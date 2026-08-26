@@ -1,0 +1,53 @@
+{
+  "name": "active-resistance",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-band",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Resistance",
+        "value": "Not set"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Standing Band Fly"
+    },
+    {
+      "label": "Resistance",
+      "value": "Not set"
+    },
+    {
+      "label": "Reps",
+      "valueContains": "15"
+    },
+    {
+      "identifier": "completeSetButton",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

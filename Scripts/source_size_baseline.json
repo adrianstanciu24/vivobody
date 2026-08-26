@@ -1,6 +1,6 @@
 {
   "files": {
-    "vivobody/App/DebugSeed.swift": 776,
+    "vivobody/App/DebugSeed.swift": 759,
     "vivobody/Components/Inputs/BareScrubber.swift": 920,
     "vivobody/Models/Domain/ExerciseCatalog.swift": 824,
     "vivobody/Models/Domain/WorkoutSession.swift": 636,

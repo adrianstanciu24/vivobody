@@ -169,6 +169,12 @@ the entered machine setting remains visible as Assistance and carries the cue
 comparisons, but does not scale the authored muscle-role and RIR inputs used by
 the 3D development model.
 
+During an active workout, `nonComparable` exercises with authored bodyweight
+equipment omit the load control and show only repetitions or time. Other
+`nonComparable` exercises label the editable field **Resistance**; zero is
+shown as **Not set**, not as a meaningful zero-unit load. This presentation
+does not make the entered resistance comparable or change its analytics use.
+
 `bodyweightFraction` is a coefficient used only by the two bodyweight load
 modes. It is zero for `external` and `nonComparable`. Reviewed band exercises
 may be bundled, but their resistance is always `nonComparable`: a color,

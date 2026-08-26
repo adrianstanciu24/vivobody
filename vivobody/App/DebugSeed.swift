@@ -117,8 +117,10 @@ import VivoKit
             if CommandLine.arguments.contains("--ui-test-active-bodyweight-duration") {
                 seedActiveBodyweightDuration(in: context)
             }
-            if CommandLine.arguments.contains("--ui-test-active-band") {
-                seedActiveBand(in: context)
+            if CommandLine.arguments.contains("--ui-test-active-band")
+                || CommandLine.arguments.contains("--ui-test-active-no-load")
+            {
+                seedActiveLoadPresentation(in: context)
             }
             if CommandLine.arguments.contains("--ui-test-superset") {
                 seedActiveSuperset(in: context)
@@ -227,40 +229,21 @@ import VivoKit
             try? context.saveOrRollback()
         }
 
-        /// Completed custom, non-comparable resistance fixture for verifying
-        /// that workout receipts report the raw band volume the user logged.
-        private static func seedActiveBand(in context: ModelContext) {
+        /// Active fixtures for non-comparable resistance and unloaded bodyweight UI.
+        private static func seedActiveLoadPresentation(in context: ModelContext) {
             let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
                 predicate: #Predicate { $0.completedAt == nil }
             ))) ?? []
             guard existing.isEmpty else { return }
 
-            let exercise = Exercise(
-                name: "My Band-Resisted Push-Up",
-                group: .chest,
+            let isNoLoad = CommandLine.arguments.contains("--ui-test-active-no-load")
+            let exercise = debugCatalogExercise(
+                named: isNoLoad ? "Bodyweight Forward Lunge" : "Standing Band Fly",
                 plannedSets: 3,
-                plannedReps: 10,
-                plannedWeight: 30 * WeightUnit.lbPerKg,
-                muscleInvolvement: Muscle.Involvement(contributions: [
-                    .init(muscle: .pectoralisMajorSternocostal, role: .primary),
-                    .init(muscle: .triceps, role: .secondary),
-                    .init(muscle: .deltoidAnterior, role: .secondary),
-                ]),
-                classification: ExerciseClassification(
-                    equipment: .band,
-                    mechanic: .compound,
-                    pattern: .push,
-                    direction: .horizontal,
-                    planes: [.sagittal],
-                    laterality: .bilateral
-                ),
-                modality: .dynamicStrength,
-                loadMode: .nonComparable,
+                plannedReps: isNoLoad ? 12 : 15,
+                plannedWeight: 0,
                 sortOrder: 0
             )
-            for set in exercise.sets {
-                set.isCompleted = true
-            }
             let session = WorkoutSession(exercises: [exercise], restDuration: 90)
             context.insert(session)
             try? context.saveOrRollback()

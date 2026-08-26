@@ -1,0 +1,63 @@
+{
+  "name": "active-no-load",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-no-load",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Reps",
+        "valueContains": "12"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Bodyweight Forward Lunge"
+    },
+    {
+      "label": "Reps",
+      "valueContains": "12"
+    },
+    {
+      "identifier": "completeSetButton",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Resistance",
+      "visible": true
+    },
+    {
+      "label": "Weight",
+      "visible": true
+    },
+    {
+      "label": "Weight increment",
+      "visible": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

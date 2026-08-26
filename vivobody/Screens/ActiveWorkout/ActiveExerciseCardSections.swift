@@ -2,10 +2,8 @@
 //  ActiveExerciseCardSections.swift
 //  vivobody
 //
-//  Section view builders for ActiveExerciseCard, extracted from the
-//  main file for readability: name + pips, the open working-set
-//  instrument, RIR, and the action area. Members live on the
-//  ActiveExerciseCard extension and share the struct's stored state.
+//  Section view builders for ActiveExerciseCard: identity, the working-set
+//  instrument, RIR, and actions.
 //
 
 import SwiftData
@@ -17,9 +15,7 @@ extension ActiveExerciseCard {
 
     var nameRow: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
-            // The shared ribbon that couples linked cards: same volt
-            // tag ("Superset · A1" / "· A2") on every member, using
-            // the lifter-standard notation.
+            // Shared ribbon for every linked card, using lifter-standard notation.
             if let tag = session.supersetTag(for: exercise) {
                 Text("Superset · \(tag)")
                     .panelLegendType()
@@ -42,10 +38,7 @@ extension ActiveExerciseCard {
     }
 
     var setPips: some View {
-        // The newest completed lamp carries its reading, merging the
-        // old "Last 135 x 8" caption into the timeline itself: past
-        // compressed to dots, the freshest set vivid, the current one
-        // breathing, the rest unlit.
+        // The newest completed lamp carries its reading; older sets compress to dots.
         let lastCompletedID = sets.last(where: { $0.isCompleted })?.id
         return ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: Space.md) {
@@ -219,14 +212,8 @@ extension ActiveExerciseCard {
         }
     }
 
-    /// Configuration is deliberately separate from status: segments
-    /// get the full row above, while this cluster owns set count and
-    /// the load increment. Both instruments group on the left and
-    /// share one legend-above-control treatment (the RIR selector's
-    /// pattern), so the row reads as a labeled control panel rather
-    /// than two pills flung to opposite edges. The step control is
-    /// useful only while a rep set is live; completed and duration
-    /// exercises retain just the set stepper.
+    /// Set count and, when load is editable, its increment. Completed,
+    /// duration, and no-load bodyweight exercises retain only set count.
     var exerciseConfigurationRow: some View {
         HStack(alignment: .top, spacing: Space.lg) {
             VStack(alignment: .leading, spacing: Space.sm) {
@@ -237,7 +224,8 @@ extension ActiveExerciseCard {
             }
 
             if session.activeSet(for: exercise) != nil,
-               exercise.trackingMode == .reps
+               exercise.trackingMode == .reps,
+               !isUnloadedBodyweightExercise
             {
                 VStack(alignment: .leading, spacing: Space.sm) {
                     Text("STEP")
@@ -256,6 +244,8 @@ extension ActiveExerciseCard {
     var repsHero: some View {
         if exercise.loadMode == .bodyweightAdded {
             bodyweightRepsHero
+        } else if isUnloadedBodyweightExercise {
+            unloadedRepsHero
         } else {
             externalLoadRepsHero
         }
@@ -263,33 +253,35 @@ extension ActiveExerciseCard {
 
     var externalLoadRepsHero: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            // A bare value plus its unit is self-explanatory for weight and
-            // band resistance. Assistance retains its semantic noun because
-            // its value is subtracted from bodyweight rather than added.
-            if exercise.loadMode == .assistanceSubtracted {
+            if exercise.loadMode == .assistanceSubtracted
+                || exercise.loadMode == .nonComparable
+            {
                 Text(exercise.loadMode.inputLabel)
                     .panelLegend()
             }
-            BareScrubber(
-                value: weightDisplayBinding,
-                range: unit.strengthRange,
-                step: weightStep,
-                pointsPerStep: 8,
-                fontSize: 104,
-                unit: unit.symbol,
-                unitFontSize: 18,
-                numberColor: Ink.primary,
-                unitColor: Ink.tertiary,
-                accessibilityLabel: exercise.loadMode.inputLabel,
-                showsScrubHint: isActive,
-                performsScrubNudge: isActive,
-                fitsWidth: true,
-                tickTone: .deep,
-                hitSlop: 12,
-                showsRail: true,
-                cancellationID: effectiveScrubCancellationID,
-                onScrubEnded: activeScrubDidEnd
-            )
+            resistanceAccessibleLoadControl {
+                BareScrubber(
+                    value: weightDisplayBinding,
+                    range: unit.strengthRange,
+                    step: weightStep,
+                    pointsPerStep: 8,
+                    fontSize: activeLoadFontSize,
+                    unit: activeLoadUnit,
+                    unitFontSize: 18,
+                    numberColor: Ink.primary,
+                    unitColor: Ink.tertiary,
+                    formatter: activeLoadFormatter,
+                    accessibilityLabel: exercise.loadMode.inputLabel,
+                    showsScrubHint: isActive,
+                    performsScrubNudge: isActive,
+                    fitsWidth: true,
+                    tickTone: .deep,
+                    hitSlop: 12,
+                    showsRail: true,
+                    cancellationID: effectiveScrubCancellationID,
+                    onScrubEnded: activeScrubDidEnd
+                )
+            }
             assistanceDirectionHint
 
             HStack(alignment: .center, spacing: Space.sm) {
@@ -426,7 +418,9 @@ extension ActiveExerciseCard {
 
     @ViewBuilder
     var durationLoadControl: some View {
-        if exercise.loadMode == .bodyweightAdded {
+        if isUnloadedBodyweightExercise {
+            EmptyView()
+        } else if exercise.loadMode == .bodyweightAdded {
             VStack(alignment: .leading, spacing: Space.xs) {
                 HStack(alignment: .firstTextBaseline) {
                     Text("Bodyweight")
@@ -467,32 +461,39 @@ extension ActiveExerciseCard {
             }
         } else {
             VStack(alignment: .leading, spacing: Space.xs) {
-                if exercise.loadMode == .assistanceSubtracted {
+                if exercise.loadMode == .assistanceSubtracted
+                    || exercise.loadMode == .nonComparable
+                {
                     Text(exercise.loadMode.inputLabel)
                         .panelLegend()
                 }
                 HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                    Text(exercise.loadMode.inputOperatorSymbol)
-                        .font(Typography.statValue)
-                        .foregroundStyle(Ink.quaternary)
-                        .accessibilityHidden(true)
-                    BareScrubber(
-                        value: weightDisplayBinding,
-                        range: unit.strengthRange,
-                        step: weightStep,
-                        pointsPerStep: 8,
-                        fontSize: 46,
-                        unit: unit.symbol,
-                        unitFontSize: 14,
-                        numberColor: Ink.secondary,
-                        unitColor: Ink.tertiary,
-                        accessibilityLabel: exercise.loadMode.inputLabel,
-                        showsScrubHint: isActive,
-                        tickTone: .deep,
-                        hitSlop: 18,
-                        cancellationID: effectiveScrubCancellationID,
-                        onScrubEnded: activeScrubDidEnd
-                    )
+                    if exercise.loadMode != .nonComparable {
+                        Text(exercise.loadMode.inputOperatorSymbol)
+                            .font(Typography.statValue)
+                            .foregroundStyle(Ink.quaternary)
+                            .accessibilityHidden(true)
+                    }
+                    resistanceAccessibleLoadControl {
+                        BareScrubber(
+                            value: weightDisplayBinding,
+                            range: unit.strengthRange,
+                            step: weightStep,
+                            pointsPerStep: 8,
+                            fontSize: 46,
+                            unit: activeLoadUnit,
+                            unitFontSize: 14,
+                            numberColor: Ink.secondary,
+                            unitColor: Ink.tertiary,
+                            formatter: activeLoadFormatter,
+                            accessibilityLabel: exercise.loadMode.inputLabel,
+                            showsScrubHint: isActive,
+                            tickTone: .deep,
+                            hitSlop: 18,
+                            cancellationID: effectiveScrubCancellationID,
+                            onScrubEnded: activeScrubDidEnd
+                        )
+                    }
                 }
                 assistanceDirectionHint
             }

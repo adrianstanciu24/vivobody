@@ -54,7 +54,38 @@ extension ActiveExerciseCard {
         }
     }
 
+    @ViewBuilder
     func completedRepsHero(_ top: WorkoutSet?) -> some View {
+        if isUnloadedBodyweightExercise {
+            completedUnloadedRepsHero(top)
+        } else {
+            completedLoadedRepsHero(top)
+        }
+    }
+
+    func completedUnloadedRepsHero(_ top: WorkoutSet?) -> some View {
+        let repsText = top.map { "\($0.reps)" } ?? "—"
+        return VStack(alignment: .leading, spacing: Space.sm) {
+            Text("REPS")
+                .panelLegend()
+                .accessibilityHidden(true)
+            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+                Text(repsText)
+                    .font(.system(size: 104, weight: .bold))
+                    .foregroundStyle(Tint.complete)
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.35)
+                Text("reps")
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.tertiary)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(repsText) reps")
+    }
+
+    func completedLoadedRepsHero(_ top: WorkoutSet?) -> some View {
         let weightText = top.flatMap {
             exercise.loadMode.summaryLoadLabel($0.weight, unit: unit)
         } ?? "—"
