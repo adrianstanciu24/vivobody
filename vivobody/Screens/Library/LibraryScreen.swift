@@ -3,8 +3,8 @@
 //  vivobody
 //
 //  Two-segment browser for everything reusable in the app:
-//    • Templates — the user's saved workout plans
 //    • Exercises — the bundled exercise catalog plus user-created entries
+//    • Templates — the user's saved workout plans
 //
 //  Why a segmented control instead of a tab: both surfaces serve
 //  the same mental model ("reusable workout content") and live at
@@ -57,7 +57,7 @@ struct LibraryScreen: View {
     /// one action read as clutter.
     @Query private var allTemplates: [WorkoutTemplate]
 
-    @State private var segment: LibrarySegment = .templates
+    @State private var segment: LibrarySegment = .exercises
     @State private var searchText: String = ""
 
     /// Catalog chip selection for the Exercises segment. Lives here
@@ -213,8 +213,8 @@ struct LibraryScreen: View {
 // MARK: - Segment enum
 
 enum LibrarySegment: String, CaseIterable, Identifiable {
-    case templates
     case exercises
+    case templates
     var id: String {
         rawValue
     }
@@ -227,7 +227,7 @@ enum LibrarySegment: String, CaseIterable, Identifiable {
     }
 }
 
-#Preview("Templates") {
+#Preview("Exercises") {
     NavigationStack {
         LibraryScreen(appState: AppState())
             .navigationTitle("Library")
