@@ -2386,6 +2386,58 @@
       "scope": "Thirteen healthy participants performed eight barbell good-morning repetitions with an added load equal to twenty-five percent of body mass, shoulder-width slightly externally rotated feet, an upright start, equal self-selected lowering and raising speeds, deliberate core tension, and a cue to avoid lumbar flexion. Three-dimensional motion capture and force plates directly measured large hip excursion, material pelvis-lumbar and lumbar-thoracic excursion, and small nondefining knee motion. The procedure and standardized instruction differ between upper-trapezius and rear-deltoid bar-site wording, so the catalog preserves only a coarse posterior-shoulder/upper-back placement. The study did not measure EMG, prescribe universal segment angles, or authorize Romanian-deadlift, stiff-leg-deadlift, floor-pull, unilateral, or externally supported variants; muscle roles are conservative mechanics-and-anatomy assignments rather than measured rankings."
     },
     {
+      "id": "coratella-2022-romanian-step-stiff-leg-deadlift",
+      "sourceType": "experimentalEMGStudy",
+      "title": "An Electromyographic Analysis of Romanian, Step-Romanian, and Stiff-Leg Deadlift: Implication for Resistance Training",
+      "authors": [
+        "Giuseppe Coratella",
+        "Gianpaolo Tornatore",
+        "Stefano Longo",
+        "Fabio Esposito",
+        "Emiliano Cè"
+      ],
+      "year": 2022,
+      "doi": "10.3390/ijerph19031903",
+      "pmid": "35162922",
+      "pmcid": "PMC8835508",
+      "url": "https://doi.org/10.3390/ijerph19031903",
+      "scope": "Ten male competitive bodybuilders performed six non-exhausting repetitions of the barbell Romanian, 15-centimeter-step Romanian, and stiff-leg deadlift at 80 percent of each variation's tested one-repetition maximum, with two-second ascending and descending phases and an approximately half-second isometric phase whose location was not reported. Surface EMG measured dominant-side gluteus maximus, gluteus medius, biceps femoris, semitendinosus, longissimus, and iliocostalis excitation in both phases. It directly supports the three fixtures, a conservative posterior-chain role envelope, and the flexed-versus-extended-knee technique distinction. It did not measure kinematics or joint kinetics or prescribe a floor pause or reset. It therefore does not prove literal zero knee excursion, a universal depth, other equipment, unilateral geometry, numeric muscle contribution, or hypertrophy."
+    },
+    {
+      "id": "lee-2018-conventional-romanian-deadlift",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "An electromyographic and kinetic comparison of conventional and Romanian deadlifts",
+      "authors": [
+        "Sangwoo Lee",
+        "Jacob Schultz",
+        "Joseph Timgren",
+        "Katelyn Staelgraeve",
+        "Michael Miller",
+        "Yuanlong Liu"
+      ],
+      "year": 2018,
+      "doi": "10.1016/j.jesf.2018.08.001",
+      "pmid": "30662500",
+      "pmcid": "PMC6323186",
+      "url": "https://doi.org/10.1016/j.jesf.2018.08.001",
+      "scope": "Twenty-one men with at least three years of conventional- and Romanian-deadlift experience performed five trials of each technique at the same absolute load, 70 percent of the tested Romanian-deadlift one-repetition maximum, using a medium stance and double-overhand grip. Three-dimensional motion capture, force plates, inverse dynamics, and surface EMG measured lower-extremity kinematics and net joint torque plus rectus-femoris, biceps-femoris, and gluteus-maximus excitation. It directly supports the greater dynamic knee-and-ankle demand of the conventional floor pull relative to the Romanian hinge. The common load was not the same relative intensity for both exercises, and the instruction to touch the floor was not achieved by every Romanian trial; the study does not establish a static knee angle, universal depth or floor contact, other variants or equipment, or a numeric muscle-contribution ranking."
+    },
+    {
+      "id": "lyons-2026-conventional-romanian-deadlift",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "The effects of the conventional deadlift and Romanian deadlift on muscle activation and joint angles at a submaximal intensity",
+      "authors": [
+        "Michelle Lyons",
+        "Louise Burnie",
+        "Liam T. Pearson",
+        "Gill Barry"
+      ],
+      "year": 2026,
+      "doi": "10.19164/gjsscmr.v2i1.1595",
+      "url": "https://doi.org/10.19164/gjsscmr.v2i1.1595",
+      "scope": "Issue-year 2026 study published online in 2025: fifteen recreationally active adults with three to five years of experience performed five barefoot conventional- and Romanian-deadlift repetitions at the same absolute load, 50 percent of a self-reported or estimated Romanian-deadlift one-repetition maximum. The participants used their typical uncoached techniques while sagittal two-dimensional video measured hip, knee, and ankle angles and surface EMG measured dominant-side biceps femoris and vastus lateralis. The substantial Romanian-deadlift knee range is direct adverse evidence against treating an ordinary Romanian deadlift as position held; the paper is internally inconsistent, with Table 5 and the later discussion reporting approximately 33 degrees while the preceding results paragraph reports approximately 38 degrees. The study did not standardize stance, knee angle, or technique; use three-dimensional motion capture; measure joint kinetics or other muscles; or isolate a strict static-knee, no-floor-reset fixture."
+    },
+    {
       "id": "comfort-2015-forward-reverse-lunge-kinetics",
       "sourceType": "experimentalKinematicsKineticsStudy",
       "title": "Joint Kinetics and Kinematics During Common Lower Limb Rehabilitation Exercises",

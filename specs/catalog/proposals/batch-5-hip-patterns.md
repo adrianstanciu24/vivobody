@@ -1,5 +1,10 @@
 # Batch 5 — hip-pattern compound review
 
+Successor note: the deadlift deferrals in this historical review are
+superseded by [the deadlift activation record](deadlift-activation.md). This
+document retains the original Batch-5 decision history; its good-morning and
+hip-thrust/bridge outcomes remain active.
+
 Status: final. `hip-hinge` is active with one barbell good morning, and
 `hip-thrust-bridge` is active with one barbell hip thrust plus one barbell
 glute bridge. The hinge activation follows Schellenberg et al.'s directly

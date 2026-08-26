@@ -1,0 +1,907 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "romanian-deadlift",
+  "name": "Romanian and Stiff-Leg Deadlift",
+  "definition": "A bilateral unsupported barbell hinge in which both feet remain planted, the athlete lifts a free bar from the floor to standing through hip extension, and the plates return to the floor at the end of every repetition. The roster is limited to Coratella et al.'s six-repetition, 80-percent-one-repetition-maximum fixtures: a Romanian deadlift from the same floor as the feet, a stiff-leg deadlift from that floor, and a Romanian deadlift performed with both feet on a 15-centimeter step while the bar remains on the lower floor. This is not a generic continuous Romanian-deadlift contract: top-start repetitions that stop above the floor, arbitrary deficits, other loads, and other equipment remain outside it. The fixed 95-pound / 42.5-kilogram runtime seeds are product initialization, not claims that those loads equal 80 percent of any athlete's maximum. Coratella et al. prescribed slightly flexed knees for both Romanian fixtures and extended knees throughout the stiff-leg fixture, but collected no kinematics. Their methods also say to finish the Romanian lift with both hips and knees fully extended, while Lee et al.'s deeper floor-touch Romanian fixture and Lyons et al.'s uncoached Romanian technique show that material knee excursion can occur. Knee position is therefore recorded as a prescribed technique with unmeasured kinematics, never as position held; knee extension is not declared as a training-defining prime because the exact active fixtures provide no measured invariant knee action and the source characterizes these as hip-dominant, isometric-knee variations. Hip extension is the sole dynamic prime. The straight-spine instruction and measured erector-spinae excitation support resisting spinal flexion, not fabricated dynamic spinal extension. Medial hamstrings and gluteus maximus are non-ranked co-primary contributors, while lumbar extensors oppose the declared spinal-flexion tendency. The visible biceps-femoris region remains a stabilizer because its combined mesh cannot distinguish the hip-extending long head from the short head. Surface-EMG differences among the three fixtures support their distinction but do not establish numeric contribution, equal activation, hypertrophy, or equipment equivalence.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "coratella-2022-romanian-step-stiff-leg-deadlift",
+    "lee-2018-conventional-romanian-deadlift",
+    "lyons-2026-conventional-romanian-deadlift"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension"
+    ],
+    "resistedActions": [
+      "spine.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "medialHamstrings",
+        "gluteMax"
+      ],
+      "secondary": [
+        "lumbarExtensors"
+      ],
+      "stabilizer": [
+        "bicepsFemoris",
+        "gluteMed",
+        "gastrocnemius",
+        "soleus",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "trapeziusUpper",
+        "brachialis",
+        "abs",
+        "obliques"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain fixed while the pelvis and torso move relative to the planted lower limbs.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The gross posture at the upright endpoint of every reviewed fixture.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "No bench, pad, or other external surface supports the torso during the hinge.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both reviewed feet share a symmetric bilateral stance.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "Coratella et al. standardized the feet at hip distance.",
+      "allowedValues": [
+        "hipDistance"
+      ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study did not report or compare a toe-angle prescription.",
+      "allowedValues": [
+        "unreported"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain continuously planted on their reviewed support surface.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The surface under both feet: the same floor that supports the bar, or the directly studied 15-centimeter step above it.",
+      "allowedValues": [
+        "floor",
+        "fifteenCentimeterStep"
+      ]
+    },
+    {
+      "id": "platformHeightCm",
+      "valueType": "number",
+      "required": false,
+      "description": "The vertical distance between the foot-support platform and the barbell floor; it exists only for the directly studied 15-centimeter step fixture.",
+      "minimum": 15,
+      "maximum": 15
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both hands hold the free bar in front of the body.",
+      "allowedValues": [
+        "handsInFrontOfBody"
+      ]
+    },
+    {
+      "id": "gripWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study standardized both hands at shoulder distance.",
+      "allowedValues": [
+        "shoulderDistance"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The publication reported grip width but not forearm orientation.",
+      "allowedValues": [
+        "unreported"
+      ]
+    },
+    {
+      "id": "shoulderPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source instruction draws the shoulders back and down while the bar is held.",
+      "allowedValues": [
+        "drawnBackAndDown"
+      ]
+    },
+    {
+      "id": "externalLoadPrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each reviewed fixture used 80 percent of that variation's separately tested one-repetition maximum.",
+      "allowedValues": [
+        "eightyPercentVariantSpecificOneRepMaximum"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip extension creates the reviewed ascent from the floor to standing.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "A straight spine was instructed, but the source collected no kinematics and cannot establish a literal held position or dynamic spinal action.",
+      "allowedValues": [
+        "straightPostureInstructedKinematicsUnmeasured"
+      ]
+    },
+    {
+      "id": "kneeTechnique",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly instructed knee distinction. Romanian fixtures begin slightly flexed and finish fully extended, whereas the stiff-leg fixture prescribes extension throughout; Coratella et al. did not measure either trajectory.",
+      "allowedValues": [
+        "slightlyFlexedStartToExtendedEndpointKinematicsUnmeasured",
+        "extendedThroughoutKinematicsUnmeasured"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-exact bar-to-floor relationship rather than a universal hip, knee, or trunk angle.",
+      "allowedValues": [
+        "floorAtFootLevelToStanding",
+        "floorFifteenCentimetersBelowFeetToStanding"
+      ]
+    },
+    {
+      "id": "tempo",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study used two-second ascending and descending phases with an approximately half-second isometric phase and visual timing feedback.",
+      "allowedValues": [
+        "twoSecondsEachPhaseWithHalfSecondIsometric"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "No rail, lever, or other mechanism constrains the free barbell path."
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The plates touch the floor at the end of every repetition, but the source did not locate its half-second isometric phase or prescribe a pause, reset, or complete unloading there.",
+      "allowedValues": [
+        "floorContactNoSpecifiedReset"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip extension defines the lift while the source-prescribed but unmeasured knee behavior remains nondefining.",
+      "allowedValues": [
+        "hipDominantHingeWithNondefiningKneeTechnique"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 6,
+      "maximum": 6
+    }
+  },
+  "exerciseRules": [
+    {
+      "id": "step-surface-pins-reviewed-deficit",
+      "description": "The only admitted raised-foot fixture uses the directly studied 15-centimeter step, below-foot floor range, and Romanian knee prescription.",
+      "when": {
+        "field": "variant.supportSurface",
+        "operator": "equals",
+        "value": "fifteenCentimeterStep"
+      },
+      "then": [
+        {
+          "field": "variant.platformHeightCm",
+          "value": 15
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "floorFifteenCentimetersBelowFeetToStanding"
+        },
+        {
+          "field": "variant.kneeTechnique",
+          "value": "slightlyFlexedStartToExtendedEndpointKinematicsUnmeasured"
+        }
+      ],
+      "requirePresent": [
+        "variant.platformHeightCm"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "below-foot-range-requires-reviewed-step",
+      "description": "A below-foot floor range is admitted only with the directly reviewed 15-centimeter step and Romanian knee prescription.",
+      "when": {
+        "field": "variant.rangeOfMotion",
+        "operator": "equals",
+        "value": "floorFifteenCentimetersBelowFeetToStanding"
+      },
+      "then": [
+        {
+          "field": "variant.supportSurface",
+          "value": "fifteenCentimeterStep"
+        },
+        {
+          "field": "variant.platformHeightCm",
+          "value": 15
+        },
+        {
+          "field": "variant.kneeTechnique",
+          "value": "slightlyFlexedStartToExtendedEndpointKinematicsUnmeasured"
+        }
+      ],
+      "requirePresent": [
+        "variant.platformHeightCm"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "floor-surface-pins-ground-level-range",
+      "description": "Ground-level Romanian and stiff-leg fixtures use the same floor for the feet and plates and carry no platform-height field.",
+      "when": {
+        "field": "variant.supportSurface",
+        "operator": "equals",
+        "value": "floor"
+      },
+      "then": [
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "floorAtFootLevelToStanding"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.platformHeightCm"
+      ]
+    },
+    {
+      "id": "ground-level-range-requires-floor-surface",
+      "description": "A floor-at-foot-level range requires both feet on that floor and no platform-height field.",
+      "when": {
+        "field": "variant.rangeOfMotion",
+        "operator": "equals",
+        "value": "floorAtFootLevelToStanding"
+      },
+      "then": [
+        {
+          "field": "variant.supportSurface",
+          "value": "floor"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.platformHeightCm"
+      ]
+    },
+    {
+      "id": "stiff-leg-technique-requires-ground-level-fixture",
+      "description": "The only directly reviewed extended-knee-throughout fixture places both feet and the plates on the same floor.",
+      "when": {
+        "field": "variant.kneeTechnique",
+        "operator": "equals",
+        "value": "extendedThroughoutKinematicsUnmeasured"
+      },
+      "then": [
+        {
+          "field": "variant.supportSurface",
+          "value": "floor"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "floorAtFootLevelToStanding"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.platformHeightCm"
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "barbell-romanian-deadlift",
+      "name": "Floor-Touch Barbell Romanian Deadlift",
+      "aliases": [
+        "Barbell Romanian Deadlift",
+        "Romanian Deadlift",
+        "RDL"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 95,
+      "defaultWeightKg": 42.5,
+      "reps": 6,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "hipDistance",
+        "footOrientation": "unreported",
+        "footContact": "continuous",
+        "supportSurface": "floor",
+        "loadPlacement": "handsInFrontOfBody",
+        "gripWidth": "shoulderDistance",
+        "gripOrientation": "unreported",
+        "shoulderPosition": "drawnBackAndDown",
+        "externalLoadPrescription": "eightyPercentVariantSpecificOneRepMaximum",
+        "hipMotion": "extends",
+        "spineMotion": "straightPostureInstructedKinematicsUnmeasured",
+        "kneeTechnique": "slightlyFlexedStartToExtendedEndpointKinematicsUnmeasured",
+        "rangeOfMotion": "floorAtFootLevelToStanding",
+        "tempo": "twoSecondsEachPhaseWithHalfSecondIsometric",
+        "fixedPath": false,
+        "interRepSupport": "floorContactNoSpecifiedReset",
+        "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "coratella-2022-romanian-step-stiff-leg-deadlift",
+        "lee-2018-conventional-romanian-deadlift",
+        "lyons-2026-conventional-romanian-deadlift"
+      ],
+      "execution": {
+        "startingPosition": "Stand with your feet hip-distance apart on the floor in front of a free barbell. Bend your knees slightly, hinge forward with a straight back, grip the bar with both hands shoulder-width apart, and draw your shoulders back and down.",
+        "movement": "Lift the bar from the floor over two seconds by extending your hips. Finish tall by fully extending your hips and knees without turning the lift into a squat.",
+        "endpoint": "Stand upright with your hips and knees fully extended and the bar held in front of your body.",
+        "returnPhase": "Hinge forward and lower the bar for two seconds until the plates touch the floor beside your feet, keeping the slight knee bend and straight-back position. The source did not prescribe a floor pause, reset, or complete unloading.",
+        "controlledJoints": "Keep the lift hip-dominant. Begin with the prescribed slight knee bend, but do not treat it as a measured fixed angle.",
+        "supportAndPosture": "Keep both feet planted, brace your trunk, maintain the instructed straight-back posture, and use no external torso support.",
+        "disqualifyingCompensations": [
+          "Keeping the knees extended throughout turns the movement into a stiff-leg deadlift.",
+          "Bending the knees deeply turns the hinge into a squat-like conventional floor pull.",
+          "Stopping the plates above the floor turns the reviewed floor-touch fixture into a partial or continuous Romanian deadlift."
+        ]
+      }
+    },
+    {
+      "catalogID": "barbell-stiff-leg-deadlift",
+      "name": "Barbell Stiff-Leg Deadlift",
+      "aliases": [
+        "Stiff-Leg Deadlift",
+        "SLDL"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 95,
+      "defaultWeightKg": 42.5,
+      "reps": 6,
+      "searchPriority": 84,
+      "involvement": [
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "hipDistance",
+        "footOrientation": "unreported",
+        "footContact": "continuous",
+        "supportSurface": "floor",
+        "loadPlacement": "handsInFrontOfBody",
+        "gripWidth": "shoulderDistance",
+        "gripOrientation": "unreported",
+        "shoulderPosition": "drawnBackAndDown",
+        "externalLoadPrescription": "eightyPercentVariantSpecificOneRepMaximum",
+        "hipMotion": "extends",
+        "spineMotion": "straightPostureInstructedKinematicsUnmeasured",
+        "kneeTechnique": "extendedThroughoutKinematicsUnmeasured",
+        "rangeOfMotion": "floorAtFootLevelToStanding",
+        "tempo": "twoSecondsEachPhaseWithHalfSecondIsometric",
+        "fixedPath": false,
+        "interRepSupport": "floorContactNoSpecifiedReset",
+        "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "coratella-2022-romanian-step-stiff-leg-deadlift"
+      ],
+      "execution": {
+        "startingPosition": "Stand with your feet hip-distance apart on the floor in front of a free barbell. Keep your knees extended, hinge forward with a straight back, grip the bar with both hands shoulder-width apart, and draw your shoulders back and down.",
+        "movement": "Lift the bar from the floor over two seconds by extending your hips while keeping your knees extended.",
+        "endpoint": "Stand upright with your hips fully extended, your knees still extended, and the bar held in front of your body.",
+        "returnPhase": "Hinge forward and lower the bar for two seconds until the plates touch the floor beside your feet, keeping your knees extended and your back straight. The source did not prescribe a floor pause, reset, or complete unloading.",
+        "controlledJoints": "Keep both knees extended throughout the repetition without adding a squat-like bend.",
+        "supportAndPosture": "Keep both feet planted, brace your trunk, maintain the instructed straight-back posture, and use no external torso support.",
+        "disqualifyingCompensations": [
+          "Adding a slight knee bend turns the movement into a Romanian deadlift.",
+          "Bending the knees deeply turns the hinge into a squat-like conventional floor pull.",
+          "Stopping the plates above the floor turns the reviewed floor-touch fixture into a partial stiff-leg deadlift."
+        ]
+      }
+    },
+    {
+      "catalogID": "barbell-romanian-deadlift-15-cm-step",
+      "name": "15 cm Step Barbell Romanian Deadlift",
+      "aliases": [
+        "15 cm Step Romanian Deadlift",
+        "15 cm Deficit Romanian Deadlift",
+        "Step RDL"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 95,
+      "defaultWeightKg": 42.5,
+      "reps": 6,
+      "searchPriority": 78,
+      "involvement": [
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "hipDistance",
+        "footOrientation": "unreported",
+        "footContact": "continuous",
+        "supportSurface": "fifteenCentimeterStep",
+        "platformHeightCm": 15,
+        "loadPlacement": "handsInFrontOfBody",
+        "gripWidth": "shoulderDistance",
+        "gripOrientation": "unreported",
+        "shoulderPosition": "drawnBackAndDown",
+        "externalLoadPrescription": "eightyPercentVariantSpecificOneRepMaximum",
+        "hipMotion": "extends",
+        "spineMotion": "straightPostureInstructedKinematicsUnmeasured",
+        "kneeTechnique": "slightlyFlexedStartToExtendedEndpointKinematicsUnmeasured",
+        "rangeOfMotion": "floorFifteenCentimetersBelowFeetToStanding",
+        "tempo": "twoSecondsEachPhaseWithHalfSecondIsometric",
+        "fixedPath": false,
+        "interRepSupport": "floorContactNoSpecifiedReset",
+        "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "coratella-2022-romanian-step-stiff-leg-deadlift"
+      ],
+      "execution": {
+        "startingPosition": "Stand with both feet hip-distance apart on a 15-centimeter step above a free barbell resting on the lower floor. Bend your knees slightly, hinge forward with a straight back, grip the bar with both hands shoulder-width apart, and draw your shoulders back and down.",
+        "movement": "Lift the bar from the lower floor over two seconds by extending your hips. Finish tall by fully extending your hips and knees without turning the lift into a squat.",
+        "endpoint": "Stand upright on the step with your hips and knees fully extended and the bar held in front of your body.",
+        "returnPhase": "Hinge forward and lower the bar for two seconds until the plates touch the lower floor 15 centimeters below your feet, keeping the slight knee bend and straight-back position. The source did not prescribe a floor pause, reset, or complete unloading.",
+        "controlledJoints": "Keep the lift hip-dominant. Begin with the prescribed slight knee bend, but do not treat it as a measured fixed angle.",
+        "supportAndPosture": "Keep both feet planted on the 15-centimeter step, brace your trunk, maintain the instructed straight-back posture, and use no external torso support.",
+        "disqualifyingCompensations": [
+          "Using a floor-level stance turns the movement into a ground-level Romanian deadlift.",
+          "Keeping the knees extended throughout turns the movement into an unreviewed step stiff-leg deadlift.",
+          "Bending the knees deeply turns the hinge into a deficit squat-like floor pull.",
+          "Stopping the plates at foot level instead of the lower floor removes the directly studied 15-centimeter range."
+        ]
+      }
+    }
+  ]
+}

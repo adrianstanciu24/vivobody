@@ -1,0 +1,550 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "conventional-deadlift",
+  "name": "Conventional Deadlift",
+  "definition": "A strict bilateral conventional straight-bar deadlift in which a free bar is held with both hands outside a symmetric medium stance, contacts the floor at the bottom, and travels to an upright standing endpoint through combined hip extension, knee extension, and ankle plantarflexion. Lee et al. directly tested experienced lifters with a stance equal to 100 percent of pelvis width, a double-overhand grip, self-selected speed, and the same absolute load equal to 70 percent of each participant's Romanian-deadlift one-repetition maximum. Their measured trials began upright, touched the floor during the descent, and returned upright; the catalog presents those same measured phases in the familiar floor-to-standing-to-floor order as an explicit product reordering and does not claim a dead-stop pause or complete unloading between repetitions. Lee measured rectus-femoris, biceps-femoris, and gluteus-maximus EMG plus three-dimensional lower-extremity kinematics and kinetics. Lyons et al. separately measured greater vastus-lateralis excitation in the conventional than Romanian condition, but used each participant's typical uncoached technique. Gluteus maximus and the combined vasti region are non-ranked co-primary training emphases; rectus femoris and the plantarflexors are secondary, while medial hamstrings and the unsplit biceps-femoris region receive conservative hip, pelvis, and knee-control credit. The five-repetition, 45-pound, and 20-kilogram defaults are product initialization rather than a claim that either source prescribed those universal values. Lee did not report spinal kinematics, foot orientation, or a dead-stop reset, so none is invented. Schellenberg et al.'s shoulder-width, slight-toe-out, mixed-grip deadlift is boundary context only and supplies no fixture detail to this record. Sumo, trap-bar, Romanian, stiff-leg, deficit, block, rack, explicit dead-stop, paused, touch-and-go-as-a-distinct-technique, mixed-grip, hook-grip, straps, snatch-grip, unilateral, staggered, dumbbell, kettlebell, cable, Smith, and machine variants remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "lee-2018-conventional-romanian-deadlift",
+    "lyons-2026-conventional-romanian-deadlift",
+    "schellenberg-2013-deadlift-goodmorning-kinematics"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultReps": {
+      "minimum": 3,
+      "maximum": 8
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMax",
+        "vasti"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "bicepsFemoris",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "trapeziusUpper",
+        "triceps",
+        "abs",
+        "obliques",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain fixed against the floor while the pelvis, torso, and freely held bar move relative to that distal base.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The gross whole-body posture at the upright endpoint of the floor pull.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "No bench, pad, rack, or other external surface supports the torso during the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The conventional fixture distributes the task across a symmetric, non-split bilateral stance.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lee et al.'s directly standardized medium stance measured 100 percent of each participant's pelvis width.",
+      "allowedValues": [
+        "oneHundredPercentPelvisWidth"
+      ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lee et al. did not report or standardize a foot-rotation angle for the measured conventional fixture.",
+      "allowedValues": [
+        "unreported"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain continuously planted throughout the bottom position, ascent, upright endpoint, and descent.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "armPositionRelativeToLegs",
+      "valueType": "enum",
+      "required": true,
+      "description": "The conventional technique keeps both arms outside the thighs rather than inside the stance as in a sumo deadlift.",
+      "allowedValues": [
+        "outsideThighs"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lee et al. directly standardized both hands in an overhand grip; mixed, hook, and strap-assisted grips are not admitted.",
+      "allowedValues": [
+        "doubleOverhand"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "The free straight bar is held by both hands anterior to the body rather than resting on the shoulders, pelvis, or another body surface.",
+      "allowedValues": [
+        "handsInFrontOfBody"
+      ]
+    },
+    {
+      "id": "repetitionOrder",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lee et al. measured upright-to-floor-to-upright trials. The catalog begins at the source-measured floor position and presents the same ascent and descent in conventional logging order without changing either measured phase.",
+      "allowedValues": [
+        "floorToStandingToFloorCatalogReorder"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric hip action during the ascent from the floor-contact position.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric knee action from the large measured bottom-position knee flexion toward standing.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric ankle action from the measured bottom position toward the standing ankle angle; this does not prescribe rising onto the toes.",
+      "allowedValues": [
+        "plantarflexesTowardStanding"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lee et al. did not report segmental spinal kinematics, so deliberate spinal motion is not a prime action and zero spinal motion is not claimed.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog keeps both elbows extended so arm motion does not turn the floor pull into a curl; this is a mechanics-derived coaching constraint rather than a reported Lee outcome.",
+      "allowedValues": [
+        "extendedAngleHeldCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The admitted path spans the source-prescribed bar-to-floor contact and upright standing endpoint without inventing a universal joint-angle target.",
+      "allowedValues": [
+        "floorAtFootLevelToStanding"
+      ]
+    },
+    {
+      "id": "tempo",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lee et al. used self-selected speed because participants found a controlled cadence unnatural, while requiring within-participant consistency.",
+      "allowedValues": [
+        "selfSelectedConsistent"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "No rail, lever, or other mechanism constrains the free straight-bar path."
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The plates contact the floor at the repetition boundary, but Lee et al. did not standardize a pause, reset, or complete unloading.",
+      "allowedValues": [
+        "floorContactNoSpecifiedReset"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip extension, knee extension, and ankle plantarflexion together create the concentric floor pull.",
+      "allowedValues": [
+        "compoundHipKneeAnkleExtension"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "conventional-barbell-deadlift",
+      "name": "Conventional Barbell Deadlift",
+      "aliases": [
+        "Conventional Deadlift",
+        "Straight-Bar Conventional Deadlift"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 5,
+      "searchPriority": 100,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "oneHundredPercentPelvisWidth",
+        "footOrientation": "unreported",
+        "footContact": "continuous",
+        "armPositionRelativeToLegs": "outsideThighs",
+        "gripOrientation": "doubleOverhand",
+        "loadPlacement": "handsInFrontOfBody",
+        "repetitionOrder": "floorToStandingToFloorCatalogReorder",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexesTowardStanding",
+        "spineMotion": "nonstandardized",
+        "elbowMotion": "extendedAngleHeldCatalogAdaptation",
+        "rangeOfMotion": "floorAtFootLevelToStanding",
+        "tempo": "selfSelectedConsistent",
+        "fixedPath": false,
+        "interRepSupport": "floorContactNoSpecifiedReset",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "lee-2018-conventional-romanian-deadlift",
+        "lyons-2026-conventional-romanian-deadlift"
+      ],
+      "execution": {
+        "startingPosition": "Place a free straight barbell on the floor. Stand in a symmetric medium stance about one pelvis-width apart with a comfortable foot angle. Take a double-overhand grip with both arms outside your thighs and keep both feet planted.",
+        "movement": "From the floor-contact position, push through both feet and straighten your hips and knees together while the bar rises in your extended arms. Let the ankles move naturally toward the standing angle without rising onto your toes.",
+        "endpoint": "Finish upright with your hips and knees extended and the bar controlled in both hands.",
+        "returnPhase": "Bend your hips and knees under control and lower the bar until the plates contact the floor. Let the plates touch without assuming a prescribed pause, reset, or complete unloading between repetitions.",
+        "controlledJoints": "Keep both elbows extended and brace your trunk without deliberately rounding or arching to create the repetition.",
+        "supportAndPosture": "Use no external torso support, keep the free bar controlled, and maintain continuous contact through both feet.",
+        "disqualifyingCompensations": [
+          "Moving the feet wide and placing the arms inside the thighs turns the lift into a sumo deadlift.",
+          "Keeping the knees nearly straight turns the floor pull into a stiff-leg deadlift.",
+          "Using a hexagonal bar changes the handle and load geometry into a trap-bar deadlift.",
+          "Deliberately rounding the spine to move the bar turns the lift into a rounded-back pull outside this contract."
+        ]
+      }
+    }
+  ]
+}

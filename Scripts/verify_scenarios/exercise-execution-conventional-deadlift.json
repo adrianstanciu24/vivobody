@@ -1,0 +1,125 @@
+{
+  "name": "exercise-execution-conventional-deadlift",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Conventional Barbell Deadlift,"
+        },
+        "direction": "up",
+        "maxSwipes": 24
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Conventional Barbell Deadlift,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Movement"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "one pelvis-width"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "straighten your hips and knees"
+          },
+          {
+            "identifier": "exercise-execution-endpoint",
+            "labelContains": "hips and knees extended"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-return"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "plates contact the floor"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-compensations"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-controlled-joints",
+            "labelContains": "both elbows extended"
+          },
+          {
+            "identifier": "exercise-execution-support-posture",
+            "labelContains": "no external torso support"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "sumo deadlift"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}

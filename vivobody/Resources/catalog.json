@@ -732,6 +732,109 @@
     ]
   },
   {
+    "familyID": "conventional-deadlift",
+    "catalogID": "conventional-barbell-deadlift",
+    "name": "Conventional Barbell Deadlift",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Conventional Deadlift",
+      "Straight-Bar Conventional Deadlift"
+    ],
+    "searchPriority": 100,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Place a free straight barbell on the floor. Stand in a symmetric medium stance about one pelvis-width apart with a comfortable foot angle. Take a double-overhand grip with both arms outside your thighs and keep both feet planted.",
+      "movement": "From the floor-contact position, push through both feet and straighten your hips and knees together while the bar rises in your extended arms. Let the ankles move naturally toward the standing angle without rising onto your toes.",
+      "endpoint": "Finish upright with your hips and knees extended and the bar controlled in both hands.",
+      "returnPhase": "Bend your hips and knees under control and lower the bar until the plates contact the floor. Let the plates touch without assuming a prescribed pause, reset, or complete unloading between repetitions.",
+      "controlledJoints": "Keep both elbows extended and brace your trunk without deliberately rounding or arching to create the repetition.",
+      "supportAndPosture": "Use no external torso support, keep the free bar controlled, and maintain continuous contact through both feet.",
+      "disqualifyingCompensations": [
+        "Moving the feet wide and placing the arms inside the thighs turns the lift into a sumo deadlift.",
+        "Keeping the knees nearly straight turns the floor pull into a stiff-leg deadlift.",
+        "Using a hexagonal bar changes the handle and load geometry into a trap-bar deadlift.",
+        "Deliberately rounding the spine to move the bar turns the lift into a rounded-back pull outside this contract."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "decline-press",
     "catalogID": "decline-barbell-bench-press",
     "name": "Decline Barbell Bench Press",
@@ -4653,6 +4756,303 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "romanian-deadlift",
+    "catalogID": "barbell-romanian-deadlift",
+    "name": "Floor-Touch Barbell Romanian Deadlift",
+    "group": "legs",
+    "defaultWeight": 95,
+    "defaultWeightKg": 42.5,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Barbell Romanian Deadlift",
+      "Romanian Deadlift",
+      "RDL"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with your feet hip-distance apart on the floor in front of a free barbell. Bend your knees slightly, hinge forward with a straight back, grip the bar with both hands shoulder-width apart, and draw your shoulders back and down.",
+      "movement": "Lift the bar from the floor over two seconds by extending your hips. Finish tall by fully extending your hips and knees without turning the lift into a squat.",
+      "endpoint": "Stand upright with your hips and knees fully extended and the bar held in front of your body.",
+      "returnPhase": "Hinge forward and lower the bar for two seconds until the plates touch the floor beside your feet, keeping the slight knee bend and straight-back position. The source did not prescribe a floor pause, reset, or complete unloading.",
+      "controlledJoints": "Keep the lift hip-dominant. Begin with the prescribed slight knee bend, but do not treat it as a measured fixed angle.",
+      "supportAndPosture": "Keep both feet planted, brace your trunk, maintain the instructed straight-back posture, and use no external torso support.",
+      "disqualifyingCompensations": [
+        "Keeping the knees extended throughout turns the movement into a stiff-leg deadlift.",
+        "Bending the knees deeply turns the hinge into a squat-like conventional floor pull.",
+        "Stopping the plates above the floor turns the reviewed floor-touch fixture into a partial or continuous Romanian deadlift."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "romanian-deadlift",
+    "catalogID": "barbell-stiff-leg-deadlift",
+    "name": "Barbell Stiff-Leg Deadlift",
+    "group": "legs",
+    "defaultWeight": 95,
+    "defaultWeightKg": 42.5,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Stiff-Leg Deadlift",
+      "SLDL"
+    ],
+    "searchPriority": 84,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with your feet hip-distance apart on the floor in front of a free barbell. Keep your knees extended, hinge forward with a straight back, grip the bar with both hands shoulder-width apart, and draw your shoulders back and down.",
+      "movement": "Lift the bar from the floor over two seconds by extending your hips while keeping your knees extended.",
+      "endpoint": "Stand upright with your hips fully extended, your knees still extended, and the bar held in front of your body.",
+      "returnPhase": "Hinge forward and lower the bar for two seconds until the plates touch the floor beside your feet, keeping your knees extended and your back straight. The source did not prescribe a floor pause, reset, or complete unloading.",
+      "controlledJoints": "Keep both knees extended throughout the repetition without adding a squat-like bend.",
+      "supportAndPosture": "Keep both feet planted, brace your trunk, maintain the instructed straight-back posture, and use no external torso support.",
+      "disqualifyingCompensations": [
+        "Adding a slight knee bend turns the movement into a Romanian deadlift.",
+        "Bending the knees deeply turns the hinge into a squat-like conventional floor pull.",
+        "Stopping the plates above the floor turns the reviewed floor-touch fixture into a partial stiff-leg deadlift."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "romanian-deadlift",
+    "catalogID": "barbell-romanian-deadlift-15-cm-step",
+    "name": "15 cm Step Barbell Romanian Deadlift",
+    "group": "legs",
+    "defaultWeight": 95,
+    "defaultWeightKg": 42.5,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "15 cm Step Romanian Deadlift",
+      "15 cm Deficit Romanian Deadlift",
+      "Step RDL"
+    ],
+    "searchPriority": 78,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with both feet hip-distance apart on a 15-centimeter step above a free barbell resting on the lower floor. Bend your knees slightly, hinge forward with a straight back, grip the bar with both hands shoulder-width apart, and draw your shoulders back and down.",
+      "movement": "Lift the bar from the lower floor over two seconds by extending your hips. Finish tall by fully extending your hips and knees without turning the lift into a squat.",
+      "endpoint": "Stand upright on the step with your hips and knees fully extended and the bar held in front of your body.",
+      "returnPhase": "Hinge forward and lower the bar for two seconds until the plates touch the lower floor 15 centimeters below your feet, keeping the slight knee bend and straight-back position. The source did not prescribe a floor pause, reset, or complete unloading.",
+      "controlledJoints": "Keep the lift hip-dominant. Begin with the prescribed slight knee bend, but do not treat it as a measured fixed angle.",
+      "supportAndPosture": "Keep both feet planted on the 15-centimeter step, brace your trunk, maintain the instructed straight-back posture, and use no external torso support.",
+      "disqualifyingCompensations": [
+        "Using a floor-level stance turns the movement into a ground-level Romanian deadlift.",
+        "Keeping the knees extended throughout turns the movement into an unreviewed step stiff-leg deadlift.",
+        "Bending the knees deeply turns the hinge into a deficit squat-like floor pull.",
+        "Stopping the plates at foot level instead of the lower floor removes the directly studied 15-centimeter range."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
         "role": "stabilizer"
       }
     ]

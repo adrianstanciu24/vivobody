@@ -11,6 +11,7 @@ $(SRCROOT)/specs/catalog/families/anti-lateral-flexion.json
 $(SRCROOT)/specs/catalog/families/anti-rotation.json
 $(SRCROOT)/specs/catalog/families/bilateral-squat.json
 $(SRCROOT)/specs/catalog/families/chest-fly.json
+$(SRCROOT)/specs/catalog/families/conventional-deadlift.json
 $(SRCROOT)/specs/catalog/families/decline-press.json
 $(SRCROOT)/specs/catalog/families/diagonal-pull.json
 $(SRCROOT)/specs/catalog/families/dip.json
@@ -36,6 +37,7 @@ $(SRCROOT)/specs/catalog/families/knee-flexion.json
 $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/push-press.json
 $(SRCROOT)/specs/catalog/families/reverse-fly.json
+$(SRCROOT)/specs/catalog/families/romanian-deadlift.json
 $(SRCROOT)/specs/catalog/families/scapular-depression.json
 $(SRCROOT)/specs/catalog/families/scapular-elevation.json
 $(SRCROOT)/specs/catalog/families/scapular-protraction.json

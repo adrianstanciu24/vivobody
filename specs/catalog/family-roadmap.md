@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 57 reviewed families are active, containing 136 exercises.
+- 59 reviewed families are active, containing 140 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 154 registered evidence sources.
+  44 joint actions, and 157 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -25,7 +25,9 @@ are discovery handles, not guaranteed final family IDs.
 - Batch 5 initially resolved five discovery candidates into four active
   families and two holds after splitting stationary split squats from dynamic
   lunges. Later review activated both the good-morning hinge owner and the
-  forward/reverse dynamic-lunge family.
+  forward/reverse dynamic-lunge family. A subsequent deadlift review activated
+  one conventional floor-pull family and a separate three-record Romanian,
+  step-Romanian, and stiff-leg family without broadening the good morning.
 - Batch 6 resolved five taxonomy-sensitive candidates into five active
   single-exercise families after the hip-rotation anatomy and evidence gates
   closed atomically.
@@ -86,7 +88,9 @@ batch siblings.
 | `hip-flexion` | 1 |
 | `ankle-plantarflexion` | 2 |
 | `bilateral-squat` | 2 |
+| `conventional-deadlift` | 1 |
 | `hip-hinge` | 1 |
+| `romanian-deadlift` | 3 |
 | `hip-thrust-bridge` | 2 |
 | `split-stance-squat` | 1 |
 | `step-up` | 1 |
@@ -105,7 +109,7 @@ batch siblings.
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **136** |
+| **Total** | **140** |
 
 ## Foundation gates
 
@@ -349,9 +353,10 @@ outside this isolation contract.
 
 ## Batch 5 — Lower-body compound sagittal patterns (5)
 
-Status: complete. Five discovery candidates resolved into six narrow active
-families. The former `split-stance-lunge` handle split into the stationary
-`split-stance-squat` and dynamic step-and-return `dynamic-lunge` owners.
+Status: complete, with a later deadlift follow-up. Five discovery candidates
+first resolved into six narrow active families. The former
+`split-stance-lunge` handle split into the stationary `split-stance-squat` and
+dynamic step-and-return `dynamic-lunge` owners.
 
 1. `hip-hinge`
 2. `hip-thrust-bridge`
@@ -361,7 +366,7 @@ families. The former `split-stance-lunge` handle split into the stationary
 5. `step-up`
 6. `dynamic-lunge` — split from the discovery handle
 
-The nine active records are deliberately narrow: parallel straight-bar back
+The original nine records are deliberately narrow: parallel straight-bar back
 and front squats; barbell hip thrust and floor glute bridge; one stationary
 approximately-leg-length barbell split squat using the study's 100-percent
 condition; one exact 21-cm bodyweight forward stepping sequence; one barbell
@@ -376,13 +381,27 @@ the knee held or promoting knee extension. Romanian, stiff-leg, conventional,
 sumo, trap-bar, deficit, floor-pull, and supported-back-extension variants
 remain outside the contract.
 
+The later [deadlift activation](proposals/deadlift-activation.md) preserves
+that boundary and adds two separate owners rather than broadening
+`hip-hinge`:
+
+7. `conventional-deadlift` — one bilateral barbell floor-contact fixture with
+   material hip, knee, and ankle motion while spinal motion remains unmeasured
+8. `romanian-deadlift` — three bilateral barbell floor-contact fixtures:
+   Romanian, 15-centimeter step Romanian, and stiff-leg deadlift
+
+The Romanian-family contract records the reviewed knee instructions without
+calling an ordinary Romanian deadlift position-held. Sumo, trap-bar,
+unilateral, staggered, dumbbell, kettlebell, cable, and Smith-machine variants
+remain future evidence decisions rather than inferred substitutions.
+
 Dynamic lunge owns the reviewed landing, deceleration, changing support, and
 return-to-bilateral-standing transitions for exact forward and reverse
 fixtures. `split-stance-squat` remains the fixed-foot owner. Walking and
 alternating lunges, external loads, fixed stride lengths, and continuous
-locomotion remain outside both contracts. Leg press, knee-extension-heavy floor
-pulls, generic-height step-ups, and lateral/crossover step-ups remain explicit
-future decisions rather than automatic variants.
+locomotion remain outside both contracts. Leg press, generic-height step-ups,
+and lateral/crossover step-ups remain explicit future decisions rather than
+automatic variants.
 
 ## Batch 6 — Lower-body taxonomy-sensitive isolation (5)
 

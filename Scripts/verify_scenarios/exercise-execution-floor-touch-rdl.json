@@ -1,0 +1,121 @@
+{
+  "name": "exercise-execution-floor-touch-rdl",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body"]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Floor-Touch Barbell Romanian Deadlift,"
+        },
+        "direction": "up",
+        "maxSwipes": 24
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Floor-Touch Barbell Romanian Deadlift,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Movement"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "Bend your knees slightly"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "extending your hips"
+          },
+          {
+            "identifier": "exercise-execution-endpoint",
+            "labelContains": "hips and knees fully extended"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-return"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "plates touch the floor"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-compensations"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-controlled-joints",
+            "labelContains": "prescribed slight knee bend"
+          },
+          {
+            "identifier": "exercise-execution-support-posture",
+            "labelContains": "both feet planted"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "continuous Romanian deadlift"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}

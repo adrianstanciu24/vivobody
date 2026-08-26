@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Fifty-seven reviewed family files containing 136 exercises are currently
+Fifty-nine reviewed family files containing 140 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-154-source foundation. Each uses a coverage batch whose exercises
+157-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -56,17 +56,17 @@ versus bent-knee machine calf raise, and one supine bodyweight active straight-
 leg raise to active end range. The hip-flexion fixture reports its pelvis and
 spine motion as nonstandardized rather than inventing position-held claims.
 
-Batch 5 adds nine exercises across `bilateral-squat`, `hip-thrust-bridge`,
-`split-stance-squat`, `step-up`, `hip-hinge`, and `dynamic-lunge`. The rosters
-are limited to two parallel straight-bar squats, two padded-barbell
-thrust/bridge fixtures, one stationary approximately-leg-length barbell split
-squat using the study's 100-percent condition, one complete 21-cm bodyweight
-forward stepping sequence, one exact 25-percent-body-mass barbell good morning,
-and the reviewed bodyweight forward and reverse step-and-return lunges. The
-good morning declares dynamic hip and spinal extension while preserving its
-small measured knee excursion as nondefining. Dynamic lunge owns the reviewed
-landing, support-transition, deceleration, and return topology; stationary
-split squats and walking lunges remain outside it.
+Batch 5 and its deadlift follow-up add thirteen exercises across
+`bilateral-squat`, `hip-thrust-bridge`, `split-stance-squat`, `step-up`,
+`hip-hinge`, `dynamic-lunge`, `conventional-deadlift`, and
+`romanian-deadlift`. The original nine records remain the reviewed squat,
+thrust/bridge, split-squat, step-up, good-morning, and dynamic-lunge fixtures.
+That roster still includes one exact 25-percent-body-mass barbell good morning.
+The follow-up adds one conventional barbell deadlift plus distinct Romanian,
+15-centimeter step-Romanian, and stiff-leg barbell fixtures. Their floor
+contact, knee technique, range, and load geometry stay explicit; they do not
+silently broaden the good-morning contract or authorize sumo, trap-bar,
+unilateral, or equipment-substitution variants.
 
 Batch 6 adds one exercise each across `hip-abduction`, `hip-adduction`,
 `ankle-dorsiflexion`, `hip-internal-rotation`, and
