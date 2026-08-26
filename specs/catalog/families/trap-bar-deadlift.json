@@ -1,0 +1,986 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "trap-bar-deadlift",
+  "name": "Trap-Bar Deadlift",
+  "definition": "A bilateral unsupported floor pull performed while standing inside a free hexagonal frame and holding parallel handles beside the lower legs. The frame rises from the floor to an upright endpoint through combined hip extension, knee extension, and ankle plantarflexion. The roster is limited to two independently documented fixtures and does not claim that their handle heights are interchangeable. Lake et al.'s low-handle fixture used a Pullum Sports hex bar whose published figure places the unraised handles at the sleeve axis, a parallel palms-facing grip, bare feet, three separate single repetitions at 90 percent of the low-handle fixture's separately tested one-repetition maximum, and at least two minutes between attempts. Lockie et al.'s high-handle fixture used the high handles of an American Barbell dual-height hex bar; the high-handle centers were 10 centimeters above the low-handle centers and 64 centimeters apart. That fixture used one-repetition-maximum attempts, three minutes between attempts, maximal force intent, and self-selected footwear kept consistent on an Olympic platform. Both sources analyzed the ascent from the resting floor position to standing and did not prescribe an eccentric cadence; the catalog's controlled return to the floor is an explicit logging adaptation rather than a measured phase. Swinton et al. support the shared hip-, knee-, and ankle-extension actions and show a greater knee moment with lower lumbar and hip moments for their unspecified-height hex bar, but their shoulder-width, maximal-speed, 10-to-80-percent-straight-bar-one-repetition-maximum protocol supplies no fixture values to either active record. Camara et al. support vastus-lateralis, biceps-femoris, and erector-spinae involvement for an unspecified-height hex bar, not numeric muscle contribution or high-handle equivalence. Gluteus maximus and the combined vasti region are non-ranked co-primary training emphases; rectus femoris and the plantarflexors are secondary, while hamstrings, loaded-grip, upper-limb, and trunk contributors receive conservative stabilization credit. The one-repetition defaults reflect the directly studied trial structures. The 45-pound and 20-kilogram load seeds are product initialization, not claims about trap-bar frame mass or either source prescription. Neither active source standardized stance width, toe angle, spinal kinematics, or the return phase, so none is invented. Straight-bar, sumo, arbitrary handle heights, open-frame bars, farmer carries, jumps, mid-thigh pulls, shrugs, deficits, blocks, racks, unilateral or staggered stances, straps, and non-trap-bar equipment remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "camara-2016-straight-hex-bar-emg",
+    "christophy-2012-lumbar-spine",
+    "lake-2017-low-handle-hex-bar-deadlift",
+    "lockie-2018-high-handle-hex-bar-deadlift",
+    "swinton-2011-straight-hex-bar-biomechanics"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "trapBar"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultReps": {
+      "minimum": 1,
+      "maximum": 1
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMax",
+        "vasti"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "bicepsFemoris",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "trapeziusUpper",
+        "triceps",
+        "abs",
+        "obliques",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "sourceFixture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact experimental fixture that supplies the handle topology, load prescription, trial structure, surface, and footwear facts; values from the two sources are not interchangeable.",
+      "allowedValues": [
+        "lake2017PullumLowHandle",
+        "lockie2018AmericanBarbellHighHandle"
+      ]
+    },
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet form the distal base while the pelvis, torso, and freely held frame move relative to it.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both source fixtures finish in an upright standing position inside the frame.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "No bench, pad, rack, or other external surface supports the torso during either free-frame lift.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed fixtures use a symmetric bilateral stance inside the hexagonal frame.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lake et al. and Lockie et al. did not standardize or report a numeric stance width for their active fixtures.",
+      "allowedValues": [
+        "unreported"
+      ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Neither active fixture reported or compared toe angle.",
+      "allowedValues": [
+        "unreported"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog keeps both feet on their support surface through the ascent so the movement remains a bilateral floor pull; plantar-pressure distribution was not measured.",
+      "allowedValues": [
+        "bothFeetRemainOnSurfaceCatalogConstraint"
+      ]
+    },
+    {
+      "id": "supportAndFootwear",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lake et al. tested bare feet on the laboratory floor, whereas Lockie et al. used an Olympic platform and allowed self-selected footwear that remained the same for both lifts.",
+      "allowedValues": [
+        "barefootOnLaboratoryFloor",
+        "selfSelectedConsistentFootwearOnOlympicPlatform"
+      ]
+    },
+    {
+      "id": "frameGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly documented closed-frame implement: Pullum Sports' single-height hex bar or American Barbell's dual-height hex bar.",
+      "allowedValues": [
+        "pullumSportsClosedHexagonalFrame",
+        "americanBarbellDualHeightHexagonalFrame"
+      ]
+    },
+    {
+      "id": "handleHeight",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lake et al.'s published figure shows unraised handles at the sleeve axis. Lockie et al. directly reported high-handle centers 10 centimeters above the low-handle centers.",
+      "allowedValues": [
+        "unraisedAtSleeveAxisFromPublishedFigure",
+        "highHandlesTenCentimetersAboveLowHandleCenters"
+      ]
+    },
+    {
+      "id": "handleSpacing",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lake et al. did not report handle-center spacing. Lockie et al. reported 64 centimeters between the two high-handle centers.",
+      "allowedValues": [
+        "unreported",
+        "sixtyFourCentimetersCenterToCenter"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both hands grasp parallel lateral handles with the palms facing one another.",
+      "allowedValues": [
+        "parallelPalmsFacing"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lifter stands inside the closed frame with a handle in each hand beside the lower legs and the loaded sleeves lateral to the body.",
+      "allowedValues": [
+        "handsLateralToLowerLegsInsideFrame"
+      ]
+    },
+    {
+      "id": "externalLoadPrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lake et al. tested 90 percent of the separately measured low-handle hex-bar one-repetition maximum. Lockie et al. tested the high-handle one-repetition maximum itself.",
+      "allowedValues": [
+        "ninetyPercentLowHandleSpecificOneRepMaximum",
+        "highHandleOneRepMaximum"
+      ]
+    },
+    {
+      "id": "trialStructure",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly studied single-repetition structure and recovery interval for each source fixture.",
+      "allowedValues": [
+        "threeSeparatedSinglesMinimumTwoMinutesRest",
+        "oneRepMaximumAttemptsThreeMinutesRest"
+      ]
+    },
+    {
+      "id": "repetitionOrder",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both active sources analyzed a concentric ascent from the frame's resting floor position to standing; their publications did not standardize the subsequent return.",
+      "allowedValues": [
+        "floorToStandingAscentMeasuredReturnUnspecified"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip extension contributes to the ascent from the floor to standing.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Knee extension contributes to the ascent and reaches the source-defined extended standing endpoint.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Swinton et al. measured ankle plantarflexion in the hex-bar ascent; the catalog does not prescribe rising onto the toes.",
+      "allowedValues": [
+        "plantarflexesTowardStanding"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Neither active fixture reported segmental spinal kinematics. Lockie et al. stated a neutral-spine instruction in the conventional protocol but did not separately standardize it for the high-handle condition, so neither fixture supports dynamic spinal motion or a literal held spinal angle.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog holds the elbows extended so the frame is carried by the straight arms; this is a mechanics-derived coaching constraint rather than an active-source outcome.",
+      "allowedValues": [
+        "extendedAngleHeldCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "endpoint",
+      "valueType": "enum",
+      "required": true,
+      "description": "A successful ascent finishes erect with the knees extended and shoulders retracted while the frame remains controlled in both hands.",
+      "allowedValues": [
+        "uprightKneesExtendedShouldersRetracted"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-exact handle topology determines the reach from the floor-resting implement to standing; no population-average lift distance is turned into a prescription.",
+      "allowedValues": [
+        "floorToStandingUsingUnraisedHandles",
+        "floorToStandingUsingHighHandles"
+      ]
+    },
+    {
+      "id": "tempo",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lake et al. reported no fixed cadence for the 90-percent singles. Lockie et al. instructed subjects to lift with as much force as possible, without a timed cadence.",
+      "allowedValues": [
+        "noFixedCadenceReported",
+        "maximalForceIntentNoFixedCadence"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "No rail, lever, or machine linkage constrains either free hexagonal frame."
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each source used separated single attempts beginning from the floor; neither prescribed an eccentric cadence, touch-and-go boundary, or multi-repetition sequence.",
+      "allowedValues": [
+        "separateSinglesFloorResetReturnUnmeasured",
+        "oneRepMaximumAttemptsFloorResetReturnUnmeasured"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip extension, knee extension, and ankle plantarflexion together create the floor-to-standing ascent.",
+      "allowedValues": [
+        "compoundHipKneeAnkleExtension"
+      ]
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "lake-fixture-pins-low-handle-topology",
+      "description": "The Lake fixture admits only the Pullum low-handle geometry and its directly reported surface, load, trial, and phase details.",
+      "when": {
+        "field": "variant.sourceFixture",
+        "operator": "equals",
+        "value": "lake2017PullumLowHandle"
+      },
+      "then": [
+        {
+          "field": "variant.supportAndFootwear",
+          "value": "barefootOnLaboratoryFloor"
+        },
+        {
+          "field": "variant.frameGeometry",
+          "value": "pullumSportsClosedHexagonalFrame"
+        },
+        {
+          "field": "variant.handleHeight",
+          "value": "unraisedAtSleeveAxisFromPublishedFigure"
+        },
+        {
+          "field": "variant.handleSpacing",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.externalLoadPrescription",
+          "value": "ninetyPercentLowHandleSpecificOneRepMaximum"
+        },
+        {
+          "field": "variant.trialStructure",
+          "value": "threeSeparatedSinglesMinimumTwoMinutesRest"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "floorToStandingUsingUnraisedHandles"
+        },
+        {
+          "field": "variant.tempo",
+          "value": "noFixedCadenceReported"
+        },
+        {
+          "field": "variant.interRepSupport",
+          "value": "separateSinglesFloorResetReturnUnmeasured"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "low-handle-topology-requires-lake-fixture",
+      "description": "The unraised handle geometry is admitted only as part of the complete Lake fixture.",
+      "when": {
+        "field": "variant.handleHeight",
+        "operator": "equals",
+        "value": "unraisedAtSleeveAxisFromPublishedFigure"
+      },
+      "then": [
+        {
+          "field": "variant.sourceFixture",
+          "value": "lake2017PullumLowHandle"
+        },
+        {
+          "field": "variant.frameGeometry",
+          "value": "pullumSportsClosedHexagonalFrame"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "pullum-frame-requires-lake-low-handles",
+      "description": "The Pullum frame value cannot be combined with the high-handle source or geometry.",
+      "when": {
+        "field": "variant.frameGeometry",
+        "operator": "equals",
+        "value": "pullumSportsClosedHexagonalFrame"
+      },
+      "then": [
+        {
+          "field": "variant.sourceFixture",
+          "value": "lake2017PullumLowHandle"
+        },
+        {
+          "field": "variant.handleHeight",
+          "value": "unraisedAtSleeveAxisFromPublishedFigure"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "lake-load-requires-lake-low-handles",
+      "description": "The 90-percent low-handle-specific prescription cannot be applied to the high-handle fixture.",
+      "when": {
+        "field": "variant.externalLoadPrescription",
+        "operator": "equals",
+        "value": "ninetyPercentLowHandleSpecificOneRepMaximum"
+      },
+      "then": [
+        {
+          "field": "variant.sourceFixture",
+          "value": "lake2017PullumLowHandle"
+        },
+        {
+          "field": "variant.handleHeight",
+          "value": "unraisedAtSleeveAxisFromPublishedFigure"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "lockie-fixture-pins-high-handle-topology",
+      "description": "The Lockie fixture admits only the American Barbell high-handle geometry and its directly reported surface, load, trial, and phase details.",
+      "when": {
+        "field": "variant.sourceFixture",
+        "operator": "equals",
+        "value": "lockie2018AmericanBarbellHighHandle"
+      },
+      "then": [
+        {
+          "field": "variant.supportAndFootwear",
+          "value": "selfSelectedConsistentFootwearOnOlympicPlatform"
+        },
+        {
+          "field": "variant.frameGeometry",
+          "value": "americanBarbellDualHeightHexagonalFrame"
+        },
+        {
+          "field": "variant.handleHeight",
+          "value": "highHandlesTenCentimetersAboveLowHandleCenters"
+        },
+        {
+          "field": "variant.handleSpacing",
+          "value": "sixtyFourCentimetersCenterToCenter"
+        },
+        {
+          "field": "variant.externalLoadPrescription",
+          "value": "highHandleOneRepMaximum"
+        },
+        {
+          "field": "variant.trialStructure",
+          "value": "oneRepMaximumAttemptsThreeMinutesRest"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "floorToStandingUsingHighHandles"
+        },
+        {
+          "field": "variant.tempo",
+          "value": "maximalForceIntentNoFixedCadence"
+        },
+        {
+          "field": "variant.interRepSupport",
+          "value": "oneRepMaximumAttemptsFloorResetReturnUnmeasured"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "high-handle-topology-requires-lockie-fixture",
+      "description": "The raised handle geometry is admitted only as part of the complete Lockie fixture.",
+      "when": {
+        "field": "variant.handleHeight",
+        "operator": "equals",
+        "value": "highHandlesTenCentimetersAboveLowHandleCenters"
+      },
+      "then": [
+        {
+          "field": "variant.sourceFixture",
+          "value": "lockie2018AmericanBarbellHighHandle"
+        },
+        {
+          "field": "variant.frameGeometry",
+          "value": "americanBarbellDualHeightHexagonalFrame"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "american-frame-requires-lockie-high-handles",
+      "description": "The American Barbell dual-height frame value cannot be combined with the low-handle source or geometry.",
+      "when": {
+        "field": "variant.frameGeometry",
+        "operator": "equals",
+        "value": "americanBarbellDualHeightHexagonalFrame"
+      },
+      "then": [
+        {
+          "field": "variant.sourceFixture",
+          "value": "lockie2018AmericanBarbellHighHandle"
+        },
+        {
+          "field": "variant.handleHeight",
+          "value": "highHandlesTenCentimetersAboveLowHandleCenters"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "lockie-load-requires-lockie-high-handles",
+      "description": "The high-handle one-repetition-maximum prescription cannot be applied to the low-handle fixture.",
+      "when": {
+        "field": "variant.externalLoadPrescription",
+        "operator": "equals",
+        "value": "highHandleOneRepMaximum"
+      },
+      "then": [
+        {
+          "field": "variant.sourceFixture",
+          "value": "lockie2018AmericanBarbellHighHandle"
+        },
+        {
+          "field": "variant.handleHeight",
+          "value": "highHandlesTenCentimetersAboveLowHandleCenters"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "low-handle-trap-bar-deadlift",
+      "name": "Low-Handle Trap-Bar Deadlift",
+      "aliases": [
+        "Low-Handle Hex-Bar Deadlift",
+        "Low-Handle Hexagonal-Bar Deadlift",
+        "Low Trap-Bar Deadlift"
+      ],
+      "equipment": "trapBar",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 1,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "sourceFixture": "lake2017PullumLowHandle",
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "unreported",
+        "footOrientation": "unreported",
+        "footContact": "bothFeetRemainOnSurfaceCatalogConstraint",
+        "supportAndFootwear": "barefootOnLaboratoryFloor",
+        "frameGeometry": "pullumSportsClosedHexagonalFrame",
+        "handleHeight": "unraisedAtSleeveAxisFromPublishedFigure",
+        "handleSpacing": "unreported",
+        "gripOrientation": "parallelPalmsFacing",
+        "loadPlacement": "handsLateralToLowerLegsInsideFrame",
+        "externalLoadPrescription": "ninetyPercentLowHandleSpecificOneRepMaximum",
+        "trialStructure": "threeSeparatedSinglesMinimumTwoMinutesRest",
+        "repetitionOrder": "floorToStandingAscentMeasuredReturnUnspecified",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexesTowardStanding",
+        "spineMotion": "nonstandardized",
+        "elbowMotion": "extendedAngleHeldCatalogAdaptation",
+        "endpoint": "uprightKneesExtendedShouldersRetracted",
+        "rangeOfMotion": "floorToStandingUsingUnraisedHandles",
+        "tempo": "noFixedCadenceReported",
+        "fixedPath": false,
+        "interRepSupport": "separateSinglesFloorResetReturnUnmeasured",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "lake-2017-low-handle-hex-bar-deadlift"
+      ],
+      "execution": {
+        "startingPosition": "Rest a closed Pullum-style hexagonal frame on the floor and stand symmetrically inside it. Use the unraised handles aligned with the sleeve axis, with one handle beside each lower leg and your palms facing one another. The source did not standardize stance width or toe angle and tested this fixture barefoot.",
+        "movement": "From the resting floor position, keep both elbows extended and drive through both feet as you extend your hips and knees together. Let the ankles move naturally toward standing while the frame rises around your body; do not lower the frame during the ascent.",
+        "endpoint": "Finish erect with your knees and hips extended, shoulders drawn back, and the unraised handles controlled beside your thighs.",
+        "returnPhase": "After the logged single, lower the frame under control until it rests on the floor before the next separate attempt. Lake et al. analyzed the ascent and did not prescribe the return cadence; this controlled reset is a catalog adaptation.",
+        "controlledJoints": "Keep both elbows extended and maintain trunk control without deliberately creating spinal motion. Do not treat any stance width, toe angle, or spinal angle as source-standardized.",
+        "supportAndPosture": "Use no external torso support. Keep both feet on the floor and remain centered inside the closed frame with the loaded sleeves lateral to your body.",
+        "disqualifyingCompensations": [
+          "Turning the frame over to use raised handles turns the movement into a high-handle trap-bar deadlift.",
+          "Moving the load to a straight bar in front of the legs turns the movement into a conventional barbell deadlift.",
+          "Jumping with the frame turns the movement into a trap-bar jump rather than the reviewed deadlift.",
+          "Walking while holding the frame turns the movement into a trap-bar farmer carry."
+        ]
+      }
+    },
+    {
+      "catalogID": "high-handle-trap-bar-deadlift",
+      "name": "High-Handle Trap-Bar Deadlift",
+      "aliases": [
+        "High-Handle Hex-Bar Deadlift",
+        "High-Handle Hexagonal-Bar Deadlift",
+        "High Trap-Bar Deadlift"
+      ],
+      "equipment": "trapBar",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 1,
+      "searchPriority": 92,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "sourceFixture": "lockie2018AmericanBarbellHighHandle",
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "unreported",
+        "footOrientation": "unreported",
+        "footContact": "bothFeetRemainOnSurfaceCatalogConstraint",
+        "supportAndFootwear": "selfSelectedConsistentFootwearOnOlympicPlatform",
+        "frameGeometry": "americanBarbellDualHeightHexagonalFrame",
+        "handleHeight": "highHandlesTenCentimetersAboveLowHandleCenters",
+        "handleSpacing": "sixtyFourCentimetersCenterToCenter",
+        "gripOrientation": "parallelPalmsFacing",
+        "loadPlacement": "handsLateralToLowerLegsInsideFrame",
+        "externalLoadPrescription": "highHandleOneRepMaximum",
+        "trialStructure": "oneRepMaximumAttemptsThreeMinutesRest",
+        "repetitionOrder": "floorToStandingAscentMeasuredReturnUnspecified",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexesTowardStanding",
+        "spineMotion": "nonstandardized",
+        "elbowMotion": "extendedAngleHeldCatalogAdaptation",
+        "endpoint": "uprightKneesExtendedShouldersRetracted",
+        "rangeOfMotion": "floorToStandingUsingHighHandles",
+        "tempo": "maximalForceIntentNoFixedCadence",
+        "fixedPath": false,
+        "interRepSupport": "oneRepMaximumAttemptsFloorResetReturnUnmeasured",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "lockie-2018-high-handle-hex-bar-deadlift"
+      ],
+      "execution": {
+        "startingPosition": "Rest an American Barbell-style dual-height hexagonal frame on an Olympic platform and stand symmetrically inside it. Use the high handles, whose centers are 10 centimeters above the low-handle centers and 64 centimeters apart, with your palms facing one another. Use consistent footwear; the source did not standardize stance width or toe angle.",
+        "movement": "From the resting floor position, keep both elbows extended and lift with maximal force intent as you extend your hips and knees together. Let the ankles move naturally toward standing and do not lower the frame during the ascent.",
+        "endpoint": "Finish erect inside the frame with your knees and hips extended, shoulders drawn back, and the high handles controlled beside your thighs.",
+        "returnPhase": "After the logged single, lower the frame under control until it rests on the platform before another attempt. Lockie et al. analyzed only the concentric ascent and did not prescribe the return cadence; this controlled reset is a catalog adaptation.",
+        "controlledJoints": "Keep both elbows extended and maintain trunk control without treating any spinal angle as source-standardized or measured. Do not invent a source-standardized stance width or toe angle.",
+        "supportAndPosture": "Use no belt, wraps, supportive garment, or external torso support. Keep both feet on the platform and remain centered inside the closed frame with the loaded sleeves lateral to your body.",
+        "disqualifyingCompensations": [
+          "Using the lower handles turns the movement into a low-handle trap-bar deadlift outside this high-handle fixture.",
+          "Moving the load to a straight bar in front of the legs turns the movement into a conventional barbell deadlift.",
+          "Jumping with the frame turns the movement into a trap-bar jump rather than the reviewed deadlift.",
+          "Walking while holding the frame turns the movement into a trap-bar farmer carry."
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,233 @@
+{
+  "name": "exercise-execution-single-leg-deadlift",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Contralateral-Load Dumbbell Single-Leg Romanian Deadlift,.*Dumbbell"
+        },
+        "direction": "up",
+        "maxSwipes": 24
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Contralateral-Load Dumbbell Single-Leg Romanian Deadlift,.*Dumbbell"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Contralateral-Load Dumbbell Single-Leg Romanian Deadlift,.*Dumbbell"
+      }
+    },
+    {
+      "wait": {
+        "label": "Movement",
+        "valueContains": "unilateral"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift"
+          },
+          {
+            "labelContains": "Muscles used by Contralateral-Load Dumbbell Single-Leg Romanian Deadlift"
+          },
+          {
+            "label": "Movement",
+            "valueContains": "hinge, compound, sagittal plane, unilateral"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Primary, Medial Hamstrings · Glute Max"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Primary, Medial Hamstrings · Glute Max"
+          },
+          {
+            "labelContains": "Secondary, Lumbar Extensors"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Biceps Femoris · Glute Med · Gastrocnemius · Soleus"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Stabilizer, Upper Traps · External Rotators · Brachialis · Radial Wrist Extensors · Finger Flexors · Abs · Obliques · Biceps Femoris · Glute Med · Gastrocnemius · Soleus"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "hold one dumbbell in the opposite hand"
+          },
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "approximately 15-degree flexion"
+          },
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "trunk about parallel to the ground"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "Extend the working hip"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "opposite-side shoulder line"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-endpoint"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-endpoint",
+            "labelContains": "full working-hip extension"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-return"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "Complete six continuous repetitions"
+          },
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "individual metronome pace"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-compensations"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-controlled-joints",
+            "labelContains": "approximately 15-degree working-knee flexion"
+          },
+          {
+            "identifier": "exercise-execution-controlled-joints",
+            "labelContains": "do not claim literal zero excursion"
+          },
+          {
+            "identifier": "exercise-execution-support-posture",
+            "labelContains": "working foot planted and the other foot unloaded"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "staggered-stance or B-stance hinge"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "working-leg side turns this exercise into the ipsilateral-load fixture"
+          },
+          {
+            "identifier": "exercise-execution-side-direction",
+            "labelContains": "dumbbell in the opposite hand"
+          },
+          {
+            "identifier": "exercise-execution-side-direction",
+            "labelContains": "mirror the setup on the other leg"
+          },
+          {
+            "identifier": "exercise-execution-side-direction",
+            "labelContains": "dominant working leg"
+          },
+          {
+            "identifier": "exercise-execution-side-direction",
+            "labelContains": "catalog adaptation"
+          }
+        ],
+        "forbidden": []
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}

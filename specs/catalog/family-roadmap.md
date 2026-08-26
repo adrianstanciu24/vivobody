@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 59 reviewed families are active, containing 140 exercises.
+- 62 reviewed families are active, containing 146 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 157 registered evidence sources.
+  44 joint actions, and 165 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -27,7 +27,9 @@ are discovery handles, not guaranteed final family IDs.
   lunges. Later review activated both the good-morning hinge owner and the
   forward/reverse dynamic-lunge family. A subsequent deadlift review activated
   one conventional floor-pull family and a separate three-record Romanian,
-  step-Romanian, and stiff-leg family without broadening the good morning.
+  step-Romanian, and stiff-leg family without broadening the good morning. A
+  second expansion activated separate sumo, trap-bar, and true single-leg
+  owners while leaving staggered/B-stance deferred for missing fixture facts.
 - Batch 6 resolved five taxonomy-sensitive candidates into five active
   single-exercise families after the hip-rotation anatomy and evidence gates
   closed atomically.
@@ -89,6 +91,9 @@ batch siblings.
 | `ankle-plantarflexion` | 2 |
 | `bilateral-squat` | 2 |
 | `conventional-deadlift` | 1 |
+| `sumo-deadlift` | 1 |
+| `trap-bar-deadlift` | 2 |
+| `single-leg-deadlift` | 3 |
 | `hip-hinge` | 1 |
 | `romanian-deadlift` | 3 |
 | `hip-thrust-bridge` | 2 |
@@ -109,7 +114,7 @@ batch siblings.
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **140** |
+| **Total** | **146** |
 
 ## Foundation gates
 
@@ -353,7 +358,7 @@ outside this isolation contract.
 
 ## Batch 5 — Lower-body compound sagittal patterns (5)
 
-Status: complete, with a later deadlift follow-up. Five discovery candidates
+Status: complete, with two later deadlift follow-ups. Five discovery candidates
 first resolved into six narrow active families. The former
 `split-stance-lunge` handle split into the stationary `split-stance-squat` and
 dynamic step-and-return `dynamic-lunge` owners.
@@ -391,9 +396,22 @@ that boundary and adds two separate owners rather than broadening
    Romanian, 15-centimeter step Romanian, and stiff-leg deadlift
 
 The Romanian-family contract records the reviewed knee instructions without
-calling an ordinary Romanian deadlift position-held. Sumo, trap-bar,
-unilateral, staggered, dumbbell, kettlebell, cable, and Smith-machine variants
-remain future evidence decisions rather than inferred substitutions.
+calling an ordinary Romanian deadlift position-held.
+
+The later [deadlift expansion](proposals/deadlift-expansion.md) adds three more
+owners without weakening either bilateral contract:
+
+9. `sumo-deadlift` — one barefoot double-overhand dead-stop barbell fixture
+10. `trap-bar-deadlift` — separate source-exact low- and high-handle fixtures
+11. `single-leg-deadlift` — one barbell fixture plus ipsilateral- and
+    contralateral-load one-dumbbell Romanian fixtures
+
+Staggered/B-stance remains deferred because its direct intervention does not
+report the rear-foot load share, knee behavior, range, grip, or bar path needed
+to distinguish it truthfully from a true single-leg or bilateral hinge.
+Kettlebell, cable, Smith-machine, arbitrary-handle, and other equipment or
+support geometries remain future evidence decisions rather than inferred
+substitutions.
 
 Dynamic lunge owns the reviewed landing, deceleration, changing support, and
 return-to-bilateral-standing transitions for exact forward and reverse

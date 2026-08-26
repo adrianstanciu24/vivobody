@@ -6,6 +6,11 @@ barbell exercises. The enforceable sources are
 `families/romanian-deadlift.json`; this record preserves the evidence limits,
 family split, product adaptations, and exclusions behind those contracts.
 
+The later [deadlift expansion](deadlift-expansion.md) separately activates
+sumo, trap-bar, and true single-leg fixtures. Its narrower contracts supersede
+the corresponding deferrals below without broadening either family in this
+record; staggered/B-stance remains deferred.
+
 This decision supersedes only the deadlift deferrals in
 `batch-5-hip-patterns.md`. The original Batch-5 good-morning and
 hip-thrust/bridge decisions remain active and historically accurate.
@@ -185,9 +190,9 @@ do not supply fixture details to `conventional-barbell-deadlift`.
 
 | Candidate | Decision boundary |
 |---|---|
-| Sumo deadlift | Wider stance, arms-inside-thighs grip geometry, and different hip/knee mechanics require a separate reviewed contract. |
-| Hex/trap-bar deadlift | Handle height, load line, neutral-grip geometry, and knee-extensor demand are not straight-bar equivalence. |
-| Single-leg or unilateral deadlift/RDL | Laterality, balance, pelvis control, and frontal/transverse demands differ from both bilateral families. |
+| Sumo deadlift | Later activated as a separate reviewed contract; it remains outside these two families. |
+| Hex/trap-bar deadlift | Later activated as a separate reviewed contract with explicit handle geometry; it remains outside these two families. |
+| Single-leg or unilateral deadlift/RDL | Later activated as a separate reviewed contract; it remains outside these two bilateral families. |
 | Staggered or B-stance RDL | Asymmetric support and load sharing require direct review; it is not a stance-width option. |
 | Dumbbell or kettlebell variants | Implement path, floor reach, grip, load placement, and possible unilateral geometry differ. |
 | Cable, Smith, lever-machine, or selectorized variants | Resistance direction, fixed path, mechanism, and external support are new contract facts. |
@@ -206,11 +211,10 @@ source limitations match the family contract.
 ## Validation expectations
 
 1. Keep exactly the two family IDs and four catalog IDs above, with global ID,
-   name, and alias uniqueness. The integrated catalog contains 59 real
-   families and 140 exercises.
-2. Keep all three newly registered evidence IDs referenced and preserve the
-   157-source coverage invariant. Unused registry entries and unknown refs
-   must fail validation.
+   name, and alias uniqueness. Later deadlift families do not alter this
+   activation record's roster.
+2. Keep all three evidence IDs introduced by this activation referenced.
+   Unused registry entries and unknown refs must fail validation.
 3. Pin the conventional prime actions to hip extension, knee extension, and
    ankle plantarflexion. Pin the Romanian family to hip extension as its only
    dynamic prime plus resisted spinal flexion; dynamic knee and spine actions

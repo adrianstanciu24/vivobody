@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 59 reviewed families compile to 140 exercises with stable
+//  product: 62 reviewed families compile to 146 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 140)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 59)
+        #expect(CatalogData.records.count == 146)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 62)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -171,6 +171,181 @@ struct CatalogBiomechanicsTests {
         let pushPress = try #require(CatalogData.record(forExerciseNamed: "Barbell Push Press"))
         #expect(pushPress.direction == .vertical)
         #expect(pushPress.planes == [.sagittal, .frontal])
+    }
+
+    @Test func trapBarEquipmentAndHandleFixturesAreFirstClass() throws {
+        #expect(Equipment.trapBar.rawValue == "trapBar")
+        #expect(Equipment.trapBar.displayName == "Trap Bar")
+
+        let lowHandle = try #require(
+            CatalogData.record(forCatalogID: "low-handle-trap-bar-deadlift")
+        )
+        let highHandle = try #require(
+            CatalogData.record(forCatalogID: "high-handle-trap-bar-deadlift")
+        )
+
+        #expect(lowHandle.name == "Low-Handle Trap-Bar Deadlift")
+        #expect(highHandle.name == "High-Handle Trap-Bar Deadlift")
+        #expect(
+            Set(
+                CatalogData.records
+                    .filter { $0.familyID == "trap-bar-deadlift" }
+                    .map(\.catalogID)
+            ) == [
+                "low-handle-trap-bar-deadlift",
+                "high-handle-trap-bar-deadlift",
+            ]
+        )
+
+        for record in [lowHandle, highHandle] {
+            #expect(record.familyID == "trap-bar-deadlift")
+            #expect(record.equipment == .trapBar)
+            #expect(record.laterality == .bilateral)
+            #expect(record.mechanic == .compound)
+            #expect(record.pattern == .hinge)
+            #expect(record.planes == [.sagittal])
+            #expect(record.modality == .dynamicStrength)
+            #expect(record.trackingMode == .reps)
+            #expect(record.loadMode == .external)
+            #expect(record.bodyweightFraction == 0)
+            #expect(record.reps == 1)
+            #expect(record.defaultWeight == 45)
+            #expect(record.defaultWeightKg == 20)
+            #expect(record.muscleInvolvement.role(for: .gluteMax) == .primary)
+            #expect(record.muscleInvolvement.role(for: .vasti) == .primary)
+            #expect(record.muscleInvolvement.role(for: .rectusFemoris) == .secondary)
+            #expect(record.muscleInvolvement.role(for: .gastrocnemius) == .secondary)
+            #expect(record.muscleInvolvement.role(for: .soleus) == .secondary)
+            #expect(record.muscleInvolvement.role(for: .medialHamstrings) == .stabilizer)
+            #expect(record.muscleInvolvement.role(for: .bicepsFemoris) == .stabilizer)
+            #expect(record.muscleInvolvement.role(for: .fingerFlexors) == .stabilizer)
+            #expect(record.muscleInvolvement.role(for: .lumbarExtensors) == .stabilizer)
+        }
+    }
+
+    @Test func sumoDeadliftKeepsThreeJointCompoundRuntimeSignature() throws {
+        let sumo = try #require(
+            CatalogData.record(forCatalogID: "barefoot-dead-stop-sumo-barbell-deadlift")
+        )
+
+        #expect(sumo.familyID == "sumo-deadlift")
+        #expect(sumo.name == "Barefoot Dead-Stop Sumo Barbell Deadlift")
+        #expect(sumo.aliases == [
+            "Sumo Barbell Deadlift",
+            "Sumo Deadlift",
+            "Double-Overhand Dead-Stop Sumo Deadlift",
+        ])
+        #expect(sumo.equipment == .barbell)
+        #expect(sumo.laterality == .bilateral)
+        #expect(sumo.mechanic == .compound)
+        #expect(sumo.trainingRole == .legs)
+        #expect(sumo.pattern == .hinge)
+        #expect(sumo.planes == [.sagittal])
+        #expect(sumo.modality == .dynamicStrength)
+        #expect(sumo.trackingMode == .reps)
+        #expect(sumo.loadMode == .external)
+        #expect(sumo.bodyweightFraction == 0)
+        #expect(sumo.reps == 3)
+        #expect(sumo.defaultWeight == 45)
+        #expect(sumo.defaultWeightKg == 20)
+
+        #expect(sumo.muscleInvolvement.role(for: .gluteMax) == .primary)
+        #expect(sumo.muscleInvolvement.role(for: .vasti) == .primary)
+        #expect(sumo.muscleInvolvement.role(for: .rectusFemoris) == .secondary)
+        #expect(sumo.muscleInvolvement.role(for: .gastrocnemius) == .secondary)
+        #expect(sumo.muscleInvolvement.role(for: .soleus) == .secondary)
+        #expect(sumo.muscleInvolvement.role(for: .medialHamstrings) == .stabilizer)
+        #expect(sumo.muscleInvolvement.role(for: .adductorMagnus) == .stabilizer)
+
+        let item = ExerciseCatalogItem(record: sumo, createdAt: Date(timeIntervalSince1970: 0))
+        let aliasMatch = ExerciseSearch.rank(items: [item], query: "Sumo Deadlift")
+        #expect(aliasMatch.first?.catalogID == sumo.catalogID)
+    }
+
+    @Test func singleLegDeadliftsKeepHipOnlyProjectionAndLoadSideAliases() throws {
+        let barbell = try #require(
+            CatalogData.record(forCatalogID: "barbell-single-leg-deadlift")
+        )
+        let sameSide = try #require(
+            CatalogData.record(
+                forCatalogID: "dumbbell-single-leg-romanian-deadlift-ipsilateral-load"
+            )
+        )
+        let oppositeSide = try #require(
+            CatalogData.record(
+                forCatalogID: "dumbbell-single-leg-romanian-deadlift-contralateral-load"
+            )
+        )
+
+        #expect(
+            Set(
+                CatalogData.records
+                    .filter { $0.familyID == "single-leg-deadlift" }
+                    .map(\.catalogID)
+            ) == [
+                "barbell-single-leg-deadlift",
+                "dumbbell-single-leg-romanian-deadlift-ipsilateral-load",
+                "dumbbell-single-leg-romanian-deadlift-contralateral-load",
+            ]
+        )
+
+        for record in [barbell, sameSide, oppositeSide] {
+            #expect(record.familyID == "single-leg-deadlift")
+            #expect(record.laterality == .unilateral)
+            #expect(record.mechanic == .compound)
+            #expect(record.trainingRole == .legs)
+            #expect(record.pattern == .hinge)
+            #expect(record.planes == [.sagittal])
+            #expect(record.modality == .dynamicStrength)
+            #expect(record.trackingMode == .reps)
+            #expect(record.loadMode == .external)
+            #expect(record.bodyweightFraction == 0)
+            #expect(record.muscleInvolvement.role(for: .medialHamstrings) == .primary)
+            #expect(record.muscleInvolvement.role(for: .gluteMax) == .primary)
+            #expect(record.muscleInvolvement.role(for: .lumbarExtensors) == .secondary)
+            #expect(record.muscleInvolvement.role(for: .vasti) == nil)
+            #expect(record.muscleInvolvement.role(for: .rectusFemoris) == nil)
+            #expect(record.muscleInvolvement.role(for: .gastrocnemius) == .stabilizer)
+            #expect(record.muscleInvolvement.role(for: .soleus) == .stabilizer)
+            #expect(record.muscleInvolvement.role(for: .gluteMed) == .stabilizer)
+        }
+
+        #expect(barbell.name == "Barbell Single-Leg Deadlift")
+        #expect(barbell.equipment == .barbell)
+        #expect(barbell.reps == 5)
+        #expect(barbell.defaultWeight == 45)
+        #expect(barbell.defaultWeightKg == 20)
+
+        #expect(sameSide.name == "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift")
+        #expect(sameSide.equipment == .dumbbell)
+        #expect(sameSide.reps == 6)
+        #expect(sameSide.defaultWeight == 25)
+        #expect(sameSide.defaultWeightKg == 12.5)
+        #expect(sameSide.aliases.contains("Same-Side-Load Dumbbell Single-Leg Romanian Deadlift"))
+
+        #expect(oppositeSide.name == "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift")
+        #expect(oppositeSide.equipment == .dumbbell)
+        #expect(oppositeSide.reps == 6)
+        #expect(oppositeSide.defaultWeight == 25)
+        #expect(oppositeSide.defaultWeightKg == 12.5)
+        #expect(oppositeSide.aliases.contains(
+            "Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift"
+        ))
+
+        let createdAt = Date(timeIntervalSince1970: 0)
+        let items = [barbell, sameSide, oppositeSide].map {
+            ExerciseCatalogItem(record: $0, createdAt: createdAt)
+        }
+        let sameSideMatch = ExerciseSearch.rank(
+            items: items,
+            query: "Same-Side-Load Dumbbell Single-Leg Romanian Deadlift"
+        )
+        let oppositeSideMatch = ExerciseSearch.rank(
+            items: items,
+            query: "Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift"
+        )
+        #expect(sameSideMatch.first?.catalogID == sameSide.catalogID)
+        #expect(oppositeSideMatch.first?.catalogID == oppositeSide.catalogID)
     }
 
     @Test func trainingRolesCoverCompoundAndIsolationProgrammingPlacement() throws {

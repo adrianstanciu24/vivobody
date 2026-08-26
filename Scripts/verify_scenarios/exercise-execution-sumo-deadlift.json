@@ -1,0 +1,194 @@
+{
+  "name": "exercise-execution-sumo-deadlift",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Barefoot Dead-Stop Sumo Barbell Deadlift,"
+        },
+        "direction": "up",
+        "maxSwipes": 24
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Barefoot Dead-Stop Sumo Barbell Deadlift,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Barefoot Dead-Stop Sumo Barbell Deadlift"
+          },
+          {
+            "labelContains": "Muscles used by Barefoot Dead-Stop Sumo Barbell Deadlift"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Primary, Vasti · Glute Max"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Primary, Vasti · Glute Max"
+          },
+          {
+            "labelContains": "Secondary, Rectus Femoris · Gastrocnemius · Soleus"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Biceps Femoris · Medial Hamstrings · Glute Med · Adductor Magnus · Tibialis Anterior"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Biceps Femoris · Medial Hamstrings · Glute Med · Adductor Magnus · Tibialis Anterior"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "Stand barefoot"
+          },
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "double-overhand grip inside your knees"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "complete floor dead stop"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "extend your hips and knees together"
+          },
+          {
+            "identifier": "exercise-execution-endpoint",
+            "labelContains": "hips and knees fully extended"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-return"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "rests fully on the floor"
+          },
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "catalog adaptation"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-compensations"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-controlled-joints",
+            "labelContains": "both elbows extended"
+          },
+          {
+            "identifier": "exercise-execution-controlled-joints",
+            "labelContains": "frontal- and transverse-plane demands"
+          },
+          {
+            "identifier": "exercise-execution-support-posture",
+            "labelContains": "continuous contact through both bare feet"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "conventional deadlift"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "mixed grip"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}

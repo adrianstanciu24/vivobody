@@ -203,6 +203,16 @@ class CatalogFoundationTests(unittest.TestCase):
             for family in cls.real_families
             if family["id"] in deadlift_ids
         }
+        deadlift_expansion_ids = {
+            "sumo-deadlift",
+            "trap-bar-deadlift",
+            "single-leg-deadlift",
+        }
+        cls.deadlift_expansion_families = {
+            family["id"]: family
+            for family in cls.real_families
+            if family["id"] in deadlift_expansion_ids
+        }
 
     def family_copy(self) -> dict:
         return copy.deepcopy(self.valid_family)
@@ -6042,6 +6052,9 @@ class CatalogFoundationTests(unittest.TestCase):
             "ankle-plantarflexion",
             "bilateral-squat",
             "conventional-deadlift",
+            "sumo-deadlift",
+            "trap-bar-deadlift",
+            "single-leg-deadlift",
             "hip-hinge",
             "romanian-deadlift",
             "hip-thrust-bridge",
@@ -6069,7 +6082,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            140,
+            146,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -6936,6 +6949,9 @@ class CatalogFoundationTests(unittest.TestCase):
             "hip-flexion",
             "bilateral-squat",
             "conventional-deadlift",
+            "sumo-deadlift",
+            "trap-bar-deadlift",
+            "single-leg-deadlift",
             "hip-hinge",
             "romanian-deadlift",
             "hip-thrust-bridge",
@@ -12094,6 +12110,1197 @@ class CatalogFoundationTests(unittest.TestCase):
                 )
                 self.assertNotIn("variant", record)
 
+    def test_deadlift_expansion_contracts_and_rosters_are_exact(self) -> None:
+        expected_families = {
+            "sumo-deadlift": {
+                "name": "Sumo Deadlift",
+                "allowed": {
+                    "equipment": ["barbell"],
+                    "modalities": ["dynamicStrength"],
+                    "trackingModes": ["reps"],
+                    "loadModes": ["external"],
+                    "lateralities": ["bilateral"],
+                },
+                "recommended": None,
+                "evidence": (
+                    "arnold-2010-lower-limb",
+                    "christophy-2012-lumbar-spine",
+                    "hanen-2025-conventional-sumo-deadlift",
+                ),
+                "roster": ("barefoot-dead-stop-sumo-barbell-deadlift",),
+            },
+            "trap-bar-deadlift": {
+                "name": "Trap-Bar Deadlift",
+                "allowed": {
+                    "equipment": ["trapBar"],
+                    "modalities": ["dynamicStrength"],
+                    "trackingModes": ["reps"],
+                    "loadModes": ["external"],
+                    "lateralities": ["bilateral"],
+                },
+                "recommended": {
+                    "defaultReps": {"minimum": 1, "maximum": 1}
+                },
+                "evidence": (
+                    "arnold-2010-lower-limb",
+                    "camara-2016-straight-hex-bar-emg",
+                    "christophy-2012-lumbar-spine",
+                    "lake-2017-low-handle-hex-bar-deadlift",
+                    "lockie-2018-high-handle-hex-bar-deadlift",
+                    "swinton-2011-straight-hex-bar-biomechanics",
+                ),
+                "roster": (
+                    "low-handle-trap-bar-deadlift",
+                    "high-handle-trap-bar-deadlift",
+                ),
+            },
+            "single-leg-deadlift": {
+                "name": "Single-Leg Deadlift",
+                "allowed": {
+                    "equipment": ["barbell", "dumbbell"],
+                    "modalities": ["dynamicStrength"],
+                    "trackingModes": ["reps"],
+                    "loadModes": ["external"],
+                    "lateralities": ["unilateral"],
+                },
+                "recommended": {
+                    "defaultReps": {"minimum": 5, "maximum": 6}
+                },
+                "evidence": (
+                    "arnold-2010-lower-limb",
+                    "christophy-2012-lumbar-spine",
+                    "diamant-2021-barbell-single-leg-deadlift",
+                    "mo-2023-single-leg-romanian-loading-position",
+                    "mooney-2026-staggered-stance-romanian-deadlift",
+                ),
+                "roster": (
+                    "barbell-single-leg-deadlift",
+                    "dumbbell-single-leg-romanian-deadlift-ipsilateral-load",
+                    "dumbbell-single-leg-romanian-deadlift-contralateral-load",
+                ),
+            },
+        }
+        self.assertEqual(
+            set(self.deadlift_expansion_families),
+            set(expected_families),
+        )
+        self.assertEqual(
+            sum(
+                len(family["exercises"])
+                for family in self.deadlift_expansion_families.values()
+            ),
+            6,
+        )
+        for family_id, expected in expected_families.items():
+            family = self.deadlift_expansion_families[family_id]
+            with self.subTest(family=family_id):
+                self.assertEqual(family["name"], expected["name"])
+                self.assertEqual(
+                    family["fixed"],
+                    {
+                        "mechanic": "compound",
+                        "trainingRole": "legs",
+                        "pattern": "hinge",
+                        "direction": None,
+                        "planes": ["sagittal"],
+                    },
+                )
+                self.assertEqual(
+                    family["groupPolicy"],
+                    {"default": "legs", "allowed": ["legs"]},
+                )
+                self.assertEqual(family["allowed"], expected["allowed"])
+                if expected["recommended"] is None:
+                    self.assertNotIn("recommended", family)
+                else:
+                    self.assertEqual(
+                        family["recommended"],
+                        expected["recommended"],
+                    )
+                self.assertEqual(
+                    tuple(family["evidenceRefs"]),
+                    expected["evidence"],
+                )
+                self.assertEqual(
+                    tuple(
+                        exercise["catalogID"]
+                        for exercise in family["exercises"]
+                    ),
+                    expected["roster"],
+                )
+
+        expected_exercises = {
+            "barefoot-dead-stop-sumo-barbell-deadlift": {
+                "name": "Barefoot Dead-Stop Sumo Barbell Deadlift",
+                "aliases": (
+                    "Sumo Barbell Deadlift",
+                    "Sumo Deadlift",
+                    "Double-Overhand Dead-Stop Sumo Deadlift",
+                ),
+                "setup": (
+                    "barbell", "bilateral", "dynamicStrength", "reps",
+                    "external", 0, 45, 20, 3, 100,
+                ),
+                "evidence": ("hanen-2025-conventional-sumo-deadlift",),
+            },
+            "low-handle-trap-bar-deadlift": {
+                "name": "Low-Handle Trap-Bar Deadlift",
+                "aliases": (
+                    "Low-Handle Hex-Bar Deadlift",
+                    "Low-Handle Hexagonal-Bar Deadlift",
+                    "Low Trap-Bar Deadlift",
+                ),
+                "setup": (
+                    "trapBar", "bilateral", "dynamicStrength", "reps",
+                    "external", 0, 45, 20, 1, 96,
+                ),
+                "evidence": ("lake-2017-low-handle-hex-bar-deadlift",),
+            },
+            "high-handle-trap-bar-deadlift": {
+                "name": "High-Handle Trap-Bar Deadlift",
+                "aliases": (
+                    "High-Handle Hex-Bar Deadlift",
+                    "High-Handle Hexagonal-Bar Deadlift",
+                    "High Trap-Bar Deadlift",
+                ),
+                "setup": (
+                    "trapBar", "bilateral", "dynamicStrength", "reps",
+                    "external", 0, 45, 20, 1, 92,
+                ),
+                "evidence": ("lockie-2018-high-handle-hex-bar-deadlift",),
+            },
+            "barbell-single-leg-deadlift": {
+                "name": "Barbell Single-Leg Deadlift",
+                "aliases": (
+                    "Single-Leg Barbell Deadlift",
+                    "Floor-Touch Barbell Single-Leg Deadlift",
+                ),
+                "setup": (
+                    "barbell", "unilateral", "dynamicStrength", "reps",
+                    "external", 0, 45, 20, 5, 92,
+                ),
+                "evidence": ("diamant-2021-barbell-single-leg-deadlift",),
+            },
+            "dumbbell-single-leg-romanian-deadlift-ipsilateral-load": {
+                "name": (
+                    "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift"
+                ),
+                "aliases": (
+                    "Same-Side-Load Dumbbell Single-Leg Romanian Deadlift",
+                    "Ipsilateral Dumbbell Single-Leg RDL",
+                ),
+                "setup": (
+                    "dumbbell", "unilateral", "dynamicStrength", "reps",
+                    "external", 0, 25, 12.5, 6, 88,
+                ),
+                "evidence": ("mo-2023-single-leg-romanian-loading-position",),
+            },
+            "dumbbell-single-leg-romanian-deadlift-contralateral-load": {
+                "name": (
+                    "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift"
+                ),
+                "aliases": (
+                    "Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift",
+                    "Contralateral Dumbbell Single-Leg RDL",
+                ),
+                "setup": (
+                    "dumbbell", "unilateral", "dynamicStrength", "reps",
+                    "external", 0, 25, 12.5, 6, 90,
+                ),
+                "evidence": ("mo-2023-single-leg-romanian-loading-position",),
+            },
+        }
+        actual_exercises = {}
+        for family in self.deadlift_expansion_families.values():
+            for exercise in family["exercises"]:
+                actual_exercises[exercise["catalogID"]] = {
+                    "name": exercise["name"],
+                    "aliases": tuple(exercise["aliases"]),
+                    "setup": tuple(
+                        exercise[key]
+                        for key in (
+                            "equipment", "laterality", "modality",
+                            "trackingMode", "loadMode", "bodyweightFraction",
+                            "defaultWeight", "defaultWeightKg", "reps",
+                            "searchPriority",
+                        )
+                    ),
+                    "evidence": tuple(exercise["evidenceRefs"]),
+                }
+                self.assertEqual(exercise["additionalPrimeActions"], [])
+                self.assertEqual(exercise["additionalStabilityDemands"], [])
+                self.assertEqual(
+                    set(exercise["execution"]),
+                    catalog.EXECUTION_REQUIRED_FIELDS
+                    | {"returnPhase"}
+                    | (
+                        {"sideOrDirection"}
+                        if exercise["laterality"] == "unilateral"
+                        else set()
+                    ),
+                )
+        self.assertEqual(actual_exercises, expected_exercises)
+
+    def test_deadlift_expansion_family_signatures_are_exact(self) -> None:
+        expected_actions = {
+            "sumo-deadlift": (
+                ("hip.extension", "knee.extension", "ankle.plantarflexion"),
+                (),
+            ),
+            "trap-bar-deadlift": (
+                ("hip.extension", "knee.extension", "ankle.plantarflexion"),
+                (),
+            ),
+            "single-leg-deadlift": (
+                ("hip.extension",),
+                ("spine.flexion",),
+            ),
+        }
+        expected_stability = (
+            "shoulder", "scapula", "elbow", "wrist", "hand", "spine",
+            "pelvis", "hip", "knee", "ankle", "foot",
+        )
+        for family_id, (prime_actions, resisted_actions) in (
+            expected_actions.items()
+        ):
+            signature = self.deadlift_expansion_families[family_id][
+                "movementSignature"
+            ]
+            with self.subTest(family=family_id):
+                self.assertEqual(
+                    tuple(signature["planeBasisActions"]),
+                    ("hip.extension",),
+                )
+                self.assertEqual(tuple(signature["primeActions"]), prime_actions)
+                self.assertEqual(
+                    tuple(signature.get("resistedActions", [])),
+                    resisted_actions,
+                )
+                self.assertEqual(
+                    set(signature["forbiddenPrimeActions"]),
+                    self.foundation.action_ids - set(prime_actions),
+                )
+                self.assertEqual(
+                    len(signature["forbiddenPrimeActions"]),
+                    len(set(signature["forbiddenPrimeActions"])),
+                )
+                self.assertEqual(
+                    tuple(signature["stabilityDemands"]),
+                    expected_stability,
+                )
+
+    def test_deadlift_expansion_variants_are_exact(self) -> None:
+        sumo_variant = {
+            "kineticChain": "closed",
+            "bodyPosition": "standing",
+            "torsoSupport": "none",
+            "stanceConfiguration": "symmetricBilateral",
+            "stanceWidth": "selfSelectedWideUnquantified",
+            "footOrientation": "selfSelectedToeOutUnquantified",
+            "footContact": "continuous",
+            "footwear": "barefoot",
+            "armPositionRelativeToLegs": "insideKnees",
+            "gripOrientation": "doubleOverhand",
+            "gripWidth": "selfSelectedInsideKnees",
+            "loadPlacement": "handsInFrontOfBody",
+            "loadPrescription": (
+                "eightyFivePercentAdjustedOneRepMaximumMixedTechniqueBasis"
+            ),
+            "repetitionOrder": (
+                "floorToStandingToFloorCatalogReturnAdaptation"
+            ),
+            "hipMotion": "extends",
+            "hipFrontalMotion": "measuredAdductionTowardStandingNondefining",
+            "hipTransverseMotion": (
+                "measuredIncreasingExternalRotationNondefining"
+            ),
+            "kneeMotion": "extends",
+            "kneeFrontalMotion": "measuredFrontalExcursionNondefining",
+            "kneeTransverseMotion": "measuredTransverseExcursionNondefining",
+            "ankleMotion": "plantarflexesTowardStanding",
+            "ankleFrontalTransverseMotion": (
+                "measuredMultiplanarControlNondefining"
+            ),
+            "spineMotion": "unmeasured",
+            "elbowMotion": "extendedAngleHeldCatalogAdaptation",
+            "rangeOfMotion": "floorAtFootLevelToSourceDefinedStandingLockout",
+            "concentricIntent": "maximumSpeed",
+            "returnCadence": "unreportedSourceControlledCatalogAdaptation",
+            "fixedPath": False,
+            "interRepSupport": "floorDeadStopShortPauseDurationUnreported",
+            "lowerBodyContribution": (
+                "compoundHipKneeAnkleExtensionWithMultiplanarControl"
+            ),
+        }
+        trap_common = {
+            "kineticChain": "closed",
+            "bodyPosition": "standing",
+            "torsoSupport": "none",
+            "stanceConfiguration": "symmetricBilateral",
+            "stanceWidth": "unreported",
+            "footOrientation": "unreported",
+            "footContact": "bothFeetRemainOnSurfaceCatalogConstraint",
+            "gripOrientation": "parallelPalmsFacing",
+            "loadPlacement": "handsLateralToLowerLegsInsideFrame",
+            "repetitionOrder": "floorToStandingAscentMeasuredReturnUnspecified",
+            "hipMotion": "extends",
+            "kneeMotion": "extends",
+            "ankleMotion": "plantarflexesTowardStanding",
+            "spineMotion": "nonstandardized",
+            "elbowMotion": "extendedAngleHeldCatalogAdaptation",
+            "endpoint": "uprightKneesExtendedShouldersRetracted",
+            "fixedPath": False,
+            "lowerBodyContribution": "compoundHipKneeAnkleExtension",
+        }
+        single_common = {
+            "kineticChain": "unilateralClosed",
+            "bodyPosition": "standing",
+            "torsoSupport": "none",
+            "stanceConfiguration": "singleWorkingLeg",
+            "workingFootContact": "continuous",
+            "footOrientation": "unreported",
+            "hipMotion": "extends",
+            "fixedPath": False,
+            "lowerBodyContribution": (
+                "hipDominantSingleLegHingeWithNondefiningKneeTechnique"
+            ),
+        }
+        dumbbell_common = {
+            **single_common,
+            "supportSurface": "unreported",
+            "workingSideEvidence": "dominantSideTestedProductMirrored",
+            "nonWorkingLegTechnique": "positionUnreported",
+            "nonWorkingFootContact": (
+                "unilateralStanceExactContactTrajectoryUnreported"
+            ),
+            "footPlacement": "standardizedButDimensionsUnreported",
+            "footwear": "unreported",
+            "loadInterface": "singleDumbbell",
+            "loadPlacement": "oneHandAlignedBelowLoadedShoulder",
+            "gripWidth": "standardizedButUnreported",
+            "gripOrientation": "unreported",
+            "upperBodySetup": "unreportedBeyondSpinalStability",
+            "externalLoadPrescription": (
+                "highestSixRepLoadMatchedWithinPointOneMetersPerSecondToFlywheel"
+            ),
+            "spineTechnique": "antiFlexionStabilityRequiredKinematicsUnmeasured",
+            "kneeTechnique": (
+                "approximatelyFifteenDegreesMaintainedByInstructionKinematicsUnmeasured"
+            ),
+            "bottomEndpoint": "trunkAboutParallelByInstructionKinematicsUnmeasured",
+            "repetitionTopology": (
+                "sixContinuousDumbbellCyclesWithEntryOrderUnreported"
+            ),
+            "tempo": (
+                "maximalSpeedBothPhasesAtIndividualFlywheelMatchedMetronomePace"
+            ),
+            "interRepSupport": "noneDuringSixContinuousRepetitions",
+        }
+        expected = {
+            "barefoot-dead-stop-sumo-barbell-deadlift": sumo_variant,
+            "low-handle-trap-bar-deadlift": {
+                **trap_common,
+                "sourceFixture": "lake2017PullumLowHandle",
+                "supportAndFootwear": "barefootOnLaboratoryFloor",
+                "frameGeometry": "pullumSportsClosedHexagonalFrame",
+                "handleHeight": "unraisedAtSleeveAxisFromPublishedFigure",
+                "handleSpacing": "unreported",
+                "externalLoadPrescription": (
+                    "ninetyPercentLowHandleSpecificOneRepMaximum"
+                ),
+                "trialStructure": "threeSeparatedSinglesMinimumTwoMinutesRest",
+                "rangeOfMotion": "floorToStandingUsingUnraisedHandles",
+                "tempo": "noFixedCadenceReported",
+                "interRepSupport": "separateSinglesFloorResetReturnUnmeasured",
+            },
+            "high-handle-trap-bar-deadlift": {
+                **trap_common,
+                "sourceFixture": "lockie2018AmericanBarbellHighHandle",
+                "supportAndFootwear": (
+                    "selfSelectedConsistentFootwearOnOlympicPlatform"
+                ),
+                "frameGeometry": "americanBarbellDualHeightHexagonalFrame",
+                "handleHeight": (
+                    "highHandlesTenCentimetersAboveLowHandleCenters"
+                ),
+                "handleSpacing": "sixtyFourCentimetersCenterToCenter",
+                "externalLoadPrescription": "highHandleOneRepMaximum",
+                "trialStructure": "oneRepMaximumAttemptsThreeMinutesRest",
+                "rangeOfMotion": "floorToStandingUsingHighHandles",
+                "tempo": "maximalForceIntentNoFixedCadence",
+                "interRepSupport": (
+                    "oneRepMaximumAttemptsFloorResetReturnUnmeasured"
+                ),
+            },
+            "barbell-single-leg-deadlift": {
+                **single_common,
+                "supportSurface": "floor",
+                "workingSideEvidence": (
+                    "bothSidesWarmedUpRightSideMeasuredProductMirrored"
+                ),
+                "nonWorkingLegTechnique": (
+                    "straightLegExtendsBehindAndReturnsNearWorkingLeg"
+                ),
+                "nonWorkingFootContact": (
+                    "briefTopContactPermittedForStabilization"
+                ),
+                "footPlacement": "workingFootCenteredBeforeBarbell",
+                "footwear": "barefoot",
+                "loadInterface": "bilateralBarbell",
+                "loadPlacement": "twoHandsInFrontCloseToBody",
+                "loadAlignment": "barCloseToWorkingKneeAndBody",
+                "gripWidth": "shoulderWidth",
+                "gripOrientation": "pronated",
+                "upperBodySetup": (
+                    "latAndAbdominalPretensionWithScapularRetraction"
+                ),
+                "externalLoadPrescription": "individualEightRepMaximum",
+                "spineTechnique": (
+                    "extendedDuringHingeNeutralAtTopByInstructionKinematicsUnmeasured"
+                ),
+                "kneeTechnique": (
+                    "flexedOnlyAsNeededForStraightBackKinematicsUnmeasured"
+                ),
+                "bottomEndpoint": (
+                    "barbellOnFloorWithTorsoParallelRecommendedKinematicsUnmeasured"
+                ),
+                "repetitionTopology": (
+                    "fiveFloorToFullHipExtensionToFloorCyclesWithBriefTopHold"
+                ),
+                "tempo": (
+                    "fourSecondRepetitionIncludingApproximatelyTwoSecondInterRepPause"
+                ),
+                "interRepSupport": (
+                    "barbellFloorWithBriefFreeFootTopContactAndTimedPause"
+                ),
+            },
+            "dumbbell-single-leg-romanian-deadlift-ipsilateral-load": {
+                **dumbbell_common,
+                "loadSideRelativeToWorkingLeg": "ipsilateral",
+                "loadAlignment": "ipsilateralShoulderLine",
+            },
+            "dumbbell-single-leg-romanian-deadlift-contralateral-load": {
+                **dumbbell_common,
+                "loadSideRelativeToWorkingLeg": "contralateral",
+                "loadAlignment": "contralateralShoulderLine",
+            },
+        }
+        actual = {
+            exercise["catalogID"]: exercise["variant"]
+            for family in self.deadlift_expansion_families.values()
+            for exercise in family["exercises"]
+        }
+        self.assertEqual(actual, expected)
+
+    def test_deadlift_expansion_axes_are_exact_and_mutation_gated(self) -> None:
+        expected_axis_ids = {
+            "sumo-deadlift": (
+                "kineticChain", "bodyPosition", "torsoSupport",
+                "stanceConfiguration", "stanceWidth", "footOrientation",
+                "footContact", "footwear", "armPositionRelativeToLegs",
+                "gripOrientation", "gripWidth", "loadPlacement",
+                "loadPrescription", "repetitionOrder", "hipMotion",
+                "hipFrontalMotion", "hipTransverseMotion", "kneeMotion",
+                "kneeFrontalMotion", "kneeTransverseMotion", "ankleMotion",
+                "ankleFrontalTransverseMotion", "spineMotion", "elbowMotion",
+                "rangeOfMotion", "concentricIntent", "returnCadence",
+                "fixedPath", "interRepSupport", "lowerBodyContribution",
+            ),
+            "trap-bar-deadlift": (
+                "sourceFixture", "kineticChain", "bodyPosition",
+                "torsoSupport", "stanceConfiguration", "stanceWidth",
+                "footOrientation", "footContact", "supportAndFootwear",
+                "frameGeometry", "handleHeight", "handleSpacing",
+                "gripOrientation", "loadPlacement",
+                "externalLoadPrescription", "trialStructure",
+                "repetitionOrder", "hipMotion", "kneeMotion", "ankleMotion",
+                "spineMotion", "elbowMotion", "endpoint", "rangeOfMotion",
+                "tempo", "fixedPath", "interRepSupport",
+                "lowerBodyContribution",
+            ),
+            "single-leg-deadlift": (
+                "kineticChain", "bodyPosition", "torsoSupport",
+                "stanceConfiguration", "workingFootContact", "supportSurface",
+                "workingSideEvidence", "nonWorkingLegTechnique",
+                "nonWorkingFootContact", "footPlacement", "footOrientation",
+                "footwear", "loadInterface", "loadPlacement",
+                "loadSideRelativeToWorkingLeg", "loadAlignment", "gripWidth",
+                "gripOrientation", "upperBodySetup",
+                "externalLoadPrescription", "hipMotion", "spineTechnique",
+                "kneeTechnique", "bottomEndpoint", "repetitionTopology",
+                "tempo", "fixedPath", "interRepSupport",
+                "lowerBodyContribution",
+            ),
+        }
+        value_mutations = 0
+        required_removals = 0
+        for family_id, original in self.deadlift_expansion_families.items():
+            expected_specs = tuple(
+                (
+                    axis_id,
+                    "boolean" if axis_id == "fixedPath" else "enum",
+                    not (
+                        family_id == "single-leg-deadlift"
+                        and axis_id == "loadSideRelativeToWorkingLeg"
+                    ),
+                )
+                for axis_id in expected_axis_ids[family_id]
+            )
+            self.assertEqual(
+                tuple(
+                    (axis["id"], axis["valueType"], axis["required"])
+                    for axis in original["variantAxes"]
+                ),
+                expected_specs,
+            )
+            for axis in original["variantAxes"]:
+                axis_id = axis["id"]
+                observed = {
+                    exercise["variant"][axis_id]
+                    for exercise in original["exercises"]
+                    if axis_id in exercise["variant"]
+                }
+                if axis["valueType"] == "enum":
+                    self.assertEqual(set(axis["allowedValues"]), observed)
+                    self.assertEqual(
+                        len(axis["allowedValues"]),
+                        len(set(axis["allowedValues"])),
+                    )
+                elif axis["valueType"] == "boolean":
+                    self.assertEqual(axis["fixedValue"], False)
+                    self.assertEqual(observed, {False})
+                else:
+                    self.fail(
+                        f"unexpected deadlift-expansion axis type "
+                        f"{axis['valueType']}"
+                    )
+
+                for exercise_index, exercise in enumerate(original["exercises"]):
+                    if axis_id not in exercise["variant"]:
+                        continue
+                    family = copy.deepcopy(original)
+                    if axis["valueType"] == "enum":
+                        mutated_value = "mutated"
+                    else:
+                        mutated_value = not axis["fixedValue"]
+                    family["exercises"][exercise_index]["variant"][axis_id] = (
+                        mutated_value
+                    )
+                    with self.subTest(
+                        family=family_id,
+                        exercise=exercise["catalogID"],
+                        axis=axis_id,
+                        mutation="value",
+                    ):
+                        with self.assertRaises(catalog.ValidationFailure):
+                            catalog.validate_family(
+                                family,
+                                self.foundation,
+                                "mutated deadlift-expansion axis",
+                            )
+                    value_mutations += 1
+
+                    if not axis["required"]:
+                        continue
+                    family = copy.deepcopy(original)
+                    del family["exercises"][exercise_index]["variant"][axis_id]
+                    with self.subTest(
+                        family=family_id,
+                        exercise=exercise["catalogID"],
+                        axis=axis_id,
+                        mutation="remove-required",
+                    ):
+                        with self.assertRaises(catalog.ValidationFailure):
+                            catalog.validate_family(
+                                family,
+                                self.foundation,
+                                "removed deadlift-expansion required axis",
+                            )
+                    required_removals += 1
+        self.assertEqual(value_mutations, 172)
+        self.assertEqual(required_removals, 170)
+
+    def test_deadlift_expansion_rules_are_exact_and_mutation_gated(self) -> None:
+        expected_shapes = {
+            "sumo-deadlift": (),
+            "trap-bar-deadlift": (
+                (
+                    "lake-fixture-pins-low-handle-topology",
+                    "variant.sourceFixture", "lake2017PullumLowHandle",
+                    (
+                        "variant.supportAndFootwear", "variant.frameGeometry",
+                        "variant.handleHeight", "variant.handleSpacing",
+                        "variant.externalLoadPrescription",
+                        "variant.trialStructure", "variant.rangeOfMotion",
+                        "variant.tempo", "variant.interRepSupport",
+                    ),
+                    (), (),
+                ),
+                (
+                    "low-handle-topology-requires-lake-fixture",
+                    "variant.handleHeight",
+                    "unraisedAtSleeveAxisFromPublishedFigure",
+                    ("variant.sourceFixture", "variant.frameGeometry"),
+                    (), (),
+                ),
+                (
+                    "pullum-frame-requires-lake-low-handles",
+                    "variant.frameGeometry", "pullumSportsClosedHexagonalFrame",
+                    ("variant.sourceFixture", "variant.handleHeight"),
+                    (), (),
+                ),
+                (
+                    "lake-load-requires-lake-low-handles",
+                    "variant.externalLoadPrescription",
+                    "ninetyPercentLowHandleSpecificOneRepMaximum",
+                    ("variant.sourceFixture", "variant.handleHeight"),
+                    (), (),
+                ),
+                (
+                    "lockie-fixture-pins-high-handle-topology",
+                    "variant.sourceFixture",
+                    "lockie2018AmericanBarbellHighHandle",
+                    (
+                        "variant.supportAndFootwear", "variant.frameGeometry",
+                        "variant.handleHeight", "variant.handleSpacing",
+                        "variant.externalLoadPrescription",
+                        "variant.trialStructure", "variant.rangeOfMotion",
+                        "variant.tempo", "variant.interRepSupport",
+                    ),
+                    (), (),
+                ),
+                (
+                    "high-handle-topology-requires-lockie-fixture",
+                    "variant.handleHeight",
+                    "highHandlesTenCentimetersAboveLowHandleCenters",
+                    ("variant.sourceFixture", "variant.frameGeometry"),
+                    (), (),
+                ),
+                (
+                    "american-frame-requires-lockie-high-handles",
+                    "variant.frameGeometry",
+                    "americanBarbellDualHeightHexagonalFrame",
+                    ("variant.sourceFixture", "variant.handleHeight"),
+                    (), (),
+                ),
+                (
+                    "lockie-load-requires-lockie-high-handles",
+                    "variant.externalLoadPrescription", "highHandleOneRepMaximum",
+                    ("variant.sourceFixture", "variant.handleHeight"),
+                    (), (),
+                ),
+            ),
+            "single-leg-deadlift": (
+                (
+                    "barbell-requires-diamant-floor-topology",
+                    "equipment", "barbell",
+                    (
+                        "variant.supportSurface", "variant.workingSideEvidence",
+                        "variant.nonWorkingLegTechnique",
+                        "variant.nonWorkingFootContact", "variant.footPlacement",
+                        "variant.footwear", "variant.loadInterface",
+                        "variant.loadPlacement", "variant.loadAlignment",
+                        "variant.gripWidth", "variant.gripOrientation",
+                        "variant.upperBodySetup",
+                        "variant.externalLoadPrescription",
+                        "variant.spineTechnique", "variant.kneeTechnique",
+                        "variant.bottomEndpoint", "variant.repetitionTopology",
+                        "variant.tempo", "variant.interRepSupport",
+                    ),
+                    (), ("variant.loadSideRelativeToWorkingLeg",),
+                ),
+                (
+                    "barbell-floor-topology-requires-barbell",
+                    "variant.repetitionTopology",
+                    "fiveFloorToFullHipExtensionToFloorCyclesWithBriefTopHold",
+                    ("equipment",),
+                    (), ("variant.loadSideRelativeToWorkingLeg",),
+                ),
+                (
+                    "dumbbell-requires-mo-continuous-topology",
+                    "equipment", "dumbbell",
+                    (
+                        "variant.supportSurface", "variant.workingSideEvidence",
+                        "variant.nonWorkingLegTechnique",
+                        "variant.nonWorkingFootContact", "variant.footPlacement",
+                        "variant.footwear", "variant.loadInterface",
+                        "variant.loadPlacement", "variant.loadAlignment",
+                        "variant.gripWidth", "variant.gripOrientation",
+                        "variant.upperBodySetup",
+                        "variant.externalLoadPrescription",
+                        "variant.spineTechnique", "variant.kneeTechnique",
+                        "variant.bottomEndpoint", "variant.repetitionTopology",
+                        "variant.tempo", "variant.interRepSupport",
+                    ),
+                    ("variant.loadSideRelativeToWorkingLeg",), (),
+                ),
+                (
+                    "mo-continuous-topology-requires-dumbbell",
+                    "variant.repetitionTopology",
+                    "sixContinuousDumbbellCyclesWithEntryOrderUnreported",
+                    ("equipment",),
+                    ("variant.loadSideRelativeToWorkingLeg",), (),
+                ),
+                (
+                    "ipsilateral-load-requires-ipsilateral-alignment",
+                    "variant.loadSideRelativeToWorkingLeg", "ipsilateral",
+                    ("equipment", "variant.loadAlignment"), (), (),
+                ),
+                (
+                    "ipsilateral-alignment-requires-ipsilateral-load",
+                    "variant.loadAlignment", "ipsilateralShoulderLine",
+                    ("equipment", "variant.loadSideRelativeToWorkingLeg"),
+                    (), (),
+                ),
+                (
+                    "contralateral-load-requires-contralateral-alignment",
+                    "variant.loadSideRelativeToWorkingLeg", "contralateral",
+                    ("equipment", "variant.loadAlignment"), (), (),
+                ),
+                (
+                    "contralateral-alignment-requires-contralateral-load",
+                    "variant.loadAlignment", "contralateralShoulderLine",
+                    ("equipment", "variant.loadSideRelativeToWorkingLeg"),
+                    (), (),
+                ),
+            ),
+        }
+        mutation_count = 0
+        for family_id, original in self.deadlift_expansion_families.items():
+            actual_shapes = tuple(
+                (
+                    rule["id"], rule["when"]["field"],
+                    rule["when"]["value"],
+                    tuple(assertion["field"] for assertion in rule["then"]),
+                    tuple(rule["requirePresent"]),
+                    tuple(rule["requireAbsent"]),
+                )
+                for rule in original["exerciseRules"]
+            )
+            self.assertEqual(actual_shapes, expected_shapes[family_id])
+            for rule in original["exerciseRules"]:
+                self.assertEqual(rule["when"]["operator"], "equals")
+                matches = [
+                    self.rule_matches_exercise(rule, exercise)
+                    for exercise in original["exercises"]
+                ]
+                self.assertIn(True, matches)
+                self.assertIn(False, matches)
+                matching = next(
+                    exercise
+                    for exercise in original["exercises"]
+                    if self.rule_matches_exercise(rule, exercise)
+                )
+                expected_message = "violates exercise rule " + re.escape(
+                    rule["id"]
+                )
+                for assertion in rule["then"]:
+                    mutated = copy.deepcopy(matching)
+                    self.set_rule_field(
+                        mutated,
+                        assertion["field"],
+                        "mutated",
+                    )
+                    with self.subTest(
+                        family=family_id,
+                        rule=rule["id"],
+                        field=assertion["field"],
+                        mutation="assertion",
+                    ):
+                        with self.assertRaisesRegex(
+                            catalog.ValidationFailure,
+                            expected_message,
+                        ):
+                            catalog.validate_exercise_rule_matches(
+                                mutated,
+                                [rule],
+                                "mutated deadlift-expansion assertion",
+                            )
+                    mutation_count += 1
+                for field_path in rule["requirePresent"]:
+                    mutated = copy.deepcopy(matching)
+                    self.delete_rule_field(mutated, field_path)
+                    with self.subTest(
+                        family=family_id,
+                        rule=rule["id"],
+                        field=field_path,
+                        mutation="presence",
+                    ):
+                        with self.assertRaisesRegex(
+                            catalog.ValidationFailure,
+                            expected_message,
+                        ):
+                            catalog.validate_exercise_rule_matches(
+                                mutated,
+                                [rule],
+                                "mutated deadlift-expansion presence",
+                            )
+                    mutation_count += 1
+                for field_path in rule["requireAbsent"]:
+                    mutated = copy.deepcopy(matching)
+                    self.set_rule_field(mutated, field_path, "mutated")
+                    with self.subTest(
+                        family=family_id,
+                        rule=rule["id"],
+                        field=field_path,
+                        mutation="absence",
+                    ):
+                        with self.assertRaisesRegex(
+                            catalog.ValidationFailure,
+                            expected_message,
+                        ):
+                            catalog.validate_exercise_rule_matches(
+                                mutated,
+                                [rule],
+                                "mutated deadlift-expansion absence",
+                            )
+                    mutation_count += 1
+        self.assertEqual(mutation_count, 82)
+
+    def test_deadlift_expansion_classifications_are_mutation_gated(self) -> None:
+        domains = {
+            "equipment": ("equipment", catalog.EQUIPMENT),
+            "laterality": ("lateralities", catalog.LATERALITIES),
+            "modality": ("modalities", catalog.MODALITIES),
+            "trackingMode": ("trackingModes", catalog.TRACKING_MODES),
+            "loadMode": ("loadModes", catalog.LOAD_MODES),
+        }
+        mutation_count = 0
+        for family_id, original in self.deadlift_expansion_families.items():
+            for exercise_index, exercise in enumerate(original["exercises"]):
+                for field, (allowed_key, domain) in domains.items():
+                    family = copy.deepcopy(original)
+                    disallowed = sorted(
+                        domain - set(original["allowed"][allowed_key])
+                    )[0]
+                    family["exercises"][exercise_index][field] = disallowed
+                    with self.subTest(
+                        family=family_id,
+                        exercise=exercise["catalogID"],
+                        field=field,
+                    ):
+                        with self.assertRaises(catalog.ValidationFailure):
+                            catalog.validate_family(
+                                family,
+                                self.foundation,
+                                "disallowed deadlift-expansion classification",
+                            )
+                    mutation_count += 1
+
+                family = copy.deepcopy(original)
+                family["exercises"][exercise_index]["groupOverride"] = "back"
+                with self.subTest(
+                    family=family_id,
+                    exercise=exercise["catalogID"],
+                    field="groupOverride",
+                ):
+                    with self.assertRaises(catalog.ValidationFailure):
+                        catalog.validate_family(
+                            family,
+                            self.foundation,
+                            "disallowed deadlift-expansion group",
+                        )
+                mutation_count += 1
+        self.assertEqual(mutation_count, 36)
+
+    def test_deadlift_expansion_required_roles_are_mutation_gated(self) -> None:
+        expected_roles = {
+            "sumo-deadlift": (
+                ("gluteMax", "primary"),
+                ("vasti", "primary"),
+                ("rectusFemoris", "secondary"),
+                ("gastrocnemius", "secondary"),
+                ("soleus", "secondary"),
+                ("medialHamstrings", "stabilizer"),
+                ("bicepsFemoris", "stabilizer"),
+                ("gluteMed", "stabilizer"),
+                ("adductorMagnus", "stabilizer"),
+                ("tibialisAnterior", "stabilizer"),
+                ("fingerFlexors", "stabilizer"),
+                ("extensorCarpiRadialis", "stabilizer"),
+                ("externalRotators", "stabilizer"),
+                ("trapeziusUpper", "stabilizer"),
+                ("triceps", "stabilizer"),
+                ("abs", "stabilizer"),
+                ("obliques", "stabilizer"),
+                ("lumbarExtensors", "stabilizer"),
+            ),
+            "trap-bar-deadlift": (
+                ("gluteMax", "primary"),
+                ("vasti", "primary"),
+                ("rectusFemoris", "secondary"),
+                ("gastrocnemius", "secondary"),
+                ("soleus", "secondary"),
+                ("medialHamstrings", "stabilizer"),
+                ("bicepsFemoris", "stabilizer"),
+                ("fingerFlexors", "stabilizer"),
+                ("extensorCarpiRadialis", "stabilizer"),
+                ("externalRotators", "stabilizer"),
+                ("trapeziusUpper", "stabilizer"),
+                ("triceps", "stabilizer"),
+                ("abs", "stabilizer"),
+                ("obliques", "stabilizer"),
+                ("lumbarExtensors", "stabilizer"),
+            ),
+            "single-leg-deadlift": (
+                ("medialHamstrings", "primary"),
+                ("gluteMax", "primary"),
+                ("lumbarExtensors", "secondary"),
+                ("bicepsFemoris", "stabilizer"),
+                ("gluteMed", "stabilizer"),
+                ("gastrocnemius", "stabilizer"),
+                ("soleus", "stabilizer"),
+                ("fingerFlexors", "stabilizer"),
+                ("extensorCarpiRadialis", "stabilizer"),
+                ("externalRotators", "stabilizer"),
+                ("trapeziusUpper", "stabilizer"),
+                ("brachialis", "stabilizer"),
+                ("abs", "stabilizer"),
+                ("obliques", "stabilizer"),
+            ),
+        }
+        removal_count = 0
+        demotion_count = 0
+        lower_role = {"primary": "secondary", "secondary": "stabilizer"}
+        for family_id, original in self.deadlift_expansion_families.items():
+            role_specs = expected_roles[family_id]
+            self.assertEqual(
+                tuple(
+                    (tuple(requirement["anyOf"]), requirement["minimumRole"])
+                    for requirement in original["musclePolicy"]["requirements"]
+                ),
+                tuple(((muscle,), role) for muscle, role in role_specs),
+            )
+            self.assertEqual(
+                original["musclePolicy"]["allowedByRole"],
+                {
+                    role: [
+                        muscle
+                        for muscle, assigned_role in role_specs
+                        if assigned_role == role
+                    ]
+                    for role in ("primary", "secondary", "stabilizer")
+                },
+            )
+            expected_involvement = [
+                {"muscle": muscle, "role": role}
+                for muscle, role in role_specs
+            ]
+            for exercise_index, exercise in enumerate(original["exercises"]):
+                self.assertEqual(exercise["involvement"], expected_involvement)
+                for requirement_index, requirement in enumerate(
+                    original["musclePolicy"]["requirements"]
+                ):
+                    family = copy.deepcopy(original)
+                    family["exercises"][exercise_index]["involvement"] = [
+                        assignment
+                        for assignment in family["exercises"][exercise_index][
+                            "involvement"
+                        ]
+                        if assignment["muscle"] not in requirement["anyOf"]
+                    ]
+                    with self.subTest(
+                        family=family_id,
+                        exercise=exercise["catalogID"],
+                        requirement=requirement_index,
+                        mutation="remove",
+                    ):
+                        with self.assertRaises(catalog.ValidationFailure):
+                            catalog.validate_family(
+                                family,
+                                self.foundation,
+                                "removed deadlift-expansion role",
+                            )
+                    removal_count += 1
+
+                    minimum_role = requirement["minimumRole"]
+                    if minimum_role == "stabilizer":
+                        continue
+                    candidate = requirement["anyOf"][0]
+                    family = copy.deepcopy(original)
+                    family["exercises"] = [family["exercises"][exercise_index]]
+                    demoted_role = lower_role[minimum_role]
+                    family["musclePolicy"]["allowedByRole"][demoted_role].append(
+                        candidate
+                    )
+                    next(
+                        assignment
+                        for assignment in family["exercises"][0]["involvement"]
+                        if assignment["muscle"] == candidate
+                    )["role"] = demoted_role
+                    with self.subTest(
+                        family=family_id,
+                        exercise=exercise["catalogID"],
+                        requirement=requirement_index,
+                        mutation="demote",
+                    ):
+                        with self.assertRaises(catalog.ValidationFailure):
+                            catalog.validate_family(
+                                family,
+                                self.foundation,
+                                "demoted deadlift-expansion role",
+                            )
+                    demotion_count += 1
+        self.assertEqual(removal_count, 90)
+        self.assertEqual(demotion_count, 24)
+
+    def test_deadlift_expansion_evidence_scopes_preserve_limits(self) -> None:
+        sources = {
+            source["id"]: source["scope"]
+            for source in self.foundation.evidence["sources"]
+        }
+        expected_phrases = {
+            "hanen-2025-conventional-sumo-deadlift": (
+                "self-selected wide and externally rotated stance",
+                "short inter-repetition rests created a dead-stop floor pull",
+                "does not prescribe numeric stance, toe, or grip widths",
+                "analyze or standardize the descent",
+                "measure spinal kinematics",
+                "85 percent is not treated as a universal",
+            ),
+            "lake-2017-low-handle-hex-bar-deadlift": (
+                "three separate barefoot hex-bar singles at 90 percent",
+                "exact unraised-handle ascent",
+                "does not report stance width, toe angle, eccentric technique",
+                "equivalence to a straight-bar or raised-handle deadlift",
+            ),
+            "lockie-2018-high-handle-hex-bar-deadlift": (
+                "0.10 meters above the low-handle centers",
+                "0.64 meters apart",
+                "does not report absolute handle-to-floor height",
+                "direct high-versus-low-handle comparison",
+            ),
+            "swinton-2011-straight-hex-bar-biomechanics": (
+                "does not report handle height, handle spacing, grip orientation",
+                "supports family mechanics rather than either active handle fixture",
+            ),
+            "camara-2016-straight-hex-bar-emg": (
+                "does not report numeric stance geometry, handle height or spacing",
+                "not a universal contribution ranking or handle-height effect",
+            ),
+            "diamant-2021-barbell-single-leg-deadlift": (
+                "individually tested eight-repetition maximum",
+                "free foot could touch briefly",
+                "does not measure joint kinematics or kinetics",
+                "authorize dumbbell, Romanian, staggered-support",
+            ),
+            "mo-2023-single-leg-romanian-loading-position": (
+                "Only the dominant support leg was tested",
+                "exact foot and grip positions were standardized but not reported",
+                "free-leg position, dumbbell repetition start order",
+                "does not authorize flywheel equivalence, bilateral, staggered-support",
+            ),
+            "mooney-2026-staggered-stance-romanian-deadlift": (
+                "contralateral toe tip in line with the lead heel",
+                "does not isolate the exercise's outcomes from Nordic work",
+                "lacks a non-intervention control",
+                "does not report stance width, rear-foot contact or load sharing",
+                "prevent activation of a truthful B-stance or kickstand-Romanian",
+            ),
+        }
+        for source_id, phrases in expected_phrases.items():
+            for phrase in phrases:
+                with self.subTest(source=source_id, phrase=phrase):
+                    self.assertIn(phrase, sources[source_id])
+
+    def test_deadlift_expansion_runtime_projection_is_exact(self) -> None:
+        records = catalog.compile_runtime_catalog(self.real_families)
+        expansion_records = {
+            record["catalogID"]: record
+            for record in records
+            if record["familyID"] in self.deadlift_expansion_families
+        }
+        expected = {
+            "barefoot-dead-stop-sumo-barbell-deadlift": (
+                "sumo-deadlift", "Barefoot Dead-Stop Sumo Barbell Deadlift",
+                ("Sumo Barbell Deadlift", "Sumo Deadlift",
+                 "Double-Overhand Dead-Stop Sumo Deadlift"),
+                "barbell", "bilateral", 45, 20, 3, 100,
+            ),
+            "low-handle-trap-bar-deadlift": (
+                "trap-bar-deadlift", "Low-Handle Trap-Bar Deadlift",
+                ("Low-Handle Hex-Bar Deadlift",
+                 "Low-Handle Hexagonal-Bar Deadlift",
+                 "Low Trap-Bar Deadlift"),
+                "trapBar", "bilateral", 45, 20, 1, 96,
+            ),
+            "high-handle-trap-bar-deadlift": (
+                "trap-bar-deadlift", "High-Handle Trap-Bar Deadlift",
+                ("High-Handle Hex-Bar Deadlift",
+                 "High-Handle Hexagonal-Bar Deadlift",
+                 "High Trap-Bar Deadlift"),
+                "trapBar", "bilateral", 45, 20, 1, 92,
+            ),
+            "barbell-single-leg-deadlift": (
+                "single-leg-deadlift", "Barbell Single-Leg Deadlift",
+                ("Single-Leg Barbell Deadlift",
+                 "Floor-Touch Barbell Single-Leg Deadlift"),
+                "barbell", "unilateral", 45, 20, 5, 92,
+            ),
+            "dumbbell-single-leg-romanian-deadlift-ipsilateral-load": (
+                "single-leg-deadlift",
+                "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift",
+                ("Same-Side-Load Dumbbell Single-Leg Romanian Deadlift",
+                 "Ipsilateral Dumbbell Single-Leg RDL"),
+                "dumbbell", "unilateral", 25, 12.5, 6, 88,
+            ),
+            "dumbbell-single-leg-romanian-deadlift-contralateral-load": (
+                "single-leg-deadlift",
+                "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift",
+                ("Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift",
+                 "Contralateral Dumbbell Single-Leg RDL"),
+                "dumbbell", "unilateral", 25, 12.5, 6, 90,
+            ),
+        }
+        self.assertEqual(set(expansion_records), set(expected))
+        source_exercises = {
+            exercise["catalogID"]: exercise
+            for family in self.deadlift_expansion_families.values()
+            for exercise in family["exercises"]
+        }
+        for catalog_id, values in expected.items():
+            (
+                family_id, name, aliases, equipment, laterality,
+                default_weight, default_weight_kg, reps, priority,
+            ) = values
+            source = source_exercises[catalog_id]
+            projected = {
+                "familyID": family_id,
+                "catalogID": catalog_id,
+                "name": name,
+                "group": "legs",
+                "defaultWeight": default_weight,
+                "defaultWeightKg": default_weight_kg,
+                "reps": reps,
+                "trackingMode": "reps",
+                "equipment": equipment,
+                "mechanic": "compound",
+                "trainingRole": "legs",
+                "pattern": "hinge",
+                "direction": None,
+                "planes": ["sagittal"],
+                "laterality": laterality,
+                "aliases": list(aliases),
+                "searchPriority": priority,
+                "bodyweightFraction": 0,
+                "modality": "dynamicStrength",
+                "loadMode": "external",
+                "execution": source["execution"],
+                "involvement": source["involvement"],
+            }
+            with self.subTest(catalog_id=catalog_id):
+                self.assertEqual(expansion_records[catalog_id], projected)
+                self.assertNotIn("variant", expansion_records[catalog_id])
+                self.assertNotIn("evidenceRefs", expansion_records[catalog_id])
+        self.assertEqual(
+            {
+                record["equipment"]
+                for record in expansion_records.values()
+                if record["familyID"] == "trap-bar-deadlift"
+            },
+            {"trapBar"},
+        )
+
     def test_batch6_dorsiflexion_contract_and_roster_are_exact(self) -> None:
         family = self.batch6_families["ankle-dorsiflexion"]
         self.assertEqual(family["name"], "Ankle Dorsiflexion")
@@ -13147,7 +14354,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 157)
+        self.assertEqual(len(source_by_id), 165)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -13291,8 +14498,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             9,
         )
-        self.assertEqual(len(self.real_families), 59)
-        self.assertEqual(len(self.foundation.evidence_ids), 157)
+        self.assertEqual(len(self.real_families), 62)
+        self.assertEqual(len(self.foundation.evidence_ids), 165)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -14569,7 +15776,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_proposal = " ".join(proposal.split())
 
         self.assertIn(
-            "59 reviewed families are active, containing 140 exercises",
+            "62 reviewed families are active, containing 146 exercises",
             roadmap,
         )
         self.assertIn(
@@ -14582,8 +15789,8 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
         self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **140** |", roadmap)
-        self.assertIn("Fifty-nine reviewed family files", families_readme)
+        self.assertIn("| **Total** | **146** |", roadmap)
+        self.assertIn("Sixty-two reviewed family files", families_readme)
         self.assertIn("Batch 7 adds nine exercises", families_readme)
         self.assertIn(
             "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
@@ -15646,9 +16853,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 59)
-        self.assertEqual(len(records), 140)
-        self.assertEqual(len(self.foundation.evidence_ids), 157)
+        self.assertEqual(len(self.real_families), 62)
+        self.assertEqual(len(records), 146)
+        self.assertEqual(len(self.foundation.evidence_ids), 165)
         self.assertEqual(
             {
                 key: upright[key]
@@ -15994,7 +17201,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| `finger-flexion-grip` | 1 |", roadmap)
-        self.assertIn("| **Total** | **140** |", roadmap)
+        self.assertIn("| **Total** | **146** |", roadmap)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -17093,21 +18300,21 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("No catalog-roadmap work item remains unresolved", roadmap)
         self.assertIn("| `diagonal-pull` | 1 |", roadmap)
-        self.assertIn("| **Total** | **140** |", roadmap)
+        self.assertIn("| **Total** | **146** |", roadmap)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_59_families_and_140_exercises(
+    def test_runtime_projection_is_exactly_62_families_and_146_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 140)
+        self.assertEqual(len(records), 146)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 59)
+        self.assertEqual(len({record["familyID"] for record in records}), 62)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -17252,6 +18459,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "legs": {
                 "ankle-dorsiflexion", "ankle-plantarflexion",
                 "bilateral-squat", "conventional-deadlift", "dynamic-lunge",
+                "single-leg-deadlift", "sumo-deadlift", "trap-bar-deadlift",
                 "hip-abduction",
                 "hip-adduction", "hip-extension", "hip-external-rotation",
                 "hip-flexion", "hip-hinge", "hip-internal-rotation",
@@ -17457,7 +18665,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 140)
+            self.assertEqual(len(emitted), 146)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},

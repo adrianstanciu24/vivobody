@@ -1,0 +1,203 @@
+{
+  "name": "exercise-execution-trap-bar-deadlift",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Low-Handle Trap-Bar Deadlift,.*Trap Bar"
+        },
+        "direction": "up",
+        "maxSwipes": 24
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Low-Handle Trap-Bar Deadlift,.*Trap Bar"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Low-Handle Trap-Bar Deadlift,.*Trap Bar"
+      }
+    },
+    {
+      "wait": {
+        "label": "Movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Low-Handle Trap-Bar Deadlift"
+          },
+          {
+            "labelContains": "Muscles used by Low-Handle Trap-Bar Deadlift"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Primary, Vasti · Glute Max"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Primary, Vasti · Glute Max"
+          },
+          {
+            "labelContains": "Secondary, Rectus Femoris · Gastrocnemius · Soleus"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Finger Flexors · Triceps · Abs · Obliques · Biceps Femoris · Medial Hamstrings"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Finger Flexors · Triceps · Abs · Obliques · Biceps Femoris · Medial Hamstrings"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "unraised handles aligned with the sleeve axis"
+          },
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "palms facing one another"
+          },
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "tested this fixture barefoot"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "extend your hips and knees together"
+          },
+          {
+            "identifier": "exercise-execution-endpoint",
+            "labelContains": "knees and hips extended"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-return"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "rests on the floor"
+          },
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "catalog adaptation"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-compensations"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-controlled-joints",
+            "labelContains": "both elbows extended"
+          },
+          {
+            "identifier": "exercise-execution-controlled-joints",
+            "labelContains": "stance width"
+          },
+          {
+            "identifier": "exercise-execution-support-posture",
+            "labelContains": "centered inside the closed frame"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "high-handle trap-bar deadlift"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "conventional barbell deadlift"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}

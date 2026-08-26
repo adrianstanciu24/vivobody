@@ -5,8 +5,8 @@ bundled exercise catalog. The reviewed contracts in `specs/catalog/families/`
 are the canonical exercise source. `Scripts/catalog.py` validates those
 contracts against the taxonomy, joint-action, evidence, and family-schema
 foundations, then deterministically projects them into
-`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 59
-active families and their 140 reviewed exercises; the synthetic fixture and
+`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 62
+active families and their 146 reviewed exercises; the synthetic fixture and
 supplemental `--family` inputs are never emitted.
 
 ## Identity and movement instructions
@@ -151,6 +151,11 @@ counts, but are excluded from records, comparable tonnage, RIR analytics,
 hard-set credit, and Training Development. Untagged/defaulted rows are
 working sets; exercise names never infer set intent.
 
+Equipment identifies the implement geometry that materially defines the
+exercise. A trap bar is stored as `trapBar`, displayed as **Trap Bar**, and
+filtered independently from `barbell`; standing inside a frame with lateral
+parallel handles is not a straight-bar substitution or generic `other` gear.
+
 ## Load semantics
 
 - `external`: logged weight is the comparable resistance.
@@ -255,10 +260,10 @@ The bundled catalog must satisfy all of the following before shipping:
 
 - `python3 Scripts/catalog.py --check` validates every canonical source and
   proves the bundled runtime catalog is byte-for-byte compiler output.
-- The projection contains exactly 59 family IDs and 140 exercise records; it is
+- The projection contains exactly 62 family IDs and 146 exercise records; it is
   stable under family file discovery order and excludes the synthetic fixture
   and supplemental `--family` validation inputs.
-- The evidence registry contains exactly 157 source identities, each referenced
+- The evidence registry contains exactly 165 source identities, each referenced
   by an active foundation, family, or exercise claim.
 - Every required raw enum decodes without fallback.
 - Stable IDs, canonical names, and normalized aliases are unique.

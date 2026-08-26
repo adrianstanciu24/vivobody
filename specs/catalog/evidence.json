@@ -2438,6 +2438,155 @@
       "scope": "Issue-year 2026 study published online in 2025: fifteen recreationally active adults with three to five years of experience performed five barefoot conventional- and Romanian-deadlift repetitions at the same absolute load, 50 percent of a self-reported or estimated Romanian-deadlift one-repetition maximum. The participants used their typical uncoached techniques while sagittal two-dimensional video measured hip, knee, and ankle angles and surface EMG measured dominant-side biceps femoris and vastus lateralis. The substantial Romanian-deadlift knee range is direct adverse evidence against treating an ordinary Romanian deadlift as position held; the paper is internally inconsistent, with Table 5 and the later discussion reporting approximately 33 degrees while the preceding results paragraph reports approximately 38 degrees. The study did not standardize stance, knee angle, or technique; use three-dimensional motion capture; measure joint kinetics or other muscles; or isolate a strict static-knee, no-floor-reset fixture."
     },
     {
+      "id": "hanen-2025-conventional-sumo-deadlift",
+      "sourceType": "experimentalKinematicsKineticsEMGStudy",
+      "title": "Biomechanical analysis of conventional and sumo deadlift",
+      "authors": [
+        "Nicolas C. Hanen",
+        "Khaireddine Ben Mansour",
+        "Geoffrey N. Ertel",
+        "Youri Duchene",
+        "Gerome C. Gauchard"
+      ],
+      "year": 2025,
+      "doi": "10.3389/fbioe.2025.1597209",
+      "pmid": "40497251",
+      "pmcid": "PMC12148905",
+      "url": "https://doi.org/10.3389/fbioe.2025.1597209",
+      "scope": "Thirty experienced male lifters performed three barefoot sumo-deadlift repetitions at 85 percent of an adjusted one-repetition maximum with the free bar beginning on the floor, a self-selected wide and externally rotated stance, both hands inside the knees, a double-overhand grip of individualized width, and maximal intended concentric speed. Successful repetitions ended upright with hips and knees extended, the torso straight, and the shoulders retracted; short inter-repetition rests created a dead-stop floor pull, but their duration was not quantified. Three-dimensional lower-limb kinematics and kinetics plus surface EMG directly support dynamic hip and knee extension, a vastus-lateralis training emphasis, and materially greater frontal- and transverse-plane control demands than the compared conventional style. The source does not prescribe numeric stance, toe, or grip widths; analyze or standardize the descent; measure spinal kinematics; or authorize shod, mixed-grip, hook-grip, strapped, touch-and-go, other sumo, or non-barbell fixtures. Its adjusted one-repetition maximum used preferred versus non-preferred techniques across different halves of the sample, so 85 percent is not treated as a universal variation-specific prescription."
+    },
+    {
+      "id": "lake-2017-low-handle-hex-bar-deadlift",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Effect of a Hexagonal Barbell on the Mechanical Demand of Deadlift Performance",
+      "authors": [
+        "Jason Lake",
+        "Freddie Duncan",
+        "Matt Jackson",
+        "David Naworynsky"
+      ],
+      "year": 2017,
+      "doi": "10.3390/sports5040082",
+      "pmid": "29910442",
+      "pmcid": "PMC5969032",
+      "url": "https://doi.org/10.3390/sports5040082",
+      "scope": "Eleven men proficient with both compared deadlifts performed three separate barefoot hex-bar singles at 90 percent of their hex-bar-specific one-repetition maximum with at least two minutes of rest. The pictured Pullum hexagonal frame places its parallel palms-facing handles in the sleeve-and-plate-axis plane; the athlete stands inside the frame, chalk was permitted, and each ascent began with the implement resting on the floor and ended with locked knees and retracted shoulders without lowering during the ascent. Linear-position data directly support this exact unraised-handle ascent and its one-repetition test topology. The source does not report stance width, toe angle, eccentric technique, inter-repetition handling beyond separate singles, a universal frame mass, or equivalence to a straight-bar or raised-handle deadlift."
+    },
+    {
+      "id": "lockie-2018-high-handle-hex-bar-deadlift",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "The 1 Repetition Maximum Mechanics of a High-Handle Hexagonal Bar Deadlift Compared With a Conventional Deadlift as Measured by a Linear Position Transducer",
+      "authors": [
+        "Robert G. Lockie",
+        "Matthew R. Moreno",
+        "Adrina Lazar",
+        "Fabrice G. Risso",
+        "Tricia M. Liu",
+        "Alyssa A. Stage",
+        "Samantha A. Birmingham-Babauta",
+        "Ibett A. Torne",
+        "John J. Stokes",
+        "Dominic V. Giuliano",
+        "DeShaun L. Davis",
+        "Ashley J. Orjalo",
+        "Samuel J. Callaghan"
+      ],
+      "year": 2018,
+      "doi": "10.1519/JSC.0000000000001781",
+      "pmid": "28394830",
+      "url": "https://doi.org/10.1519/JSC.0000000000001781",
+      "scope": "Thirty-one strength-trained adults performed a maximal-force one-repetition high-handle hex-bar deadlift on an Olympic platform while standing inside a dual-height American Barbell frame. The selected high-handle centers were 0.10 meters above the low-handle centers and 0.64 meters apart; participants used consistent self-selected footwear and no belt, wraps, or other supportive equipment. A successful ascent ended erect with extended knees and retracted shoulders. Linear-position data directly support this raised-handle one-repetition fixture and a shorter measured lift than the compared straight-bar condition. The paper does not report absolute handle-to-floor height, stance width, toe angle, a universal frame mass, standardized eccentric handling, or a direct high-versus-low-handle comparison; its population mean displacement and duration are observations, not exercise prescriptions."
+    },
+    {
+      "id": "swinton-2011-straight-hex-bar-biomechanics",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "A biomechanical analysis of straight and hexagonal barbell deadlifts using submaximal loads",
+      "authors": [
+        "Paul A. Swinton",
+        "Arthur Stewart",
+        "Ioannis Agouris",
+        "Justin W. L. Keogh",
+        "Ray Lloyd"
+      ],
+      "year": 2011,
+      "doi": "10.1519/JSC.0b013e3181e73f87",
+      "pmid": "21659894",
+      "url": "https://doi.org/10.1519/JSC.0b013e3181e73f87",
+      "scope": "Nineteen male powerlifters performed two maximal-intended-velocity repetitions at each of eight loads from 10 through 80 percent of their straight-bar one-repetition maximum with a shoulder-width stance, straight elbows, no jump, and at least two minutes of rest between trials. The hexagonal bar allowed the lifter to stand within its frame. Three-dimensional inverse dynamics and resistance tracking directly support combined hip, knee, and ankle extension and show that the hex-bar geometry shifts the compared joint-moment distribution toward the knee while retaining hip and lumbar demand. The source does not report handle height, handle spacing, grip orientation, a hex-bar-relative loading prescription, or eccentric technique, so it supports family mechanics rather than either active handle fixture."
+    },
+    {
+      "id": "camara-2016-straight-hex-bar-emg",
+      "sourceType": "experimentalKineticsEMGStudy",
+      "title": "An Examination of Muscle Activation and Power Characteristics While Performing the Deadlift Exercise With Straight and Hexagonal Barbells",
+      "authors": [
+        "Kevin D. Camara",
+        "Jared W. Coburn",
+        "Dustin D. Dunnick",
+        "Lee E. Brown",
+        "Andrew J. Galpin",
+        "Pablo B. Costa"
+      ],
+      "year": 2016,
+      "doi": "10.1519/JSC.0000000000001352",
+      "pmid": "26840440",
+      "url": "https://doi.org/10.1519/JSC.0000000000001352",
+      "scope": "Twenty resistance-trained men performed three conventional-stance repetitions at 65 and 85 percent of each bar type's tested one-repetition maximum with consistent self-selected deadlifting shoes, chalk permitted, and no belts or straps. Successful repetitions ended erect with hips and knees extended, the torso upright, and the shoulder girdle retracted. Force-plate data and surface EMG from vastus lateralis, biceps femoris, and erector spinae directly support quadriceps emphasis plus measured hamstring and spinal-extensor participation in a hex-bar deadlift. The paper does not report numeric stance geometry, handle height or spacing, grip details, or enough apparatus detail to define either active handle fixture; it supports conservative muscle roles and equipment distinction, not a universal contribution ranking or handle-height effect."
+    },
+    {
+      "id": "diamant-2021-barbell-single-leg-deadlift",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Comparison of EMG Activity between Single-Leg Deadlift and Conventional Bilateral Deadlift in Trained Amateur Athletes - An Empirical Analysis",
+      "authors": [
+        "Wiktor Diamant",
+        "Stephan Geisler",
+        "Tim Havers",
+        "Axel Knicker"
+      ],
+      "year": 2021,
+      "doi": "10.70252/MVFY4610",
+      "pmid": "34055137",
+      "pmcid": "PMC8136577",
+      "url": "https://doi.org/10.70252/MVFY4610",
+      "scope": "Fifteen trained men completed five recorded barefoot barbell single-leg-deadlift repetitions at their individually tested eight-repetition maximum after a two-month familiarization period. A standard 20-kilogram Olympic bar with 450-millimeter plates was held in a bilateral pronated shoulder-width grip; the support foot began centered before the bar, its knee bent only enough to preserve the instructed extended-back position, and the unloaded straight leg extended behind as the torso approached parallel. The bar traveled close to the support knee to full hip extension, the free foot could touch briefly at the upright endpoint for stabilization, and a brief top hold plus controlled return to the ground were paced by acoustic timing with approximately two seconds between repetitions. Surface EMG directly supports gluteus maximus, gluteus medius, biceps femoris, and erector-spinae participation. The study does not measure joint kinematics or kinetics, separate biceps-femoris heads, establish numeric contribution or hypertrophy, or authorize dumbbell, Romanian, staggered-support, shod, belted, strapped, or arbitrary-range variants."
+    },
+    {
+      "id": "mo-2023-single-leg-romanian-loading-position",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effects of loading positions on the activation of trunk and hip muscles during flywheel and dumbbell single-leg Romanian deadlift exercises",
+      "authors": [
+        "Ryan Chun Yin Mo",
+        "Derrick Chung Wang Ngai",
+        "Chapman Cheuk Man Ng",
+        "Kenson Ho Sang Sin",
+        "Jim Tze Chung Luk",
+        "Indy Man Kit Ho"
+      ],
+      "year": 2023,
+      "doi": "10.3389/fphys.2023.1264604",
+      "pmid": "38093908",
+      "pmcid": "PMC10716453",
+      "url": "https://doi.org/10.3389/fphys.2023.1264604",
+      "scope": "Twelve active resistance-trained men performed six continuous dominant-leg single-leg Romanian-deadlift repetitions at maximal intended speed with one dumbbell held either ipsilateral or contralateral to the support leg. The support knee was instructed at approximately 15 degrees of flexion and the bottom brought the trunk approximately parallel to the floor. Each dumbbell load was the greatest six-repetition load that preserved balance and technique while matching the paired flywheel trial's mean velocity within 0.1 meters per second; it was not a tested percentage of maximum. Surface EMG measured superior and inferior gluteus maximus, gluteus medius, biceps femoris, bilateral erector spinae, bilateral external oblique, and adductor longus, directly supporting hip-extensor and multiplanar trunk-and-pelvis control roles plus the ipsilateral-versus-contralateral load-side distinction. Only the dominant support leg was tested; exact foot and grip positions were standardized but not reported, and free-leg position, dumbbell repetition start order, joint kinematics, kinetics, and universal load or range were not established. The source does not authorize flywheel equivalence, bilateral, staggered-support, two-dumbbell, or barbell Romanian variants."
+    },
+    {
+      "id": "mooney-2026-staggered-stance-romanian-deadlift",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Previous Hamstring Injury Does Not Impact Biceps Femoris Long Head Fascicle Length and Eccentric Knee Flexion Strength Changes Following a Low-Volume Resistance Training Intervention in Elite Under-20-Year-Old Male Gaelic Footballers",
+      "authors": [
+        "Tommy Mooney",
+        "Kevin Cronin",
+        "Shane Malone",
+        "Neil Welch",
+        "Kieran Collins",
+        "Jack Hickey"
+      ],
+      "year": 2026,
+      "doi": "10.1002/ejsc.70204",
+      "pmid": "42348402",
+      "url": "https://doi.org/10.1002/ejsc.70204",
+      "scope": "Twenty-six elite under-20 male Gaelic footballers completed nine weeks of once-weekly training that combined two sets of four Nordic-hamstring repetitions with three sets of six barbell staggered-stance Romanian-deadlift repetitions on each lead side, plus ordinary team training and matches. The staggered fixture placed the contralateral toe tip in line with the lead heel, included eccentric lowering and concentric lifting, and added five kilograms when set rating of perceived exertion was below six. This is direct evidence that the named staggered-stance exercise and coarse toe-to-heel relationship were used, but it does not isolate the exercise's outcomes from Nordic work, sprinting, or match exposure and lacks a non-intervention control. It does not report stance width, rear-foot contact or load sharing, knee behavior, grip, bar path, range endpoint or floor relationship, cadence, or exercise-specific muscle activity. Those missing defining fields prevent activation of a truthful B-stance or kickstand-Romanian catalog fixture."
+    },
+    {
       "id": "comfort-2015-forward-reverse-lunge-kinetics",
       "sourceType": "experimentalKinematicsKineticsStudy",
       "title": "Joint Kinetics and Kinematics During Common Lower Limb Rehabilitation Exercises",

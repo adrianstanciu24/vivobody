@@ -49,6 +49,7 @@ $(SRCROOT)/specs/catalog/families/shoulder-external-rotation.json
 $(SRCROOT)/specs/catalog/families/shoulder-flexion-raise.json
 $(SRCROOT)/specs/catalog/families/shoulder-horizontal-abduction-row.json
 $(SRCROOT)/specs/catalog/families/shoulder-internal-rotation.json
+$(SRCROOT)/specs/catalog/families/single-leg-deadlift.json
 $(SRCROOT)/specs/catalog/families/spine-extension.json
 $(SRCROOT)/specs/catalog/families/spine-flexion.json
 $(SRCROOT)/specs/catalog/families/spine-lateral-flexion.json
@@ -56,6 +57,8 @@ $(SRCROOT)/specs/catalog/families/spine-rotation.json
 $(SRCROOT)/specs/catalog/families/split-stance-squat.json
 $(SRCROOT)/specs/catalog/families/step-up.json
 $(SRCROOT)/specs/catalog/families/suitcase-carry.json
+$(SRCROOT)/specs/catalog/families/sumo-deadlift.json
+$(SRCROOT)/specs/catalog/families/trap-bar-deadlift.json
 $(SRCROOT)/specs/catalog/families/upright-row.json
 $(SRCROOT)/specs/catalog/families/vertical-press.json
 $(SRCROOT)/specs/catalog/families/vertical-pull.json

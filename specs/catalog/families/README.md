@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Fifty-nine reviewed family files containing 140 exercises are currently
+Sixty-two reviewed family files containing 146 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-157-source foundation. Each uses a coverage batch whose exercises
+165-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -65,8 +65,15 @@ That roster still includes one exact 25-percent-body-mass barbell good morning.
 The follow-up adds one conventional barbell deadlift plus distinct Romanian,
 15-centimeter step-Romanian, and stiff-leg barbell fixtures. Their floor
 contact, knee technique, range, and load geometry stay explicit; they do not
-silently broaden the good-morning contract or authorize sumo, trap-bar,
-unilateral, or equipment-substitution variants.
+silently broaden the good-morning contract.
+
+The later deadlift expansion adds six more source-bounded records in three
+separate owners: one barefoot dead-stop sumo fixture, low- and high-handle
+trap-bar fixtures, and three true single-leg fixtures covering one barbell and
+two one-dumbbell load-side relationships. `trapBar` is first-class equipment,
+not `other` or a barbell synonym. Staggered/B-stance remains unavailable
+because the direct intervention omits rear-foot load sharing, knee behavior,
+range, grip, and bar-path details needed for a truthful fixture.
 
 Batch 6 adds one exercise each across `hip-abduction`, `hip-adduction`,
 `ankle-dorsiflexion`, `hip-internal-rotation`, and

@@ -7878,6 +7878,306 @@
     ]
   },
   {
+    "familyID": "single-leg-deadlift",
+    "catalogID": "barbell-single-leg-deadlift",
+    "name": "Barbell Single-Leg Deadlift",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Single-Leg Barbell Deadlift",
+      "Floor-Touch Barbell Single-Leg Deadlift"
+    ],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Set a straight Olympic barbell on the floor. Stand barefoot with the working foot centered just in front of the bar. Hinge over that leg, bend its knee only as far as needed to keep your back extended, and extend the unloaded straight leg behind you. Grip the bar with both hands shoulder-width apart and your palms facing back toward your legs; brace your abdomen, tension your lats, and draw your shoulder blades back.",
+      "movement": "Extend the working hip and straighten your torso under control, keeping the bar as close as possible to the working knee and body while the straight free leg travels toward the standing position.",
+      "endpoint": "Finish with the working hip fully extended, the free leg almost level with the working leg, the buttocks and abdomen braced, and the lumbar spine neutral. The source allowed the free foot to touch down briefly for stabilization and used a brief top hold.",
+      "returnPhase": "Lift the free foot again if it touched down, hinge under control, and lower the bar close to your body until the plates return to the floor. Keep the complete timed repetition cycle to four seconds, including the source's approximately two-second pause between repetitions; the publication did not report a separate concentric/eccentric split.",
+      "controlledJoints": "Keep the repetition hip-dominant. Use only the knee bend needed for the instructed straight back; Diamant et al. did not measure a fixed knee or torso angle, and knee extension is not a declared prime action.",
+      "supportAndPosture": "Keep the working foot planted and use no belt, straps, bench, wall, or hand support. The source called a torso-parallel bottom posture optimal but did not measure kinematics.",
+      "disqualifyingCompensations": [
+        "Keeping the free foot planted to share the loaded hinge turns the task into a staggered-stance or two-foot-support deadlift.",
+        "Bending the working knee deeply to lower and raise the body turns the hip-dominant hinge into a single-leg squat pattern.",
+        "Stopping the bar above the floor turns the reviewed floor-start fixture into an unreviewed partial or continuous single-leg hinge.",
+        "Holding the bar with one hand turns the two-hand-grip barbell fixture into an unreviewed asymmetric-load variation."
+      ],
+      "sideOrDirection": "Complete the set on one working leg, then mirror the setup on the other leg. Diamant et al. warmed up both sides but measured only the right leg; the mirrored prescription is a catalog adaptation."
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "single-leg-deadlift",
+    "catalogID": "dumbbell-single-leg-romanian-deadlift-ipsilateral-load",
+    "name": "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift",
+    "group": "legs",
+    "defaultWeight": 25,
+    "defaultWeightKg": 12.5,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Same-Side-Load Dumbbell Single-Leg Romanian Deadlift",
+      "Ipsilateral Dumbbell Single-Leg RDL"
+    ],
+    "searchPriority": 88,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Choose the working leg and hold one dumbbell in the hand on that same side, aligned below the ipsilateral shoulder. Stand only on the working leg with its knee held at the source's instructed approximately 15-degree flexion. Mo et al. standardized foot and grip placement but did not report their dimensions, grip orientation, footwear, support surface, or free-leg position. The publication also did not separately report whether the dumbbell cycle first entered at the top or bottom; this catalog instruction enters the reported bottom posture with the trunk about parallel to the ground.",
+      "movement": "Extend the working hip at the source's maximal instructed speed to raise the torso while keeping the dumbbell in the working-side shoulder line and maintaining the prescribed slight knee bend.",
+      "endpoint": "Reach full working-hip extension without deliberately straightening the knee, rotating the trunk, or using the free foot for support.",
+      "returnPhase": "Hinge at the source's maximal instructed speed until the trunk is about parallel to the ground, then continue directly into the next repetition without external support. Complete six continuous repetitions. The study used an individual metronome pace matched to each participant's flywheel velocity, not one universal cadence.",
+      "controlledJoints": "Maintain the instructed approximately 15-degree working-knee flexion and control the spine and pelvis against flexion, side-bending, and rotation. The source did not collect kinematics, so these instructions do not claim literal zero excursion.",
+      "supportAndPosture": "Keep the working foot planted and the other foot unloaded, with no wall, bench, hand, or torso support. Do not invent a free-leg trajectory or exact foot and grip placement that Mo et al. did not report.",
+      "disqualifyingCompensations": [
+        "Putting the free foot down to share the load turns the single-leg fixture into a staggered-stance or B-stance hinge.",
+        "Moving the dumbbell to the hand opposite the working leg turns this exercise into the contralateral-load fixture.",
+        "Bending and straightening the working knee deeply to create the repetition turns the hip-dominant hinge into a single-leg squat pattern.",
+        "Stopping well before the reported trunk-parallel bottom turns the reviewed range into an unreviewed partial single-leg hinge."
+      ],
+      "sideOrDirection": "Complete the continuous set on one working leg with the dumbbell in the same-side hand, then move the dumbbell and mirror the setup on the other leg. Mo et al. tested only the dominant working leg; the mirrored prescription is a catalog adaptation."
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "single-leg-deadlift",
+    "catalogID": "dumbbell-single-leg-romanian-deadlift-contralateral-load",
+    "name": "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift",
+    "group": "legs",
+    "defaultWeight": 25,
+    "defaultWeightKg": 12.5,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift",
+      "Contralateral Dumbbell Single-Leg RDL"
+    ],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Choose the working leg and hold one dumbbell in the opposite hand, aligned below the contralateral shoulder. Stand only on the working leg with its knee held at the source's instructed approximately 15-degree flexion. Mo et al. standardized foot and grip placement but did not report their dimensions, grip orientation, footwear, support surface, or free-leg position. The publication also did not separately report whether the dumbbell cycle first entered at the top or bottom; this catalog instruction enters the reported bottom posture with the trunk about parallel to the ground.",
+      "movement": "Extend the working hip at the source's maximal instructed speed to raise the torso while keeping the dumbbell in the opposite-side shoulder line and maintaining the prescribed slight knee bend.",
+      "endpoint": "Reach full working-hip extension without deliberately straightening the knee, rotating the trunk, or using the free foot for support.",
+      "returnPhase": "Hinge at the source's maximal instructed speed until the trunk is about parallel to the ground, then continue directly into the next repetition without external support. Complete six continuous repetitions. The study used an individual metronome pace matched to each participant's flywheel velocity, not one universal cadence.",
+      "controlledJoints": "Maintain the instructed approximately 15-degree working-knee flexion and control the spine and pelvis against flexion, side-bending, and rotation. The source did not collect kinematics, so these instructions do not claim literal zero excursion.",
+      "supportAndPosture": "Keep the working foot planted and the other foot unloaded, with no wall, bench, hand, or torso support. Do not invent a free-leg trajectory or exact foot and grip placement that Mo et al. did not report.",
+      "disqualifyingCompensations": [
+        "Putting the free foot down to share the load turns the single-leg fixture into a staggered-stance or B-stance hinge.",
+        "Moving the dumbbell to the hand on the working-leg side turns this exercise into the ipsilateral-load fixture.",
+        "Bending and straightening the working knee deeply to create the repetition turns the hip-dominant hinge into a single-leg squat pattern.",
+        "Stopping well before the reported trunk-parallel bottom turns the reviewed range into an unreviewed partial single-leg hinge."
+      ],
+      "sideOrDirection": "Complete the continuous set on one working leg with the dumbbell in the opposite hand, then move the dumbbell and mirror the setup on the other leg. Mo et al. tested only the dominant working leg; the mirrored prescription is a catalog adaptation."
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "spine-extension",
     "catalogID": "medx-isolated-lumbar-extension",
     "name": "MedX Isolated Lumbar Extension",
@@ -8351,6 +8651,330 @@
       },
       {
         "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "sumo-deadlift",
+    "catalogID": "barefoot-dead-stop-sumo-barbell-deadlift",
+    "name": "Barefoot Dead-Stop Sumo Barbell Deadlift",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 3,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Sumo Barbell Deadlift",
+      "Sumo Deadlift",
+      "Double-Overhand Dead-Stop Sumo Deadlift"
+    ],
+    "searchPriority": 100,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Place a free barbell at rest on the floor. Stand barefoot in a symmetric stance wider than your natural narrow stance, turn both toes outward by a comfortable self-selected amount, and take a double-overhand grip inside your knees at a self-selected width.",
+      "movement": "From the complete floor dead stop, drive through both feet and extend your hips and knees together to raise the bar with maximum concentric-speed intent. Let your hips, knees, and ankles follow the wide-stance path without lifting either foot or rising deliberately onto your toes.",
+      "endpoint": "Finish upright with your hips and knees fully extended, your torso straight, and your shoulders drawn back while the bar remains controlled in both hands.",
+      "returnPhase": "Lower the bar under control until it rests fully on the floor, then use a short pause before the next repetition. Controlled lowering is a catalog adaptation because Hanen et al. analyzed only the ascent and did not report an eccentric cadence.",
+      "controlledJoints": "Keep both elbows extended as a catalog coaching constraint, brace your trunk without using deliberate spinal motion to create the repetition, and control the measured frontal- and transverse-plane demands of the wide stance.",
+      "supportAndPosture": "Use no external torso support, maintain continuous contact through both bare feet, and do not infer a source-verified neutral-spine posture because spinal kinematics were not measured.",
+      "disqualifyingCompensations": [
+        "Moving to a narrow stance and placing the arms outside the thighs turns the lift into a conventional deadlift.",
+        "Bouncing or immediately reversing the bar from the floor removes the required dead stop.",
+        "Using a mixed grip, hook grip, straps, or another grip aid leaves the reviewed double-overhand fixture.",
+        "Wearing shoes or using a trap bar, blocks, a rack, or another load topology leaves this directly reviewed fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "adductorMagnus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "trap-bar-deadlift",
+    "catalogID": "low-handle-trap-bar-deadlift",
+    "name": "Low-Handle Trap-Bar Deadlift",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 1,
+    "trackingMode": "reps",
+    "equipment": "trapBar",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Low-Handle Hex-Bar Deadlift",
+      "Low-Handle Hexagonal-Bar Deadlift",
+      "Low Trap-Bar Deadlift"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Rest a closed Pullum-style hexagonal frame on the floor and stand symmetrically inside it. Use the unraised handles aligned with the sleeve axis, with one handle beside each lower leg and your palms facing one another. The source did not standardize stance width or toe angle and tested this fixture barefoot.",
+      "movement": "From the resting floor position, keep both elbows extended and drive through both feet as you extend your hips and knees together. Let the ankles move naturally toward standing while the frame rises around your body; do not lower the frame during the ascent.",
+      "endpoint": "Finish erect with your knees and hips extended, shoulders drawn back, and the unraised handles controlled beside your thighs.",
+      "returnPhase": "After the logged single, lower the frame under control until it rests on the floor before the next separate attempt. Lake et al. analyzed the ascent and did not prescribe the return cadence; this controlled reset is a catalog adaptation.",
+      "controlledJoints": "Keep both elbows extended and maintain trunk control without deliberately creating spinal motion. Do not treat any stance width, toe angle, or spinal angle as source-standardized.",
+      "supportAndPosture": "Use no external torso support. Keep both feet on the floor and remain centered inside the closed frame with the loaded sleeves lateral to your body.",
+      "disqualifyingCompensations": [
+        "Turning the frame over to use raised handles turns the movement into a high-handle trap-bar deadlift.",
+        "Moving the load to a straight bar in front of the legs turns the movement into a conventional barbell deadlift.",
+        "Jumping with the frame turns the movement into a trap-bar jump rather than the reviewed deadlift.",
+        "Walking while holding the frame turns the movement into a trap-bar farmer carry."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "trap-bar-deadlift",
+    "catalogID": "high-handle-trap-bar-deadlift",
+    "name": "High-Handle Trap-Bar Deadlift",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 1,
+    "trackingMode": "reps",
+    "equipment": "trapBar",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "High-Handle Hex-Bar Deadlift",
+      "High-Handle Hexagonal-Bar Deadlift",
+      "High Trap-Bar Deadlift"
+    ],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Rest an American Barbell-style dual-height hexagonal frame on an Olympic platform and stand symmetrically inside it. Use the high handles, whose centers are 10 centimeters above the low-handle centers and 64 centimeters apart, with your palms facing one another. Use consistent footwear; the source did not standardize stance width or toe angle.",
+      "movement": "From the resting floor position, keep both elbows extended and lift with maximal force intent as you extend your hips and knees together. Let the ankles move naturally toward standing and do not lower the frame during the ascent.",
+      "endpoint": "Finish erect inside the frame with your knees and hips extended, shoulders drawn back, and the high handles controlled beside your thighs.",
+      "returnPhase": "After the logged single, lower the frame under control until it rests on the platform before another attempt. Lockie et al. analyzed only the concentric ascent and did not prescribe the return cadence; this controlled reset is a catalog adaptation.",
+      "controlledJoints": "Keep both elbows extended and maintain trunk control without treating any spinal angle as source-standardized or measured. Do not invent a source-standardized stance width or toe angle.",
+      "supportAndPosture": "Use no belt, wraps, supportive garment, or external torso support. Keep both feet on the platform and remain centered inside the closed frame with the loaded sleeves lateral to your body.",
+      "disqualifyingCompensations": [
+        "Using the lower handles turns the movement into a low-handle trap-bar deadlift outside this high-handle fixture.",
+        "Moving the load to a straight bar in front of the legs turns the movement into a conventional barbell deadlift.",
+        "Jumping with the frame turns the movement into a trap-bar jump rather than the reviewed deadlift.",
+        "Walking while holding the frame turns the movement into a trap-bar farmer carry."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]

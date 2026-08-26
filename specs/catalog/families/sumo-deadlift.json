@@ -1,0 +1,665 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "sumo-deadlift",
+  "name": "Sumo Deadlift",
+  "definition": "A strict bilateral barefoot sumo barbell deadlift in which a free bar begins at rest on the floor, both hands take a double-overhand grip inside a self-selected wide toe-out stance, and the bar travels to an upright standing endpoint through hip extension, knee extension, and ankle plantarflexion. Hanen et al. directly tested thirty experienced male lifters performing three repetitions at 85 percent of an adjusted one-repetition maximum, with maximal concentric-speed intent, a short unquantified pause between repetitions, and a dead stop that removed elastic carryover. The adjusted maximum was estimated with either the participant's preferred or non-preferred deadlift technique according to cohort assignment, so the load is not represented as a sumo-specific or universally equal relative intensity. The source did not quantify stance width, toe-out angle, grip width, or pause duration. Its three-dimensional analysis directly measured frontal- and transverse-plane hip, knee, and ankle behavior, including hip movement toward adduction and greater external rotation during the ascent, but those excursions are recorded as nondefining control demands rather than fabricated training primes: the study did not identify their muscle contributors, and its adductor-magnus EMG does not establish that muscle as a primary force generator. Gluteus maximus and the combined vasti region are non-ranked co-primary emphases supported by measured hip and knee extension mechanics plus surface EMG; rectus femoris and the plantarflexors are conservative secondary anatomy assignments, while measured adductor magnus, gluteus medius, biceps femoris, tibialis anterior, and lumbar erector activity receive only control credit. The study analyzed the ascent from lift-off to lockout, not the descent; the catalog's controlled return to the floor is an explicit product adaptation needed to repeat the documented dead-stop fixture, and no source-derived eccentric cadence is claimed. The 45-pound and 20-kilogram defaults are product initialization rather than a claim that either equals 85 percent of an athlete's maximum. Shod, narrow-stance, arms-outside-the-thighs, mixed-grip, hook-grip, strap-assisted, touch-and-go, bounced, conventional, Romanian, stiff-leg, deficit, block, rack, paused-at-height, trap-bar, dumbbell, kettlebell, cable, Smith, machine, unilateral, and staggered variants remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "hanen-2025-conventional-sumo-deadlift"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "adductorMagnus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "tibialisAnterior"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMax",
+        "vasti"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "bicepsFemoris",
+        "gluteMed",
+        "adductorMagnus",
+        "tibialisAnterior",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "trapeziusUpper",
+        "triceps",
+        "abs",
+        "obliques",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both bare feet remain fixed against separate force plates while the pelvis, torso, and freely held bar move relative to that distal base.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The gross whole-body posture at the source-defined successful endpoint.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "No bench, pad, rack, or other external surface supports the torso during the floor pull.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The sumo fixture distributes the task across a symmetric, non-split bilateral stance.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hanen et al. required a wider foot placement but let each participant select the width and reported no numeric threshold.",
+      "allowedValues": [
+        "selfSelectedWideUnquantified"
+      ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly tested feet pointed outward at a self-selected angle that the source did not quantify.",
+      "allowedValues": [
+        "selfSelectedToeOutUnquantified"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain in contact with the force-plate floor throughout the analyzed ascent.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "footwear",
+      "valueType": "enum",
+      "required": true,
+      "description": "All directly analyzed trials were performed barefoot.",
+      "allowedValues": [
+        "barefoot"
+      ]
+    },
+    {
+      "id": "armPositionRelativeToLegs",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both hands grip the bar inside the knees, distinguishing the reviewed sumo topology from the conventional fixture.",
+      "allowedValues": [
+        "insideKnees"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hanen et al. consistently used an overhand grip for both hands; mixed, hook, and assisted grips are not admitted.",
+      "allowedValues": [
+        "doubleOverhand"
+      ]
+    },
+    {
+      "id": "gripWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "Participants selected their own grip width inside the knees; no universal numeric width is inferred.",
+      "allowedValues": [
+        "selfSelectedInsideKnees"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "The free barbell is held by both hands anterior to the body rather than supported on the shoulders, pelvis, or another body surface.",
+      "allowedValues": [
+        "handsInFrontOfBody"
+      ]
+    },
+    {
+      "id": "loadPrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "The analyzed load was 85 percent of an adjusted one-repetition maximum estimated using a cohort-assigned preferred or non-preferred deadlift technique, not a guaranteed sumo-specific maximum.",
+      "allowedValues": [
+        "eightyFivePercentAdjustedOneRepMaximumMixedTechniqueBasis"
+      ]
+    },
+    {
+      "id": "repetitionOrder",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source analyzed floor-to-standing ascent only; the catalog adds a controlled return to the floor solely to repeat the documented dead-stop fixture.",
+      "allowedValues": [
+        "floorToStandingToFloorCatalogReturnAdaptation"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The primary sagittal hip action measured from lift-off to the fully extended standing endpoint.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "hipFrontalMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hip remained abducted in the wide stance while moving toward adduction through both ascent phases; this directly measured excursion is recorded without promoting it to a training-defining prime.",
+      "allowedValues": [
+        "measuredAdductionTowardStandingNondefining"
+      ]
+    },
+    {
+      "id": "hipTransverseMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip external rotation increased through the ascent, but no unconditioned muscle-contributor claim is inferred from that measured motion.",
+      "allowedValues": [
+        "measuredIncreasingExternalRotationNondefining"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both knees dynamically extend from lift-off to the source-defined fully extended endpoint.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "kneeFrontalMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study measured frontal-plane knee excursion during the ascent; it remains a nondefining control demand rather than an authored knee-adduction or knee-abduction training prime.",
+      "allowedValues": [
+        "measuredFrontalExcursionNondefining"
+      ]
+    },
+    {
+      "id": "kneeTransverseMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study measured transverse-plane knee excursion and internal-rotation moments without identifying a dynamic transverse-plane training prime.",
+      "allowedValues": [
+        "measuredTransverseExcursionNondefining"
+      ]
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The ankle moved toward plantarflexion from mid-ascent to lockout while a plantarflexion moment was present; this does not prescribe rising onto the toes.",
+      "allowedValues": [
+        "plantarflexesTowardStanding"
+      ]
+    },
+    {
+      "id": "ankleFrontalTransverseMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Measured eversion posture and frontal- and transverse-plane ankle moments are preserved as nondefining foot-and-ankle control rather than extra training primes.",
+      "allowedValues": [
+        "measuredMultiplanarControlNondefining"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source measured erector-spinae EMG but no spinal kinematics, so deliberate spinal motion is not a prime action and literal neutral alignment is not claimed.",
+      "allowedValues": [
+        "unmeasured"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog keeps both elbows extended so arm motion does not turn the floor pull into a curl; elbow kinematics were not measured by Hanen et al.",
+      "allowedValues": [
+        "extendedAngleHeldCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The analyzed concentric path begins with the bar resting on the floor and ends upright with fully extended hips and knees, a straight torso, and retracted shoulders.",
+      "allowedValues": [
+        "floorAtFootLevelToSourceDefinedStandingLockout"
+      ]
+    },
+    {
+      "id": "concentricIntent",
+      "valueType": "enum",
+      "required": true,
+      "description": "Participants were instructed to perform each concentric phase at maximum speed under the submaximal test load.",
+      "allowedValues": [
+        "maximumSpeed"
+      ]
+    },
+    {
+      "id": "returnCadence",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study did not analyze or standardize the descent; controlled lowering is an explicit catalog adaptation with no numeric cadence.",
+      "allowedValues": [
+        "unreportedSourceControlledCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "No rail, lever, or other mechanism constrains the free-bar path."
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bar rests on the floor at the repetition boundary, with a short source-imposed pause whose duration was not quantified and a dead stop that removes elastic carryover.",
+      "allowedValues": [
+        "floorDeadStopShortPauseDurationUnreported"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip extension, knee extension, and ankle plantarflexion create the defining concentric floor pull while directly measured multiplanar lower-limb behavior remains a control demand.",
+      "allowedValues": [
+        "compoundHipKneeAnkleExtensionWithMultiplanarControl"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "barefoot-dead-stop-sumo-barbell-deadlift",
+      "name": "Barefoot Dead-Stop Sumo Barbell Deadlift",
+      "aliases": [
+        "Sumo Barbell Deadlift",
+        "Sumo Deadlift",
+        "Double-Overhand Dead-Stop Sumo Deadlift"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 3,
+      "searchPriority": 100,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "adductorMagnus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "selfSelectedWideUnquantified",
+        "footOrientation": "selfSelectedToeOutUnquantified",
+        "footContact": "continuous",
+        "footwear": "barefoot",
+        "armPositionRelativeToLegs": "insideKnees",
+        "gripOrientation": "doubleOverhand",
+        "gripWidth": "selfSelectedInsideKnees",
+        "loadPlacement": "handsInFrontOfBody",
+        "loadPrescription": "eightyFivePercentAdjustedOneRepMaximumMixedTechniqueBasis",
+        "repetitionOrder": "floorToStandingToFloorCatalogReturnAdaptation",
+        "hipMotion": "extends",
+        "hipFrontalMotion": "measuredAdductionTowardStandingNondefining",
+        "hipTransverseMotion": "measuredIncreasingExternalRotationNondefining",
+        "kneeMotion": "extends",
+        "kneeFrontalMotion": "measuredFrontalExcursionNondefining",
+        "kneeTransverseMotion": "measuredTransverseExcursionNondefining",
+        "ankleMotion": "plantarflexesTowardStanding",
+        "ankleFrontalTransverseMotion": "measuredMultiplanarControlNondefining",
+        "spineMotion": "unmeasured",
+        "elbowMotion": "extendedAngleHeldCatalogAdaptation",
+        "rangeOfMotion": "floorAtFootLevelToSourceDefinedStandingLockout",
+        "concentricIntent": "maximumSpeed",
+        "returnCadence": "unreportedSourceControlledCatalogAdaptation",
+        "fixedPath": false,
+        "interRepSupport": "floorDeadStopShortPauseDurationUnreported",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtensionWithMultiplanarControl"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "hanen-2025-conventional-sumo-deadlift"
+      ],
+      "execution": {
+        "startingPosition": "Place a free barbell at rest on the floor. Stand barefoot in a symmetric stance wider than your natural narrow stance, turn both toes outward by a comfortable self-selected amount, and take a double-overhand grip inside your knees at a self-selected width.",
+        "movement": "From the complete floor dead stop, drive through both feet and extend your hips and knees together to raise the bar with maximum concentric-speed intent. Let your hips, knees, and ankles follow the wide-stance path without lifting either foot or rising deliberately onto your toes.",
+        "endpoint": "Finish upright with your hips and knees fully extended, your torso straight, and your shoulders drawn back while the bar remains controlled in both hands.",
+        "returnPhase": "Lower the bar under control until it rests fully on the floor, then use a short pause before the next repetition. Controlled lowering is a catalog adaptation because Hanen et al. analyzed only the ascent and did not report an eccentric cadence.",
+        "controlledJoints": "Keep both elbows extended as a catalog coaching constraint, brace your trunk without using deliberate spinal motion to create the repetition, and control the measured frontal- and transverse-plane demands of the wide stance.",
+        "supportAndPosture": "Use no external torso support, maintain continuous contact through both bare feet, and do not infer a source-verified neutral-spine posture because spinal kinematics were not measured.",
+        "disqualifyingCompensations": [
+          "Moving to a narrow stance and placing the arms outside the thighs turns the lift into a conventional deadlift.",
+          "Bouncing or immediately reversing the bar from the floor removes the required dead stop.",
+          "Using a mixed grip, hook grip, straps, or another grip aid leaves the reviewed double-overhand fixture.",
+          "Wearing shoes or using a trap bar, blocks, a rack, or another load topology leaves this directly reviewed fixture."
+        ]
+      }
+    }
+  ]
+}
