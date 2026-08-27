@@ -331,8 +331,8 @@ final class WorkoutSession: Identifiable {
     /// Comparable tonnage and its completeness across completed
     /// dynamic-strength sets and external-load power sets. Each reps
     /// set uses effective load, so added body weight and assistance have
-    /// the correct polarity. Conditioning, mobility, timed, and
-    /// non-comparable work are excluded rather than treated as missing.
+    /// the correct polarity. Timed and non-comparable work are excluded
+    /// rather than treated as missing.
     var comparableTonnageSummary: ComparableTonnageSummary {
         exercises.reduce(.zero) { summary, exercise in
             summary.merging(exercise.comparableTonnageSummary)
@@ -371,9 +371,8 @@ final class WorkoutSession: Identifiable {
         }
     }
 
-    /// Total elapsed work across completed sets of every `.duration`
-    /// exercise — isometric holds, conditioning intervals, and timed
-    /// mobility alike.
+    /// Total elapsed work across completed sets of every duration-tracked
+    /// exercise.
     var totalTimedWork: TimeInterval {
         exercises.reduce(0) { acc, ex in
             guard ex.trackingMode == .duration else { return acc }
@@ -539,9 +538,8 @@ extension Exercise {
 
     /// Completed working sets that can honestly enter strength-set
     /// analytics. Dynamic work requires logged reps; isometric work
-    /// requires logged hold time. Conditioning and mobility never
-    /// masquerade as strength volume even when they happen to use a
-    /// reps or duration input.
+    /// requires logged hold time. Power and mismatched tracking pairs
+    /// never masquerade as strength volume.
     var completedHardSetCount: Int {
         guard modality.supportsHardSetAnalytics else { return 0 }
 

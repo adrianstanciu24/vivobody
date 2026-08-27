@@ -2,7 +2,7 @@
 //  ExercisePresentationTests.swift
 //  vivobodyTests
 //
-//  Guards the shared UI vocabulary for timed modalities and semantic
+//  Guards the shared lifter-focused exercise vocabulary and semantic
 //  load descriptions, including completion accessibility wording.
 //
 
@@ -18,27 +18,23 @@ struct ExercisePresentationTests {
             .dynamicStrength,
             .isometricStrength,
             .power,
-            .conditioning,
-            .mobility,
         ])
-        #expect(choices.map(\.customExerciseChoiceName) == [
+        #expect(choices.map(\.displayName) == [
             "Strength · Reps",
             "Strength · Hold",
             "Power / Explosive",
-            "Conditioning",
-            "Mobility",
         ])
-        #expect(ExerciseModality.dynamicStrength.customExerciseTrackingModes == [.reps])
-        #expect(ExerciseModality.isometricStrength.customExerciseTrackingModes == [.duration])
-        #expect(ExerciseModality.power.customExerciseTrackingModes == [.reps])
-        #expect(ExerciseModality.conditioning.customExerciseTrackingModes == [.reps, .duration])
-        #expect(ExerciseModality.mobility.customExerciseTrackingModes == [.reps, .duration])
+        #expect(choices.map(\.requiredTrackingMode) == [.reps, .duration, .reps])
+        #expect(choices.map(\.categoryDisplayName) == [
+            "Strength",
+            "Strength",
+            "Power / Explosive",
+        ])
+        #expect(choices.map(\.measureDisplayName) == ["Reps", "Hold", "Reps"])
     }
 
     @Test func durationTerminologyFollowsModality() {
         #expect(ExerciseModality.isometricStrength.durationLabel == "Hold")
-        #expect(ExerciseModality.conditioning.durationLabel == "Interval")
-        #expect(ExerciseModality.mobility.durationLabel == "Time")
         #expect(ExerciseModality.dynamicStrength.durationLabel == "Time")
         #expect(ExerciseModality.power.durationLabel == "Time")
     }
@@ -66,10 +62,6 @@ struct ExercisePresentationTests {
         #expect(
             ExerciseLoadMode.nonComparable.durationRecordDetail(modality: .isometricStrength)
                 == "Longest hold"
-        )
-        #expect(
-            ExerciseLoadMode.nonComparable.durationRecordDetail(modality: .conditioning)
-                == "Longest interval"
         )
     }
 

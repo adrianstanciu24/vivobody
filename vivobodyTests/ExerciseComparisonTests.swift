@@ -155,57 +155,30 @@ struct ExerciseComparisonTests {
         )
     }
 
-    /// Real-world interval work: duration-tracked whole-body effort
-    /// with authored anatomical roles, but no hypertrophy volume.
-    private func makeConditioning() -> ExerciseCatalogItem {
+    /// Non-comparable explosive work retains authored anatomical roles,
+    /// but earns neither performance records nor hypertrophy volume.
+    private func makeUnrankedPower() -> ExerciseCatalogItem {
         ExerciseCatalogItem(
-            catalogID: "burpee",
-            familyID: "locomotion",
-            name: "Burpee",
-            group: .legs,
-            defaultWeight: 0,
-            trackingMode: .duration,
-            modality: .conditioning,
-            loadMode: .nonComparable,
-            equipment: .bodyweight,
-            mechanic: .compound,
-            trainingRole: .other,
-            pattern: .locomotion,
-            direction: nil,
-            planes: [.sagittal],
-            laterality: .bilateral,
-            muscleInvolvement: Muscle.Involvement(contributions: [
-                .init(muscle: .vasti, role: .primary),
-                .init(muscle: .abs, role: .secondary),
-                .init(muscle: .deltoidAnterior, role: .stabilizer),
-            ])
-        )
-    }
-
-    /// Duration-tracked mobility work with explicit prime and assisting
-    /// anatomy. Those roles remain visible but must never enter the
-    /// hard-set currency.
-    private func makeMobility() -> ExerciseCatalogItem {
-        ExerciseCatalogItem(
-            catalogID: "half-kneeling-thoracic-rotation-mobility",
-            familyID: "thoracic-rotation-mobility",
-            name: "Half-Kneeling Thoracic Rotation",
+            catalogID: "rotational-medicine-ball-throw",
+            familyID: "rotational-throw",
+            name: "Rotational Medicine-Ball Throw",
             group: .core,
             defaultWeight: 0,
-            trackingMode: .duration,
-            modality: .mobility,
+            defaultReps: 5,
+            trackingMode: .reps,
+            modality: .power,
             loadMode: .nonComparable,
-            defaultDuration: 30,
-            equipment: .bodyweight,
-            mechanic: .isolation,
+            equipment: .other,
+            mechanic: .compound,
             trainingRole: .core,
-            pattern: nil,
+            pattern: .core,
             direction: nil,
             planes: [.transverse],
             laterality: .unilateral,
             muscleInvolvement: Muscle.Involvement(contributions: [
                 .init(muscle: .obliques, role: .primary),
                 .init(muscle: .abs, role: .secondary),
+                .init(muscle: .deltoidAnterior, role: .stabilizer),
             ])
         )
     }
@@ -314,10 +287,10 @@ struct ExerciseComparisonTests {
         #expect(samePrimary.roleChanges.isEmpty)
     }
 
-    @Test func powerAndConditioningRolesNeverBecomeVolumeBearing() {
+    @Test func powerRolesNeverBecomeVolumeBearing() {
         let comparison = ExerciseComparison(
             anchor: makeLandminePowerTest(),
-            other: makeConditioning()
+            other: makeUnrankedPower()
         )
 
         #expect(comparison.trainingVolumeAvailability == .neither)
@@ -346,7 +319,7 @@ struct ExerciseComparisonTests {
     @Test func durationTrackedIsometricRolesBecomeVolumeBearing() {
         let comparison = ExerciseComparison(
             anchor: makePlank(),
-            other: makeConditioning()
+            other: makeUnrankedPower()
         )
 
         #expect(comparison.trainingVolumeAvailability == .anchorOnly)
@@ -362,10 +335,10 @@ struct ExerciseComparisonTests {
         ).isEmpty)
     }
 
-    @Test func mobilityRolesNeverBecomeVolumeBearing() {
+    @Test func unrankedPowerRolesNeverBecomeVolumeBearing() {
         let comparison = ExerciseComparison(
-            anchor: makeMobility(),
-            other: makeConditioning()
+            anchor: makeUnrankedPower(),
+            other: makeLandminePowerTest()
         )
 
         #expect(comparison.trainingVolumeAvailability == .neither)
@@ -463,7 +436,7 @@ struct ExerciseComparisonTests {
     @Test func nonVolumeModalitiesStillRetainTheirAnatomy() {
         let comparison = ExerciseComparison(
             anchor: makeLandminePowerTest(),
-            other: makeConditioning()
+            other: makeUnrankedPower()
         )
 
         #expect(comparison.anatomyChannels(
@@ -566,7 +539,7 @@ struct ExerciseComparisonTests {
 
         #expect(ExerciseComparison(
             anchor: makePlank(),
-            other: makeConditioning()
+            other: makeUnrankedPower()
         ).directionNote == nil)
     }
 
@@ -586,7 +559,11 @@ struct ExerciseComparisonTests {
 
         let measured = rows.first { $0.label == "Measured" }
         #expect(measured?.anchorValue == "Reps")
-        #expect(measured?.otherValue == "Time")
+        #expect(measured?.otherValue == "Hold")
+
+        let type = rows.first { $0.label == "Type" }
+        #expect(type?.anchorValue == "Strength")
+        #expect(type?.otherValue == "Strength")
     }
 
     @Test func progressionNoteFiresOnlyOnGenuineDifferences() {
@@ -599,11 +576,11 @@ struct ExerciseComparisonTests {
                 == "Only Incline Bench Press has a comparable load axis; Plank has no honest load-progression record."
         )
 
-        // A ranked duration hold vs unranked conditioning: same load
+        // A ranked duration hold vs unranked power: same load
         // comparability, different record eligibility.
         let rankedVsUnranked = ExerciseComparison(
             anchor: makePlank(),
-            other: makeConditioning()
+            other: makeUnrankedPower()
         )
         #expect(
             rankedVsUnranked.progressionNote == "Only Plank earns performance records."

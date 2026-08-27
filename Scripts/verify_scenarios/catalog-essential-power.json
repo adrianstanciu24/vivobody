@@ -1,0 +1,49 @@
+{
+  "name": "catalog-essential-power",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Push",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Barbell Split Jerk,"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Barbell Split Jerk,"
+      }
+    },
+    {
+      "wait": {
+        "label": "POWER / EXPLOSIVE"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "POWER / EXPLOSIVE"
+    },
+    {
+      "label": "Barbell Split Jerk"
+    }
+  ],
+  "forbidden": []
+}

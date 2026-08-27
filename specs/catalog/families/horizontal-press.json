@@ -3,14 +3,15 @@
   "schemaVersion": 1,
   "id": "horizontal-press",
   "name": "Horizontal Press",
-  "definition": "A compound press whose concentric phase combines shoulder horizontal adduction with elbow extension in either an open or closed kinetic chain. The resistance path is approximately perpendicular to the torso's longitudinal axis; inclined, declined, vertical, and elbow-isolation presses belong to other families. Grip-width variants remain horizontal presses but are deferred until a hand-spacing axis is reviewed. Feet-elevated and hands-elevated push-ups are future incline-press and decline-press variants respectively, once those contracts admit closed-chain bodyweight exercises.",
+  "definition": "A compound press whose concentric phase combines shoulder horizontal adduction with elbow extension in either an open or closed kinetic chain. The resistance path is approximately perpendicular to the torso's longitudinal axis; inclined, declined, vertical, and elbow-isolation presses belong to other families. The close-grip barbell record owns one source-defined narrow spacing relative to individual latissimus and triceps landmarks, while the generic barbell bench press remains grip-width unspecified. Feet-elevated and hands-elevated push-ups remain future incline-press and decline-press variants.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "borges-2019-bench-machine-scapula",
     "boroto-2018-scapular-stabilizers-press",
     "cabral-2022-pectoralis-regions",
     "coratella-2020-bench-press-variations",
-    "van-den-tillaar-2019-pushup-bench"
+    "van-den-tillaar-2019-pushup-bench",
+    "saeterbakken-2021-bench-grip-width"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -195,6 +196,20 @@
         "feet",
         "knees"
       ]
+    },
+    {
+      "id": "relativeGripWidth",
+      "valueType": "enum",
+      "required": false,
+      "description": "A reviewed relative hand-spacing category when one is explicitly defined.",
+      "allowedValues": ["narrow"]
+    },
+    {
+      "id": "gripWidthReference",
+      "valueType": "enum",
+      "required": false,
+      "description": "The individual anatomical reference defining the narrow grip.",
+      "allowedValues": ["indexFingerDistanceBetweenLatissimusTricepsIntersections"]
     }
   ],
   "exerciseRules": [
@@ -428,6 +443,26 @@
           "role": "stabilizer"
         }
       ]
+    },
+    {
+      "id": "narrow-grip-pins-flat-barbell-press",
+      "description": "The reviewed close-grip condition is a flat bilateral free-bar press with its individual landmark reference.",
+      "when": {"field": "variant.relativeGripWidth", "operator": "equals", "value": "narrow"},
+      "then": [
+        {"field": "equipment", "value": "barbell"}, {"field": "laterality", "value": "bilateral"},
+        {"field": "variant.kineticChain", "value": "open"}, {"field": "variant.torsoSupport", "value": "bench"},
+        {"field": "variant.pressInclinationDegrees", "value": 0}, {"field": "variant.gripOrientation", "value": "pronated"},
+        {"field": "variant.rangeOfMotion", "value": "full"}, {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.gripWidthReference", "value": "indexFingerDistanceBetweenLatissimusTricepsIntersections"}
+      ],
+      "requirePresent": ["variant.gripWidthReference"], "requireAbsent": []
+    },
+    {
+      "id": "landmark-reference-requires-narrow-grip",
+      "description": "The reviewed latissimus-to-triceps landmark reference cannot appear without the narrow grip category.",
+      "when": {"field": "variant.gripWidthReference", "operator": "equals", "value": "indexFingerDistanceBetweenLatissimusTricepsIntersections"},
+      "then": [{"field": "variant.relativeGripWidth", "value": "narrow"}],
+      "requirePresent": ["variant.relativeGripWidth"], "requireAbsent": []
     }
   ],
   "recommended": {
@@ -1344,6 +1379,34 @@
           "Bouncing the upper arms off the floor turns the floor press into a rebound press.",
           "Letting the dumbbells drift outward turns the press into a chest fly."
         ]
+      }
+    },
+    {
+      "catalogID": "close-grip-barbell-bench-press",
+      "name": "Close-Grip Barbell Bench Press",
+      "aliases": ["Close-Grip Bench Press", "Narrow-Grip Barbell Bench Press"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 8, "searchPriority": 98,
+      "involvement": [
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"},
+        {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"},
+        {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open", "torsoSupport": "bench", "scapularTranslation": "supportConstrained", "pressInclinationDegrees": 0,
+        "gripOrientation": "pronated", "rangeOfMotion": "full", "fixedPath": false, "lowerBodySupport": "none",
+        "relativeGripWidth": "narrow", "gripWidthReference": "indexFingerDistanceBetweenLatissimusTricepsIntersections"
+      },
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "cabral-2022-pectoralis-regions", "saeterbakken-2021-bench-grip-width"],
+      "execution": {
+        "startingPosition": "Use the distance between the left and right latissimus-to-triceps intersection landmarks as the index-finger spacing, then lie on the flat bench with the head, shoulders, and buttocks supported.",
+        "movement": "Lower the bar until it lightly touches the chest without bouncing.",
+        "endpoint": "End the descent at the light chest touch while keeping the source-defined narrow spacing.",
+        "returnPhase": "Press the bar until both elbows are fully extended.",
+        "controlledJoints": "Keep both hands at the measured spacing and control the bar without rebounding.",
+        "supportAndPosture": "Keep the head, shoulders, and buttocks in contact with the bench.",
+        "disqualifyingCompensations": ["Bouncing the bar off the chest changes the reviewed press.", "Moving the index fingers wider or losing bench contact changes the source-defined fixture."]
       }
     }
   ]

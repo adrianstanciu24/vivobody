@@ -1,13 +1,13 @@
 {
   "files": {
-    "vivobody/App/DebugSeed.swift": 759,
+    "vivobody/App/DebugSeed.swift": 758,
     "vivobody/Components/Inputs/BareScrubber.swift": 920,
-    "vivobody/Models/Domain/ExerciseCatalog.swift": 824,
-    "vivobody/Models/Domain/WorkoutSession.swift": 636,
+    "vivobody/Models/Domain/ExerciseCatalog.swift": 821,
+    "vivobody/Models/Domain/WorkoutSession.swift": 634,
     "vivobody/Models/Insights/SessionAnalytics.swift": 791,
     "vivobody/Screens/ActiveWorkout/ActiveExerciseCard.swift": 636,
     "vivobody/Screens/Insights/SignatureSection.swift": 808,
-    "vivobody/Screens/Library/CustomExerciseEditorSheet.swift": 1284,
+    "vivobody/Screens/Library/CustomExerciseEditorSheet.swift": 1241,
     "vivobody/Screens/Library/ExerciseDetailSections.swift": 1131,
     "vivobody/Screens/Me/MeScreen.swift": 744,
     "vivobody/Screens/Me/SettingsScreen.swift": 763,

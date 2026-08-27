@@ -102,14 +102,14 @@ struct ExerciseHistorySummaryTests {
     }
 
     @Test func nonRecordWorkStillRetainsLatestPrescription() throws {
-        let conditioning = session(
+        let power = session(
             daysAfterBase: 0,
             sets: [(40, 20), (45, 15)],
-            modality: .conditioning,
+            modality: .power,
             loadMode: .nonComparable
         )
-        let key = try #require(conditioning.orderedExercises.first?.historyKey)
-        let summary = try #require(summaries([conditioning])[key])
+        let key = try #require(power.orderedExercises.first?.historyKey)
+        let summary = try #require(summaries([power])[key])
 
         #expect(summary.currentAllTimeBest == nil)
         #expect(summary.sessionCount == 1)

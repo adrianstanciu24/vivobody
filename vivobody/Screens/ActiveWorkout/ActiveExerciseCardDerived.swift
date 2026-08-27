@@ -88,9 +88,9 @@ extension ActiveExerciseCard {
         )
     }
 
-    /// Verb for the complete button — modality + position aware. Only
-    /// isometric duration work is called a hold; conditioning uses
-    /// interval and other duration work uses time.
+    /// Verb for the complete button — modality + position aware. Valid
+    /// duration work is an isometric hold; invalid legacy combinations
+    /// retain neutral time wording.
     func completeTitle(isLastSet: Bool) -> String {
         if exercise.trackingMode == .duration {
             let verb = isLastSet ? "Finish" : "Complete"

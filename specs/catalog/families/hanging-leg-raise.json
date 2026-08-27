@@ -1,0 +1,129 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hanging-leg-raise",
+  "name": "Hanging Leg Raise",
+  "definition": "A suspended bilateral core movement in which the hips flex to ninety degrees from an overhead-bar hang while the anterior trunk resists spinal extension and a neutral spine is attempted. The bent-knee record also flexes the knees dynamically; the straight-leg record holds them extended. Kipping, deliberate spinal curling, unsupported grip variants, and endpoints above ninety degrees remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "holzbaur-2005-upper-extremity", "mcgill-2014-hanging-leg-raise"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["hip.flexion"],
+    "primeActions": ["hip.flexion"],
+    "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": [
+      "scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt",
+      "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["abs"], "minimumRole": "primary"},
+      {"anyOf": ["iliopsoas"], "minimumRole": "primary"},
+      {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"},
+      {"anyOf": ["serratus"], "minimumRole": "stabilizer"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["abs", "iliopsoas"],
+      "secondary": ["rectusFemoris", "medialHamstrings", "bicepsFemoris", "obliques"],
+      "stabilizer": ["pectoralisMajorSternocostal", "serratus", "triceps", "fingerFlexors", "extensorCarpiRadialis"]
+    }
+  },
+  "variantAxes": [
+    {"id": "supportTopology", "valueType": "enum", "required": true, "description": "How the body is suspended.", "allowedValues": ["overheadBarHandHang"]},
+    {"id": "hipEndpointDegrees", "valueType": "number", "required": true, "description": "The reviewed hip-flexion endpoint.", "minimum": 90, "maximum": 90},
+    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "Whether the knees flex or remain extended.", "allowedValues": ["flexesToNinety", "angleHeldExtended"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The instructed spinal behavior.", "allowedValues": ["neutralAttempted"]},
+    {"id": "tempo", "valueType": "enum", "required": true, "description": "The reviewed phase timing.", "allowedValues": ["twoUpOneHoldTwoDownOneHold"]},
+    {"id": "momentum", "valueType": "enum", "required": true, "description": "The reviewed no-kip boundary.", "allowedValues": ["controlledNoDeliberateSwing"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the lower limbs.", "fixedValue": false}
+  ],
+  "exerciseRules": [
+    {
+      "id": "bent-knee-raise-declares-knee-flexion",
+      "description": "The bent-knee record includes dynamic knee flexion and its knee-flexor movers.",
+      "when": {"field": "variant.kneeMotion", "operator": "equals", "value": "flexesToNinety"},
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {"muscle": "medialHamstrings", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "secondary"}
+      ],
+      "requireAdditionalPrimeActions": ["knee.flexion"]
+    },
+    {
+      "id": "straight-leg-raise-forbids-knee-action",
+      "description": "The straight-leg record holds the knees extended and admits no exercise-level prime-action exception.",
+      "when": {"field": "variant.kneeMotion", "operator": "equals", "value": "angleHeldExtended"},
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireAdditionalPrimeActions": []
+    }
+  ],
+  "recommended": {"defaultReps": {"minimum": 5, "maximum": 15}},
+  "exercises": [
+    {
+      "catalogID": "hanging-knee-raise",
+      "name": "Hanging Knee Raise",
+      "aliases": ["Bent-Knee Hanging Leg Raise", "Hanging Bent-Knee Raise"],
+      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable",
+      "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
+      "involvement": [
+        {"muscle": "abs", "role": "primary"}, {"muscle": "iliopsoas", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "secondary"},
+        {"muscle": "obliques", "role": "secondary"},
+        {"muscle": "pectoralisMajorSternocostal", "role": "stabilizer"}, {"muscle": "serratus", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}
+      ],
+      "variant": {"supportTopology": "overheadBarHandHang", "hipEndpointDegrees": 90, "kneeMotion": "flexesToNinety", "spineMotion": "neutralAttempted", "tempo": "twoUpOneHoldTwoDownOneHold", "momentum": "controlledNoDeliberateSwing", "fixedPath": false},
+      "additionalPrimeActions": ["knee.flexion"],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "holzbaur-2005-upper-extremity", "mcgill-2014-hanging-leg-raise"],
+      "execution": {
+        "startingPosition": "Hang from the overhead bar with the legs straight below you and attempt to keep the spine neutral.",
+        "movement": "Over two seconds, raise the knees while bending them until both hips and knees reach ninety degrees.",
+        "endpoint": "Hold the ninety-degree hip-and-knee position for one second.",
+        "returnPhase": "Lower for two seconds until the legs hang straight, then hold the bottom for one second.",
+        "controlledJoints": "Keep the movement controlled rather than swinging from the shoulders or torso.",
+        "supportAndPosture": "Remain suspended from the bar and attempt to preserve a neutral spine.",
+        "disqualifyingCompensations": ["Swinging the legs turns the controlled raise into a kipping raise.", "Deliberately curling the torso changes the neutral-spine hip-and-knee raise."]
+      }
+    },
+    {
+      "catalogID": "hanging-straight-leg-raise",
+      "name": "Hanging Straight-Leg Raise",
+      "aliases": ["Straight-Leg Hanging Raise", "Hanging Leg Raise with Straight Legs"],
+      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable",
+      "bodyweightFraction": 0, "defaultWeight": 0, "reps": 8, "searchPriority": 92,
+      "involvement": [
+        {"muscle": "abs", "role": "primary"}, {"muscle": "iliopsoas", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "obliques", "role": "secondary"},
+        {"muscle": "pectoralisMajorSternocostal", "role": "stabilizer"}, {"muscle": "serratus", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}
+      ],
+      "variant": {"supportTopology": "overheadBarHandHang", "hipEndpointDegrees": 90, "kneeMotion": "angleHeldExtended", "spineMotion": "neutralAttempted", "tempo": "twoUpOneHoldTwoDownOneHold", "momentum": "controlledNoDeliberateSwing", "fixedPath": false},
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "holzbaur-2005-upper-extremity", "mcgill-2014-hanging-leg-raise"],
+      "execution": {
+        "startingPosition": "Hang from the overhead bar with both legs straight and attempt to keep the spine neutral.",
+        "movement": "Over two seconds, raise both straight legs until the hips reach ninety degrees.",
+        "endpoint": "Hold the straight-leg ninety-degree hip position for one second.",
+        "returnPhase": "Lower the straight legs for two seconds, then hold the bottom for one second.",
+        "controlledJoints": "Keep both knees straight and avoid using a swing.",
+        "supportAndPosture": "Remain suspended from the bar and attempt to preserve a neutral spine.",
+        "disqualifyingCompensations": ["Bending the knees turns the exercise into a hanging knee raise.", "Swinging the legs turns the controlled raise into a kipping raise."]
+      }
+    }
+  ]
+}

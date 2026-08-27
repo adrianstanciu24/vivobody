@@ -51,9 +51,8 @@ nonisolated enum PerformanceSemanticKind: String, Codable, Hashable {
     }
 }
 
-/// The kind of physical work an exercise represents. Modality gates
-/// analytics that would otherwise fabricate strength volume or PRs for
-/// conditioning and mobility drills.
+/// The kind of lifter-tracked work an exercise represents. Modality gates
+/// analytics that would otherwise treat explosive work as hypertrophy volume.
 nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable {
     case dynamicStrength
     case isometricStrength
@@ -62,32 +61,27 @@ nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable {
     /// with hypertrophy hard sets and implement weight is often not a
     /// sufficient comparison axis.
     case power
-    case conditioning
-    case mobility
 
     nonisolated var displayName: String {
         switch self {
-        case .dynamicStrength: "Dynamic Strength"
-        case .isometricStrength: "Isometric Strength"
+        case .dynamicStrength: "Strength · Reps"
+        case .isometricStrength: "Strength · Hold"
         case .power: "Power / Explosive"
-        case .conditioning: "Conditioning"
-        case .mobility: "Mobility"
         }
     }
 
     /// Dynamic and isometric strength work can credit primary and
-    /// secondary muscles with hypertrophy-oriented hard sets. Power,
-    /// conditioning, and mobility do not.
+    /// secondary muscles with hypertrophy-oriented hard sets. Power does not.
     nonisolated var supportsHardSetAnalytics: Bool {
         self == .dynamicStrength || self == .isometricStrength
     }
 
-    /// Strength and power movements must identify at least one actual
-    /// force-producing target. Conditioning and mobility may instead
-    /// describe whole-body work or passive/control roles without
-    /// pretending a stabilizer is a prime mover.
-    nonisolated var requiresPrimaryMuscle: Bool {
-        self == .dynamicStrength || self == .isometricStrength || self == .power
+    /// Every supported exercise type has one honest logging measure.
+    nonisolated var requiredTrackingMode: TrackingMode {
+        switch self {
+        case .dynamicStrength, .power: .reps
+        case .isometricStrength: .duration
+        }
     }
 
     /// Whether the modality and tracking unit form a meaningful
@@ -147,7 +141,7 @@ nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable {
             return loadMode.supportsLoadComparison
         case .power:
             return loadMode == .external
-        case .isometricStrength, .conditioning, .mobility:
+        case .isometricStrength:
             return false
         }
     }

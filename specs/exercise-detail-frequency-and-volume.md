@@ -144,7 +144,7 @@ in Recent sessions.
   the section hides entirely, matching the screen's self-gating sections.
   The Insights neglect list — not this card — owns "you haven't trained
   this" nudges.
-- Modality earns no volume (power, conditioning, mobility): hidden.
+- Modality earns no volume (power): hidden.
 - Custom exercise with no authored anatomy: hidden.
 - Rows are the muscles this exercise actually credited in the window
   (all > 0 by construction). A muscle the current involvement map no

@@ -68,8 +68,6 @@ extension WorkoutSession {
 /// One exercise's contribution to the session, expressed as a share
 /// within its own currency: eligible dynamic-strength reps exercises
 /// split comparable tonnage; timed exercises split elapsed duration.
-/// Conditioning and mobility duration remains ordinary timed work,
-/// while their reps work never masquerades as strength tonnage.
 nonisolated struct SessionContribution: Hashable {
     /// Whether this exercise is measured in elapsed time (true) or
     /// comparable strength tonnage (false).

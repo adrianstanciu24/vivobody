@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 62 reviewed families compile to 146 exercises with stable
+//  product: 71 reviewed families compile to 166 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,14 +15,16 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 146)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 62)
+        #expect(CatalogData.records.count == 166)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 71)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
         #expect(CatalogData.record(forCatalogID: "repetitive-grip-trainer-close")?.familyID == "finger-flexion-grip")
         #expect(CatalogData.record(forCatalogID: "conventional-barbell-deadlift")?.familyID == "conventional-deadlift")
         #expect(CatalogData.record(forCatalogID: "barbell-romanian-deadlift")?.familyID == "romanian-deadlift")
+        #expect(CatalogData.record(forCatalogID: "barbell-power-clean")?.modality == .power)
+        #expect(CatalogData.record(forCatalogID: "wall-sit")?.trackingMode == .duration)
     }
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {
@@ -98,16 +100,12 @@ struct CatalogBiomechanicsTests {
             case .isometricStrength:
                 #expect(record.trackingMode == .duration)
                 #expect((record.defaultDuration ?? 0) > 0)
-            case .conditioning, .mobility:
-                break
             }
 
-            if record.modality.requiresPrimaryMuscle {
-                #expect(record.involvement.contains { $0.role == .primary })
-                #expect(record.involvement.contains {
-                    $0.role == .primary && $0.muscle.group == record.group
-                })
-            }
+            #expect(record.involvement.contains { $0.role == .primary })
+            #expect(record.involvement.contains {
+                $0.role == .primary && $0.muscle.group == record.group
+            })
 
             switch record.loadMode {
             case .external, .nonComparable:

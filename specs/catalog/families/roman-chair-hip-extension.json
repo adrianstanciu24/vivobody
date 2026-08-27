@@ -1,0 +1,89 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "roman-chair-hip-extension",
+  "name": "Roman-Chair Hip Extension",
+  "definition": "A hip-driven extension on the reviewed Technogym PG05 forty-five-degree Roman chair. The torso and pelvis move together through hip flexion and extension while the spine is held straight with its natural curve. Dynamic spinal flexion or extension leaves this family. Logged load is added external load only; no unmeasured body-segment fraction is converted into comparable tonnage.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "andersen-2021-roman-chair-back-extension"],
+  "fixed": {"mechanic": "isolation", "trainingRole": "legs", "pattern": null, "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["other"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension"],
+    "resistedActions": ["spine.flexion"],
+    "forbiddenPrimeActions": [
+      "scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt",
+      "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"},
+      {"anyOf": ["medialHamstrings"], "minimumRole": "secondary"},
+      {"anyOf": ["lumbarExtensors"], "minimumRole": "secondary"},
+      {"anyOf": ["bicepsFemoris"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {"primary": ["gluteMax"], "secondary": ["medialHamstrings", "lumbarExtensors"], "stabilizer": ["bicepsFemoris"]}
+  },
+  "variantAxes": [
+    {"id": "supportApparatus", "valueType": "enum", "required": true, "description": "The reviewed Roman-chair fixture.", "allowedValues": ["technogymPG05RomanChair"]},
+    {"id": "supportAngleDegrees", "valueType": "number", "required": true, "description": "The nominal chair inclination.", "minimum": 45, "maximum": 45},
+    {"id": "hipRangeOfMotion", "valueType": "enum", "required": true, "description": "The reviewed hip excursion.", "allowedValues": ["approximatelyNinetyDegrees"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The instructed spinal behavior.", "allowedValues": ["straightNaturalCurveHeld"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "What the logged scalar represents.", "allowedValues": ["totalAddedExternalLoadOnly"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether the torso follows a guided external path.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [
+    {
+      "catalogID": "45-degree-roman-chair-back-extension",
+      "name": "45° Roman-Chair Back Extension",
+      "aliases": ["45° Back Extension", "45-Degree Back Extension", "Roman-Chair Hyperextension"],
+      "equipment": "other",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 92,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "medialHamstrings", "role": "secondary"},
+        {"muscle": "lumbarExtensors", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}
+      ],
+      "variant": {
+        "supportApparatus": "technogymPG05RomanChair",
+        "supportAngleDegrees": 45,
+        "hipRangeOfMotion": "approximatelyNinetyDegrees",
+        "spineMotion": "straightNaturalCurveHeld",
+        "loadAccounting": "totalAddedExternalLoadOnly",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "andersen-2021-roman-chair-back-extension"],
+      "execution": {
+        "startingPosition": "Set yourself in the forty-five-degree Roman chair, begin upright, hold the added load at your chest, and keep your back straight with its natural curve.",
+        "movement": "Lower the torso by bending at the hips until the hip angle changes by approximately ninety degrees.",
+        "endpoint": "End the descent at the reviewed hip position without rounding through the back.",
+        "returnPhase": "Extend the hips and return to the upright position at a controlled pace.",
+        "controlledJoints": "Keep the back and pelvis moving together so the repetition comes from the hips.",
+        "supportAndPosture": "Remain secured by the Roman-chair supports throughout the set.",
+        "disqualifyingCompensations": [
+          "Rounding and straightening the back turns the hip extension into dynamic spinal motion.",
+          "Using momentum to rebound from the bottom turns the controlled repetition into a swing."
+        ]
+      }
+    }
+  ]
+}

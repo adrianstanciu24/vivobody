@@ -3,12 +3,13 @@
   "schemaVersion": 1,
   "id": "chest-fly",
   "name": "Chest Fly",
-  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally adducts the upper arms with a fixed, nearly extended elbow posture. The admitted roster is limited to the directly reviewed flat dumbbell and standing elastic-band variants; cable, machine, unilateral, bodyweight, pressing, and elbow-extension variants remain outside this contract.",
+  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally adducts the upper arms with a fixed, nearly extended elbow posture. The admitted roster is limited to the directly reviewed flat dumbbell, standing elastic-band, and standing dual-cable fixtures. Each branch preserves its reviewed support, arm path, grip disclosure, and resistance geometry; machine, unilateral, bodyweight, pressing, and elbow-extension variants remain outside this contract.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "holzbaur-2005-upper-extremity",
     "bergquist-2018-band-free-weight-fly",
-    "welsch-2005-dumbbell-fly"
+    "welsch-2005-dumbbell-fly",
+    "schutz-2022-chest-exercise-joint-loading"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -28,7 +29,8 @@
   "allowed": {
     "equipment": [
       "dumbbell",
-      "band"
+      "band",
+      "cable"
     ],
     "modalities": [
       "dynamicStrength"
@@ -194,7 +196,8 @@
       "required": true,
       "description": "The canonical forearm and hand orientation through the working range.",
       "allowedValues": [
-        "neutral"
+        "neutral",
+        "unreported"
       ]
     },
     {
@@ -221,16 +224,73 @@
       "required": true,
       "description": "The reviewed upper-arm path relative to the torso.",
       "allowedValues": [
-        "flared"
+        "flared",
+        "sidewaysInCablePlane"
       ]
     },
     {
       "id": "upperArmElevationDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "description": "The reviewed upper-arm elevation relative to the torso; this is a setup descriptor, not an added abduction action.",
       "minimum": 90,
       "maximum": 90
+    },
+    {
+      "id": "handleType",
+      "valueType": "enum",
+      "required": false,
+      "description": "The directly reviewed cable handles.",
+      "allowedValues": ["singleCableHandles"]
+    },
+    {
+      "id": "cableAnchorHeight",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed tower setting.",
+      "allowedValues": ["headLevel"]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed standing support stance.",
+      "allowedValues": ["lungeEitherLegForward"]
+    },
+    {
+      "id": "torsoInclination",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reported torso posture without invented degrees.",
+      "allowedValues": ["forwardNonNumeric"]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": false,
+      "description": "The two-tower cable geometry.",
+      "allowedValues": ["dualCableCoplanar"]
+    },
+    {
+      "id": "loadDistribution",
+      "valueType": "enum",
+      "required": false,
+      "description": "The matched setting across the two towers.",
+      "allowedValues": ["equalAcrossTwoTowers"]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": false,
+      "description": "The logged scalar means the selected weight on each matching stack, not their sum.",
+      "allowedValues": ["perStack"]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether an external guide fixes the arm path.",
+      "fixedValue": false
     }
   ],
   "recommended": {
@@ -306,6 +366,48 @@
       "requireAdditionalStabilityDemands": [
         "spine"
       ]
+    },
+    {
+      "id": "non-cable-fly-preserves-reviewed-arm-fixture",
+      "description": "The dumbbell and band branches retain the neutral grip, flared shoulder-height arm path, and omit every cable-only setup field.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "cable"
+      },
+      "then": [
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.upperArmPath", "value": "flared"},
+        {"field": "variant.upperArmElevationDegrees", "value": 90}
+      ],
+      "requirePresent": ["variant.upperArmElevationDegrees"],
+      "requireAbsent": [
+        "variant.handleType",
+        "variant.cableAnchorHeight",
+        "variant.stanceConfiguration",
+        "variant.torsoInclination",
+        "variant.resistanceGeometry",
+        "variant.loadDistribution",
+        "variant.loadAccounting"
+      ]
+    },
+    {
+      "id": "dual-cable-fly-pins-reviewed-tower-geometry",
+      "description": "The cable branch preserves the exact two-tower standing fixture and per-stack load meaning.",
+      "when": {"field": "equipment", "operator": "equals", "value": "cable"},
+      "then": [
+        {"field": "loadMode", "value": "external"}, {"field": "variant.bodyPosition", "value": "standing"},
+        {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "free"},
+        {"field": "variant.gripOrientation", "value": "unreported"}, {"field": "variant.upperArmPath", "value": "sidewaysInCablePlane"},
+        {"field": "variant.handleType", "value": "singleCableHandles"}, {"field": "variant.cableAnchorHeight", "value": "headLevel"},
+        {"field": "variant.stanceConfiguration", "value": "lungeEitherLegForward"}, {"field": "variant.torsoInclination", "value": "forwardNonNumeric"},
+        {"field": "variant.resistanceGeometry", "value": "dualCableCoplanar"}, {"field": "variant.loadDistribution", "value": "equalAcrossTwoTowers"},
+        {"field": "variant.loadAccounting", "value": "perStack"}
+      ],
+      "requirePresent": ["variant.handleType", "variant.cableAnchorHeight", "variant.stanceConfiguration", "variant.torsoInclination", "variant.resistanceGeometry", "variant.loadDistribution", "variant.loadAccounting"],
+      "requireAbsent": ["variant.upperArmElevationDegrees"],
+      "requireMuscleRequirements": [{"anyOf": ["abs", "obliques", "lumbarExtensors"], "minimumRole": "stabilizer"}],
+      "requireAdditionalStabilityDemands": ["spine", "pelvis"]
     }
   ],
   "exercises": [
@@ -372,6 +474,7 @@
         "elbowPosture": "nearExtended",
         "upperArmPath": "flared",
         "upperArmElevationDegrees": 90
+        ,"fixedPath": false
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -460,6 +563,7 @@
         "elbowPosture": "nearExtended",
         "upperArmPath": "flared",
         "upperArmElevationDegrees": 90
+        ,"fixedPath": false
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -481,6 +585,37 @@
           "Bending and straightening the elbows turns the fly into a band press.",
           "Leaning or twisting the torso to swing the hands together turns the fly into a full-body heave."
         ]
+      }
+    },
+    {
+      "catalogID": "standing-dual-cable-crossover",
+      "name": "Standing Dual-Cable Crossover",
+      "aliases": ["Cable Crossover", "Standing Cable Crossover", "Dual-Cable Fly"],
+      "equipment": "cable", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 95,
+      "involvement": [
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "secondary"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open", "lowerBodyContribution": "none", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free",
+        "gripOrientation": "unreported", "elbowMotion": "angleHeld", "elbowPosture": "nearExtended", "upperArmPath": "sidewaysInCablePlane",
+        "handleType": "singleCableHandles", "cableAnchorHeight": "headLevel", "stanceConfiguration": "lungeEitherLegForward",
+        "torsoInclination": "forwardNonNumeric", "resistanceGeometry": "dualCableCoplanar", "loadDistribution": "equalAcrossTwoTowers",
+        "loadAccounting": "perStack", "fixedPath": false
+      },
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["spine", "pelvis"],
+      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "holzbaur-2005-upper-extremity", "schutz-2022-chest-exercise-joint-loading"],
+      "execution": {
+        "startingPosition": "Set both towers to head level with the same load on each stack, hold one handle per side, stand centered in a lunge stance, and lean forward with a fixed slight elbow bend.",
+        "movement": "Bring both arms together in front while keeping the arms and cables in the same plane.",
+        "endpoint": "End when the hands meet in front without crossing past each other.",
+        "returnPhase": "Open the arms under control to the sideways start without changing the elbow bend.",
+        "controlledJoints": "Keep both elbows slightly bent and move the arms symmetrically.",
+        "supportAndPosture": "Hold the lunge stance and forward torso position without stepping or twisting.",
+        "disqualifyingCompensations": ["Bending and straightening the elbows changes the fly into a cable press.", "Stepping, twisting, or allowing one side to lead changes the reviewed balanced path."]
       }
     }
   ]

@@ -33,7 +33,7 @@ extension ExerciseSubstitution.Preservation {
         case let .planes(planes):
             "\(ExerciseSubstitutionCopy.planeList(planes)) movement"
         case let .modality(modality):
-            "the \(ExerciseSubstitutionCopy.modalityLabel(modality)) modality"
+            "the \(modality.displayName.lowercased()) exercise type"
         case let .tracking(trackingMode):
             "\(ExerciseSubstitutionCopy.trackingLabel(trackingMode)) tracking"
         case let .loadMode(loadMode):
@@ -63,7 +63,7 @@ extension ExerciseSubstitution.Preservation {
         case let .planes(planes):
             "\(ExerciseSubstitutionCopy.planeList(planes)) movement"
         case let .modality(modality):
-            "\(ExerciseSubstitutionCopy.modalityLabel(modality)) modality"
+            "\(modality.displayName) type"
         case let .tracking(trackingMode):
             "\(ExerciseSubstitutionCopy.trackingLabel(trackingMode)) tracking"
         case let .loadMode(loadMode):
@@ -170,16 +170,6 @@ private enum ExerciseSubstitutionCopy {
         _ movement: ExerciseSubstitution.Movement?
     ) -> String {
         movement?.displayName.lowercased() ?? "no compound pattern"
-    }
-
-    static func modalityLabel(_ modality: ExerciseModality) -> String {
-        switch modality {
-        case .dynamicStrength: "dynamic strength"
-        case .isometricStrength: "isometric strength"
-        case .power: "power"
-        case .conditioning: "conditioning"
-        case .mobility: "mobility"
-        }
     }
 
     static func trackingLabel(_ trackingMode: TrackingMode) -> String {

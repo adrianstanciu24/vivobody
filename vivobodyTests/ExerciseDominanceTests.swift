@@ -153,21 +153,21 @@ struct ExerciseDominanceTests {
         #expect(board.totalSets == 2)
     }
 
-    @Test func excludesConditioningAndMobilitySets() {
+    @Test func excludesPowerAndMismatchedStrengthSets() {
         let strength = lift("Bench Press", group: .chest, [(100, 8, true)])
-        let conditioning = lift(
-            "Burpee",
+        let power = lift(
+            "Push Press",
             group: .chest,
-            modality: .conditioning,
+            modality: .power,
             [(0, 20, true), (0, 20, true)]
         )
-        let mobility = lift(
-            "Shoulder CAR",
+        let mismatchedIsometric = lift(
+            "Isometric Reps Mismatch",
             group: .shoulders,
-            modality: .mobility,
+            modality: .isometricStrength,
             [(0, 5, true), (0, 5, true), (0, 5, true)]
         )
-        let board = [session(daysAgo: 1, [strength, conditioning, mobility])]
+        let board = [session(daysAgo: 1, [strength, power, mismatchedIsometric])]
             .exerciseDominance(now: now)
 
         #expect(board.stats.map(\.name) == ["Bench Press"])

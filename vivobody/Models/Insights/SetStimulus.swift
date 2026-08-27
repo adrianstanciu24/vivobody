@@ -13,8 +13,7 @@
 //  assume) and each rep further in reserve costs 20%. An unlogged RIR
 //  is not a reading and stays neutral — non-raters are never punished.
 //  Only completed dynamic-strength reps and completed
-//  isometric-strength holds enter this currency; power, conditioning,
-//  and mobility work earns none.
+//  isometric-strength holds enter this currency; power earns none.
 //
 //  Deliberately absent (removed 2026-08, see
 //  specs/muscle-attention-simplification.md): per-exercise decaying

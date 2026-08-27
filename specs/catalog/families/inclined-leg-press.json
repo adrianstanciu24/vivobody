@@ -1,0 +1,107 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "inclined-leg-press",
+  "name": "Inclined Leg Press",
+  "definition": "A bilateral compound machine squat pattern performed on the reviewed FFITTECH PL688 forty-five-degree sled. The feet remain fixed to the guided plate while the hips and knees extend. The machine, stance, foot position, range, and cadence are contract boundaries; other leg-press geometries require separate review. Entered load means plates added to this fixture and is not comparable across machines or to an unknown empty-sled resistance.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "martin-fuentes-2022-inclined-leg-press"],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {
+    "equipment": ["machine"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["external"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension", "knee.extension"],
+    "stabilityDemands": ["pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"},
+      {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"},
+      {"anyOf": ["gluteMed"], "minimumRole": "stabilizer"},
+      {"anyOf": ["gastrocnemius"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "vasti"],
+      "secondary": ["rectusFemoris"],
+      "stabilizer": ["gluteMed", "gastrocnemius"]
+    }
+  },
+  "variantAxes": [
+    {"id": "machineFixture", "valueType": "enum", "required": true, "description": "The directly reviewed sled fixture.", "allowedValues": ["ffittechPL688"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The supported body position.", "allowedValues": ["reclinedSeated"]},
+    {"id": "stanceWidth", "valueType": "enum", "required": true, "description": "The prescribed bilateral foot spacing.", "allowedValues": ["oneHundredPercentHipWidth"]},
+    {"id": "footplateHeight", "valueType": "enum", "required": true, "description": "The reviewed foot position on the plate.", "allowedValues": ["medium"]},
+    {"id": "footRotationDegrees", "valueType": "number", "required": true, "description": "The reviewed foot rotation.", "minimum": 0, "maximum": 0},
+    {"id": "trackInclinationDegrees", "valueType": "number", "required": true, "description": "The nominal sled-track angle.", "minimum": 45, "maximum": 45},
+    {"id": "rangeOfMotion", "valueType": "enum", "required": true, "description": "The reviewed knee range.", "allowedValues": ["fullExtensionToNinetyDegreeFlexion"]},
+    {"id": "cadence", "valueType": "enum", "required": true, "description": "The continuous reviewed cadence.", "allowedValues": ["twoSecondEccentricTwoSecondConcentric"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether the sled constrains the external path.", "fixedValue": true},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "What the logged scalar represents.", "allowedValues": ["platesAddedSameFixtureOnly"]}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [
+    {
+      "catalogID": "45-degree-incline-leg-press",
+      "name": "45° Incline Leg Press",
+      "aliases": ["45-Degree Leg Press", "Inclined Leg Press"],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 90,
+      "defaultWeightKg": 40,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "vasti", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "gastrocnemius", "role": "stabilizer"}
+      ],
+      "variant": {
+        "machineFixture": "ffittechPL688",
+        "bodyPosition": "reclinedSeated",
+        "stanceWidth": "oneHundredPercentHipWidth",
+        "footplateHeight": "medium",
+        "footRotationDegrees": 0,
+        "trackInclinationDegrees": 45,
+        "rangeOfMotion": "fullExtensionToNinetyDegreeFlexion",
+        "cadence": "twoSecondEccentricTwoSecondConcentric",
+        "fixedPath": true,
+        "loadAccounting": "platesAddedSameFixtureOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "martin-fuentes-2022-inclined-leg-press"],
+      "execution": {
+        "startingPosition": "Sit reclined with your back and pelvis on the PL688 pads, hold the handles, and place both feet at medium plate height, hip-width apart and straight ahead.",
+        "movement": "Lower the sled continuously for two seconds until the knees reach approximately ninety degrees of flexion.",
+        "endpoint": "Reach the reviewed depth while keeping both whole feet and the supported pelvis in contact.",
+        "returnPhase": "Press for two seconds to full knee extension without forcefully hyperextending the knees.",
+        "controlledJoints": "Keep the knees tracking with the feet and do not rotate or lift either foot.",
+        "supportAndPosture": "Keep your back and pelvis against the pads and both hands on the handles.",
+        "disqualifyingCompensations": [
+          "Lifting a foot or the pelvis removes the reviewed machine contact.",
+          "Bouncing at the bottom or abbreviating the depth changes the reviewed range and cadence."
+        ]
+      }
+    }
+  ]
+}

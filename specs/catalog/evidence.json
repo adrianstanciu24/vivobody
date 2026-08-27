@@ -1481,7 +1481,7 @@
       "doi": "10.1519/JSC.0000000000004810",
       "pmid": "39072653",
       "url": "https://doi.org/10.1519/JSC.0000000000004810",
-      "scope": "Eighteen resistance-trained men performed push presses, push jerks, and split jerks at 60, 75, and 90 percent of exercise one-repetition maximum. Force-time and task data support continuous foot contact, a single countermovement-propulsion phase, and standing lockout without a receiving dip as the push-press boundary; the study does not provide joint-resolved lower-limb moments, scapular kinematics, or a muscle-role hierarchy."
+      "scope": "Eighteen resistance-trained men performed push presses, push jerks, and split jerks at 60, 75, and 90 percent of exercise one-repetition maximum. Force-time and task data support the planted-foot push-press boundary as well as split-jerk flight, a one-foot-forward and one-foot-back receive, and recovery to a standing lockout. The study does not provide joint-resolved lower-limb moments, scapular kinematics, or a muscle-role hierarchy; it also leaves exact grip and lead-foot prescriptions unreported."
     },
     {
       "id": "larsen-2025-leg-extension-hip-flexion",
@@ -2661,6 +2661,407 @@
       "doi": "10.3233/IES-210169",
       "url": "https://doi.org/10.3233/IES-210169",
       "scope": "Upper-, middle-, and lower-trapezius, serratus-anterior, anterior- and middle-deltoid, infraspinatus, and latissimus-dorsi surface EMG was compared across ninety-degree, one-hundred-thirty-five-degree, elbow-stand, and full handstand support positions. Shoulder and scapular-stabilizer activity increased progressively, and upper/middle trapezius plus serratus activity was material in the full handstand. This static support study supports the importance of the inverted shoulder/scapular stability environment only; it does not establish dynamic handstand-push-up actions, triceps recruitment, regional role ranks, wall-contact effects, or changing load fractions."
+    },
+    {
+      "id": "martin-fuentes-2022-inclined-leg-press",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Influence of Feet Position and Execution Velocity on Muscle Activation and Kinematic Parameters During the Inclined Leg Press Exercise",
+      "authors": [
+        "Isabel Martin-Fuentes",
+        "Jose M. Oliva-Lozano",
+        "Jose M. Muyor"
+      ],
+      "year": 2022,
+      "doi": "10.1177/19417381211016357",
+      "pmid": "34085847",
+      "pmcid": "PMC9112713",
+      "url": "https://doi.org/10.1177/19417381211016357",
+      "scope": "The FFITTECH PL688 inclined leg press was tested bilaterally with medium-height feet at hip width and zero degrees of rotation, moving continuously for two seconds in each direction between full knee extension and ninety degrees of knee flexion. Knee kinematics and quadriceps and gluteus-medius surface EMG were measured. Hip and ankle kinematics, machine-equivalent loading, pad contact, and gluteus-maximus activity were not measured."
+    },
+    {
+      "id": "schwarz-2019-maxicam-hack-squat",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "A Comparison of Machine versus Free-Weight Squats for the Enhancement of Lower-Body Power, Speed, and Change-of-Direction Ability during an Initial Training Phase of Recreationally-Active Women",
+      "authors": [
+        "Neil A. Schwarz",
+        "Sean P. Harper",
+        "Andy Waldhelm",
+        "Sarah K. McKinley-Barnard",
+        "Shelley L. Holden",
+        "John E. Kovaleski"
+      ],
+      "year": 2019,
+      "doi": "10.3390/sports7100215",
+      "pmid": "31574918",
+      "pmcid": "PMC6835729",
+      "url": "https://doi.org/10.3390/sports7100215",
+      "scope": "Recreationally active women trained on one Maxicam hack-squat machine manufactured by Muscle Dynamics. The source establishes the machine identity, closed-chain squat task, ninety-degree knee-flexion endpoint, approximately three-second eccentric, and concentric performed as quickly as possible. It does not report stance, linkage or support geometry, loading interface, sled angle or mass, hip and ankle kinematics, or individual-muscle roles."
+    },
+    {
+      "id": "mackey-2021-bulgarian-split-squat",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Biomechanical Differences Between the Bulgarian Split-Squat and Back Squat",
+      "authors": [
+        "Ethan R. Mackey",
+        "Bryan L. Riemann"
+      ],
+      "year": 2021,
+      "doi": "10.70252/CIYT8956",
+      "pmid": "34055144",
+      "pmcid": "PMC8136570",
+      "url": "https://doi.org/10.70252/CIYT8956",
+      "scope": "A high-bar barbell rear-foot-elevated split squat placed the lead leg in line with the hip, used a rear box at base-of-patella height with the rear foot fixed against a posterior stop, individualized lead-toe distance, and approximately ninety degrees of lead-knee flexion. Lead hip, knee, and ankle kinematics and kinetics were measured. Rear-foot contact surface, trunk angle, and individual-muscle rankings were not reported."
+    },
+    {
+      "id": "balsamo-2012-johnson-sl160-seated-leg-curl",
+      "sourceType": "experimentalStrengthStudy",
+      "title": "Exercise Order Affects the Total Training Volume and the Ratings of Perceived Exertion in Response to a Super-Set Resistance Training Session",
+      "authors": [
+        "Sandor Balsamo",
+        "Ramires Alsamir Tibana",
+        "Dahan da Cunha Nascimento",
+        "Gleyverton Landim de Farias",
+        "Zeno Petruccelli",
+        "Frederico dos Santos de Santana",
+        "Otavio Vanni Martins",
+        "Fernando de Aguiar",
+        "Guilherme Borges Pereira",
+        "Jessica Cardoso de Souza",
+        "Jonato Prestes"
+      ],
+      "year": 2012,
+      "doi": "10.2147/IJGM.S27377",
+      "pmid": "22371654",
+      "pmcid": "PMC3282595",
+      "url": "https://doi.org/10.2147/IJGM.S27377",
+      "scope": "The Johnson Health Technologies SL160 seated isoinertial leg curl was performed bilaterally using fixed handles through knee motion from anatomical full extension to ninety degrees of flexion. Cadence and hip angle were not controlled or reported, and the study did not measure individual-muscle activity or hypertrophy."
+    },
+    {
+      "id": "villalba-2026-bilateral-prone-leg-curl",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Co-Contraction Training Induces Muscle Hypertrophy but Not Strength Gains in Older Adults: A Controlled Intervention Study",
+      "authors": [
+        "Marina Mello Villalba",
+        "Rafael Akira Fujita",
+        "Julia Oliveira de Faria",
+        "Veronica Miyasike-daSilva",
+        "Renato Moraes",
+        "Matheus Machado Gomes"
+      ],
+      "year": 2026,
+      "doi": "10.1002/hsr2.72625",
+      "pmid": "42291726",
+      "pmcid": "PMC13259961",
+      "url": "https://doi.org/10.1002/hsr2.72625",
+      "scope": "A bilateral prone Flex Fitness leg curl aligned the anterior superior iliac spines with the bench division, held the hips at forty-five degrees, moved the knees from full extension to ninety degrees, kept the ankles neutral and arms relaxed, and used two-second concentric and eccentric phases. The model, restraint, and roller location were not reported."
+    },
+    {
+      "id": "brandt-2013-machine-hip-abduction-adduction",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Perceived Loading and Muscle Activity During Hip Strengthening Exercises: Comparison of Elastic Resistance and Machine Exercises",
+      "authors": [
+        "Mikkel Brandt",
+        "Markus Due Jakobsen",
+        "Kristian Thorborg",
+        "Emil Sundstrup",
+        "Kenneth Jay",
+        "Lars L. Andersen"
+      ],
+      "year": 2013,
+      "pmid": "24377067",
+      "pmcid": "PMC3867074",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3867074/",
+      "scope": "Technogym seated isotonic abductor and adductor machines used an upright posture at eighty degrees of hip flexion, handles, approximately ninety degrees of knee flexion, zero to approximately forty-five degrees of abduction or the reverse, and approximately one-second concentric and eccentric phases. Machine-specific descriptions use bilateral starting positions and plural hip motion, while a generic protocol sentence calls the exercises unilateral; the bilateral catalog fixtures retain this disclosed limitation."
+    },
+    {
+      "id": "andersen-2021-roman-chair-back-extension",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Comparison of Muscle Activity in Three Single-Joint, Hip Extension Exercises in Resistance-Trained Women",
+      "authors": [
+        "Vidar Andersen",
+        "Helene Pedersen",
+        "Marius Steiro Fimland",
+        "Matthew Shaw",
+        "Tom Erik Jorung Solstad",
+        "Nicolay Stien",
+        "Kristoffer Toldnes Cumming",
+        "Atle Hole Saeterbakken"
+      ],
+      "year": 2021,
+      "doi": "10.52082/jssm.2021.181",
+      "pmid": "33948095",
+      "pmcid": "PMC8057707",
+      "url": "https://doi.org/10.52082/jssm.2021.181",
+      "scope": "Resistance-trained women performed a six-repetition-maximum hip extension on a Technogym PG05 forty-five-degree Roman chair using a weighted vest and plates at the chest. The torso moved from upright through approximately ninety degrees of hip flexion and back while maintaining a straight back with natural curvature. Surface EMG measured gluteus maximus, biceps femoris, and erector spinae. The source does not support dynamic spinal extension, universal pad placement, a body-mass load fraction, or cross-muscle force ranking."
+    },
+    {
+      "id": "mcgill-2014-hanging-leg-raise",
+      "sourceType": "experimentalKinematicsEMGModelStudy",
+      "title": "Muscle activity and spine load during anterior chain whole body linkage exercises: the body saw, hanging leg raise and walkout from a push-up",
+      "authors": [
+        "Stuart McGill",
+        "Jordan Andersen",
+        "Jordan Cannon"
+      ],
+      "year": 2014,
+      "doi": "10.1080/02640414.2014.946437",
+      "pmid": "25111163",
+      "url": "https://doi.org/10.1080/02640414.2014.946437",
+      "scope": "Fit men completed bent-knee and straight-knee hanging raises from an overhead bar to ninety degrees of hip flexion with two-second raising and lowering phases plus one-second endpoint holds while attempting a neutral spine. The bent-knee condition also flexed the knees to ninety degrees; the straight-leg condition held them extended. Surface EMG, three-dimensional kinematics, and lumbar modeling support the shared suspended topology and core-stability demand, but hip flexors were not measured and grip width and scapular behavior were not standardized."
+    },
+    {
+      "id": "marcolin-2018-curl-variants",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Differences in electromyographic activity of biceps brachii and brachioradialis while performing three variants of curl",
+      "authors": [
+        "Giuseppe Marcolin",
+        "Fausto Antonio Panizzolo",
+        "Nicola Petrone",
+        "Tatiana Moro",
+        "Davide Grigoletto",
+        "Davide Piccolo",
+        "Antonio Paoli"
+      ],
+      "year": 2018,
+      "doi": "10.7717/peerj.5165",
+      "pmid": "30013836",
+      "pmcid": "PMC6047503",
+      "url": "https://doi.org/10.7717/peerj.5165",
+      "scope": "Resistance-trained men performed standing straight-bar curls with both forearms supinated, ten repetitions at sixty-five percent one-repetition maximum, and a three-second repetition cadence. Trunk movement and knee flexion were monitored to exclude cheating while right-arm biceps-brachii and brachioradialis EMG and elbow goniometry were recorded. The source does not establish brachialis activity, hypertrophy ranking, universal grip width, or a product load seed."
+    },
+    {
+      "id": "oliveira-2009-dumbbell-curl-shoulder-position",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Effect of the shoulder position on the biceps brachii EMG in different dumbbell curls",
+      "authors": [
+        "Liliam F. Oliveira",
+        "Thiago T. Matta",
+        "Daniel S. Alves",
+        "Marco A. C. Garcia",
+        "Taian M. M. Vieira"
+      ],
+      "year": 2009,
+      "pmid": "24150552",
+      "pmcid": "PMC3737788",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3737788/",
+      "scope": "Trained right-handed men performed a right-arm standing dumbbell curl with the arm alongside the body at forty percent of an isometric maximum and self-selected speed. Elbow angle and long-head biceps-brachii surface EMG were recorded. It supports the unilateral standing fixture and biceps participation, not fixed tempo, other elbow-flexor ranking, chronic adaptation, or a universal load."
+    },
+    {
+      "id": "hussain-2020-triceps-pushdown-fatigue",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Muscle Fatigue in the Three Heads of Triceps Brachii During Intensity and Speed Variations of Triceps Push-Down Exercise",
+      "authors": [
+        "Jawad Hussain",
+        "Kenneth Sundaraj",
+        "Indra Devi Subramaniam",
+        "Chee Kiang Lam"
+      ],
+      "year": 2020,
+      "doi": "10.3389/fphys.2020.00112",
+      "pmid": "32153422",
+      "pmcid": "PMC7047337",
+      "url": "https://doi.org/10.3389/fphys.2020.00112",
+      "scope": "Healthy men performed bilateral cable pushdowns with a straight bar, shoulder-width pronated grip, upper arms close to the torso and perpendicular to the floor, slight forward torso lean, and full elbow extension. An assistant prevented posture change and bodyweight assistance, and surface EMG measured all three triceps heads. The source does not establish chronic adaptation or support-muscle ranking."
+    },
+    {
+      "id": "schutz-2022-chest-exercise-joint-loading",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Chest Exercises: Movement and Loading of Shoulder, Elbow and Wrist Joints",
+      "authors": [
+        "Pascal Schutz",
+        "Pia Zimmer",
+        "Fabian Zeidler",
+        "Michael Pluss",
+        "Katja Oberhofer",
+        "Renate List",
+        "Silvio Rene Lorenzetti"
+      ],
+      "year": 2022,
+      "doi": "10.3390/sports10020019",
+      "pmid": "35202059",
+      "pmcid": "PMC8877248",
+      "url": "https://doi.org/10.3390/sports10020019",
+      "scope": "Weight-training-familiar adults performed dual-cable crossovers with equal load division, head-level anchors, a lunge stance, forward torso inclination, and both arms moving in the cable plane until the hands met. Three-dimensional upper-limb kinematics and handle forces were measured. The source does not include EMG, model the scapula separately, prescribe grip orientation, require crossed hands, or establish a universal stack load."
+    },
+    {
+      "id": "saeterbakken-2021-bench-grip-width",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The Effect of Grip Width on Muscle Strength and Electromyographic Activity in Bench Press among Novice- and Resistance-Trained Men",
+      "authors": [
+        "Atle Hole Saeterbakken",
+        "Nicolay Stien",
+        "Helene Pedersen",
+        "Tom Erik Jorung Solstad",
+        "Kristoffer Toldnes Cumming",
+        "Vidar Andersen"
+      ],
+      "year": 2021,
+      "doi": "10.3390/ijerph18126444",
+      "pmid": "34198674",
+      "pmcid": "PMC8296276",
+      "url": "https://doi.org/10.3390/ijerph18126444",
+      "scope": "Men performed six-repetition-maximum flat barbell bench presses with a source-defined narrow index-finger spacing based on latissimus and triceps intersection marks. The bar lightly touched the chest and returned to full elbow extension while head, shoulders, and buttocks remained supported. Surface EMG supports a narrow-grip horizontal press but not a triceps-isolation owner, universal centimeter spacing, chronic hypertrophy, or muscle-force ranking."
+    },
+    {
+      "id": "faigenbaum-2012-power-clean-reliability",
+      "sourceType": "experimentalStrengthStudy",
+      "title": "Reliability of the One Repetition-Maximum Power Clean Test in Adolescent Athletes",
+      "authors": [
+        "Avery D. Faigenbaum",
+        "James E. McFarland",
+        "Robert Herman",
+        "Fernando Naclerio",
+        "Nicholas A. Ratamess",
+        "Jie Kang",
+        "Gregory D. Myer"
+      ],
+      "year": 2012,
+      "doi": "10.1519/JSC.0b013e318220db2c",
+      "pmid": "22233786",
+      "url": "https://doi.org/10.1519/JSC.0b013e318220db2c",
+      "scope": "Trained adolescent males performed a standardized floor-start power clean. The protocol supports a hip-width floor setup, pronated grip, close first pull, triple extension and shrug, elbow-led pull-under, quarter-squat front-rack catch, and recovery to standing. It establishes task reliability, not joint moments, categorical muscle roles, or generalization to untrained lifters."
+    },
+    {
+      "id": "santos-2021-power-clean-coordination",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Intermuscular Coordination in the Power Clean Exercise: Comparison between Olympic Weightlifters and Untrained Individuals - A Preliminary Study",
+      "authors": [
+        "Paulo D. G. Santos",
+        "Joao R. Vaz",
+        "Paulo F. Correia",
+        "Maria J. Valamatos",
+        "Antonio P. Veloso",
+        "Pedro Pezarat-Correia"
+      ],
+      "year": 2021,
+      "doi": "10.3390/s21051904",
+      "pmid": "33803182",
+      "url": "https://doi.org/10.3390/s21051904",
+      "scope": "Weightlifters and untrained participants completed power cleans while sixteen muscles were recorded. The study supports coordinated whole-body and phase-dependent activity, but not joint-resolved mechanics, universal recruitment magnitude, or categorical role ranking."
+    },
+    {
+      "id": "weakley-2026-weightlifting-load-velocity",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "The load-velocity profiles and exercise-specific velocity zones for seven commonly used weightlifting exercises",
+      "authors": [
+        "Jonathon Weakley",
+        "Tandia Wood",
+        "Amador Garcia-Ramos",
+        "Tayah R. Brennan",
+        "Chieh-Ying Chiang",
+        "Liam Schultz",
+        "J. Bryan Mann",
+        "Matthew Morrison",
+        "Daniela Goncalves Pedrosa",
+        "Mark W. Creaby"
+      ],
+      "year": 2026,
+      "doi": "10.1371/journal.pone.0352209",
+      "pmid": "42406853",
+      "url": "https://doi.org/10.1371/journal.pone.0352209",
+      "scope": "Trained weightlifting athletes performed hang power snatches across relative loads. The protocol supports the mid-thigh start, controlled lowering above the knees, close bar path, rapid triple extension and shoulder elevation, delayed elbow bend, and overhead power catch. Peak velocity supports Power with external load and repetitions; joint moments and a complete muscle hierarchy were not provided."
+    },
+    {
+      "id": "geisler-2023-hang-power-lift-emg",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effects of Expertise on Muscle Activity during the Hang Power Clean and Hang Power Snatch Compared to Snatch and Clean Pulls - An Explorative Analysis",
+      "authors": [
+        "Stephan Geisler",
+        "Tim Havers",
+        "Eduard Isenmann",
+        "Jonas Schulze",
+        "Leonie K. Lourens",
+        "Jannik Nowak",
+        "Steffen Held",
+        "G. Gregory Haff"
+      ],
+      "year": 2023,
+      "doi": "10.52082/jssm.2023.778",
+      "pmid": "38045750",
+      "url": "https://doi.org/10.52082/jssm.2023.778",
+      "scope": "Lifters performed hang power snatches and related pulls while vastus lateralis, gluteus maximus, rectus abdominis, erector spinae, and trapezius activity was measured. It supports material lower-body, trapezius, and trunk activity, not upper-limb joint actions or categorical role ranking."
+    },
+    {
+      "id": "murphy-riemann-2025-kettlebell-swing-hip-kinetics",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Effects of Kettlebell Swing Style and Mass on Female Hip Joint Kinetics",
+      "authors": [
+        "Kasey M. Murphy",
+        "Bryan L. Riemann"
+      ],
+      "year": 2025,
+      "doi": "10.26603/001c.127464",
+      "pmid": "39758692",
+      "url": "https://doi.org/10.26603/001c.127464",
+      "scope": "Experienced women performed continuous shoulder-height and overhead swings with twelve- and sixteen-kilogram kettlebells. Three-dimensional kinetics support ballistic hip extension, an externally loaded Power classification, the shoulder-height boundary, and an active return cue. Stance and grip were not standardized, and the study does not establish a complete muscle hierarchy."
+    },
+    {
+      "id": "van-gelder-2015-two-hand-kettlebell-swing",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "EMG Analysis and Sagittal Plane Kinematics of the Two-Handed and Single-Handed Kettlebell Swing: A Descriptive Study",
+      "authors": [
+        "Leonard H. Van Gelder",
+        "Barbara J. Hoogenboom",
+        "Bryan Alonzo",
+        "Dayna Briggs",
+        "Brian Hatzel"
+      ],
+      "year": 2015,
+      "pmid": "26618061",
+      "pmcid": "PMC4637916",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4637916/",
+      "scope": "Healthy adults performed two-hand and single-hand swings with self-selected kettlebell mass. The study distinguishes the two-hand fixture and describes the backswing, hip-extension acceleration, pendular ascent, terminal extension, and gravity-assisted return. Its phases were observational, cadence was fixed, and it does not provide joint moments or trained-lifter role rankings."
+    },
+    {
+      "id": "zebis-2013-kettlebell-swing-hamstrings",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Kettlebell swing targets semitendinosus and supine leg curl targets biceps femoris: an EMG study with rehabilitation implications",
+      "authors": [
+        "Mette Kreutzfeldt Zebis",
+        "Jorgen Skotte",
+        "Christoffer H. Andersen",
+        "Peter Mortensen",
+        "Hojland H. Petersen",
+        "Tine C. Viskaer",
+        "Tanja L. Jensen",
+        "Jesper Bencke",
+        "Lars L. Andersen"
+      ],
+      "year": 2013,
+      "doi": "10.1136/bjsports-2011-090281",
+      "pmid": "22736206",
+      "url": "https://doi.org/10.1136/bjsports-2011-090281",
+      "scope": "Female elite athletes performed kettlebell swings with direct hamstring surface EMG. It supports medial-hamstring involvement and relative semitendinosus emphasis, not force contribution, chronic adaptation, or a complete exercise fixture."
+    },
+    {
+      "id": "biscarini-2020-wall-squat-torques",
+      "sourceType": "biomechanicalModelStudy",
+      "title": "Joint Torques and Tibiofemoral Joint Reaction Force in the Bodyweight Wall Squat Therapeutic Exercise",
+      "authors": [
+        "Andrea Biscarini",
+        "Samuele Contemori",
+        "Cristina V. Dieni",
+        "Roberto Panichi"
+      ],
+      "year": 2020,
+      "doi": "10.3390/app10093019",
+      "url": "https://doi.org/10.3390/app10093019",
+      "scope": "A static wall-squat biomechanical model and measured support forces establish meaningful knee-extension torque near a ninety-degree wall-supported position. Hip and ankle torques vary with foot placement, center of pressure, and wall-force location, so the source supports resisted knee flexion but not universal hip or ankle action contracts or muscle rankings."
+    },
+    {
+      "id": "dyer-2024-wall-sit-fatigue",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Effects of static exercises on hip muscle fatigue and knee wobble assessed by surface electromyography and inertial measurement unit data",
+      "authors": [
+        "Olivia L. Dyer",
+        "Mark A. Seeley",
+        "Benjamin B. Wheatley"
+      ],
+      "year": 2024,
+      "doi": "10.1038/s41598-024-61325-7",
+      "pmid": "38714802",
+      "url": "https://doi.org/10.1038/s41598-024-61325-7",
+      "scope": "Healthy adults performed a ninety-second wall sit while gluteus medius, gluteus maximus, and rectus femoris activity and inertial movement were measured. It supports material activity and fatigue in those regions during the static task, not force contribution, categorical role ranking, or universally standardized geometry."
     }
   ]
 }

@@ -117,6 +117,67 @@
         }
       ]
     },
+    "movementPhase": {
+      "description": "One ordered phase of a multi-phase repetition. Prime actions are produced, resisted actions are opposed without occurring, and yielding actions occur while muscles capable of the opposite action control them eccentrically.",
+      "type": "object",
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "properties": {
+            "primeActions": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "resistedActions"
+          ]
+        },
+        {
+          "required": [
+            "yieldingActions"
+          ]
+        }
+      ],
+      "required": [
+        "id",
+        "name",
+        "primeActions"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableID"
+        },
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "primeActions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/actionRequirement"
+          }
+        },
+        "resistedActions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/actionRequirement"
+          }
+        },
+        "yieldingActions": {
+          "description": "Externally driven joint motion that occurs while assigned movers capable of the centrally mapped opposite action control the load eccentrically.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/actionRequirement"
+          }
+        }
+      }
+    },
     "role": {
       "type": "string",
       "enum": [
@@ -186,7 +247,6 @@
             "lunge",
             "carry",
             "core",
-            "locomotion",
             null
           ]
         },
@@ -280,9 +340,7 @@
             "enum": [
               "dynamicStrength",
               "isometricStrength",
-              "power",
-              "conditioning",
-              "mobility"
+              "power"
             ]
           }
         },
@@ -342,6 +400,11 @@
           "required": [
             "resistedActions"
           ]
+        },
+        {
+          "required": [
+            "movementPhases"
+          ]
         }
       ],
       "required": [
@@ -374,6 +437,14 @@
           "uniqueItems": true,
           "items": {
             "$ref": "#/$defs/actionRequirement"
+          }
+        },
+        "movementPhases": {
+          "description": "Ordered phases for a repetition whose defining joint actions cannot be represented truthfully as one concentric action set.",
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/movementPhase"
           }
         },
         "forbiddenPrimeActions": {
@@ -648,6 +719,14 @@
           "uniqueItems": true,
           "items": {
             "$ref": "#/$defs/muscleRequirement"
+          }
+        },
+        "requireAdditionalPrimeActions": {
+          "description": "The exact exercise-level prime-action exception set required when this rule matches; an empty array forbids exercise-level broadening for the matched fixture.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/actionRequirement"
           }
         },
         "requireAdditionalStabilityDemands": {

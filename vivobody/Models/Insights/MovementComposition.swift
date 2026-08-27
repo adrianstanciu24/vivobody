@@ -10,8 +10,8 @@
 //  what kind of training this really is.
 //
 //  Counts completed dynamic- and isometric-strength sets over a rolling
-//  window (4 weeks by default, to read CURRENT emphasis). Conditioning
-//  and mobility are excluded. Each exercise is
+//  window (4 weeks by default, to read CURRENT emphasis). Power and
+//  mismatched tracking pairs are excluded. Each exercise is
 //  classified from its persisted pick-time snapshot, with bundled-name
 //  fallback for older rows. Unknown exercises are bucketed as
 //  `unclassifiedSets` and left out of the ratio and shares so the split

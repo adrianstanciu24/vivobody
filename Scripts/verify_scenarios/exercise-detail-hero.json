@@ -8,13 +8,7 @@
     {
       "wait": {
         "label": "Exercises",
-        "value": "Not selected"
-      }
-    },
-    {
-      "tap": {
-        "label": "Exercises",
-        "value": "Not selected"
+        "value": "Selected"
       }
     },
     {
@@ -32,13 +26,13 @@
     },
     {
       "wait": {
-        "label": "DYNAMIC STRENGTH"
+        "label": "STRENGTH · REPS"
       }
     }
   ],
   "required": [
     {
-      "label": "DYNAMIC STRENGTH"
+      "label": "STRENGTH · REPS"
     },
     {
       "label": "Incline Barbell Bench Press"

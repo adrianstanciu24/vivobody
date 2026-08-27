@@ -1,0 +1,87 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "power-clean",
+  "name": "Power Clean",
+  "definition": "A floor-start bilateral barbell power lift comprising a first pull, explosive triple-extension second pull, elbow-led pull-under, yielding front-rack power catch, and recovery to standing. The ordered phase contract distinguishes produced joint motion from flexion that occurs while the lower-body extensors receive the bar eccentrically. Hang starts, full-squat catches, and clean pulls without a rack receive remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "faigenbaum-2012-power-clean-reliability", "holzbaur-2005-upper-extremity", "santos-2021-power-clean-coordination"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "hinge", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["barbell"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "first-pull", "name": "First Pull", "primeActions": ["hip.extension", "knee.extension"]},
+      {"id": "second-pull", "name": "Second Pull", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion", "scapula.elevation"]},
+      {"id": "pull-under", "name": "Pull Under", "primeActions": ["elbow.flexion"]},
+      {"id": "front-rack-catch", "name": "Front-Rack Catch", "primeActions": [], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "recovery", "name": "Recovery", "primeActions": ["hip.extension", "knee.extension"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt",
+      "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}, {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["medialHamstrings"], "minimumRole": "secondary"}, {"anyOf": ["gastrocnemius"], "minimumRole": "secondary"},
+      {"anyOf": ["trapeziusUpper"], "minimumRole": "secondary"}, {"anyOf": ["bicepsBrachii", "brachialis", "brachioradialis"], "minimumRole": "secondary"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "vasti"],
+      "secondary": ["medialHamstrings", "rectusFemoris", "gastrocnemius", "soleus", "trapeziusUpper", "bicepsBrachii", "brachialis", "brachioradialis"],
+      "stabilizer": ["bicepsFemoris", "gluteMed", "fingerFlexors", "extensorCarpiRadialis", "externalRotators", "subscapularis", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "startPosition", "valueType": "enum", "required": true, "description": "The reviewed floor start.", "allowedValues": ["floorBarCloseToShins"]},
+    {"id": "grip", "valueType": "enum", "required": true, "description": "The reviewed two-hand grip.", "allowedValues": ["pronatedSlightlyWiderThanShoulders"]},
+    {"id": "pullSequence", "valueType": "enum", "required": true, "description": "The reviewed lower-body and arm timing.", "allowedValues": ["firstPullTripleExtensionShrugThenElbowFlexion"]},
+    {"id": "receivingStrategy", "valueType": "enum", "required": true, "description": "The power-clean catch boundary.", "allowedValues": ["quarterSquatFrontRack"]},
+    {"id": "recoveryStrategy", "valueType": "enum", "required": true, "description": "The required completion after receiving.", "allowedValues": ["standFromQuarterSquat"]},
+    {"id": "interRepSupport", "valueType": "enum", "required": true, "description": "Where the bar returns between repetitions.", "allowedValues": ["floor"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the bar.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 1, "maximum": 5}},
+  "exercises": [
+    {
+      "catalogID": "barbell-power-clean",
+      "name": "Barbell Power Clean",
+      "aliases": ["Power Clean", "Floor Power Clean"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "power", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 3, "searchPriority": 98,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"}, {"muscle": "vasti", "role": "primary"},
+        {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "bicepsBrachii", "role": "secondary"},
+        {"muscle": "brachialis", "role": "secondary"}, {"muscle": "brachioradialis", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {"startPosition": "floorBarCloseToShins", "grip": "pronatedSlightlyWiderThanShoulders", "pullSequence": "firstPullTripleExtensionShrugThenElbowFlexion", "receivingStrategy": "quarterSquatFrontRack", "recoveryStrategy": "standFromQuarterSquat", "interRepSupport": "floor", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "faigenbaum-2012-power-clean-reliability", "holzbaur-2005-upper-extremity", "santos-2021-power-clean-coordination"],
+      "execution": {
+        "startingPosition": "Stand about hip-width with the bar on the floor close to the shins and grip it overhand slightly wider than shoulder width.",
+        "movement": "Keep the bar close as the hips and knees extend, then rapidly extend the hips, knees, and ankles and shrug before bending the elbows to pull under.",
+        "endpoint": "Receive the bar across the clavicles and front shoulders in a quarter squat with the elbows pointing forward.",
+        "returnPhase": "Stand fully from the catch, then lower the bar under control to the floor before the next repetition.",
+        "controlledJoints": "Complete the lower-body extension before bending the elbows and control hip, knee, and ankle flexion in the catch.",
+        "supportAndPosture": "Keep the bar close, brace the trunk, and maintain a secure two-hand grip.",
+        "disqualifyingCompensations": ["Starting from the hang changes the exercise into a hang clean.", "Receiving below a power quarter squat changes the exercise into a full clean.", "Failing to stand from the catch leaves the repetition incomplete."]
+      }
+    }
+  ]
+}

@@ -93,10 +93,9 @@ struct IntensityMixTests {
 
     @Test func onlyDynamicStrengthRepsEnterTheMix() {
         let dynamic = lift([(5, true), (8, true)])
-        let conditioning = lift([(20, true)], modality: .conditioning)
-        let mobility = lift([(3, true)], modality: .mobility)
+        let power = lift([(3, true)], modality: .power)
         let invalidIsometricReps = lift([(12, true)], modality: .isometricStrength)
-        let archive = [session(daysAgo: 1, [dynamic, conditioning, mobility, invalidIsometricReps])]
+        let archive = [session(daysAgo: 1, [dynamic, power, invalidIsometricReps])]
 
         let mix = archive.intensityMix(now: now)
         #expect(mix.strengthSets == 1)

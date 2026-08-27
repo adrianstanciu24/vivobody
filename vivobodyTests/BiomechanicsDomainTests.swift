@@ -36,17 +36,23 @@ struct BiomechanicsDomainTests {
     }
 
     @Test func modalitiesGateStrengthAnalytics() {
+        #expect(ExerciseModality.allCases == [
+            .dynamicStrength,
+            .isometricStrength,
+            .power,
+        ])
+        #expect(MovementPattern.allCases == [
+            .push,
+            .pull,
+            .squat,
+            .hinge,
+            .lunge,
+            .carry,
+            .core,
+        ])
         #expect(ExerciseModality.dynamicStrength.supportsHardSetAnalytics)
         #expect(ExerciseModality.isometricStrength.supportsHardSetAnalytics)
         #expect(!ExerciseModality.power.supportsHardSetAnalytics)
-        #expect(!ExerciseModality.conditioning.supportsHardSetAnalytics)
-        #expect(!ExerciseModality.mobility.supportsHardSetAnalytics)
-
-        #expect(ExerciseModality.dynamicStrength.requiresPrimaryMuscle)
-        #expect(ExerciseModality.isometricStrength.requiresPrimaryMuscle)
-        #expect(ExerciseModality.power.requiresPrimaryMuscle)
-        #expect(!ExerciseModality.conditioning.requiresPrimaryMuscle)
-        #expect(!ExerciseModality.mobility.requiresPrimaryMuscle)
 
         #expect(ExerciseModality.dynamicStrength.supportsStrengthPR(for: .reps))
         #expect(!ExerciseModality.dynamicStrength.supportsStrengthPR(for: .duration))

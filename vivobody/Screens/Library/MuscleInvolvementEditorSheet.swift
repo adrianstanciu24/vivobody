@@ -13,18 +13,15 @@ import VivoKit
 
 struct MuscleInvolvementEditorSheet: View {
     let onApply: ([String: Double]) -> Void
-    let requiresPrimary: Bool
 
     @Environment(\.dismiss) private var dismiss
     @State private var snapshot: [String: Double]
 
     init(
         initialSnapshot: [String: Double],
-        requiresPrimary: Bool = true,
         onApply: @escaping ([String: Double]) -> Void
     ) {
         _snapshot = State(initialValue: initialSnapshot)
-        self.requiresPrimary = requiresPrimary
         self.onApply = onApply
     }
 
@@ -32,20 +29,16 @@ struct MuscleInvolvementEditorSheet: View {
         Muscle.Involvement(snapshot: snapshot)
     }
 
-    /// Empty anatomy is not a valid authored custom exercise. Conditioning
-    /// and mobility may omit a primary, but still select the regions that
-    /// should appear in Exercise Anatomy instead of inheriting a group guess.
+    /// Authored exercises need at least one force-producing primary muscle.
     private var canApply: Bool {
-        !involvement.isEmpty && (!requiresPrimary || involvement.hasPrimary)
+        !involvement.isEmpty && involvement.hasPrimary
     }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: Space.section) {
-                    Text(requiresPrimary
-                        ? "Choose each muscle's role. Primary and secondary muscles shape training volume; stabilizers remain visible without earning hard-set credit."
-                        : "Choose any muscles that should remain visible for this exercise. This modality does not earn hard-set volume.")
+                    Text("Choose each muscle's role. Primary and secondary muscles shape training volume; stabilizers remain visible without earning hard-set credit.")
                         .font(Typography.body)
                         .foregroundStyle(Ink.tertiary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -58,7 +51,7 @@ struct MuscleInvolvementEditorSheet: View {
                         Text("Choose at least one muscle.")
                             .font(Typography.body)
                             .foregroundStyle(Tint.danger)
-                    } else if requiresPrimary, !involvement.hasPrimary {
+                    } else if !involvement.hasPrimary {
                         Text("Choose at least one Primary muscle.")
                             .font(Typography.body)
                             .foregroundStyle(Tint.danger)

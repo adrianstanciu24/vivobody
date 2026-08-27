@@ -126,15 +126,11 @@ struct SessionInsightsTests {
     }
 
     @Test func totalVolumeExcludesNonStrengthAndIncludesLoggedNonComparableReps() {
-        let conditioning = lift(
-            "Burpee",
+        let power = lift(
+            "Push Press",
             sets: [(100, 10, nil, true)],
-            modality: .conditioning
-        )
-        let mobility = lift(
-            "Shoulder CAR",
-            sets: [(100, 10, nil, true)],
-            modality: .mobility
+            modality: .power,
+            loadMode: .nonComparable
         )
         let invalidIsometricReps = lift(
             "Static Hold",
@@ -148,7 +144,7 @@ struct SessionInsightsTests {
             loadMode: .nonComparable
         )
         let dynamic = lift(sets: [(100, 10, nil, true)])
-        let s = session(minutes: 20, [conditioning, mobility, invalidIsometricReps, banded, dynamic])
+        let s = session(minutes: 20, [power, invalidIsometricReps, banded, dynamic])
 
         #expect(s.comparableTonnageSummary.knownSubtotal == 1_000)
         #expect(s.totalVolume == 2_000)
@@ -233,9 +229,9 @@ struct SessionInsightsTests {
         #expect(s.hardSetCount == 0)
     }
 
-    @Test func conditioningRIRDoesNotCountAsStrengthHardSets() {
+    @Test func powerRIRDoesNotCountAsStrengthHardSets() {
         let exercise = lift(sets: [(100, 8, 0, true)])
-        exercise.modality = .conditioning
+        exercise.modality = .power
         let s = session(minutes: 20, [exercise])
         #expect(!s.hasLoggedRIR)
         #expect(s.hardSetCount == 0)
@@ -298,10 +294,11 @@ struct SessionInsightsTests {
             bodyweightFraction: 1
         )
         let external = lift("Barbell Row", .back, sets: [(100, 10, nil, true)])
-        let conditioning = lift(
-            "Burpee",
+        let power = lift(
+            "Push Press",
             sets: [(100, 10, nil, true)],
-            modality: .conditioning
+            modality: .power,
+            loadMode: .nonComparable
         )
         let banded = lift(
             "Band Row",
@@ -311,7 +308,7 @@ struct SessionInsightsTests {
         )
         let contrib = session(
             minutes: 20,
-            [assisted, external, conditioning, banded],
+            [assisted, external, power, banded],
             bodyweightAtStart: 155
         ).contributions()
 
@@ -319,23 +316,8 @@ struct SessionInsightsTests {
         #expect(contrib[external.id]?.metric == 1_000)
         #expect(contrib[assisted.id]?.share == 0.5)
         #expect(contrib[external.id]?.share == 0.5)
-        #expect(contrib[conditioning.id] == nil)
+        #expect(contrib[power.id] == nil)
         #expect(contrib[banded.id] == nil)
-    }
-
-    @Test func conditioningAndMobilityDurationRemainTimedContributions() {
-        let conditioning = hold("Loaded Carry", seconds: [90])
-        conditioning.modality = .conditioning
-        let mobility = hold("Codman Pendulum", seconds: [30])
-        mobility.modality = .mobility
-        let contrib = session(minutes: 10, [conditioning, mobility]).contributions()
-
-        #expect(contrib[conditioning.id]?.metric == 90)
-        #expect(contrib[conditioning.id]?.share == 0.75)
-        #expect(contrib[conditioning.id]?.isDuration == true)
-        #expect(contrib[mobility.id]?.metric == 30)
-        #expect(contrib[mobility.id]?.share == 0.25)
-        #expect(contrib[mobility.id]?.isDuration == true)
     }
 
     // MARK: - Adherence

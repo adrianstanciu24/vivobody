@@ -213,11 +213,10 @@ struct RepRangeMigrationTests {
 
     @Test func onlyDynamicStrengthRepsEnterWeeklyAverages() {
         let dynamic = lift([(8, true)])
-        let conditioning = lift([(30, true)], modality: .conditioning)
-        let mobility = lift([(2, true)], modality: .mobility)
+        let power = lift([(3, true)], modality: .power)
         let invalidIsometricReps = lift([(20, true)], modality: .isometricStrength)
         let report = [
-            session(daysAgo: 1, [dynamic, conditioning, mobility, invalidIsometricReps])
+            session(daysAgo: 1, [dynamic, power, invalidIsometricReps])
         ].repRangeMigration(now: now)
 
         #expect(report.points.count == 1)

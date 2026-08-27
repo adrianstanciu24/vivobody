@@ -388,8 +388,8 @@ extension ActiveExerciseCard {
     }
 
     /// Timed instrument — the big number is the target duration
-    /// (mm:ss). Modality supplies the noun: isometric work is a hold,
-    /// conditioning is an interval, and other duration work is time.
+    /// (mm:ss). Isometric work is a hold; invalid legacy combinations
+    /// retain neutral time wording.
     var durationHero: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text(exercise.modality.durationLabel)

@@ -22,6 +22,8 @@ $(SRCROOT)/specs/catalog/families/farmer-carry.json
 $(SRCROOT)/specs/catalog/families/finger-flexion-grip.json
 $(SRCROOT)/specs/catalog/families/forearm-pronation.json
 $(SRCROOT)/specs/catalog/families/forearm-supination.json
+$(SRCROOT)/specs/catalog/families/hang-power-snatch.json
+$(SRCROOT)/specs/catalog/families/hanging-leg-raise.json
 $(SRCROOT)/specs/catalog/families/hip-abduction.json
 $(SRCROOT)/specs/catalog/families/hip-adduction.json
 $(SRCROOT)/specs/catalog/families/hip-extension.json
@@ -32,11 +34,16 @@ $(SRCROOT)/specs/catalog/families/hip-internal-rotation.json
 $(SRCROOT)/specs/catalog/families/hip-thrust-bridge.json
 $(SRCROOT)/specs/catalog/families/horizontal-press.json
 $(SRCROOT)/specs/catalog/families/incline-press.json
+$(SRCROOT)/specs/catalog/families/inclined-leg-press.json
+$(SRCROOT)/specs/catalog/families/kettlebell-swing.json
 $(SRCROOT)/specs/catalog/families/knee-extension.json
 $(SRCROOT)/specs/catalog/families/knee-flexion.json
 $(SRCROOT)/specs/catalog/families/landmine-press.json
+$(SRCROOT)/specs/catalog/families/machine-hack-squat.json
+$(SRCROOT)/specs/catalog/families/power-clean.json
 $(SRCROOT)/specs/catalog/families/push-press.json
 $(SRCROOT)/specs/catalog/families/reverse-fly.json
+$(SRCROOT)/specs/catalog/families/roman-chair-hip-extension.json
 $(SRCROOT)/specs/catalog/families/romanian-deadlift.json
 $(SRCROOT)/specs/catalog/families/scapular-depression.json
 $(SRCROOT)/specs/catalog/families/scapular-elevation.json
@@ -54,6 +61,7 @@ $(SRCROOT)/specs/catalog/families/spine-extension.json
 $(SRCROOT)/specs/catalog/families/spine-flexion.json
 $(SRCROOT)/specs/catalog/families/spine-lateral-flexion.json
 $(SRCROOT)/specs/catalog/families/spine-rotation.json
+$(SRCROOT)/specs/catalog/families/split-jerk.json
 $(SRCROOT)/specs/catalog/families/split-stance-squat.json
 $(SRCROOT)/specs/catalog/families/step-up.json
 $(SRCROOT)/specs/catalog/families/suitcase-carry.json
@@ -62,6 +70,7 @@ $(SRCROOT)/specs/catalog/families/trap-bar-deadlift.json
 $(SRCROOT)/specs/catalog/families/upright-row.json
 $(SRCROOT)/specs/catalog/families/vertical-press.json
 $(SRCROOT)/specs/catalog/families/vertical-pull.json
+$(SRCROOT)/specs/catalog/families/wall-sit.json
 $(SRCROOT)/specs/catalog/families/wrist-extension.json
 $(SRCROOT)/specs/catalog/families/wrist-flexion.json
 $(SRCROOT)/specs/catalog/families/wrist-radial-deviation.json

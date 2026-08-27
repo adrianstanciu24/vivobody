@@ -200,7 +200,7 @@ extension ExerciseDetailScreen {
                 )
                 MovementClassificationCard(
                     mechanic: .compound,
-                    movementLabel: "Locomotion",
+                    movementLabel: "Loaded carry",
                     trainingRole: .other,
                     planes: [.sagittal, .frontal, .transverse],
                     laterality: .bilateral

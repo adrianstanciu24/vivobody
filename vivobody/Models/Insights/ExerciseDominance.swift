@@ -8,8 +8,8 @@
 //  same honest unit instead of tonnage favoring squats and deadlifts.
 //
 //  Dynamic-strength rep sets and isometric-strength timed sets count;
-//  conditioning, mobility, incomplete, and empty sets do not. Exercises
-//  are grouped by copied catalog identity, falling back to normalized
+//  power, mismatched, incomplete, and empty sets do not. Exercises are
+//  grouped by copied catalog identity, falling back to normalized
 //  name for custom history.
 //
 //  Pure value-type computation on injected dates, so it's testable

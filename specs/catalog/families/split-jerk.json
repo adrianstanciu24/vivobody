@@ -1,0 +1,85 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "split-jerk",
+  "name": "Split Jerk",
+  "definition": "A front-rack bilateral barbell power press with a countermovement dip, explosive lower-body propulsion, flight, an asymmetric one-foot-forward and one-foot-back receive under a locked-out bar, and recovery to one line. Ordered phases distinguish the yielding dip and receive from propulsion and arm drive. Soriano et al. directly own the front-rack jerk task, propulsion and flight, asymmetric split receive, and recovery boundary, but do not provide joint-resolved lower-limb moments, scapular kinematics, an exact grip or lead-side prescription, or a muscle hierarchy. The shoulder, scapular, and elbow actions and categorical upper-body roles are explicit transfers from Ackland et al., Holzbaur et al., and Seth et al.; lower-body role labels combine Soriano et al.'s task sequence with Arnold et al.'s capability model rather than claiming exercise-specific contribution magnitudes. The 45-pound, 20-kilogram, and three-repetition seeds are product defaults rather than source prescriptions. Planted-foot push presses and symmetric push-jerk receives remain outside this family.",
+  "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "seth-2019-shoulder-work", "soriano-2024-push-press-jerk"],
+  "fixed": {"mechanic": "compound", "trainingRole": "push", "pattern": "push", "direction": "vertical", "planes": ["sagittal", "frontal"]},
+  "groupPolicy": {"default": "shoulders", "allowed": ["shoulders"]},
+  "allowed": {"equipment": ["barbell"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.flexion", "shoulder.abduction"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "dip", "name": "Dip", "primeActions": [], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "propulsion", "name": "Propulsion", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion"]},
+      {"id": "arm-drive-and-split-receive", "name": "Arm Drive and Split Receive", "primeActions": ["shoulder.flexion", "shoulder.abduction", "scapula.upwardRotation", "scapula.posteriorTilt", "elbow.extension"], "yieldingActions": ["knee.flexion"]},
+      {"id": "recovery", "name": "Recovery", "primeActions": ["knee.extension"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.downwardRotation", "scapula.anteriorTilt",
+      "shoulder.extension", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.flexion", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["deltoidAnterior"], "minimumRole": "primary"}, {"anyOf": ["vasti"], "minimumRole": "primary"}, {"anyOf": ["gluteMax"], "minimumRole": "primary"},
+      {"anyOf": ["triceps"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "secondary"}, {"anyOf": ["gastrocnemius"], "minimumRole": "secondary"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["deltoidAnterior", "vasti", "gluteMax"],
+      "secondary": ["deltoidLateral", "supraspinatus", "triceps", "serratus", "trapeziusUpper", "trapeziusLower", "rectusFemoris", "gastrocnemius", "soleus"],
+      "stabilizer": ["extensorCarpiRadialis", "fingerFlexors", "externalRotators", "subscapularis", "abs", "obliques", "lumbarExtensors", "gluteMed", "medialHamstrings", "bicepsFemoris"]
+    }
+  },
+  "variantAxes": [
+    {"id": "loadPlacement", "valueType": "enum", "required": true, "description": "The start position of the bar.", "allowedValues": ["frontRack"]},
+    {"id": "dipStyle", "valueType": "enum", "required": true, "description": "The countermovement before propulsion.", "allowedValues": ["jerkCountermovement"]},
+    {"id": "receivingStrategy", "valueType": "enum", "required": true, "description": "The defining asymmetric receive.", "allowedValues": ["oneFootForwardOneFootBack"]},
+    {"id": "leadFoot", "valueType": "enum", "required": true, "description": "The unreported lead-side choice; no universal prescription is inferred.", "allowedValues": ["unreportedNoUniversalPrescription"]},
+    {"id": "footContact", "valueType": "enum", "required": true, "description": "The flight and split-contact boundary.", "allowedValues": ["leavesFloorThenSplitContact"]},
+    {"id": "armEndpoint", "valueType": "enum", "required": true, "description": "The overhead receive requirement.", "allowedValues": ["elbowsFullyExtendedOverhead"]},
+    {"id": "recoveryStrategy", "valueType": "enum", "required": true, "description": "The required completion position.", "allowedValues": ["feetReturnToSameLine"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the bar.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 1, "maximum": 5}},
+  "exercises": [
+    {
+      "catalogID": "barbell-split-jerk",
+      "name": "Barbell Split Jerk",
+      "aliases": ["Split Jerk", "Olympic Split Jerk"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "power", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 3, "searchPriority": 95,
+      "involvement": [
+        {"muscle": "deltoidAnterior", "role": "primary"}, {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "deltoidLateral", "role": "secondary"}, {"muscle": "supraspinatus", "role": "secondary"},
+        {"muscle": "triceps", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"},
+        {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "trapeziusLower", "role": "secondary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}
+      ],
+      "variant": {"loadPlacement": "frontRack", "dipStyle": "jerkCountermovement", "receivingStrategy": "oneFootForwardOneFootBack", "leadFoot": "unreportedNoUniversalPrescription", "footContact": "leavesFloorThenSplitContact", "armEndpoint": "elbowsFullyExtendedOverhead", "recoveryStrategy": "feetReturnToSameLine", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "seth-2019-shoulder-work", "soriano-2024-push-press-jerk"],
+      "execution": {
+        "startingPosition": "Stand with the bar in the front rack, use an overhand grip at a comfortable width, and support yourself on both feet.",
+        "movement": "Dip quickly, extend the hips, knees, and ankles forcefully, and drive the arms to full extension while moving one foot forward and the other backward.",
+        "endpoint": "Receive the bar overhead in a split stance with both elbows fully straight.",
+        "returnPhase": "Recover until both feet are on one line with the bar locked out, then lower it under control to the front rack.",
+        "controlledJoints": "Control knee flexion in the split receive without inventing symmetric front-leg and rear-leg hip or ankle actions.",
+        "supportAndPosture": "Brace the trunk, keep a secure two-hand grip, and use no torso support.",
+        "disqualifyingCompensations": ["Keeping both feet planted changes the lift into a push press.", "Receiving with the feet symmetric changes the lift into a push jerk.", "Pressing to lockout after receiving is a press-out rather than the reviewed jerk."]
+      }
+    }
+  ]
+}

@@ -406,7 +406,7 @@ import VivoKit
             try? context.saveOrRollback()
         }
 
-        /// One archived conditioning workout for the Insights screen's
+        /// One archived power workout for the Insights screen's
         /// per-instrument empty states. Consistency has a factual calendar
         /// mark, while strength-only signals remain deliberately unqualified.
         private static func seedInsightsEmptyInstruments(in context: ModelContext) {
@@ -416,15 +416,14 @@ import VivoKit
             guard existing.isEmpty else { return }
 
             let exercise = Exercise(
-                name: "Incline Walk",
+                name: "Box Jump",
                 group: .legs,
                 plannedSets: 1,
-                plannedReps: 0,
+                plannedReps: 5,
                 plannedWeight: 0,
-                trackingMode: .duration,
-                modality: .conditioning,
+                trackingMode: .reps,
+                modality: .power,
                 loadMode: .nonComparable,
-                plannedDuration: 20 * 60,
                 sortOrder: 0
             )
             exercise.sets.first?.isCompleted = true

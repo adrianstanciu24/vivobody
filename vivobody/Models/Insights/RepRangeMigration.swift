@@ -16,7 +16,7 @@
 //    • towardStrength  — slope ≤ -0.1 reps/week (sets trending heavier)
 //    • stable          — |slope| < 0.1 reps/week
 //
-//  Timed (`.duration`) holds, conditioning reps, and mobility drills
+//  Timed (`.duration`) holds, power work, and mismatched tracking pairs
 //  are excluded, as are incomplete sets and sets logged with zero reps. Pure value type on
 //  injected dates, so it's testable on a virtual clock (see
 //  `RepRangeMigrationTests`).

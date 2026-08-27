@@ -250,8 +250,8 @@ nonisolated struct ExerciseComparison {
     }
 
     /// One exercise at a time, with no stronger-side merging. The
-    /// training-volume scope is empty for power, conditioning,
-    /// mobility, and mismatched strength modality/tracking pairs.
+    /// training-volume scope is empty for power and mismatched strength
+    /// modality/tracking pairs.
     func anatomyChannels(
         for side: Side,
         scope: AnatomyScope
@@ -387,20 +387,20 @@ nonisolated struct ExerciseComparison {
         }
     }
 
-    /// How each exercise is measured and progressed: modality,
+    /// How each exercise is measured and progressed: exercise type,
     /// tracking unit, load semantics, and record eligibility. This is
     /// the "which one is easier to track progressively?" block.
     var trackingRows: [FactRow] {
         [
             FactRow(
-                label: "Modality",
-                anchorValue: anchor.modality.displayName,
-                otherValue: other.modality.displayName
+                label: "Type",
+                anchorValue: anchor.modality.categoryDisplayName,
+                otherValue: other.modality.categoryDisplayName
             ),
             FactRow(
                 label: "Measured",
-                anchorValue: anchor.trackingMode.displayName,
-                otherValue: other.trackingMode.displayName
+                anchorValue: anchor.modality.measureDisplayName,
+                otherValue: other.modality.measureDisplayName
             ),
             FactRow(
                 label: "Load",

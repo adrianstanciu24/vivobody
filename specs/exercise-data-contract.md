@@ -5,8 +5,8 @@ bundled exercise catalog. The reviewed contracts in `specs/catalog/families/`
 are the canonical exercise source. `Scripts/catalog.py` validates those
 contracts against the taxonomy, joint-action, evidence, and family-schema
 foundations, then deterministically projects them into
-`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 62
-active families and their 146 reviewed exercises; the synthetic fixture and
+`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 71
+active families and their 166 reviewed exercises; the synthetic fixture and
 supplemental `--family` inputs are never emitted.
 
 ## Identity and movement instructions
@@ -61,8 +61,7 @@ The snapshot values distinguish categorical roles in the existing
 temporary emphasis on Exercise Detail, but is not a claim of 20% development.
 The values are product heuristics, not measurements of EMG, hypertrophy, force,
 or energy expenditure.
-Strength and power exercises must have at least one primary muscle.
-Conditioning and mobility movements may use an explicit no-primary exception.
+Every exercise must have at least one primary muscle in its browsing group.
 
 The hard-set column applies only after a valid dynamic-strength repetition set
 or isometric-strength duration set passes the modality/tracking gate. Power
@@ -123,18 +122,19 @@ textually visible and feed analytics without painting a substitute 3D mesh.
   hard sets or estimated 1RM. Jumps, throws, bands, and other non-comparable
   power work remain unranked because the log lacks output dimensions such as
   height, velocity, or distance.
-- `conditioning`: locomotion or work-capacity movement; excluded from strength
-  PR, estimated-1RM, and hypertrophy-volume analytics.
-- `mobility`: mobility, rehabilitation, or passive movement; excluded from
-  strength and hypertrophy analytics.
 
-Custom-exercise authoring exposes every modality through
-`ExerciseModality.customExerciseChoices`; `customExerciseTrackingModes` owns
-their permitted measures. Dynamic strength and power are fixed to reps,
-isometric strength is fixed to duration, and conditioning and mobility let the
-user choose reps or duration. Conditioning and mobility remain visible in
-workouts and history while staying excluded from strength PRs, comparable
-tonnage, hypertrophy hard sets, and the 3D development model.
+Olympic-lift catches use ordered catalog-authoring phases so joint motion is
+not mislabeled as one concentric action set. A phase separates produced actions
+from static resisted tendencies and from `yieldingActions`: motion that occurs
+while the assigned opposite-action muscles control it eccentrically. These
+phases validate biomechanics and instructions at build time; they do not alter
+the runtime performance signature, load comparison, or one-record logging
+model.
+
+Custom-exercise authoring exposes these three modalities through
+`ExerciseModality.customExerciseChoices`. Dynamic strength and power are fixed
+to reps; isometric strength is fixed to duration. Conditioning and mobility
+are outside the app's lifter-focused exercise catalog.
 
 `trackingMode` describes the entered measurement (`reps` or `duration`); it does
 not substitute for modality.
@@ -142,8 +142,8 @@ not substitute for modality.
 RIR is valid only for an explicitly rated (`rirLogged`) completed
 `.dynamicStrength + .reps` set. Rollups of performed repetition work also
 require positive repetitions. The stored default RIR value is not a reading,
-and isometric, power, conditioning, mobility, and mismatched modality/tracking
-records never enter RIR averages, hard-set counts, or progression guidance.
+and isometric, power, and mismatched modality/tracking records never enter RIR
+averages, hard-set counts, or progression guidance.
 
 Each workout and per-set template row also stores an explicit set intent:
 `working` or `warmUp`. Warm-ups remain visible in history and completion
@@ -231,8 +231,8 @@ or unavailable subtotal as a complete total.
   cross-mechanic discovery filters, and is authored explicitly rather than
   inferred from a joint action. For example, a lateral raise is `push` by PPL
   placement even though shoulder abduction is not a literal pressing action.
-- `pattern` describes the dominant compound pattern. Locomotion has its own
-  value; isolation records have no pattern.
+- `pattern` describes the dominant compound pattern; isolation records have no
+  pattern.
 - `direction` exists only for push and pull patterns and uses
   `horizontal|vertical|diagonal`. Direction describes the resistance/travel
   direction, not an anatomical plane.
@@ -260,10 +260,10 @@ The bundled catalog must satisfy all of the following before shipping:
 
 - `python3 Scripts/catalog.py --check` validates every canonical source and
   proves the bundled runtime catalog is byte-for-byte compiler output.
-- The projection contains exactly 62 family IDs and 146 exercise records; it is
+- The projection contains exactly 71 family IDs and 166 exercise records; it is
   stable under family file discovery order and excludes the synthetic fixture
   and supplemental `--family` validation inputs.
-- The evidence registry contains exactly 165 source identities, each referenced
+- The evidence registry contains exactly 187 source identities, each referenced
   by an active foundation, family, or exercise claim.
 - Every required raw enum decodes without fallback.
 - Stable IDs, canonical names, and normalized aliases are unique.

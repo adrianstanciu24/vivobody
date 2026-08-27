@@ -15,7 +15,7 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
   opposition map, and an independent anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
   them against another list written in the same family file.
-- `evidence.json` tracks exactly 165 primary musculoskeletal sources supporting
+- `evidence.json` tracks exactly 187 primary musculoskeletal sources supporting
   those capability profiles. A citation supports a rule; it does not turn EMG
   or a model estimate into a universal numeric contribution.
 - `family.schema.json` documents the strict JSON shape for one family and its
@@ -55,9 +55,11 @@ contextual descriptions, but it must not create a second anatomical taxonomy.
 Exercise involvement remains categorical:
 
 - `primary`: a contributor that the exercise principally emphasizes, either by
-  producing a prime action or by opposing a declared resisted action.
-- `secondary`: a meaningful dynamic agonist, synergist, or resisted-action
-  opponent that is not the exercise's dominant training emphasis. Secondary
+  producing a prime action or by opposing a declared resisted or yielding
+  action.
+- `secondary`: a meaningful dynamic agonist, synergist, resisted-action
+  opponent, or eccentric controller that is not the exercise's dominant
+  training emphasis. Secondary
   does not mean inactive or anatomically incapable of producing or opposing
   the training-defining action.
 - `stabilizer`: a contributor used principally to control a declared joint or
@@ -161,11 +163,33 @@ lateral-flexion and carry records prescribe both body or load sides; the
 spine-rotation record prescribes both rotation directions. Each retains the
 aggregation limitation explicitly.
 
-A family must declare at least one prime or resisted action, and the same
-action cannot be both. `planeBasisActions` may select from their union.
+A family must declare at least one direct prime or resisted action, or a Power
+family may declare two or more ordered movement phases. The same action cannot
+occupy conflicting modes. `planeBasisActions` selects from the reviewed action
+union, including yielding actions when ordered phases are present.
 Resisted actions are family-level invariants. If two exercises resist different
 tendencies or use different basis planes, they belong in separate contracts;
 exercise-level resisted-action exceptions are deliberately unsupported.
+
+## Ordered power-phase semantics
+
+A power repetition with a catch or receiving phase cannot flatten all joint
+motion into one concentric action set. Such a family leaves its direct
+`primeActions` empty and declares two or more ordered `movementPhases` instead.
+Each phase distinguishes three action modes:
+
+- `primeActions`: joint motion produced by the assigned movers;
+- `resistedActions`: an external tendency opposed without that motion
+  occurring; and
+- `yieldingActions`: externally driven joint motion that does occur while
+  muscles capable of the centrally mapped opposite action control it
+  eccentrically.
+
+The validator unions those phase actions only for capability coverage while
+retaining their authored order and mode. Yielding actions require matching
+stability demands and an assigned primary or secondary muscle capable of the
+opposite action. Ordered phases are restricted to `power` families and cannot
+be silently broadened through exercise-level `additionalPrimeActions`.
 
 ## Lower-body region boundaries
 
@@ -225,8 +249,9 @@ Each family separates:
   are `sagittal`, `frontal`, and `transverse`.
 - `allowed`: equipment, modality, tracking, load, and laterality choices an
   exercise may select.
-- `movementSignature`: prime and/or resisted joint actions, optional
-  `forbiddenPrimeActions`, one to three `planeBasisActions`, and stability
+- `movementSignature`: direct prime and/or resisted joint actions, or ordered
+  phase actions for a multi-phase power repetition; optional
+  `forbiddenPrimeActions`; one to three `planeBasisActions`; and stability
   regions. A forbidden prime action
   cannot be added by an exercise variant even when an assigned muscle is
   anatomically capable of producing it in some position.
@@ -330,11 +355,12 @@ ownership decisions rather than authored exercises. Standard and knee push-ups
 remain horizontal press variants.
 
 `narrow`, `shoulderWidth`, and `wide` grip variants remain horizontal-press
-mechanics.
-They are deferred until a hand-spacing axis and its thresholds are reviewed;
-no grip width may be inferred from aliases. A close-grip press becomes a
-separate triceps-emphasis family only if a later evidence review deliberately
-assigns triceps as primary under a different muscle contract.
+mechanics. One narrow barbell condition is active using its source-defined
+latissimus-to-triceps landmark spacing; generic narrow, shoulder-width, and
+wide variants remain deferred until their hand-spacing thresholds are
+reviewed, and no grip width may be inferred from aliases. A close-grip press
+becomes a separate triceps-emphasis family only if a later evidence review
+deliberately assigns triceps as primary under a different muscle contract.
 
 `diagonal` is a push/pull direction, not an anatomical plane. The family-first
 taxonomy retains exactly the three cardinal planes while allowing a family to
@@ -372,4 +398,4 @@ exactly 44 joint actions, all muscles have evidence-backed action profiles,
 family prime actions have capable movers, and stability demands have capable
 assigned muscles. The two posterior-serratus mesh bases are explicitly pinned
 as non-trainable scene surfaces rather than lumbar proxies. The runtime
-projection is pinned to exactly 62 active families and 146 exercises.
+projection is pinned to exactly 71 active families and 166 exercises.

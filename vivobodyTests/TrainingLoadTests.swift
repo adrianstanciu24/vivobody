@@ -204,7 +204,7 @@ struct TrainingLoadTests {
     @Test func mixedModalitiesCreditStrengthWorkOnly() {
         let sessions = [
             session(daysAgo: 1, sets: 2, reps: 5, modality: .dynamicStrength),
-            session(daysAgo: 2, sets: 3, reps: 3, modality: .conditioning),
+            session(daysAgo: 2, sets: 3, reps: 3, modality: .power),
             session(
                 daysAgo: 3,
                 sets: 2,
@@ -218,7 +218,7 @@ struct TrainingLoadTests {
                 sets: 4,
                 reps: 0,
                 mode: .duration,
-                modality: .mobility,
+                modality: .dynamicStrength,
                 duration: 30
             ),
         ]

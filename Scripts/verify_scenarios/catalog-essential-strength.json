@@ -1,0 +1,43 @@
+{
+  "name": "catalog-essential-strength",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Standing Dual-Cable Crossover,"
+        },
+        "direction": "up",
+        "maxSwipes": 5
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Standing Dual-Cable Crossover,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "label": "Standing Dual-Cable Crossover"
+    }
+  ],
+  "forbidden": []
+}

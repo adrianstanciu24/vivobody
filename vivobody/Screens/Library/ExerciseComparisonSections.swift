@@ -323,7 +323,7 @@ extension ExerciseComparisonScreen {
         case "Planes": "rotate.3d"
         case "Laterality": "person.2"
         case "Equipment": "dumbbell.fill"
-        case "Modality": "bolt.fill"
+        case "Type": "bolt.fill"
         case "Measured": "ruler"
         case "Load": "scalemass.fill"
         default: "circle.grid.2x2"

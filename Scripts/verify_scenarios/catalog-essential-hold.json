@@ -1,0 +1,43 @@
+{
+  "name": "catalog-essential-hold",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Wall Sit,"
+        },
+        "direction": "up",
+        "maxSwipes": 80
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Wall Sit,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · HOLD"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "STRENGTH · HOLD"
+    },
+    {
+      "label": "Wall Sit"
+    }
+  ],
+  "forbidden": []
+}

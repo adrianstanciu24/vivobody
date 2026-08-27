@@ -11,7 +11,7 @@
 //
 //  Counts completed dynamic-strength `.reps` sets over a rolling
 //  window (28 days by default, to read current emphasis). Timed holds,
-//  conditioning reps, and mobility drills are excluded. Pure value-
+//  power work, and mismatched tracking pairs are excluded. Pure value-
 //  type computation on injected dates (see `IntensityMixTests`).
 //
 

@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 62 reviewed families are active, containing 146 exercises.
+- 71 reviewed families are active, containing 166 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 165 registered evidence sources.
+  44 joint actions, and 187 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -37,6 +37,10 @@ are discovery handles, not guaranteed final family IDs.
   resolved through a carry split and the later lumbar closure; the carry
   candidate split into separate farmer and suitcase families, and the two
   lumbar holds activated after an atomic anatomy/evidence repair.
+- The essential lifter expansion added 20 reviewed records: nine new family
+  owners containing 10 records, plus 10 records within existing family
+  contracts. Its four explosive lifts use the existing Power modality, while
+  Wall Sit uses Strength Hold.
 - No catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
   one source-exact seated 45-degree cable fixture, both Batch-3 nonstandard
   press branches are closed, and the generic grip discovery handle is resolved
@@ -52,7 +56,7 @@ batch siblings.
 
 | Family | Exercises |
 |---|---:|
-| `horizontal-press` | 12 |
+| `horizontal-press` | 13 |
 | `incline-press` | 4 |
 | `decline-press` | 4 |
 | `vertical-press` | 11 |
@@ -61,14 +65,14 @@ batch siblings.
 | `shoulder-extension-row` | 12 |
 | `shoulder-horizontal-abduction-row` | 6 |
 | `shoulder-extension-isolation` | 3 |
-| `chest-fly` | 2 |
+| `chest-fly` | 3 |
 | `reverse-fly` | 4 |
 | `shoulder-flexion-raise` | 1 |
 | `shoulder-abduction-raise` | 2 |
 | `shoulder-external-rotation` | 3 |
 | `shoulder-internal-rotation` | 2 |
-| `elbow-flexion` | 3 |
-| `elbow-extension` | 5 |
+| `elbow-flexion` | 5 |
+| `elbow-extension` | 6 |
 | `forearm-pronation` | 1 |
 | `forearm-supination` | 1 |
 | `wrist-flexion` | 1 |
@@ -85,11 +89,14 @@ batch siblings.
 | `push-press` | 1 |
 | `landmine-press` | 1 |
 | `knee-extension` | 2 |
-| `knee-flexion` | 2 |
+| `knee-flexion` | 4 |
 | `hip-extension` | 1 |
+| `roman-chair-hip-extension` | 1 |
 | `hip-flexion` | 1 |
 | `ankle-plantarflexion` | 2 |
 | `bilateral-squat` | 2 |
+| `inclined-leg-press` | 1 |
+| `machine-hack-squat` | 1 |
 | `conventional-deadlift` | 1 |
 | `sumo-deadlift` | 1 |
 | `trap-bar-deadlift` | 2 |
@@ -97,11 +104,11 @@ batch siblings.
 | `hip-hinge` | 1 |
 | `romanian-deadlift` | 3 |
 | `hip-thrust-bridge` | 2 |
-| `split-stance-squat` | 1 |
+| `split-stance-squat` | 2 |
 | `step-up` | 1 |
 | `dynamic-lunge` | 2 |
-| `hip-abduction` | 1 |
-| `hip-adduction` | 1 |
+| `hip-abduction` | 2 |
+| `hip-adduction` | 2 |
 | `ankle-dorsiflexion` | 1 |
 | `hip-internal-rotation` | 1 |
 | `hip-external-rotation` | 1 |
@@ -114,7 +121,13 @@ batch siblings.
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **146** |
+| `hanging-leg-raise` | 2 |
+| `power-clean` | 1 |
+| `kettlebell-swing` | 1 |
+| `hang-power-snatch` | 1 |
+| `split-jerk` | 1 |
+| `wall-sit` | 1 |
+| **Total** | **166** |
 
 ## Foundation gates
 
@@ -219,10 +232,11 @@ Batch 7 added `movementSignature.resistedActions` so an isometric family names
 the external joint-action tendency it opposes without inventing a dynamic prime
 action. A central, total, symmetric action-opposition map proves that an
 assigned primary or secondary muscle can produce the opposing action.
-`planeBasisActions` now draws from the union of prime and resisted actions while
-preserving its same-region, distinct-plane, and exact-plane rules. A contract
-must declare at least one prime or resisted action, and one action cannot be
-both.
+`planeBasisActions` now draws from the reviewed action union while preserving
+its same-region, distinct-plane, and exact-plane rules. A contract must declare
+at least one direct prime or resisted action, or a Power family may use ordered
+movement phases with produced and yielding actions. One action cannot occupy
+conflicting modes.
 
 Farmer and suitcase carries use separate family-level resisted signatures:
 the suitcase contract adds lateral flexion and uses it as the frontal plane

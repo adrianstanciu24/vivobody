@@ -82,8 +82,8 @@ attempts a bodyweight-only draft and reports catalog coverage gaps honestly.
 The automatic candidate pool contains current, visible catalog items whose
 modality is `.dynamicStrength` or `.isometricStrength`, whose tracking mode is
 compatible with that modality, and whose authored classification and primary
-muscle facts are sufficient for the requested slot. Power, conditioning, and
-mobility exercises are excluded even when their equipment matches.
+muscle facts are sufficient for the requested slot. Power exercises are
+excluded even when their equipment matches.
 Bodyweight exercises remain eligible regardless of external-equipment
 selections; explicit avoids still remove them.
 
@@ -291,7 +291,7 @@ choices is always a user action.
 - No experience-level inference, exercise difficulty score, fatigue estimate,
   recovery model, progression, autoregulation, deload, or adaptive replanning.
 - No starting-weight or percentage-of-1RM prescription.
-- No mobility, conditioning, or power programming; no unilateral quota.
+- No power programming; no unilateral quota.
 - No persistent routine relationship, routine history, cloud service, ML, or
   generated prose.
 - No modification of existing templates or active workouts.

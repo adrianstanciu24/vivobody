@@ -135,14 +135,13 @@ struct SetStimulusTests {
 
     // MARK: - Modality gates
 
-    @Test func powerMobilityAndConditioningEarnNoHardSetCredit() {
-        for modality in [ExerciseModality.power, .mobility, .conditioning] {
-            let ex = lift("Non-strength Fixture", .core, sets: [
-                SetSpec(weight: 25, reps: 10),
-            ], modality: modality)
-            #expect(SetStimulus.setEquivalentCredit(for: ex) == 0)
-            #expect(SetStimulus.credit(for: ex).isEmpty)
-        }
+    @Test func powerEarnsNoHardSetCredit() {
+        let exercise = lift("Power Fixture", .core, sets: [
+            SetSpec(weight: 25, reps: 10),
+        ], modality: .power)
+
+        #expect(SetStimulus.setEquivalentCredit(for: exercise) == 0)
+        #expect(SetStimulus.credit(for: exercise).isEmpty)
     }
 
     @Test func onlyExactStrengthModalityAndTrackingPairsEarnCredit() {

@@ -52,7 +52,7 @@ The screen behaves as an instrument, not a long report:
   hard-set credit and authored anatomical involvement, including stabilizers
   and non-volume modalities. It uses the exact `SetStimulus` gate:
   dynamic-strength reps and isometric-strength holds qualify; power,
-  conditioning, mobility, and mismatched tracking do not.
+  and mismatched tracking do not.
 - **Anatomy** — remains inside Muscles, after the comparison beams. One
   selected exercise is shown at a time, switchable between A and B, and it
   offers its own Volume / All roles scope so changing the figure never moves
@@ -130,7 +130,7 @@ only path to it.
 ## Testing
 
 - `vivobodyTests/ExerciseComparisonTests.swift`: the exact hard-set gate,
-  power/conditioning and mismatched-tracking exclusions, overlap/emphasis,
+  power and mismatched-tracking exclusions, overlap/emphasis,
   separate anatomy scopes, authored direction, delta classification,
   movement/tracking facts, progression notes, and tint-ramp regressions.
 - Semantic scenarios: `exercise-comparison` (Pro flow through the picker

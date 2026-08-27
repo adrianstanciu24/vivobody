@@ -211,7 +211,7 @@ nonisolated struct ExerciseProgress: Identifiable, Hashable {
 
     var performanceSignature: ExercisePerformanceSignature {
         points.last?.performanceSignature ?? ExercisePerformanceSignature(
-            modality: .conditioning,
+            modality: .power,
             trackingMode: .reps,
             loadMode: .nonComparable,
             bodyweightFraction: 0

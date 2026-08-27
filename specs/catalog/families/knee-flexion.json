@@ -3,11 +3,13 @@
   "schemaVersion": 1,
   "id": "knee-flexion",
   "name": "Knee Flexion",
-  "definition": "A strict open-chain lever-machine isolation in which the lower leg flexes at the knee while the hip, pelvis, spine, ankle, and foot remain held. The initial roster contains only the directly trained unilateral seated and prone conditions at approximately 90 and 30 degrees of hip flexion with the pelvis restrained. Both migrated hamstring regions remain primary in both postures; sartorius and gracilis are directly measured secondaries. Gastrocnemius is deliberately absent because the training source did not report ankle posture or measure calf involvement, while separate maximal isokinetic evidence shows that its knee-flexion contribution changes with ankle position. Bilateral or standing curls, cable or band curls, Nordics, razor curls, glute-ham raises, sliding or ball curls, hip-extension tasks, and ankle-posture variants remain outside this family.",
+  "definition": "A strict open-chain lever-machine isolation in which the lower leg flexes at the knee while the hip, pelvis, spine, ankle, and foot remain held. The roster owns four exact commercial-machine fixtures: unilateral seated and prone conditions plus a bilateral Johnson SL160 seated curl and a bilateral Flex Fitness prone curl. Hip angle, ankle posture, support, handles, and cadence remain fixture-specific and unreported fields are not invented. Standing curls, cable or band curls, Nordics, razor curls, glute-ham raises, sliding or ball curls, and hip-extension tasks remain outside this family.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "maeo-2021-seated-prone-leg-curl",
-    "gallucci-2002-gastrocnemius-leg-curl"
+    "gallucci-2002-gastrocnemius-leg-curl",
+    "balsamo-2012-johnson-sl160-seated-leg-curl",
+    "villalba-2026-bilateral-prone-leg-curl"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -38,7 +40,8 @@
       "external"
     ],
     "lateralities": [
-      "unilateral"
+      "unilateral",
+      "bilateral"
     ]
   },
   "movementSignature": {
@@ -172,9 +175,11 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "machinePadAndStrap"
+        "machinePadAndStrap",
+        "machineSeatAndBackPad",
+        "machineBenchNoStrapReported"
       ],
-      "description": "The machine surface and directly reported adjustable straps restraining the pelvis."
+      "description": "The fixture-specific seat, bench, pad, and reported restraint relationship supporting the pelvis."
     },
     {
       "id": "pelvisMotion",
@@ -206,10 +211,10 @@
     {
       "id": "hipFlexionDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "minimum": 30,
       "maximum": 90,
-      "description": "Held hip flexion from anatomical neutral; only the rule-pinned 30- and 90-degree research fixtures are admitted."
+      "description": "Held hip flexion from anatomical neutral; the reviewed fixtures pin 30, 45, or 90 degrees when reported, while the Johnson fixture deliberately omits an unreported angle."
     },
     {
       "id": "kneeMotion",
@@ -250,9 +255,10 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "unreported"
+        "unreported",
+        "neutral"
       ],
-      "description": "The held ankle posture; the direct seated/prone training source did not report it, so no gastrocnemius role is inferred."
+      "description": "The fixture-specific held ankle posture: neutral only where reported and otherwise explicitly unreported."
     },
     {
       "id": "footMotion",
@@ -291,6 +297,40 @@
       "description": "The reviewed leg-curl machine mechanism."
     },
     {
+      "id": "machineFixture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "lifeFitnessPro2SeriesModified",
+        "senohToredo",
+        "johnsonSL160",
+        "flexFitnessProneModelUnreported"
+      ],
+      "description": "The exact directly reviewed machine fixture."
+    },
+    {
+      "id": "handSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "unreported",
+        "fixedMachineHandles",
+        "armsRelaxed"
+      ],
+      "description": "The reported hand or arm support during the repetition."
+    },
+    {
+      "id": "cadence",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "twoSecondConcentricTwoSecondEccentricNoPause",
+        "twoSecondConcentricTwoSecondEccentric",
+        "notControlled"
+      ],
+      "description": "The fixture-specific repetition cadence or explicit absence of control."
+    },
+    {
       "id": "fixedPath",
       "valueType": "boolean",
       "required": true,
@@ -309,71 +349,74 @@
   ],
   "exerciseRules": [
     {
-      "id": "seated-leg-curl-uses-reviewed-hip-angle",
-      "description": "The seated source fixture holds the hip near 90 degrees of flexion.",
+      "id": "life-fitness-pins-unilateral-seated-fixture",
+      "description": "The modified Life Fitness fixture preserves its exact unilateral seated support, hip angle, ankle disclosure, hand disclosure, and cadence.",
       "when": {
-        "field": "variant.bodyPosition",
+        "field": "variant.machineFixture",
         "operator": "equals",
-        "value": "seated"
+        "value": "lifeFitnessPro2SeriesModified"
       },
       "then": [
-        {
-          "field": "variant.hipFlexionDegrees",
-          "value": 90
-        }
+        {"field": "laterality", "value": "unilateral"},
+        {"field": "variant.bodyPosition", "value": "seated"},
+        {"field": "variant.pelvisSupport", "value": "machinePadAndStrap"},
+        {"field": "variant.hipFlexionDegrees", "value": 90},
+        {"field": "variant.anklePosture", "value": "unreported"},
+        {"field": "variant.handSupport", "value": "unreported"},
+        {"field": "variant.cadence", "value": "twoSecondConcentricTwoSecondEccentricNoPause"}
       ],
-      "requirePresent": [],
+      "requirePresent": ["variant.hipFlexionDegrees"],
       "requireAbsent": []
     },
     {
-      "id": "ninety-degree-leg-curl-is-seated",
-      "description": "The reviewed 90-degree hip-flexion fixture is the seated condition.",
+      "id": "senoh-pins-unilateral-prone-fixture",
+      "description": "The Senoh Toredo fixture preserves its exact unilateral prone support, hip angle, ankle disclosure, hand disclosure, and cadence.",
       "when": {
-        "field": "variant.hipFlexionDegrees",
+        "field": "variant.machineFixture",
         "operator": "equals",
-        "value": 90
+        "value": "senohToredo"
       },
       "then": [
-        {
-          "field": "variant.bodyPosition",
-          "value": "seated"
-        }
+        {"field": "laterality", "value": "unilateral"},
+        {"field": "variant.bodyPosition", "value": "prone"},
+        {"field": "variant.pelvisSupport", "value": "machinePadAndStrap"},
+        {"field": "variant.hipFlexionDegrees", "value": 30},
+        {"field": "variant.anklePosture", "value": "unreported"},
+        {"field": "variant.handSupport", "value": "unreported"},
+        {"field": "variant.cadence", "value": "twoSecondConcentricTwoSecondEccentricNoPause"}
       ],
-      "requirePresent": [],
+      "requirePresent": ["variant.hipFlexionDegrees"],
       "requireAbsent": []
     },
     {
-      "id": "prone-leg-curl-uses-reviewed-hip-angle",
-      "description": "The prone source fixture holds the hip near 30 degrees of flexion.",
-      "when": {
-        "field": "variant.bodyPosition",
-        "operator": "equals",
-        "value": "prone"
-      },
+      "id": "johnson-sl160-pins-bilateral-seated-fixture",
+      "description": "The Johnson SL160 source reports bilateral seated knee motion but no hip angle.",
+      "when": {"field": "variant.machineFixture", "operator": "equals", "value": "johnsonSL160"},
       "then": [
-        {
-          "field": "variant.hipFlexionDegrees",
-          "value": 30
-        }
+        {"field": "laterality", "value": "bilateral"},
+        {"field": "variant.bodyPosition", "value": "seated"},
+        {"field": "variant.pelvisSupport", "value": "machineSeatAndBackPad"},
+        {"field": "variant.anklePosture", "value": "unreported"},
+        {"field": "variant.handSupport", "value": "fixedMachineHandles"},
+        {"field": "variant.cadence", "value": "notControlled"}
       ],
       "requirePresent": [],
-      "requireAbsent": []
+      "requireAbsent": ["variant.hipFlexionDegrees"]
     },
     {
-      "id": "thirty-degree-leg-curl-is-prone",
-      "description": "The reviewed 30-degree hip-flexion fixture is the prone condition.",
-      "when": {
-        "field": "variant.hipFlexionDegrees",
-        "operator": "equals",
-        "value": 30
-      },
+      "id": "flex-fitness-pins-bilateral-prone-fixture",
+      "description": "The Flex Fitness source reports the exact bilateral prone posture and cadence.",
+      "when": {"field": "variant.machineFixture", "operator": "equals", "value": "flexFitnessProneModelUnreported"},
       "then": [
-        {
-          "field": "variant.bodyPosition",
-          "value": "prone"
-        }
+        {"field": "laterality", "value": "bilateral"},
+        {"field": "variant.bodyPosition", "value": "prone"},
+        {"field": "variant.pelvisSupport", "value": "machineBenchNoStrapReported"},
+        {"field": "variant.hipFlexionDegrees", "value": 45},
+        {"field": "variant.anklePosture", "value": "neutral"},
+        {"field": "variant.handSupport", "value": "armsRelaxed"},
+        {"field": "variant.cadence", "value": "twoSecondConcentricTwoSecondEccentric"}
       ],
-      "requirePresent": [],
+      "requirePresent": ["variant.hipFlexionDegrees"],
       "requireAbsent": []
     }
   ],
@@ -437,6 +480,9 @@
         "movingSegment": "lowerLeg",
         "loadInterface": "distalShinPad",
         "machineType": "leverLegCurl",
+        "machineFixture": "lifeFitnessPro2SeriesModified",
+        "handSupport": "unreported",
+        "cadence": "twoSecondConcentricTwoSecondEccentricNoPause",
         "fixedPath": true,
         "lowerBodyContribution": "isolatedJointMotion"
       },
@@ -512,6 +558,9 @@
         "movingSegment": "lowerLeg",
         "loadInterface": "distalShinPad",
         "machineType": "leverLegCurl",
+        "machineFixture": "senohToredo",
+        "handSupport": "unreported",
+        "cadence": "twoSecondConcentricTwoSecondEccentricNoPause",
         "fixedPath": true,
         "lowerBodyContribution": "isolatedJointMotion"
       },
@@ -532,6 +581,66 @@
           "Arching the back off the pad turns the curl into a hip-extension pull."
         ],
         "sideOrDirection": "Complete the set on one leg, then repeat with the other leg."
+      }
+    },
+    {
+      "catalogID": "johnson-sl160-bilateral-seated-leg-curl",
+      "name": "Johnson SL160 Bilateral Seated Leg Curl",
+      "aliases": ["Bilateral Seated Leg Curl", "Seated Leg Curl"],
+      "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 40, "defaultWeightKg": 20, "reps": 10, "searchPriority": 91,
+      "involvement": [
+        {"muscle": "medialHamstrings", "role": "primary"}, {"muscle": "bicepsFemoris", "role": "primary"},
+        {"muscle": "sartorius", "role": "secondary"}, {"muscle": "gracilis", "role": "secondary"}
+      ],
+      "variant": {
+        "kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "machinePad", "pelvisSupport": "machineSeatAndBackPad",
+        "pelvisMotion": "positionHeld", "spineMotion": "positionHeld", "hipMotion": "positionHeld", "kneeMotion": "flexes",
+        "kneeStartFlexionDegrees": 0, "kneeEndFlexionDegrees": 90, "ankleMotion": "positionHeld", "anklePosture": "unreported",
+        "footMotion": "positionHeld", "movingSegment": "lowerLeg", "loadInterface": "distalShinPad", "machineType": "leverLegCurl",
+        "machineFixture": "johnsonSL160", "handSupport": "fixedMachineHandles", "cadence": "notControlled", "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "balsamo-2012-johnson-sl160-seated-leg-curl", "maeo-2021-seated-prone-leg-curl"],
+      "execution": {
+        "startingPosition": "Sit against the SL160 support, align both knees with the machine pivots, place both distal lower legs against the pad, and hold the fixed handles.",
+        "movement": "Flex both knees together from anatomical full extension toward ninety degrees.",
+        "endpoint": "End when both knees reach approximately ninety degrees of flexion.",
+        "returnPhase": "Extend both knees under control to the reviewed starting position.",
+        "controlledJoints": "Keep the pelvis, spine, hips, ankles, and feet still without asymmetric movement.",
+        "supportAndPosture": "Remain seated against the machine supports and keep both hands on the fixed handles.",
+        "disqualifyingCompensations": ["Lifting the pelvis or back changes the supported fixture.", "Using momentum or moving one side ahead of the other changes the two-leg curl."]
+      }
+    },
+    {
+      "catalogID": "flex-fitness-bilateral-prone-leg-curl",
+      "name": "Flex Fitness Bilateral Prone Leg Curl",
+      "aliases": ["Bilateral Prone Leg Curl", "Bilateral Lying Leg Curl", "Lying Leg Curl"],
+      "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 40, "defaultWeightKg": 20, "reps": 10, "searchPriority": 90,
+      "involvement": [
+        {"muscle": "medialHamstrings", "role": "primary"}, {"muscle": "bicepsFemoris", "role": "primary"},
+        {"muscle": "sartorius", "role": "secondary"}, {"muscle": "gracilis", "role": "secondary"}
+      ],
+      "variant": {
+        "kineticChain": "open", "bodyPosition": "prone", "torsoSupport": "machinePad", "pelvisSupport": "machineBenchNoStrapReported",
+        "pelvisMotion": "positionHeld", "spineMotion": "positionHeld", "hipMotion": "positionHeld", "hipFlexionDegrees": 45,
+        "kneeMotion": "flexes", "kneeStartFlexionDegrees": 0, "kneeEndFlexionDegrees": 90, "ankleMotion": "positionHeld",
+        "anklePosture": "neutral", "footMotion": "positionHeld", "movingSegment": "lowerLeg", "loadInterface": "distalShinPad",
+        "machineType": "leverLegCurl", "machineFixture": "flexFitnessProneModelUnreported", "handSupport": "armsRelaxed",
+        "cadence": "twoSecondConcentricTwoSecondEccentric", "fixedPath": true, "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "maeo-2021-seated-prone-leg-curl", "villalba-2026-bilateral-prone-leg-curl"],
+      "execution": {
+        "startingPosition": "Lie face down with the front of the pelvis aligned to the bench division, hold the hips at forty-five degrees, keep the ankles neutral, and relax the arms.",
+        "movement": "Flex both knees from full extension to ninety degrees over two seconds.",
+        "endpoint": "End when both knees reach ninety degrees without changing the hip angle.",
+        "returnPhase": "Extend both knees to the start over two seconds.",
+        "controlledJoints": "Keep the pelvis, spine, hips, ankles, and feet still without asymmetric movement.",
+        "supportAndPosture": "Remain face down against the bench with the arms relaxed throughout the set.",
+        "disqualifyingCompensations": ["Lifting the pelvis or arching the back changes the supported curl.", "Changing the hip angle, using momentum, or moving asymmetrically changes the reviewed fixture."]
       }
     }
   ]

@@ -483,7 +483,7 @@ struct MuscleDevelopmentTests {
         #expect(externalNodes.isEmpty)
     }
 
-    @Test func hipAndLocomotionBoundariesCreditMoversWithoutPromotingStabilizers() {
+    @Test func hipAndHingeBoundariesCreditMoversWithoutPromotingStabilizers() {
         let hipFlexion = session(
             at: day(0),
             [lift("Bodyweight Active Straight-Leg Raise", .legs, sets: 4, reps: 10, weight: 0)]

@@ -1,0 +1,90 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hang-power-snatch",
+  "name": "Hang Power Snatch",
+  "definition": "A bilateral barbell power lift beginning at mid-thigh, loading to just above the knees, accelerating through triple extension, pulling under, receiving overhead above full-squat depth, and recovering to standing. Ordered phases preserve both the yielding loading and catch motions and the produced overhead actions. Weakley et al. directly own the hang start, loading phase, triple-extension sequence, delayed elbow bend, overhead power receive, and Power classification, while Geisler et al. support measured lower-body, trapezius, and trunk activity. Neither study measures the declared shoulder and scapular actions or a complete muscle hierarchy. Shoulder flexion and abduction, scapular upward rotation and posterior tilt, elbow extension, and their categorical upper-body roles are therefore explicit transfers from Ackland et al., Holzbaur et al., and Seth et al., not hang-power-snatch-specific magnitude rankings. The 45-pound, 20-kilogram, and three-repetition seeds are product defaults rather than source prescriptions. Floor starts, full-squat catches, and snatch pulls without an overhead receive remain outside this family.",
+  "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "arnold-2010-lower-limb", "geisler-2023-hang-power-lift-emg", "holzbaur-2005-upper-extremity", "seth-2019-shoulder-work", "weakley-2026-weightlifting-load-velocity"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "hinge", "direction": null, "planes": ["sagittal", "frontal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["barbell"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.flexion", "shoulder.abduction"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "hang-loading", "name": "Hang Loading", "primeActions": [], "yieldingActions": ["hip.flexion", "knee.flexion"]},
+      {"id": "second-pull", "name": "Second Pull", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion", "scapula.elevation"]},
+      {"id": "pull-under", "name": "Pull Under", "primeActions": ["elbow.flexion"]},
+      {"id": "overhead-power-catch", "name": "Overhead Power Catch", "primeActions": ["shoulder.flexion", "shoulder.abduction", "scapula.upwardRotation", "scapula.posteriorTilt", "elbow.extension"], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "recovery", "name": "Recovery", "primeActions": ["hip.extension", "knee.extension"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.downwardRotation", "scapula.anteriorTilt",
+      "shoulder.extension", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}, {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["deltoidAnterior"], "minimumRole": "secondary"}, {"anyOf": ["triceps"], "minimumRole": "secondary"},
+      {"anyOf": ["serratus"], "minimumRole": "secondary"}, {"anyOf": ["gastrocnemius"], "minimumRole": "secondary"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "vasti"],
+      "secondary": ["medialHamstrings", "rectusFemoris", "gastrocnemius", "soleus", "trapeziusUpper", "bicepsBrachii", "brachialis", "brachioradialis", "deltoidAnterior", "deltoidLateral", "supraspinatus", "triceps", "serratus", "trapeziusLower"],
+      "stabilizer": ["bicepsFemoris", "gluteMed", "fingerFlexors", "extensorCarpiRadialis", "externalRotators", "subscapularis", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "startBarPosition", "valueType": "enum", "required": true, "description": "The reviewed hang start.", "allowedValues": ["midThigh"]},
+    {"id": "eccentricEndpoint", "valueType": "enum", "required": true, "description": "The bottom of the loading phase.", "allowedValues": ["justAboveKnees"]},
+    {"id": "grip", "valueType": "enum", "required": true, "description": "The reviewed grip boundary.", "allowedValues": ["pronatedSnatchWidthSelfSelected"]},
+    {"id": "pullSequence", "valueType": "enum", "required": true, "description": "The reviewed timing sequence.", "allowedValues": ["tripleExtensionThenElbowFlexion"]},
+    {"id": "receivingStrategy", "valueType": "enum", "required": true, "description": "The overhead power receive.", "allowedValues": ["overheadQuarterSquatHipCreaseAboveKnee"]},
+    {"id": "armEndpoint", "valueType": "enum", "required": true, "description": "The required overhead lockout.", "allowedValues": ["elbowsFullyExtendedOverhead"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the bar.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 1, "maximum": 5}},
+  "exercises": [
+    {
+      "catalogID": "barbell-hang-power-snatch",
+      "name": "Barbell Hang Power Snatch",
+      "aliases": ["Hang Power Snatch", "Power Snatch from Hang"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "power", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 3, "searchPriority": 96,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"}, {"muscle": "vasti", "role": "primary"},
+        {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "bicepsBrachii", "role": "secondary"},
+        {"muscle": "brachialis", "role": "secondary"}, {"muscle": "brachioradialis", "role": "secondary"},
+        {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "deltoidLateral", "role": "secondary"},
+        {"muscle": "supraspinatus", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"},
+        {"muscle": "serratus", "role": "secondary"}, {"muscle": "trapeziusLower", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {"startBarPosition": "midThigh", "eccentricEndpoint": "justAboveKnees", "grip": "pronatedSnatchWidthSelfSelected", "pullSequence": "tripleExtensionThenElbowFlexion", "receivingStrategy": "overheadQuarterSquatHipCreaseAboveKnee", "armEndpoint": "elbowsFullyExtendedOverhead", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "arnold-2010-lower-limb", "geisler-2023-hang-power-lift-emg", "holzbaur-2005-upper-extremity", "seth-2019-shoulder-work", "weakley-2026-weightlifting-load-velocity"],
+      "execution": {
+        "startingPosition": "Stand with the bar at mid-thigh using a wide overhand snatch grip, straight elbows, and a rigid trunk.",
+        "movement": "Lower the bar to just above the knees, then rapidly extend the hips, knees, and ankles, elevate the shoulders, and bend the elbows only after that extension to pull under.",
+        "endpoint": "Receive the bar overhead in a power quarter squat with fully straight elbows and the hip crease above the knees.",
+        "returnPhase": "Stand from the catch, then lower the bar under control to mid-thigh before the next repetition.",
+        "controlledJoints": "Control hip, knee, and ankle flexion during loading and receiving while keeping the bar close.",
+        "supportAndPosture": "Brace the trunk and maintain the wide two-hand grip without external support.",
+        "disqualifyingCompensations": ["Bending the elbows before triple extension changes the reviewed pull sequence.", "Receiving below power depth changes the exercise into a full hang snatch.", "Starting from the floor changes the exercise into a floor power snatch."]
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Vivobody Add Exercise"
+  short_description: "Research and gate catalog exercise additions"
+  default_prompt: "Use $vivobody-add-exercise to research, review, and add an exercise to the Vivobody catalog."
+
+policy:
+  allow_implicit_invocation: true

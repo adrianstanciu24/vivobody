@@ -152,17 +152,18 @@ struct ExerciseProgressInsightsTests {
         #expect(EstimatedOneRepMaxPolicy.estimate(effectiveLoad: 100, reps: 13) == nil)
     }
 
-    @Test func conditioningKeepsHistoryButCannotCreateStrengthRecords() {
+    @Test func unrankedPowerKeepsHistoryButCannotCreateStrengthRecords() {
         let exercises = [(50.0, 12), (60.0, 15)].map { weight, reps in
-            let exercise = lift("Conditioning Fixture", .core, weight: weight, reps: reps)
-            exercise.modality = .conditioning
+            let exercise = lift("Unranked Power Fixture", .core, weight: weight, reps: reps)
+            exercise.modality = .power
+            exercise.loadMode = .nonComparable
             return exercise
         }
         let sessions = exercises.enumerated().map { index, exercise in
             session(at: day(Double(index)), [exercise])
         }
 
-        let prog = progress(sessions, "Conditioning Fixture")
+        let prog = progress(sessions, "Unranked Power Fixture")
         #expect(prog?.points.count == 2)
         #expect(prog?.points.allSatisfy { !$0.isStrengthPR } == true)
         #expect(prog?.bestE1RM == 0)
@@ -444,24 +445,26 @@ struct ExerciseProgressInsightsTests {
         #expect(progress.allSatisfy { $0.points.count == 2 })
     }
 
-    @Test func conditioningAndNonComparableHistoryHaveNoComparableTonnage() {
-        let conditioning = lift("Conditioning Volume Fixture", .core, weight: 50, reps: 10)
-        conditioning.modality = .conditioning
+    @Test func unrankedPowerAndNonComparableHistoryHaveNoComparableTonnage() {
+        let power = lift("Unranked Power Volume Fixture", .core, weight: 50, reps: 10)
+        power.modality = .power
+        power.loadMode = .nonComparable
         let band = lift("Band Volume Fixture", .back, weight: 25, reps: 10)
         band.loadMode = .nonComparable
 
         let sessions = [
-            session(at: day(0), [conditioning]),
-            session(at: day(1), [lift("Conditioning Volume Fixture", .core, weight: 55, reps: 10)]),
+            session(at: day(0), [power]),
+            session(at: day(1), [lift("Unranked Power Volume Fixture", .core, weight: 55, reps: 10)]),
             session(at: day(2), [band]),
             session(at: day(3), [lift("Band Volume Fixture", .back, weight: 30, reps: 10)]),
         ]
-        sessions[1].exercises[0].modality = .conditioning
+        sessions[1].exercises[0].modality = .power
+        sessions[1].exercises[0].loadMode = .nonComparable
         sessions[3].exercises[0].loadMode = .nonComparable
 
-        #expect(progress(sessions, "Conditioning Volume Fixture")?.points.allSatisfy { $0.totalVolume == 0 } == true)
+        #expect(progress(sessions, "Unranked Power Volume Fixture")?.points.allSatisfy { $0.totalVolume == 0 } == true)
         #expect(progress(sessions, "Band Volume Fixture")?.points.allSatisfy { $0.totalVolume == 0 } == true)
-        #expect(progress(sessions, "Conditioning Volume Fixture")?.points.allSatisfy {
+        #expect(progress(sessions, "Unranked Power Volume Fixture")?.points.allSatisfy {
             $0.comparableTonnageAvailability == .complete
         } == true)
         #expect(progress(sessions, "Band Volume Fixture")?.points.allSatisfy {

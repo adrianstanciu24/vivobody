@@ -1,0 +1,85 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "machine-hack-squat",
+  "name": "Maxicam Hack Squat",
+  "definition": "A bilateral closed-chain compound squat on the directly reviewed Maxicam hack-squat machine manufactured by Muscle Dynamics. The reviewed task reaches ninety degrees of knee flexion, lowers for approximately three seconds, and rises as quickly as possible. Stance, linkage and support geometry, loading interface, machine mass, and hip and ankle kinematics remain unreported rather than becoming portable machine defaults. The entered load is comparable only on the same fixture; the 45-pound, 20-kilogram, and ten-repetition seeds are product defaults rather than source prescriptions.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "schwarz-2019-maxicam-hack-squat"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "squat", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["machine"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension", "knee.extension"],
+    "stabilityDemands": ["pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"},
+      {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"},
+      {"anyOf": ["medialHamstrings"], "minimumRole": "stabilizer"},
+      {"anyOf": ["bicepsFemoris"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {"primary": ["gluteMax", "vasti"], "secondary": ["rectusFemoris"], "stabilizer": ["medialHamstrings", "bicepsFemoris"]}
+  },
+  "variantAxes": [
+    {"id": "machineFixture", "valueType": "enum", "required": true, "description": "The reviewed manufacturer fixture with unreported model.", "allowedValues": ["maxicamMuscleDynamicsModelUnreported"]},
+    {"id": "torsoSupport", "valueType": "enum", "required": true, "description": "The unreported support geometry of the reviewed machine.", "allowedValues": ["machineSupportGeometryUnreported"]},
+    {"id": "stance", "valueType": "enum", "required": true, "description": "The unreported bilateral stance.", "allowedValues": ["bilateralWidthAndRotationUnreported"]},
+    {"id": "rangeOfMotion", "valueType": "enum", "required": true, "description": "The trained knee range.", "allowedValues": ["toNinetyDegreeKneeFlexion"]},
+    {"id": "cadence", "valueType": "enum", "required": true, "description": "The reported training cadence.", "allowedValues": ["threeSecondEccentricAsQuicklyAsPossibleConcentric"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether the reviewed apparatus constrains the load path; this is an apparatus-level inference and does not assert rails or linkage geometry.", "fixedValue": true},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The entered external-load value remains comparable only on this exact machine fixture.", "allowedValues": ["enteredExternalLoadSameFixtureOnly"]}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [
+    {
+      "catalogID": "machine-hack-squat",
+      "name": "Maxicam Hack Squat",
+      "aliases": ["Machine Hack Squat", "Hack Squat Machine"],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 10,
+      "searchPriority": 93,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "vasti", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}
+      ],
+      "variant": {
+        "machineFixture": "maxicamMuscleDynamicsModelUnreported",
+        "torsoSupport": "machineSupportGeometryUnreported",
+        "stance": "bilateralWidthAndRotationUnreported",
+        "rangeOfMotion": "toNinetyDegreeKneeFlexion",
+        "cadence": "threeSecondEccentricAsQuicklyAsPossibleConcentric",
+        "fixedPath": true,
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "schwarz-2019-maxicam-hack-squat"],
+      "execution": {
+        "startingPosition": "Set up on the Maxicam hack-squat machine according to its safety instructions, choose a repeatable two-foot stance, and begin from its intended start position.",
+        "movement": "Lower the machine load for approximately three seconds toward ninety degrees of knee flexion.",
+        "endpoint": "Reach approximately ninety degrees of knee flexion without bouncing.",
+        "returnPhase": "Rise as quickly as possible while maintaining the same machine setup and controlled path.",
+        "controlledJoints": "Keep both feet fixed and the knees tracking without collapse or rotation.",
+        "supportAndPosture": "Maintain the same torso and pelvis position throughout each repetition.",
+        "disqualifyingCompensations": [
+          "Changing the stance or machine setup during the set changes the reviewed fixture.",
+          "Bouncing or using inconsistent depth changes the trained repetition."
+        ]
+      }
+    }
+  ]
+}

@@ -3,12 +3,13 @@
   "schemaVersion": 1,
   "id": "elbow-extension",
   "name": "Elbow Extension",
-  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm and forearm posture is held and shoulder, wrist, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every initial record: the reviewed shoulder positions inform length, excitation, and adaptation differences but do not justify head-specific categorical roles or a split of the aggregate triceps mesh. The roster admits only the directly reviewed unilateral supinated and pronated cable pushdowns, standing supinated overhead cable extension, seated overhead dumbbell extension, and supine dumbbell extension. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived neutral-wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials; brachioradialis is assigned only as a forearm stabilizer, never as an elbow-extension mover. The overhead cable source does not report its attachment, pulley height, or cable angle, so that record explicitly preserves an unreported cable interface.",
+  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm and forearm posture is held and shoulder, wrist, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every initial record: the reviewed shoulder positions inform length, excitation, and adaptation differences but do not justify head-specific categorical roles or a split of the aggregate triceps mesh. The roster admits only the directly reviewed unilateral supinated and pronated cable pushdowns, bilateral straight-bar pronated pushdown, standing supinated overhead cable extension, seated overhead dumbbell extension, and supine dumbbell extension. The straight bar is the only bilateral branch; every other handle remains unilateral and omits the straight-bar-only torso, upper-arm, and grip-width fields. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived neutral-wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials; brachioradialis is assigned only as a forearm stabilizer, never as an elbow-extension mover. The overhead cable source does not report its attachment, pulley height, or cable angle, so that record explicitly preserves an unreported cable interface.",
   "evidenceRefs": [
     "holzbaur-2005-upper-extremity",
     "alves-2018-triceps-shoulder-position",
     "maeo-2023-overhead-neutral-elbow-extension",
-    "villalba-2024-pushdown-forearm-position"
+    "villalba-2024-pushdown-forearm-position",
+    "hussain-2020-triceps-pushdown-fatigue"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -40,7 +41,8 @@
       "external"
     ],
     "lateralities": [
-      "unilateral"
+      "unilateral",
+      "bilateral"
     ]
   },
   "movementSignature": {
@@ -286,7 +288,8 @@
       "allowedValues": [
         "singleCableHandle",
         "unreportedCableInterface",
-        "dumbbellHandle"
+        "dumbbellHandle",
+        "straightCableBar"
       ]
     },
     {
@@ -299,6 +302,27 @@
         "overheadCableExtension",
         "gravityLoadedDumbbell"
       ]
+    },
+    {
+      "id": "torsoInclination",
+      "valueType": "enum",
+      "required": false,
+      "description": "The explicitly reported torso inclination for a fixture.",
+      "allowedValues": ["slightForward"]
+    },
+    {
+      "id": "upperArmTorsoRelationship",
+      "valueType": "enum",
+      "required": false,
+      "description": "The explicitly reported upper-arm relationship to the torso.",
+      "allowedValues": ["closeNotTouching"]
+    },
+    {
+      "id": "gripWidth",
+      "valueType": "enum",
+      "required": false,
+      "description": "The explicitly reported bilateral hand spacing.",
+      "allowedValues": ["shoulderWidth"]
     },
     {
       "id": "fixedPath",
@@ -336,8 +360,9 @@
         {
           "field": "variant.handleType",
           "allowedValues": [
-            "singleCableHandle",
-            "unreportedCableInterface"
+          "singleCableHandle",
+          "unreportedCableInterface",
+          "straightCableBar"
           ]
         },
         {
@@ -541,10 +566,7 @@
           "field": "variant.resistanceGeometry",
           "value": "highCablePushdown"
         },
-        {
-          "field": "variant.handleType",
-          "value": "singleCableHandle"
-        }
+        {"field": "variant.handleType", "allowedValues": ["singleCableHandle", "straightCableBar"]}
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -613,6 +635,28 @@
         "spine",
         "pelvis"
       ]
+    },
+    {
+      "id": "non-straight-bar-extension-remains-unilateral",
+      "description": "Every reviewed handle other than the straight cable bar remains unilateral and omits the bilateral pushdown-only setup fields.",
+      "when": {"field": "variant.handleType", "operator": "notEquals", "value": "straightCableBar"},
+      "then": [{"field": "laterality", "value": "unilateral"}],
+      "requirePresent": [],
+      "requireAbsent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth"]
+    },
+    {
+      "id": "straight-cable-bar-pins-bilateral-pushdown",
+      "description": "The straight-bar attachment belongs only to the reviewed bilateral pronated pushdown.",
+      "when": {"field": "variant.handleType", "operator": "equals", "value": "straightCableBar"},
+      "then": [
+        {"field": "equipment", "value": "cable"}, {"field": "laterality", "value": "bilateral"},
+        {"field": "variant.bodyPosition", "value": "standing"}, {"field": "variant.upperArmPosition", "value": "atSide"},
+        {"field": "variant.forearmOrientation", "value": "pronated"}, {"field": "variant.resistanceGeometry", "value": "highCablePushdown"},
+        {"field": "variant.torsoInclination", "value": "slightForward"}, {"field": "variant.upperArmTorsoRelationship", "value": "closeNotTouching"},
+        {"field": "variant.gripWidth", "value": "shoulderWidth"}
+      ],
+      "requirePresent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth"],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -1047,6 +1091,37 @@
           "Tilting the upper arm back overhead turns the lying extension into an overhead extension."
         ],
         "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
+    },
+    {
+      "catalogID": "bilateral-straight-bar-cable-triceps-pushdown",
+      "name": "Bilateral Straight-Bar Cable Triceps Pushdown",
+      "aliases": ["Straight-Bar Cable Triceps Pushdown", "Cable Triceps Pushdown", "Two-Arm Triceps Pushdown"],
+      "equipment": "cable", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 30, "defaultWeightKg": 15, "reps": 10, "searchPriority": 96,
+      "involvement": [
+        {"muscle": "triceps", "role": "primary"}, {"muscle": "brachioradialis", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "flexorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none",
+        "upperArmPosition": "atSide", "elbowMotion": "extends", "forearmMotion": "angleHeld", "forearmOrientation": "pronated",
+        "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "straightCableBar",
+        "resistanceGeometry": "highCablePushdown", "torsoInclination": "slightForward", "upperArmTorsoRelationship": "closeNotTouching",
+        "gripWidth": "shoulderWidth", "fixedPath": false, "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["spine", "pelvis"],
+      "evidenceRefs": ["hussain-2020-triceps-pushdown-fatigue"],
+      "execution": {
+        "startingPosition": "Stand at the high cable holding the straight bar with both palms down at shoulder width, keep the upper arms close to the torso, and lean slightly forward.",
+        "movement": "Move only the forearms downward until both elbows reach full extension.",
+        "endpoint": "End with both elbows fully straight and the bar clear of the torso.",
+        "returnPhase": "Return through the full range while preserving the same upper-arm and torso positions.",
+        "controlledJoints": "Keep the upper arms perpendicular to the floor and the wrists neutral.",
+        "supportAndPosture": "Maintain the slight forward lean without using bodyweight to drive the bar.",
+        "disqualifyingCompensations": ["Leaning onto the bar changes the strict pushdown into a bodyweight-assisted push.", "Moving the upper arms or allowing one arm to lead changes the reviewed two-arm elbow extension."]
       }
     }
   ]

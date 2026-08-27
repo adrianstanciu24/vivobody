@@ -45,57 +45,67 @@
           {
             "label": "Power / Explosive",
             "value": "Not selected"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Conditioning"
           },
           {
-            "label": "Conditioning",
-            "value": "Not selected"
-          },
-          {
-            "label": "Mobility",
-            "value": "Not selected"
+            "label": "Mobility"
           }
         ]
       }
     },
     {
       "tap": {
-        "label": "Conditioning",
+        "label": "Strength · Hold",
         "value": "Not selected"
       }
     },
     {
       "wait": {
         "label": "Exercise type",
-        "value": "Conditioning"
+        "value": "Strength · Hold"
       }
     },
     {
       "assert": {
         "required": [
           {
-            "label": "Reps or Time. Not counted in strength stats or the 3D body."
+            "label": "Exercise type",
+            "value": "Strength · Hold"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Measure"
+          },
+          {
+            "label": "Conditioning"
+          },
+          {
+            "label": "Mobility"
           }
         ]
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "label": "Reps",
-          "value": "Selected"
-        },
-        "direction": "up"
       }
     }
   ],
   "required": [
     {
-      "label": "Reps",
-      "value": "Selected"
+      "label": "Exercise type",
+      "value": "Strength · Hold"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Conditioning"
     },
     {
-      "label": "Time",
-      "value": "Not selected"
+      "label": "Mobility"
+    },
+    {
+      "label": "Measure"
     }
   ]
 }

@@ -65,7 +65,6 @@ nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable {
     case lunge // split squat, step-up, walking lunge
     case carry // farmer's carry, suitcase, yoke
     case core // planks, leg raises, anti-rotation
-    case locomotion // gait, skips, and conditioning footwork
 
     nonisolated var displayName: String {
         switch self {
@@ -76,7 +75,6 @@ nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable {
         case .lunge: "Lunge"
         case .carry: "Carry"
         case .core: "Core"
-        case .locomotion: "Locomotion"
         }
     }
 }
@@ -180,8 +178,7 @@ final class ExerciseCatalogItem: Identifiable {
     /// with no migration. Copied to templates / sessions at pick-time.
     var trackingModeRaw: String = TrackingMode.reps.rawValue
 
-    /// Whether this is dynamic strength, isometric strength,
-    /// conditioning, or mobility work.
+    /// Whether this is rep strength, hold strength, or explosive work.
     var modalityRaw: String = ExerciseModality.dynamicStrength.rawValue
 
     /// How logged resistance combines with body weight.

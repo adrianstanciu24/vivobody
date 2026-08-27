@@ -1,0 +1,69 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "wall-sit",
+  "name": "Wall Sit",
+  "definition": "A bilateral duration-tracked isometric squat hold with the back supported by a wall, the thighs approximately horizontal, and the hips and knees near ninety degrees. The fixture universally resists the tendency toward knee flexion; hip and ankle torque directions vary with foot and pressure geometry and are not generalized. Load is non-comparable.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "biscarini-2020-wall-squat-torques", "dyer-2024-wall-sit-fatigue"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "squat", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["isometricStrength"], "trackingModes": ["duration"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["knee.flexion"],
+    "primeActions": [],
+    "resistedActions": ["knee.flexion"],
+    "forbiddenPrimeActions": [
+      "scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt",
+      "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["vasti"], "minimumRole": "primary"}, {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"},
+      {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"},
+      {"anyOf": ["soleus"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {"primary": ["vasti"], "secondary": ["rectusFemoris"], "stabilizer": ["gluteMax", "gluteMed", "lumbarExtensors", "abs", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "torsoSupport", "valueType": "enum", "required": true, "description": "The continuous posterior support.", "allowedValues": ["fullBackFlatAgainstWall"]},
+    {"id": "hipFlexionDegrees", "valueType": "number", "required": true, "description": "The reviewed near-right-angle hip posture.", "minimum": 85, "maximum": 95},
+    {"id": "kneeFlexionDegrees", "valueType": "number", "required": true, "description": "The reviewed near-right-angle knee posture.", "minimum": 85, "maximum": 95},
+    {"id": "thighOrientation", "valueType": "enum", "required": true, "description": "The visual hold target.", "allowedValues": ["approximatelyHorizontal"]},
+    {"id": "footContact", "valueType": "enum", "required": true, "description": "The continuous floor contact.", "allowedValues": ["bothFullFeet"]},
+    {"id": "holdType", "valueType": "enum", "required": true, "description": "The recorded performance type.", "allowedValues": ["timedIsometric"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an apparatus mechanically guides the hold.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultDuration": {"minimum": 10, "maximum": 120}},
+  "exercises": [
+    {
+      "catalogID": "wall-sit",
+      "name": "Wall Sit",
+      "aliases": ["Wall Squat Hold", "Wall Chair Hold"],
+      "equipment": "bodyweight", "laterality": "bilateral", "modality": "isometricStrength", "trackingMode": "duration", "loadMode": "nonComparable",
+      "bodyweightFraction": 0, "defaultWeight": 0, "reps": 1, "defaultDuration": 30, "searchPriority": 96,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"}
+      ],
+      "variant": {"torsoSupport": "fullBackFlatAgainstWall", "hipFlexionDegrees": 90, "kneeFlexionDegrees": 90, "thighOrientation": "approximatelyHorizontal", "footContact": "bothFullFeet", "holdType": "timedIsometric", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "biscarini-2020-wall-squat-torques", "dyer-2024-wall-sit-fatigue"],
+      "execution": {
+        "startingPosition": "Place your back flat against a wall with both feet fully planted about shoulder-width apart and positioned in front of you.",
+        "movement": "Slide down until the thighs are approximately horizontal and the hips and knees are each near ninety degrees.",
+        "endpoint": "Hold that position for the recorded duration while maintaining the wall and floor contacts.",
+        "controlledJoints": "Keep the hips, knees, ankles, feet, pelvis, and spine steady without sliding.",
+        "supportAndPosture": "Keep the full back against the wall and both whole feet on the floor.",
+        "disqualifyingCompensations": ["Sliding materially above or below the reviewed range changes the fixture.", "Losing wall contact or lifting part of either foot removes the reviewed support."]
+      }
+    }
+  ]
+}

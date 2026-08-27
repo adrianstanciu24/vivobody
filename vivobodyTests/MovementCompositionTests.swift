@@ -92,21 +92,21 @@ struct MovementCompositionTests {
         #expect(split.unclassifiedSets == 0)
     }
 
-    @Test func ignoresConditioningAndMobilitySets() {
+    @Test func ignoresPowerAndMismatchedStrengthSets() {
         let bench = lift("Barbell Bench Press", .chest, [(8, true)])
-        let conditioning = lift(
-            "Burpee",
+        let power = lift(
+            "Push Press",
             .chest,
-            modality: .conditioning,
+            modality: .power,
             [(20, true), (20, true)]
         )
-        let mobility = lift(
-            "Shoulder CAR",
+        let mismatchedIsometric = lift(
+            "Isometric Reps Mismatch",
             .shoulders,
-            modality: .mobility,
+            modality: .isometricStrength,
             [(5, true), (5, true), (5, true)]
         )
-        let split = [session(daysAgo: 1, [bench, conditioning, mobility])]
+        let split = [session(daysAgo: 1, [bench, power, mismatchedIsometric])]
             .compoundIsolationSplit(now: now)
 
         #expect(split.compoundSets == 1)

@@ -194,9 +194,9 @@ struct ConsistencyReportTests {
         strengthSets[3].repsInReserve = 0
         strengthSets[3].rirLogged = true        // Rated but incomplete.
 
-        let conditioning = lift(sets: 2, rir: 0, modality: .conditioning)
-        let mobility = lift(sets: 2, rir: 5, modality: .mobility)
-        let report = [session(at: now, [strength, conditioning, mobility])]
+        let power = lift(sets: 2, rir: 0, modality: .power)
+        let mismatchedIsometric = lift(sets: 2, rir: 5, modality: .isometricStrength)
+        let report = [session(at: now, [strength, power, mismatchedIsometric])]
             .consistency(now: now)
 
         #expect(abs((report.averageRIR ?? -1) - 1) < 1e-9)

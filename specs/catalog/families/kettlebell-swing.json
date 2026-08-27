@@ -1,0 +1,76 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "kettlebell-swing",
+  "name": "Kettlebell Swing",
+  "definition": "A bilateral two-hand ballistic hip-extension task in which one kettlebell follows a free pendular path from the backswing to shoulder height. Hip drive creates the ascent while the arms guide the implement; a deliberate shoulder raise, overhead endpoint, or knee-dominant squat leaves this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "murphy-riemann-2025-kettlebell-swing-hip-kinetics", "van-gelder-2015-two-hand-kettlebell-swing", "zebis-2013-kettlebell-swing-hamstrings"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "hinge", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["kettlebell"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension"],
+    "forbiddenPrimeActions": [
+      "scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt",
+      "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}, {"anyOf": ["medialHamstrings"], "minimumRole": "primary"},
+      {"anyOf": ["bicepsFemoris"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"},
+      {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "medialHamstrings"],
+      "secondary": [],
+      "stabilizer": ["bicepsFemoris", "gluteMed", "gastrocnemius", "soleus", "fingerFlexors", "extensorCarpiRadialis", "externalRotators", "trapeziusUpper", "brachialis", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "gripConfiguration", "valueType": "enum", "required": true, "description": "The reviewed two-hand hold.", "allowedValues": ["bilateralTwoHanded"]},
+    {"id": "implementPath", "valueType": "enum", "required": true, "description": "The unsupported implement path.", "allowedValues": ["freePendular"]},
+    {"id": "swingEndpoint", "valueType": "enum", "required": true, "description": "The upper endpoint boundary.", "allowedValues": ["shoulderHeight"]},
+    {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "description": "The movement source.", "allowedValues": ["ballisticHipExtensionDominant"]},
+    {"id": "returnStrategy", "valueType": "enum", "required": true, "description": "The reviewed continuous return.", "allowedValues": ["activeEccentricPullback"]},
+    {"id": "footContact", "valueType": "enum", "required": true, "description": "The bilateral ground-contact boundary.", "allowedValues": ["continuous"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the bell.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 5, "maximum": 20}},
+  "exercises": [
+    {
+      "catalogID": "two-hand-kettlebell-swing",
+      "name": "Two-Hand Kettlebell Swing",
+      "aliases": ["Two-Arm Kettlebell Swing", "Shoulder-Height Kettlebell Swing"],
+      "equipment": "kettlebell", "laterality": "bilateral", "modality": "power", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 35, "defaultWeightKg": 15, "reps": 10, "searchPriority": 95,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"}, {"muscle": "medialHamstrings", "role": "primary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "gastrocnemius", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"},
+        {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {"gripConfiguration": "bilateralTwoHanded", "implementPath": "freePendular", "swingEndpoint": "shoulderHeight", "lowerBodyContribution": "ballisticHipExtensionDominant", "returnStrategy": "activeEccentricPullback", "footContact": "continuous", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "murphy-riemann-2025-kettlebell-swing-hip-kinetics", "van-gelder-2015-two-hand-kettlebell-swing", "zebis-2013-kettlebell-swing-hamstrings"],
+      "execution": {
+        "startingPosition": "Stand symmetrically with both feet planted, hold one kettlebell with both hands, and hike it between the legs into hip flexion.",
+        "movement": "Drive the hips forward rapidly with long arms and let that hip drive send the bell on a free arc.",
+        "endpoint": "Finish the upward swing at shoulder height with the hips near neutral and do not continue overhead.",
+        "returnPhase": "Actively guide the bell down, hinge as it passes between the legs, and continue into the next repetition.",
+        "controlledJoints": "Keep both feet planted and do not deliberately lift the bell with the shoulders or elbows.",
+        "supportAndPosture": "Use no torso support, brace the trunk, and keep a secure two-hand grip.",
+        "disqualifyingCompensations": ["Actively raising the bell with the arms replaces the hip-driven swing.", "Continuing overhead or turning the movement into a deep squat leaves this family."]
+      }
+    }
+  ]
+}

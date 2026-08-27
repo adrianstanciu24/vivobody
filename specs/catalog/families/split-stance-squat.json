@@ -3,11 +3,12 @@
   "schemaVersion": 1,
   "id": "split-stance-squat",
   "name": "Stationary Split Squat",
-  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. Both feet retain their reviewed floor contacts while the athlete lowers until the lead thigh is parallel to the floor, then returns to split standing through lead-side hip extension, knee extension, and ankle plantarflexion. The initial roster owns only an erect-torso barbell split squat at a stance length equal to the athlete's leg length. It does not treat a forward, reverse, or walking lunge's step, impact, deceleration, and changing support phases as variant axes. The family ID names the stationary geometry; the fixed lunge pattern is Vivobody's broader app-level classification for asymmetric split-stance lower-body compounds. Rear-foot-elevated, front-foot-elevated, supported, Smith, dumbbell, kettlebell, bodyweight, deficit, short-stance, long-stance, dynamic-lunge, and walking-lunge branches remain outside this first contract.",
+  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns a floor-supported split squat and the directly reviewed high-bar rear-foot-elevated fixture; both keep their contacts fixed and return through lead-side hip extension, knee extension, and ankle plantarflexion. The elevated branch pins rear support to base-of-patella height and individualizes stance from the lead patella-over-toe relationship at the reviewed depth. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, dumbbell, kettlebell, bodyweight, and deficit branches remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "song-2023-split-squat-step-length",
-    "stastny-2015-split-squat-dumbbell-position"
+    "stastny-2015-split-squat-dumbbell-position",
+    "mackey-2021-bulgarian-split-squat"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -274,7 +275,8 @@
       "required": true,
       "description": "The reviewed long split stance, approximately equal to greater-trochanter-to-lateral-malleolus leg length. Song et al. taped a 100-percent condition but did not report the exact foot landmark, so the contract does not encode a false numeric ratio.",
       "allowedValues": [
-        "approximatelyLegLength"
+        "approximatelyLegLength",
+        "individualizedPatellaOverLeadToeAtParallel"
       ]
     },
     {
@@ -292,7 +294,18 @@
       "required": true,
       "description": "The trail-foot contact retained throughout the repetition; the reviewed split stance uses the forefoot rather than an elevated rear support.",
       "allowedValues": [
-        "forefootFloor"
+        "forefootFloor",
+        "elevatedBoxFootFixedAgainstPosteriorStop"
+      ]
+    },
+    {
+      "id": "rearSupportHeight",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed rear-contact height; floor means no elevation, while the Bulgarian fixture uses the athlete's base-of-patella height.",
+      "allowedValues": [
+        "floor",
+        "baseOfPatellaToGround"
       ]
     },
     {
@@ -310,7 +323,8 @@
       "required": true,
       "description": "Where the barbell is supported; the source figure supports posterior upper-back placement but does not establish a precise high- versus low-bar site.",
       "allowedValues": [
-        "upperBackBarbell"
+        "upperBackBarbell",
+        "highBarUpperBackBarbell"
       ]
     },
     {
@@ -328,7 +342,8 @@
       "required": true,
       "description": "The reviewed bottom-position criterion for the lead limb; the lead thigh reaches approximately parallel to the floor.",
       "allowedValues": [
-        "leadThighParallel"
+        "leadThighParallel",
+        "leadKneeApproximatelyNinetyDegrees"
       ]
     },
     {
@@ -337,7 +352,8 @@
       "required": true,
       "description": "The instructed and video-checked sagittal trunk orientation.",
       "allowedValues": [
-        "erect"
+        "erect",
+        "nonstandardized"
       ]
     },
     {
@@ -426,7 +442,36 @@
       "maximum": 15
     }
   },
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "floor-trail-support-has-no-elevation",
+      "description": "The original split squat keeps the trail forefoot on the floor.",
+      "when": {"field": "variant.trailFootSupport", "operator": "equals", "value": "forefootFloor"},
+      "then": [
+        {"field": "variant.stanceLength", "value": "approximatelyLegLength"},
+        {"field": "variant.rearSupportHeight", "value": "floor"},
+        {"field": "variant.loadPlacement", "value": "upperBackBarbell"},
+        {"field": "variant.rangeOfMotion", "value": "leadThighParallel"},
+        {"field": "variant.trunkOrientation", "value": "erect"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "elevated-trail-support-uses-patella-height",
+      "description": "The reviewed rear box is set from base of patella to ground.",
+      "when": {"field": "variant.trailFootSupport", "operator": "equals", "value": "elevatedBoxFootFixedAgainstPosteriorStop"},
+      "then": [
+        {"field": "variant.rearSupportHeight", "value": "baseOfPatellaToGround"},
+        {"field": "variant.stanceLength", "value": "individualizedPatellaOverLeadToeAtParallel"},
+        {"field": "variant.rangeOfMotion", "value": "leadKneeApproximatelyNinetyDegrees"},
+        {"field": "variant.loadPlacement", "value": "highBarUpperBackBarbell"},
+        {"field": "variant.trunkOrientation", "value": "nonstandardized"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "barbell-split-squat",
@@ -470,6 +515,7 @@
         "stanceLength": "approximatelyLegLength",
         "leadFootSupport": "fullFootFloor",
         "trailFootSupport": "forefootFloor",
+        "rearSupportHeight": "floor",
         "interRepFootTransition": "none",
         "loadPlacement": "upperBackBarbell",
         "gripOrientation": "pronated",
@@ -503,6 +549,51 @@
           "Shortening the stance turns the split squat into a narrow squat."
         ],
         "sideOrDirection": "Complete every repetition with one leg forward, then switch to the other leg."
+      }
+    },
+    {
+      "catalogID": "barbell-rear-foot-elevated-split-squat",
+      "name": "Barbell Rear-Foot-Elevated Split Squat",
+      "aliases": ["Barbell Bulgarian Split Squat", "Barbell Bulgarian Squat"],
+      "equipment": "barbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 92,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "splitSagittal",
+        "stanceLength": "individualizedPatellaOverLeadToeAtParallel", "leadFootSupport": "fullFootFloor",
+        "trailFootSupport": "elevatedBoxFootFixedAgainstPosteriorStop", "rearSupportHeight": "baseOfPatellaToGround",
+        "interRepFootTransition": "none", "loadPlacement": "highBarUpperBackBarbell", "gripOrientation": "pronated",
+        "rangeOfMotion": "leadKneeApproximatelyNinetyDegrees", "trunkOrientation": "nonstandardized", "spineMotion": "nonstandardized",
+        "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "footMotion": "positionHeld",
+        "footContact": "continuous", "interRepSupport": "none", "fixedPath": false, "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "mackey-2021-bulgarian-split-squat"],
+      "execution": {
+        "startingPosition": "Set a stable rear box to the bottom-of-kneecap height, secure the rear foot against its posterior stop, place the lead leg in line with that hip, and hold the bar high on the upper back.",
+        "movement": "Lower with both contacts fixed until the lead knee reaches approximately ninety degrees and the kneecap is aligned over the lead toe.",
+        "endpoint": "Reach the individualized reviewed depth without changing the foot positions or rear support.",
+        "returnPhase": "Rise through the lead hip, knee, and ankle without stepping between repetitions.",
+        "controlledJoints": "Keep the lead knee tracking with the foot and do not let the rear foot slide.",
+        "supportAndPosture": "Maintain the high-bar position while the unreported trunk angle remains consistent across the set.",
+        "disqualifyingCompensations": ["Losing or sliding the rear-foot support changes the reviewed fixture.", "Stepping or drifting from the individualized stance changes the stationary split squat."],
+        "sideOrDirection": "Complete the set with one lead leg, then repeat with the other leg leading."
       }
     }
   ]

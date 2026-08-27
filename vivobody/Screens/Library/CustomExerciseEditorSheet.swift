@@ -178,7 +178,6 @@ struct CustomExerciseEditorSheet: View {
     private var hasValidMuscleRoles: Bool {
         let involvement = draft.muscleInvolvement
         guard !involvement.isEmpty else { return false }
-        guard draft.modality.requiresPrimaryMuscle else { return true }
         return involvement.primary.contains { $0.group == draft.group }
     }
 
@@ -271,8 +270,7 @@ struct CustomExerciseEditorSheet: View {
         }
         .sheet(isPresented: $isMuscleEditorPresented) {
             MuscleInvolvementEditorSheet(
-                initialSnapshot: draft.muscleInvolvementSnapshot,
-                requiresPrimary: draft.modality.requiresPrimaryMuscle
+                initialSnapshot: draft.muscleInvolvementSnapshot
             ) { snapshot in
                 draft.muscleInvolvementSnapshot = snapshot
             }
@@ -332,10 +330,6 @@ struct CustomExerciseEditorSheet: View {
     private var loggingDefaultsSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Logging defaults")
-
-            if draft.modality.customExerciseTrackingModes.count > 1 {
-                trackingModeField
-            }
 
             loadModeField
                 .id(CatalogValidationAnchor.loadMode)
@@ -424,13 +418,8 @@ struct CustomExerciseEditorSheet: View {
                 isMuscleEditorPresented = true
             }
 
-            if showsValidationErrors,
-               draft.modality.requiresPrimaryMuscle,
-               !hasValidMuscleRoles
-            {
+            if showsValidationErrors, !hasValidMuscleRoles {
                 validationMessage("Choose a Primary muscle in the selected muscle group.")
-            } else if showsValidationErrors, !hasValidMuscleRoles {
-                validationMessage("Choose at least one muscle.")
             }
         }
     }
@@ -446,15 +435,8 @@ struct CustomExerciseEditorSheet: View {
     // MARK: - Modality
 
     private var modalityField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            pickerRow(title: "Exercise type", value: draft.modality.customExerciseChoiceName) { presentPicker(.modality) }
-
-            if draft.modality.customExerciseTrackingModes.count > 1 {
-                Text("Reps or Time. Not counted in strength stats or the 3D body.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.quaternary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+        pickerRow(title: "Exercise type", value: draft.modality.displayName) {
+            presentPicker(.modality)
         }
     }
 
@@ -670,7 +652,7 @@ struct CustomExerciseEditorSheet: View {
             CatalogChoiceSheet(
                 title: "Exercise Type",
                 options: ExerciseModality.customExerciseChoices,
-                label: { $0.customExerciseChoiceName },
+                label: { $0.displayName },
                 isSelected: { draft.modality == $0 },
                 onSelect: applyModality
             )
@@ -724,11 +706,7 @@ struct CustomExerciseEditorSheet: View {
 
     private func applyModality(_ modality: ExerciseModality) {
         draft.modality = modality
-        if modality == .dynamicStrength || modality == .power {
-            draft.trackingMode = .reps
-        } else if modality == .isometricStrength {
-            draft.trackingMode = .duration
-        }
+        draft.trackingMode = modality.requiredTrackingMode
     }
 
     private func applyPattern(_ pattern: MovementPattern) {
@@ -788,27 +766,6 @@ struct CustomExerciseEditorSheet: View {
                 validationMessage("Name and aliases must be unique across the exercise catalog.")
             }
         }
-    }
-
-    // MARK: - Measure (reps vs. time)
-
-    /// Chooses how the exercise is logged. Time replaces reps with a
-    /// modality-aware duration: Hold for isometric strength, Interval
-    /// for conditioning, and Time for other timed work. Shown only
-    /// when the modality leaves a real choice; strength and isometric
-    /// modalities force their measure, so no picker is rendered.
-    private var trackingModeField: some View {
-        segmentedField(
-            title: "Measure",
-            selection: Binding(
-                get: { draft.trackingMode },
-                set: { mode in
-                    applyAnimatedSelection { draft.trackingMode = mode }
-                }
-            ),
-            options: draft.modality.customExerciseTrackingModes,
-            label: { $0.displayName }
-        )
     }
 
     private var loadModeField: some View {

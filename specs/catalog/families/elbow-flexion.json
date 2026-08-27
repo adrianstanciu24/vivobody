@@ -3,12 +3,14 @@
   "schemaVersion": 1,
   "id": "elbow-flexion",
   "name": "Elbow Flexion",
-  "definition": "A strict open-chain isolation movement in which the elbow flexes while the upper arm remains at the side, forearm orientation and neutral wrist are held, and the torso, scapulae, and lower body do not create the repetition. Brachialis is the orientation-neutral primary baseline; biceps brachii is additionally primary only in the reviewed supinated curl and secondary in the neutral and pronated curls. Brachioradialis remains secondary across the initial roster because controlled slow elbow flexion and loaded cable-curl studies report conflicting orientation-dependent excitation orders. Finger flexors author the static implement hold, while extensor carpi radialis supplies mechanics-derived counter-control of the neutral wrist rather than a dynamic wrist-extension action. The three directly reviewed standing cable fixtures intentionally exclude rotating dumbbell curls, semisupinated EZ bars, supported curls, machines, and exercises that add shoulder or scapular prime actions.",
+  "definition": "A strict standing open-chain isolation in which the elbow flexes while the upper arm stays at the side, forearm orientation and neutral wrist are held, and the torso, scapulae, and lower body do not create the repetition. The roster owns three cable grips plus a bilateral straight-bar barbell curl and a unilateral supinated dumbbell curl. Brachialis is the orientation-neutral primary baseline; biceps brachii is co-primary in supination and secondary in the neutral and pronated records. Rotating curls, semisupinated EZ bars, supported curls, machines, and variants adding shoulder or scapular prime actions remain outside this contract.",
   "evidenceRefs": [
     "holzbaur-2005-upper-extremity",
     "murray-1995-elbow-forearm-moment-arms",
     "coratella-2023-curl-handgrips",
-    "kleiber-2015-elbow-flexion-hand-position"
+    "kleiber-2015-elbow-flexion-hand-position",
+    "marcolin-2018-curl-variants",
+    "oliveira-2009-dumbbell-curl-shoulder-position"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -27,7 +29,9 @@
   },
   "allowed": {
     "equipment": [
-      "cable"
+      "cable",
+      "barbell",
+      "dumbbell"
     ],
     "modalities": [
       "dynamicStrength"
@@ -39,7 +43,8 @@
       "external"
     ],
     "lateralities": [
-      "bilateral"
+      "bilateral",
+      "unilateral"
     ]
   },
   "movementSignature": {
@@ -292,7 +297,9 @@
       "description": "The reviewed cable attachment defining the load-to-hand interface.",
       "allowedValues": [
         "straightBar",
-        "rope"
+        "rope",
+        "straightBarbell",
+        "dumbbellHandle"
       ]
     },
     {
@@ -301,7 +308,9 @@
       "required": true,
       "description": "How the reviewed cable line creates elbow-flexion resistance without constraining the implement to a rail or lever path.",
       "allowedValues": [
-        "lowCableCurl"
+        "lowCableCurl",
+        "gravityLoadedBarbell",
+        "gravityLoadedDumbbell"
       ]
     },
     {
@@ -397,6 +406,37 @@
           "role": "secondary"
         }
       ]
+    },
+    {
+      "id": "cable-curl-pins-cable-interface",
+      "description": "Cable records retain the reviewed low-cable interfaces.",
+      "when": {"field": "equipment", "operator": "equals", "value": "cable"},
+      "then": [
+        {"field": "laterality", "value": "bilateral"},
+        {"field": "variant.handleType", "allowedValues": ["straightBar", "rope"]},
+        {"field": "variant.resistanceGeometry", "value": "lowCableCurl"}
+      ],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "barbell-curl-pins-straight-bar-fixture",
+      "description": "The reviewed free-weight barbell branch is bilateral and supinated.",
+      "when": {"field": "equipment", "operator": "equals", "value": "barbell"},
+      "then": [
+        {"field": "laterality", "value": "bilateral"}, {"field": "variant.forearmOrientation", "value": "supinated"},
+        {"field": "variant.handleType", "value": "straightBarbell"}, {"field": "variant.resistanceGeometry", "value": "gravityLoadedBarbell"}
+      ],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-curl-pins-single-arm-fixture",
+      "description": "The reviewed dumbbell branch is unilateral and held supinated.",
+      "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
+      "then": [
+        {"field": "laterality", "value": "unilateral"}, {"field": "variant.forearmOrientation", "value": "supinated"},
+        {"field": "variant.handleType", "value": "dumbbellHandle"}, {"field": "variant.resistanceGeometry", "value": "gravityLoadedDumbbell"}
+      ],
+      "requirePresent": [], "requireAbsent": []
     }
   ],
   "exercises": [
@@ -664,6 +704,65 @@
           "Leaning the torso backward turns the strict curl into a cheat curl.",
           "Letting the palms turn away from facing down changes the reverse curl into a different grip exercise."
         ]
+      }
+    },
+    {
+      "catalogID": "standing-straight-bar-barbell-curl",
+      "name": "Standing Straight-Bar Barbell Curl",
+      "aliases": ["Straight-Bar Barbell Curl", "Standing Barbell Biceps Curl"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 10, "searchPriority": 96,
+      "involvement": [
+        {"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"},
+        {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none",
+        "upperArmPosition": "atSide", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated",
+        "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "straightBarbell",
+        "resistanceGeometry": "gravityLoadedBarbell", "fixedPath": false, "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["marcolin-2018-curl-variants", "murray-1995-elbow-forearm-moment-arms"],
+      "execution": {
+        "startingPosition": "Stand upright holding the straight bar with both palms facing up and the upper arms beside the torso.",
+        "movement": "Flex both elbows through a comfortable full range without moving the shoulders.",
+        "endpoint": "End with the elbows comfortably bent and both palms still facing up.",
+        "returnPhase": "Lower the bar under control without rotating the forearms.",
+        "controlledJoints": "Keep the wrists neutral and the upper arms beside the torso.",
+        "supportAndPosture": "Keep the trunk and knees still throughout the repetition.",
+        "disqualifyingCompensations": ["Leaning backward or driving with the knees changes the strict curl.", "Swinging the upper arms forward adds a shoulder-flexion repetition."]
+      }
+    },
+    {
+      "catalogID": "standing-single-arm-supinated-dumbbell-curl",
+      "name": "Standing Single-Arm Supinated Dumbbell Curl",
+      "aliases": ["Single-Arm Dumbbell Curl", "One-Arm Supinated Dumbbell Curl"],
+      "equipment": "dumbbell", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 15, "defaultWeightKg": 7.5, "reps": 10, "searchPriority": 95,
+      "involvement": [
+        {"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"},
+        {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none",
+        "upperArmPosition": "atSide", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated",
+        "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "dumbbellHandle",
+        "resistanceGeometry": "gravityLoadedDumbbell", "fixedPath": false, "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["pelvis"],
+      "evidenceRefs": ["murray-1995-elbow-forearm-moment-arms", "oliveira-2009-dumbbell-curl-shoulder-position"],
+      "execution": {
+        "startingPosition": "Stand with one dumbbell in the working hand, the palm facing up, and the upper arm alongside the body.",
+        "movement": "Flex the working elbow through a comfortable range without moving the shoulder.",
+        "endpoint": "End with the elbow comfortably flexed and the palm still facing up.",
+        "returnPhase": "Lower the dumbbell under control toward the near-extended start.",
+        "controlledJoints": "Keep the palm up, wrist neutral, and upper arm beside the torso.",
+        "supportAndPosture": "Keep the trunk and lower body still against the one-sided load.",
+        "disqualifyingCompensations": ["Leaning or twisting the torso changes the strict curl.", "Swinging the upper arm forward or rotating the palm changes the reviewed fixture."],
+        "sideOrDirection": "Complete the set on one arm, then repeat with the other arm."
       }
     }
   ]

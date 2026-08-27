@@ -251,21 +251,8 @@ nonisolated enum CatalogData {
                 throw ValidationError.missingDuration(record.catalogID)
             }
 
-            switch record.modality {
-            case .dynamicStrength:
-                guard record.trackingMode == .reps else {
-                    throw ValidationError.invalidModalityTracking(record.catalogID)
-                }
-            case .isometricStrength:
-                guard record.trackingMode == .duration else {
-                    throw ValidationError.invalidModalityTracking(record.catalogID)
-                }
-            case .power:
-                guard record.trackingMode == .reps else {
-                    throw ValidationError.invalidModalityTracking(record.catalogID)
-                }
-            case .conditioning, .mobility:
-                break
+            guard record.trackingMode == record.modality.requiredTrackingMode else {
+                throw ValidationError.invalidModalityTracking(record.catalogID)
             }
 
             switch record.loadMode {
@@ -307,15 +294,13 @@ nonisolated enum CatalogData {
             guard Set(muscles).count == muscles.count else {
                 throw ValidationError.duplicateMuscle(record.catalogID)
             }
-            if record.modality.requiresPrimaryMuscle {
-                guard record.involvement.contains(where: { $0.role == .primary }) else {
-                    throw ValidationError.missingPrimary(record.catalogID)
-                }
-                guard record.involvement.contains(where: {
-                    $0.role == .primary && $0.muscle.group == record.group
-                }) else {
-                    throw ValidationError.primaryGroupMismatch(record.catalogID)
-                }
+            guard record.involvement.contains(where: { $0.role == .primary }) else {
+                throw ValidationError.missingPrimary(record.catalogID)
+            }
+            guard record.involvement.contains(where: {
+                $0.role == .primary && $0.muscle.group == record.group
+            }) else {
+                throw ValidationError.primaryGroupMismatch(record.catalogID)
             }
 
             let isPushPull = record.pattern == .push || record.pattern == .pull
