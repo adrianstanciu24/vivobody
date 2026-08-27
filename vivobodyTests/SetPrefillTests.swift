@@ -20,7 +20,6 @@ import Testing
 
 @MainActor
 struct SetCarryForwardTests {
-
     private func uniformExercise(weight: Double = 135, reps: Int = 8) -> Exercise {
         Exercise(
             name: "Bench Press",
@@ -127,7 +126,6 @@ struct SetCarryForwardTests {
 
 @MainActor
 struct TemplatePrefillTests {
-
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
 
     private func makeContext() throws -> ModelContext {
@@ -163,7 +161,7 @@ struct TemplatePrefillTests {
             plannedWeight: 0
         )
         configure(ex)
-        let date = now.addingTimeInterval(-daysAgo * 86_400)
+        let date = now.addingTimeInterval(-daysAgo * 86400)
         let session = WorkoutSession(exercises: [ex], startedAt: date)
         session.completedAt = date
         context.insert(session)
@@ -249,6 +247,29 @@ struct TemplatePrefillTests {
         #expect(spawned.orderedSets.allSatisfy { $0.weight == 135 && $0.reps == 8 })
     }
 
+    @Test func unloadedBodyweightHistoryCannotReintroduceStaleWeight() throws {
+        let context = try makeContext()
+        let record = try #require(CatalogData.record(forCatalogID: "nordic-curl"))
+        let item = ExerciseCatalogItem(record: record, createdAt: now)
+        let archived = Exercise(from: item, sortOrder: 0)
+        for set in archived.sets {
+            set.weight = 45
+            set.plannedWeight = 45
+            set.isCompleted = true
+        }
+        let session = WorkoutSession(exercises: [archived], startedAt: now)
+        session.completedAt = now
+        context.insert(session)
+        try context.save()
+
+        let template = TemplateExercise(from: item, sortOrder: 0)
+        let spawned = try spawn(template, in: context)
+
+        #expect(spawned.plannedWeight == 0)
+        #expect(spawned.orderedSets.allSatisfy { $0.weight == 0 })
+        #expect(spawned.orderedSets.allSatisfy { $0.plannedWeight == 0 })
+    }
+
     @Test func uncompletedHistorySetsDoNotSeed() throws {
         let context = try makeContext()
         try archiveSession(in: context, daysAgo: 1) { ex in
@@ -309,7 +330,7 @@ struct TemplatePrefillTests {
         )
         let recent = WorkoutSession(
             exercises: [hold],
-            startedAt: now.addingTimeInterval(-86_400)
+            startedAt: now.addingTimeInterval(-86400)
         )
         recent.completedAt = recent.startedAt
         context.insert(recent)

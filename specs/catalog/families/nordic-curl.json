@@ -1,0 +1,79 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "nordic-curl",
+  "name": "Nordic Curl",
+  "definition": "A bilateral partner-anchored tall-kneeling isolation in which neutral hips and trunk are held while the knees yield into extension for three seconds and then actively flex for a three-second unassisted return over the achieved range. The lower-leg anchor is support topology rather than loaded equipment. Hand-assisted resets, eccentric-only repetitions, hip-breaking razor curls or glute-ham raises, external load, and Reverse Nordic remain outside this family. Categorical muscle roles are disclosed action and region inferences from measured activity, not measured rankings.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "narouei-2018-nordic-hamstring", "sarabon-2019-nordic-variations"],
+  "fixed": {"mechanic": "isolation", "trainingRole": "legs", "pattern": null, "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["knee.flexion"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "lowering", "name": "Lowering", "primeActions": [], "yieldingActions": ["knee.extension"]},
+      {"id": "active-return", "name": "Active Return", "primeActions": ["knee.flexion"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt",
+      "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["bicepsFemoris"], "minimumRole": "primary"},
+      {"anyOf": ["medialHamstrings"], "minimumRole": "primary"},
+      {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"},
+      {"anyOf": ["obliques"], "minimumRole": "stabilizer"},
+      {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["bicepsFemoris", "medialHamstrings"],
+      "secondary": [],
+      "stabilizer": ["gluteMax", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "Whether the distal lower legs are fixed.", "allowedValues": ["closed"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed whole-body posture.", "allowedValues": ["tallKneeling"]},
+    {"id": "lowerLegSupport", "valueType": "enum", "required": true, "description": "The reviewed partner anchor.", "allowedValues": ["partnerFixed"]},
+    {"id": "hipAndTrunkPosture", "valueType": "enum", "required": true, "description": "The posture held while the knees move.", "allowedValues": ["neutralHeld"]},
+    {"id": "armStrategy", "valueType": "enum", "required": true, "description": "The reviewed unsupported arm placement.", "allowedValues": ["forwardNoFloorSupport"]},
+    {"id": "loweringCadence", "valueType": "enum", "required": true, "description": "The reviewed yielding cadence.", "allowedValues": ["threeSeconds"]},
+    {"id": "returnCadence", "valueType": "enum", "required": true, "description": "The reviewed active-return cadence.", "allowedValues": ["threeSecondsActiveUnassisted"]},
+    {"id": "rangeOfMotion", "valueType": "enum", "required": true, "description": "The participant-controlled available range.", "allowedValues": ["achievedControlledRange"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether a rail guides the torso.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 1, "maximum": 8}},
+  "exercises": [
+    {
+      "catalogID": "nordic-curl",
+      "name": "Nordic Curl",
+      "aliases": [],
+      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable",
+      "bodyweightFraction": 0, "defaultWeight": 0, "reps": 5, "searchPriority": 92,
+      "involvement": [
+        {"muscle": "bicepsFemoris", "role": "primary"}, {"muscle": "medialHamstrings", "role": "primary"},
+        {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {"kineticChain": "closed", "bodyPosition": "tallKneeling", "lowerLegSupport": "partnerFixed", "hipAndTrunkPosture": "neutralHeld", "armStrategy": "forwardNoFloorSupport", "loweringCadence": "threeSeconds", "returnCadence": "threeSecondsActiveUnassisted", "rangeOfMotion": "achievedControlledRange", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "narouei-2018-nordic-hamstring", "sarabon-2019-nordic-variations"],
+      "execution": {
+        "startingPosition": "Kneel tall with both lower legs held firmly by a partner, the hips and trunk neutral, and the arms reaching forward without touching the floor.",
+        "movement": "Keep the hips and trunk aligned while lowering forward from the knees for three seconds through the range you can control.",
+        "endpoint": "Stop at the furthest controlled position before the hips or trunk break alignment.",
+        "returnPhase": "Actively flex both knees and pull the body back to tall kneeling over three seconds without pushing from the hands.",
+        "controlledJoints": "Let knee extension occur only during the controlled lowering phase and create the return through knee flexion.",
+        "supportAndPosture": "Keep the partner anchor secure and hold the hips, pelvis, and spine steady.",
+        "disqualifyingCompensations": ["Touching down or pushing from the hands makes the repetition an assisted reset.", "Bending at the hips changes the reviewed Nordic fixture.", "Omitting the active return creates an eccentric-only repetition."]
+      }
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 71 reviewed families compile to 166 exercises with stable
+//  product: 75 reviewed families compile to 172 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 166)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 71)
+        #expect(CatalogData.records.count == 172)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 75)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -25,6 +25,47 @@ struct CatalogBiomechanicsTests {
         #expect(CatalogData.record(forCatalogID: "barbell-romanian-deadlift")?.familyID == "romanian-deadlift")
         #expect(CatalogData.record(forCatalogID: "barbell-power-clean")?.modality == .power)
         #expect(CatalogData.record(forCatalogID: "wall-sit")?.trackingMode == .duration)
+    }
+
+    @Test func approvedAugustFixturesReachTheRuntimeProjection() throws {
+        let expected: [(String, String, String)] = [
+            ("nordic-curl", "Nordic Curl", "nordic-curl"),
+            ("barbell-preacher-curl", "Barbell Preacher Curl", "elbow-flexion"),
+            (
+                "bilateral-incline-dumbbell-curl",
+                "Bilateral Incline Dumbbell Curl",
+                "elbow-flexion"
+            ),
+            (
+                "barbell-mid-thigh-clean-pull",
+                "Barbell Mid-Thigh Clean Pull",
+                "mid-thigh-clean-pull"
+            ),
+            ("barbell-squat-clean", "Barbell Squat Clean", "squat-clean"),
+            ("barbell-squat-snatch", "Barbell Squat Snatch", "full-snatch"),
+        ]
+
+        for (catalogID, name, familyID) in expected {
+            let record = try #require(CatalogData.record(forCatalogID: catalogID))
+            #expect(record.name == name)
+            #expect(record.familyID == familyID)
+        }
+
+        let nordic = try #require(CatalogData.record(forCatalogID: "nordic-curl"))
+        let nordicItem = ExerciseCatalogItem(record: nordic, createdAt: .distantPast)
+        #expect(!nordicItem.tracksResistance)
+        #expect(nordic.modality == .dynamicStrength)
+        #expect(nordic.loadMode == .nonComparable)
+
+        for catalogID in [
+            "barbell-mid-thigh-clean-pull",
+            "barbell-squat-clean",
+            "barbell-squat-snatch",
+        ] {
+            let record = try #require(CatalogData.record(forCatalogID: catalogID))
+            #expect(record.modality == .power)
+            #expect(record.loadMode == .external)
+        }
     }
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {
@@ -59,7 +100,7 @@ struct CatalogBiomechanicsTests {
                 execution.controlledJoints,
                 execution.supportAndPosture,
             ] + execution.disqualifyingCompensations
-                + [execution.returnPhase, execution.sideOrDirection].compactMap { $0 }
+                + [execution.returnPhase, execution.sideOrDirection].compactMap(\.self)
 
             for text in texts {
                 let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)

@@ -22,6 +22,7 @@ $(SRCROOT)/specs/catalog/families/farmer-carry.json
 $(SRCROOT)/specs/catalog/families/finger-flexion-grip.json
 $(SRCROOT)/specs/catalog/families/forearm-pronation.json
 $(SRCROOT)/specs/catalog/families/forearm-supination.json
+$(SRCROOT)/specs/catalog/families/full-snatch.json
 $(SRCROOT)/specs/catalog/families/hang-power-snatch.json
 $(SRCROOT)/specs/catalog/families/hanging-leg-raise.json
 $(SRCROOT)/specs/catalog/families/hip-abduction.json
@@ -40,6 +41,8 @@ $(SRCROOT)/specs/catalog/families/knee-extension.json
 $(SRCROOT)/specs/catalog/families/knee-flexion.json
 $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/machine-hack-squat.json
+$(SRCROOT)/specs/catalog/families/mid-thigh-clean-pull.json
+$(SRCROOT)/specs/catalog/families/nordic-curl.json
 $(SRCROOT)/specs/catalog/families/power-clean.json
 $(SRCROOT)/specs/catalog/families/push-press.json
 $(SRCROOT)/specs/catalog/families/reverse-fly.json
@@ -63,6 +66,7 @@ $(SRCROOT)/specs/catalog/families/spine-lateral-flexion.json
 $(SRCROOT)/specs/catalog/families/spine-rotation.json
 $(SRCROOT)/specs/catalog/families/split-jerk.json
 $(SRCROOT)/specs/catalog/families/split-stance-squat.json
+$(SRCROOT)/specs/catalog/families/squat-clean.json
 $(SRCROOT)/specs/catalog/families/step-up.json
 $(SRCROOT)/specs/catalog/families/suitcase-carry.json
 $(SRCROOT)/specs/catalog/families/sumo-deadlift.json

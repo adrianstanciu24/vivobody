@@ -226,7 +226,12 @@ final class Exercise: Identifiable {
         self.muscleGroupRaw = group.rawValue
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
-        self.plannedWeight = plannedWeight
+        let normalizedWeight = ExerciseResistanceCapability.normalizedWeight(
+            plannedWeight,
+            loadMode: loadMode,
+            equipment: classification?.equipment
+        )
+        self.plannedWeight = normalizedWeight
         self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name)).snapshot
         self.equipmentRaw = classification?.equipment.rawValue
         self.mechanicRaw = classification?.mechanic.rawValue
@@ -247,11 +252,11 @@ final class Exercise: Identifiable {
         // the user adjusts the scrubbers and taps complete.
         for i in 0 ..< plannedSets {
             let set = WorkoutSet(
-                weight: plannedWeight,
+                weight: normalizedWeight,
                 reps: plannedReps,
                 duration: plannedDuration,
                 sortOrder: i,
-                plannedWeight: plannedWeight,
+                plannedWeight: normalizedWeight,
                 plannedReps: plannedReps,
                 plannedDuration: plannedDuration
             )
@@ -376,7 +381,7 @@ extension Exercise {
     /// summary, history, picker, and detail surfaces.
     func setLabel(_ set: WorkoutSet, unit: WeightUnit) -> String {
         SetSpecFormatter.format(
-            weight: set.weight,
+            weight: trackedWeight(set.weight),
             reps: set.reps,
             duration: set.duration,
             trackingMode: trackingMode,
@@ -428,7 +433,7 @@ extension Exercise {
 
         exercise.sets.removeAll()
         exercise.plannedSets = setCount
-        exercise.plannedWeight = first.weight
+        exercise.plannedWeight = exercise.trackedWeight(first.weight)
         exercise.plannedReps = first.reps
         exercise.plannedDuration = first.duration
         for index in 0 ..< setCount {
@@ -437,11 +442,11 @@ extension Exercise {
                 : compatibleHistory[min(index, compatibleHistory.count - 1)]
             exercise.sets.append(
                 WorkoutSet(
-                    weight: seed.weight,
+                    weight: exercise.trackedWeight(seed.weight),
                     reps: seed.reps,
                     duration: seed.duration,
                     sortOrder: index,
-                    plannedWeight: seed.weight,
+                    plannedWeight: exercise.trackedWeight(seed.weight),
                     plannedReps: seed.reps,
                     plannedDuration: seed.duration
                 )
@@ -470,17 +475,17 @@ extension Exercise {
         exercise.sets.removeAll()
         exercise.plannedSets = prescription.count
         exercise.plannedReps = prescription[0].reps
-        exercise.plannedWeight = prescription[0].weight
+        exercise.plannedWeight = exercise.trackedWeight(prescription[0].weight)
         exercise.plannedDuration = prescription[0].duration
         for (index, source) in prescription.enumerated() {
             exercise.sets.append(
                 WorkoutSet(
-                    weight: source.weight,
+                    weight: exercise.trackedWeight(source.weight),
                     reps: source.reps,
                     duration: source.duration,
                     isCompleted: false,
                     sortOrder: index,
-                    plannedWeight: source.weight,
+                    plannedWeight: exercise.trackedWeight(source.weight),
                     plannedReps: source.reps,
                     plannedDuration: source.duration
                 )
@@ -511,7 +516,9 @@ extension Exercise {
             group: source.group,
             plannedSets: 0,
             plannedReps: firstSet?.reps ?? source.plannedReps,
-            plannedWeight: firstSet?.weight ?? source.plannedWeight,
+            plannedWeight: source.trackedWeight(
+                firstSet?.weight ?? source.plannedWeight
+            ),
             muscleInvolvement: source.muscleInvolvement,
             classification: source.classification,
             trackingMode: source.trackingMode,
@@ -525,12 +532,12 @@ extension Exercise {
         for (i, sourceSet) in sourceSets.enumerated() {
             copy.sets.append(
                 WorkoutSet(
-                    weight: sourceSet.weight,
+                    weight: source.trackedWeight(sourceSet.weight),
                     reps: sourceSet.reps,
                     duration: sourceSet.duration,
                     isCompleted: false,
                     sortOrder: i,
-                    plannedWeight: sourceSet.weight,
+                    plannedWeight: source.trackedWeight(sourceSet.weight),
                     plannedReps: sourceSet.reps,
                     plannedDuration: sourceSet.duration
                 )

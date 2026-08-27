@@ -375,14 +375,20 @@ enum WidgetSnapshotWriter {
             switch exercise.trackingMode {
             case .reps:
                 let base = "\(count) x \(first.reps)"
-                guard let load = exercise.loadMode.summaryLoadLabel(first.weight, unit: unit) else {
+                guard let load = exercise.loadMode.summaryLoadLabel(
+                    exercise.trackedWeight(first.weight),
+                    unit: unit
+                ) else {
                     return base
                 }
                 return "\(base) @ \(load)"
             case .duration:
                 let duration = DurationFormatter.compact(first.duration)
                 let base = "\(count) x \(duration) \(exercise.modality.durationLabelLowercased)"
-                guard let load = exercise.loadMode.summaryLoadLabel(first.weight, unit: unit) else {
+                guard let load = exercise.loadMode.summaryLoadLabel(
+                    exercise.trackedWeight(first.weight),
+                    unit: unit
+                ) else {
                     return base
                 }
                 return "\(base) @ \(load)"
@@ -393,7 +399,7 @@ enum WidgetSnapshotWriter {
         case .reps:
             let base = "\(exercise.plannedSets) x \(exercise.plannedReps)"
             guard let load = exercise.loadMode.summaryLoadLabel(
-                exercise.plannedWeight,
+                exercise.trackedWeight(exercise.plannedWeight),
                 unit: unit
             ) else { return base }
             return "\(base) @ \(load)"
@@ -401,7 +407,7 @@ enum WidgetSnapshotWriter {
             let duration = DurationFormatter.compact(exercise.plannedDuration)
             let base = "\(exercise.plannedSets) x \(duration) \(exercise.modality.durationLabelLowercased)"
             guard let load = exercise.loadMode.summaryLoadLabel(
-                exercise.plannedWeight,
+                exercise.trackedWeight(exercise.plannedWeight),
                 unit: unit
             ) else { return base }
             return "\(base) @ \(load)"
@@ -465,7 +471,7 @@ enum WidgetSnapshotWriter {
     private static func setSpec(for set: WorkoutSet, exercise: Exercise?, unit: WeightUnit) -> String {
         guard let exercise else { return "" }
         return SetSpecFormatter.format(
-            weight: set.weight,
+            weight: exercise.trackedWeight(set.weight),
             reps: set.reps,
             duration: set.duration,
             trackingMode: exercise.trackingMode,

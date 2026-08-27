@@ -22,17 +22,6 @@ import SwiftData
 import SwiftUI
 import UIKit
 
-enum ExerciseReplacementBlockReason: Equatable {
-    case staleSession, exerciseNotFound
-    case exerciseAlreadyStarted, persistenceUnavailable
-}
-
-enum ExerciseReplacementResult: Equatable {
-    case replaced(newExerciseID: UUID)
-    case blocked(ExerciseReplacementBlockReason)
-    case saveFailed
-}
-
 @MainActor
 @Observable
 final class WorkoutSessionController {
@@ -109,6 +98,7 @@ final class WorkoutSessionController {
               let context = modelContext
         else { return false }
 
+        session.normalizeUntrackedResistance()
         do {
             try context.saveOrRollback()
             SessionSideEffects.handle(event, session: session, in: context)
@@ -469,6 +459,7 @@ final class WorkoutSessionController {
         if session.completedAt == nil {
             session.completedAt = Date()
         }
+        session.normalizeUntrackedResistance()
         session.resetTransientState()
 
         guard let context = modelContext else {

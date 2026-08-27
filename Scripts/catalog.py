@@ -2156,15 +2156,22 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
             not prime_actions and not resisted_actions,
             f"{context}.movementSignature ordered phases cannot also declare direct actions",
         )
-        require(
-            data["allowed"]["modalities"] == ["power"],
-            f"{context}.movementSignature ordered phases are reserved for power families",
-        )
         prime_actions, resisted_actions, yielding_actions = validate_movement_phases(
             signature["movementPhases"],
             action_ids=foundation.action_ids,
             condition_actions=foundation.condition_actions,
             context=f"{context}.movementSignature.movementPhases",
+        )
+        modalities = data["allowed"]["modalities"]
+        phases_are_valid = modalities == ["power"] or (
+            modalities == ["dynamicStrength"]
+            and bool(prime_actions)
+            and bool(yielding_actions)
+            and not resisted_actions
+        )
+        require(
+            phases_are_valid,
+            f"{context}.movementSignature ordered phases require a power family or a dynamic-strength family with produced and yielding actions",
         )
     require(
         prime_actions or resisted_actions or yielding_actions,

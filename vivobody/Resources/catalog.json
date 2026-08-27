@@ -2080,7 +2080,7 @@
       "Cable Biceps Curl"
     ],
     "searchPriority": 90,
-    "bodyweightFraction": 0.0,
+    "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
     "execution": {
@@ -2154,7 +2154,7 @@
       "Rope Hammer Curl"
     ],
     "searchPriority": 85,
-    "bodyweightFraction": 0.0,
+    "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
     "execution": {
@@ -2228,7 +2228,7 @@
       "Cable Reverse Curl"
     ],
     "searchPriority": 75,
-    "bodyweightFraction": 0.0,
+    "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
     "execution": {
@@ -2422,6 +2422,124 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-flexion",
+    "catalogID": "barbell-preacher-curl",
+    "name": "Barbell Preacher Curl",
+    "group": "arms",
+    "defaultWeight": 30,
+    "defaultWeightKg": 15,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit at a preacher station with both upper arms fully supported on the pad, hold the source-described bar with palms up, and keep the wrists neutral.",
+      "movement": "Flex both elbows together for one second without lifting the upper arms from the pad.",
+      "endpoint": "Finish at the top of the controlled elbow-flexion range while the upper arms remain supported.",
+      "returnPhase": "Lower the bar for two seconds to the controlled start without changing forearm orientation.",
+      "controlledJoints": "Create the repetition through elbow flexion while the wrists and forearm orientation stay fixed.",
+      "supportAndPosture": "Keep both upper arms on the preacher pad; the source does not report a bar shape or pad angle.",
+      "disqualifyingCompensations": [
+        "Lifting an upper arm from the pad leaves the reviewed preacher fixture.",
+        "Using an alternate-arm sequence or rotating the forearms changes the reviewed task.",
+        "Treating the unreported bar as a confirmed straight or EZ bar invents fixture detail."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "brachialis",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-flexion",
+    "catalogID": "bilateral-incline-dumbbell-curl",
+    "name": "Bilateral Incline Dumbbell Curl",
+    "group": "arms",
+    "defaultWeight": 15,
+    "defaultWeightKg": 7.5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Recline against a 45-degree bench with a dumbbell in each hand, palms facing up, and both upper arms hanging behind the torso.",
+      "movement": "Flex both elbows together while keeping the torso supported and the upper-arm position unchanged.",
+      "endpoint": "Finish at the top of the controlled elbow-flexion range with both palms still facing up.",
+      "returnPhase": "Lower both dumbbells together under control until the elbows approach extension.",
+      "controlledJoints": "Create the repetition through elbow flexion without rotating the forearms or deliberately flexing the shoulders.",
+      "supportAndPosture": "Keep the torso against the bench and move both arms at the same time.",
+      "disqualifyingCompensations": [
+        "Sitting upright or losing posterior bench support leaves the reviewed incline fixture.",
+        "Alternating arms changes the reviewed two-arm sequence.",
+        "Swinging the upper arms forward adds shoulder motion outside the family contract."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "brachialis",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
       }
     ]
@@ -2689,6 +2807,149 @@
       },
       {
         "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "full-snatch",
+    "catalogID": "barbell-squat-snatch",
+    "name": "Barbell Squat Snatch",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 3,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Full Snatch",
+      "Squat Snatch"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand about hip-width with the bar on the floor close to the shins and take a self-selected wide overhand snatch grip.",
+      "movement": "Keep the bar close through the first pull and rebend, extend the hips, knees, and ankles rapidly and shrug, then bend the elbows to pull under.",
+      "endpoint": "Receive the bar overhead in a full squat with the hip crease below the knees and both elbows fully straight.",
+      "returnPhase": "Stand fully from the overhead squat, then return the bar to the floor before the next repetition.",
+      "controlledJoints": "Complete the lower-body pull before pulling under and control the upper-arm, shoulder-blade, elbow, hip, knee, and ankle positions in the receive.",
+      "supportAndPosture": "Brace the trunk, keep the bar close, and maintain a secure wide two-hand overhead lockout.",
+      "disqualifyingCompensations": [
+        "Receiving above full-squat depth changes the lift into a Power Snatch.",
+        "Starting from the hang or omitting the overhead catch leaves this family.",
+        "Beginning from an overhead squat is a separate exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -5473,6 +5734,162 @@
       },
       {
         "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "mid-thigh-clean-pull",
+    "catalogID": "barbell-mid-thigh-clean-pull",
+    "name": "Barbell Mid-Thigh Clean Pull",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 3,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Mid-Thigh Clean Pull",
+      "Clean Pull from Mid-Thigh"
+    ],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Use lifting straps and a self-selected overhand clean grip, lower the bar from the hang to midway between the kneecap and hip crease, and pause without a countermovement.",
+      "movement": "With the elbows straight, extend the hips, knees, and ankles rapidly and shrug upward.",
+      "endpoint": "Finish tall at the top of the pull with the elbows still straight and do not pull under the bar.",
+      "returnPhase": "Return the bar to rack supports before setting up the next repetition.",
+      "controlledJoints": "Create the pull through lower-body extension and shoulder elevation without bending the elbows.",
+      "supportAndPosture": "Brace the trunk, keep both feet planted, and maintain the strapped two-hand grip.",
+      "disqualifyingCompensations": [
+        "Bending the elbows changes the pull into a high-pull variant.",
+        "Pulling under or catching the bar changes the task into a clean.",
+        "Starting from the floor or using a snatch-width grip leaves this fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "nordic-curl",
+    "catalogID": "nordic-curl",
+    "name": "Nordic Curl",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Kneel tall with both lower legs held firmly by a partner, the hips and trunk neutral, and the arms reaching forward without touching the floor.",
+      "movement": "Keep the hips and trunk aligned while lowering forward from the knees for three seconds through the range you can control.",
+      "endpoint": "Stop at the furthest controlled position before the hips or trunk break alignment.",
+      "returnPhase": "Actively flex both knees and pull the body back to tall kneeling over three seconds without pushing from the hands.",
+      "controlledJoints": "Let knee extension occur only during the controlled lowering phase and create the return through knee flexion.",
+      "supportAndPosture": "Keep the partner anchor secure and hold the hips, pelvis, and spine steady.",
+      "disqualifyingCompensations": [
+        "Touching down or pushing from the hands makes the repetition an assisted reset.",
+        "Bending at the hips changes the reviewed Nordic fixture.",
+        "Omitting the active return creates an eccentric-only repetition."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "bicepsFemoris",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -9996,6 +10413,124 @@
       },
       {
         "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "squat-clean",
+    "catalogID": "barbell-squat-clean",
+    "name": "Barbell Squat Clean",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 3,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Full Clean",
+      "Squat Clean"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand about hip-width with the bar on the floor close to the shins and take a self-selected overhand clean grip.",
+      "movement": "Keep the bar close through the first pull and rebend, extend the hips, knees, and ankles rapidly and shrug, then bend the elbows to pull under.",
+      "endpoint": "Receive the bar across the front shoulders in a full front squat with the hip crease below the knees.",
+      "returnPhase": "Stand fully from the front squat, then return the bar to the floor before the next repetition.",
+      "controlledJoints": "Complete the lower-body pull before the elbow-led pull-under and control hip, knee, and ankle flexion in the receive.",
+      "supportAndPosture": "Brace the trunk, keep the bar close, and maintain a secure two-hand front-rack receive.",
+      "disqualifyingCompensations": [
+        "Receiving above full-squat depth changes the lift into a Power Clean.",
+        "Starting from the hang or omitting the catch leaves this family.",
+        "Adding a jerk is a separate phase and exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
         "role": "stabilizer"
       },
       {

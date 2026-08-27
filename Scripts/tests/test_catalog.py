@@ -91,6 +91,38 @@ ESSENTIAL_EXPANSION_EVIDENCE_IDS = {
     "dyer-2024-wall-sit-fatigue",
 }
 
+REQUESTED_EXERCISE_RECORD_IDS = {
+    "nordic-curl",
+    "barbell-preacher-curl",
+    "bilateral-incline-dumbbell-curl",
+    "barbell-mid-thigh-clean-pull",
+    "barbell-squat-clean",
+    "barbell-squat-snatch",
+}
+
+REQUESTED_EXERCISE_FAMILY_IDS = {
+    "nordic-curl",
+    "mid-thigh-clean-pull",
+    "squat-clean",
+    "full-snatch",
+}
+
+REQUESTED_EXERCISE_EVIDENCE_IDS = {
+    "narouei-2018-nordic-hamstring",
+    "sarabon-2019-nordic-variations",
+    "nunes-2020-barbell-preacher-curl",
+    "zabaleta-korta-2023-incline-dumbbell-curl",
+    "comfort-2015-mid-thigh-clean-pull",
+    "kawamori-2006-mid-thigh-clean-pull",
+    "nsca-2023-weightlifting-position",
+    "khuyagbaatar-2024-snatch-clean-kinematics",
+    "arauz-2026-snatch-clean-biomechanics",
+}
+
+HISTORICAL_BATCH_EXCLUSION_RECORD_IDS = (
+    ESSENTIAL_EXPANSION_RECORD_IDS | REQUESTED_EXERCISE_RECORD_IDS
+)
+
 
 def execution_texts(exercise: dict) -> list[str]:
     """All user-facing execution strings in canonical reading order."""
@@ -6187,6 +6219,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "farmer-carry",
             "suitcase-carry",
             *ESSENTIAL_EXPANSION_FAMILY_IDS,
+            *REQUESTED_EXERCISE_FAMILY_IDS,
         }
         self.assertEqual(
             {family["id"] for family in self.real_families},
@@ -6194,7 +6227,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            166,
+            172,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -6803,7 +6836,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         exercise["catalogID"]
                         for exercise in family["exercises"]
                         if exercise["catalogID"]
-                        not in ESSENTIAL_EXPANSION_RECORD_IDS
+                        not in HISTORICAL_BATCH_EXCLUSION_RECORD_IDS
                     ],
                     contract["roster"],
                 )
@@ -6952,7 +6985,7 @@ class CatalogFoundationTests(unittest.TestCase):
             }
             for family in self.batch2_families.values()
             for exercise in family["exercises"]
-            if exercise["catalogID"] not in ESSENTIAL_EXPANSION_RECORD_IDS
+            if exercise["catalogID"] not in HISTORICAL_BATCH_EXCLUSION_RECORD_IDS
         }
         self.assertEqual(actual, expected)
 
@@ -6988,7 +7021,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "992105cf5041a3b5f2a158c74ba4f298b144c1e88f7845434eb896bca96c5cf5",
+            "8a8caa6d2e81c17a7328b8e7190e78e03cc3c3bdce3121a4a56cf3a99500e1d6",
         )
 
     def test_batch2_forbids_every_other_known_prime_action(self) -> None:
@@ -7084,12 +7117,16 @@ class CatalogFoundationTests(unittest.TestCase):
             "farmer-carry",
             "suitcase-carry",
             "chest-fly",
+            "full-snatch",
             "hang-power-snatch",
             "hanging-leg-raise",
             "kettlebell-swing",
+            "mid-thigh-clean-pull",
+            "nordic-curl",
             "power-clean",
             "roman-chair-hip-extension",
             "split-jerk",
+            "squat-clean",
             "wall-sit",
         }
         actual_family_ids = set()
@@ -7299,7 +7336,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         )
                     mutation_count += 1
 
-        self.assertEqual(mutation_count, 64)
+        self.assertEqual(mutation_count, 270)
 
     def test_conditioned_rotation_cannot_be_broadened_per_exercise(
         self,
@@ -7408,7 +7445,7 @@ class CatalogFoundationTests(unittest.TestCase):
         actual = {}
         for family in self.batch2_families.values():
             for exercise in family["exercises"]:
-                if exercise["catalogID"] in ESSENTIAL_EXPANSION_RECORD_IDS:
+                if exercise["catalogID"] in HISTORICAL_BATCH_EXCLUSION_RECORD_IDS:
                     continue
                 actual[exercise["catalogID"]] = (
                     exercise["defaultWeight"],
@@ -14587,7 +14624,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 187)
+        self.assertEqual(len(source_by_id), 196)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -14731,8 +14768,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             9,
         )
-        self.assertEqual(len(self.real_families), 71)
-        self.assertEqual(len(self.foundation.evidence_ids), 187)
+        self.assertEqual(len(self.real_families), 75)
+        self.assertEqual(len(self.foundation.evidence_ids), 196)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -16009,7 +16046,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_proposal = " ".join(proposal.split())
 
         self.assertIn(
-            "71 reviewed families are active, containing 166 exercises",
+            "75 reviewed families are active, containing 172 exercises",
             roadmap,
         )
         self.assertIn(
@@ -16022,8 +16059,8 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
         self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **166** |", roadmap)
-        self.assertIn("Seventy-one reviewed family files", families_readme)
+        self.assertIn("| **Total** | **172** |", roadmap)
+        self.assertIn("Seventy-five reviewed family files", families_readme)
         self.assertIn("Batch 7 adds nine exercises", families_readme)
         self.assertIn(
             "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
@@ -17086,9 +17123,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 71)
-        self.assertEqual(len(records), 166)
-        self.assertEqual(len(self.foundation.evidence_ids), 187)
+        self.assertEqual(len(self.real_families), 75)
+        self.assertEqual(len(records), 172)
+        self.assertEqual(len(self.foundation.evidence_ids), 196)
         self.assertEqual(
             {
                 key: upright[key]
@@ -17434,11 +17471,217 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| `finger-flexion-grip` | 1 |", roadmap)
-        self.assertIn("| **Total** | **166** |", roadmap)
+        self.assertIn("| **Total** | **172** |", roadmap)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
         self.assertIn("hangs remain a closed-chain shoulder-body topology", normalized_roadmap)
+
+    def test_requested_exercise_runtime_identity_and_defaults_are_exact(
+        self,
+    ) -> None:
+        records = {
+            record["catalogID"]: record
+            for record in catalog.compile_runtime_catalog(self.real_families)
+            if record["catalogID"] in REQUESTED_EXERCISE_RECORD_IDS
+        }
+        expected = {
+            "nordic-curl": (
+                "Nordic Curl", "nordic-curl", [], "bodyweight",
+                "dynamicStrength", "nonComparable", 0, None, 5, 92,
+            ),
+            "barbell-preacher-curl": (
+                "Barbell Preacher Curl", "elbow-flexion", [], "barbell",
+                "dynamicStrength", "external", 30, 15, 10, 90,
+            ),
+            "bilateral-incline-dumbbell-curl": (
+                "Bilateral Incline Dumbbell Curl", "elbow-flexion", [],
+                "dumbbell", "dynamicStrength", "external", 15, 7.5, 10, 90,
+            ),
+            "barbell-mid-thigh-clean-pull": (
+                "Barbell Mid-Thigh Clean Pull", "mid-thigh-clean-pull",
+                ["Mid-Thigh Clean Pull", "Clean Pull from Mid-Thigh"],
+                "barbell", "power", "external", 45, 20, 3, 90,
+            ),
+            "barbell-squat-clean": (
+                "Barbell Squat Clean", "squat-clean",
+                ["Full Clean", "Squat Clean"], "barbell", "power",
+                "external", 45, 20, 3, 95,
+            ),
+            "barbell-squat-snatch": (
+                "Barbell Squat Snatch", "full-snatch",
+                ["Full Snatch", "Squat Snatch"], "barbell", "power",
+                "external", 45, 20, 3, 95,
+            ),
+        }
+        self.assertEqual(set(records), REQUESTED_EXERCISE_RECORD_IDS)
+        self.assertEqual(
+            {
+                record_id: (
+                    record["name"], record["familyID"], record["aliases"],
+                    record["equipment"], record["modality"],
+                    record["loadMode"], record["defaultWeight"],
+                    record.get("defaultWeightKg"), record["reps"],
+                    record["searchPriority"],
+                )
+                for record_id, record in records.items()
+            },
+            expected,
+        )
+
+    def test_requested_family_phase_and_prime_boundaries_are_exact(self) -> None:
+        family_by_id = {family["id"]: family for family in self.real_families}
+        self.assertEqual(
+            {
+                family_id: len(family_by_id[family_id]["exercises"])
+                for family_id in REQUESTED_EXERCISE_FAMILY_IDS
+            },
+            {family_id: 1 for family_id in REQUESTED_EXERCISE_FAMILY_IDS},
+        )
+        self.assertEqual(
+            family_by_id["nordic-curl"]["movementSignature"]["movementPhases"],
+            [
+                {
+                    "id": "lowering", "name": "Lowering",
+                    "primeActions": [], "yieldingActions": ["knee.extension"],
+                },
+                {
+                    "id": "active-return", "name": "Active Return",
+                    "primeActions": ["knee.flexion"],
+                },
+            ],
+        )
+        self.assertEqual(
+            family_by_id["mid-thigh-clean-pull"]["movementSignature"][
+                "primeActions"
+            ],
+            [
+                "hip.extension", "knee.extension", "ankle.plantarflexion",
+                "scapula.elevation",
+            ],
+        )
+        self.assertEqual(
+            [
+                phase["id"]
+                for phase in family_by_id["squat-clean"]["movementSignature"][
+                    "movementPhases"
+                ]
+            ],
+            [
+                "first-pull", "second-pull", "pull-under",
+                "full-front-squat-catch", "recovery",
+            ],
+        )
+        self.assertEqual(
+            [
+                phase["id"]
+                for phase in family_by_id["full-snatch"]["movementSignature"][
+                    "movementPhases"
+                ]
+            ],
+            [
+                "first-pull", "second-pull", "pull-under",
+                "full-overhead-squat-catch", "recovery",
+            ],
+        )
+
+        for family_id in REQUESTED_EXERCISE_FAMILY_IDS:
+            signature = family_by_id[family_id]["movementSignature"]
+            produced = {
+                action if isinstance(action, str) else action["action"]
+                for action in signature["primeActions"]
+            }
+            for phase in signature.get("movementPhases", []):
+                produced.update(
+                    action if isinstance(action, str) else action["action"]
+                    for action in phase["primeActions"]
+                )
+            self.assertEqual(
+                set(signature["forbiddenPrimeActions"]),
+                self.foundation.action_ids - produced,
+            )
+
+    def test_requested_curl_fixtures_and_conditional_rules_are_exact(self) -> None:
+        family = next(
+            family for family in self.real_families
+            if family["id"] == "elbow-flexion"
+        )
+        fixture_values = {
+            exercise["variant"]["curlFixture"]
+            for exercise in family["exercises"]
+        }
+        self.assertEqual(
+            fixture_values,
+            {
+                "standingSupinatedStraightBarCable",
+                "standingNeutralRopeCable",
+                "standingPronatedStraightBarCable",
+                "standingStraightBarBarbell",
+                "standingSingleArmSupinatedDumbbell",
+                "preacherBarbellUnreportedShape",
+                "inclineBilateralSupinatedDumbbell",
+            },
+        )
+        self.assertEqual(
+            {rule["when"]["value"] for rule in family["exerciseRules"]},
+            fixture_values,
+        )
+        by_id = {item["catalogID"]: item for item in family["exercises"]}
+        self.assertEqual(
+            by_id["barbell-preacher-curl"]["variant"]["handleType"],
+            "barbellShapeUnreported",
+        )
+        self.assertEqual(
+            by_id["bilateral-incline-dumbbell-curl"]["variant"]["armSequence"],
+            "simultaneousBilateral",
+        )
+
+        mutations = (
+            ("barbell-preacher-curl", "handleType", "straightBarbell"),
+            ("bilateral-incline-dumbbell-curl", "upperArmPosition", "atSide"),
+            ("supinated-straight-bar-cable-curl", "upperArmSupport", "preacherPad"),
+        )
+        for catalog_id, field, value in mutations:
+            mutated = copy.deepcopy(family)
+            exercise = next(
+                item for item in mutated["exercises"]
+                if item["catalogID"] == catalog_id
+            )
+            exercise["variant"][field] = value
+            with self.subTest(catalog_id=catalog_id, field=field):
+                self.assert_family_fails(mutated, "violates exercise rule")
+
+        mutated = copy.deepcopy(family)
+        incline = next(
+            item for item in mutated["exercises"]
+            if item["catalogID"] == "bilateral-incline-dumbbell-curl"
+        )
+        incline["variant"]["preacherPadAngle"] = "unreported"
+        self.assert_family_fails(mutated, "variant.preacherPadAngle must be absent")
+
+    def test_requested_evidence_is_registered_used_and_source_bounded(self) -> None:
+        sources = {
+            source["id"]: source for source in self.foundation.evidence["sources"]
+        }
+        used = {
+            source_id
+            for family in self.real_families
+            for source_id in family["evidenceRefs"] + [
+                ref
+                for exercise in family["exercises"]
+                for ref in exercise["evidenceRefs"]
+            ]
+        }
+        self.assertTrue(REQUESTED_EXERCISE_EVIDENCE_IDS <= set(sources))
+        self.assertTrue(REQUESTED_EXERCISE_EVIDENCE_IDS <= used)
+        self.assertIn(
+            "bar shape, pad angle",
+            sources["nunes-2020-barbell-preacher-curl"]["scope"],
+        )
+        self.assertIn(
+            "clean-grip orientation and width",
+            sources["comfort-2015-mid-thigh-clean-pull"]["scope"],
+        )
 
     def test_essential_expansion_runtime_identity_and_tracking_are_exact(
         self,
@@ -18585,7 +18828,7 @@ class CatalogFoundationTests(unittest.TestCase):
             [],
         )
 
-    def test_ordered_phases_are_reserved_for_power_without_direct_actions(
+    def test_ordered_phases_require_power_or_controlled_yield_dynamic_strength(
         self,
     ) -> None:
         family = self.family_copy()
@@ -18607,9 +18850,27 @@ class CatalogFoundationTests(unittest.TestCase):
         )
 
         family["movementSignature"]["primeActions"] = []
+        family["movementSignature"]["movementPhases"][1] = {
+            "id": "second",
+            "name": "Second",
+            "primeActions": ["elbow.extension"],
+            "yieldingActions": ["shoulder.horizontalAbduction"],
+        }
+        self.assertEqual(
+            catalog.validate_family(
+                family,
+                self.foundation,
+                "dynamic phased fixture",
+            ),
+            [],
+        )
+
+        family["allowed"]["modalities"] = ["isometricStrength"]
+        family["exercises"][0]["modality"] = "isometricStrength"
         self.assert_family_fails(
             family,
-            "ordered phases are reserved for power families",
+            "ordered phases require a power family or a dynamic-strength family "
+            "with produced and yielding actions",
         )
 
     def test_ordered_phases_reject_duplicate_ids_and_empty_phases(self) -> None:
@@ -19692,21 +19953,21 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("No catalog-roadmap work item remains unresolved", roadmap)
         self.assertIn("| `diagonal-pull` | 1 |", roadmap)
-        self.assertIn("| **Total** | **166** |", roadmap)
+        self.assertIn("| **Total** | **172** |", roadmap)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_71_families_and_166_exercises(
+    def test_runtime_projection_is_exactly_75_families_and_172_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 166)
+        self.assertEqual(len(records), 172)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 71)
+        self.assertEqual(len({record["familyID"] for record in records}), 75)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -19858,9 +20119,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 "hip-flexion", "hip-hinge", "hip-internal-rotation",
                 "hip-thrust-bridge", "knee-extension", "knee-flexion",
                 "romanian-deadlift", "split-stance-squat", "step-up",
-                "hang-power-snatch", "inclined-leg-press",
-                "kettlebell-swing", "machine-hack-squat", "power-clean",
+                "full-snatch", "hang-power-snatch", "inclined-leg-press",
+                "kettlebell-swing", "machine-hack-squat",
+                "mid-thigh-clean-pull", "nordic-curl", "power-clean",
                 "roman-chair-hip-extension", "wall-sit",
+                "squat-clean",
             },
             "core": {
                 "anti-extension", "anti-lateral-flexion", "anti-rotation",
@@ -20061,7 +20324,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 166)
+            self.assertEqual(len(emitted), 172)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},

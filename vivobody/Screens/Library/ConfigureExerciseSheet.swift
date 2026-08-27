@@ -70,6 +70,13 @@ struct ConfigureExerciseSheet: View {
     private let draftID: UUID
     private let originalDraft: ExerciseDraft?
 
+    private var tracksResistance: Bool {
+        ExerciseResistanceCapability.tracksResistance(
+            loadMode: loadMode,
+            equipment: classification?.equipment
+        )
+    }
+
     init(target: ConfigureExerciseTarget, onCommit: @escaping (ExerciseDraft) -> Void) {
         self.target = target
         self.onCommit = onCommit
@@ -163,22 +170,24 @@ struct ConfigureExerciseSheet: View {
                         }
                     }
 
-                    SectionDivider()
+                    if tracksResistance {
+                        SectionDivider()
 
-                    valueRow(label: loadMode.inputLabel) {
-                        BareScrubber(
-                            value: weightDisplayBinding,
-                            range: unit.strengthRange,
-                            step: unit.strengthStep,
-                            pointsPerStep: 8,
-                            fontSize: 56,
-                            unit: unit.symbol,
-                            unitFontSize: 16,
-                            numberColor: Ink.primary,
-                            unitColor: Ink.tertiary,
-                            accessibilityLabel: loadMode.inputLabel,
-                            tickTone: .deep
-                        )
+                        valueRow(label: loadMode.inputLabel) {
+                            BareScrubber(
+                                value: weightDisplayBinding,
+                                range: unit.strengthRange,
+                                step: unit.strengthStep,
+                                pointsPerStep: 8,
+                                fontSize: 56,
+                                unit: unit.symbol,
+                                unitFontSize: 16,
+                                numberColor: Ink.primary,
+                                unitColor: Ink.tertiary,
+                                accessibilityLabel: loadMode.inputLabel,
+                                tickTone: .deep
+                            )
+                        }
                     }
                 }
                 .padding(.top, Space.lg)
@@ -257,11 +266,17 @@ struct ConfigureExerciseSheet: View {
     private var previewLine: String {
         switch mode {
         case .reps:
-            let load = loadMode.summaryLoadLabel(weight, unit: unit)
+            let load = loadMode.summaryLoadLabel(
+                tracksResistance ? weight : 0,
+                unit: unit
+            )
             return load.map { "\(sets) × \(reps) @ \($0)" } ?? "\(sets) × \(reps)"
         case .duration:
             let base = "\(sets) × \(DurationFormatter.string(duration)) \(modality.durationLabelLowercased)"
-            guard let load = loadMode.summaryLoadLabel(weight, unit: unit) else { return base }
+            guard let load = loadMode.summaryLoadLabel(
+                tracksResistance ? weight : 0,
+                unit: unit
+            ) else { return base }
             return "\(base) @ \(load)"
         }
     }
@@ -331,7 +346,7 @@ struct ConfigureExerciseSheet: View {
             group: group,
             plannedSets: sets,
             plannedReps: reps,
-            plannedWeight: weight,
+            plannedWeight: tracksResistance ? weight : 0,
             muscleInvolvement: muscleInvolvement,
             classification: classification,
             trackingMode: mode,

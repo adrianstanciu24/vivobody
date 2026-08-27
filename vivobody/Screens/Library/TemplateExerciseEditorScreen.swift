@@ -83,22 +83,24 @@ struct TemplateExerciseEditorScreen: View {
                     }
                 }
 
-                SectionDivider()
+                if exercise.tracksResistance {
+                    SectionDivider()
 
-                valueRow(label: exercise.loadMode.inputLabel) {
-                    BareScrubber(
-                        value: weightDisplayBinding,
-                        range: unit.strengthRange,
-                        step: unit.strengthStep,
-                        pointsPerStep: 8,
-                        fontSize: 64,
-                        unit: unit.symbol,
-                        unitFontSize: 16,
-                        numberColor: Ink.primary,
-                        unitColor: Ink.tertiary,
-                        accessibilityLabel: exercise.loadMode.inputLabel,
-                        tickTone: .deep
-                    )
+                    valueRow(label: exercise.loadMode.inputLabel) {
+                        BareScrubber(
+                            value: weightDisplayBinding,
+                            range: unit.strengthRange,
+                            step: unit.strengthStep,
+                            pointsPerStep: 8,
+                            fontSize: 64,
+                            unit: unit.symbol,
+                            unitFontSize: 16,
+                            numberColor: Ink.primary,
+                            unitColor: Ink.tertiary,
+                            accessibilityLabel: exercise.loadMode.inputLabel,
+                            tickTone: .deep
+                        )
+                    }
                 }
             }
             .padding(.top, Space.lg)
@@ -117,6 +119,7 @@ struct TemplateExerciseEditorScreen: View {
         .onChange(of: exercise.plannedReps) { _, _ in save() }
         .onChange(of: exercise.plannedWeight) { _, _ in save() }
         .onChange(of: exercise.plannedDuration) { _, _ in save() }
+        .onAppear { normalizeUntrackedResistance() }
         .saveErrorAlert($saveError)
     }
 
@@ -198,5 +201,19 @@ struct TemplateExerciseEditorScreen: View {
         } catch {
             saveError = SaveErrorBox(error)
         }
+    }
+
+    private func normalizeUntrackedResistance() {
+        guard !exercise.tracksResistance else { return }
+        var changed = false
+        if exercise.plannedWeight != 0 {
+            exercise.plannedWeight = 0
+            changed = true
+        }
+        for set in exercise.sets where set.weight != 0 {
+            set.weight = 0
+            changed = true
+        }
+        if changed { save() }
     }
 }

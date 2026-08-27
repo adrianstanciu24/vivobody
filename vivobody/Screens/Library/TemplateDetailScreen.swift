@@ -232,7 +232,7 @@ struct TemplateDetailScreen: View {
         case .reps:
             if exercise.hasPerSetData {
                 let sets = exercise.orderedSets
-                let weights = sets.map(\.weight)
+                let weights = sets.map { exercise.trackedWeight($0.weight) }
                 guard let lo = weights.min(), let hi = weights.max() else { return "" }
                 if lo == hi, let first = sets.first {
                     let load = exercise.loadMode.summaryLoadLabel(lo, unit: unit)
@@ -243,7 +243,10 @@ struct TemplateDetailScreen: View {
                 return loadRange.map { "\(sets.count) sets · \($0)" }
                     ?? "\(sets.count) sets"
             }
-            let load = exercise.loadMode.summaryLoadLabel(exercise.plannedWeight, unit: unit)
+            let load = exercise.loadMode.summaryLoadLabel(
+                exercise.trackedWeight(exercise.plannedWeight),
+                unit: unit
+            )
             return load.map { "\(exercise.plannedSets) × \(exercise.plannedReps) @ \($0)" }
                 ?? "\(exercise.plannedSets) × \(exercise.plannedReps)"
 
@@ -259,7 +262,7 @@ struct TemplateDetailScreen: View {
             }
             let base = "\(exercise.plannedSets) × \(DurationFormatter.string(exercise.plannedDuration)) \(exercise.modality.durationLabelLowercased)"
             guard let load = exercise.loadMode.summaryLoadLabel(
-                exercise.plannedWeight,
+                exercise.trackedWeight(exercise.plannedWeight),
                 unit: unit
             ) else { return base }
             return "\(base) @ \(load)"

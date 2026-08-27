@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 71 reviewed families are active, containing 166 exercises.
+- 75 reviewed families are active, containing 172 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 187 registered evidence sources.
+  44 joint actions, and 196 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -71,7 +71,7 @@ batch siblings.
 | `shoulder-abduction-raise` | 2 |
 | `shoulder-external-rotation` | 3 |
 | `shoulder-internal-rotation` | 2 |
-| `elbow-flexion` | 5 |
+| `elbow-flexion` | 7 |
 | `elbow-extension` | 6 |
 | `forearm-pronation` | 1 |
 | `forearm-supination` | 1 |
@@ -90,6 +90,7 @@ batch siblings.
 | `landmine-press` | 1 |
 | `knee-extension` | 2 |
 | `knee-flexion` | 4 |
+| `nordic-curl` | 1 |
 | `hip-extension` | 1 |
 | `roman-chair-hip-extension` | 1 |
 | `hip-flexion` | 1 |
@@ -123,11 +124,14 @@ batch siblings.
 | `suitcase-carry` | 1 |
 | `hanging-leg-raise` | 2 |
 | `power-clean` | 1 |
+| `squat-clean` | 1 |
+| `full-snatch` | 1 |
+| `mid-thigh-clean-pull` | 1 |
 | `kettlebell-swing` | 1 |
 | `hang-power-snatch` | 1 |
 | `split-jerk` | 1 |
 | `wall-sit` | 1 |
-| **Total** | **166** |
+| **Total** | **172** |
 
 ## Foundation gates
 
@@ -235,8 +239,9 @@ assigned primary or secondary muscle can produce the opposing action.
 `planeBasisActions` now draws from the reviewed action union while preserving
 its same-region, distinct-plane, and exact-plane rules. A contract must declare
 at least one direct prime or resisted action, or a Power family may use ordered
-movement phases with produced and yielding actions. One action cannot occupy
-conflicting modes.
+movement phases. A Dynamic Strength family may also use phases when it declares
+both produced and yielding actions without resisted actions, as Nordic Curl
+does. One action cannot occupy conflicting modes.
 
 Farmer and suitcase carries use separate family-level resisted signatures:
 the suitcase contract adds lateral flexion and uses it as the frontal plane

@@ -115,6 +115,13 @@ nonisolated struct AnalyticsExerciseSnapshot {
         loadProfile.bodyweightFraction
     }
 
+    nonisolated var tracksResistance: Bool {
+        ExerciseResistanceCapability.tracksResistance(
+            loadMode: loadMode,
+            equipment: classification?.equipment
+        )
+    }
+
     nonisolated var loadBodyweight: Double {
         bodyweightAtSession
     }
@@ -141,7 +148,12 @@ nonisolated struct AnalyticsExerciseSnapshot {
         volumeCredits = exercise.muscleInvolvement.volumeCredits.filter {
             $0.value > 0
         }
-        sets = exercise.orderedSets.map(AnalyticsSetSnapshot.init)
+        sets = exercise.orderedSets.map {
+            AnalyticsSetSnapshot(
+                $0,
+                tracksResistance: exercise.tracksResistance
+            )
+        }
     }
 
     nonisolated init(
@@ -355,8 +367,8 @@ nonisolated struct AnalyticsSetSnapshot {
     }
 
     @MainActor
-    init(_ set: WorkoutSet) {
-        weight = set.weight
+    init(_ set: WorkoutSet, tracksResistance: Bool = true) {
+        weight = tracksResistance ? max(0, set.weight) : 0
         reps = set.reps
         duration = set.duration
         isCompleted = set.isCompleted

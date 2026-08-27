@@ -394,7 +394,7 @@ extension TodayScreen {
             if exercise.hasPerSetData {
                 let sets = exercise.orderedSets
                 let reps = sets.map(\.reps)
-                let weights = sets.map(\.weight)
+                let weights = sets.map { exercise.trackedWeight($0.weight) }
                 guard let loW = weights.min(), let hiW = weights.max(),
                       let loR = reps.min(), let hiR = reps.max()
                 else {
@@ -415,7 +415,7 @@ extension TodayScreen {
             }
             return schemeWithLoad(
                 count: "\(exercise.plannedSets) × \(exercise.plannedReps)",
-                weight: exercise.plannedWeight,
+                weight: exercise.trackedWeight(exercise.plannedWeight),
                 loadMode: exercise.loadMode
             )
 
@@ -434,7 +434,7 @@ extension TodayScreen {
                     duration: duration,
                     modality: exercise.modality,
                     loadMode: exercise.loadMode,
-                    weights: sets.map(\.weight)
+                    weights: sets.map { exercise.trackedWeight($0.weight) }
                 )
             }
             return durationScheme(
@@ -442,7 +442,7 @@ extension TodayScreen {
                 duration: DurationFormatter.string(exercise.plannedDuration),
                 modality: exercise.modality,
                 loadMode: exercise.loadMode,
-                weights: [exercise.plannedWeight]
+                weights: [exercise.trackedWeight(exercise.plannedWeight)]
             )
         }
     }
@@ -515,7 +515,8 @@ extension TodayScreen {
                     modality: $0.modality,
                     trackingMode: $0.trackingMode,
                     loadMode: $0.loadMode,
-                    bodyweightFraction: $0.bodyweightFraction
+                    bodyweightFraction: $0.bodyweightFraction,
+                    tracksResistance: $0.tracksResistance
                 )
             ) == pr.historyKey
         }
@@ -627,27 +628,6 @@ extension TodayScreen {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Space.xl)
         .contentCard()
-    }
-
-    private func lastWorkoutVolumeStat(for session: WorkoutSession) -> Stat {
-        let summary = session.receiptTonnageSummary
-        switch summary.availability {
-        case .complete:
-            return Stat(
-                value: volumeLabel(summary.knownSubtotal),
-                unit: unit.symbol,
-                label: "Volume",
-                accent: lastWorkoutHasPR
-            )
-        case .partial:
-            return Stat(
-                value: "\(volumeLabel(summary.knownSubtotal))+",
-                unit: unit.symbol,
-                label: "Known volume"
-            )
-        case .unavailable:
-            return Stat(value: "—", label: "Volume unavailable")
-        }
     }
 
     /// Relative day + time of the last session, surfaced as the dim

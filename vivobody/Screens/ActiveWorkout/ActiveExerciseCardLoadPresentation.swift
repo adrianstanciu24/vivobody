@@ -11,8 +11,7 @@ import VivoKit
 
 extension ActiveExerciseCard {
     var isUnloadedBodyweightExercise: Bool {
-        exercise.loadMode == .nonComparable
-            && exercise.classification?.equipment == .bodyweight
+        !exercise.tracksResistance
     }
 
     var activeLoadUnit: String {

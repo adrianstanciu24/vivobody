@@ -117,10 +117,16 @@ extension ActiveExerciseCard {
     func completedDurationHero(_ top: WorkoutSet?) -> some View {
         let timeText = top.map { DurationFormatter.string($0.duration) } ?? "—"
         let loadText = top.flatMap {
-            exercise.loadMode.summaryLoadLabel($0.weight, unit: unit)
+            exercise.loadMode.summaryLoadLabel(
+                exercise.trackedWeight($0.weight),
+                unit: unit
+            )
         }
         let accessibilityLoad = top.flatMap {
-            exercise.loadMode.accessibilityLoadDescription($0.weight, unit: unit)
+            exercise.loadMode.accessibilityLoadDescription(
+                exercise.trackedWeight($0.weight),
+                unit: unit
+            )
         }
         return VStack(alignment: .leading, spacing: Space.sm) {
             Text(exercise.modality.durationLabel)
@@ -156,11 +162,14 @@ extension ActiveExerciseCard {
         } else if let active = session.activeSet(for: exercise) {
             let isLastSet = activeIndex == sets.count - 1
             let durationAccessibilityLabel = "\(exercise.modality.durationLabel) \(DurationFormatter.string(active.duration))"
-                + (exercise.loadMode.accessibilityLoadDescription(active.weight, unit: unit)
-                    .map { ", \($0)" } ?? "")
+                + (exercise.loadMode.accessibilityLoadDescription(
+                    exercise.trackedWeight(active.weight),
+                    unit: unit
+                )
+                .map { ", \($0)" } ?? "")
             SetCompleteButton(
                 reps: active.reps,
-                weight: active.weight,
+                weight: exercise.trackedWeight(active.weight),
                 loadMode: exercise.loadMode,
                 isComplete: pendingCompletionSetID == active.id,
                 intensity: isLastSet ? .peak : .standard,

@@ -260,7 +260,7 @@ enum WorkoutLiveActivityController {
     private static func setSpec(for set: WorkoutSet, exercise: Exercise?) -> String {
         guard let exercise else { return "" }
         return SetSpecFormatter.format(
-            weight: set.weight,
+            weight: exercise.trackedWeight(set.weight),
             reps: set.reps,
             duration: set.duration,
             trackingMode: exercise.trackingMode,

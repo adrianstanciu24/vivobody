@@ -171,6 +171,66 @@ struct BiomechanicsDomainTests {
         ) == "12 reps")
     }
 
+    @Test func unloadedBodyweightCapabilityNormalizesDraftHistoryAndTemplateWeights() throws {
+        let record = try #require(CatalogData.record(forCatalogID: "nordic-curl"))
+        let item = ExerciseCatalogItem(record: record, createdAt: .distantPast)
+        let exercise = Exercise(from: item, sortOrder: 0)
+
+        #expect(!item.tracksResistance)
+        #expect(!exercise.tracksResistance)
+        #expect(exercise.plannedWeight == 0)
+        #expect(exercise.sets.allSatisfy { $0.weight == 0 && $0.plannedWeight == 0 })
+
+        exercise.plannedWeight = 45
+        for set in exercise.sets {
+            set.weight = 45
+            set.plannedWeight = 45
+            set.isCompleted = true
+        }
+
+        let session = WorkoutSession(exercises: [exercise])
+        let snapshot = AnalyticsExerciseSnapshot(exercise, bodyweightAtSession: 0)
+        let copy = Exercise.freshCopy(of: exercise)
+
+        #expect(exercise.setLabel(exercise.orderedSets[0], unit: .lb) == "5 reps")
+        #expect(exercise.completedReceiptTonnage == nil)
+        #expect(!session.hasReceiptTonnageAxis)
+        #expect(snapshot.sets.allSatisfy { $0.weight == 0 })
+        #expect(copy.plannedWeight == 0)
+        #expect(copy.sets.allSatisfy { $0.weight == 0 && $0.plannedWeight == 0 })
+
+        let template = TemplateExercise(from: item, sortOrder: 0)
+        template.plannedWeight = 45
+        template.sets.append(TemplateSet(weight: 45, reps: 5))
+        let spawned = Exercise(from: template)
+        #expect(spawned.plannedWeight == 0)
+        #expect(spawned.sets.allSatisfy { $0.weight == 0 && $0.plannedWeight == 0 })
+
+        #expect(session.normalizeUntrackedResistance())
+        #expect(exercise.plannedWeight == 0)
+        #expect(exercise.sets.allSatisfy { $0.weight == 0 && $0.plannedWeight == 0 })
+        #expect(!session.normalizeUntrackedResistance())
+    }
+
+    @Test func nonComparableBandResistanceRemainsTracked() throws {
+        let record = try #require(CatalogData.record(forCatalogID: "standing-band-fly"))
+        let item = ExerciseCatalogItem(record: record, createdAt: .distantPast)
+        let exercise = Exercise(from: item, sortOrder: 0)
+        let session = WorkoutSession(exercises: [exercise])
+
+        #expect(item.tracksResistance)
+        #expect(exercise.tracksResistance)
+        session.updateActiveWeight(for: exercise, weight: 20)
+        session.updateActiveReps(for: exercise, reps: 10)
+        session.completeActiveSet(for: exercise)
+
+        #expect(exercise.orderedSets[0].weight == 20)
+        #expect(exercise.completedReceiptTonnage == 200)
+        #expect(session.hasReceiptTonnageAxis)
+        #expect(!session.normalizeUntrackedResistance())
+        #expect(exercise.orderedSets[0].weight == 20)
+    }
+
     @Test func catalogSemanticsSnapshotThroughTemplateAndWorkout() throws {
         let record = try #require(CatalogData.record(forExerciseNamed: "Barbell Bench Press"))
         let item = ExerciseCatalogItem(record: record, createdAt: Date(timeIntervalSince1970: 0))
@@ -264,6 +324,50 @@ struct BiomechanicsDomainTests {
         #expect(halfBodyweightLift.historyKey.contains("bodyweightBps=5000"))
         #expect(fullBodyweightLift.historyKey.contains("bodyweightBps=10000"))
         #expect(hold.historyKey.contains("isometricDuration"))
+    }
+
+    @Test func customIdentityPartitionsResistanceCapability() {
+        let itemID = UUID()
+        let unloaded = Exercise(
+            name: "Custom Fixture",
+            catalogItemID: itemID,
+            group: .legs,
+            plannedSets: 0,
+            plannedWeight: 45,
+            classification: ExerciseClassification(
+                equipment: .bodyweight,
+                mechanic: .isolation,
+                trainingRole: .legs,
+                pattern: nil,
+                direction: nil,
+                planes: [.sagittal],
+                laterality: .bilateral
+            ),
+            loadMode: .nonComparable
+        )
+        let band = Exercise(
+            name: "Custom Fixture",
+            catalogItemID: itemID,
+            group: .legs,
+            plannedSets: 0,
+            plannedWeight: 45,
+            classification: ExerciseClassification(
+                equipment: .band,
+                mechanic: .isolation,
+                trainingRole: .legs,
+                pattern: nil,
+                direction: nil,
+                planes: [.sagittal],
+                laterality: .bilateral
+            ),
+            loadMode: .nonComparable
+        )
+
+        #expect(unloaded.historyKey != band.historyKey)
+        #expect(unloaded.historyKey.contains("resistance=untracked"))
+        #expect(band.historyKey.contains("resistance=tracked"))
+        #expect(unloaded.plannedWeight == 0)
+        #expect(band.plannedWeight == 45)
     }
 
     @Test func strictCatalogRejectsIncompleteBiomechanics() {

@@ -3,767 +3,141 @@
   "schemaVersion": 1,
   "id": "elbow-flexion",
   "name": "Elbow Flexion",
-  "definition": "A strict standing open-chain isolation in which the elbow flexes while the upper arm stays at the side, forearm orientation and neutral wrist are held, and the torso, scapulae, and lower body do not create the repetition. The roster owns three cable grips plus a bilateral straight-bar barbell curl and a unilateral supinated dumbbell curl. Brachialis is the orientation-neutral primary baseline; biceps brachii is co-primary in supination and secondary in the neutral and pronated records. Rotating curls, semisupinated EZ bars, supported curls, machines, and variants adding shoulder or scapular prime actions remain outside this contract.",
+  "definition": "An open-chain isolation in which the elbow flexes while the reviewed fixture holds its upper-arm posture, forearm orientation, and neutral wrist. The seven source-bounded fixtures cover three standing cable grips, a standing straight-bar barbell curl, a standing single-arm supinated dumbbell curl, a seated barbell preacher curl with an unreported bar shape and pad angle, and a bilateral supinated dumbbell curl against a 45-degree posterior bench. Brachialis is the orientation-neutral primary baseline; biceps brachii is co-primary in supination and secondary in the neutral and pronated standing records. Rotating curls, semisupinated EZ bars, unsupported preacher shapes, alternate-arm incline curls, machines, and variants adding shoulder or scapular prime actions remain outside this contract.",
   "evidenceRefs": [
-    "holzbaur-2005-upper-extremity",
-    "murray-1995-elbow-forearm-moment-arms",
-    "coratella-2023-curl-handgrips",
-    "kleiber-2015-elbow-flexion-hand-position",
-    "marcolin-2018-curl-variants",
-    "oliveira-2009-dumbbell-curl-shoulder-position"
+    "holzbaur-2005-upper-extremity", "murray-1995-elbow-forearm-moment-arms", "coratella-2023-curl-handgrips", "kleiber-2015-elbow-flexion-hand-position", "marcolin-2018-curl-variants", "oliveira-2009-dumbbell-curl-shoulder-position", "nunes-2020-barbell-preacher-curl", "zabaleta-korta-2023-incline-dumbbell-curl"
   ],
-  "fixed": {
-    "mechanic": "isolation",
-    "trainingRole": "pull",
-    "pattern": null,
-    "direction": null,
-    "planes": [
-      "sagittal"
-    ]
-  },
-  "groupPolicy": {
-    "default": "arms",
-    "allowed": [
-      "arms"
-    ]
-  },
-  "allowed": {
-    "equipment": [
-      "cable",
-      "barbell",
-      "dumbbell"
-    ],
-    "modalities": [
-      "dynamicStrength"
-    ],
-    "trackingModes": [
-      "reps"
-    ],
-    "loadModes": [
-      "external"
-    ],
-    "lateralities": [
-      "bilateral",
-      "unilateral"
-    ]
-  },
+  "fixed": {"mechanic": "isolation", "trainingRole": "pull", "pattern": null, "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "arms", "allowed": ["arms"]},
+  "allowed": {"equipment": ["cable", "barbell", "dumbbell"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral", "unilateral"]},
   "movementSignature": {
-    "planeBasisActions": [
-      "elbow.flexion"
-    ],
-    "primeActions": [
-      "elbow.flexion"
-    ],
+    "planeBasisActions": ["elbow.flexion"],
+    "primeActions": ["elbow.flexion"],
     "forbiddenPrimeActions": [
-      "scapula.elevation",
-      "scapula.depression",
-      "scapula.protraction",
-      "scapula.retraction",
-      "scapula.upwardRotation",
-      "scapula.downwardRotation",
-      "scapula.anteriorTilt",
-      "scapula.posteriorTilt",
-      "shoulder.flexion",
-      "shoulder.extension",
-      "shoulder.abduction",
-      "shoulder.adduction",
-      "shoulder.horizontalAdduction",
-      "shoulder.horizontalAbduction",
-      "shoulder.internalRotation",
-      "shoulder.externalRotation",
-      "elbow.extension",
-      "forearm.pronation",
-      "forearm.supination",
-      "wrist.flexion",
-      "wrist.extension",
-      "wrist.radialDeviation",
-      "wrist.ulnarDeviation",
-      "hand.fingerFlexion",
-      "hand.fingerExtension",
-      "spine.flexion",
-      "spine.extension",
-      "spine.lateralFlexion",
-      "spine.rotation",
-      "hip.flexion",
-      "hip.extension",
-      "hip.abduction",
-      "hip.adduction",
-      "hip.internalRotation",
-      "hip.externalRotation",
-      "knee.flexion",
-      "knee.extension",
-      "ankle.plantarflexion",
-      "ankle.dorsiflexion",
-      "ankle.inversion",
-      "ankle.eversion",
-      "foot.toeFlexion",
-      "foot.toeExtension"
+      "scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt",
+      "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
     ],
-    "stabilityDemands": [
-      "shoulder",
-      "scapula",
-      "elbow",
-      "forearm",
-      "wrist",
-      "hand",
-      "spine",
-      "pelvis"
-    ]
+    "stabilityDemands": ["shoulder", "elbow", "forearm", "wrist", "hand"]
   },
   "musclePolicy": {
     "requirements": [
-      {
-        "anyOf": [
-          "brachialis"
-        ],
-        "minimumRole": "primary"
-      },
-      {
-        "anyOf": [
-          "bicepsBrachii"
-        ],
-        "minimumRole": "secondary"
-      },
-      {
-        "anyOf": [
-          "brachioradialis"
-        ],
-        "minimumRole": "secondary"
-      },
-      {
-        "anyOf": [
-          "deltoidAnterior"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "trapeziusMiddle"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "fingerFlexors"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "extensorCarpiRadialis"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "obliques"
-        ],
-        "minimumRole": "stabilizer"
-      }
+      {"anyOf": ["brachialis"], "minimumRole": "primary"}, {"anyOf": ["bicepsBrachii"], "minimumRole": "secondary"}, {"anyOf": ["brachioradialis"], "minimumRole": "secondary"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}
     ],
-    "allowedByRole": {
-      "primary": [
-        "brachialis",
-        "bicepsBrachii"
-      ],
-      "secondary": [
-        "bicepsBrachii",
-        "brachioradialis"
-      ],
-      "stabilizer": [
-        "deltoidAnterior",
-        "trapeziusMiddle",
-        "fingerFlexors",
-        "extensorCarpiRadialis",
-        "obliques"
-      ]
-    }
+    "allowedByRole": {"primary": ["brachialis", "bicepsBrachii"], "secondary": ["bicepsBrachii", "brachioradialis"], "stabilizer": ["deltoidAnterior", "trapeziusMiddle", "fingerFlexors", "extensorCarpiRadialis", "obliques"]}
   },
   "variantAxes": [
-    {
-      "id": "kineticChain",
-      "valueType": "enum",
-      "required": true,
-      "description": "Whether the loaded hand moves freely or remains fixed to the environment.",
-      "allowedValues": [
-        "open"
-      ]
-    },
-    {
-      "id": "bodyPosition",
-      "valueType": "enum",
-      "required": true,
-      "description": "The whole-body posture used by the reviewed strict curl fixture.",
-      "allowedValues": [
-        "standing"
-      ]
-    },
-    {
-      "id": "torsoSupport",
-      "valueType": "enum",
-      "required": true,
-      "description": "The external surface directly supporting the torso during the repetition.",
-      "allowedValues": [
-        "none"
-      ]
-    },
-    {
-      "id": "scapularTranslation",
-      "valueType": "enum",
-      "required": true,
-      "description": "Whether external posterior support limits scapular translation along the thorax; this does not name a dynamic scapular action.",
-      "allowedValues": [
-        "free"
-      ]
-    },
-    {
-      "id": "forearmSupport",
-      "valueType": "enum",
-      "required": true,
-      "description": "The external surface supporting the forearm independently of torso support.",
-      "allowedValues": [
-        "none"
-      ]
-    },
-    {
-      "id": "upperArmPosition",
-      "valueType": "enum",
-      "required": true,
-      "description": "The torso-relative upper-arm posture held while the elbow moves; posture does not add a shoulder prime action.",
-      "allowedValues": [
-        "atSide"
-      ]
-    },
-    {
-      "id": "elbowMotion",
-      "valueType": "enum",
-      "required": true,
-      "description": "The dynamic elbow action that creates the concentric repetition.",
-      "allowedValues": [
-        "flexes"
-      ]
-    },
-    {
-      "id": "forearmMotion",
-      "valueType": "enum",
-      "required": true,
-      "description": "Whether the radioulnar angle is held or changes deliberately during the repetition.",
-      "allowedValues": [
-        "angleHeld"
-      ]
-    },
-    {
-      "id": "forearmOrientation",
-      "valueType": "enum",
-      "required": true,
-      "description": "The radioulnar posture held through elbow flexion, independent of implement naming and dynamic forearm rotation.",
-      "allowedValues": [
-        "supinated",
-        "neutral",
-        "pronated"
-      ]
-    },
-    {
-      "id": "wristMotion",
-      "valueType": "enum",
-      "required": true,
-      "description": "Whether wrist angle is held or changes deliberately during the repetition.",
-      "allowedValues": [
-        "angleHeld"
-      ]
-    },
-    {
-      "id": "wristPosture",
-      "valueType": "enum",
-      "required": true,
-      "description": "The reviewed wrist posture held during the strict curl; neutral is an authoring target rather than a zero-error measurement claim.",
-      "allowedValues": [
-        "neutral"
-      ]
-    },
-    {
-      "id": "handTask",
-      "valueType": "enum",
-      "required": true,
-      "description": "The task performed by the fingers while the elbow creates the repetition.",
-      "allowedValues": [
-        "staticImplementHold"
-      ]
-    },
-    {
-      "id": "handleType",
-      "valueType": "enum",
-      "required": true,
-      "description": "The reviewed cable attachment defining the load-to-hand interface.",
-      "allowedValues": [
-        "straightBar",
-        "rope",
-        "straightBarbell",
-        "dumbbellHandle"
-      ]
-    },
-    {
-      "id": "resistanceGeometry",
-      "valueType": "enum",
-      "required": true,
-      "description": "How the reviewed cable line creates elbow-flexion resistance without constraining the implement to a rail or lever path.",
-      "allowedValues": [
-        "lowCableCurl",
-        "gravityLoadedBarbell",
-        "gravityLoadedDumbbell"
-      ]
-    },
-    {
-      "id": "fixedPath",
-      "valueType": "boolean",
-      "required": true,
-      "fixedValue": false,
-      "description": "Whether rails or a lever machine constrain the external load path; cable direction alone is not a fixed path."
-    },
-    {
-      "id": "lowerBodyContribution",
-      "valueType": "enum",
-      "required": true,
-      "description": "Whether hip, knee, or ankle drive contributes to elbow flexion.",
-      "allowedValues": [
-        "none"
-      ]
-    }
+    {"id": "curlFixture", "valueType": "enum", "required": true, "description": "The exact reviewed implement, posture, support, and sequence branch.", "allowedValues": ["standingSupinatedStraightBarCable", "standingNeutralRopeCable", "standingPronatedStraightBarCable", "standingStraightBarBarbell", "standingSingleArmSupinatedDumbbell", "preacherBarbellUnreportedShape", "inclineBilateralSupinatedDumbbell"]},
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "Whether the loaded hand moves freely.", "allowedValues": ["open"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed whole-body posture.", "allowedValues": ["standing", "seated", "reclined45Degrees"]},
+    {"id": "torsoSupport", "valueType": "enum", "required": true, "description": "The external surface directly supporting the torso.", "allowedValues": ["none", "posteriorBench45Degrees"]},
+    {"id": "scapularTranslation", "valueType": "enum", "required": true, "description": "Whether scapular translation is free or unstandardized by the source.", "allowedValues": ["free", "unstandardized"]},
+    {"id": "forearmSupport", "valueType": "enum", "required": true, "description": "Whether the forearm itself is externally supported.", "allowedValues": ["none"]},
+    {"id": "upperArmSupport", "valueType": "enum", "required": true, "description": "The external surface supporting the upper arm.", "allowedValues": ["none", "preacherPad"]},
+    {"id": "upperArmPosition", "valueType": "enum", "required": true, "description": "The torso-relative upper-arm posture held while the elbow moves.", "allowedValues": ["atSide", "flexedOverPreacherPad", "behindTorso"]},
+    {"id": "armSequence", "valueType": "enum", "required": true, "description": "Whether both arms move together or one side is completed then mirrored.", "allowedValues": ["simultaneousBilateral", "singleArmThenMirror"]},
+    {"id": "elbowMotion", "valueType": "enum", "required": true, "description": "The dynamic elbow action.", "allowedValues": ["flexes"]},
+    {"id": "forearmMotion", "valueType": "enum", "required": true, "description": "Whether radioulnar angle changes deliberately.", "allowedValues": ["angleHeld"]},
+    {"id": "forearmOrientation", "valueType": "enum", "required": true, "description": "The forearm posture held through elbow flexion.", "allowedValues": ["supinated", "neutral", "pronated"]},
+    {"id": "wristMotion", "valueType": "enum", "required": true, "description": "Whether wrist angle changes deliberately.", "allowedValues": ["angleHeld"]},
+    {"id": "wristPosture", "valueType": "enum", "required": true, "description": "The reviewed wrist posture.", "allowedValues": ["neutral"]},
+    {"id": "handTask", "valueType": "enum", "required": true, "description": "The finger task while the elbow creates the repetition.", "allowedValues": ["staticImplementHold"]},
+    {"id": "handleType", "valueType": "enum", "required": true, "description": "The reviewed load-to-hand interface without inferring an unreported bar shape.", "allowedValues": ["straightBar", "rope", "straightBarbell", "dumbbellHandle", "barbellShapeUnreported"]},
+    {"id": "resistanceGeometry", "valueType": "enum", "required": true, "description": "How resistance reaches the hand.", "allowedValues": ["lowCableCurl", "gravityLoadedBarbell", "gravityLoadedDumbbell"]},
+    {"id": "preacherPadAngle", "valueType": "enum", "required": false, "description": "The source-reported preacher pad angle; absent outside preacher fixtures.", "allowedValues": ["unreported"]},
+    {"id": "cadence", "valueType": "enum", "required": false, "description": "The source-controlled repetition cadence; absent where not fixture-defining.", "allowedValues": ["oneSecondConcentricTwoSecondEccentric"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "Whether rails or a lever constrain the external load path."},
+    {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "description": "Whether lower-body drive contributes.", "allowedValues": ["none"]}
   ],
-  "recommended": {
-    "defaultReps": {
-      "minimum": 8,
-      "maximum": 15
-    }
-  },
+  "recommended": {"defaultReps": {"minimum": 8, "maximum": 15}},
   "exerciseRules": [
     {
-      "id": "rope-curl-requires-neutral-forearm",
-      "description": "The directly reviewed rope cable curl holds a neutral forearm orientation.",
-      "when": {
-        "field": "variant.handleType",
-        "operator": "equals",
-        "value": "rope"
-      },
-      "then": [
-        {
-          "field": "variant.forearmOrientation",
-          "value": "neutral"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
+      "id": "standing-supinated-straight-bar-cable-fixture", "description": "Pins the reviewed standing supinated straight-bar cable fixture and its unsupported stability roles.", "when": {"field": "variant.curlFixture", "operator": "equals", "value": "standingSupinatedStraightBarCable"},
+      "then": [{"field": "equipment", "value": "cable"}, {"field": "laterality", "value": "bilateral"}, {"field": "variant.kineticChain", "value": "open"}, {"field": "variant.bodyPosition", "value": "standing"}, {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "free"}, {"field": "variant.forearmSupport", "value": "none"}, {"field": "variant.upperArmSupport", "value": "none"}, {"field": "variant.upperArmPosition", "value": "atSide"}, {"field": "variant.armSequence", "value": "simultaneousBilateral"}, {"field": "variant.elbowMotion", "value": "flexes"}, {"field": "variant.forearmMotion", "value": "angleHeld"}, {"field": "variant.forearmOrientation", "value": "supinated"}, {"field": "variant.wristMotion", "value": "angleHeld"}, {"field": "variant.wristPosture", "value": "neutral"}, {"field": "variant.handTask", "value": "staticImplementHold"}, {"field": "variant.handleType", "value": "straightBar"}, {"field": "variant.resistanceGeometry", "value": "lowCableCurl"}, {"field": "variant.fixedPath", "value": false}, {"field": "variant.lowerBodyContribution", "value": "none"}],
+      "requirePresent": [], "requireAbsent": ["variant.preacherPadAngle", "variant.cadence"], "requireInvolvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}], "requireAdditionalStabilityDemands": ["scapula", "spine", "pelvis"]
     },
     {
-      "id": "neutral-curl-requires-rope",
-      "description": "Neutral forearm orientation is admitted only through the directly reviewed rope cable fixture.",
-      "when": {
-        "field": "variant.forearmOrientation",
-        "operator": "equals",
-        "value": "neutral"
-      },
-      "then": [
-        {
-          "field": "variant.handleType",
-          "value": "rope"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
+      "id": "standing-neutral-rope-cable-fixture", "description": "Pins the reviewed standing neutral rope cable fixture and its unsupported stability roles.", "when": {"field": "variant.curlFixture", "operator": "equals", "value": "standingNeutralRopeCable"},
+      "then": [{"field": "equipment", "value": "cable"}, {"field": "laterality", "value": "bilateral"}, {"field": "variant.kineticChain", "value": "open"}, {"field": "variant.bodyPosition", "value": "standing"}, {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "free"}, {"field": "variant.forearmSupport", "value": "none"}, {"field": "variant.upperArmSupport", "value": "none"}, {"field": "variant.upperArmPosition", "value": "atSide"}, {"field": "variant.armSequence", "value": "simultaneousBilateral"}, {"field": "variant.elbowMotion", "value": "flexes"}, {"field": "variant.forearmMotion", "value": "angleHeld"}, {"field": "variant.forearmOrientation", "value": "neutral"}, {"field": "variant.wristMotion", "value": "angleHeld"}, {"field": "variant.wristPosture", "value": "neutral"}, {"field": "variant.handTask", "value": "staticImplementHold"}, {"field": "variant.handleType", "value": "rope"}, {"field": "variant.resistanceGeometry", "value": "lowCableCurl"}, {"field": "variant.fixedPath", "value": false}, {"field": "variant.lowerBodyContribution", "value": "none"}],
+      "requirePresent": [], "requireAbsent": ["variant.preacherPadAngle", "variant.cadence"], "requireInvolvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}], "requireAdditionalStabilityDemands": ["scapula", "spine", "pelvis"]
     },
     {
-      "id": "supinated-curl-promotes-biceps-brachii",
-      "description": "The reviewed supinated cable curl assigns biceps brachii as a co-primary elbow flexor.",
-      "when": {
-        "field": "variant.forearmOrientation",
-        "operator": "equals",
-        "value": "supinated"
-      },
-      "then": [],
-      "requirePresent": [],
-      "requireAbsent": [],
-      "requireInvolvement": [
-        {
-          "muscle": "bicepsBrachii",
-          "role": "primary"
-        }
-      ]
+      "id": "standing-pronated-straight-bar-cable-fixture", "description": "Pins the reviewed standing pronated straight-bar cable fixture and its unsupported stability roles.", "when": {"field": "variant.curlFixture", "operator": "equals", "value": "standingPronatedStraightBarCable"},
+      "then": [{"field": "equipment", "value": "cable"}, {"field": "laterality", "value": "bilateral"}, {"field": "variant.kineticChain", "value": "open"}, {"field": "variant.bodyPosition", "value": "standing"}, {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "free"}, {"field": "variant.forearmSupport", "value": "none"}, {"field": "variant.upperArmSupport", "value": "none"}, {"field": "variant.upperArmPosition", "value": "atSide"}, {"field": "variant.armSequence", "value": "simultaneousBilateral"}, {"field": "variant.elbowMotion", "value": "flexes"}, {"field": "variant.forearmMotion", "value": "angleHeld"}, {"field": "variant.forearmOrientation", "value": "pronated"}, {"field": "variant.wristMotion", "value": "angleHeld"}, {"field": "variant.wristPosture", "value": "neutral"}, {"field": "variant.handTask", "value": "staticImplementHold"}, {"field": "variant.handleType", "value": "straightBar"}, {"field": "variant.resistanceGeometry", "value": "lowCableCurl"}, {"field": "variant.fixedPath", "value": false}, {"field": "variant.lowerBodyContribution", "value": "none"}],
+      "requirePresent": [], "requireAbsent": ["variant.preacherPadAngle", "variant.cadence"], "requireInvolvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}], "requireAdditionalStabilityDemands": ["scapula", "spine", "pelvis"]
     },
     {
-      "id": "non-supinated-curl-keeps-biceps-brachii-secondary",
-      "description": "Neutral and pronated cable curls retain biceps brachii as a secondary elbow flexor rather than removing its contribution or promoting it to primary.",
-      "when": {
-        "field": "variant.forearmOrientation",
-        "operator": "notEquals",
-        "value": "supinated"
-      },
-      "then": [],
-      "requirePresent": [],
-      "requireAbsent": [],
-      "requireInvolvement": [
-        {
-          "muscle": "bicepsBrachii",
-          "role": "secondary"
-        }
-      ]
+      "id": "standing-straight-bar-barbell-fixture", "description": "Pins the reviewed standing straight-bar barbell fixture and its unsupported stability roles.", "when": {"field": "variant.curlFixture", "operator": "equals", "value": "standingStraightBarBarbell"},
+      "then": [{"field": "equipment", "value": "barbell"}, {"field": "laterality", "value": "bilateral"}, {"field": "variant.kineticChain", "value": "open"}, {"field": "variant.bodyPosition", "value": "standing"}, {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "free"}, {"field": "variant.forearmSupport", "value": "none"}, {"field": "variant.upperArmSupport", "value": "none"}, {"field": "variant.upperArmPosition", "value": "atSide"}, {"field": "variant.armSequence", "value": "simultaneousBilateral"}, {"field": "variant.elbowMotion", "value": "flexes"}, {"field": "variant.forearmMotion", "value": "angleHeld"}, {"field": "variant.forearmOrientation", "value": "supinated"}, {"field": "variant.wristMotion", "value": "angleHeld"}, {"field": "variant.wristPosture", "value": "neutral"}, {"field": "variant.handTask", "value": "staticImplementHold"}, {"field": "variant.handleType", "value": "straightBarbell"}, {"field": "variant.resistanceGeometry", "value": "gravityLoadedBarbell"}, {"field": "variant.fixedPath", "value": false}, {"field": "variant.lowerBodyContribution", "value": "none"}],
+      "requirePresent": [], "requireAbsent": ["variant.preacherPadAngle", "variant.cadence"], "requireInvolvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}], "requireAdditionalStabilityDemands": ["scapula", "spine", "pelvis"]
     },
     {
-      "id": "cable-curl-pins-cable-interface",
-      "description": "Cable records retain the reviewed low-cable interfaces.",
-      "when": {"field": "equipment", "operator": "equals", "value": "cable"},
-      "then": [
-        {"field": "laterality", "value": "bilateral"},
-        {"field": "variant.handleType", "allowedValues": ["straightBar", "rope"]},
-        {"field": "variant.resistanceGeometry", "value": "lowCableCurl"}
-      ],
-      "requirePresent": [], "requireAbsent": []
+      "id": "standing-single-arm-supinated-dumbbell-fixture", "description": "Pins the reviewed standing single-arm dumbbell fixture and its asymmetric stability roles.", "when": {"field": "variant.curlFixture", "operator": "equals", "value": "standingSingleArmSupinatedDumbbell"},
+      "then": [{"field": "equipment", "value": "dumbbell"}, {"field": "laterality", "value": "unilateral"}, {"field": "variant.kineticChain", "value": "open"}, {"field": "variant.bodyPosition", "value": "standing"}, {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "free"}, {"field": "variant.forearmSupport", "value": "none"}, {"field": "variant.upperArmSupport", "value": "none"}, {"field": "variant.upperArmPosition", "value": "atSide"}, {"field": "variant.armSequence", "value": "singleArmThenMirror"}, {"field": "variant.elbowMotion", "value": "flexes"}, {"field": "variant.forearmMotion", "value": "angleHeld"}, {"field": "variant.forearmOrientation", "value": "supinated"}, {"field": "variant.wristMotion", "value": "angleHeld"}, {"field": "variant.wristPosture", "value": "neutral"}, {"field": "variant.handTask", "value": "staticImplementHold"}, {"field": "variant.handleType", "value": "dumbbellHandle"}, {"field": "variant.resistanceGeometry", "value": "gravityLoadedDumbbell"}, {"field": "variant.fixedPath", "value": false}, {"field": "variant.lowerBodyContribution", "value": "none"}],
+      "requirePresent": [], "requireAbsent": ["variant.preacherPadAngle", "variant.cadence"], "requireInvolvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}], "requireAdditionalStabilityDemands": ["scapula", "spine", "pelvis"]
     },
     {
-      "id": "barbell-curl-pins-straight-bar-fixture",
-      "description": "The reviewed free-weight barbell branch is bilateral and supinated.",
-      "when": {"field": "equipment", "operator": "equals", "value": "barbell"},
-      "then": [
-        {"field": "laterality", "value": "bilateral"}, {"field": "variant.forearmOrientation", "value": "supinated"},
-        {"field": "variant.handleType", "value": "straightBarbell"}, {"field": "variant.resistanceGeometry", "value": "gravityLoadedBarbell"}
-      ],
-      "requirePresent": [], "requireAbsent": []
+      "id": "preacher-barbell-unreported-shape-fixture", "description": "Pins the source-bounded seated preacher fixture without inventing its bar shape or pad angle.", "when": {"field": "variant.curlFixture", "operator": "equals", "value": "preacherBarbellUnreportedShape"},
+      "then": [{"field": "equipment", "value": "barbell"}, {"field": "laterality", "value": "bilateral"}, {"field": "variant.kineticChain", "value": "open"}, {"field": "variant.bodyPosition", "value": "seated"}, {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "unstandardized"}, {"field": "variant.forearmSupport", "value": "none"}, {"field": "variant.upperArmSupport", "value": "preacherPad"}, {"field": "variant.upperArmPosition", "value": "flexedOverPreacherPad"}, {"field": "variant.armSequence", "value": "simultaneousBilateral"}, {"field": "variant.elbowMotion", "value": "flexes"}, {"field": "variant.forearmMotion", "value": "angleHeld"}, {"field": "variant.forearmOrientation", "value": "supinated"}, {"field": "variant.wristMotion", "value": "angleHeld"}, {"field": "variant.wristPosture", "value": "neutral"}, {"field": "variant.handTask", "value": "staticImplementHold"}, {"field": "variant.handleType", "value": "barbellShapeUnreported"}, {"field": "variant.resistanceGeometry", "value": "gravityLoadedBarbell"}, {"field": "variant.preacherPadAngle", "value": "unreported"}, {"field": "variant.cadence", "value": "oneSecondConcentricTwoSecondEccentric"}, {"field": "variant.fixedPath", "value": false}, {"field": "variant.lowerBodyContribution", "value": "none"}],
+      "requirePresent": ["variant.preacherPadAngle", "variant.cadence"], "requireAbsent": [], "requireInvolvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}]
     },
     {
-      "id": "dumbbell-curl-pins-single-arm-fixture",
-      "description": "The reviewed dumbbell branch is unilateral and held supinated.",
-      "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
-      "then": [
-        {"field": "laterality", "value": "unilateral"}, {"field": "variant.forearmOrientation", "value": "supinated"},
-        {"field": "variant.handleType", "value": "dumbbellHandle"}, {"field": "variant.resistanceGeometry", "value": "gravityLoadedDumbbell"}
-      ],
-      "requirePresent": [], "requireAbsent": []
+      "id": "incline-bilateral-supinated-dumbbell-fixture", "description": "Pins the source-bounded simultaneous bilateral curl against a 45-degree posterior bench.", "when": {"field": "variant.curlFixture", "operator": "equals", "value": "inclineBilateralSupinatedDumbbell"},
+      "then": [{"field": "equipment", "value": "dumbbell"}, {"field": "laterality", "value": "bilateral"}, {"field": "variant.kineticChain", "value": "open"}, {"field": "variant.bodyPosition", "value": "reclined45Degrees"}, {"field": "variant.torsoSupport", "value": "posteriorBench45Degrees"}, {"field": "variant.scapularTranslation", "value": "unstandardized"}, {"field": "variant.forearmSupport", "value": "none"}, {"field": "variant.upperArmSupport", "value": "none"}, {"field": "variant.upperArmPosition", "value": "behindTorso"}, {"field": "variant.armSequence", "value": "simultaneousBilateral"}, {"field": "variant.elbowMotion", "value": "flexes"}, {"field": "variant.forearmMotion", "value": "angleHeld"}, {"field": "variant.forearmOrientation", "value": "supinated"}, {"field": "variant.wristMotion", "value": "angleHeld"}, {"field": "variant.wristPosture", "value": "neutral"}, {"field": "variant.handTask", "value": "staticImplementHold"}, {"field": "variant.handleType", "value": "dumbbellHandle"}, {"field": "variant.resistanceGeometry", "value": "gravityLoadedDumbbell"}, {"field": "variant.fixedPath", "value": false}, {"field": "variant.lowerBodyContribution", "value": "none"}],
+      "requirePresent": [], "requireAbsent": ["variant.preacherPadAngle", "variant.cadence"], "requireInvolvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}]
     }
   ],
   "exercises": [
     {
-      "catalogID": "supinated-straight-bar-cable-curl",
-      "name": "Supinated Straight-Bar Cable Curl",
-      "aliases": [
-        "Straight-Bar Cable Curl",
-        "Cable Biceps Curl"
-      ],
-      "equipment": "cable",
-      "laterality": "bilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0.0,
-      "defaultWeight": 30,
-      "defaultWeightKg": 15,
-      "reps": 10,
-      "searchPriority": 90,
-      "involvement": [
-        {
-          "muscle": "brachialis",
-          "role": "primary"
-        },
-        {
-          "muscle": "bicepsBrachii",
-          "role": "primary"
-        },
-        {
-          "muscle": "brachioradialis",
-          "role": "secondary"
-        },
-        {
-          "muscle": "deltoidAnterior",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "trapeziusMiddle",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "fingerFlexors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "extensorCarpiRadialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "scapularTranslation": "free",
-        "forearmSupport": "none",
-        "upperArmPosition": "atSide",
-        "elbowMotion": "flexes",
-        "forearmMotion": "angleHeld",
-        "forearmOrientation": "supinated",
-        "wristMotion": "angleHeld",
-        "wristPosture": "neutral",
-        "handTask": "staticImplementHold",
-        "handleType": "straightBar",
-        "resistanceGeometry": "lowCableCurl",
-        "fixedPath": false,
-        "lowerBodyContribution": "none"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "coratella-2023-curl-handgrips"
-      ],
-      "execution": {
-        "startingPosition": "Stand facing a low cable while holding a straight bar with both palms facing up.",
-        "movement": "Bend your elbows as far as you can.",
-        "endpoint": "End each repetition with your elbows bent as far as they comfortably go.",
-        "returnPhase": "Lower the bar under control without turning your forearms.",
-        "controlledJoints": "Keep your upper arms beside your torso and your wrists straight.",
-        "supportAndPosture": "Keep your body still.",
-        "disqualifyingCompensations": [
-          "Swinging the upper arms forward turns the strict curl into a shoulder swing.",
-          "Leaning the torso backward turns the strict curl into a cheat curl.",
-          "Letting the palms turn away from facing up changes the palms-up curl into a different grip exercise."
-        ]
-      }
+      "catalogID": "supinated-straight-bar-cable-curl", "name": "Supinated Straight-Bar Cable Curl", "aliases": ["Straight-Bar Cable Curl", "Cable Biceps Curl"], "equipment": "cable", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 30, "defaultWeightKg": 15, "reps": 10, "searchPriority": 90,
+      "involvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "variant": {"curlFixture": "standingSupinatedStraightBarCable", "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none", "upperArmSupport": "none", "upperArmPosition": "atSide", "armSequence": "simultaneousBilateral", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated", "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "straightBar", "resistanceGeometry": "lowCableCurl", "fixedPath": false, "lowerBodyContribution": "none"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["scapula", "spine", "pelvis"], "evidenceRefs": ["coratella-2023-curl-handgrips"],
+      "execution": {"startingPosition": "Stand facing a low cable while holding a straight bar with both palms facing up.", "movement": "Bend your elbows as far as you can.", "endpoint": "End each repetition with your elbows bent as far as they comfortably go.", "returnPhase": "Lower the bar under control without turning your forearms.", "controlledJoints": "Keep your upper arms beside your torso and your wrists straight.", "supportAndPosture": "Keep your body still.", "disqualifyingCompensations": ["Swinging the upper arms forward turns the strict curl into a shoulder swing.", "Leaning the torso backward turns the strict curl into a cheat curl.", "Letting the palms turn away from facing up changes the palms-up curl into a different grip exercise."]}
     },
     {
-      "catalogID": "neutral-rope-cable-curl",
-      "name": "Neutral-Grip Rope Cable Curl",
-      "aliases": [
-        "Cable Rope Hammer Curl",
-        "Rope Hammer Curl"
-      ],
-      "equipment": "cable",
-      "laterality": "bilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0.0,
-      "defaultWeight": 30,
-      "defaultWeightKg": 15,
-      "reps": 10,
-      "searchPriority": 85,
-      "involvement": [
-        {
-          "muscle": "brachialis",
-          "role": "primary"
-        },
-        {
-          "muscle": "bicepsBrachii",
-          "role": "secondary"
-        },
-        {
-          "muscle": "brachioradialis",
-          "role": "secondary"
-        },
-        {
-          "muscle": "deltoidAnterior",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "trapeziusMiddle",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "fingerFlexors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "extensorCarpiRadialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "scapularTranslation": "free",
-        "forearmSupport": "none",
-        "upperArmPosition": "atSide",
-        "elbowMotion": "flexes",
-        "forearmMotion": "angleHeld",
-        "forearmOrientation": "neutral",
-        "wristMotion": "angleHeld",
-        "wristPosture": "neutral",
-        "handTask": "staticImplementHold",
-        "handleType": "rope",
-        "resistanceGeometry": "lowCableCurl",
-        "fixedPath": false,
-        "lowerBodyContribution": "none"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "coratella-2023-curl-handgrips",
-        "kleiber-2015-elbow-flexion-hand-position"
-      ],
-      "execution": {
-        "startingPosition": "Stand facing a low cable while holding the rope ends with both palms facing inward.",
-        "movement": "Bend your elbows as far as you can.",
-        "endpoint": "End each repetition with your elbows bent as far as they comfortably go.",
-        "returnPhase": "Return under control without turning your forearms.",
-        "controlledJoints": "Keep your upper arms beside your torso and your wrists straight.",
-        "supportAndPosture": "Keep your body still.",
-        "disqualifyingCompensations": [
-          "Swinging the upper arms forward turns the strict curl into a shoulder swing.",
-          "Leaning the torso backward turns the strict curl into a cheat curl.",
-          "Turning the palms away from facing each other changes the hammer curl into a different grip exercise."
-        ]
-      }
+      "catalogID": "neutral-rope-cable-curl", "name": "Neutral-Grip Rope Cable Curl", "aliases": ["Cable Rope Hammer Curl", "Rope Hammer Curl"], "equipment": "cable", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 30, "defaultWeightKg": 15, "reps": 10, "searchPriority": 85,
+      "involvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "variant": {"curlFixture": "standingNeutralRopeCable", "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none", "upperArmSupport": "none", "upperArmPosition": "atSide", "armSequence": "simultaneousBilateral", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "neutral", "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "rope", "resistanceGeometry": "lowCableCurl", "fixedPath": false, "lowerBodyContribution": "none"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["scapula", "spine", "pelvis"], "evidenceRefs": ["coratella-2023-curl-handgrips", "kleiber-2015-elbow-flexion-hand-position"],
+      "execution": {"startingPosition": "Stand facing a low cable while holding the rope ends with both palms facing inward.", "movement": "Bend your elbows as far as you can.", "endpoint": "End each repetition with your elbows bent as far as they comfortably go.", "returnPhase": "Return under control without turning your forearms.", "controlledJoints": "Keep your upper arms beside your torso and your wrists straight.", "supportAndPosture": "Keep your body still.", "disqualifyingCompensations": ["Swinging the upper arms forward turns the strict curl into a shoulder swing.", "Leaning the torso backward turns the strict curl into a cheat curl.", "Turning the palms away from facing each other changes the hammer curl into a different grip exercise."]}
     },
     {
-      "catalogID": "pronated-straight-bar-cable-curl",
-      "name": "Pronated Straight-Bar Cable Curl",
-      "aliases": [
-        "Reverse-Grip Cable Curl",
-        "Cable Reverse Curl"
-      ],
-      "equipment": "cable",
-      "laterality": "bilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0.0,
-      "defaultWeight": 20,
-      "defaultWeightKg": 10,
-      "reps": 10,
-      "searchPriority": 75,
-      "involvement": [
-        {
-          "muscle": "brachialis",
-          "role": "primary"
-        },
-        {
-          "muscle": "bicepsBrachii",
-          "role": "secondary"
-        },
-        {
-          "muscle": "brachioradialis",
-          "role": "secondary"
-        },
-        {
-          "muscle": "deltoidAnterior",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "trapeziusMiddle",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "fingerFlexors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "extensorCarpiRadialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "scapularTranslation": "free",
-        "forearmSupport": "none",
-        "upperArmPosition": "atSide",
-        "elbowMotion": "flexes",
-        "forearmMotion": "angleHeld",
-        "forearmOrientation": "pronated",
-        "wristMotion": "angleHeld",
-        "wristPosture": "neutral",
-        "handTask": "staticImplementHold",
-        "handleType": "straightBar",
-        "resistanceGeometry": "lowCableCurl",
-        "fixedPath": false,
-        "lowerBodyContribution": "none"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "coratella-2023-curl-handgrips",
-        "kleiber-2015-elbow-flexion-hand-position"
-      ],
-      "execution": {
-        "startingPosition": "Stand facing a low cable while holding a straight bar with both palms facing down.",
-        "movement": "Bend your elbows as far as you can.",
-        "endpoint": "End each repetition with your elbows bent as far as they comfortably go.",
-        "returnPhase": "Lower the bar under control without turning your forearms.",
-        "controlledJoints": "Keep your upper arms beside your torso and your wrists straight.",
-        "supportAndPosture": "Keep your body still.",
-        "disqualifyingCompensations": [
-          "Swinging the upper arms forward turns the strict curl into a shoulder swing.",
-          "Leaning the torso backward turns the strict curl into a cheat curl.",
-          "Letting the palms turn away from facing down changes the reverse curl into a different grip exercise."
-        ]
-      }
+      "catalogID": "pronated-straight-bar-cable-curl", "name": "Pronated Straight-Bar Cable Curl", "aliases": ["Reverse-Grip Cable Curl", "Cable Reverse Curl"], "equipment": "cable", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 75,
+      "involvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "variant": {"curlFixture": "standingPronatedStraightBarCable", "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none", "upperArmSupport": "none", "upperArmPosition": "atSide", "armSequence": "simultaneousBilateral", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "pronated", "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "straightBar", "resistanceGeometry": "lowCableCurl", "fixedPath": false, "lowerBodyContribution": "none"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["scapula", "spine", "pelvis"], "evidenceRefs": ["coratella-2023-curl-handgrips", "kleiber-2015-elbow-flexion-hand-position"],
+      "execution": {"startingPosition": "Stand facing a low cable while holding a straight bar with both palms facing down.", "movement": "Bend your elbows as far as you can.", "endpoint": "End each repetition with your elbows bent as far as they comfortably go.", "returnPhase": "Lower the bar under control without turning your forearms.", "controlledJoints": "Keep your upper arms beside your torso and your wrists straight.", "supportAndPosture": "Keep your body still.", "disqualifyingCompensations": ["Swinging the upper arms forward turns the strict curl into a shoulder swing.", "Leaning the torso backward turns the strict curl into a cheat curl.", "Letting the palms turn away from facing down changes the reverse curl into a different grip exercise."]}
     },
     {
-      "catalogID": "standing-straight-bar-barbell-curl",
-      "name": "Standing Straight-Bar Barbell Curl",
-      "aliases": ["Straight-Bar Barbell Curl", "Standing Barbell Biceps Curl"],
-      "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
-      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 10, "searchPriority": 96,
-      "involvement": [
-        {"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"},
-        {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"},
-        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}
-      ],
-      "variant": {
-        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none",
-        "upperArmPosition": "atSide", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated",
-        "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "straightBarbell",
-        "resistanceGeometry": "gravityLoadedBarbell", "fixedPath": false, "lowerBodyContribution": "none"
-      },
-      "additionalPrimeActions": [], "additionalStabilityDemands": [],
-      "evidenceRefs": ["marcolin-2018-curl-variants", "murray-1995-elbow-forearm-moment-arms"],
-      "execution": {
-        "startingPosition": "Stand upright holding the straight bar with both palms facing up and the upper arms beside the torso.",
-        "movement": "Flex both elbows through a comfortable full range without moving the shoulders.",
-        "endpoint": "End with the elbows comfortably bent and both palms still facing up.",
-        "returnPhase": "Lower the bar under control without rotating the forearms.",
-        "controlledJoints": "Keep the wrists neutral and the upper arms beside the torso.",
-        "supportAndPosture": "Keep the trunk and knees still throughout the repetition.",
-        "disqualifyingCompensations": ["Leaning backward or driving with the knees changes the strict curl.", "Swinging the upper arms forward adds a shoulder-flexion repetition."]
-      }
+      "catalogID": "standing-straight-bar-barbell-curl", "name": "Standing Straight-Bar Barbell Curl", "aliases": ["Straight-Bar Barbell Curl", "Standing Barbell Biceps Curl"], "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 10, "searchPriority": 96,
+      "involvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "variant": {"curlFixture": "standingStraightBarBarbell", "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none", "upperArmSupport": "none", "upperArmPosition": "atSide", "armSequence": "simultaneousBilateral", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated", "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "straightBarbell", "resistanceGeometry": "gravityLoadedBarbell", "fixedPath": false, "lowerBodyContribution": "none"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["scapula", "spine", "pelvis"], "evidenceRefs": ["marcolin-2018-curl-variants", "murray-1995-elbow-forearm-moment-arms"],
+      "execution": {"startingPosition": "Stand upright holding the straight bar with both palms facing up and the upper arms beside the torso.", "movement": "Flex both elbows through a comfortable full range without moving the shoulders.", "endpoint": "End with the elbows comfortably bent and both palms still facing up.", "returnPhase": "Lower the bar under control without rotating the forearms.", "controlledJoints": "Keep the wrists neutral and the upper arms beside the torso.", "supportAndPosture": "Keep the trunk and knees still throughout the repetition.", "disqualifyingCompensations": ["Leaning backward or driving with the knees changes the strict curl.", "Swinging the upper arms forward adds a shoulder-flexion repetition."]}
     },
     {
-      "catalogID": "standing-single-arm-supinated-dumbbell-curl",
-      "name": "Standing Single-Arm Supinated Dumbbell Curl",
-      "aliases": ["Single-Arm Dumbbell Curl", "One-Arm Supinated Dumbbell Curl"],
-      "equipment": "dumbbell", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
-      "bodyweightFraction": 0, "defaultWeight": 15, "defaultWeightKg": 7.5, "reps": 10, "searchPriority": 95,
-      "involvement": [
-        {"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"},
-        {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"},
-        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}
-      ],
-      "variant": {
-        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none",
-        "upperArmPosition": "atSide", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated",
-        "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "dumbbellHandle",
-        "resistanceGeometry": "gravityLoadedDumbbell", "fixedPath": false, "lowerBodyContribution": "none"
-      },
-      "additionalPrimeActions": [], "additionalStabilityDemands": ["pelvis"],
-      "evidenceRefs": ["murray-1995-elbow-forearm-moment-arms", "oliveira-2009-dumbbell-curl-shoulder-position"],
-      "execution": {
-        "startingPosition": "Stand with one dumbbell in the working hand, the palm facing up, and the upper arm alongside the body.",
-        "movement": "Flex the working elbow through a comfortable range without moving the shoulder.",
-        "endpoint": "End with the elbow comfortably flexed and the palm still facing up.",
-        "returnPhase": "Lower the dumbbell under control toward the near-extended start.",
-        "controlledJoints": "Keep the palm up, wrist neutral, and upper arm beside the torso.",
-        "supportAndPosture": "Keep the trunk and lower body still against the one-sided load.",
-        "disqualifyingCompensations": ["Leaning or twisting the torso changes the strict curl.", "Swinging the upper arm forward or rotating the palm changes the reviewed fixture."],
-        "sideOrDirection": "Complete the set on one arm, then repeat with the other arm."
-      }
+      "catalogID": "standing-single-arm-supinated-dumbbell-curl", "name": "Standing Single-Arm Supinated Dumbbell Curl", "aliases": ["Single-Arm Dumbbell Curl", "One-Arm Supinated Dumbbell Curl"], "equipment": "dumbbell", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 15, "defaultWeightKg": 7.5, "reps": 10, "searchPriority": 95,
+      "involvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "variant": {"curlFixture": "standingSingleArmSupinatedDumbbell", "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none", "upperArmSupport": "none", "upperArmPosition": "atSide", "armSequence": "singleArmThenMirror", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated", "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "dumbbellHandle", "resistanceGeometry": "gravityLoadedDumbbell", "fixedPath": false, "lowerBodyContribution": "none"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["scapula", "spine", "pelvis"], "evidenceRefs": ["murray-1995-elbow-forearm-moment-arms", "oliveira-2009-dumbbell-curl-shoulder-position"],
+      "execution": {"startingPosition": "Stand with one dumbbell in the working hand, the palm facing up, and the upper arm alongside the body.", "movement": "Flex the working elbow through a comfortable range without moving the shoulder.", "endpoint": "End with the elbow comfortably flexed and the palm still facing up.", "returnPhase": "Lower the dumbbell under control toward the near-extended start.", "controlledJoints": "Keep the palm up, wrist neutral, and upper arm beside the torso.", "supportAndPosture": "Keep the trunk and lower body still against the one-sided load.", "disqualifyingCompensations": ["Leaning or twisting the torso changes the strict curl.", "Swinging the upper arm forward or rotating the palm changes the reviewed fixture."], "sideOrDirection": "Complete the set on one arm, then repeat with the other arm."}
+    },
+    {
+      "catalogID": "barbell-preacher-curl", "name": "Barbell Preacher Curl", "aliases": [], "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 30, "defaultWeightKg": 15, "reps": 10, "searchPriority": 90,
+      "involvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}],
+      "variant": {"curlFixture": "preacherBarbellUnreportedShape", "kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "none", "scapularTranslation": "unstandardized", "forearmSupport": "none", "upperArmSupport": "preacherPad", "upperArmPosition": "flexedOverPreacherPad", "armSequence": "simultaneousBilateral", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated", "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "barbellShapeUnreported", "resistanceGeometry": "gravityLoadedBarbell", "preacherPadAngle": "unreported", "cadence": "oneSecondConcentricTwoSecondEccentric", "fixedPath": false, "lowerBodyContribution": "none"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["murray-1995-elbow-forearm-moment-arms", "nunes-2020-barbell-preacher-curl"],
+      "execution": {"startingPosition": "Sit at a preacher station with both upper arms fully supported on the pad, hold the source-described bar with palms up, and keep the wrists neutral.", "movement": "Flex both elbows together for one second without lifting the upper arms from the pad.", "endpoint": "Finish at the top of the controlled elbow-flexion range while the upper arms remain supported.", "returnPhase": "Lower the bar for two seconds to the controlled start without changing forearm orientation.", "controlledJoints": "Create the repetition through elbow flexion while the wrists and forearm orientation stay fixed.", "supportAndPosture": "Keep both upper arms on the preacher pad; the source does not report a bar shape or pad angle.", "disqualifyingCompensations": ["Lifting an upper arm from the pad leaves the reviewed preacher fixture.", "Using an alternate-arm sequence or rotating the forearms changes the reviewed task.", "Treating the unreported bar as a confirmed straight or EZ bar invents fixture detail."]}
+    },
+    {
+      "catalogID": "bilateral-incline-dumbbell-curl", "name": "Bilateral Incline Dumbbell Curl", "aliases": [], "equipment": "dumbbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 15, "defaultWeightKg": 7.5, "reps": 10, "searchPriority": 90,
+      "involvement": [{"muscle": "brachialis", "role": "primary"}, {"muscle": "bicepsBrachii", "role": "primary"}, {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}],
+      "variant": {"curlFixture": "inclineBilateralSupinatedDumbbell", "kineticChain": "open", "bodyPosition": "reclined45Degrees", "torsoSupport": "posteriorBench45Degrees", "scapularTranslation": "unstandardized", "forearmSupport": "none", "upperArmSupport": "none", "upperArmPosition": "behindTorso", "armSequence": "simultaneousBilateral", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated", "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "dumbbellHandle", "resistanceGeometry": "gravityLoadedDumbbell", "fixedPath": false, "lowerBodyContribution": "none"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["murray-1995-elbow-forearm-moment-arms", "oliveira-2009-dumbbell-curl-shoulder-position", "zabaleta-korta-2023-incline-dumbbell-curl"],
+      "execution": {"startingPosition": "Recline against a 45-degree bench with a dumbbell in each hand, palms facing up, and both upper arms hanging behind the torso.", "movement": "Flex both elbows together while keeping the torso supported and the upper-arm position unchanged.", "endpoint": "Finish at the top of the controlled elbow-flexion range with both palms still facing up.", "returnPhase": "Lower both dumbbells together under control until the elbows approach extension.", "controlledJoints": "Create the repetition through elbow flexion without rotating the forearms or deliberately flexing the shoulders.", "supportAndPosture": "Keep the torso against the bench and move both arms at the same time.", "disqualifyingCompensations": ["Sitting upright or losing posterior bench support leaves the reviewed incline fixture.", "Alternating arms changes the reviewed two-arm sequence.", "Swinging the upper arms forward adds shoulder motion outside the family contract."]}
     }
   ]
 }

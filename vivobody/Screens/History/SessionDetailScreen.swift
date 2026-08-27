@@ -12,12 +12,12 @@
 //    • SESSION HERO — the screen's one focal card. The date and the
 //      derived workout title (e.g. "Full body") carry the entry's
 //      identity, with the outlined PR capsule beside the title when
-//      the session set an all-time top weight; the total volume
-//      follows as a huge monospaced numeral in the completion
+//      the session set an all-time record; comparable volume or the
+//      honest unloaded work metric follows as a huge monospaced numeral in the completion
 //      accent; Duration / Sets / Reps close as a stat strip, with
 //      the Top set detail and intensity line as the card's footer.
 //    • EXERCISES — one card per exercise: group label + per-exercise
-//      volume (+ the PR capsule when earned), the contribution
+//      volume or unloaded work (+ the PR capsule when earned), the contribution
 //      waterfall, then the set grid of `1   135 × 8` rows in tabular
 //      monospace. The top set's numerals render in the completion
 //      accent; incomplete sets dim with a hollow status pip.
@@ -120,44 +120,48 @@ struct SessionDetailScreen: View {
     private var heroVolume: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                Text(heroVolumeValue)
+                Text(heroMetric.value)
                     .font(Typography.metricHero)
                     .foregroundStyle(sessionHasPR ? Tint.complete : Ink.primary)
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                if session.receiptTonnageSummary.availability != .unavailable {
-                    Text(unit.symbol)
+                if let metricUnit = heroMetric.unit {
+                    Text(metricUnit)
                         .font(Typography.metricInline)
                         .foregroundStyle(Ink.tertiary)
                 }
             }
-            Text(heroVolumeLabel)
+            Text(heroMetric.label)
                 .panelLegendType()
                 .foregroundStyle(sessionHasPR ? Tint.complete : Ink.tertiary)
         }
     }
 
-    private var heroVolumeValue: String {
+    private var heroMetric: (value: String, unit: String?, label: String) {
+        guard session.hasReceiptTonnageAxis else {
+            if session.totalReps > 0 {
+                return ("\(session.totalReps)", nil, "Reps")
+            }
+            return (DurationFormatter.compact(session.totalTimedWork), nil, "Timed work")
+        }
+
         let summary = session.receiptTonnageSummary
         switch summary.availability {
         case .complete:
-            return WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
+            return (
+                WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit),
+                unit.symbol,
+                sessionHasPR ? "Volume · personal record" : "Volume"
+            )
         case .partial:
-            return "\(WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit))+"
+            return (
+                "\(WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit))+",
+                unit.symbol,
+                "Known volume · total unavailable"
+            )
         case .unavailable:
-            return "—"
-        }
-    }
-
-    private var heroVolumeLabel: String {
-        switch session.receiptTonnageSummary.availability {
-        case .complete:
-            sessionHasPR ? "Volume · personal record" : "Volume"
-        case .partial:
-            "Known volume · total unavailable"
-        case .unavailable:
-            "Volume unavailable"
+            return ("—", nil, "Volume unavailable")
         }
     }
 
@@ -231,14 +235,14 @@ struct SessionDetailScreen: View {
         max(0, Int(session.duration / 60))
     }
 
-    /// Strongest comparable dynamic-strength set in the session.
-    /// Selection uses effective resistance (including inverse machine
-    /// assistance), while the label preserves exactly what the user
-    /// logged. Non-comparable and non-strength work is excluded.
+    /// Strongest load-comparable reps set in the session. Selection uses
+    /// effective resistance (including inverse machine assistance), while
+    /// the label preserves exactly what the user logged. If the receipt has
+    /// only unloaded reps, the highest-rep set becomes its ordinary marker.
     private var topSetValue: String {
         let candidates = session.orderedExercises.flatMap { exercise in
-            guard exercise.modality == .dynamicStrength,
-                  exercise.trackingMode == .reps
+            guard exercise.trackingMode == .reps,
+                  exercise.performanceSemanticKind.comparesLoad
             else {
                 return [(Exercise, WorkoutSet, Double)]()
             }
@@ -251,10 +255,27 @@ struct SessionDetailScreen: View {
                 return (exercise, set, load)
             }
         }
-        guard let (exercise, set, _) = candidates.max(by: { lhs, rhs in
+        if let (exercise, set, _) = candidates.max(by: { lhs, rhs in
             if lhs.2 == rhs.2 { return lhs.1.reps < rhs.1.reps }
             return lhs.2 < rhs.2
-        }) else { return "—" }
+        }) {
+            return exercise.setLabel(set, unit: unit)
+        }
+
+        let repsCandidates = session.orderedExercises.flatMap { exercise in
+            guard exercise.trackingMode == .reps,
+                  !exercise.tracksResistance
+            else {
+                return [(Exercise, WorkoutSet)]()
+            }
+            return exercise.sets.compactMap { set -> (Exercise, WorkoutSet)? in
+                guard set.isAnalyticsEligible, set.reps > 0 else { return nil }
+                return (exercise, set)
+            }
+        }
+        guard let (exercise, set) = repsCandidates.max(by: { $0.1.reps < $1.1.reps }) else {
+            return "—"
+        }
         return exercise.setLabel(set, unit: unit)
     }
 
@@ -376,7 +397,17 @@ private struct ExerciseDetailRow: View {
     private var volumeCluster: some View {
         switch mode {
         case .reps:
-            if exerciseVolume > 0 {
+            if !exercise.supportsReceiptTonnage {
+                let reps = exercise.sets
+                    .filter(\.isCompleted)
+                    .reduce(0) { $0 + $1.reps }
+                if reps > 0 {
+                    Text("\(reps) reps")
+                        .font(Typography.metricInline)
+                        .foregroundStyle(Ink.secondary)
+                        .monospacedDigit()
+                }
+            } else if exerciseVolume > 0 {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(WeightFormatter.volumeValue(exerciseVolume, unit: unit))
                         .font(Typography.metricInline)
@@ -444,31 +475,38 @@ private struct ExerciseDetailRow: View {
     private func setValue(set: WorkoutSet, textColor: Color) -> some View {
         switch mode {
         case .reps:
-            Text(exercise.loadMode.loggedLoadLabel(
-                set.weight,
+            if let load = exercise.loadMode.loggedLoadLabel(
+                exercise.trackedWeight(set.weight),
                 unit: unit,
                 includeUnit: true
-            ) ?? "—")
-                .font(Typography.metricInline)
-                .foregroundStyle(textColor)
-                .monospacedDigit()
+            ) {
+                Text(load)
+                    .font(Typography.metricInline)
+                    .foregroundStyle(textColor)
+                    .monospacedDigit()
 
-            Text("×")
-                .font(Typography.metricUnit)
-                .foregroundStyle(Ink.quaternary)
-                .padding(.horizontal, Space.md)
+                Text("×")
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.quaternary)
+                    .padding(.horizontal, Space.md)
 
-            Text("\(set.reps)")
-                .font(Typography.metricInline)
-                .foregroundStyle(textColor)
-                .monospacedDigit()
-                .minimumScaleFactor(0.6)
-                .frame(width: 40, alignment: .trailing)
+                Text("\(set.reps)")
+                    .font(Typography.metricInline)
+                    .foregroundStyle(textColor)
+                    .monospacedDigit()
+                    .minimumScaleFactor(0.6)
+                    .frame(width: 40, alignment: .trailing)
+            } else {
+                Text("\(set.reps) reps")
+                    .font(Typography.metricInline)
+                    .foregroundStyle(textColor)
+                    .monospacedDigit()
+            }
 
         case .duration:
-            if set.weight > 0 {
+            if exercise.trackedWeight(set.weight) > 0 {
                 Text(exercise.loadMode.loggedLoadLabel(
-                    set.weight,
+                    exercise.trackedWeight(set.weight),
                     unit: unit,
                     includeUnit: true
                 ) ?? "")

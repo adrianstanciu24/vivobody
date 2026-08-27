@@ -371,6 +371,7 @@ extension ExerciseDetailScreen {
         case .weight: return "Load"
         case .e1rm: return "Estimated one-rep max"
         case .volume: return "Volume"
+        case .reps: return "Reps"
         }
     }
 
@@ -387,6 +388,9 @@ extension ExerciseDetailScreen {
     }
 
     private func chartAccessibilityValue(_ value: Double) -> String {
+        if effectiveChartMetric == .reps {
+            return "\(Int(value.rounded())) reps"
+        }
         if item.trackingMode == .duration, !item.performanceSemanticKind.comparesLoad {
             return DurationFormatter.string(value)
         }
@@ -432,6 +436,9 @@ extension ExerciseDetailScreen {
             }
             return last.topDuration > 0 ? last.topDuration : nil
         }
+        if effectiveChartMetric == .reps {
+            return last.topReps > 0 ? Double(last.topReps) : nil
+        }
         guard effectiveChartMetric == .weight else { return nil }
         guard let load = last.effectiveTopLoad
             ?? (last.loadMode == .nonComparable ? max(0, last.topWeight) : nil)
@@ -465,6 +472,7 @@ extension ExerciseDetailScreen {
     /// left blank: its live axis prints raw seconds, so any unit glyph
     /// there would invent a scale the real chart does not have.
     private var chartPlaceholderUnitLabel: String? {
+        if effectiveChartMetric == .reps { return "reps" }
         if item.trackingMode == .duration,
            !item.performanceSemanticKind.comparesLoad
         {
@@ -898,7 +906,7 @@ extension ExerciseDetailScreen {
 
             rows.append(RecentSessionRow(
                 date: date,
-                topWeight: top.weight,
+                topWeight: item.tracksResistance ? max(0, top.weight) : 0,
                 topReps: top.reps,
                 topDuration: top.duration,
                 loadMode: exercise.loadMode,
@@ -919,6 +927,9 @@ extension ExerciseDetailScreen {
             // that single top set as the "best" so the column isn't
             // empty when the user is just getting started.
             guard let last = lastInstance else { return "—" }
+            if !item.tracksResistance, item.trackingMode == .reps {
+                return "\(last.topReps)"
+            }
             if item.performanceSemanticKind.comparesLoad {
                 return last.loadMode.loggedLoadLabel(
                     last.topWeight,
@@ -937,6 +948,9 @@ extension ExerciseDetailScreen {
         }
 
         guard let best = bestDisplayPoint(in: prog) else { return "—" }
+        if !item.tracksResistance, best.trackingMode == .reps {
+            return "\(best.topReps)"
+        }
         if best.performanceSemanticKind.comparesLoad {
             return best.loadMode.loggedLoadLabel(
                 best.topWeight,
@@ -964,6 +978,9 @@ extension ExerciseDetailScreen {
         }
         if item.trackingMode == .duration {
             return prog.points.max { $0.topDuration < $1.topDuration }
+        }
+        if !item.tracksResistance {
+            return prog.points.max { $0.topReps < $1.topReps }
         }
         return prog.bestWeightPoint
     }
@@ -1008,124 +1025,5 @@ extension ExerciseDetailScreen {
         // evidence either. Keep the editor unsaveable until the user
         // enters the value they actually tested.
         return 0
-    }
-
-    // MARK: - Chart helpers
-
-    /// Filter a resolved series by the selected time range. Takes the
-    /// series as a parameter (rather than reading `progress` again) so
-    /// the chart's visible slice and PR-id set share one instance —
-    /// `progress` mints fresh point UUIDs on every access.
-    func visiblePoints(from prog: ExerciseProgress?) -> [ExerciseProgressPoint] {
-        guard let prog else { return [] }
-        let now = Date()
-        var points = prog.points.filter { $0.date <= now }
-        if let cutoff = range.cutoff {
-            points = points.filter { $0.date >= cutoff }
-        }
-        if effectiveChartMetric == .weight,
-           item.performanceSemanticKind.comparesLoad
-        {
-            // Never relabel raw added load or machine assistance as an
-            // absolute resistance when the historical bodyweight is absent.
-            points = points.filter { $0.effectiveTopLoad != nil }
-        } else if effectiveChartMetric == .e1rm {
-            points = points.filter { $0.estimated1RM > 0 }
-        } else if effectiveChartMetric == .volume {
-            // An unavailable effective load is a missing tonnage point,
-            // not a zero-volume performance. Partial values are also
-            // withheld so the line never implies a complete subtotal.
-            points = points.filter {
-                $0.comparableTonnageAvailability == .complete
-            }
-        }
-        return points
-    }
-
-    /// IDs of the points that set a new high on the *currently
-    /// selected* metric, computed with a running max over the full
-    /// chronological series (not just the visible window) so a PR dot
-    /// only appears where the value beat everything before it.
-    func prPointIDs(from prog: ExerciseProgress?) -> Set<UUID> {
-        guard let prog,
-              supportsPerformanceRecord else { return [] }
-        if item.trackingMode == .reps, effectiveChartMetric == .volume {
-            return []
-        }
-        if item.trackingMode == .duration || effectiveChartMetric == .weight {
-            return Set(prog.points.filter(\.isStrengthPR).map(\.id))
-        }
-        var ids = Set<UUID>()
-        var runningMax = -Double.infinity
-        for point in prog.points {
-            let value = point.estimated1RM
-            guard value > 0 else { continue }
-            if value > runningMax {
-                runningMax = value
-                ids.insert(point.id)
-            }
-        }
-        return ids
-    }
-
-    /// The y-value for a chart point in the user's display unit. Loaded
-    /// isometrics plot absolute effective resistance; duration-only work
-    /// plots time. Nil keeps unavailable absolute load or incomplete
-    /// comparable tonnage off the chart.
-    func chartValue(for point: ExerciseProgressPoint) -> Double? {
-        if item.trackingMode == .duration {
-            if item.performanceSemanticKind.comparesLoad {
-                guard let effectiveLoad = point.effectiveTopLoad else { return nil }
-                return WeightFormatter.toDisplay(effectiveLoad, unit: unit)
-            }
-            return point.topDuration
-        }
-        switch effectiveChartMetric {
-        case .weight:
-            guard let historyLoad = point.historyTopLoad else { return nil }
-            return WeightFormatter.toDisplay(historyLoad, unit: unit)
-        case .e1rm: return WeightFormatter.toDisplay(point.estimated1RM, unit: unit)
-        case .volume:
-            guard point.comparableTonnageAvailability == .complete else { return nil }
-            return WeightFormatter.toDisplay(point.totalVolume, unit: unit)
-        }
-    }
-
-    /// Unsupported metrics fall back to the ordinary load-history
-    /// line. Only comparable dynamic strength exposes e1RM/tonnage.
-    var effectiveChartMetric: ChartMetric {
-        availableChartMetrics.contains(chartMetric) ? chartMetric : .weight
-    }
-
-    var availableChartMetrics: [ChartMetric] {
-        supportsEstimatedOneRepMax ? ChartMetric.allCases : [.weight]
-    }
-
-    var supportsPerformanceRecord: Bool {
-        item.performanceSemanticKind.supportsRecord
-    }
-
-    var supportsEstimatedOneRepMax: Bool {
-        item.modality.supportsEstimatedOneRepMax(
-            for: item.trackingMode,
-            loadMode: item.loadMode
-        )
-    }
-
-    /// Cached confidence-gated estimated-strength direction for this
-    /// exercise. The detail uses the exact board already built for Today
-    /// and the widget; no analytics are recomputed during rendering.
-    var strengthTrendStat: StrengthOutlookStat? {
-        guard supportsEstimatedOneRepMax else { return nil }
-        return sessionAnalytics?.strength.stat(forHistoryKey: historyKey)
-    }
-
-    /// Confidence-eligible workout dates from the cached history index.
-    /// Unlike `ExerciseProgress`, this index retains the first point, so
-    /// the build-up card can honestly advance from 0/4 to 1/4.
-    var strengthTrendReadinessDates: [Date] {
-        guard supportsEstimatedOneRepMax else { return [] }
-        return sessionAnalytics?.exerciseHistorySummaries[historyKey]?
-            .estimatedOneRepMaxDates ?? []
     }
 }

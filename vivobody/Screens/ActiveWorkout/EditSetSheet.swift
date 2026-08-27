@@ -55,6 +55,10 @@ struct EditSetSheet: View {
         self.set.exercise?.loadMode ?? .external
     }
 
+    private var tracksResistance: Bool {
+        self.set.exercise?.tracksResistance ?? true
+    }
+
     /// 1-based position of this set inside its exercise — the sheet
     /// names what it's editing ("Set 2 of 3") so a pip tap never
     /// opens onto an anonymous number.
@@ -126,25 +130,29 @@ struct EditSetSheet: View {
                         // A bare value plus its unit explains itself for
                         // plain weight; added load and assistance keep
                         // their semantic noun, matching the hero.
-                        if loadMode != .external {
-                            Text(loadMode.inputLabel)
-                                .panelLegend()
+                        if tracksResistance {
+                            if loadMode != .external {
+                                Text(loadMode.inputLabel)
+                                    .panelLegend()
+                            }
+                            WeightScrubber(
+                                canonicalWeight: weightBinding,
+                                purpose: .strength,
+                                label: loadMode.inputLabel,
+                                pointsPerStep: 8,
+                                valueFontSize: 96,
+                                presentation: .bare,
+                                onScrubEnded: saveSettledScrub
+                            )
                         }
-                        WeightScrubber(
-                            canonicalWeight: weightBinding,
-                            purpose: .strength,
-                            label: loadMode.inputLabel,
-                            pointsPerStep: 8,
-                            valueFontSize: 96,
-                            presentation: .bare,
-                            onScrubEnded: saveSettledScrub
-                        )
 
                         HStack(alignment: .center, spacing: Space.sm) {
-                            Text("×")
-                                .font(Typography.statValue)
-                                .foregroundStyle(Ink.quaternary)
-                                .accessibilityHidden(true)
+                            if tracksResistance {
+                                Text("×")
+                                    .font(Typography.statValue)
+                                    .foregroundStyle(Ink.quaternary)
+                                    .accessibilityHidden(true)
+                            }
                             BareScrubber(
                                 value: repsBinding,
                                 range: 1 ... 30,
@@ -188,25 +196,27 @@ struct EditSetSheet: View {
                             onScrubEnded: saveSettledScrub
                         )
 
-                        if loadMode != .external {
-                            Text(loadMode.inputLabel)
-                                .panelLegend()
-                                .padding(.top, Space.sm)
-                        }
-                        HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                            Text(loadMode.inputOperatorSymbol)
-                                .font(Typography.statValue)
-                                .foregroundStyle(Ink.quaternary)
-                                .accessibilityHidden(true)
-                            WeightScrubber(
-                                canonicalWeight: weightBinding,
-                                purpose: .strength,
-                                label: loadMode.inputLabel,
-                                pointsPerStep: 8,
-                                valueFontSize: 40,
-                                presentation: .bare,
-                                onScrubEnded: saveSettledScrub
-                            )
+                        if tracksResistance {
+                            if loadMode != .external {
+                                Text(loadMode.inputLabel)
+                                    .panelLegend()
+                                    .padding(.top, Space.sm)
+                            }
+                            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+                                Text(loadMode.inputOperatorSymbol)
+                                    .font(Typography.statValue)
+                                    .foregroundStyle(Ink.quaternary)
+                                    .accessibilityHidden(true)
+                                WeightScrubber(
+                                    canonicalWeight: weightBinding,
+                                    purpose: .strength,
+                                    label: loadMode.inputLabel,
+                                    pointsPerStep: 8,
+                                    valueFontSize: 40,
+                                    presentation: .bare,
+                                    onScrubEnded: saveSettledScrub
+                                )
+                            }
                         }
                     }
                 }
@@ -251,6 +261,7 @@ struct EditSetSheet: View {
             }
         }
         .onDisappear { saveSettledScrub() }
+        .onAppear { normalizeUntrackedResistance() }
         .saveErrorAlert($saveError)
     }
 
@@ -282,6 +293,14 @@ struct EditSetSheet: View {
             hasPendingChanges = false
             saveError = SaveErrorBox(error)
         }
+    }
+
+    private func normalizeUntrackedResistance() {
+        guard !tracksResistance else { return }
+        guard set.weight != 0 || set.plannedWeight != 0 else { return }
+        set.weight = 0
+        set.plannedWeight = 0
+        saveImmediately()
     }
 }
 

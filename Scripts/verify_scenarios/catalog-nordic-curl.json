@@ -1,0 +1,74 @@
+{
+  "name": "catalog-nordic-curl",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Nordic Curl,"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Nordic Curl,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Nordic Curl"
+          },
+          {
+            "labelContains": "Muscles used by Nordic Curl"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Movement",
+          "valueContains": "legs training role"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Movement",
+      "valueContains": "legs training role"
+    },
+    {
+      "label": "Movement",
+      "valueContains": "isolation"
+    },
+    {
+      "label": "Movement",
+      "valueContains": "sagittal plane"
+    }
+  ],
+  "forbidden": []
+}

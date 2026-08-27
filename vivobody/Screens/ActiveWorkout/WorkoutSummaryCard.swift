@@ -9,15 +9,15 @@
 //
 //  Architecture:
 //    • A tiny status kicker — "In progress" (Volt) / "Complete" (gold).
-//    • The HERO: known comparable volume as a huge monospaced numeral,
-//      with partial/unavailable state kept explicit and shown
-//      immediately at its final value.
+//    • The HERO: comparable volume, unloaded repetitions, or timed work
+//      as a huge monospaced numeral, with partial/unavailable state kept
+//      explicit and shown immediately at its final value.
 //    • A StatStrip for the core counts (duration, sets, reps, timed) —
 //      the same grammar as the History receipt, ruled top and bottom
 //      into a band — with the intensity line (density, hard sets) as
 //      a dim footer note beneath.
 //    • The exercise list as type rows divided by hairlines, each with
-//      its total volume and the same gold/dim set pips used on the pages.
+//      its honest work metric and the same gold/dim set pips used on the pages.
 //    • Words for verbs: "Add exercise" and a gold "Done" verb
 //      button (finishing the session is a completion).
 //
@@ -69,6 +69,10 @@ struct WorkoutSummaryCard: View {
 
     private var tonnageAvailability: ComparableTonnageAvailability {
         session.receiptTonnageSummary.availability
+    }
+
+    private var showsTonnage: Bool {
+        session.hasReceiptTonnageAxis
     }
 
     private var isComplete: Bool {
@@ -141,7 +145,12 @@ struct WorkoutSummaryCard: View {
     private var heroVolume: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                if tonnageAvailability == .unavailable {
+                if !showsTonnage {
+                    Text(nonTonnageValue)
+                        .font(Typography.metricHero)
+                        .foregroundStyle(Ink.primary)
+                        .monospacedDigit()
+                } else if tonnageAvailability == .unavailable {
                     Text("—")
                         .font(Typography.metricHero)
                         .foregroundStyle(Ink.primary)
@@ -172,11 +181,21 @@ struct WorkoutSummaryCard: View {
     }
 
     private var volumeLegend: String {
-        switch tonnageAvailability {
+        guard showsTonnage else { return nonTonnageLegend }
+        return switch tonnageAvailability {
         case .complete: "Volume"
         case .partial: "Known volume · total unavailable"
         case .unavailable: "Volume unavailable"
         }
+    }
+
+    private var nonTonnageValue: String {
+        if session.totalReps > 0 { return "\(session.totalReps)" }
+        return DurationFormatter.compact(session.totalTimedWork)
+    }
+
+    private var nonTonnageLegend: String {
+        session.totalReps > 0 ? "Reps" : "Timed work"
     }
 
     /// The stat strip bracketed by hairlines — a ruled band on the
@@ -305,7 +324,12 @@ struct WorkoutSummaryCard: View {
                 .reduce(0) { $0 + $1.duration }
             return DurationFormatter.compact(total)
         }
-        guard let volume = exercise.completedReceiptTonnage else { return "—" }
+        guard let volume = exercise.completedReceiptTonnage else {
+            let reps = exercise.sets
+                .filter(\.isCompleted)
+                .reduce(0) { $0 + $1.reps }
+            return "\(reps) reps"
+        }
         return WeightFormatter.volumeString(volume, unit: unit)
     }
 

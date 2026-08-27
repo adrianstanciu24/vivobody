@@ -225,7 +225,7 @@ struct ActiveExerciseCard: View {
     func addSet() {
         let seed = session.activeSet(for: exercise) ?? sets.last
         let newSet = WorkoutSet(
-            weight: seed?.weight ?? exercise.plannedWeight,
+            weight: exercise.trackedWeight(seed?.weight ?? exercise.plannedWeight),
             reps: seed?.reps ?? exercise.plannedReps,
             duration: seed?.duration ?? exercise.plannedDuration,
             sortOrder: exercise.sets.count
@@ -285,16 +285,14 @@ struct ActiveExerciseCard: View {
         localScrubCancellationID &+= 1
         activeScrubDidEnd()
 
-        let weight = set.weight
+        let weight = exercise.trackedWeight(set.weight)
         let reps = set.reps
         let duration = set.duration
         let exerciseName = exercise.name
         let catalogItemID = exercise.catalogItemID
         let catalogID = exercise.catalogID
-        let mode = exercise.trackingMode
-        let modality = exercise.modality
-        let loadMode = exercise.loadMode
-        let bodyweightFraction = exercise.bodyweightFraction
+        let performanceSignature = exercise.performanceSignature
+        let loadProfile = exercise.loadProfile
         let bodyweight = exercise.loadBodyweight
 
         pendingCompletionSetID = set.id
@@ -317,10 +315,8 @@ struct ActiveExerciseCard: View {
                 exerciseName: exerciseName,
                 catalogItemID: catalogItemID,
                 catalogID: catalogID,
-                mode: mode,
-                modality: modality,
-                loadMode: loadMode,
-                bodyweightFraction: bodyweightFraction,
+                performanceSignature: performanceSignature,
+                loadProfile: loadProfile,
                 bodyweight: bodyweight,
                 weight: weight,
                 reps: reps,
@@ -338,10 +334,10 @@ struct ActiveExerciseCard: View {
                 let payload: (value: String, unit: String?)?
                 switch prKind {
                 case .weight:
-                    let effectiveLoad = ExerciseLoadProfile(
-                        mode: loadMode,
-                        bodyweightFraction: bodyweightFraction
-                    ).effectiveLoad(loggedWeight: weight, bodyweight: bodyweight)
+                    let effectiveLoad = loadProfile.effectiveLoad(
+                        loggedWeight: weight,
+                        bodyweight: bodyweight
+                    )
                     payload = effectiveLoad.map {
                         (
                             WeightFormatter.string(
@@ -367,8 +363,8 @@ struct ActiveExerciseCard: View {
                         exerciseName: exerciseName,
                         weight: weight,
                         kind: prKind,
-                        loadMode: loadMode,
-                        modality: modality,
+                        loadMode: loadProfile.mode,
+                        modality: performanceSignature.modality,
                         unit: unit
                     )
                     saveActiveSessionChanges()
@@ -470,37 +466,25 @@ struct ActiveExerciseCard: View {
         exerciseName: String,
         catalogItemID: UUID?,
         catalogID: String?,
-        mode: TrackingMode,
-        modality: ExerciseModality,
-        loadMode: ExerciseLoadMode,
-        bodyweightFraction: Double,
+        performanceSignature: ExercisePerformanceSignature,
+        loadProfile: ExerciseLoadProfile,
         bodyweight: Double,
         weight: Double,
         reps: Int,
         duration: TimeInterval
     ) -> PRKind? {
-        let candidateSignature = ExercisePerformanceSignature(
-            modality: modality,
-            trackingMode: mode,
-            loadMode: loadMode,
-            bodyweightFraction: bodyweightFraction
-        )
-        let semanticKind = candidateSignature.performanceKind
+        let semanticKind = performanceSignature.performanceKind
         guard semanticKind.supportsRecord else { return nil }
 
         let candidateHistoryKey = ExerciseIdentity.key(
             catalogID: catalogID,
             catalogItemID: catalogItemID,
             name: exerciseName,
-            performanceSignature: candidateSignature
+            performanceSignature: performanceSignature
         )
 
-        let candidateProfile = ExerciseLoadProfile(
-            mode: loadMode,
-            bodyweightFraction: bodyweightFraction
-        )
         let candidateEffectiveLoad = semanticKind.comparesLoad
-            ? candidateProfile.effectiveLoad(
+            ? loadProfile.effectiveLoad(
                 loggedWeight: weight,
                 bodyweight: bodyweight
             )
@@ -578,6 +562,7 @@ struct ActiveExerciseCard: View {
             return
         }
 
+        session.normalizeUntrackedResistance()
         do {
             try modelContext.saveOrRollback()
             SessionSideEffects.handle(.updated, session: session, in: modelContext)

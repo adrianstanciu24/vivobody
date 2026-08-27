@@ -2844,7 +2844,7 @@
       "pmid": "24150552",
       "pmcid": "PMC3737788",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3737788/",
-      "scope": "Trained right-handed men performed a right-arm standing dumbbell curl with the arm alongside the body at forty percent of an isometric maximum and self-selected speed. Elbow angle and long-head biceps-brachii surface EMG were recorded. It supports the unilateral standing fixture and biceps participation, not fixed tempo, other elbow-flexor ranking, chronic adaptation, or a universal load."
+      "scope": "Trained right-handed men performed right-arm standing, preacher, and incline dumbbell curls at forty percent of an isometric maximum and self-selected speed. The incline condition used a unilateral 50-degree trunk-hyperextension geometry; elbow angle and long-head biceps-brachii surface EMG were recorded. It directly supports the existing unilateral standing fixture and supports incline-curl biceps activity only across a geometry mismatch; it does not define the proposed 45-degree bench, fully supinated grip, bilateral or simultaneous sequence, fixed tempo, other elbow-flexor rankings, chronic adaptation, or universal load."
     },
     {
       "id": "hussain-2020-triceps-pushdown-fatigue",
@@ -3062,6 +3062,108 @@
       "pmid": "38714802",
       "url": "https://doi.org/10.1038/s41598-024-61325-7",
       "scope": "Healthy adults performed a ninety-second wall sit while gluteus medius, gluteus maximus, and rectus femoris activity and inertial movement were measured. It supports material activity and fatigue in those regions during the static task, not force contribution, categorical role ranking, or universally standardized geometry."
+    },
+    {
+      "id": "narouei-2018-nordic-hamstring",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Hip and trunk muscles activity during nordic hamstring exercise",
+      "authors": ["Shideh Narouei", "Atsushi Imai", "Hiroshi Akuzawa", "Kiyotaka Hasebe", "Koji Kaneoka"],
+      "year": 2018,
+      "doi": "10.12965/jer.1835200.600",
+      "pmid": "29740557",
+      "pmcid": "PMC5931159",
+      "url": "https://doi.org/10.12965/jer.1835200.600",
+      "scope": "Men performed a bilateral partner-anchored Nordic hamstring exercise from kneeling with neutral hips and trunk, a three-second controlled forward knee-extension lowering phase, and a three-second active knee-flexion return without hand assistance. Surface EMG measured biceps femoris, semitendinosus, gluteus maximus, external oblique, and erector spinae. This supports the exact down-and-active-return fixture and measured-region involvement, not a universal magnitude ranking, fixed achieved range, or any mapping beyond the disclosed semitendinosus-to-medialHamstrings aggregation."
+    },
+    {
+      "id": "sarabon-2019-nordic-variations",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Kinematic and electromyographic analysis of variations in Nordic hamstring exercise",
+      "authors": ["Nejc Šarabon", "Jan Marušič", "Goran Marković", "Žiga Kozinc"],
+      "year": 2019,
+      "doi": "10.1371/journal.pone.0223437",
+      "pmid": "31644582",
+      "pmcid": "PMC6808554",
+      "url": "https://doi.org/10.1371/journal.pone.0223437",
+      "scope": "Synchronized kinematics and EMG compared Nordic hamstring variations using fixed lower-leg support. It supports the materiality of anchor and execution geometry and activity in the studied hamstring and gastrocnemius regions; it does not make those variants interchangeable with Narouei's active-return fixture or establish a universal role ranking."
+    },
+    {
+      "id": "nunes-2020-barbell-preacher-curl",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Placing Greater Torque at Shorter or Longer Muscle Lengths? Effects of Cable vs. Barbell Preacher Curl Training on Muscular Strength and Hypertrophy in Young Adults",
+      "authors": ["João Pedro Nunes", "Jeferson L. Jacinto", "Alex S. Ribeiro", "Jerry L. Mayhew", "Masatoshi Nakamura", "Danila M. G. Capel", "Leidiane R. Santos", "Leandro Santos", "Edilson S. Cyrino", "Andreo F. Aguiar"],
+      "year": 2020,
+      "doi": "10.3390/ijerph17165859",
+      "pmid": "32823490",
+      "pmcid": "PMC7460162",
+      "url": "https://doi.org/10.3390/ijerph17165859",
+      "scope": "Young adults trained a bilateral shoulder-width supinated barbell preacher curl through full elbow range using one-second concentric and two-second eccentric phases. The preacher apparatus, torque profile, and biceps-brachii adaptation are direct; bar shape, pad angle, brachialis or brachioradialis activity, grip and wrist stabilizers, and a universal role hierarchy are unreported."
+    },
+    {
+      "id": "zabaleta-korta-2023-incline-dumbbell-curl",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Regional Hypertrophy: The Effect of Exercises at Long and Short Muscle Lengths in Recreationally Trained Women",
+      "authors": ["Aitor Zabaleta-Korta", "Eneko Fernández-Peña", "Jon Torres-Unda", "Maider Francés", "Asier Zubillaga", "Jordan Santos-Concejero"],
+      "year": 2023,
+      "doi": "10.5114/jhk/163561",
+      "pmid": "37559762",
+      "pmcid": "PMC10407320",
+      "url": "https://doi.org/10.5114/jhk/163561",
+      "scope": "Recreationally trained women performed the 45-degree incline dumbbell curl with fully supinated dumbbells, forearms perpendicular to the floor initially, and elbow flexion to 90-110 degrees. Both arms were trained, but simultaneous versus alternating sequence was unreported; simultaneous bilateral execution is a catalog adaptation. The study found no significant incline-group regional growth, so it supports setup rather than a magnitude or head-specific role ranking."
+    },
+    {
+      "id": "comfort-2015-mid-thigh-clean-pull",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "The effect of load and sex on kinematic and kinetic variables during the mid-thigh clean pull",
+      "authors": ["Paul Comfort", "Paul A. Jones", "Rebecca Udall"],
+      "year": 2015,
+      "doi": "10.1080/14763141.2015.1025237",
+      "pmid": "25896197",
+      "url": "https://doi.org/10.1080/14763141.2015.1025237",
+      "scope": "Men and women performed strapped dynamic mid-thigh clean pulls after lowering the bar from hang to midway between the patella and inguinal crease, pausing without countermovement, then rapidly extending the ankles, knees, and hips and shrugging with elbows held extended before returning the bar to rack supports. It directly supports start, arm endpoint, loading and reset, and kinematics and kinetics; clean-grip orientation and width and an EMG muscle ranking are not reported."
+    },
+    {
+      "id": "kawamori-2006-mid-thigh-clean-pull",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Peak Force and Rate of Force Development During Isometric and Dynamic Mid-Thigh Clean Pulls Performed at Various Intensities",
+      "authors": ["Naoki Kawamori", "Steven J. Rossi", "Blake D. Justice", "Erin E. Haff", "Emido E. Pistilli", "Harold S. O'Bryant", "Michael H. Stone", "G. Gregory Haff"],
+      "year": 2006,
+      "doi": "10.1519/18025.1",
+      "pmid": "16937959",
+      "url": "https://doi.org/10.1519/18025.1",
+      "scope": "The study compared isometric and dynamic mid-thigh clean pulls across intensities and supports the dynamic mid-thigh start and loading boundary. It does not establish grip orientation or width, elbow endpoint, straps, inter-repetition reset, or an exercise-specific muscle hierarchy and is supporting rather than fixture-owning evidence."
+    },
+    {
+      "id": "nsca-2023-weightlifting-position",
+      "sourceType": "professionalPositionStatement",
+      "title": "National Strength and Conditioning Association Position Statement on Weightlifting for Sports Performance",
+      "authors": ["Paul Comfort", "G. Gregory Haff", "Timothy J. Suchomel", "Marcos A. Soriano", "Kyle C. Pierce", "W. Guy Hornsby", "Erin E. Haff", "Lesley M. Sommerfield", "Shyam Chavda", "Stephanie J. Morris", "Andrew C. Fry", "Michael H. Stone"],
+      "year": 2023,
+      "doi": "10.1519/JSC.0000000000004476",
+      "pmid": "36952649",
+      "url": "https://doi.org/10.1519/JSC.0000000000004476",
+      "scope": "The professional position statement defines weightlifting derivatives, clean and snatch grip selection, and catching versus pulling or no-catch boundaries. It supports the clean-grip pulling-derivative classification and shared phase terminology; it does not replace Comfort's exact start and reset or establish exercise-specific categorical muscle rankings."
+    },
+    {
+      "id": "khuyagbaatar-2024-snatch-clean-kinematics",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Kinematic Comparison of Snatch and Clean Lifts in Weightlifters Using Wearable Inertial Measurement Unit Sensors",
+      "authors": ["Batbayar Khuyagbaatar", "Munkhbat Tumurbaatar", "Khosbayar Tsenkherjav", "Tserenchimed Purevsuren", "Tsooj Shambaljamts", "Kyungsoo Kim", "Tsolmonbaatar Danjkhuu", "Ganbat Danaa", "Yoon Hyuk Kim"],
+      "year": 2024,
+      "doi": "10.5334/paah.306",
+      "url": "https://doi.org/10.5334/paah.306",
+      "scope": "Wearable-IMU kinematics during full snatch and clean lifts support floor-start ordered phase topology, including transition or rebend, second pull, turnover or receive, and recovery. The study does not establish a complete muscle-role hierarchy or directly measure the proposal's recovery ankle-plantarflexion inference."
+    },
+    {
+      "id": "arauz-2026-snatch-clean-biomechanics",
+      "sourceType": "experimentalKinematicsKineticsEMGStudy",
+      "title": "Biomechanical and neuromuscular differences between the snatch and clean in elite weightlifters",
+      "authors": ["Paul G. Arauz", "Gabriela Garcia", "Jose Llerena", "Imin Kao"],
+      "year": 2026,
+      "doi": "10.1016/j.jbiomech.2025.113106",
+      "pmid": "41352184",
+      "url": "https://doi.org/10.1016/j.jbiomech.2025.113106",
+      "scope": "Elite weightlifters performed snatch and clean lifts with lower-limb kinematics, kinetics, and EMG. It directly supports lower-limb involvement and comparison between the lifts; upper-body and trunk role categories, grip dimensions, and product settings remain inferred or outside scope."
     }
   ]
 }

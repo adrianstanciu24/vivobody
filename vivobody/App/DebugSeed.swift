@@ -11,68 +11,6 @@ import VivoKit
 
 #if DEBUG
 
-    func debugCatalogRecord(named name: String) -> CatalogRecord {
-        guard let record = CatalogData.record(forExerciseNamed: name) else {
-            preconditionFailure("Debug seed references unknown catalog exercise: \(name)")
-        }
-        return record
-    }
-
-    func debugCatalogExercise(
-        named name: String,
-        plannedSets: Int,
-        plannedReps: Int,
-        plannedWeight: Double,
-        plannedDuration: TimeInterval? = nil,
-        sortOrder: Int
-    ) -> Exercise {
-        let record = debugCatalogRecord(named: name)
-        return Exercise(
-            name: record.name,
-            catalogID: record.catalogID,
-            familyID: record.familyID,
-            group: record.group,
-            plannedSets: plannedSets,
-            plannedReps: plannedReps,
-            plannedWeight: plannedWeight,
-            muscleInvolvement: record.muscleInvolvement,
-            classification: record.classification,
-            trackingMode: record.trackingMode,
-            modality: record.modality,
-            loadMode: record.loadMode,
-            bodyweightFraction: record.bodyweightFraction,
-            plannedDuration: plannedDuration ?? record.defaultDurationValue,
-            sortOrder: sortOrder
-        )
-    }
-
-    private func debugCatalogTemplateExercise(
-        named name: String,
-        plannedSets: Int,
-        plannedReps: Int,
-        plannedWeight: Double,
-        sortOrder: Int
-    ) -> TemplateExercise {
-        let record = debugCatalogRecord(named: name)
-        return TemplateExercise(
-            name: record.name,
-            catalogID: record.catalogID,
-            familyID: record.familyID,
-            group: record.group,
-            plannedSets: plannedSets,
-            plannedReps: plannedReps,
-            plannedWeight: plannedWeight,
-            muscleInvolvement: record.muscleInvolvement,
-            classification: record.classification,
-            trackingMode: record.trackingMode,
-            modality: record.modality,
-            loadMode: record.loadMode,
-            bodyweightFraction: record.bodyweightFraction,
-            plannedDuration: record.defaultDurationValue,
-            sortOrder: sortOrder
-        )
-    }
-
     /// UI-test and verification helpers driven by launch arguments.
     /// Reset wipes the store for a clean test base; seeds insert focused
     /// workout states; requestedTab chooses a capture start tab.
@@ -244,6 +182,15 @@ import VivoKit
                 plannedWeight: 0,
                 sortOrder: 0
             )
+            if isNoLoad {
+                // Simulate a legacy/stale draft so the UI proof covers
+                // interpretation and normalization, not just a clean seed.
+                exercise.plannedWeight = 45
+                for set in exercise.sets {
+                    set.weight = 45
+                    set.plannedWeight = 45
+                }
+            }
             let session = WorkoutSession(exercises: [exercise], restDuration: 90)
             context.insert(session)
             try? context.saveOrRollback()

@@ -4,8 +4,9 @@
 //
 //  Defines how logged resistance combines with body weight. Explicit
 //  load modes prevent assisted movements from being treated as though
-//  more assistance were more resistance, and let non-comparable work
-//  opt out of load-based analytics entirely.
+//  more assistance were more resistance, let non-comparable work opt
+//  out of load-based analytics, and distinguish variable resistance
+//  from bodyweight fixtures that have no resistance input at all.
 //
 
 import Foundation
@@ -173,6 +174,28 @@ nonisolated enum ExerciseLoad {
 
     static func bodyweightFraction(forExerciseNamed name: String) -> Double {
         profile(forExerciseNamed: name).bodyweightFraction
+    }
+}
+
+/// Whether a fixture has a user-entered resistance axis. Bands remain
+/// editable even though their load is non-comparable; unloaded bodyweight
+/// fixtures do not invent a pound value merely because WorkoutSet stores one.
+nonisolated enum ExerciseResistanceCapability {
+    static func tracksResistance(
+        loadMode: ExerciseLoadMode,
+        equipment: Equipment?
+    ) -> Bool {
+        !(loadMode == .nonComparable && equipment == .bodyweight)
+    }
+
+    static func normalizedWeight(
+        _ weight: Double,
+        loadMode: ExerciseLoadMode,
+        equipment: Equipment?
+    ) -> Double {
+        tracksResistance(loadMode: loadMode, equipment: equipment)
+            ? max(0, weight)
+            : 0
     }
 }
 

@@ -274,7 +274,11 @@ final class TemplateExercise: Identifiable {
         self.muscleGroupRaw = group.rawValue
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
-        self.plannedWeight = plannedWeight
+        self.plannedWeight = ExerciseResistanceCapability.normalizedWeight(
+            plannedWeight,
+            loadMode: loadMode,
+            equipment: classification?.equipment
+        )
         self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name)).snapshot
         self.equipmentRaw = classification?.equipment.rawValue
         self.mechanicRaw = classification?.mechanic.rawValue
@@ -380,7 +384,9 @@ extension Exercise {
                 group: templateExercise.group,
                 plannedSets: 0,
                 plannedReps: orderedSets.first?.reps ?? templateExercise.plannedReps,
-                plannedWeight: orderedSets.first?.weight ?? templateExercise.plannedWeight,
+                plannedWeight: templateExercise.trackedWeight(
+                    orderedSets.first?.weight ?? templateExercise.plannedWeight
+                ),
                 muscleInvolvement: templateExercise.muscleInvolvement,
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
@@ -393,11 +399,11 @@ extension Exercise {
             for (i, templateSet) in orderedSets.enumerated() {
                 self.sets.append(
                     WorkoutSet(
-                        weight: templateSet.weight,
+                        weight: templateExercise.trackedWeight(templateSet.weight),
                         reps: templateSet.reps,
                         duration: templateSet.duration,
                         sortOrder: i,
-                        plannedWeight: templateSet.weight,
+                        plannedWeight: templateExercise.trackedWeight(templateSet.weight),
                         plannedReps: templateSet.reps,
                         plannedDuration: templateSet.duration
                     )
@@ -412,7 +418,9 @@ extension Exercise {
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
-                plannedWeight: templateExercise.plannedWeight,
+                plannedWeight: templateExercise.trackedWeight(
+                    templateExercise.plannedWeight
+                ),
                 muscleInvolvement: templateExercise.muscleInvolvement,
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
@@ -478,7 +486,7 @@ extension Exercise {
 
         for (i, set) in exercise.orderedSets.enumerated() {
             let source = logged[min(i, logged.count - 1)]
-            set.weight = source.weight
+            set.weight = exercise.trackedWeight(source.weight)
             set.reps = source.reps
             set.duration = source.duration
         }

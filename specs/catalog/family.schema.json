@@ -440,7 +440,7 @@
           }
         },
         "movementPhases": {
-          "description": "Ordered phases for a repetition whose defining joint actions cannot be represented truthfully as one concentric action set.",
+          "description": "Ordered phases for a Power repetition or controlled-yield Dynamic Strength repetition whose defining joint actions cannot be represented truthfully as one concentric action set.",
           "type": "array",
           "minItems": 2,
           "items": {

@@ -202,7 +202,8 @@ nonisolated extension AnalyticsAccumulator {
                     modality: exercise.modality,
                     trackingMode: exercise.trackingMode,
                     loadMode: exercise.loadMode,
-                    bodyweightFraction: exercise.bodyweightFraction
+                    bodyweightFraction: exercise.bodyweightFraction,
+                    tracksResistance: exercise.tracksResistance
                 )
                 let instance = ExerciseHistoryInstance(
                     date: replay.date,

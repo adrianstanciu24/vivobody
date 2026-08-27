@@ -72,6 +72,9 @@ extension ExerciseDetailScreen {
     /// scale next to the numeral instead of burying it in a caption.
     var bestSetFragment: String? {
         guard let source = bestRecordSource else { return nil }
+        if !item.tracksResistance, item.trackingMode == .reps {
+            return "reps"
+        }
         switch item.performanceSemanticKind {
         case .dynamicLoadAndReps, .powerLoadAndReps:
             return "× \(source.reps)"

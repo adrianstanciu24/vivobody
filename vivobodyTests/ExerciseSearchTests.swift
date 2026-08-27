@@ -75,6 +75,40 @@ struct ExerciseSearchTests {
         #expect(ranked.first?.name == "Barbell Back Squat")
     }
 
+    @Test func approvedAugustFixturesAreDiscoverableByRequestedNames() {
+        let catalog = bundledCatalog()
+        let expected: [(String, String)] = [
+            ("Nordic Curl", "nordic-curl"),
+            ("Preacher Curl", "barbell-preacher-curl"),
+            ("Incline Dumbbell Curl", "bilateral-incline-dumbbell-curl"),
+            ("Mid-Thigh Clean Pull", "barbell-mid-thigh-clean-pull"),
+            ("Full Clean", "barbell-squat-clean"),
+            ("Full Snatch", "barbell-squat-snatch"),
+        ]
+
+        for (query, catalogID) in expected {
+            let ranked = ExerciseSearch.rank(items: catalog, query: query)
+            #expect(ranked.first?.catalogID == catalogID)
+        }
+    }
+
+    @Test func genericCleanAndSnatchKeepPowerNeighborsAheadOfSquatFixtures() throws {
+        let catalog = bundledCatalog()
+        let cleanIDs = ExerciseSearch.rank(items: catalog, query: "clean").compactMap(\.catalogID)
+        let snatchIDs = ExerciseSearch.rank(items: catalog, query: "snatch").compactMap(\.catalogID)
+        let powerCleanIndex = try #require(cleanIDs.firstIndex(of: "barbell-power-clean"))
+        let squatCleanIndex = try #require(cleanIDs.firstIndex(of: "barbell-squat-clean"))
+        let hangPowerSnatchIndex = try #require(
+            snatchIDs.firstIndex(of: "barbell-hang-power-snatch")
+        )
+        let squatSnatchIndex = try #require(
+            snatchIDs.firstIndex(of: "barbell-squat-snatch")
+        )
+
+        #expect(powerCleanIndex < squatCleanIndex)
+        #expect(hangPowerSnatchIndex < squatSnatchIndex)
+    }
+
     @Test func trainingRoleFiltersSpanCompoundAndIsolationWork() {
         let catalog = bundledCatalog()
         let push = catalog.filter { LibraryExerciseFilter.trainingRole(.push).matches($0) }

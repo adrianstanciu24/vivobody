@@ -171,7 +171,7 @@ struct ExerciseDetailScreen: View {
     /// Which series the progress chart plots. Only offered for
     /// `.reps` exercises — timed holds always plot duration.
     enum ChartMetric: String, CaseIterable, Identifiable {
-        case weight, e1rm, volume
+        case weight, e1rm, volume, reps
         var id: String {
             rawValue
         }
@@ -181,6 +181,7 @@ struct ExerciseDetailScreen: View {
             case .weight: "Load"
             case .e1rm: "e1RM"
             case .volume: "Volume"
+            case .reps: "Reps"
             }
         }
     }

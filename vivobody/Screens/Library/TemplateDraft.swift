@@ -109,7 +109,11 @@ struct ExerciseDraft: Identifiable, Hashable {
         self.group = group
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
-        self.plannedWeight = plannedWeight
+        self.plannedWeight = ExerciseResistanceCapability.normalizedWeight(
+            plannedWeight,
+            loadMode: loadMode,
+            equipment: classification?.equipment
+        )
         self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name)).snapshot
         self.classification = classification
         self.trackingMode = trackingMode
@@ -119,7 +123,15 @@ struct ExerciseDraft: Identifiable, Hashable {
         self.plannedDuration = plannedDuration
         self.supersetID = supersetID
         self.isPerSet = isPerSet
-        self.sets = sets
+        let tracksResistance = ExerciseResistanceCapability.tracksResistance(
+            loadMode: loadMode,
+            equipment: classification?.equipment
+        )
+        self.sets = sets.map { set in
+            var set = set
+            if !tracksResistance { set.weight = 0 }
+            return set
+        }
     }
 }
 
@@ -146,6 +158,21 @@ struct SetDraft: Identifiable, Hashable {
 }
 
 extension ExerciseDraft {
+    var tracksResistance: Bool {
+        ExerciseResistanceCapability.tracksResistance(
+            loadMode: loadMode,
+            equipment: classification?.equipment
+        )
+    }
+
+    func trackedWeight(_ weight: Double) -> Double {
+        ExerciseResistanceCapability.normalizedWeight(
+            weight,
+            loadMode: loadMode,
+            equipment: classification?.equipment
+        )
+    }
+
     /// Build from a catalog pick — pre-fills sensible defaults so
     /// the user doesn't always scrub from zero. Starts in uniform
     /// mode; the user can expand to per-set in the editor.
@@ -321,7 +348,7 @@ extension ExerciseDraft {
         switch trackingMode {
         case .reps:
             if isPerSet, !sets.isEmpty {
-                let weights = sets.map(\.weight)
+                let weights = sets.map { trackedWeight($0.weight) }
                 guard let lo = weights.min(), let hi = weights.max() else { return "" }
                 if lo == hi {
                     // All rows happen to be identical — read uniformly.
@@ -333,7 +360,10 @@ extension ExerciseDraft {
                 return loadRange.map { "\(sets.count) sets · \($0)" }
                     ?? "\(sets.count) sets"
             }
-            let load = loadMode.summaryLoadLabel(plannedWeight, unit: unit)
+            let load = loadMode.summaryLoadLabel(
+                trackedWeight(plannedWeight),
+                unit: unit
+            )
             return load.map { "\(plannedSets) × \(plannedReps) @ \($0)" }
                 ?? "\(plannedSets) × \(plannedReps)"
 
@@ -347,7 +377,10 @@ extension ExerciseDraft {
                 return "\(sets.count) \(modality.durationCountLabel) · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
             }
             let base = "\(plannedSets) × \(DurationFormatter.string(plannedDuration)) \(modality.durationLabelLowercased)"
-            guard let load = loadMode.summaryLoadLabel(plannedWeight, unit: unit) else { return base }
+            guard let load = loadMode.summaryLoadLabel(
+                trackedWeight(plannedWeight),
+                unit: unit
+            ) else { return base }
             return "\(base) @ \(load)"
         }
     }

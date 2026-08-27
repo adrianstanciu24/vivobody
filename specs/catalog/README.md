@@ -15,7 +15,7 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
   opposition map, and an independent anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
   them against another list written in the same family file.
-- `evidence.json` tracks exactly 187 primary musculoskeletal sources supporting
+- `evidence.json` tracks exactly 196 primary musculoskeletal sources supporting
   those capability profiles. A citation supports a rule; it does not turn EMG
   or a model estimate into a universal numeric contribution.
 - `family.schema.json` documents the strict JSON shape for one family and its
@@ -164,17 +164,19 @@ spine-rotation record prescribes both rotation directions. Each retains the
 aggregation limitation explicitly.
 
 A family must declare at least one direct prime or resisted action, or a Power
-family may declare two or more ordered movement phases. The same action cannot
+family or controlled-yield Dynamic Strength family may declare two or more
+ordered movement phases. The same action cannot
 occupy conflicting modes. `planeBasisActions` selects from the reviewed action
 union, including yielding actions when ordered phases are present.
 Resisted actions are family-level invariants. If two exercises resist different
 tendencies or use different basis planes, they belong in separate contracts;
 exercise-level resisted-action exceptions are deliberately unsupported.
 
-## Ordered power-phase semantics
+## Ordered movement-phase semantics
 
-A power repetition with a catch or receiving phase cannot flatten all joint
-motion into one concentric action set. Such a family leaves its direct
+A power repetition with a catch or receiving phase, or a Dynamic Strength
+repetition defined by a controlled yielding phase and an active return, cannot
+flatten all joint motion into one concentric action set. Such a family leaves its direct
 `primeActions` empty and declares two or more ordered `movementPhases` instead.
 Each phase distinguishes three action modes:
 
@@ -188,8 +190,10 @@ Each phase distinguishes three action modes:
 The validator unions those phase actions only for capability coverage while
 retaining their authored order and mode. Yielding actions require matching
 stability demands and an assigned primary or secondary muscle capable of the
-opposite action. Ordered phases are restricted to `power` families and cannot
-be silently broadened through exercise-level `additionalPrimeActions`.
+opposite action. Ordered phases are restricted to `power`, or to
+`dynamicStrength` contracts containing both produced and yielding actions with
+no resisted actions. They cannot be silently broadened through exercise-level
+`additionalPrimeActions`.
 
 ## Lower-body region boundaries
 
@@ -398,4 +402,4 @@ exactly 44 joint actions, all muscles have evidence-backed action profiles,
 family prime actions have capable movers, and stability demands have capable
 assigned muscles. The two posterior-serratus mesh bases are explicitly pinned
 as non-trainable scene surfaces rather than lumbar proxies. The runtime
-projection is pinned to exactly 71 active families and 166 exercises.
+projection is pinned to exactly 75 active families and 172 exercises.

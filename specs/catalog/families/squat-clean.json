@@ -1,0 +1,80 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "squat-clean",
+  "name": "Squat Clean",
+  "definition": "A bilateral floor-start barbell Power lift using a self-selected pronated clean grip, first pull, observed transition or rebend, second pull, elbow-led pull-under, full front-squat receive, and recovery to standing before a floor reset. The transition is required topology rather than a separately credited prime phase. Recovery ankle plantarflexion and every categorical muscle role are disclosed mechanics or anatomy inferences. Power catches, hang starts, pulls without a catch, overhead receives, and the jerk remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "nsca-2023-weightlifting-position", "khuyagbaatar-2024-snatch-clean-kinematics", "arauz-2026-snatch-clean-biomechanics"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "hinge", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["barbell"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "first-pull", "name": "First Pull", "primeActions": ["hip.extension", "knee.extension"]},
+      {"id": "second-pull", "name": "Second Pull", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion", "scapula.elevation"]},
+      {"id": "pull-under", "name": "Pull Under", "primeActions": ["elbow.flexion"]},
+      {"id": "full-front-squat-catch", "name": "Full Front-Squat Catch", "primeActions": [], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "recovery", "name": "Recovery", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt",
+      "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}, {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["trapeziusUpper"], "minimumRole": "secondary"}, {"anyOf": ["bicepsBrachii"], "minimumRole": "secondary"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "vasti"],
+      "secondary": ["medialHamstrings", "rectusFemoris", "gastrocnemius", "soleus", "trapeziusUpper", "bicepsBrachii", "brachialis", "brachioradialis"],
+      "stabilizer": ["bicepsFemoris", "gluteMed", "fingerFlexors", "extensorCarpiRadialis", "externalRotators", "subscapularis", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "startPosition", "valueType": "enum", "required": true, "description": "The reviewed floor start.", "allowedValues": ["floorBarCloseToShins"]},
+    {"id": "grip", "valueType": "enum", "required": true, "description": "The reviewed clean grip.", "allowedValues": ["pronatedCleanWidthSelfSelected"]},
+    {"id": "transitionTopology", "valueType": "enum", "required": true, "description": "The observed rebend without separate role credit.", "allowedValues": ["observedRebendNoSeparateActionCredit"]},
+    {"id": "pullSequence", "valueType": "enum", "required": true, "description": "The reviewed pull and turnover order.", "allowedValues": ["firstPullSecondPullElbowLedPullUnder"]},
+    {"id": "receivingStrategy", "valueType": "enum", "required": true, "description": "The squat-clean receive.", "allowedValues": ["fullFrontSquatHipCreaseBelowKnee"]},
+    {"id": "recoveryStrategy", "valueType": "enum", "required": true, "description": "Completion after receiving.", "allowedValues": ["standFromFullFrontSquat"]},
+    {"id": "interRepSupport", "valueType": "enum", "required": true, "description": "Where the bar resets.", "allowedValues": ["floor"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether a rail guides the bar.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 1, "maximum": 5}},
+  "exercises": [
+    {
+      "catalogID": "barbell-squat-clean",
+      "name": "Barbell Squat Clean",
+      "aliases": ["Full Clean", "Squat Clean"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "power", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 3, "searchPriority": 95,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"}, {"muscle": "vasti", "role": "primary"},
+        {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"}, {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "brachialis", "role": "secondary"}, {"muscle": "brachioradialis", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {"startPosition": "floorBarCloseToShins", "grip": "pronatedCleanWidthSelfSelected", "transitionTopology": "observedRebendNoSeparateActionCredit", "pullSequence": "firstPullSecondPullElbowLedPullUnder", "receivingStrategy": "fullFrontSquatHipCreaseBelowKnee", "recoveryStrategy": "standFromFullFrontSquat", "interRepSupport": "floor", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "nsca-2023-weightlifting-position", "khuyagbaatar-2024-snatch-clean-kinematics", "arauz-2026-snatch-clean-biomechanics"],
+      "execution": {
+        "startingPosition": "Stand about hip-width with the bar on the floor close to the shins and take a self-selected overhand clean grip.",
+        "movement": "Keep the bar close through the first pull and rebend, extend the hips, knees, and ankles rapidly and shrug, then bend the elbows to pull under.",
+        "endpoint": "Receive the bar across the front shoulders in a full front squat with the hip crease below the knees.",
+        "returnPhase": "Stand fully from the front squat, then return the bar to the floor before the next repetition.",
+        "controlledJoints": "Complete the lower-body pull before the elbow-led pull-under and control hip, knee, and ankle flexion in the receive.",
+        "supportAndPosture": "Brace the trunk, keep the bar close, and maintain a secure two-hand front-rack receive.",
+        "disqualifyingCompensations": ["Receiving above full-squat depth changes the lift into a Power Clean.", "Starting from the hang or omitting the catch leaves this family.", "Adding a jerk is a separate phase and exercise."]
+      }
+    }
+  ]
+}

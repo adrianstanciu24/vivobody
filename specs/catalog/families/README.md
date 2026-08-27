@@ -1,15 +1,18 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Seventy-one reviewed family files containing 166 exercises are currently
+Seventy-five reviewed family files containing 172 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-187-source foundation. Each uses a coverage batch whose exercises
+196-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
 records are never assigned artificial endpoints merely to cover a range.
+Ordered phases are available to Power contracts and to source-exact Dynamic
+Strength fixtures that pair a controlled yielding phase with an active return;
+`nordic-curl` is the bounded Dynamic Strength use of that grammar.
 Shoulder-extension row uses 12 reviewed exercises to cover five equipment
 classes, open and closed chains, supported and unsupported torsos, unilateral
 control, free and fixed external paths, and its pinned bodyweight setup.

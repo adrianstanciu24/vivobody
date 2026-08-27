@@ -300,7 +300,7 @@ struct SupersetTag: View {
 /// One archived session as a row inside a date-group card. The left
 /// column carries identity (a workout title for today, a date for
 /// earlier sessions) plus a muscle/time meta line; the right column
-/// anchors the volume numeral in monospace. `prominent` (today's
+/// anchors its honest receipt metric in monospace. `prominent` (today's
 /// sessions) enlarges the numeral and promotes the title. A PR adds
 /// the lone accent: a small outlined tag beside the title.
 struct SessionRow: View {
@@ -333,23 +333,23 @@ struct SessionRow: View {
 
             Spacer(minLength: Space.sm)
 
-            // Volume is the row's metric, not its headline — kept a calm
+            // The receipt metric is supporting context, not the headline — kept a calm
             // grayscale numeral so the workout's identity (name + muscle
             // fingerprint) leads. The accent lives only in the rare PR
             // badge, never on every line.
             HStack(alignment: .lastTextBaseline, spacing: 4) {
-                Text(volumeValue)
+                Text(receiptMetric.value)
                     .font(prominent ? Typography.statValue : Typography.metricInline)
                     .foregroundStyle(Ink.secondary)
                     .monospacedDigit()
-                if session.receiptTonnageSummary.availability != .unavailable {
-                    Text(unit.symbol)
+                if let metricUnit = receiptMetric.unit {
+                    Text(metricUnit)
                         .font(Typography.metricUnit)
                         .foregroundStyle(Ink.tertiary)
                 }
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(volumeAccessibilityLabel)
+            .accessibilityLabel(receiptMetric.accessibilityLabel)
 
             Image(systemName: "chevron.right")
                 .font(Typography.caption)
@@ -378,27 +378,25 @@ struct SessionRow: View {
         prominent ? workoutTitle : dateLine
     }
 
-    private var volumeValue: String {
-        let summary = session.receiptTonnageSummary
-        switch summary.availability {
-        case .complete:
-            return WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
-        case .partial:
-            return "\(WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit))+"
-        case .unavailable:
-            return "—"
+    private var receiptMetric: (value: String, unit: String?, accessibilityLabel: String) {
+        guard session.hasReceiptTonnageAxis else {
+            if session.totalReps > 0 {
+                return ("\(session.totalReps)", "reps", "\(session.totalReps) reps")
+            }
+            let timed = DurationFormatter.compact(session.totalTimedWork)
+            return (timed, nil, "\(timed) timed work")
         }
-    }
 
-    private var volumeAccessibilityLabel: String {
         let summary = session.receiptTonnageSummary
         switch summary.availability {
         case .complete:
-            return "\(volumeValue) \(unit.symbol) volume"
+            let value = WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
+            return (value, unit.symbol, "\(value) \(unit.symbol) volume")
         case .partial:
-            return "\(WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)) \(unit.symbol) known volume; total unavailable"
+            let value = WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
+            return ("\(value)+", unit.symbol, "\(value) \(unit.symbol) known volume; total unavailable")
         case .unavailable:
-            return "Volume unavailable"
+            return ("—", nil, "Volume unavailable")
         }
     }
 

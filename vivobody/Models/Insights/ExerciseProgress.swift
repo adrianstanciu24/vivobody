@@ -76,6 +76,7 @@ nonisolated struct ExerciseProgressPoint: Identifiable, Hashable {
     var modality: ExerciseModality = .dynamicStrength
     var loadMode: ExerciseLoadMode = .external
     var bodyweightFraction: Double = 0
+    var tracksResistance: Bool = true
     /// Historical body weight captured by the owning workout session.
     /// This keeps a pull-up performed at 180 lb distinct from one
     /// performed at 160 lb without consulting today's measurement.
@@ -90,7 +91,8 @@ nonisolated struct ExerciseProgressPoint: Identifiable, Hashable {
             modality: modality,
             trackingMode: trackingMode,
             loadMode: loadMode,
-            bodyweightFraction: bodyweightFraction
+            bodyweightFraction: bodyweightFraction,
+            tracksResistance: tracksResistance
         )
     }
 
@@ -122,6 +124,7 @@ nonisolated struct ExerciseProgressPoint: Identifiable, Hashable {
     /// returns nil rather than relabeling added load or assistance as
     /// absolute resistance.
     var historyTopLoad: Double? {
+        guard tracksResistance else { return nil }
         if let effectiveTopLoad { return effectiveTopLoad }
         return loadMode == .nonComparable ? max(0, topWeight) : nil
     }
@@ -428,37 +431,6 @@ nonisolated extension AnalyticsAccumulator {
     }
 }
 
-// MARK: - Relative date
-
-/// Compact relative-date helper for picker decorations. Returns short
-/// strings the picker can fit next to a weight × reps line:
-///   • "today", "yesterday"
-///   • "2d ago", "5d ago"
-///   • "2w ago", "5w ago"
-///   • "3mo ago"
-///   • "6+ mo ago" (clamp for stale entries — old data isn't
-///     actionable, so we don't waste space on exact months/years)
-///
-/// Reads off a passed `now` for testability. Caller-side the default
-/// is `Date()`.
-enum RelativeDate {
-    static func short(_ date: Date, now: Date = Date(), calendar: Calendar = .current) -> String {
-        if calendar.isDateInToday(date) { return "today" }
-        if calendar.isDateInYesterday(date) { return "yesterday" }
-
-        let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: date), to: calendar.startOfDay(for: now)).day ?? 0
-        if days < 0 { return "today" } // Defensive — future-stamped data
-        if days < 14 { return "\(days)d ago" }
-
-        let weeks = days / 7
-        if weeks < 8 { return "\(weeks)w ago" }
-
-        let months = days / 30
-        if months < 6 { return "\(months)mo ago" }
-        return "6+ mo ago"
-    }
-}
-
 @MainActor
 extension [WorkoutSession] {
     /// Group archived sessions by stable exercise history key and produce
@@ -536,6 +508,7 @@ nonisolated extension AnalyticsAccumulator {
                     modality: exercise.modality,
                     loadMode: exercise.loadMode,
                     bodyweightFraction: exercise.bodyweightFraction,
+                    tracksResistance: exercise.tracksResistance,
                     bodyweightAtSession: exercise.loadBodyweight,
                     totalVolume: tonnage.knownSubtotal,
                     comparableTonnageAvailability: tonnage.availability

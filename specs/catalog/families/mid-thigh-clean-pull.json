@@ -1,0 +1,75 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "mid-thigh-clean-pull",
+  "name": "Mid-Thigh Clean Pull",
+  "definition": "A bilateral strapped barbell Power pull entered from the hang, paused midway between the patella and inguinal crease without countermovement, and completed through ankle, knee, and hip extension plus a shrug while the elbows remain straight. The bar resets on rack supports between repetitions. Isometric mid-thigh pulls, floor pulls, snatch-grip pulls, high pulls with elbow flexion, and every clean receive remain outside this family. Muscle roles are mechanics and anatomy inferences, not exercise-specific EMG rankings.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "comfort-2015-mid-thigh-clean-pull", "kawamori-2006-mid-thigh-clean-pull", "nsca-2023-weightlifting-position"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "hinge", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["barbell"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion", "scapula.elevation"],
+    "forbiddenPrimeActions": [
+      "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt",
+      "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}, {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["trapeziusUpper"], "minimumRole": "secondary"}, {"anyOf": ["bicepsBrachii"], "minimumRole": "stabilizer"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "vasti"],
+      "secondary": ["medialHamstrings", "rectusFemoris", "gastrocnemius", "soleus", "trapeziusUpper"],
+      "stabilizer": ["bicepsFemoris", "bicepsBrachii", "fingerFlexors", "extensorCarpiRadialis", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "entryStrategy", "valueType": "enum", "required": true, "description": "How the bar reaches the start.", "allowedValues": ["loweredFromHang"]},
+    {"id": "startBarPosition", "valueType": "enum", "required": true, "description": "The reviewed paused start.", "allowedValues": ["midwayPatellaToInguinalCrease"]},
+    {"id": "prePullStrategy", "valueType": "enum", "required": true, "description": "Whether countermovement precedes the pull.", "allowedValues": ["pausedNoCountermovement"]},
+    {"id": "grip", "valueType": "enum", "required": true, "description": "The reviewed derivative grip.", "allowedValues": ["pronatedCleanWidthSelfSelected"]},
+    {"id": "handSupport", "valueType": "enum", "required": true, "description": "The reported bar-to-hand support.", "allowedValues": ["liftingStraps"]},
+    {"id": "armStrategy", "valueType": "enum", "required": true, "description": "The elbow boundary.", "allowedValues": ["elbowsStraightThroughout"]},
+    {"id": "pullStrategy", "valueType": "enum", "required": true, "description": "The produced pull sequence.", "allowedValues": ["tripleExtensionAndShrug"]},
+    {"id": "receiveStrategy", "valueType": "enum", "required": true, "description": "The no-catch boundary.", "allowedValues": ["noPullUnderNoCatch"]},
+    {"id": "interRepSupport", "valueType": "enum", "required": true, "description": "Where the bar resets.", "allowedValues": ["rackSupports"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether a rail guides the bar.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 1, "maximum": 5}},
+  "exercises": [
+    {
+      "catalogID": "barbell-mid-thigh-clean-pull",
+      "name": "Barbell Mid-Thigh Clean Pull",
+      "aliases": ["Mid-Thigh Clean Pull", "Clean Pull from Mid-Thigh"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "power", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 3, "searchPriority": 90,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"}, {"muscle": "vasti", "role": "primary"},
+        {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"}, {"muscle": "trapeziusUpper", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "bicepsBrachii", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {"entryStrategy": "loweredFromHang", "startBarPosition": "midwayPatellaToInguinalCrease", "prePullStrategy": "pausedNoCountermovement", "grip": "pronatedCleanWidthSelfSelected", "handSupport": "liftingStraps", "armStrategy": "elbowsStraightThroughout", "pullStrategy": "tripleExtensionAndShrug", "receiveStrategy": "noPullUnderNoCatch", "interRepSupport": "rackSupports", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "comfort-2015-mid-thigh-clean-pull", "kawamori-2006-mid-thigh-clean-pull", "nsca-2023-weightlifting-position"],
+      "execution": {
+        "startingPosition": "Use lifting straps and a self-selected overhand clean grip, lower the bar from the hang to midway between the kneecap and hip crease, and pause without a countermovement.",
+        "movement": "With the elbows straight, extend the hips, knees, and ankles rapidly and shrug upward.",
+        "endpoint": "Finish tall at the top of the pull with the elbows still straight and do not pull under the bar.",
+        "returnPhase": "Return the bar to rack supports before setting up the next repetition.",
+        "controlledJoints": "Create the pull through lower-body extension and shoulder elevation without bending the elbows.",
+        "supportAndPosture": "Brace the trunk, keep both feet planted, and maintain the strapped two-hand grip.",
+        "disqualifyingCompensations": ["Bending the elbows changes the pull into a high-pull variant.", "Pulling under or catching the bar changes the task into a clean.", "Starting from the floor or using a snatch-width grip leaves this fixture."]
+      }
+    }
+  ]
+}

@@ -166,6 +166,13 @@ struct CatalogDraft {
         mechanic == .compound && (pattern == .push || pattern == .pull)
     }
 
+    var tracksResistance: Bool {
+        ExerciseResistanceCapability.tracksResistance(
+            loadMode: loadMode,
+            equipment: equipment
+        )
+    }
+
     var muscleSummary: String {
         let involvement = muscleInvolvement
         let primary = involvement.primary.map(\.displayName).joined(separator: " · ")

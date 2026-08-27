@@ -213,7 +213,9 @@ struct CustomExerciseEditorSheet: View {
                     VStack(alignment: .leading, spacing: Space.section) {
                         if isBundledEdit {
                             bundledIdentitySummary
-                            defaultsRow
+                            if showsDefaultsRow {
+                                defaultsRow
+                            }
                         } else {
                             if let source = duplicateSource {
                                 duplicateOriginNote(source: source)
@@ -341,8 +343,14 @@ struct CustomExerciseEditorSheet: View {
                     .transition(.move(edge: .top).combined(with: .opacity))
             }
 
-            defaultsRow
+            if showsDefaultsRow {
+                defaultsRow
+            }
         }
+    }
+
+    private var showsDefaultsRow: Bool {
+        draft.trackingMode == .duration || draft.tracksResistance
     }
 
     private var searchSection: some View {
@@ -807,57 +815,61 @@ struct CustomExerciseEditorSheet: View {
 
     private var defaultsRow: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            Text("Defaults")
-                .sectionLabelStyle(Opacity.medium)
+            if draft.trackingMode == .duration || draft.tracksResistance {
+                Text("Defaults")
+                    .sectionLabelStyle(Opacity.medium)
 
-            HStack(alignment: .top, spacing: Space.xxl) {
-                switch draft.trackingMode {
-                case .reps:
-                    valueColumn(label: draft.loadMode.inputLabel) {
-                        BareScrubber(
-                            value: defaultWeightBinding,
-                            range: unit.strengthRange,
-                            step: unit.strengthStep,
-                            pointsPerStep: 8,
-                            fontSize: 40,
-                            unit: unit.symbol,
-                            unitFontSize: 13,
-                            numberColor: Ink.primary,
-                            unitColor: Ink.tertiary,
-                            accessibilityLabel: draft.loadMode.inputLabel,
-                            tickTone: .deep
-                        )
+                HStack(alignment: .top, spacing: Space.xxl) {
+                    switch draft.trackingMode {
+                    case .reps:
+                        valueColumn(label: draft.loadMode.inputLabel) {
+                            BareScrubber(
+                                value: defaultWeightBinding,
+                                range: unit.strengthRange,
+                                step: unit.strengthStep,
+                                pointsPerStep: 8,
+                                fontSize: 40,
+                                unit: unit.symbol,
+                                unitFontSize: 13,
+                                numberColor: Ink.primary,
+                                unitColor: Ink.tertiary,
+                                accessibilityLabel: draft.loadMode.inputLabel,
+                                tickTone: .deep
+                            )
+                        }
+                    case .duration:
+                        valueColumn(label: draft.modality.durationLabel) {
+                            BareScrubber(
+                                value: defaultDurationBinding,
+                                range: DurationFormatter.scrubRange,
+                                step: DurationFormatter.scrubStep,
+                                pointsPerStep: 10,
+                                fontSize: 40,
+                                numberColor: Ink.primary,
+                                formatter: { DurationFormatter.string($0) },
+                                accessibilityLabel: draft.modality.durationLabel
+                            )
+                        }
+                        if draft.tracksResistance {
+                            valueColumn(label: draft.loadMode.inputLabel) {
+                                BareScrubber(
+                                    value: defaultWeightBinding,
+                                    range: unit.strengthRange,
+                                    step: unit.strengthStep,
+                                    pointsPerStep: 8,
+                                    fontSize: 40,
+                                    unit: unit.symbol,
+                                    unitFontSize: 13,
+                                    numberColor: Ink.primary,
+                                    unitColor: Ink.tertiary,
+                                    accessibilityLabel: draft.loadMode.inputLabel,
+                                    tickTone: .deep
+                                )
+                            }
+                        }
                     }
-                case .duration:
-                    valueColumn(label: draft.modality.durationLabel) {
-                        BareScrubber(
-                            value: defaultDurationBinding,
-                            range: DurationFormatter.scrubRange,
-                            step: DurationFormatter.scrubStep,
-                            pointsPerStep: 10,
-                            fontSize: 40,
-                            numberColor: Ink.primary,
-                            formatter: { DurationFormatter.string($0) },
-                            accessibilityLabel: draft.modality.durationLabel
-                        )
-                    }
-                    valueColumn(label: draft.loadMode.inputLabel) {
-                        BareScrubber(
-                            value: defaultWeightBinding,
-                            range: unit.strengthRange,
-                            step: unit.strengthStep,
-                            pointsPerStep: 8,
-                            fontSize: 40,
-                            unit: unit.symbol,
-                            unitFontSize: 13,
-                            numberColor: Ink.primary,
-                            unitColor: Ink.tertiary,
-                            accessibilityLabel: draft.loadMode.inputLabel,
-                            tickTone: .deep
-                        )
-                    }
+                    Spacer(minLength: 0)
                 }
-                Spacer(minLength: 0)
             }
         }
     }
@@ -923,6 +935,7 @@ struct CustomExerciseEditorSheet: View {
     private func save() {
         guard canSave else { return }
         let trimmedName = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let defaultWeight = draft.tracksResistance ? draft.defaultWeight : 0
 
         let parsedAliases = draft.parsedAliases
 
@@ -941,7 +954,7 @@ struct CustomExerciseEditorSheet: View {
             let item = ExerciseCatalogItem(
                 name: trimmedName,
                 group: draft.group,
-                defaultWeight: draft.defaultWeight,
+                defaultWeight: defaultWeight,
                 defaultReps: sourceDefaultReps,
                 trackingMode: draft.trackingMode,
                 modality: draft.modality,
@@ -965,11 +978,11 @@ struct CustomExerciseEditorSheet: View {
 
         case let .edit(item):
             if isBundledEdit {
-                let weightChanged = draft.defaultWeight != item.defaultWeight
-                item.defaultWeight = draft.defaultWeight
+                let weightChanged = defaultWeight != item.defaultWeight
+                item.defaultWeight = defaultWeight
                 if weightChanged {
-                    item.defaultWeightKg = unit == .kg
-                        ? WeightFormatter.toDisplay(draft.defaultWeight, unit: .kg)
+                    item.defaultWeightKg = unit == .kg && draft.tracksResistance
+                        ? WeightFormatter.toDisplay(defaultWeight, unit: .kg)
                         : nil
                 }
                 item.defaultDuration = draft.defaultDuration
@@ -980,17 +993,18 @@ struct CustomExerciseEditorSheet: View {
                 modality: draft.modality,
                 trackingMode: draft.trackingMode,
                 loadMode: draft.loadMode,
-                bodyweightFraction: draft.bodyweightFraction
+                bodyweightFraction: draft.bodyweightFraction,
+                tracksResistance: draft.tracksResistance
             )
             let performanceSemanticsChanged =
                 item.performanceSignature != editedPerformanceSignature
             item.name = trimmedName
             item.group = draft.group
-            let weightChanged = draft.defaultWeight != item.defaultWeight
-            item.defaultWeight = draft.defaultWeight
+            let weightChanged = defaultWeight != item.defaultWeight
+            item.defaultWeight = defaultWeight
             if weightChanged {
-                item.defaultWeightKg = unit == .kg
-                    ? WeightFormatter.toDisplay(draft.defaultWeight, unit: .kg)
+                item.defaultWeightKg = unit == .kg && draft.tracksResistance
+                    ? WeightFormatter.toDisplay(defaultWeight, unit: .kg)
                     : nil
             }
             item.trackingMode = draft.trackingMode
@@ -1032,210 +1046,5 @@ struct CustomExerciseEditorSheet: View {
         }
         Haptics.thunk()
         dismiss()
-    }
-}
-
-// MARK: - Segmented field
-
-/// Form-specific segmented control. The neutral track reads as one
-/// control while the selected option owns the app's orange accent;
-/// resting options stay grayscale so the selection is unmistakable.
-private struct CatalogSegmentedField<Option: Hashable>: View {
-    let title: String
-    @Binding var selection: Option
-    let options: [Option]
-    let label: (Option) -> String
-
-    @Namespace private var selectionThumb
-
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text(title)
-                .sectionLabelStyle(Opacity.medium)
-
-            HStack(spacing: 2) {
-                ForEach(options, id: \.self) { option in
-                    optionButton(option)
-                }
-            }
-            .padding(2)
-            .background {
-                Capsule()
-                    .fill(Surface.cardTintBright)
-            }
-            .overlay {
-                Capsule()
-                    .stroke(Surface.edge, lineWidth: 1)
-            }
-        }
-        .animation(
-            reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.85),
-            value: selection
-        )
-    }
-
-    private func optionButton(_ option: Option) -> some View {
-        let selected = option == selection
-        return Button {
-            guard !selected else { return }
-            selection = option
-        } label: {
-            HStack(spacing: Space.xs) {
-                if selected, differentiateWithoutColor {
-                    Image(systemName: "checkmark")
-                        .accessibilityHidden(true)
-                }
-
-                Text(label(option))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.72)
-            }
-            .font(Typography.body)
-            .fontWeight(selected ? .semibold : .regular)
-            .foregroundStyle(selected ? Tint.onAccent : Ink.primary)
-            .padding(.horizontal, Space.sm)
-            .frame(maxWidth: .infinity, minHeight: Space.tapMin)
-            .background {
-                if selected {
-                    Capsule()
-                        .fill(Tint.inProgress)
-                        .matchedGeometryEffect(id: "selection", in: selectionThumb)
-                }
-            }
-            .contentShape(Capsule())
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(label(option))
-        .accessibilityValue(selected ? "Selected" : "Not selected")
-        .accessibilityAddTraits(selected ? .isSelected : [])
-    }
-}
-
-/// Three independent cardinal-plane toggles. At least one remains
-/// selected, while reviewed/custom multi-plane movements can retain
-/// every component instead of being flattened to a dominant plane.
-private struct CatalogPlaneField: View {
-    let title: String
-    @Binding var selection: [MovementPlane]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text(title)
-                .sectionLabelStyle(Opacity.medium)
-
-            HStack(spacing: Space.sm) {
-                ForEach(MovementPlane.allCases, id: \.self) { plane in
-                    let selected = selection.contains(plane)
-                    Button {
-                        var updated = Set(selection)
-                        if selected {
-                            guard updated.count > 1 else {
-                                Haptics.rigid()
-                                return
-                            }
-                            updated.remove(plane)
-                        } else {
-                            updated.insert(plane)
-                        }
-                        Haptics.selection()
-                        selection = MovementPlane.allCases.filter(updated.contains)
-                    } label: {
-                        Text(plane.displayName)
-                            .font(Typography.body)
-                            .fontWeight(selected ? .semibold : .regular)
-                            .foregroundStyle(selected ? Tint.onAccent : Ink.primary)
-                            .frame(maxWidth: .infinity, minHeight: Space.tapMin)
-                            .background(
-                                Capsule().fill(selected ? Tint.inProgress : Surface.cardTintBright)
-                            )
-                            .overlay(Capsule().stroke(Surface.edge, lineWidth: 1))
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(plane.displayName)
-                    .accessibilityValue(selected ? "Selected" : "Not selected")
-                    .accessibilityAddTraits(selected ? .isSelected : [])
-                }
-            }
-        }
-    }
-}
-
-// MARK: - Choice sheet
-
-/// Focused single-choice list for the editor's longer taxonomies.
-/// Selection applies immediately and dismisses, while the checkmark
-/// keeps the current value legible before the user commits the draft.
-private struct CatalogChoiceSheet<Option: Hashable>: View {
-    let title: String
-    let options: [Option]
-    let label: (Option) -> String
-    let isSelected: (Option) -> Bool
-    let onSelect: (Option) -> Void
-
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 0) {
-                    ForEach(options, id: \.self) { option in
-                        choiceRow(option)
-
-                        if option != options.last {
-                            SectionDivider()
-                                .padding(.horizontal, Space.lg)
-                        }
-                    }
-                }
-                .contentCard()
-                .padding(.vertical, Space.md)
-            }
-            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-            .screenBackground()
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
-            }
-        }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
-    }
-
-    private func choiceRow(_ option: Option) -> some View {
-        let selected = isSelected(option)
-        return Button {
-            Haptics.selection()
-            onSelect(option)
-            dismiss()
-        } label: {
-            HStack(spacing: Space.md) {
-                Text(label(option))
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.primary)
-
-                Spacer(minLength: Space.sm)
-
-                if selected {
-                    Image(systemName: "checkmark")
-                        .font(Typography.headline)
-                        .foregroundStyle(Tint.primary)
-                        .accessibilityHidden(true)
-                }
-            }
-            .padding(.horizontal, Space.lg)
-            .frame(minHeight: Space.rowMin)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(label(option))
-        .accessibilityValue(selected ? "Selected" : "Not selected")
-        .accessibilityAddTraits(selected ? .isSelected : [])
     }
 }
