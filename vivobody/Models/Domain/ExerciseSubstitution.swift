@@ -311,6 +311,9 @@ enum ExerciseSubstitution {
         {
             return .closest
         }
+        if anchor.pattern == .hang, candidate.pattern == .hang {
+            return .partial
+        }
         if exactFamily(anchor, candidate) == similarityScale
             || !anchor.primaryMuscles.intersection(candidate.primaryMuscles).isEmpty
             || movementsMatch(anchor, candidate)

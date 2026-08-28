@@ -49,7 +49,9 @@ struct BiomechanicsDomainTests {
             .lunge,
             .carry,
             .core,
+            .hang,
         ])
+        #expect(TrainingRole.defaultRole(for: .hang) == .pull)
         #expect(ExerciseModality.dynamicStrength.supportsHardSetAnalytics)
         #expect(ExerciseModality.isometricStrength.supportsHardSetAnalytics)
         #expect(!ExerciseModality.power.supportsHardSetAnalytics)

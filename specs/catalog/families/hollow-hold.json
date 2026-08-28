@@ -1,0 +1,412 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hollow-hold",
+  "name": "Hollow Hold",
+  "definition": "A strict bilateral bodyweight isometric in which the athlete lies supine, fixes a posterior pelvic tilt with no lumbar gap, raises the shoulder blades and straight unsupported legs from the floor, and holds locked knees and elbows with the arms beside the ears. Gravity tends to extend the spine and hips; those are resisted tendencies rather than dynamic flexion repetitions. CrossFit directly defines the long-lever fixture. Drysdale supports abdominal participation in posterior pelvic control, and Okubo supports hip-flexor and abdominal participation during a straight-leg raise and hold. The categorical muscle roles are bounded anatomy-and-mechanics inferences, not an exact-fixture EMG ranking. Tuck holds, hollow rocks, V-sits, dead bugs, leg raises, curl-ups, prone planks, bent limbs, and deliberate rocking remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "crossfit-2015-gymnastics-hollow-body",
+    "drysdale-2004-pelvic-tilt-hollowing",
+    "okubo-2021-end-range-active-straight-leg-raise"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 60
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "spine.extension",
+      "hip.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "iliopsoas"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "abs"
+      ],
+      "secondary": [
+        "obliques",
+        "iliopsoas",
+        "rectusFemoris"
+      ],
+      "stabilizer": [
+        "serratus",
+        "deltoidAnterior",
+        "triceps",
+        "gluteMax"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the unsupported limbs move freely relative to the floor support.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed whole-body orientation.",
+      "allowedValues": [
+        "supine"
+      ]
+    },
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The stable surface beneath the torso and pelvis.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "pelvisPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The pelvic position held throughout the task.",
+      "allowedValues": [
+        "posteriorTiltHeld"
+      ]
+    },
+    {
+      "id": "lumbarContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The required relationship between the lower back and floor.",
+      "allowedValues": [
+        "noGap"
+      ]
+    },
+    {
+      "id": "shoulderBladePosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The spatial relationship of the shoulder-blade region to the floor, not an anatomical scapular-elevation action.",
+      "allowedValues": [
+        "offFloor"
+      ]
+    },
+    {
+      "id": "upperArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The held overhead arm position.",
+      "allowedValues": [
+        "besideEars"
+      ]
+    },
+    {
+      "id": "shoulderMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate shoulder motion creates a repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The locked elbow position used by the reviewed long-lever shape.",
+      "allowedValues": [
+        "extendedHeld"
+      ]
+    },
+    {
+      "id": "legPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The unsupported long-lever leg position.",
+      "allowedValues": [
+        "straightRaisedFromFloor"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The locked knee position used by the reviewed long-lever shape.",
+      "allowedValues": [
+        "extendedHeld"
+      ]
+    },
+    {
+      "id": "bodyMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the shape remains still rather than rocking or repeating.",
+      "allowedValues": [
+        "stillHold"
+      ]
+    },
+    {
+      "id": "holdType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The tracked task rather than a repetition count.",
+      "allowedValues": [
+        "timedIsometric"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the body position."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the legs propel a repetition or maintain the static shape only.",
+      "allowedValues": [
+        "staticHoldOnly"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "hollow-hold",
+      "name": "Hollow Hold",
+      "aliases": [
+        "Hollow Body Hold"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 30,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "secondary"
+        },
+        {
+          "muscle": "iliopsoas",
+          "role": "secondary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "supine",
+        "supportSurface": "floor",
+        "pelvisPosture": "posteriorTiltHeld",
+        "lumbarContact": "noGap",
+        "shoulderBladePosition": "offFloor",
+        "upperArmPosition": "besideEars",
+        "shoulderMotion": "positionHeld",
+        "elbowMotion": "extendedHeld",
+        "legPosition": "straightRaisedFromFloor",
+        "kneeMotion": "extendedHeld",
+        "bodyMotion": "stillHold",
+        "holdType": "timedIsometric",
+        "fixedPath": false,
+        "lowerBodyContribution": "staticHoldOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "crossfit-2015-gymnastics-hollow-body",
+        "drysdale-2004-pelvic-tilt-hollowing",
+        "okubo-2021-end-range-active-straight-leg-raise"
+      ],
+      "execution": {
+        "startingPosition": "Lie on your back with both legs straight and both arms extended beside your ears.",
+        "movement": "Tilt your pelvis back, press your lower back into the floor, and raise your shoulder blades and straight legs from the floor.",
+        "endpoint": "Hold the long hollow shape for the set time with no gap beneath your lower back.",
+        "controlledJoints": "Keep your knees and elbows straight and keep the shoulders, spine, pelvis, and hips still.",
+        "supportAndPosture": "Keep the arms beside the ears, the shoulder-blade region off the floor, and both legs unsupported.",
+        "disqualifyingCompensations": [
+          "A gap opening beneath the lower back ends the strict hold.",
+          "Bending the knees or elbows turns the exercise into a shorter-lever variation.",
+          "Rocking the body turns the hold into a Hollow Rock."
+        ]
+      }
+    }
+  ]
+}

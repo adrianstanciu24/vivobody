@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Seventy-five reviewed family files containing 172 exercises are currently
+Seventy-eight reviewed family files containing 176 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-196-source foundation. Each uses a coverage batch whose exercises
+201-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -34,10 +34,9 @@ Batch 2 adds fifteen exercises across `elbow-flexion`, `elbow-extension`,
 conditioned `forearm-pronation|forearm-supination`, and the four cardinal wrist
 actions, plus the later `finger-flexion-grip` closure. Generic `grip` is
 intentionally not a family: one non-comparable grip-trainer record owns dynamic
-finger closing, while isometric support remains inside carries and implement-
-owning lifts, dynamometer squeezing remains assessment-only, hanging remains a
-closed-chain shoulder-body topology, and pinch remains unavailable until thumb
-and intrinsic-hand anatomy exists.
+finger closing, while isometric support remains inside carries, hangs, and
+implement-owning lifts, dynamometer squeezing remains assessment-only, and
+pinch remains unavailable until thumb and intrinsic-hand anatomy exists.
 
 Batch 3 initially added five exercises across `scapular-protraction`,
 `scapular-elevation`, `dip`, and `push-press`. Later reviews activated the exact
@@ -92,7 +91,7 @@ text-and-analytics visible without painting a substitute body-model mesh.
 Neither contract turns anatomy-level capability into unmeasured exercise
 volume.
 
-Batch 7 adds nine exercises across `spine-flexion`, `spine-extension`,
+Batch 7 initially added nine exercises across `spine-flexion`, `spine-extension`,
 `spine-lateral-flexion`, `spine-rotation`,
 `anti-extension`, `anti-lateral-flexion`, `anti-rotation`, `farmer-carry`, and
 `suitcase-carry`. The dynamic families each admit one narrow fixture; the
@@ -105,6 +104,14 @@ condition-matched evidence triangulation. Posterior-serratus meshes are not
 used as lumbar training proxies. `spine-extension` and
 `spine-lateral-flexion` are active, and posterior serratus is excluded from
 trainable ownership.
+
+The requested-exercise follow-up adds Kneeling Cable Crunch as a second exact
+`spine-flexion` fixture plus three narrow families: `hollow-hold`,
+`passive-dead-hang`, and `active-dead-hang`. Hollow and both hangs are
+duration-only bodyweight records with non-comparable load. Passive and Active
+Dead Hang remain distinct histories and use the `hang` pattern rather than
+claiming Vertical Pull coverage. Their standards establish fixture geometry;
+categorical roles are explicitly bounded anatomy-and-mechanics inferences.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
@@ -456,6 +463,13 @@ fixture is active only at its pinned range, cadence, and machine topology. It
 does not authorize arbitrary back-extension machines, and its explicitly
 unvisualized lumbar-extensor region remains text-and-analytics visible without
 painting a substitute surface.
+
+`spine-flexion` now uses a required fixture discriminator. The original
+bodyweight branch retains its 0-to-30-degree gross trunk-elevation range. The
+Kneeling Cable Crunch branch instead pins tall kneeling, high-rope resistance,
+the rope beside the head, held hips and pelvis, and an unquantified strict
+flexion range. Its rules prevent either branch from inheriting the other's
+equipment, load mode, range fields, or support topology.
 
 The anti-movement families make the resisted tendency explicit instead of
 inventing a dynamic repetition. Stable forearm plank resists spine extension,

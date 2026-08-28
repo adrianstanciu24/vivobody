@@ -65,6 +65,7 @@ nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable {
     case lunge // split squat, step-up, walking lunge
     case carry // farmer's carry, suitcase, yoke
     case core // planks, leg raises, anti-rotation
+    case hang // passive and active straight-arm hangs
 
     nonisolated var displayName: String {
         switch self {
@@ -75,6 +76,7 @@ nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable {
         case .lunge: "Lunge"
         case .carry: "Carry"
         case .core: "Core"
+        case .hang: "Hang"
         }
     }
 }
@@ -214,11 +216,9 @@ final class ExerciseCatalogItem: Identifiable {
     /// the honest unknown state for pre-existing custom catalog rows.
     var trainingRoleRaw: String? = nil
 
-    /// Movement pattern (push/pull/squat/hinge/lunge/carry/core).
-    /// Optional because isolation work doesn't have a meaningful
-    /// pattern. Nil-when-isolation is a soft rule, not enforced in
-    /// the store — the editor just hides the pattern selector when
-    /// mechanic is isolation.
+    /// Compound movement pattern; nil for isolation work. The editor hides
+    /// this selector when mechanic is isolation, but storage does not enforce
+    /// that soft rule.
     var patternRaw: String? = nil
 
     /// Horizontal vs. vertical orientation for push/pull patterns.

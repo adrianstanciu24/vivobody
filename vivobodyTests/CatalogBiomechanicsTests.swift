@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 75 reviewed families compile to 172 exercises with stable
+//  product: 78 reviewed families compile to 176 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 172)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 75)
+        #expect(CatalogData.records.count == 176)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 78)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -43,6 +43,14 @@ struct CatalogBiomechanicsTests {
             ),
             ("barbell-squat-clean", "Barbell Squat Clean", "squat-clean"),
             ("barbell-squat-snatch", "Barbell Squat Snatch", "full-snatch"),
+            (
+                "kneeling-cable-crunch",
+                "Kneeling Cable Crunch",
+                "spine-flexion"
+            ),
+            ("hollow-hold", "Hollow Hold", "hollow-hold"),
+            ("passive-dead-hang", "Passive Dead Hang", "passive-dead-hang"),
+            ("active-dead-hang", "Active Dead Hang", "active-dead-hang"),
         ]
 
         for (catalogID, name, familyID) in expected {
@@ -65,6 +73,40 @@ struct CatalogBiomechanicsTests {
             let record = try #require(CatalogData.record(forCatalogID: catalogID))
             #expect(record.modality == .power)
             #expect(record.loadMode == .external)
+        }
+
+        let cableCrunch = try #require(
+            CatalogData.record(forCatalogID: "kneeling-cable-crunch")
+        )
+        #expect(cableCrunch.equipment == .cable)
+        #expect(cableCrunch.loadMode == .external)
+        #expect(cableCrunch.defaultWeight == 30)
+        #expect(cableCrunch.defaultWeightKg == 15)
+
+        let hollow = try #require(CatalogData.record(forCatalogID: "hollow-hold"))
+        #expect(hollow.pattern == .core)
+        #expect(hollow.trainingRole == .core)
+
+        let passive = try #require(
+            CatalogData.record(forCatalogID: "passive-dead-hang")
+        )
+        let active = try #require(
+            CatalogData.record(forCatalogID: "active-dead-hang")
+        )
+        #expect(passive.pattern == .hang)
+        #expect(passive.trainingRole == .other)
+        #expect(passive.group == .arms)
+        #expect(active.pattern == .hang)
+        #expect(active.trainingRole == .pull)
+        #expect(active.group == .back)
+
+        for record in [hollow, passive, active] {
+            let item = ExerciseCatalogItem(record: record, createdAt: .distantPast)
+            #expect(record.trackingMode == .duration)
+            #expect(record.modality == .isometricStrength)
+            #expect(record.loadMode == .nonComparable)
+            #expect(record.defaultDuration == 30)
+            #expect(!item.tracksResistance)
         }
     }
 

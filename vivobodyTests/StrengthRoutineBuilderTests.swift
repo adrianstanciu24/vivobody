@@ -229,6 +229,22 @@ struct StrengthRoutineBuilderTests {
         #expect(selected.contains { $0.pattern == .hinge })
     }
 
+    @Test func activeHangDoesNotSatisfyVerticalPullCoverage() throws {
+        let activeHang = try candidate("active-dead-hang")
+        let plan = StrengthRoutineBuilder.build(
+            input: input(equipment: []),
+            candidates: [activeHang]
+        )
+
+        #expect(plan.gaps.contains {
+            $0.kind == .missingMovement(.pull, .vertical)
+        })
+        #expect(!plan.days.flatMap(\.slots).contains {
+            $0.kind == .verticalPull
+                && $0.exercise?.catalogID == "active-dead-hang"
+        })
+    }
+
     @Test func fourDayEmphasisOnlyAppearsOnItsTrainingRegion() {
         for duration in StrengthRoutineSessionDuration.allCases {
             for emphasis in MuscleGroup.allCases {

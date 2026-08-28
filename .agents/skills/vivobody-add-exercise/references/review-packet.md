@@ -27,7 +27,7 @@ One of: `no-op alias`, `added`, `proposal awaiting approval`, or `blocked by evi
 |---|---|---|---|
 | | | direct / supporting / inferred | |
 
-Link the stable DOI, PubMed, PMC, journal, or official-standard page. Include the web search date. Do not bury conflicting evidence.
+Link the stable DOI, PubMed, PMC, journal, or official-standard page. Label fixture-standard support separately from anatomy-and-mechanics inference. Include the web search date. Do not bury conflicting evidence.
 
 ## Integration
 

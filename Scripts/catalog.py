@@ -174,7 +174,7 @@ EQUIPMENT = {
 }
 MECHANICS = {"compound", "isolation"}
 TRAINING_ROLES = {"push", "pull", "legs", "core", "other"}
-PATTERNS = {"push", "pull", "squat", "hinge", "lunge", "carry", "core"}
+PATTERNS = {"push", "pull", "squat", "hinge", "lunge", "carry", "core", "hang"}
 DIRECTIONS = {"horizontal", "vertical", "diagonal"}
 CARDINAL_PLANES = {"sagittal", "frontal", "transverse"}
 LATERALITIES = {"bilateral", "unilateral"}
@@ -183,6 +183,7 @@ MODALITIES = {"dynamicStrength", "isometricStrength", "power"}
 LOAD_MODES = {"external", "bodyweightAdded", "assistanceSubtracted", "nonComparable"}
 ROLES = {"primary", "secondary", "stabilizer"}
 ROLE_RANK = {"stabilizer": 1, "secondary": 2, "primary": 3}
+OFFICIAL_TECHNICAL_SOURCE_TYPES = {"officialTechnicalStandard"}
 RULE_FIELD_DOMAINS = {
     "equipment": EQUIPMENT,
     "laterality": LATERALITIES,
@@ -597,6 +598,7 @@ def validate_evidence(data: dict[str, Any]) -> frozenset[str]:
     sources = require_list(data["sources"], f"{context}.sources")
     evidence_ids: set[str] = set()
     identifier_owners: dict[tuple[str, str], str] = {}
+    url_owners: dict[str, str] = {}
 
     for index, source in enumerate(sources):
         item_context = f"{context}.sources[{index}]"
@@ -611,7 +613,7 @@ def validate_evidence(data: dict[str, Any]) -> frozenset[str]:
         require(STABLE_ID.fullmatch(source_id) is not None, f"invalid evidence ID: {source_id}")
         require(source_id not in evidence_ids, f"duplicate evidence ID: {source_id}")
         evidence_ids.add(source_id)
-        require_non_empty_string(source["sourceType"], f"{item_context}.sourceType")
+        source_type = require_non_empty_string(source["sourceType"], f"{item_context}.sourceType")
         require_non_empty_string(source["title"], f"{item_context}.title")
         authors = require_list(source["authors"], f"{item_context}.authors")
         require_unique(authors, f"{item_context}.authors")
@@ -619,9 +621,15 @@ def validate_evidence(data: dict[str, Any]) -> frozenset[str]:
             require_non_empty_string(author, f"{item_context}.authors entry")
         require(type(source["year"]) is int and 1900 <= source["year"] <= 2100, f"{item_context}.year is invalid")
         require_non_empty_string(source["scope"], f"{item_context}.scope")
+        source_url = require_non_empty_string(source["url"], f"{item_context}.url")
+        require(source_url.startswith("https://"), f"{item_context}.url must use HTTPS")
+        has_canonical_identifier = any(
+            key in source for key in ("doi", "pmid", "pmcid")
+        )
         require(
-            any(key in source for key in ("doi", "pmid", "pmcid")),
-            f"{item_context} must declare at least one canonical identifier: doi, pmid, or pmcid",
+            has_canonical_identifier
+            or source_type in OFFICIAL_TECHNICAL_SOURCE_TYPES,
+            f"{item_context} must declare a canonical identifier or use an approved official technical source type",
         )
         if "doi" in source:
             doi = require_non_empty_string(source["doi"], f"{item_context}.doi")
@@ -633,11 +641,13 @@ def validate_evidence(data: dict[str, Any]) -> frozenset[str]:
                 f"{item_context}.pmcid must use the canonical PMC plus digits form",
             )
             expected_url = f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
-        else:
+        elif "pmid" in source:
             pmid = source["pmid"]
             require(isinstance(pmid, str) and pmid.isdigit(), f"{item_context}.pmid must contain digits")
             expected_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-        require(source["url"] == expected_url, f"{item_context}.url must match its highest-priority canonical identifier")
+        else:
+            expected_url = source_url
+        require(source_url == expected_url, f"{item_context}.url must match its highest-priority canonical identifier")
         if "pmid" in source:
             require(
                 isinstance(source["pmid"], str) and re.fullmatch(r"[1-9][0-9]*", source["pmid"]) is not None,
@@ -659,6 +669,12 @@ def validate_evidence(data: dict[str, Any]) -> frozenset[str]:
                 f"{item_context}.{identifier_key} duplicates canonical identifier owned by {previous_owner}",
             )
             identifier_owners[owner_key] = source_id
+        previous_url_owner = url_owners.get(source_url.casefold())
+        require(
+            previous_url_owner is None,
+            f"{item_context}.url duplicates URL owned by {previous_url_owner}",
+        )
+        url_owners[source_url.casefold()] = source_id
 
     return frozenset(evidence_ids)
 
@@ -915,12 +931,17 @@ def validate_family_schema(data: dict[str, Any]) -> None:
     )
     fixed_properties = fixed_classification.get("properties", {})
     training_role_values = fixed_properties.get("trainingRole", {}).get("enum")
+    pattern_values = fixed_properties.get("pattern", {}).get("enum")
     direction_values = fixed_properties.get("direction", {}).get("enum")
     planes_schema = fixed_properties.get("planes", {})
     plane_values = planes_schema.get("items", {}).get("enum")
     require(
         set(training_role_values or []) == TRAINING_ROLES,
         f"{context} training-role enum differs from validator vocabulary",
+    )
+    require(
+        set(pattern_values or []) == {*PATTERNS, None},
+        f"{context} movement-pattern enum differs from validator vocabulary",
     )
     require(
         set(direction_values or []) == {*DIRECTIONS, None},

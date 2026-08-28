@@ -1,25 +1,30 @@
 # Requested exercise expansion — August 2026
 
-Status: six source-bounded fixtures approved and activated on 2026-08-27;
-Kneeling Cable Crunch and Hollow Hold remain blocked by evidence, while
-Flexed-Arm Hang remains blocked by fixture and contract definition.
+Status: all ten source-bounded fixtures are active. Six were activated on
+2026-08-27; Kneeling Cable Crunch, Hollow Hold, Passive Dead Hang, and Active
+Dead Hang followed on 2026-08-28 after the evidence policy was made
+proportional.
 
 ## Outcome
 
-The request contained nine distinct exercises. None was a duplicate or a safe
-alias of an active record, and none fit an active family contract unchanged.
+The original request contained nine named items. The owner later corrected
+Flexed-Arm Hang to a straight-arm hang and requested both passive and active
+shoulder positions. That replaces one candidate with two, so the current scope
+contains ten exact fixtures. None is a duplicate or safe alias of an active
+record, and none fits an active family contract unchanged.
 
 | Requested exercise | Outcome | Owner | Reason |
 |---|---|---|---|
 | Nordic Curl | Activated | New `nordic-curl` family plus shared phase-schema expansion | The source-exact repetition yields through knee extension, then actively returns through knee flexion; the approved capability is phase-bound to produced-plus-yielding dynamic-strength records. |
-| Kneeling Cable Crunch | Blocked by evidence | Future `spine-flexion` expansion | Available primary evidence does not define the requested tall-kneeling, high-rope fixture. |
+| Kneeling Cable Crunch | Activated | `spine-flexion` expansion | ACE directly defines the conventional tall-kneeling high-rope fixture; hips-held and support-chain roles are disclosed catalog inferences. |
 | Preacher Curl | Activated as Barbell Preacher Curl | `elbow-flexion` expansion | “Preacher Curl” is implement-ambiguous; the activated fixture is specifically a bilateral barbell preacher curl with unreported bar shape and pad angle. |
 | Incline Dumbbell Curl | Activated as Bilateral Incline Dumbbell Curl | `elbow-flexion` expansion | The activated fixture uses a 45-degree bench and held supination; simultaneous bilateral movement is an explicit catalog adaptation because source sequencing is unreported. |
 | Mid-Thigh Clean Pull | Activated as Barbell Mid-Thigh Clean Pull | New `mid-thigh-clean-pull` family | It omits the pull-under and catch and cannot inherit the Power Clean phase or muscle contract. |
 | Full Clean | Activated as Barbell Squat Clean | New `squat-clean` family | A full front-squat receive and recovery are deliberately excluded by the active `power-clean` identity and contract. |
 | Full Snatch | Activated as Barbell Squat Snatch | New `full-snatch` family | Its floor first pull and full overhead-squat receive/recovery differ from Hang Power Snatch; the second pull and pull-under overlap. |
-| Hollow Hold | Blocked by evidence | Future `hollow-hold` family | The official fixture is exact, but no exact long-lever primary study establishes the complete action and muscle-role contract. |
-| Flexed-Arm Hang | Blocked by fixture and contract | Future `flexed-arm-hang` family | The protocol fixes grip and endpoint but not shoulder/scapular posture, exact resisted actions, or a defensible muscle policy. |
+| Hollow Hold | Activated | New `hollow-hold` family | The official standard defines the exact long-lever shape; component research and existing anatomy support bounded categorical roles without an exact-fixture ranking. |
+| Passive Dead Hang | Activated | New `passive-dead-hang` family | The exact relaxed-shoulder fixture resists finger opening and uses conservative support-chain roles; involvement is not treated as an exhaustive passive-tissue atlas. |
+| Active Dead Hang | Activated | New `active-dead-hang` family plus `hang` pattern | The exact active-shoulder fixture resists scapular elevation and finger opening without being mislabeled as a Vertical Pull. |
 
 Bundled workout history is keyed by stable `catalogID`, never by canonical name
 or alias. The integration uses implement-specific IDs and canonical names so
@@ -33,8 +38,9 @@ Nordic Curl receives unranked repetitions and authored hard-set credit but no
 load-based PR; Power exercises receive load/repetition records and tonnage but
 no e1RM, RIR, or hard-set credit. The three activated Power records remain
 excluded from routine-builder hard-set selection, while Nordic and both curls
-follow the existing strength-exercise eligibility. Duration-only behavior for
-the blocked isometric candidates is not activated here.
+follow the existing strength-exercise eligibility. Hollow Hold and both hangs
+use duration-only bodyweight logging with no comparable load, tonnage, e1RM,
+RIR, or stale pounds.
 
 ## Candidate fixtures
 
@@ -66,16 +72,17 @@ the blocked isometric candidates is not activated here.
 
 ### Kneeling Cable Crunch
 
-- **Intended fixture:** bilateral tall kneeling, high cable with a rope
-  attachment, hips and pelvis held, deliberate spinal flexion, and controlled
-  return; cable, external load, `dynamicStrength`, repetitions.
-- **Evidence failure:** the located cable-crunch abstract does not report
-  kneeling posture, pulley height, attachment, hip constraint, range, or full
-  execution and measured only right paraspinals.
-- **Contract impact if unlocked:** investigate an expansion of `spine-flexion`
-  for cable equipment, external load, tall-kneeling support, high-rope
-  resistance geometry, and the possible shoulder, elbow, hand, hip, and knee
-  stability demands. Those demands are hypotheses until directly reviewed.
+- **Active fixture:** bilateral tall kneeling on the knees and shins, facing a
+  high cable with a rope held stationary beside the head; hips and pelvis stay
+  held while the spine flexes and returns under control.
+- **Product semantics:** cable, external load, `dynamicStrength`, repetitions;
+  30 lb / 15 kg by 12 and search priority 92.
+- **Evidence and role boundary:** ACE directly defines the setup and execution.
+  The held hip/pelvis constraint and categorical support-chain stabilizers are
+  transparent anatomy-and-mechanics inferences, not measured rankings.
+- **Contract integration:** expand `spine-flexion` with one required fixture
+  discriminator and rules that keep the original 30-degree curl-up and cable
+  branches exact rather than admitting a Cartesian product.
 - **Negative boundary:** standing or seated cable crunches, arm-driven
   pulldowns, hip hinges, machine crunches, sit-ups, and oblique crunches.
 
@@ -204,43 +211,77 @@ the blocked isometric candidates is not activated here.
 
 ### Hollow Hold
 
-- **Intended fixture:** supine with no lumbar gap, posterior pelvic tilt,
-  scapulae and straight legs raised, knees and elbows locked, and arms by the
-  ears; bilateral bodyweight `isometricStrength`, duration, `nonComparable`.
-- **Evidence failure:** the official CrossFit standard defines the shape, but
-  the located primary EMG work uses flexed-hip and flexed-knee pelvic-tilt
-  conditions. It does not establish the complete action or categorical role
-  policy for the requested long-lever hold.
-- **Contract impact if unlocked:** investigate a new `hollow-hold` owner; it
-  cannot inherit the plank-specific `anti-extension` support chain. Possible
-  resisted spinal, hip, and shoulder tendencies and the abdominal, gluteal,
-  hip-flexor, knee-extensor, and shoulder roles remain hypotheses to test, not
-  predetermined contract requirements.
+- **Exact fixture:** supine with no lumbar gap, posterior pelvic tilt, shoulder
+  blades and straight legs raised from the floor, knees and elbows locked, and
+  arms by the ears with active shoulders. “Shoulder blades raised from the
+  floor” is a spatial setup description, not an authored
+  `scapula.elevation` action.
+- **Product semantics:** bilateral bodyweight
+  `isometricStrength`, duration, `nonComparable`, and zero weight/fraction;
+  30-second seed and search priority 94. It exposes no load, tonnage, e1RM, or
+  RIR and ranks history by longest hold.
+- **Evidence and role boundary:** CrossFit directly fixes the long-lever shape;
+  Drysdale and Okubo support its posterior-pelvic-control and straight-leg-hold
+  components. Resisted spine and hip extension plus categorical muscle roles
+  are explicitly labeled anatomy-and-mechanics inference, not exact-fixture
+  rankings.
+- **Contract integration:** a separate `hollow-hold` owner; it does not inherit
+  the plank-specific `anti-extension` support topology.
 - **Negative boundary:** tuck hollow, Dead Bug, V-sit, dynamic leg raise,
   Curl-Up, and prone Plank.
 
-### Flexed-Arm Hang
+### Passive Dead Hang
 
-- **Candidate name:** `Pronated Flexed-Arm Hang`; no aliases. The requested
-  generic words remain discoverable through token search, but no global name is
-  reserved while neutral- and supinated-grip variants remain outside scope.
-- **Exact setup and movement:** bilateral timed hold on a horizontal bar with a
-  shoulder-width pronated grip, chin initially above the bar, elbows flexed,
-  and feet unsupported; end at fatigue or loss of the chin-above-bar position.
-- **Provisional product semantics:** bodyweight, bilateral,
-  `isometricStrength`, duration, `nonComparable`, zero bodyweight fraction.
-  This would record an unweighted fixture without inventing a comparable load
-  or exposing an unsupported added-weight variant.
-- **Role boundary:** the protocol defines the task but not muscle activation.
-  Elbow-flexor, shoulder/scapular, and grip roles must remain conservative
-  action-capability inferences without numeric or rank claims.
-- **Contract blocker:** the reviewed protocols do not fix shoulder or scapular
-  posture. Without that geometry, the proposal cannot truthfully select a plane
-  basis, exact `resistedActions`, stability demands, or muscle requirements.
-  It must not inherit dynamic Vertical Pull prime actions.
-- **Negative boundary:** supinated or neutral-grip hangs, dead hang, scapular
-  hang, dynamic Pull-Up or Chin-Up, mid-range isometric, climbing edge hang,
-  and foot-assisted holds.
+- **Canonical name and ID:** `Passive Dead Hang` / `passive-dead-hang`; no
+  aliases. Bare `Dead Hang` remains intentionally unreserved because it does
+  not distinguish the shoulder contract.
+- **Exact setup and movement:** hang still from a horizontal pull-up bar with a
+  bilateral shoulder-width closed pronated grip, feet unsupported, and elbows
+  fully extended. Maintain the secure grip while allowing the shoulders to
+  rise naturally toward the ears; do not deliberately depress the shoulder
+  blades or cycle between shoulder positions.
+- **Product semantics:** bodyweight `isometricStrength`, duration,
+  `nonComparable`, and zero weight/fraction; 30-second seed, search priority
+  94, arms grouping, and longest-hold history. User-facing copy must say
+  “allow the shoulders to rise naturally,” not “relax completely,” because the
+  grip remains active. No decompression or shoulder-health claim is authored.
+- **Contract integration:** a separate compound `hang` owner with no prime
+  actions and resisted `hand.fingerExtension`. Conservative grip and
+  support-chain roles are disclosed anatomy-and-mechanics inferences. Catalog
+  involvement is a training-contributor model, not an exhaustive passive-
+  tissue atlas, so relaxed shoulder loading does not require invented benefits
+  or a passive-tissue schema.
+- **Evidence boundary:** Army and CrossFit standards establish the bar, closed
+  overhand grip, straight arms, unsupported suspension, and naturally elevated
+  shoulder posture; climbing-hang EMG supports grip involvement only.
+- **Negative boundary:** Active Dead Hang, Scapular Pull-Up, flexed-arm hang,
+  Pull-Up, climbing-edge hang, weighted hang, and foot-assisted hang.
+
+### Active Dead Hang
+
+- **Canonical name and ID:** `Active Dead Hang` / `active-dead-hang`; no
+  aliases and no shared history with Passive Dead Hang.
+- **Exact setup and movement:** use the same bilateral shoulder-width closed
+  pronated bar grip, unsupported feet, and fully extended elbows, then hold the
+  shoulder blades down with the shoulders away from the ears. Do not bend the
+  elbows or repeatedly elevate and depress the shoulder blades.
+- **Product semantics:** bodyweight `isometricStrength`, duration,
+  `nonComparable`, and zero weight/fraction; 30-second seed, search priority
+  92, back grouping, and longest-hold history. It exposes no load, tonnage,
+  e1RM, RIR, or stale pounds.
+- **Contract integration:** a separate compound `hang` owner with no prime
+  actions and resisted `scapula.elevation` plus `hand.fingerExtension`.
+  Scapular depression is the opposing capacity held isometrically, not a
+  dynamic prime action. Repeated motion remains a Scapular Pull-Up.
+- **Evidence boundary:** Army and CrossFit standards establish the bar, grip,
+  straight arms, and shoulders-away-from-ears position. Lower-trapezius and
+  support-chain categories are bounded anatomy-and-mechanics inferences; no
+  numeric activation ranking is claimed.
+- **Negative boundary:** Passive Dead Hang, Scapular Pull-Up, flexed-arm hang,
+  Pull-Up, climbing-edge hang, weighted hang, and foot-assisted hang.
+
+Both hangs use the additive `hang` compound pattern. They remain distinct
+families and histories and do not satisfy Vertical Pull coverage.
 
 ## Approved contract surfaces
 
@@ -332,30 +373,34 @@ from claiming that every phase differs.
 - **Duplicate gate:** exact normalized names, aliases, IDs, and fuzzy neighbors
   were checked. No active duplicate or alias-only integration exists.
 - **Closest-family gate:** Nordic, Mid-Thigh Clean Pull, Full Snatch, Hollow
-  Hold, Squat Clean, and Flexed-Arm Hang require new owners; Preacher and
-  Bilateral Incline Dumbbell Curl expand `elbow-flexion`; Kneeling Cable Crunch
-  would expand `spine-flexion` if evidence is found.
-- **Evidence gate:** six exact fixtures are sufficient for activation.
-  Kneeling Cable Crunch and Hollow Hold fail the evidence gate; Flexed-Arm Hang
-  has a protocol but fails the exact-fixture/contract gate.
+  Hold, Squat Clean, Passive Dead Hang, and Active Dead Hang require new
+  owners; Preacher and Bilateral Incline Dumbbell Curl expand
+  `elbow-flexion`; Kneeling Cable Crunch expands `spine-flexion`.
+- **Evidence gate:** all ten exact fixtures are sufficient for activation. An
+  authoritative standard may establish conventional geometry, while existing
+  primary anatomy may support transparently bounded categorical roles. Exact
+  exercise-specific EMG remains necessary for novel capabilities or
+  quantitative, comparative, medical, or surprising claims—not every ordinary
+  fixture.
 - **Contract gate:** every evidence-ready candidate changes a family contract,
-  creates a family, or broadens shared schema semantics. Owner approval for the
-  six reviewed surfaces was granted explicitly on 2026-08-27; no approval was
-  inferred for the three blocked candidates.
+  creates a family, or broadens shared semantics. Owner approval was explicit:
+  six fixtures on 2026-08-27 and the four follow-up fixtures plus proportional
+  policy and `hang` vocabulary on 2026-08-28.
 - **Independent review gate:** biomechanics/evidence, family-boundary, and
   product-semantics reviews were performed independently before synthesis, then
-  re-run against each corrected surface. All three final reviews pass. No
+  re-run against all four follow-up fixtures under the proportional policy.
+  All four pass with bounded inference and no medical or ranking claims. No
   reviewer edited catalog files.
 
 ## Evidence ledger
 
-Web search and source verification date: **2026-08-27**.
+Web search and source verification date: **2026-08-28**.
 
 | Claim | Primary source | Support | Limitation |
 |---|---|---|---|
 | Nordic down-and-active-return fixture and hamstring activity | [Narouei et al. 2018](https://pmc.ncbi.nlm.nih.gov/articles/PMC5931159/) | Direct | The achieved range varies; trunk/glute EMG is not a universal role ranking. |
 | Nordic fixation and execution variants materially change mechanics | [Šarabon et al. 2019](https://pmc.ncbi.nlm.nih.gov/articles/PMC6808554/) | Supporting | Does not make different anchors interchangeable. |
-| Requested kneeling cable-crunch fixture | [Mitchell et al. 1998](https://doi.org/10.1097/00005768-199805001-01634) | Insufficient | Abstract omits the defining setup and most relevant muscle/action data. |
+| Requested kneeling cable-crunch fixture | [ACE Certified News](https://www.acefitness.org/cp/pdfs/CertifiedNews/AugSept09Cert.pdf) | Direct technical standard | Hip/pelvis constraint and categorical support-chain roles are disclosed catalog inferences. |
 | Bilateral barbell preacher fixture, torque profile, and biceps adaptation | [Nunes et al. 2020](https://pmc.ncbi.nlm.nih.gov/articles/PMC7460162/) | Direct | Bar shape and pad angle are unreported; no brachialis/brachioradialis measurement. |
 | 45-degree fully supinated incline-dumbbell fixture | [Zabaleta-Korta et al. 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10407320/) | Direct setup; adapted sequence | Both arms were trained, but sequence is unreported and the incline group had no significant regional growth; simultaneous movement is a disclosed catalog adaptation. |
 | Incline-curl biceps long-head activity | [Oliveira et al. 2009](https://pmc.ncbi.nlm.nih.gov/articles/PMC3737788/) | Supporting | Uses a unilateral 50-degree trunk-hyperextension fixture; it does not define the active bench angle, bilateral sequence, grip, or a head-specific hierarchy. |
@@ -365,17 +410,24 @@ Web search and source verification date: **2026-08-27**.
 | Competition Clean and Snatch start, receive, and recovery boundaries | [IWF TCRR, 5 November 2025](https://iwf.sport/wp-content/uploads/downloads/2025/11/IWF-TCRR-2025-as-of-05-November-2025.pdf) | Direct official boundary standard | Permits split/power receiving; the active records deliberately narrow both fixtures to a squat catch and do not treat the standard as muscle evidence. |
 | Full Clean and Snatch phase kinematics | [Khuyagbaatar et al.](https://doi.org/10.5334/paah.306) | Direct | Does not establish a complete muscle-role hierarchy. |
 | Full Clean versus Snatch lower-limb EMG and biomechanics | [Arauz et al. 2026](https://pubmed.ncbi.nlm.nih.gov/41352184/) | Direct | Upper-body and trunk roles remain inferred. |
-| Official long-lever Hollow Hold shape | [CrossFit Gymnastics Training Guide](https://assets.crossfit.com/pdfs/seminars/SMERefs/Gymnastics/GymnasticsCourse_SeminarGuide.pdf) | Direct technical standard | No exact categorical muscle-role evidence. |
-| Pelvic-tilt abdominal EMG | [Drysdale et al. 2004](https://pmc.ncbi.nlm.nih.gov/articles/PMC385259/) | Supporting only | Flexed-hip/knee geometry does not match the long-lever Hollow Hold. |
-| Pronated chin-above-bar timed hold | [Clemons et al. 2004](https://doi.org/10.1519/R-12342.1) | Direct protocol | Tests relationships with selected relative-strength measures; it does not establish broad task validity or muscle activation. |
-| Shoulder-width pronated Flexed-Arm Hang protocol | [Imanian et al. 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC12473082/) | Direct fixture | Training outcomes do not establish exercise-specific muscle rankings. |
+| Official long-lever Hollow Hold shape | [CrossFit Gymnastics Training Guide](https://assets.crossfit.com/pdfs/seminars/SMERefs/Gymnastics/GymnasticsCourse_SeminarGuide.pdf) | Direct technical standard | Categorical roles remain bounded inference, not exact-fixture rankings. |
+| Pelvic-tilt abdominal EMG | [Drysdale et al. 2004](https://pmc.ncbi.nlm.nih.gov/articles/PMC385259/) | Supporting component | Flexed-hip/knee geometry does not exactly match the long-lever Hollow Hold. |
+| Closed-overhand straight-arm bar geometry | [U.S. Army ATP 7-22.02](https://www.benning.army.mil/tenant/wtc/content/PDF/ARN45013-ATP_7-22.02-001-WEB-4.pdf) | Direct technical standard | Does not distinguish active and passive scapular posture or rank muscles. |
+| Active versus passive shoulder position in a straight-arm bar hang | [CrossFit, 2026](https://www.crossfit.com/essentials/crossfit-bar-hanging) | Direct technical distinction | No muscle measurement, fixed grip width, or complete grip geometry. |
+| Fully extended hang loading and forearm EMG | [Exel et al. 2023](https://doi.org/10.3389/fspor.2023.1251089) | Supporting | Uses a 22-mm climbing edge and open-crimp grip, not a horizontal bar; scapular state is unspecified. |
+| Sustained dead-hang coordination | [Exel et al. 2026](https://doi.org/10.1002/ejsc.70197) | Supporting | Uses a 20-mm climbing edge and half-crimp grip; scapular state is unspecified and coordination does not establish categorical muscle roles. |
 
 ## Integration
 
 - **Active family or proposal:** `nordic-curl`, `mid-thigh-clean-pull`,
   `squat-clean`, and `full-snatch` are active families; Barbell Preacher Curl
-  and Bilateral Incline Dumbbell Curl are active `elbow-flexion` fixtures. The
-  other three requests remain blocked in this record.
+  and Bilateral Incline Dumbbell Curl are active `elbow-flexion` fixtures;
+  Kneeling Cable Crunch is an active `spine-flexion` fixture; and
+  `hollow-hold`, `passive-dead-hang`, and `active-dead-hang` are active
+  families.
+- **Second-review scope:** the proportional evidence policy, official-standard
+  evidence route, `hang` pattern, three new families, and one family expansion
+  were integrated for the four follow-up fixtures.
 - **Changed files:** canonical family, evidence, and schema source under
   `specs/catalog/`; catalog compiler, mutation/search/runtime tests, and catalog
   documentation; resistance-capability normalization across workout, template,
@@ -383,31 +435,26 @@ Web search and source verification date: **2026-08-27**.
   catalog.
 - **Generated output:** `Scripts/catalog.py --emit-runtime` regenerated
   `vivobody/Resources/catalog.json`; the checked foundation has 58 muscles,
-  60 mesh bases, 44 actions, 196 evidence sources, 76 family contracts,
-  172 exercise records, and digest `21faa9c33b0a`.
-- **Tests and catalog gates:** the focused catalog suite passes 417 tests.
-  Focused Swift tests pass for biomechanics/catalog contracts, requested-name
-  and Clean/Snatch ordering, set carry-forward, and template prefill.
-  `Scripts/check.sh` passes, including generated-data checks and app build.
-- **UI evidence:** `catalog-nordic-curl` passes Library discovery, detail anatomy,
-  and Movement semantics with inspected screenshot/tree evidence.
-  `active-no-load` passes with a deliberately stale 45 lb seed while exposing
-  only repetitions and no Resistance or Weight control.
+  60 mesh bases, 44 actions, 201 evidence sources, 79 validated family
+  contracts including the synthetic fixture, and 176 active exercise records.
+- **Tests and catalog gates:** the generated catalog is byte-identical to the
+  compiler output; all 420 catalog mutation tests and the targeted biomechanics,
+  search, substitution, and routine-builder iOS suites pass.
+- **UI evidence:** `catalog-active-dead-hang` passes with inspected
+  `.verify/scenarios/catalog-active-dead-hang/final.jpg` and
+  `final-ui.json`; the detail exposes Strength · Hold plus Hang, Compound, and
+  Frontal movement semantics without clipping.
 
 ## Remaining uncertainty or unlock
 
-No additional unlock remains for the six approved fixtures. Bodyweight plus
+No additional unlock remains for the ten approved fixtures. Bodyweight plus
 `nonComparable` now defines an unloaded capability across active workout,
 template, completed-set, receipt, history, analytics, widget, and save paths.
 Stale values are interpreted as zero and normalized at write boundaries without
 a SwiftData schema migration; band resistance remains tracked.
 
-Kneeling Cable Crunch needs a primary motion/EMG study or authoritative
-technical standard that fixes tall-kneeling posture, high-pulley rope geometry,
-hip/pelvis constraint, range, and execution. Hollow Hold needs exact long-lever
-biomechanics/EMG evidence sufficient to assign its resisted actions and muscle
-roles without transferring the plank contract.
-
-Flexed-Arm Hang additionally needs a source-exact shoulder/scapular posture or
-another defensible geometry decision before resisted actions, plane basis,
-stability demands, and muscle requirements can be reviewed.
+Remaining uncertainty is intentionally bounded: the new standards establish
+fixture geometry, while some categorical roles are anatomy-and-mechanics
+inferences rather than exact-fixture measurements. The catalog makes no
+numeric activation ranking, medical benefit, decompression, rehabilitation,
+or injury-prevention claim for these records.

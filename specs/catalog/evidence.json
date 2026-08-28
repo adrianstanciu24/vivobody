@@ -3164,6 +3164,65 @@
       "pmid": "41352184",
       "url": "https://doi.org/10.1016/j.jbiomech.2025.113106",
       "scope": "Elite weightlifters performed snatch and clean lifts with lower-limb kinematics, kinetics, and EMG. It directly supports lower-limb involvement and comparison between the lifts; upper-body and trunk role categories, grip dimensions, and product settings remain inferred or outside scope."
+    },
+    {
+      "id": "ace-2009-kneeling-cable-crunch",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Take Advantage of the Versatility and Convenience of the Cable Crossover",
+      "authors": [
+        "Carrie Myers"
+      ],
+      "year": 2009,
+      "url": "https://www.acefitness.org/cp/pdfs/CertifiedNews/AugSept09Cert.pdf",
+      "scope": "ACE specifies a high-position triceps rope, an athlete facing the weight stack and kneeling, the rope held stationary with wrists beside the head, abdominal contraction and forward torso flexion, a slow controlled return, and repetitions. It establishes the conventional Kneeling Cable Crunch fixture and execution sequence, not exact joint angles, muscle measurements, or medical benefits. Holding the hips and pelvis still is a disclosed catalog narrowing."
+    },
+    {
+      "id": "crossfit-2015-gymnastics-hollow-body",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Gymnastics Training Guide: Hollow Body Position",
+      "authors": [
+        "CrossFit, Inc."
+      ],
+      "year": 2015,
+      "url": "https://assets.crossfit.com/pdfs/seminars/SMERefs/Gymnastics/GymnasticsCourse_SeminarGuide.pdf",
+      "scope": "CrossFit specifies the supine long-lever Hollow Body Position with no lumbar gap, posterior pelvic tilt, shoulder blades and straight legs raised from the floor, locked knees and elbows, and arms beside the ears with active shoulders. It establishes fixture geometry and a timed hold, not joint moments, categorical muscle rankings, or medical claims. Raised shoulder blades describe the torso's spatial relationship to the floor and do not establish scapular elevation."
+    },
+    {
+      "id": "army-2020-straight-arm-hang",
+      "sourceType": "officialTechnicalStandard",
+      "title": "ATP 7-22.02 Holistic Health and Fitness Drills and Exercises",
+      "authors": [
+        "Headquarters, Department of the Army"
+      ],
+      "year": 2020,
+      "url": "https://www.benning.army.mil/tenant/wtc/content/PDF/ARN45013-ATP_7-22.02-001-WEB-4.pdf",
+      "scope": "The Army standard defines a Straight-Arm Hang on a horizontal pull-up bar using a closed overhand grip and straight arms as the start for pull-up and straight-arm-pull drills. It supports the bar, grip closure and orientation, unsupported suspension, and extended-elbow boundary, not passive-versus-active scapular posture or exercise-specific muscle rankings."
+    },
+    {
+      "id": "crossfit-2026-bar-hanging",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Is Hanging From a Bar Worth Your Time? A CrossFit Reality Check",
+      "authors": [
+        "Stephane Rochet"
+      ],
+      "year": 2026,
+      "url": "https://www.crossfit.com/essentials/crossfit-bar-hanging",
+      "scope": "CrossFit distinguishes an active hang with the shoulders held slightly away from the ears from a passive hang in which the shoulders rise naturally toward the ears. It establishes the two shoulder-position fixtures, not quantitative grip equivalence, muscle rankings, decompression, rehabilitation, injury prevention, or other medical benefits."
+    },
+    {
+      "id": "drysdale-2004-pelvic-tilt-hollowing",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Surface Electromyographic Activity of the Abdominal Muscles During Pelvic-Tilt and Abdominal-Hollowing Exercises",
+      "authors": [
+        "Cheri L. Drysdale",
+        "Jennifer E. Earl",
+        "Jay Hertel"
+      ],
+      "year": 2004,
+      "pmid": "15085209",
+      "pmcid": "PMC385259",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC385259/",
+      "scope": "Healthy active women performed supine pelvic-tilt and abdominal-hollowing tasks in standard, supported-leg, and unsupported flexed-hip and flexed-knee positions while rectus-abdominis and external-oblique surface EMG was measured. It supports abdominal participation in posterior pelvic control, not the exact long-lever Hollow Hold or a universal categorical role ranking."
     }
   ]
 }

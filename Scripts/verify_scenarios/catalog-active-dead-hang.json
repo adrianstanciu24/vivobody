@@ -1,0 +1,74 @@
+{
+  "name": "catalog-active-dead-hang",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Active Dead Hang,"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Active Dead Hang,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · HOLD"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Active Dead Hang"
+          },
+          {
+            "labelContains": "Muscles used by Active Dead Hang"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Movement",
+          "valueContains": "hang"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Movement",
+      "valueContains": "compound"
+    },
+    {
+      "label": "Movement",
+      "valueContains": "hang"
+    },
+    {
+      "label": "Movement",
+      "valueContains": "frontal plane"
+    }
+  ],
+  "forbidden": []
+}

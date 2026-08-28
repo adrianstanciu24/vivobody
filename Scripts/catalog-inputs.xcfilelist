@@ -4,6 +4,7 @@ $(SRCROOT)/specs/catalog/joint-actions.json
 $(SRCROOT)/specs/catalog/evidence.json
 $(SRCROOT)/specs/catalog/family.schema.json
 $(SRCROOT)/specs/catalog/fixtures/valid-family.json
+$(SRCROOT)/specs/catalog/families/active-dead-hang.json
 $(SRCROOT)/specs/catalog/families/ankle-dorsiflexion.json
 $(SRCROOT)/specs/catalog/families/ankle-plantarflexion.json
 $(SRCROOT)/specs/catalog/families/anti-extension.json
@@ -33,6 +34,7 @@ $(SRCROOT)/specs/catalog/families/hip-flexion.json
 $(SRCROOT)/specs/catalog/families/hip-hinge.json
 $(SRCROOT)/specs/catalog/families/hip-internal-rotation.json
 $(SRCROOT)/specs/catalog/families/hip-thrust-bridge.json
+$(SRCROOT)/specs/catalog/families/hollow-hold.json
 $(SRCROOT)/specs/catalog/families/horizontal-press.json
 $(SRCROOT)/specs/catalog/families/incline-press.json
 $(SRCROOT)/specs/catalog/families/inclined-leg-press.json
@@ -43,6 +45,7 @@ $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/machine-hack-squat.json
 $(SRCROOT)/specs/catalog/families/mid-thigh-clean-pull.json
 $(SRCROOT)/specs/catalog/families/nordic-curl.json
+$(SRCROOT)/specs/catalog/families/passive-dead-hang.json
 $(SRCROOT)/specs/catalog/families/power-clean.json
 $(SRCROOT)/specs/catalog/families/push-press.json
 $(SRCROOT)/specs/catalog/families/reverse-fly.json

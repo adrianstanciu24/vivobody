@@ -84,12 +84,25 @@ struct ExerciseSearchTests {
             ("Mid-Thigh Clean Pull", "barbell-mid-thigh-clean-pull"),
             ("Full Clean", "barbell-squat-clean"),
             ("Full Snatch", "barbell-squat-snatch"),
+            ("Kneeling Cable Crunch", "kneeling-cable-crunch"),
+            ("Hollow Hold", "hollow-hold"),
+            ("Hollow Body Hold", "hollow-hold"),
+            ("Passive Dead Hang", "passive-dead-hang"),
+            ("Active Dead Hang", "active-dead-hang"),
         ]
 
         for (query, catalogID) in expected {
             let ranked = ExerciseSearch.rank(items: catalog, query: query)
             #expect(ranked.first?.catalogID == catalogID)
         }
+    }
+
+    @Test func genericDeadHangKeepsPassiveThenActiveVariantsTogether() {
+        let ranked = ExerciseSearch.rank(items: bundledCatalog(), query: "dead hang")
+        #expect(ranked.prefix(2).compactMap(\.catalogID) == [
+            "passive-dead-hang",
+            "active-dead-hang",
+        ])
     }
 
     @Test func genericCleanAndSnatchKeepPowerNeighborsAheadOfSquatFixtures() throws {

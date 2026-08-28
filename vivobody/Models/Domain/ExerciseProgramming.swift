@@ -54,6 +54,7 @@ nonisolated enum TrainingRole: String, Codable, Hashable, CaseIterable {
         case .pull: .pull
         case .squat, .hinge, .lunge: .legs
         case .core: .core
+        case .hang: .pull
         case .carry, nil: .other
         }
     }

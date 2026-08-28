@@ -12,7 +12,8 @@ intake
                                                 -> evidence gate
                          insufficient/conflict -> blocked proposal
                                                 -> contract gate
-                         contract broadening --> proposal + owner approval
+                   shared/unrequested change --> proposal + owner approval
+                   authorized local contract --> draft exercise
                          unchanged contract ---> draft exercise
                                                    -> evidence review ----\
                                                    -> contract review -----+-> integration gate
@@ -50,7 +51,7 @@ Return `no-op alias` when the proposed movement is already represented by the sa
 
 ## Parallel discovery lanes
 
-Each lane is read-only and returns a compact packet. Give subagents the exact candidate fixture, repository root, closest-family hypothesis, and a prohibition on editing files.
+Each lane is read-only and returns a compact packet. Use all three lanes for a new family, ambiguous fixture, or shared semantic change. For a routine exact fixture, evidence and product semantics may be combined, but family-boundary review remains independent. Give subagents the exact candidate fixture, repository root, closest-family hypothesis, and a prohibition on editing files.
 
 ### Biomechanics researcher
 
@@ -119,43 +120,46 @@ Product verdict:
 
 For every non-duplicate addition, browse the current web even when local evidence appears reusable. Prefer stable primary routes such as DOI, PubMed, PMC, the journal article, or an official technical standard.
 
-Evidence is sufficient only when:
+Evidence is sufficient when:
 
-- the studied setup is exact enough to defend family ownership and declared axes;
+- an authoritative technical standard, exact study protocol, or owner-specified fixture is precise enough to defend family ownership and declared axes;
 - categorical joint-action and muscle-role claims are either directly supported or transparently bounded inferences;
 - contradictory sources are reconciled by fixture, method, population, or measurement differences;
 - limitations are explicit and no claim depends on a commercial name or generic coaching prose;
 - every active evidence entry will be referenced by a capability, family, or exercise.
 
-Do not use blogs, exercise databases, search snippets, or vendor marketing as biomechanical proof. They may clarify what variation the user means. Do not convert EMG amplitude into force, hypertrophy, or universal percentages. Do not present OpenSim or another model as measured physiology.
+An authoritative technical standard may establish conventional setup, execution, and endpoints without DOI-backed exercise-specific research. Existing primary anatomy, moment-arm, and musculoskeletal-model evidence may establish possible actions and stabilizing capability; a family may then make a transparent categorical anatomy-and-mechanics inference for the exact fixture. Exact exercise-specific EMG is required only when adding a new anatomical capability or making a quantitative, ranked, comparative, medical, or surprising claim. Its absence alone is not an evidence failure.
+
+Do not use blogs, exercise databases, search snippets, or vendor marketing as biomechanical proof. They may clarify what variation the user means. Do not convert EMG amplitude into force, hypertrophy, or universal percentages. Do not present OpenSim or another model as measured physiology. Do not infer medical benefits from coaching standards.
 
 When evidence is insufficient and file changes are authorized, create or update `specs/catalog/proposals/<candidate>.md` with the reviewed fixture, candidate boundary, sources, rejected inferences, and a concrete unlock. For a review-only request, return the same proposal-ready content without writing it. Do not add unused sources to `evidence.json`.
 
 ## Contract gate
 
-Choose exactly one outcome:
+Choose exactly one path:
 
 | Outcome | Condition | Authorized action |
 |---|---|---|
 | `no-op alias` | Exact fixture already exists | Explain match; optionally propose a justified alias |
 | `fast lane` | Active family accepts every value without contract or vocabulary changes | Draft the exercise and supporting referenced evidence |
-| `proposal awaiting approval` | New family or any contract/shared-vocabulary broadening is required | Write or return proposal; pause before active catalog edits |
+| `authorized local contract` | The owner asked to add the exact fixture and it needs a narrow new family or fixture-specific expansion | Draft, independently review, and integrate it |
+| `proposal awaiting approval` | The request was review-only, or admission changes shared schema/taxonomy/capabilities or broadens an existing family beyond the named fixture | Write or return proposal; pause before active catalog edits |
 | `blocked by evidence` | Fixture, anatomy, or primary evidence cannot support the claims | Write or return blocked proposal and concrete unlock |
 
 Changing an allowed equipment value, axis domain, action, muscle whitelist, rule, taxonomy entry, or joint-action capability is a contract change even if it is only one JSON line. Do not weaken a family merely to admit one exercise.
 
-Owner approval may be present in the original request when it explicitly authorizes the named new family or exact contract change. Generic permission to “add the exercise” is not approval to broaden the contract.
+An explicit request to add a named exact fixture authorizes its smallest local family contract. It does not authorize unrelated variants, a broader family domain, shared schema or taxonomy changes, or new anatomical capabilities. Those surfaces need an explicit owner decision.
 
 ## Draft and independent review
 
-For a fast-lane draft:
+For an authorized draft:
 
 1. Edit one family at a time under `specs/catalog/families/`.
 2. Add evidence only when the active catalog references it.
 3. Keep identifiers stable, categorical roles explicit, and every axis authored.
 4. Never edit generated runtime JSON by hand.
 
-After drafting, use reviewers who did not author the changed claims:
+After drafting, use reviewers who did not author the changed claims, proportionate to risk:
 
 - evidence reviewer: challenge source identity, claim support, fixture match, and overstatement;
 - contract reviewer: run a field-by-field family audit and adversarial neighboring-family cases;

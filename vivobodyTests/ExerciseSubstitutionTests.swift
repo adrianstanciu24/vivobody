@@ -207,6 +207,33 @@ struct ExerciseSubstitutionTests {
         #expect(recommendation?.preserves.contains(.tracking(.reps)) == true)
     }
 
+    @Test func activeAndPassiveDeadHangsRemainPartialAlternatives() throws {
+        let passiveRecord = try #require(
+            CatalogData.record(forCatalogID: "passive-dead-hang")
+        )
+        let activeRecord = try #require(
+            CatalogData.record(forCatalogID: "active-dead-hang")
+        )
+        let passive = ExerciseCatalogItem(record: passiveRecord, createdAt: .distantPast)
+        let active = ExerciseCatalogItem(record: activeRecord, createdAt: .distantPast)
+
+        let passiveToActive = try #require(
+            ExerciseSubstitution.rank(anchor: passive, candidates: [active]).first
+        )
+        let activeToPassive = try #require(
+            ExerciseSubstitution.rank(anchor: active, candidates: [passive]).first
+        )
+
+        for recommendation in [passiveToActive, activeToPassive] {
+            #expect(recommendation.tier == .partial)
+            #expect(recommendation.preserves.contains(
+                .movement(.init(pattern: .hang, direction: nil))
+            ))
+            #expect(recommendation.preserves.contains(.tracking(.duration)))
+            #expect(recommendation.changes.contains(.family))
+        }
+    }
+
     @Test func missingFamiliesAreNotTreatedAsAnExactMatch() {
         let anchor = item(
             catalogID: nil,

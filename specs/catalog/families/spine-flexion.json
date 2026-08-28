@@ -3,10 +3,15 @@
   "schemaVersion": 1,
   "id": "spine-flexion",
   "name": "Spine Flexion",
-  "definition": "A strict bilateral bodyweight trunk isolation in which the spine dynamically flexes from a supine start to the directly reviewed 30-degree curl-up endpoint and then returns under control while the pelvis and lower body do not create the repetition. Rectus abdominis is primary and the combined internal-and-external-oblique region is secondary. Ha and Shin directly measured rectus abdominis plus both external and internal obliques during concentric and eccentric curl-ups at 30, 60, and 90 degrees; the first roster admits only the 30-degree condition. The primary-versus-secondary rank is a practical sagittal-training-emphasis judgment rather than a claim that surface EMG is a numeric contribution oracle. Vivobody cannot separate internal from external oblique or left from right, so the oblique assignment necessarily credits a combined bilateral region. The study also measured iliopsoas activity, but this contract holds hip position and does not award a hip-flexor role merely because activity was recorded. Full sit-ups, loaded crunches, cable or machine crunches, reverse crunches, leg raises, diagonal curl-ups, spinal rotation, lateral flexion, isometric holds, unstable surfaces, and curl-ups beyond 30 degrees remain outside this contract.",
+  "definition": "A strict bilateral trunk isolation in which the spine dynamically flexes and then returns under control while deliberate hip and pelvic motion do not create the repetition. The roster contains two exact fixtures: a bodyweight supine curl-up ending at the directly reviewed 30-degree trunk elevation, and a tall-kneeling high-rope cable crunch with the rope held beside the head and an unquantified strict trunk-flexion range. Rectus abdominis is primary and the combined internal-and-external-oblique region is secondary. Ha and Shin directly measured abdominal activity during controlled curl-ups; ACE directly defines the conventional cable fixture. Cable support-chain roles are bounded anatomy-and-mechanics inferences, not measured rankings. Full sit-ups, machine crunches, reverse crunches, leg raises, diagonal curl-ups, spinal rotation, lateral flexion, isometric holds, unstable surfaces, arm-driven cable pulls, and unreviewed curl-up angles remain outside this contract.",
   "evidenceRefs": [
+    "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
-    "ha-2020-curl-up-angle"
+    "holzbaur-2005-upper-extremity",
+    "mirakhorlo-2018-hand-wrist-model",
+    "seth-2019-shoulder-work",
+    "ha-2020-curl-up-angle",
+    "ace-2009-kneeling-cable-crunch"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -25,7 +30,8 @@
   },
   "allowed": {
     "equipment": [
-      "bodyweight"
+      "bodyweight",
+      "cable"
     ],
     "modalities": [
       "dynamicStrength"
@@ -34,7 +40,8 @@
       "reps"
     ],
     "loadModes": [
-      "nonComparable"
+      "nonComparable",
+      "external"
     ],
     "lateralities": [
       "bilateral"
@@ -119,17 +126,35 @@
       "secondary": [
         "obliques"
       ],
-      "stabilizer": []
+      "stabilizer": [
+        "serratus",
+        "externalRotators",
+        "bicepsBrachii",
+        "fingerFlexors",
+        "gluteMax",
+        "vasti"
+      ]
     }
   },
   "variantAxes": [
+    {
+      "id": "flexionFixture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact reviewed posture, resistance, and range branch.",
+      "allowedValues": [
+        "supineThirtyDegreeBodyweightCurlUp",
+        "tallKneelingHighRopeCableCrunch"
+      ]
+    },
     {
       "id": "bodyPosition",
       "valueType": "enum",
       "required": true,
       "description": "The whole-body orientation used by the reviewed curl-up.",
       "allowedValues": [
-        "supine"
+        "supine",
+        "tallKneeling"
       ]
     },
     {
@@ -144,7 +169,7 @@
     {
       "id": "trunkStartElevationDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "description": "The supine trunk-on-floor start used as the zero reference for the study-defined curl-up angle; this is not a segmental lumbar angle.",
       "minimum": 0,
       "maximum": 0
@@ -152,7 +177,7 @@
     {
       "id": "trunkEndElevationDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "description": "The directly reviewed trunk-elevation endpoint relative to the support surface; this is not a claim of 30 degrees at each spinal segment.",
       "minimum": 30,
       "maximum": 30
@@ -181,16 +206,54 @@
       "required": true,
       "description": "Where an external resistance implement contacts the athlete; the reviewed bodyweight curl-up has none.",
       "allowedValues": [
-        "none"
+        "none",
+        "ropeBesideHead"
       ]
     },
     {
       "id": "resistanceGeometry",
       "valueType": "enum",
       "required": true,
-      "description": "How the mass of the upper trunk supplies resistance during the curl-up.",
+      "description": "The reviewed source of resistance and its line relative to the torso.",
       "allowedValues": [
-        "upperTrunkGravity"
+        "upperTrunkGravity",
+        "highCableRope"
+      ]
+    },
+    {
+      "id": "lowerLegSupport",
+      "valueType": "enum",
+      "required": false,
+      "description": "The floor contact used by the tall-kneeling cable fixture.",
+      "allowedValues": [
+        "kneesAndShinsOnFloor"
+      ]
+    },
+    {
+      "id": "ropePosition",
+      "valueType": "enum",
+      "required": false,
+      "description": "The rope position held while the torso creates the repetition.",
+      "allowedValues": [
+        "stationaryBesideHead"
+      ]
+    },
+    {
+      "id": "upperLimbMotion",
+      "valueType": "enum",
+      "required": false,
+      "description": "Whether the arms pull the rope or hold its position.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "trunkRange",
+      "valueType": "enum",
+      "required": false,
+      "description": "The source-bounded trunk range when no numeric endpoint is reported.",
+      "allowedValues": [
+        "unquantifiedStrictFlexion"
       ]
     },
     {
@@ -216,7 +279,201 @@
       "maximum": 20
     }
   },
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "supine-thirty-degree-bodyweight-curl-up-fixture",
+      "description": "Pins the original source-measured bodyweight curl-up and keeps cable-only axes absent.",
+      "when": {
+        "field": "variant.flexionFixture",
+        "operator": "equals",
+        "value": "supineThirtyDegreeBodyweightCurlUp"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "loadMode",
+          "value": "nonComparable"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "supine"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "flexesThenReturns"
+        },
+        {
+          "field": "variant.pelvisMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.hipMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "none"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "upperTrunkGravity"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        }
+      ],
+      "requirePresent": [
+        "variant.trunkStartElevationDegrees",
+        "variant.trunkEndElevationDegrees"
+      ],
+      "requireAbsent": [
+        "variant.lowerLegSupport",
+        "variant.ropePosition",
+        "variant.upperLimbMotion",
+        "variant.trunkRange"
+      ],
+      "requireInvolvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "secondary"
+        }
+      ],
+      "requireAdditionalStabilityDemands": []
+    },
+    {
+      "id": "tall-kneeling-high-rope-cable-crunch-fixture",
+      "description": "Pins the exact high-rope tall-kneeling cable fixture and its inferred support-chain roles.",
+      "when": {
+        "field": "variant.flexionFixture",
+        "operator": "equals",
+        "value": "tallKneelingHighRopeCableCrunch"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "cable"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "tallKneeling"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "flexesThenReturns"
+        },
+        {
+          "field": "variant.pelvisMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.hipMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "ropeBesideHead"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "highCableRope"
+        },
+        {
+          "field": "variant.lowerLegSupport",
+          "value": "kneesAndShinsOnFloor"
+        },
+        {
+          "field": "variant.ropePosition",
+          "value": "stationaryBesideHead"
+        },
+        {
+          "field": "variant.upperLimbMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.trunkRange",
+          "value": "unquantifiedStrictFlexion"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        }
+      ],
+      "requirePresent": [
+        "variant.lowerLegSupport",
+        "variant.ropePosition",
+        "variant.upperLimbMotion",
+        "variant.trunkRange"
+      ],
+      "requireAbsent": [
+        "variant.trunkStartElevationDegrees",
+        "variant.trunkEndElevationDegrees"
+      ],
+      "requireInvolvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "scapula",
+        "shoulder",
+        "elbow",
+        "forearm",
+        "wrist",
+        "hand",
+        "hip",
+        "knee"
+      ]
+    }
+  ],
   "exercises": [
     {
       "catalogID": "30-degree-curl-up",
@@ -245,6 +502,7 @@
         }
       ],
       "variant": {
+        "flexionFixture": "supineThirtyDegreeBodyweightCurlUp",
         "bodyPosition": "supine",
         "spineMotion": "flexesThenReturns",
         "trunkStartElevationDegrees": 0,
@@ -271,6 +529,97 @@
         "disqualifyingCompensations": [
           "Lifting from the hips turns the curl-up into a full sit-up.",
           "Jerking the head and arms forward turns the controlled curl into a momentum swing."
+        ]
+      }
+    },
+    {
+      "catalogID": "kneeling-cable-crunch",
+      "name": "Kneeling Cable Crunch",
+      "aliases": [],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 30,
+      "defaultWeightKg": 15,
+      "reps": 12,
+      "searchPriority": 92,
+      "involvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "flexionFixture": "tallKneelingHighRopeCableCrunch",
+        "bodyPosition": "tallKneeling",
+        "spineMotion": "flexesThenReturns",
+        "pelvisMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "loadInterface": "ropeBesideHead",
+        "resistanceGeometry": "highCableRope",
+        "lowerLegSupport": "kneesAndShinsOnFloor",
+        "ropePosition": "stationaryBesideHead",
+        "upperLimbMotion": "positionHeld",
+        "trunkRange": "unquantifiedStrictFlexion",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "scapula",
+        "shoulder",
+        "elbow",
+        "forearm",
+        "wrist",
+        "hand",
+        "hip",
+        "knee"
+      ],
+      "evidenceRefs": [
+        "ace-2009-kneeling-cable-crunch"
+      ],
+      "execution": {
+        "startingPosition": "Attach a rope to a high cable, face the weight stack, kneel on both knees and shins, and hold the rope stationary beside your head.",
+        "movement": "Keep your hips and arms still while flexing your torso forward against the cable.",
+        "endpoint": "Stop at the end of a strict trunk curl before the hips or arms begin to create the movement.",
+        "returnPhase": "Return upright slowly under control while keeping tension on the cable.",
+        "controlledJoints": "Keep the pelvis and hips held and keep the shoulders, elbows, wrists, and grip stable around the rope.",
+        "supportAndPosture": "Stay tall on both knees and shins while the high cable remains aligned behind and above the head.",
+        "disqualifyingCompensations": [
+          "Sitting the hips back turns the repetition into a hip-driven bow.",
+          "Pulling the rope with the arms turns the repetition into an upper-limb pull.",
+          "Letting the cable snap the torso upright removes the controlled return."
         ]
       }
     }

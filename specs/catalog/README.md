@@ -15,9 +15,10 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
   opposition map, and an independent anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
   them against another list written in the same family file.
-- `evidence.json` tracks exactly 196 primary musculoskeletal sources supporting
-  those capability profiles. A citation supports a rule; it does not turn EMG
-  or a model estimate into a universal numeric contribution.
+- `evidence.json` tracks exactly 201 primary musculoskeletal sources and
+  authoritative technical standards supporting capability profiles and exact
+  fixtures. A citation supports a rule; it does not turn EMG, a model estimate,
+  or coaching guidance into a universal numeric contribution.
 - `family.schema.json` documents the strict JSON shape for one family and its
   explicitly reviewed exercises.
 - `fixtures/valid-family.json` is synthetic validator input. It is never emitted
@@ -82,9 +83,13 @@ Regional excitation differences may support a role decision, but EMG rank by
 itself does not redefine a muscle's anatomical actions. Each family must make
 the practical training-emphasis judgment explicit and evidence-backed.
 
-`movementSignature.stabilityDemands` describes every materially load-bearing
-or control-defining joint or segment. Incidental implement contact alone does
-not create a demand. The field does not require a separate `role: stabilizer`
+`movementSignature.stabilityDemands` describes every materially active,
+training-relevant joint or segment that the authored contributors control.
+Incidental implement contact alone does not create a demand, and the roster is
+not an exhaustive map of passive tissue loading. Passive fixture geometry may
+be recorded in the family definition and variant axes without inventing a
+muscle role, tissue benefit, or medical claim. The field does not require a
+separate `role: stabilizer`
 entry for each region: validation is intentionally role-agnostic at this step,
 so any
 assigned primary, secondary, or stabilizer whose anatomy profile can stabilize
@@ -95,6 +100,17 @@ joint. A family authors an explicit stabilizer only when the reviewed setup
 needs a distinct contributor or its existing movers leave a demand uncovered.
 External support may reduce the required roster, but it never satisfies an
 internal demand by itself.
+
+## Proportional evidence policy
+
+An authoritative technical standard may establish conventional fixture
+geometry, setup, and endpoints. Existing primary anatomy, moment-arm, and
+musculoskeletal-model evidence may then support transparent categorical
+action and stabilizer inferences for that exact fixture. Exact
+exercise-specific EMG is required when adding a new anatomical capability or
+making a quantitative, ranked, comparative, medical, or otherwise surprising
+claim; its absence alone does not block an ordinary exercise. Duplicate,
+family-boundary, tracking/load, and unsupported-claim gates remain strict.
 
 Continuous `0...1` involvement weights are not accepted. Visualization
 intensity, volume credit, and test comparison ranks remain separate derived
@@ -402,4 +418,4 @@ exactly 44 joint actions, all muscles have evidence-backed action profiles,
 family prime actions have capable movers, and stability demands have capable
 assigned muscles. The two posterior-serratus mesh bases are explicitly pinned
 as non-trainable scene surfaces rather than lumbar proxies. The runtime
-projection is pinned to exactly 75 active families and 172 exercises.
+projection is pinned to exactly 78 active families and 176 exercises.

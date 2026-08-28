@@ -1,5 +1,67 @@
 [
   {
+    "familyID": "active-dead-hang",
+    "catalogID": "active-dead-hang",
+    "name": "Active Dead Hang",
+    "group": "back",
+    "defaultWeight": 0,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "hang",
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Take a shoulder-width closed overhand grip on a horizontal pull-up bar, fully extend both elbows, and lift your feet clear of the floor.",
+      "movement": "Pull your shoulders slightly away from your ears and hold the shoulder blades down without bending your elbows.",
+      "endpoint": "Hold the active suspended position for the set time without losing the grip or shoulder position.",
+      "controlledJoints": "Keep both elbows fully extended and keep the shoulder blades down without repeatedly raising and lowering them.",
+      "supportAndPosture": "Support your full bodyweight through both hands with no foot assistance and no deliberate swing.",
+      "disqualifyingCompensations": [
+        "Letting the shoulders rise toward the ears turns the exercise into a Passive Dead Hang.",
+        "Bending the elbows turns the exercise into a flexed-arm hold.",
+        "Repeatedly raising and lowering the shoulders turns the exercise into a shoulder-blade pull-up."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "trapeziusLower",
+        "role": "primary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "ankle-dorsiflexion",
     "catalogID": "seated-band-ankle-dorsiflexion",
     "name": "Seated Band Ankle Dorsiflexion",
@@ -3946,6 +4008,78 @@
     ]
   },
   {
+    "familyID": "hollow-hold",
+    "catalogID": "hollow-hold",
+    "name": "Hollow Hold",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Hollow Body Hold"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with both legs straight and both arms extended beside your ears.",
+      "movement": "Tilt your pelvis back, press your lower back into the floor, and raise your shoulder blades and straight legs from the floor.",
+      "endpoint": "Hold the long hollow shape for the set time with no gap beneath your lower back.",
+      "controlledJoints": "Keep your knees and elbows straight and keep the shoulders, spine, pelvis, and hips still.",
+      "supportAndPosture": "Keep the arms beside the ears, the shoulder-blade region off the floor, and both legs unsupported.",
+      "disqualifyingCompensations": [
+        "A gap opening beneath the lower back ends the strict hold.",
+        "Bending the knees or elbows turns the exercise into a shorter-lever variation.",
+        "Rocking the body turns the hold into a Hollow Rock."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "horizontal-press",
     "catalogID": "barbell-bench-press",
     "name": "Barbell Bench Press",
@@ -5890,6 +6024,64 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "passive-dead-hang",
+    "catalogID": "passive-dead-hang",
+    "name": "Passive Dead Hang",
+    "group": "arms",
+    "defaultWeight": 0,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "other",
+    "pattern": "hang",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Take a shoulder-width closed overhand grip on a horizontal pull-up bar, fully extend both elbows, and lift your feet clear of the floor.",
+      "movement": "Keep a secure grip and remain still while allowing your shoulders to rise naturally toward your ears.",
+      "endpoint": "Hold the suspended position for the set time without losing the grip or straight-arm position.",
+      "controlledJoints": "Keep both elbows fully extended and do not deliberately pull the shoulders down or cycle the shoulder blades.",
+      "supportAndPosture": "Support your full bodyweight through both hands with no foot assistance and no deliberate swing.",
+      "disqualifyingCompensations": [
+        "Bending the elbows turns the exercise into a flexed-arm hold.",
+        "Pulling the shoulders down turns the exercise into an Active Dead Hang.",
+        "Repeatedly raising and lowering the shoulders turns the exercise into a shoulder-blade pull-up."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "fingerFlexors",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
       }
     ]
@@ -9980,6 +10172,77 @@
       {
         "muscle": "obliques",
         "role": "secondary"
+      }
+    ]
+  },
+  {
+    "familyID": "spine-flexion",
+    "catalogID": "kneeling-cable-crunch",
+    "name": "Kneeling Cable Crunch",
+    "group": "core",
+    "defaultWeight": 30,
+    "defaultWeightKg": 15,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "isolation",
+    "trainingRole": "core",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Attach a rope to a high cable, face the weight stack, kneel on both knees and shins, and hold the rope stationary beside your head.",
+      "movement": "Keep your hips and arms still while flexing your torso forward against the cable.",
+      "endpoint": "Stop at the end of a strict trunk curl before the hips or arms begin to create the movement.",
+      "returnPhase": "Return upright slowly under control while keeping tension on the cable.",
+      "controlledJoints": "Keep the pelvis and hips held and keep the shoulders, elbows, wrists, and grip stable around the rope.",
+      "supportAndPosture": "Stay tall on both knees and shins while the high cable remains aligned behind and above the head.",
+      "disqualifyingCompensations": [
+        "Sitting the hips back turns the repetition into a hip-driven bow.",
+        "Pulling the rope with the arms turns the repetition into an upper-limb pull.",
+        "Letting the cable snap the torso upright removes the controlled return."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
       }
     ]
   },

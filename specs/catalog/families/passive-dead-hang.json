@@ -1,0 +1,374 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "passive-dead-hang",
+  "name": "Passive Dead Hang",
+  "definition": "A strict bilateral timed hang from a horizontal pull-up bar using a shoulder-width closed pronated grip, unsupported feet, fully extended elbows, and no deliberate swing. The athlete maintains a secure grip while allowing the shoulders to rise naturally toward the ears and does not deliberately depress or cycle the shoulder blades. The only resisted action is hand.fingerExtension; the shoulder position is a held fixture, not an authored scapular action. Army and CrossFit standards directly establish the grip, straight-arm suspension, and passive shoulder boundary. Grip and support-chain roles are conservative anatomy-and-mechanics inferences rather than exact bar-hang rankings, and the involvement roster is not an exhaustive tissue-load atlas. Active Dead Hang, Scapular Pull-Up, flexed-arm holds, Pull-Ups, climbing-edge hangs, weighted hangs, swinging, and foot-assisted hangs remain outside this contract.",
+  "evidenceRefs": [
+    "gaffney-2014-trapezius-subdivisions",
+    "holzbaur-2005-upper-extremity",
+    "mirakhorlo-2018-hand-wrist-model",
+    "murray-1995-elbow-forearm-moment-arms",
+    "ferrer-uris-2023-finger-dead-hangs",
+    "army-2020-straight-arm-hang",
+    "crossfit-2026-bar-hanging"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "other",
+    "pattern": "hang",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "arms",
+    "allowed": [
+      "arms"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 90
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hand.fingerExtension"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "hand.fingerExtension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "forearm",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachioradialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "fingerFlexors"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "trapeziusUpper",
+        "externalRotators",
+        "brachioradialis",
+        "extensorCarpiRadialis"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether both hands remain fixed to the support implement during the hold.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "supportImplement",
+      "valueType": "enum",
+      "required": true,
+      "description": "The fixed implement carrying the suspended body.",
+      "allowedValues": [
+        "horizontalPullUpBar"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body relationship to the bar and floor.",
+      "allowedValues": [
+        "suspended"
+      ]
+    },
+    {
+      "id": "gripClosure",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the thumb closes around the bar.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed forearm and palm orientation on the bar.",
+      "allowedValues": [
+        "pronated"
+      ]
+    },
+    {
+      "id": "gripWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed hand spacing on the bar.",
+      "allowedValues": [
+        "shoulderWidth"
+      ]
+    },
+    {
+      "id": "footSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the feet unload the hang.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "upperArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The held upper-arm relationship to the torso.",
+      "allowedValues": [
+        "overhead"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The straight-elbow boundary that excludes flexed-arm hangs and Pull-Ups.",
+      "allowedValues": [
+        "extendedHeld"
+      ]
+    },
+    {
+      "id": "scapularPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The passive shoulder position held without deliberate depression.",
+      "allowedValues": [
+        "naturallyElevatedHeld"
+      ]
+    },
+    {
+      "id": "scapularMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the shoulder blades repeatedly elevate and depress.",
+      "allowedValues": [
+        "noDeliberateCycling"
+      ]
+    },
+    {
+      "id": "bodyMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate swinging creates a different task.",
+      "allowedValues": [
+        "stillNoDeliberateSwing"
+      ]
+    },
+    {
+      "id": "holdType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The tracked task rather than a repetition count.",
+      "allowedValues": [
+        "timedIsometric"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the suspended body."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the lower body assists or propels the task.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "passive-dead-hang",
+      "name": "Passive Dead Hang",
+      "aliases": [],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 30,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "fingerFlexors",
+          "role": "primary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "supportImplement": "horizontalPullUpBar",
+        "bodyPosition": "suspended",
+        "gripClosure": "closed",
+        "gripOrientation": "pronated",
+        "gripWidth": "shoulderWidth",
+        "footSupport": "none",
+        "upperArmPosition": "overhead",
+        "elbowMotion": "extendedHeld",
+        "scapularPosture": "naturallyElevatedHeld",
+        "scapularMotion": "noDeliberateCycling",
+        "bodyMotion": "stillNoDeliberateSwing",
+        "holdType": "timedIsometric",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ferrer-uris-2023-finger-dead-hangs",
+        "army-2020-straight-arm-hang",
+        "crossfit-2026-bar-hanging"
+      ],
+      "execution": {
+        "startingPosition": "Take a shoulder-width closed overhand grip on a horizontal pull-up bar, fully extend both elbows, and lift your feet clear of the floor.",
+        "movement": "Keep a secure grip and remain still while allowing your shoulders to rise naturally toward your ears.",
+        "endpoint": "Hold the suspended position for the set time without losing the grip or straight-arm position.",
+        "controlledJoints": "Keep both elbows fully extended and do not deliberately pull the shoulders down or cycle the shoulder blades.",
+        "supportAndPosture": "Support your full bodyweight through both hands with no foot assistance and no deliberate swing.",
+        "disqualifyingCompensations": [
+          "Bending the elbows turns the exercise into a flexed-arm hold.",
+          "Pulling the shoulders down turns the exercise into an Active Dead Hang.",
+          "Repeatedly raising and lowering the shoulders turns the exercise into a shoulder-blade pull-up."
+        ]
+      }
+    }
+  ]
+}

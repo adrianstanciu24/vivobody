@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 75 reviewed families are active, containing 172 exercises.
+- 78 reviewed families are active, containing 176 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 196 registered evidence sources.
+  44 joint actions, and 201 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -41,6 +41,10 @@ are discovery handles, not guaranteed final family IDs.
   owners containing 10 records, plus 10 records within existing family
   contracts. Its four explosive lifts use the existing Power modality, while
   Wall Sit uses Strength Hold.
+- The requested-exercise follow-up activated Kneeling Cable Crunch inside
+  `spine-flexion` and added separate `hollow-hold`, `passive-dead-hang`, and
+  `active-dead-hang` owners. The additive `hang` pattern keeps both hangs out
+  of Vertical Pull coverage.
 - No catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
   one source-exact seated 45-degree cable fixture, both Batch-3 nonstandard
   press branches are closed, and the generic grip discovery handle is resolved
@@ -113,7 +117,7 @@ batch siblings.
 | `ankle-dorsiflexion` | 1 |
 | `hip-internal-rotation` | 1 |
 | `hip-external-rotation` | 1 |
-| `spine-flexion` | 1 |
+| `spine-flexion` | 2 |
 | `spine-extension` | 1 |
 | `spine-lateral-flexion` | 1 |
 | `spine-rotation` | 1 |
@@ -131,7 +135,10 @@ batch siblings.
 | `hang-power-snatch` | 1 |
 | `split-jerk` | 1 |
 | `wall-sit` | 1 |
-| **Total** | **172** |
+| `hollow-hold` | 1 |
+| `passive-dead-hang` | 1 |
+| `active-dead-hang` | 1 |
+| **Total** | **176** |
 
 ## Foundation gates
 
