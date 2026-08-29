@@ -1,7 +1,9 @@
 # Verification
 
 This is the canonical guide for proving Vivobody changes. Match verification
-cost to risk, but always compile before declaring a code change done.
+cost to risk, but always compile before declaring a code change done. Simulator
+processes stay headless: never open the Simulator app and never run XCTest UI
+tests as part of the agent workflow.
 
 ## Default validation
 
@@ -52,7 +54,7 @@ replace `Scripts/check.sh`; they surface the same failures earlier. Run the
 full tree manually with `pre-commit run --all-files`, adding
 `--hook-stage pre-push` for the push stage.
 
-## UI verification with Baguette
+## Headless UI verification with Baguette
 
 For every UI-affecting change, run `Scripts/verify.sh` and inspect both the
 screenshot and accessibility tree. The script incrementally builds, reuses a
@@ -70,6 +72,17 @@ SIMULATOR_OS=26.2 Scripts/verify.sh
 LAUNCH_ARGS='--seed-history' Scripts/verify.sh
 SCENARIO=active-restoration Scripts/verify.sh
 ```
+
+For an interactive visual view, use Baguette's local interface and open
+`http://127.0.0.1:8421` in a browser:
+
+```bash
+baguette serve --host 127.0.0.1 --port 8421
+```
+
+This localhost page controls the same headless CoreSimulator process. Do not
+open the Simulator app. Use Baguette CLI/scenarios or this local interface for
+all automated UI interaction; the `vivobodyUITests` XCTest target is excluded.
 
 The default launch includes `--ui-test-reset` so onboarding cannot block a
 check. `TAB` uses the debug launch route instead of coordinate taps.
@@ -110,13 +123,13 @@ The scenario schema, selector rules, and current scenario catalog are in
 Add stable identifiers only to controls needed for important harness flows;
 decorative views do not need identifiers.
 
-## Targeted and full test suites
+## Targeted unit suites
 
 Run the smallest relevant targeted unit suite by default whenever logic
 changes. This gives agents autonomy to prove pure logic and boundary contracts
-without paying for every simulator test. Do not run the full simulator suite
-unless the user explicitly requests it or the task’s acceptance criteria name
-it.
+without paying for every simulator test. `xcodebuild` may use a headless
+simulator destination, but must target `vivobodyTests` explicitly so the
+`vivobodyUITests` target never runs. Do not run the full simulator suite.
 
 ```bash
 # Targeted suite, preferred
@@ -133,9 +146,6 @@ xcodebuild -scheme vivobody \
 # Shared widget payload contracts (host-side, no simulator)
 swift test --package-path VivoKit
 
-# Full suite
-xcodebuild -scheme vivobody \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' test
 ```
 
 Tests use Swift Testing, fixed dates or virtual clocks, and in-memory model
@@ -154,8 +164,9 @@ graphs. Follow `vivobodyTests/TrainingLoadTests.swift` for the prevailing style.
 | VivoKit snapshot payload or widget decoding | `swift test --package-path VivoKit`, build, and semantic handoff evidence when behavior changes |
 | HealthKit, StoreKit, provisioning, or hardware behavior | Build and all observable harness evidence; list remaining device/App Store checks explicitly |
 
-Anything the harness cannot observe remains a manual verification item; do not
-substitute an unrelated simulator test merely to produce a green result.
+Anything Baguette cannot observe remains a user-owned manual verification item;
+do not substitute an XCTest UI test or unrelated simulator test merely to
+produce a green result.
 
 ## Manual maintenance scan
 

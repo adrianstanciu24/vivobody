@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # verify.sh — incrementally build vivobody, reuse a headless simulator, launch
 # a deterministic app state, then capture a screenshot + accessibility tree.
+# This workflow never opens the Simulator app; Baguette is the UI boundary.
 # Output lands in .verify/.
 #
 # Usage:

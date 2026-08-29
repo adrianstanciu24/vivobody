@@ -57,14 +57,16 @@ checks, then builds the full app and widget graph.
 
 ```bash
 Scripts/check.sh                  # full non-UI validation
-Scripts/verify.sh                 # screenshot and accessibility-tree evidence
+Scripts/verify.sh                 # headless Baguette visual and semantic evidence
 SCENARIO=active-restoration Scripts/verify.sh
+baguette serve --host 127.0.0.1 --port 8421 # optional local visual interface
 swift test --package-path VivoKit # shared widget payload contracts
 ```
 
-Run the smallest relevant targeted unit suite when logic changes rather than
-the full simulator suite. [engineering/verification.md](engineering/verification.md)
-has the exact commands, the risk-to-evidence matrix, and the scenario format.
+Simulator processes stay headless: do not open the Simulator app or run the
+XCTest UI-test target. Run the smallest relevant targeted unit suite when logic
+changes. [engineering/verification.md](engineering/verification.md) has the
+exact commands, the risk-to-evidence matrix, and the Baguette scenario format.
 
 ## Repository layout
 
@@ -73,7 +75,7 @@ has the exact commands, the risk-to-evidence matrix, and the scenario format.
 | `vivobody/` | App target: screens, components, domain models, app shell |
 | `vivobodyWidgets/` | Widget extension, Live Activity, Control Center control |
 | `VivoKit/` | Swift package shared by the app and the widget extension |
-| `vivobodyTests/`, `vivobodyUITests/` | Swift Testing suites and UI coverage |
+| `vivobodyTests/`, `vivobodyUITests/` | Unit suites and legacy/manual UI-test target; agents run unit suites only |
 | `Scripts/` | Guardrails, catalog generator, verification harness |
 | `specs/` | Product and engineering specifications, exercise catalog source |
 | `engineering/` | Verification, quality, review, tech debt, plans, decisions |

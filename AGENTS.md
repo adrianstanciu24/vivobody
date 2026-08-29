@@ -58,6 +58,10 @@ Treat source as canonical for volatile facts:
   identifiers. `Scripts/check_naming.py` enforces it for Swift.
 - Compose UI from `ScreenKit`, `PanelKit`, and `GlassStyle`; use 44pt-or-larger
   controls and stable accessibility identifiers on harness-critical controls.
+- Keep simulator use headless. Do not open the Simulator app and do not run
+  XCTest UI tests. Baguette, through its CLI or localhost UI, is the only
+  automated UI interaction path; record anything it cannot observe for the
+  user to verify manually.
 - Persist every workout interaction. Keep the rest timer first-class and
   thumb-reachable. Do not introduce onboarding wizards, gamification copy, or
   interruptions during a workout.
@@ -97,20 +101,23 @@ pre-commit install
 # Manual maintenance report (not scheduled)
 /usr/bin/python3 Scripts/quality_scan.py --output .verify/quality-scan.md
 
-# Direct compile when isolating a build issue
+# Direct headless compile when isolating a build issue; this does not open Simulator
 xcodebuild -scheme vivobody -destination 'generic/platform=iOS Simulator' build
 
-# UI evidence for a user-facing change
+# Headless Baguette UI evidence for a user-facing change
 Scripts/verify.sh
+
+# Optional local Baguette visual interface; never open the Simulator app
+baguette serve --host 127.0.0.1 --port 8421
 
 # Declarative multi-step UI flow
 SCENARIO=active-restoration Scripts/verify.sh
 ```
 
 Run relevant targeted unit tests by default when logic changes. Prefer the
-smallest suite that covers the changed contract; do not run the full simulator
-suite unless the user explicitly requests it. The exact commands, risk matrix,
-Baguette workflow, artifacts, and scenario format are in
+smallest suite that covers the changed contract and exclude the UI-test target.
+Do not run the full simulator suite. The exact commands, risk matrix, Baguette
+workflow, artifacts, and scenario format are in
 [engineering/verification.md](engineering/verification.md).
 
 ## Definition of done
