@@ -49,6 +49,7 @@ $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/machine-hack-squat.json
 $(SRCROOT)/specs/catalog/families/mid-thigh-clean-pull.json
 $(SRCROOT)/specs/catalog/families/nordic-curl.json
+$(SRCROOT)/specs/catalog/families/padded-machine-pullover.json
 $(SRCROOT)/specs/catalog/families/passive-dead-hang.json
 $(SRCROOT)/specs/catalog/families/power-clean.json
 $(SRCROOT)/specs/catalog/families/push-press.json
@@ -59,6 +60,7 @@ $(SRCROOT)/specs/catalog/families/scapular-depression.json
 $(SRCROOT)/specs/catalog/families/scapular-elevation.json
 $(SRCROOT)/specs/catalog/families/scapular-protraction.json
 $(SRCROOT)/specs/catalog/families/scapular-retraction.json
+$(SRCROOT)/specs/catalog/families/seated-dip-press.json
 $(SRCROOT)/specs/catalog/families/shoulder-abduction-raise.json
 $(SRCROOT)/specs/catalog/families/shoulder-extension-isolation.json
 $(SRCROOT)/specs/catalog/families/shoulder-extension-row.json

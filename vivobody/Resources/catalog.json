@@ -6448,6 +6448,83 @@
     ]
   },
   {
+    "familyID": "horizontal-press",
+    "catalogID": "hammer-strength-mtscp-single-arm-chest-press",
+    "name": "Hammer Strength MTSCP Single-Arm Chest Press",
+    "group": "chest",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Independent-Arm Machine Chest Press",
+      "Single-Arm MTS Chest Press",
+      "Unilateral Machine Chest Press"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "On the Hammer Strength MTSCP only, adjust the seat and select the equal per-side load. Keep the other arm at rest and compare history only on this fixture.",
+      "movement": "Press one independent arm forward through its converging path while keeping the torso against the pad.",
+      "endpoint": "Finish at the comfortable machine-defined endpoint without forcing the shoulder forward.",
+      "returnPhase": "Return the working arm alone under control through its diverging path.",
+      "controlledJoints": "Keep the non-working arm still and resist trunk rotation toward or away from the working side.",
+      "supportAndPosture": "Keep the pelvis and torso against the machine support with both feet planted.",
+      "disqualifyingCompensations": [
+        "Moving both independent arms changes the one-arm history.",
+        "Using unequal stack settings cannot be represented by this one-value history.",
+        "Adding the two stack selections together changes the working-side load meaning.",
+        "Rotating or lifting the torso from the pad adds momentum."
+      ],
+      "sideOrDirection": "Use the same selected stack value on both sides, enter that per-working-side value once, complete all repetitions with one arm, then repeat on the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "incline-press",
     "catalogID": "incline-barbell-bench-press",
     "name": "Incline Barbell Bench Press",
@@ -6753,6 +6830,71 @@
         "Lifting a foot or the pelvis removes the reviewed machine contact.",
         "Bouncing at the bottom or abbreviating the depth changes the reviewed range and cadence."
       ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "inclined-leg-press",
+    "catalogID": "panatta-1fw090-single-leg-45-degree-leg-press",
+    "name": "Panatta 1FW090 Single-Leg 45° Leg Press",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Single-Leg 45° Leg Press",
+      "Unilateral 45° Leg Press",
+      "Single-Leg Incline Leg Press"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "On the Panatta 1FW090 only, disengage the reciprocal footboard coupling, select and retain one backrest position and one working-side safety-stop setting, keep the unused carriage on its independent safety, and place one foot on the working platform.",
+      "movement": "Release the working-side safety and lower that carriage under control to the depth allowed by the retained stop and a supported pelvis.",
+      "endpoint": "Reach the retained working-side stop or your controlled supported depth without lifting the pelvis.",
+      "returnPhase": "Press the working carriage upward until the knee is straight without forcefully locking it, then secure the safety.",
+      "controlledJoints": "Keep the working knee tracking with its foot, the reciprocal coupling disengaged, and the unused carriage on its independent safety.",
+      "supportAndPosture": "Keep your back and pelvis against the pads and the non-working leg clear of the active platform.",
+      "disqualifyingCompensations": [
+        "Unlocking both carriages changes the one-leg fixture.",
+        "Using unequal plate settings cannot be represented by this one-value history.",
+        "Changing the backrest or safety-stop setting breaks comparison with the prior history.",
+        "Lifting the pelvis from the pad changes the reviewed supported press."
+      ],
+      "sideOrDirection": "Use equal added plates on both sides, enter that per-working-side value once, complete all repetitions with one working leg, then repeat on the other side with the same setup."
     },
     "involvement": [
       {
@@ -7659,6 +7801,101 @@
       },
       {
         "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "padded-machine-pullover",
+    "catalogID": "hammer-strength-pl-po-plate-loaded-pullover",
+    "name": "Hammer Strength PL-PO Plate-Loaded Pullover",
+    "group": "back",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Plate-Loaded Pullover",
+      "Machine Pullover",
+      "Hammer Strength Pullover"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "On the Hammer Strength PL-PO only, log total added plate mass on the two work-arm loading rods; exclude storage horns and starting resistance. Sit against the thirty-degree support, fasten the belt, place both elbows on the pads, and grasp the overhead movement arm.",
+      "movement": "Pull the movement arm downward through its guided cam path while keeping both elbows on the pads and holding their angle.",
+      "endpoint": "Stop at the comfortable end of the machine's reduced shoulder-extension path without lifting from the support.",
+      "returnPhase": "Return the movement arm overhead under control while maintaining the pad and hand contacts.",
+      "controlledJoints": "Keep the elbow angle stable rather than turning the repetition into an elbow-extension press.",
+      "supportAndPosture": "Keep the torso against the support and the belt secured; do not drive through the legs.",
+      "disqualifyingCompensations": [
+        "Lifting either elbow from its pad changes the reviewed combined pad-and-handle interface.",
+        "Deliberately extending the elbows changes the movement into a compound press.",
+        "Lifting the torso from the support or using the legs adds momentum."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "secondary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
         "role": "stabilizer"
       },
       {
@@ -9275,6 +9512,89 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "seated-dip-press",
+    "catalogID": "ergo-fit-vector-seated-dip-press",
+    "name": "ERGO-FIT VECTOR KRAFT Seated Dip Press",
+    "group": "arms",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Seated Dip / Triceps Press Machine",
+      "Seated Dip Press Machine",
+      "Compound Triceps Press Machine"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Compare the entered stack only on the ERGO-FIT VECTOR KRAFT SEATED DIP covered by manual version 20201101. Sit with your back fully against the backrest, legs parallel, palms inward on the outer handles, elbows near ninety degrees, and arms around shoulder height.",
+      "movement": "Press both linked handles downward together as the upper arms lower and the elbows extend.",
+      "endpoint": "Stop with the forearms extended without forcefully locking the elbows.",
+      "returnPhase": "Return both handles under control until the arms are again around shoulder height.",
+      "controlledJoints": "Keep both wrists aligned with the handles and move the two arms together.",
+      "supportAndPosture": "Keep your back against the backrest and do not drive through the legs.",
+      "disqualifyingCompensations": [
+        "Lifting the back from the pad changes the reviewed supported fixture.",
+        "Driving through the legs adds lower-body contribution.",
+        "Pressing one linked handle ahead of the other leaves the simultaneous two-arm contract."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lats",
+        "role": "secondary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
       }
     ]
@@ -14712,6 +15032,104 @@
       },
       {
         "muscle": "subscapularis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "vertical-press",
+    "catalogID": "hammer-strength-mtssp-single-arm-shoulder-press",
+    "name": "Hammer Strength MTSSP Single-Arm Shoulder Press",
+    "group": "shoulders",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Independent-Arm Machine Shoulder Press",
+      "Single-Arm MTS Shoulder Press",
+      "Unilateral Machine Shoulder Press"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "On the Hammer Strength MTSSP only, adjust the seat and select the equal per-side load. Let the unused pivot-away grip remain clear and compare history only on this fixture.",
+      "movement": "Press one independent arm upward through the manufacturer's shoulder-press path while keeping the torso against the pad.",
+      "endpoint": "Finish at the comfortable machine-defined endpoint without forcing the shoulder forward.",
+      "returnPhase": "Return the working arm alone under control through its diverging path.",
+      "controlledJoints": "Keep the non-working arm still and resist trunk rotation or lateral lean.",
+      "supportAndPosture": "Keep the pelvis and torso against the machine support with both feet planted and no leg drive.",
+      "disqualifyingCompensations": [
+        "Moving both independent arms changes the one-arm history.",
+        "Using unequal stack settings cannot be represented by this one-value history.",
+        "Adding the two stack selections together changes the working-side load meaning.",
+        "Leaning or lifting from the pad adds trunk momentum."
+      ],
+      "sideOrDirection": "Use the same selected stack value on both sides, enter that per-working-side value once, complete all repetitions with one arm, then repeat on the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]

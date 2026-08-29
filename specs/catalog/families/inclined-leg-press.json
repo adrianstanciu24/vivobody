@@ -3,8 +3,8 @@
   "schemaVersion": 1,
   "id": "inclined-leg-press",
   "name": "Inclined Leg Press",
-  "definition": "A bilateral compound machine squat pattern performed on the reviewed FFITTECH PL688 forty-five-degree sled. The feet remain fixed to the guided plate while the hips and knees extend. The machine, stance, foot position, range, and cadence are contract boundaries; other leg-press geometries require separate review. Entered load means plates added to this fixture and is not comparable across machines or to an unknown empty-sled resistance.",
-  "evidenceRefs": ["arnold-2010-lower-limb", "martin-fuentes-2022-inclined-leg-press"],
+  "definition": "A compound machine squat pattern on one of two exact forty-five-degree fixtures: the bilateral FFITTECH PL688 sled or one independently locked carriage of the Panatta 1FW090 dual system. The working feet remain fixed to a guided plate while the hips and knees extend. Fixture, laterality, carriage state, setup, range, cadence, and load accounting remain record-specific contract boundaries; other leg-press geometries require separate review. Logged plate mass is never comparable across fixtures or to unknown starting resistance.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "martin-fuentes-2022-inclined-leg-press", "panatta-2026-general-catalogue"],
   "fixed": {
     "mechanic": "compound",
     "trainingRole": "legs",
@@ -18,7 +18,7 @@
     "modalities": ["dynamicStrength"],
     "trackingModes": ["reps"],
     "loadModes": ["external"],
-    "lateralities": ["bilateral"]
+    "lateralities": ["bilateral", "unilateral"]
   },
   "movementSignature": {
     "planeBasisActions": ["hip.extension"],
@@ -40,18 +40,62 @@
     }
   },
   "variantAxes": [
-    {"id": "machineFixture", "valueType": "enum", "required": true, "description": "The directly reviewed sled fixture.", "allowedValues": ["ffittechPL688"]},
+    {"id": "machineFixture", "valueType": "enum", "required": true, "description": "The directly reviewed sled fixture.", "allowedValues": ["ffittechPL688", "panatta1FW090"]},
     {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The supported body position.", "allowedValues": ["reclinedSeated"]},
-    {"id": "stanceWidth", "valueType": "enum", "required": true, "description": "The prescribed bilateral foot spacing.", "allowedValues": ["oneHundredPercentHipWidth"]},
-    {"id": "footplateHeight", "valueType": "enum", "required": true, "description": "The reviewed foot position on the plate.", "allowedValues": ["medium"]},
-    {"id": "footRotationDegrees", "valueType": "number", "required": true, "description": "The reviewed foot rotation.", "minimum": 0, "maximum": 0},
+    {"id": "stanceWidth", "valueType": "enum", "required": false, "description": "The prescribed bilateral foot spacing when the source defines it.", "allowedValues": ["oneHundredPercentHipWidth"]},
+    {"id": "footplateHeight", "valueType": "enum", "required": false, "description": "The reviewed bilateral foot position when the source defines it.", "allowedValues": ["medium"]},
+    {"id": "footRotationDegrees", "valueType": "number", "required": false, "description": "The reviewed bilateral foot rotation when the source defines it.", "minimum": 0, "maximum": 0},
     {"id": "trackInclinationDegrees", "valueType": "number", "required": true, "description": "The nominal sled-track angle.", "minimum": 45, "maximum": 45},
-    {"id": "rangeOfMotion", "valueType": "enum", "required": true, "description": "The reviewed knee range.", "allowedValues": ["fullExtensionToNinetyDegreeFlexion"]},
-    {"id": "cadence", "valueType": "enum", "required": true, "description": "The continuous reviewed cadence.", "allowedValues": ["twoSecondEccentricTwoSecondConcentric"]},
+    {"id": "rangeOfMotion", "valueType": "enum", "required": false, "description": "The reviewed knee range when the source defines it.", "allowedValues": ["fullExtensionToNinetyDegreeFlexion"]},
+    {"id": "cadence", "valueType": "enum", "required": false, "description": "The reviewed cadence when the source defines it.", "allowedValues": ["twoSecondEccentricTwoSecondConcentric"]},
+    {"id": "workingPlatform", "valueType": "enum", "required": false, "description": "The independent Panatta platform used by the working leg.", "allowedValues": ["oneIndependentPlatform"]},
+    {"id": "reciprocalCouplingState", "valueType": "enum", "required": false, "description": "The footboard-coupling lock is disengaged for independent operation.", "allowedValues": ["disengaged"]},
+    {"id": "unusedCarriageState", "valueType": "enum", "required": false, "description": "The non-working Panatta carriage remains on its independent safety.", "allowedValues": ["independentSafetyEngaged"]},
+    {"id": "backrestSetting", "valueType": "enum", "required": false, "description": "The chosen Panatta backrest position, kept stable for history comparison.", "allowedValues": ["userSelectedHeldConstant"]},
+    {"id": "safetyStopSetting", "valueType": "enum", "required": false, "description": "The chosen working-side safety stop, kept stable for history comparison.", "allowedValues": ["userSelectedHeldConstant"]},
+    {"id": "sideLoadConvention", "valueType": "enum", "required": false, "description": "Both sides use equal added plates and the per-working-side value is entered once.", "allowedValues": ["equalSideSettingsEnterOnce"]},
     {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether the sled constrains the external path.", "fixedValue": true},
-    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "What the logged scalar represents.", "allowedValues": ["platesAddedSameFixtureOnly"]}
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "What the logged scalar represents.", "allowedValues": ["platesAddedSameFixtureOnly", "platesOnWorkingCarriageSameFixtureOnly"]}
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "ffittech-fixture-pins-bilateral-study-setup",
+      "description": "The FFITTECH record preserves its bilateral study setup and omits Panatta carriage fields.",
+      "when": {"field": "variant.machineFixture", "operator": "equals", "value": "ffittechPL688"},
+      "then": [{"field": "laterality", "value": "bilateral"}, {"field": "variant.stanceWidth", "value": "oneHundredPercentHipWidth"}, {"field": "variant.footplateHeight", "value": "medium"}, {"field": "variant.footRotationDegrees", "value": 0}, {"field": "variant.rangeOfMotion", "value": "fullExtensionToNinetyDegreeFlexion"}, {"field": "variant.cadence", "value": "twoSecondEccentricTwoSecondConcentric"}, {"field": "variant.loadAccounting", "value": "platesAddedSameFixtureOnly"}],
+      "requirePresent": ["variant.stanceWidth", "variant.footplateHeight", "variant.footRotationDegrees", "variant.rangeOfMotion", "variant.cadence"],
+      "requireAbsent": ["variant.workingPlatform", "variant.reciprocalCouplingState", "variant.unusedCarriageState", "variant.backrestSetting", "variant.safetyStopSetting", "variant.sideLoadConvention"]
+    },
+    {
+      "id": "panatta-fixture-pins-unilateral-carriage-contract",
+      "description": "The Panatta record disengages the reciprocal footboard coupling, uses one independent platform while the unused carriage remains on its independent safety, and compares equal per-side working-carriage plates with stable backrest and stop settings.",
+      "when": {"field": "variant.machineFixture", "operator": "equals", "value": "panatta1FW090"},
+      "then": [{"field": "laterality", "value": "unilateral"}, {"field": "variant.workingPlatform", "value": "oneIndependentPlatform"}, {"field": "variant.reciprocalCouplingState", "value": "disengaged"}, {"field": "variant.unusedCarriageState", "value": "independentSafetyEngaged"}, {"field": "variant.backrestSetting", "value": "userSelectedHeldConstant"}, {"field": "variant.safetyStopSetting", "value": "userSelectedHeldConstant"}, {"field": "variant.sideLoadConvention", "value": "equalSideSettingsEnterOnce"}, {"field": "variant.loadAccounting", "value": "platesOnWorkingCarriageSameFixtureOnly"}],
+      "requirePresent": ["variant.workingPlatform", "variant.reciprocalCouplingState", "variant.unusedCarriageState", "variant.backrestSetting", "variant.safetyStopSetting", "variant.sideLoadConvention"],
+      "requireAbsent": ["variant.stanceWidth", "variant.footplateHeight", "variant.footRotationDegrees", "variant.rangeOfMotion", "variant.cadence"]
+    },
+    {
+      "id": "unilateral-reverses-to-panatta-fixture",
+      "description": "The only admitted unilateral inclined press is the exact Panatta independent-carriage fixture.",
+      "when": {"field": "laterality", "operator": "equals", "value": "unilateral"},
+      "then": [{"field": "variant.machineFixture", "value": "panatta1FW090"}],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "working-platform-reverses-to-panatta-fixture",
+      "description": "An independent working-platform marker identifies the Panatta fixture.",
+      "when": {"field": "variant.workingPlatform", "operator": "equals", "value": "oneIndependentPlatform"},
+      "then": [{"field": "variant.machineFixture", "value": "panatta1FW090"}],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "side-load-convention-reverses-to-panatta-fixture",
+      "description": "The equal per-side load convention belongs only to the Panatta unilateral fixture.",
+      "when": {"field": "variant.sideLoadConvention", "operator": "equals", "value": "equalSideSettingsEnterOnce"},
+      "then": [{"field": "variant.machineFixture", "value": "panatta1FW090"}],
+      "requirePresent": [], "requireAbsent": []
+    }
+  ],
   "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
   "exercises": [
     {
@@ -101,6 +145,26 @@
           "Lifting a foot or the pelvis removes the reviewed machine contact.",
           "Bouncing at the bottom or abbreviating the depth changes the reviewed range and cadence."
         ]
+      }
+    },
+    {
+      "catalogID": "panatta-1fw090-single-leg-45-degree-leg-press",
+      "name": "Panatta 1FW090 Single-Leg 45° Leg Press",
+      "aliases": ["Single-Leg 45° Leg Press", "Unilateral 45° Leg Press", "Single-Leg Incline Leg Press"],
+      "equipment": "machine", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 10, "searchPriority": 95,
+      "involvement": [{"muscle": "gluteMax", "role": "primary"}, {"muscle": "vasti", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "gastrocnemius", "role": "stabilizer"}],
+      "variant": {"machineFixture": "panatta1FW090", "bodyPosition": "reclinedSeated", "trackInclinationDegrees": 45, "workingPlatform": "oneIndependentPlatform", "reciprocalCouplingState": "disengaged", "unusedCarriageState": "independentSafetyEngaged", "backrestSetting": "userSelectedHeldConstant", "safetyStopSetting": "userSelectedHeldConstant", "sideLoadConvention": "equalSideSettingsEnterOnce", "fixedPath": true, "loadAccounting": "platesOnWorkingCarriageSameFixtureOnly"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "panatta-2026-general-catalogue"],
+      "execution": {
+        "sideOrDirection": "Use equal added plates on both sides, enter that per-working-side value once, complete all repetitions with one working leg, then repeat on the other side with the same setup.",
+        "startingPosition": "On the Panatta 1FW090 only, disengage the reciprocal footboard coupling, select and retain one backrest position and one working-side safety-stop setting, keep the unused carriage on its independent safety, and place one foot on the working platform.",
+        "movement": "Release the working-side safety and lower that carriage under control to the depth allowed by the retained stop and a supported pelvis.",
+        "endpoint": "Reach the retained working-side stop or your controlled supported depth without lifting the pelvis.",
+        "returnPhase": "Press the working carriage upward until the knee is straight without forcefully locking it, then secure the safety.",
+        "controlledJoints": "Keep the working knee tracking with its foot, the reciprocal coupling disengaged, and the unused carriage on its independent safety.",
+        "supportAndPosture": "Keep your back and pelvis against the pads and the non-working leg clear of the active platform.",
+        "disqualifyingCompensations": ["Unlocking both carriages changes the one-leg fixture.", "Using unequal plate settings cannot be represented by this one-value history.", "Changing the backrest or safety-stop setting breaks comparison with the prior history.", "Lifting the pelvis from the pad changes the reviewed supported press."]
       }
     }
   ]

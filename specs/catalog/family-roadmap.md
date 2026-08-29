@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 85 reviewed families are active, containing 206 exercises.
+- 87 reviewed families are active, containing 211 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 227 registered evidence sources.
+  44 joint actions, and 232 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -57,6 +57,12 @@ are discovery handles, not guaranteed final family IDs.
   studied Technogym Selection Glute kickback. Machine hip thrust and seated
   abdominal crunch remain evidence-blocked with concrete unlocks in the wave
   proposal.
+- The second commercial-machine wave added five source-exact histories: the
+  VECTOR seated dip press and PL-PO padded pullover use new topology owners;
+  Panatta 1FW090, MTSCP, and MTSSP add independent-side or working-side-stack
+  variants to their action-compatible press families. Belt Squat remains a
+  separate evidence-blocked family rather than inheriting ordinary squat
+  mechanics or combining Wenning and Hammer fixtures.
 - No original catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
   one source-exact seated 45-degree cable fixture, both Batch-3 nonstandard
   press branches are closed, and the generic grip discovery handle is resolved
@@ -72,15 +78,16 @@ batch siblings.
 
 | Family | Exercises |
 |---|---:|
-| `horizontal-press` | 13 |
+| `horizontal-press` | 14 |
 | `incline-press` | 4 |
 | `decline-press` | 4 |
-| `vertical-press` | 11 |
+| `vertical-press` | 12 |
 | `vertical-pull` | 13 |
 | `diagonal-pull` | 1 |
 | `shoulder-extension-row` | 12 |
 | `shoulder-horizontal-abduction-row` | 6 |
 | `shoulder-extension-isolation` | 3 |
+| `padded-machine-pullover` | 1 |
 | `chest-fly` | 4 |
 | `upper-arm-pad-chest-fly` | 1 |
 | `reverse-fly` | 4 |
@@ -105,6 +112,7 @@ batch siblings.
 | `scapular-depression` | 1 |
 | `upright-row` | 1 |
 | `dip` | 3 |
+| `seated-dip-press` | 1 |
 | `push-press` | 1 |
 | `landmine-press` | 1 |
 | `knee-extension` | 3 |
@@ -115,7 +123,7 @@ batch siblings.
 | `hip-flexion` | 1 |
 | `ankle-plantarflexion` | 4 |
 | `bilateral-squat` | 4 |
-| `inclined-leg-press` | 1 |
+| `inclined-leg-press` | 2 |
 | `horizontal-leg-press` | 1 |
 | `machine-hack-squat` | 1 |
 | `conventional-deadlift` | 1 |
@@ -157,7 +165,7 @@ batch siblings.
 | `hollow-hold` | 1 |
 | `passive-dead-hang` | 1 |
 | `active-dead-hang` | 1 |
-| **Total** | **206** |
+| **Total** | **211** |
 
 ## Foundation gates
 

@@ -3570,6 +3570,51 @@
       "year": 2026,
       "url": "https://www.manualslib.com/manual/1510290/Technogym-Selection-Glute.html",
       "scope": "This undated manufacturer manual is registered with retrieval year 2026, not a claimed publication year. It identifies the Selection Glute product and defines an abdomen pad, a lever operated through rollers, a cable-linked selectorized weight stack, a required front handgrip, a platform foot aligned to the ROM pivot, the other leg placed in front of the roller, hips held against the pad, a backward leg drive, and a slower controlled return. It supports the exact product topology and contacts and visually matches the study-reported Technogym Selection kickback fixture. It does not specify the roller's anatomical contact location, measure pelvis or spine kinematics, establish stack equivalence, or rank muscles. Treating pelvis and spine position as held is a disclosed catalog narrowing of the instructed pad contact rather than a measured kinematic result."
+    },
+    {
+      "id": "ergo-fit-2020-vector-strength-manual",
+      "sourceType": "officialTechnicalStandard",
+      "title": "VECTOR KRAFT Owner's Manual",
+      "authors": ["ERGO-FIT GmbH & Co. KG"],
+      "year": 2020,
+      "url": "https://www.ergo-fit.de/fileadmin/user_upload/service/downloads/ergo-fit/vector/ERGO-FIT_Manual-en-VECTOR-Kraft.pdf",
+      "scope": "The manufacturer manual, version VECTOR-KRAFT 20201101, defines the exact selectorized VECTOR SEATED DIP fixture. It prescribes a seated bilateral setup with the back fully against the backrest, parallel legs, palms inward on the outer handles, elbows near ninety degrees, and the arms around shoulder height; the athlete presses against resistance until the forearms are extended and returns under control to shoulder height. The paired technical figures support a disclosed categorical inference that the upper arms travel downward with shoulder extension while elbow extension is direct from the prose. The source does not quantify shoulder range, measure joint kinematics or muscle activity, establish a universal stack mass, rank muscles, or transfer to other VECTOR generations or seated-dip products. Entered load is therefore comparable only on this exact fixture and configuration."
+    },
+    {
+      "id": "life-fitness-2026-hammer-plate-loaded-manual",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Hammer Strength Plate Loaded Owner's Manual",
+      "authors": ["Life Fitness"],
+      "year": 2026,
+      "url": "https://kb.cybexintl.com/Owners_Manuals/Strength/Hammer_Strength_Plate_Loaded_Owners_Manual_1000420-0001.pdf",
+      "scope": "The manufacturer manual, document 1000420-0001 revision AJ, defines the exact PL-PO pullover fixture. It prescribes a seated and belted bilateral setup with both elbows on the elbow pads and both hands grasping the overhead movement arm, a controlled downward pull, and a controlled return while body position is held. The manual reports eighteen pounds of starting resistance per work arm; the product page additionally identifies a thirty-degree seat, belt drive, precision cam, reduced shoulder-extension path, and four storage horns. Shoulder extension with the elbow angle held is a disclosed categorical inference from the combined pad-and-handle lever geometry and figures, not measured kinematics. Symmetric loading of the two movement-arm loading rods and logging their total added plate mass while excluding starting resistance and storage horns are catalog-authored comparison conventions, not manufacturer-prescribed logging semantics. The source does not establish exact range, zero elbow or scapular motion, machine-specific muscle ranking, or cross-fixture load equivalence."
+    },
+    {
+      "id": "panatta-2026-general-catalogue",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Panatta General Catalogue",
+      "authors": ["Panatta"],
+      "year": 2026,
+      "url": "https://panattasport.com/download/panatta-general-catalogue.pdf",
+      "scope": "The current manufacturer catalogue is registered with retrieval year 2026, not a claimed publication year. It defines the exact 1FW090 Single-Leg 45 Degree Leg Press as a forty-five-degree dual system with two independent forty-by-sixty-centimeter platforms, a reciprocal footboard-coupling lock, independent safety levers and stops, three backrest positions, and fifty-plus-fifty-kilogram starting resistance. It anchors fixture identity, independent unilateral topology with the reciprocal coupling disengaged, supported position, track angle, and side-specific carriage history. It does not prescribe stance, foot rotation, cadence, one universal depth, muscle ranking, or equivalence between the two carriages or with other machines."
+    },
+    {
+      "id": "life-fitness-2026-mts-chest-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Hammer Strength MTS Iso-Lateral Chest Press",
+      "authors": ["Life Fitness"],
+      "year": 2026,
+      "url": "https://www.lifefitness.com/en-eu/catalog/strength-training/selectorized/hammer-strength-mts-iso-lateral-chest-press",
+      "scope": "This current manufacturer page is registered with retrieval year 2026, not a claimed publication year. It defines the exact MTSCP selectorized chest-press fixture with separate one-hundred-fifty-pound or seventy-five-kilogram stacks, independent converging and diverging arms, counterbalanced pressing arms, an adjustable seat, and belt-and-pulley resistance. It anchors fixture identity, independent unilateral topology, posterior support, and a working-side stack history. It does not prescribe grip orientation, numeric press inclination, exact joint range, unilateral sequencing cadence, muscle ranking, or equivalence between sides, stacks, or other machines."
+    },
+    {
+      "id": "life-fitness-2026-mts-shoulder-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Hammer Strength MTS Iso-Lateral Shoulder Press",
+      "authors": ["Life Fitness"],
+      "year": 2026,
+      "url": "https://www.lifefitness.com/en-eu/catalog/strength-training/selectorized/mts-iso-lateral-shoulder-press",
+      "scope": "This current manufacturer page is registered with retrieval year 2026, not a claimed publication year. It defines the exact MTSSP selectorized shoulder-press fixture with separate one-hundred-fifty-pound or seventy-five-kilogram stacks, independent converging and diverging counterbalanced arms, pivot-away grips, an adjustable seat, and belt-and-pulley resistance. It anchors fixture identity, independent unilateral topology, posterior support, and a working-side stack history. It does not prescribe grip orientation, exact press inclination or joint range, unilateral sequencing cadence, muscle ranking, or equivalence between sides, stacks, or other machines."
     }
   ]
 }

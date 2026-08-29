@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 85 reviewed families compile to 206 exercises with stable
+//  product: 87 reviewed families compile to 211 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 206)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 85)
+        #expect(CatalogData.records.count == 211)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 87)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -135,6 +135,44 @@ struct CatalogBiomechanicsTests {
             #expect(record.loadMode == .external)
             #expect(record.bodyweightFraction == 0)
         }
+    }
+
+    @Test func commercialMachineSecondWaveKeepsDistinctRuntimeHistories() throws {
+        let expected: [(String, String, Laterality)] = [
+            ("ergo-fit-vector-seated-dip-press", "seated-dip-press", .bilateral),
+            (
+                "hammer-strength-pl-po-plate-loaded-pullover",
+                "padded-machine-pullover",
+                .bilateral
+            ),
+            (
+                "panatta-1fw090-single-leg-45-degree-leg-press",
+                "inclined-leg-press",
+                .unilateral
+            ),
+            (
+                "hammer-strength-mtscp-single-arm-chest-press",
+                "horizontal-press",
+                .unilateral
+            ),
+            (
+                "hammer-strength-mtssp-single-arm-shoulder-press",
+                "vertical-press",
+                .unilateral
+            ),
+        ]
+
+        for (catalogID, familyID, laterality) in expected {
+            let record = try #require(CatalogData.record(forCatalogID: catalogID))
+            #expect(record.familyID == familyID)
+            #expect(record.equipment == .machine)
+            #expect(record.laterality == laterality)
+            #expect(record.loadMode == .external)
+            #expect(record.bodyweightFraction == 0)
+        }
+
+        #expect(CatalogData.record(forExerciseNamed: "Belt Squat") == nil)
+        #expect(CatalogData.record(forExerciseNamed: "Hammer Strength PL-DIP") == nil)
     }
 
     @Test func comprehensiveExpansionFixturesReachTheRuntimeProjection() throws {

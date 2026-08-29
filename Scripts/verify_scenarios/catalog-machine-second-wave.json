@@ -1,0 +1,51 @@
+{
+  "name": "catalog-machine-second-wave",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Hammer Strength PL-PO Plate-Loaded Pullover,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Hammer Strength PL-PO Plate-Loaded Pullover,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Hammer Strength PL-PO Plate-Loaded Pullover"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "labelContains": "Muscles used by Hammer Strength PL-PO Plate-Loaded Pullover"
+    }
+  ],
+  "forbidden": []
+}

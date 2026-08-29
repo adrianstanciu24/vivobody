@@ -1,0 +1,56 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "seated-dip-press",
+  "name": "Seated Dip Press",
+  "definition": "An open-chain compound machine press on the exact ERGO-FIT VECTOR SEATED DIP fixture. The supported athlete presses linked bilateral handles downward while the upper arms move from around shoulder height and the elbows extend. This externally loaded body-supported topology is separate from body-moving dips and from elbow-extension isolation, where the upper arm is held. Other VECTOR generations, assisted-dip machines, plate-loaded seated dips, independent arms, and face-out configurations remain outside this contract.",
+  "evidenceRefs": ["ergo-fit-2020-vector-strength-manual", "ackland-2008-shoulder-moment-arms", "holzbaur-2005-upper-extremity"],
+  "fixed": {"mechanic": "compound", "trainingRole": "push", "pattern": "push", "direction": "vertical", "planes": ["sagittal"]},
+  "groupPolicy": {"default": "arms", "allowed": ["arms"]},
+  "allowed": {"equipment": ["machine"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.extension"],
+    "primeActions": [{"action": "shoulder.extension", "condition": "fromFlexedPosition"}, "elbow.extension"],
+    "forbiddenPrimeActions": ["shoulder.flexion", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "elbow.flexion", "scapula.elevation", "scapula.depression", "spine.flexion", "spine.extension", "hip.extension", "knee.extension", "ankle.plantarflexion"],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["triceps"], "minimumRole": "primary"}, {"anyOf": ["pectoralisMajorSternocostal"], "minimumRole": "secondary"}, {"anyOf": ["lats", "teresMajor"], "minimumRole": "secondary"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["triceps"], "secondary": ["pectoralisMajorSternocostal", "lats", "teresMajor", "deltoidPosterior"], "stabilizer": ["externalRotators", "serratus", "trapeziusMiddle", "fingerFlexors", "extensorCarpiRadialis"]}
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The handles and machine lever move around the supported athlete.", "allowedValues": ["open"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The exact fixture is used seated.", "allowedValues": ["seated"]},
+    {"id": "torsoSupport", "valueType": "enum", "required": true, "description": "The back remains fully against the backrest.", "allowedValues": ["posteriorBackPad"]},
+    {"id": "machineFixture", "valueType": "enum", "required": true, "description": "The exact selectorized fixture whose history may be compared.", "allowedValues": ["ergoFitVectorSeatedDip20201101"]},
+    {"id": "loadInterface", "valueType": "enum", "required": true, "description": "Both hands use the outer handles with palms inward.", "allowedValues": ["bilateralOuterHandlesPalmsInward"]},
+    {"id": "leverArmConfiguration", "valueType": "enum", "required": true, "description": "Both handles belong to the linked machine mechanism.", "allowedValues": ["linked"]},
+    {"id": "armSequence", "valueType": "enum", "required": true, "description": "Both arms press together.", "allowedValues": ["simultaneousBilateral"]},
+    {"id": "upperArmPath", "valueType": "enum", "required": true, "description": "The figures support a downward upper-arm path from around shoulder height.", "allowedValues": ["shoulderHeightToDownward"]},
+    {"id": "elbowMotion", "valueType": "enum", "required": true, "description": "The elbows extend during the press.", "allowedValues": ["extends"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "The machine lever constrains the handle path.", "fixedValue": true},
+    {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "description": "The seated legs do not drive the handles.", "allowedValues": ["none"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The entered stack value is comparable only on this exact fixture and configuration.", "allowedValues": ["enteredExternalLoadSameFixtureOnly"]}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "ergo-fit-vector-seated-dip-press",
+    "name": "ERGO-FIT VECTOR KRAFT Seated Dip Press",
+    "aliases": ["Seated Dip / Triceps Press Machine", "Seated Dip Press Machine", "Compound Triceps Press Machine"],
+    "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 96,
+    "involvement": [{"muscle": "triceps", "role": "primary"}, {"muscle": "pectoralisMajorSternocostal", "role": "secondary"}, {"muscle": "lats", "role": "secondary"}, {"muscle": "teresMajor", "role": "secondary"}, {"muscle": "deltoidPosterior", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}],
+    "variant": {"kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "posteriorBackPad", "machineFixture": "ergoFitVectorSeatedDip20201101", "loadInterface": "bilateralOuterHandlesPalmsInward", "leverArmConfiguration": "linked", "armSequence": "simultaneousBilateral", "upperArmPath": "shoulderHeightToDownward", "elbowMotion": "extends", "fixedPath": true, "lowerBodyContribution": "none", "loadAccounting": "enteredExternalLoadSameFixtureOnly"},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [],
+    "evidenceRefs": ["ergo-fit-2020-vector-strength-manual", "ackland-2008-shoulder-moment-arms", "holzbaur-2005-upper-extremity"],
+    "execution": {
+      "startingPosition": "Compare the entered stack only on the ERGO-FIT VECTOR KRAFT SEATED DIP covered by manual version 20201101. Sit with your back fully against the backrest, legs parallel, palms inward on the outer handles, elbows near ninety degrees, and arms around shoulder height.",
+      "movement": "Press both linked handles downward together as the upper arms lower and the elbows extend.",
+      "endpoint": "Stop with the forearms extended without forcefully locking the elbows.",
+      "returnPhase": "Return both handles under control until the arms are again around shoulder height.",
+      "controlledJoints": "Keep both wrists aligned with the handles and move the two arms together.",
+      "supportAndPosture": "Keep your back against the backrest and do not drive through the legs.",
+      "disqualifyingCompensations": ["Lifting the back from the pad changes the reviewed supported fixture.", "Driving through the legs adds lower-body contribution.", "Pressing one linked handle ahead of the other leaves the simultaneous two-arm contract."]
+    }
+  }]
+}

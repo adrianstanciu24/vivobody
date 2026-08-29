@@ -224,6 +224,27 @@ MACHINE_FIRST_WAVE_EVIDENCE_IDS = {
     "technogym-undated-selection-glute-manual",
 }
 
+MACHINE_SECOND_WAVE_RECORD_IDS = {
+    "ergo-fit-vector-seated-dip-press",
+    "hammer-strength-pl-po-plate-loaded-pullover",
+    "panatta-1fw090-single-leg-45-degree-leg-press",
+    "hammer-strength-mtscp-single-arm-chest-press",
+    "hammer-strength-mtssp-single-arm-shoulder-press",
+}
+
+MACHINE_SECOND_WAVE_FAMILY_IDS = {
+    "padded-machine-pullover",
+    "seated-dip-press",
+}
+
+MACHINE_SECOND_WAVE_EVIDENCE_IDS = {
+    "ergo-fit-2020-vector-strength-manual",
+    "life-fitness-2026-hammer-plate-loaded-manual",
+    "panatta-2026-general-catalogue",
+    "life-fitness-2026-mts-chest-press",
+    "life-fitness-2026-mts-shoulder-press",
+}
+
 HISTORICAL_BATCH_EXCLUSION_RECORD_IDS = (
     ESSENTIAL_EXPANSION_RECORD_IDS
     | REQUESTED_EXERCISE_RECORD_IDS
@@ -231,12 +252,14 @@ HISTORICAL_BATCH_EXCLUSION_RECORD_IDS = (
     | MUST_HAVE_EXPANSION_RECORD_IDS
     | MACHINE_CATALOG_EXPANSION_RECORD_IDS
     | MACHINE_FIRST_WAVE_RECORD_IDS
+    | MACHINE_SECOND_WAVE_RECORD_IDS
 )
 
 HISTORICAL_BATCH_EXCLUSION_EVIDENCE_IDS = (
     COMPREHENSIVE_EXPANSION_EVIDENCE_IDS
     | MACHINE_CATALOG_EXPANSION_EVIDENCE_IDS
     | MACHINE_FIRST_WAVE_EVIDENCE_IDS
+    | MACHINE_SECOND_WAVE_EVIDENCE_IDS
 )
 
 
@@ -3166,7 +3189,7 @@ class CatalogFoundationTests(unittest.TestCase):
             self.horizontal_press["movementSignature"]["forbiddenPrimeActions"],
             ["shoulder.flexion", "shoulder.extension"],
         )
-        self.assertEqual(len(self.horizontal_press["exercises"]), 13)
+        self.assertEqual(len(self.horizontal_press["exercises"]), 14)
 
     def test_horizontal_press_rejects_sagittal_shoulder_prime_actions(self) -> None:
         for action in ("shoulder.flexion", "shoulder.extension"):
@@ -3239,7 +3262,11 @@ class CatalogFoundationTests(unittest.TestCase):
                         "description": (
                             "The machine mechanism when equipment is machine."
                         ),
-                        "allowedValues": ["smith", "convergingChestPress"],
+                        "allowedValues": (
+                            ["smith", "convergingChestPress", "independentMTSChestPress"]
+                            if family["id"] == "horizontal-press"
+                            else ["smith", "convergingChestPress"]
+                        ),
                     },
                 )
 
@@ -3257,7 +3284,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 "valueType": "enum",
                 "required": False,
                 "description": "The machine mechanism when equipment is machine.",
-                "allowedValues": ["smith", "convergingShoulderPress"],
+                "allowedValues": [
+                    "smith", "convergingShoulderPress",
+                    "independentMTSShoulderPress",
+                ],
             },
         )
 
@@ -3435,16 +3465,16 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertEqual(
             {
                 family["id"]: {
-                    exercise["variant"]["pressInclinationDegrees"]
+                    exercise["variant"].get("pressInclinationDegrees")
                     for exercise in family["exercises"]
                 }
                 for family in families
             },
             {
-                "horizontal-press": {0},
+                "horizontal-press": {None, 0},
                 "incline-press": {30},
                 "decline-press": {-15},
-                "vertical-press": {75, 80, 85, 90},
+                "vertical-press": {None, 75, 80, 85, 90},
             },
         )
 
@@ -3480,6 +3510,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "single-arm-standing-kettlebell-overhead-press",
                 "seated-smith-machine-overhead-press",
                 "machine-shoulder-press",
+                "hammer-strength-mtssp-single-arm-shoulder-press",
                 "wall-supported-strict-handstand-push-up",
             ],
         )
@@ -3494,7 +3525,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 variant["bodyPosition"],
                 variant["torsoSupport"],
                 variant["scapularTranslation"],
-                variant["pressInclinationDegrees"],
+                variant.get("pressInclinationDegrees"),
                 variant["gripOrientation"],
                 variant["fixedPath"],
                 variant.get("machineType"),
@@ -3550,6 +3581,11 @@ class CatalogFoundationTests(unittest.TestCase):
                     "machine", "bilateral", "seated", "machinePad",
                     "supportConstrained", 80, "neutral", True,
                     "convergingShoulderPress", None, (),
+                ),
+                "hammer-strength-mtssp-single-arm-shoulder-press": (
+                    "machine", "unilateral", "seated", "machinePad",
+                    "supportConstrained", None, "sourceUnreported", True,
+                    "independentMTSShoulderPress", None, ("spine", "pelvis"),
                 ),
                 "wall-supported-strict-handstand-push-up": (
                     "bodyweight", "bilateral", "inverted", "none", "free",
@@ -6362,6 +6398,7 @@ class CatalogFoundationTests(unittest.TestCase):
             *MUST_HAVE_EXPANSION_FAMILY_IDS,
             *MACHINE_CATALOG_EXPANSION_FAMILY_IDS,
             *MACHINE_FIRST_WAVE_FAMILY_IDS,
+            *MACHINE_SECOND_WAVE_FAMILY_IDS,
         }
         self.assertEqual(
             {family["id"] for family in self.real_families},
@@ -6369,7 +6406,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            206,
+            211,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -15349,7 +15386,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 227)
+        self.assertEqual(len(source_by_id), 232)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -15496,8 +15533,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             10,
         )
-        self.assertEqual(len(self.real_families), 85)
-        self.assertEqual(len(self.foundation.evidence_ids), 227)
+        self.assertEqual(len(self.real_families), 87)
+        self.assertEqual(len(self.foundation.evidence_ids), 232)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -16853,7 +16890,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_proposal = " ".join(proposal.split())
 
         self.assertIn(
-            "85 reviewed families are active, containing 206 exercises",
+            "87 reviewed families are active, containing 211 exercises",
             roadmap,
         )
         self.assertIn(
@@ -16866,8 +16903,8 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
         self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **206** |", roadmap)
-        self.assertIn("Eighty-five reviewed family files", families_readme)
+        self.assertIn("| **Total** | **211** |", roadmap)
+        self.assertIn("Eighty-seven reviewed family files", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
             "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
@@ -17979,9 +18016,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 85)
-        self.assertEqual(len(records), 206)
-        self.assertEqual(len(self.foundation.evidence_ids), 227)
+        self.assertEqual(len(self.real_families), 87)
+        self.assertEqual(len(records), 211)
+        self.assertEqual(len(self.foundation.evidence_ids), 232)
         self.assertEqual(
             {
                 key: upright[key]
@@ -18327,7 +18364,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| `finger-flexion-grip` | 1 |", roadmap)
-        self.assertIn("| **Total** | **206** |", roadmap)
+        self.assertIn("| **Total** | **211** |", roadmap)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -18920,7 +18957,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 for family_id in ESSENTIAL_EXPANSION_FAMILY_IDS
             },
             {
-                "inclined-leg-press": 1,
+                "inclined-leg-press": 2,
                 "machine-hack-squat": 1,
                 "roman-chair-hip-extension": 1,
                 "hanging-leg-raise": 2,
@@ -21121,21 +21158,21 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| `diagonal-pull` | 1 |", roadmap)
-        self.assertIn("| **Total** | **206** |", roadmap)
+        self.assertIn("| **Total** | **211** |", roadmap)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_85_families_and_206_exercises(
+    def test_runtime_projection_is_exactly_87_families_and_211_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 206)
+        self.assertEqual(len(records), 211)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 85)
+        self.assertEqual(len({record["familyID"] for record in records}), 87)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -21271,13 +21308,14 @@ class CatalogFoundationTests(unittest.TestCase):
                 "shoulder-abduction-raise", "shoulder-flexion-raise",
                 "upper-arm-pad-chest-fly",
                 "upper-arm-pad-shoulder-abduction",
-                "vertical-press",
+                "vertical-press", "seated-dip-press",
             },
             "pull": {
                 "active-dead-hang",
                 "diagonal-pull", "elbow-flexion", "reverse-fly",
                 "scapular-depression", "scapular-elevation",
                 "scapular-retraction", "shoulder-extension-isolation",
+                "padded-machine-pullover",
                 "shoulder-extension-row", "shoulder-horizontal-abduction-row",
                 "upright-row", "vertical-pull",
                 "externally-rotating-face-pull",
@@ -21501,7 +21539,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 206)
+            self.assertEqual(len(emitted), 211)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -21753,7 +21791,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_ids), 227)
+        self.assertEqual(len(source_ids), 232)
         self.assertTrue(COMPREHENSIVE_EXPANSION_EVIDENCE_IDS <= source_ids)
 
     def test_must_have_expansion_is_source_exact_and_runtime_visible(self) -> None:
@@ -22084,6 +22122,206 @@ class CatalogFoundationTests(unittest.TestCase):
             "variant.loadInterface has disallowed value",
         ):
             catalog.validate_family(pec, self.foundation, "mutated padded pec fly")
+
+    def test_machine_second_wave_is_source_exact_and_runtime_visible(self) -> None:
+        families = {family["id"]: family for family in self.real_families}
+        exercises = {
+            exercise["catalogID"]: exercise
+            for family in self.real_families
+            for exercise in family["exercises"]
+        }
+        self.assertTrue(MACHINE_SECOND_WAVE_RECORD_IDS <= exercises.keys())
+        self.assertTrue(
+            MACHINE_SECOND_WAVE_EVIDENCE_IDS <= self.foundation.evidence_ids
+        )
+        self.assertEqual(
+            exercises["ergo-fit-vector-seated-dip-press"]["variant"]["machineFixture"],
+            "ergoFitVectorSeatedDip20201101",
+        )
+        self.assertEqual(
+            exercises["hammer-strength-pl-po-plate-loaded-pullover"]["variant"]["loadAccounting"],
+            "totalAddedPlateMassSameFixtureOnly",
+        )
+        panatta = exercises["panatta-1fw090-single-leg-45-degree-leg-press"]
+        self.assertEqual(panatta["laterality"], "unilateral")
+        self.assertEqual(panatta["variant"]["reciprocalCouplingState"], "disengaged")
+        self.assertEqual(
+            panatta["variant"]["unusedCarriageState"],
+            "independentSafetyEngaged",
+        )
+        self.assertEqual(
+            panatta["variant"]["sideLoadConvention"],
+            "equalSideSettingsEnterOnce",
+        )
+        for catalog_id in (
+            "hammer-strength-mtscp-single-arm-chest-press",
+            "hammer-strength-mtssp-single-arm-shoulder-press",
+        ):
+            self.assertEqual(
+                exercises[catalog_id]["variant"]["loadAccounting"],
+                "workingSideStackSameFixtureOnly",
+            )
+            self.assertEqual(
+                exercises[catalog_id]["variant"]["armSequence"],
+                "oneArmAtATime",
+            )
+            self.assertEqual(
+                exercises[catalog_id]["variant"]["sideLoadConvention"],
+                "equalSideSettingsEnterOnce",
+            )
+
+        runtime_ids = {
+            record["catalogID"]
+            for record in catalog.compile_runtime_catalog(self.real_families)
+        }
+        self.assertTrue(MACHINE_SECOND_WAVE_RECORD_IDS <= runtime_ids)
+        self.assertFalse(any("belt-squat" in catalog_id for catalog_id in runtime_ids))
+        proposal = (
+            catalog.SPEC_ROOT / "proposals" / "machine-second-wave-2026-08.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("five source-exact exercises active", proposal)
+        self.assertIn("Belt Squat remains a separate blocked family", proposal)
+
+    def test_machine_second_wave_rejects_fixture_and_load_history_leaks(self) -> None:
+        inclined = copy.deepcopy(
+            next(family for family in self.real_families if family["id"] == "inclined-leg-press")
+        )
+        panatta = next(
+            exercise for exercise in inclined["exercises"]
+            if exercise["catalogID"] == "panatta-1fw090-single-leg-45-degree-leg-press"
+        )
+        panatta["laterality"] = "bilateral"
+        with self.assertRaisesRegex(
+            catalog.ValidationFailure,
+            "violates exercise rule panatta-fixture-pins-unilateral-carriage-contract",
+        ):
+            catalog.validate_family(inclined, self.foundation, "mutated Panatta laterality")
+
+        inclined = copy.deepcopy(
+            next(family for family in self.real_families if family["id"] == "inclined-leg-press")
+        )
+        panatta = next(
+            exercise for exercise in inclined["exercises"]
+            if exercise["catalogID"] == "panatta-1fw090-single-leg-45-degree-leg-press"
+        )
+        panatta["variant"]["loadAccounting"] = "platesAddedSameFixtureOnly"
+        with self.assertRaisesRegex(
+            catalog.ValidationFailure,
+            "violates exercise rule panatta-fixture-pins-unilateral-carriage-contract",
+        ):
+            catalog.validate_family(inclined, self.foundation, "mutated Panatta load")
+
+        inclined = copy.deepcopy(
+            next(family for family in self.real_families if family["id"] == "inclined-leg-press")
+        )
+        ffittech = next(
+            exercise for exercise in inclined["exercises"]
+            if exercise["catalogID"] == "45-degree-incline-leg-press"
+        )
+        ffittech["variant"]["sideLoadConvention"] = "equalSideSettingsEnterOnce"
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(inclined, self.foundation, "Panatta history on FFITTECH")
+
+        horizontal = self.horizontal_press_copy()
+        mts_chest = next(
+            exercise for exercise in horizontal["exercises"]
+            if exercise["catalogID"] == "hammer-strength-mtscp-single-arm-chest-press"
+        )
+        mts_chest["variant"]["loadAccounting"] = "mutated"
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(horizontal, self.foundation, "mutated MTSCP load")
+
+        for field, value in (
+            ("gripOrientation", "sourceUnreported"),
+            ("rangeOfMotion", "machineDefined"),
+            ("leverArmConfiguration", "independent"),
+            ("armSequence", "oneArmAtATime"),
+            ("loadAccounting", "workingSideStackSameFixtureOnly"),
+            ("sideLoadConvention", "equalSideSettingsEnterOnce"),
+        ):
+            horizontal = self.horizontal_press_copy()
+            dumbbell = next(
+                exercise for exercise in horizontal["exercises"]
+                if exercise["catalogID"] == "dumbbell-bench-press"
+            )
+            dumbbell["variant"][field] = value
+            with self.subTest(horizontal_reverse_field=field):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(
+                        horizontal,
+                        self.foundation,
+                        f"MTSCP {field} on dumbbell",
+                    )
+
+        vertical = self.vertical_press_copy()
+        mts_shoulder = next(
+            exercise for exercise in vertical["exercises"]
+            if exercise["catalogID"] == "hammer-strength-mtssp-single-arm-shoulder-press"
+        )
+        mts_shoulder["variant"]["machineFixture"] = "mutated"
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(vertical, self.foundation, "mutated MTSSP fixture")
+
+        vertical = self.vertical_press_copy()
+        dumbbell = next(
+            exercise for exercise in vertical["exercises"]
+            if exercise["catalogID"] == "seated-dumbbell-overhead-press"
+        )
+        del dumbbell["variant"]["pressInclinationDegrees"]
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(vertical, self.foundation, "missing old press angle")
+
+        for field, value in (
+            ("gripOrientation", "sourceUnreported"),
+            ("pressPath", "manufacturerShoulderPressPath"),
+            ("leverArmConfiguration", "independent"),
+            ("armSequence", "oneArmAtATime"),
+            ("loadAccounting", "workingSideStackSameFixtureOnly"),
+            ("sideLoadConvention", "equalSideSettingsEnterOnce"),
+        ):
+            vertical = self.vertical_press_copy()
+            dumbbell = next(
+                exercise for exercise in vertical["exercises"]
+                if exercise["catalogID"] == "seated-dumbbell-overhead-press"
+            )
+            dumbbell["variant"][field] = value
+            with self.subTest(vertical_reverse_field=field):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(
+                        vertical,
+                        self.foundation,
+                        f"MTSSP {field} on dumbbell",
+                    )
+
+        vertical = self.vertical_press_copy()
+        smith = next(
+            exercise for exercise in vertical["exercises"]
+            if exercise["catalogID"] == "seated-smith-machine-overhead-press"
+        )
+        smith["variant"]["torsoSupport"] = "machinePad"
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(vertical, self.foundation, "machine pad on Smith")
+
+        pullover = copy.deepcopy(
+            next(family for family in self.real_families if family["id"] == "padded-machine-pullover")
+        )
+        pullover["exercises"][0]["variant"]["loadInterface"] = "handledOnly"
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(pullover, self.foundation, "mutated pullover interface")
+
+        dip_press = copy.deepcopy(
+            next(family for family in self.real_families if family["id"] == "seated-dip-press")
+        )
+        dip_press["exercises"][0]["variant"]["loadAccounting"] = "mutated"
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(dip_press, self.foundation, "mutated VECTOR load")
+
+        pullover = copy.deepcopy(
+            next(family for family in self.real_families if family["id"] == "padded-machine-pullover")
+        )
+        pullover["exercises"][0]["variant"]["machineFixture"] = "mutated"
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(pullover, self.foundation, "mutated PL-PO fixture")
 
 if __name__ == "__main__":
     unittest.main()

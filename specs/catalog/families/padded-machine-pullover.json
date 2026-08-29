@@ -1,0 +1,58 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "padded-machine-pullover",
+  "name": "Padded Machine Pullover",
+  "definition": "A seated fixed-path shoulder-extension isolation on the exact Hammer Strength PL-PO fixture. Both elbows remain on the lever pads while the hands hold the overhead movement arm and the belt-driven cam guides a downward arc. This bent-elbow combined pad-and-handle topology is separate from handled near-straight-arm pullovers and pulldowns. Handled-only, selectorized, unilateral, pad-only, rowing, and elbow-extension variants remain outside it.",
+  "evidenceRefs": ["life-fitness-2026-hammer-plate-loaded-manual", "ackland-2008-shoulder-moment-arms", "holzbaur-2005-upper-extremity"],
+  "fixed": {"mechanic": "isolation", "trainingRole": "pull", "pattern": null, "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "back", "allowed": ["back"]},
+  "allowed": {"equipment": ["machine"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.extension"],
+    "primeActions": [{"action": "shoulder.extension", "condition": "fromFlexedPosition"}],
+    "forbiddenPrimeActions": ["shoulder.flexion", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "elbow.flexion", "elbow.extension", "scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "spine.flexion", "spine.extension", "hip.extension", "knee.extension", "ankle.plantarflexion"],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["lats"], "minimumRole": "primary"}, {"anyOf": ["pectoralisMajorSternocostal"], "minimumRole": "secondary"}, {"anyOf": ["teresMajor"], "minimumRole": "secondary"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["lats"], "secondary": ["pectoralisMajorSternocostal", "teresMajor", "deltoidPosterior"], "stabilizer": ["externalRotators", "serratus", "trapeziusMiddle", "triceps", "fingerFlexors", "extensorCarpiRadialis", "abs", "obliques", "lumbarExtensors"]}
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The lever moves around the supported athlete.", "allowedValues": ["open"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The exact fixture is used seated.", "allowedValues": ["seated"]},
+    {"id": "torsoSupport", "valueType": "enum", "required": true, "description": "The seat, posterior pad, and belt support the torso.", "allowedValues": ["angledSeatBackPadAndBelt"]},
+    {"id": "scapularTranslation", "valueType": "enum", "required": true, "description": "Posterior support constrains scapular translation without defining scapular prime motion.", "allowedValues": ["supportConstrained"]},
+    {"id": "loadInterface", "valueType": "enum", "required": true, "description": "Both elbows remain on pads while both hands grasp the movement arm.", "allowedValues": ["bilateralElbowPadsWithOverheadHandle"]},
+    {"id": "machineFixture", "valueType": "enum", "required": true, "description": "The exact plate-loaded fixture whose history may be compared.", "allowedValues": ["hammerStrengthPLPO"]},
+    {"id": "leverArmConfiguration", "valueType": "enum", "required": true, "description": "Both contacts drive the fixture's shared work arm.", "allowedValues": ["linked"]},
+    {"id": "armSequence", "valueType": "enum", "required": true, "description": "Both arms move together.", "allowedValues": ["simultaneousBilateral"]},
+    {"id": "upperArmPath", "valueType": "enum", "required": true, "description": "The cam guides a reduced shoulder-extension arc.", "allowedValues": ["leverGuidedReducedShoulderExtension"]},
+    {"id": "elbowMotion", "valueType": "enum", "required": true, "description": "The elbow angle is intentionally held against the pads.", "allowedValues": ["angleHeld"]},
+    {"id": "elbowPosture", "valueType": "enum", "required": true, "description": "The elbows remain bent on their pads.", "allowedValues": ["flexedOnPads"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "The cam and lever constrain the external path.", "fixedValue": true},
+    {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "description": "The belted seated lower body does not drive the lever.", "allowedValues": ["none"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "Log total added plate mass on the two work-arm loading rods, excluding storage horns and starting resistance, and compare only on the same fixture.", "allowedValues": ["totalAddedPlateMassSameFixtureOnly"]}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 8, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "hammer-strength-pl-po-plate-loaded-pullover",
+    "name": "Hammer Strength PL-PO Plate-Loaded Pullover",
+    "aliases": ["Plate-Loaded Pullover", "Machine Pullover", "Hammer Strength Pullover"],
+    "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 10, "searchPriority": 96,
+    "involvement": [{"muscle": "lats", "role": "primary"}, {"muscle": "pectoralisMajorSternocostal", "role": "secondary"}, {"muscle": "teresMajor", "role": "secondary"}, {"muscle": "deltoidPosterior", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}],
+    "variant": {"kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "angledSeatBackPadAndBelt", "scapularTranslation": "supportConstrained", "loadInterface": "bilateralElbowPadsWithOverheadHandle", "machineFixture": "hammerStrengthPLPO", "leverArmConfiguration": "linked", "armSequence": "simultaneousBilateral", "upperArmPath": "leverGuidedReducedShoulderExtension", "elbowMotion": "angleHeld", "elbowPosture": "flexedOnPads", "fixedPath": true, "lowerBodyContribution": "none", "loadAccounting": "totalAddedPlateMassSameFixtureOnly"},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [],
+    "evidenceRefs": ["life-fitness-2026-hammer-plate-loaded-manual", "ackland-2008-shoulder-moment-arms", "holzbaur-2005-upper-extremity"],
+    "execution": {
+      "startingPosition": "On the Hammer Strength PL-PO only, log total added plate mass on the two work-arm loading rods; exclude storage horns and starting resistance. Sit against the thirty-degree support, fasten the belt, place both elbows on the pads, and grasp the overhead movement arm.",
+      "movement": "Pull the movement arm downward through its guided cam path while keeping both elbows on the pads and holding their angle.",
+      "endpoint": "Stop at the comfortable end of the machine's reduced shoulder-extension path without lifting from the support.",
+      "returnPhase": "Return the movement arm overhead under control while maintaining the pad and hand contacts.",
+      "controlledJoints": "Keep the elbow angle stable rather than turning the repetition into an elbow-extension press.",
+      "supportAndPosture": "Keep the torso against the support and the belt secured; do not drive through the legs.",
+      "disqualifyingCompensations": ["Lifting either elbow from its pad changes the reviewed combined pad-and-handle interface.", "Deliberately extending the elbows changes the movement into a compound press.", "Lifting the torso from the support or using the legs adds momentum."]
+    }
+  }]
+}

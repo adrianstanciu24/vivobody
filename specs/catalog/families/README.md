@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Eighty-five reviewed family files containing 206 exercises are currently
+Eighty-seven reviewed family files containing 211 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-227-source foundation. Each uses a coverage batch whose exercises
+232-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -129,6 +129,17 @@ assistance is subtracted from bodyweight and explicitly becomes easier as it
 increases. Generic hip-thrust and abdominal-crunch machines remain proposals
 until their exact topology and joint-motion boundaries are sourced.
 
+The second commercial-machine wave adds five more exact histories. The
+ERGO-FIT VECTOR compound seated dip press is separate from body-moving dips
+and upper-arm-held triceps isolation. The Hammer PL-PO pullover is separate
+from handled near-straight-arm pullovers because both flexed elbows remain on
+pads while the hands hold a shared lever. The Panatta 1FW090 record logs only
+the per-side plate value with the reciprocal coupling disengaged and the
+unused side on its independent safety. Hammer MTSCP and MTSSP single-arm
+records require equal stack settings and enter that per-working-side value
+once, never the sum of two stacks. Belt Squat remains proposal
+only until one exact fixture supplies reproducible ROM and load semantics.
+
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
 detent, not a raw conversion from pounds. Zero-weight bodyweight, duration, and
@@ -141,8 +152,10 @@ discovers and validates every
 Press families reuse the same mechanical vocabulary. `kineticChain` describes
 distal fixation, `scapularTranslation` records only external support limits on
 translation rather than rotation or tilt, and signed `pressInclinationDegrees`
-uses horizontal as zero. Family-specific synonyms for these axes are not
-allowed.
+uses horizontal as zero. The exact MTSSP record omits a numeric inclination
+because its product standard identifies a shoulder-press path without
+publishing an angle; it uses a source-unreported marker instead of false
+precision. Family-specific synonyms for these axes are not allowed.
 
 `lowerBodySupport` has one cross-family meaning: the lower-body contact or
 support that materially changes effective bodyweight loading. A family that

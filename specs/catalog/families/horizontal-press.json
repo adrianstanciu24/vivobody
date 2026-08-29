@@ -144,7 +144,7 @@
     {
       "id": "pressInclinationDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "description": "Signed inclination of the canonical torso-relative press from horizontal: positive toward overhead and negative toward decline; a supported free-weight press uses backrest angle as the proxy.",
       "minimum": 0,
       "maximum": 0
@@ -157,7 +157,8 @@
       "allowedValues": [
         "pronated",
         "neutral",
-        "rotating"
+        "rotating",
+        "sourceUnreported"
       ]
     },
     {
@@ -167,7 +168,8 @@
       "description": "Whether the canonical lowering phase is unrestricted or stopped when the upper arm contacts the floor.",
       "allowedValues": [
         "full",
-        "floorLimited"
+        "floorLimited",
+        "machineDefined"
       ]
     },
     {
@@ -183,7 +185,8 @@
       "description": "The machine mechanism when equipment is machine.",
       "allowedValues": [
         "smith",
-        "convergingChestPress"
+        "convergingChestPress",
+        "independentMTSChestPress"
       ]
     },
     {
@@ -210,6 +213,41 @@
       "required": false,
       "description": "The individual anatomical reference defining the narrow grip.",
       "allowedValues": ["indexFingerDistanceBetweenLatissimusTricepsIntersections"]
+    },
+    {
+      "id": "machineFixture",
+      "valueType": "enum",
+      "required": false,
+      "description": "The exact machine fixture when a record owns model-specific unilateral history.",
+      "allowedValues": ["hammerStrengthMTSCP"]
+    },
+    {
+      "id": "leverArmConfiguration",
+      "valueType": "enum",
+      "required": false,
+      "description": "Whether the exact machine arms operate independently.",
+      "allowedValues": ["independent"]
+    },
+    {
+      "id": "armSequence",
+      "valueType": "enum",
+      "required": false,
+      "description": "The exact unilateral record presses one machine arm at a time.",
+      "allowedValues": ["oneArmAtATime"]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": false,
+      "description": "The selected load on the working-side stack, comparable only on the same fixture and side convention.",
+      "allowedValues": ["workingSideStackSameFixtureOnly"]
+    },
+    {
+      "id": "sideLoadConvention",
+      "valueType": "enum",
+      "required": false,
+      "description": "Both sides use equal selected stack values and the per-working-side value is entered once.",
+      "allowedValues": ["equalSideSettingsEnterOnce"]
     }
   ],
   "exerciseRules": [
@@ -353,6 +391,83 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "mts-independent-machine-pins-unilateral-history",
+      "description": "The exact MTSCP record uses one independent arm and its working-side stack; its source does not report grip orientation or an exact joint range.",
+      "when": {"field": "variant.machineType", "operator": "equals", "value": "independentMTSChestPress"},
+      "then": [{"field": "laterality", "value": "unilateral"}, {"field": "variant.torsoSupport", "value": "machinePad"}, {"field": "variant.gripOrientation", "value": "sourceUnreported"}, {"field": "variant.rangeOfMotion", "value": "machineDefined"}, {"field": "variant.machineFixture", "value": "hammerStrengthMTSCP"}, {"field": "variant.leverArmConfiguration", "value": "independent"}, {"field": "variant.armSequence", "value": "oneArmAtATime"}, {"field": "variant.loadAccounting", "value": "workingSideStackSameFixtureOnly"}, {"field": "variant.sideLoadConvention", "value": "equalSideSettingsEnterOnce"}],
+      "requirePresent": ["variant.machineFixture", "variant.leverArmConfiguration", "variant.armSequence", "variant.loadAccounting", "variant.sideLoadConvention"],
+      "requireAbsent": ["variant.pressInclinationDegrees"]
+    },
+    {
+      "id": "mts-fixture-reverses-to-independent-machine",
+      "description": "The MTSCP fixture identity cannot be attached to a generic or linked press.",
+      "when": {"field": "variant.machineFixture", "operator": "equals", "value": "hammerStrengthMTSCP"},
+      "then": [{"field": "variant.machineType", "value": "independentMTSChestPress"}],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "non-mts-records-omit-mts-history-fields",
+      "description": "Records outside the exact independent MTS mechanism cannot carry its fixture or load-history axes.",
+      "when": {"field": "variant.machineType", "operator": "notEquals", "value": "independentMTSChestPress"},
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": ["variant.machineFixture", "variant.leverArmConfiguration", "variant.armSequence", "variant.loadAccounting", "variant.sideLoadConvention"]
+    },
+    {
+      "id": "source-unreported-grip-reverses-to-mts",
+      "description": "The source-unreported grip marker belongs only to the exact MTSCP record.",
+      "when": {"field": "variant.gripOrientation", "operator": "equals", "value": "sourceUnreported"},
+      "then": [{"field": "variant.machineType", "value": "independentMTSChestPress"}],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "machine-defined-range-reverses-to-mts",
+      "description": "The machine-defined range marker belongs only to the exact MTSCP record.",
+      "when": {"field": "variant.rangeOfMotion", "operator": "equals", "value": "machineDefined"},
+      "then": [{"field": "variant.machineType", "value": "independentMTSChestPress"}],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "full-range-requires-numeric-horizontal-inclination",
+      "description": "Existing full-range press records retain their explicit zero-degree horizontal geometry.",
+      "when": {"field": "variant.rangeOfMotion", "operator": "equals", "value": "full"},
+      "then": [], "requirePresent": ["variant.pressInclinationDegrees"], "requireAbsent": []
+    },
+    {
+      "id": "floor-range-requires-numeric-horizontal-inclination",
+      "description": "Existing floor-limited records retain their explicit zero-degree horizontal geometry.",
+      "when": {"field": "variant.rangeOfMotion", "operator": "equals", "value": "floorLimited"},
+      "then": [], "requirePresent": ["variant.pressInclinationDegrees"], "requireAbsent": []
+    },
+    {
+      "id": "mts-lever-arm-reverses-to-machine",
+      "description": "The independent-arm marker belongs only to the MTSCP mechanism.",
+      "when": {"field": "variant.leverArmConfiguration", "operator": "equals", "value": "independent"},
+      "then": [{"field": "variant.machineType", "value": "independentMTSChestPress"}],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "mts-arm-sequence-reverses-to-machine",
+      "description": "The one-arm sequence marker belongs only to the MTSCP mechanism.",
+      "when": {"field": "variant.armSequence", "operator": "equals", "value": "oneArmAtATime"},
+      "then": [{"field": "variant.machineType", "value": "independentMTSChestPress"}],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "mts-load-accounting-reverses-to-machine",
+      "description": "The working-side stack convention belongs only to the MTSCP mechanism.",
+      "when": {"field": "variant.loadAccounting", "operator": "equals", "value": "workingSideStackSameFixtureOnly"},
+      "then": [{"field": "variant.machineType", "value": "independentMTSChestPress"}],
+      "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "mts-side-load-convention-reverses-to-machine",
+      "description": "The equal per-side stack convention belongs only to the MTSCP mechanism.",
+      "when": {"field": "variant.sideLoadConvention", "operator": "equals", "value": "equalSideSettingsEnterOnce"},
+      "then": [{"field": "variant.machineType", "value": "independentMTSChestPress"}],
+      "requirePresent": [], "requireAbsent": []
     },
     {
       "id": "unsupported-torso-allows-scapular-translation",
@@ -1407,6 +1522,26 @@
         "controlledJoints": "Keep both hands at the measured spacing and control the bar without rebounding.",
         "supportAndPosture": "Keep the head, shoulders, and buttocks in contact with the bench.",
         "disqualifyingCompensations": ["Bouncing the bar off the chest changes the reviewed press.", "Moving the index fingers wider or losing bench contact changes the source-defined fixture."]
+      }
+    },
+    {
+      "catalogID": "hammer-strength-mtscp-single-arm-chest-press",
+      "name": "Hammer Strength MTSCP Single-Arm Chest Press",
+      "aliases": ["Independent-Arm Machine Chest Press", "Single-Arm MTS Chest Press", "Unilateral Machine Chest Press"],
+      "equipment": "machine", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 96,
+      "involvement": [{"muscle": "pectoralisMajorSternocostal", "role": "primary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "variant": {"kineticChain": "open", "torsoSupport": "machinePad", "scapularTranslation": "supportConstrained", "gripOrientation": "sourceUnreported", "rangeOfMotion": "machineDefined", "fixedPath": true, "machineType": "independentMTSChestPress", "lowerBodySupport": "none", "machineFixture": "hammerStrengthMTSCP", "leverArmConfiguration": "independent", "armSequence": "oneArmAtATime", "loadAccounting": "workingSideStackSameFixtureOnly", "sideLoadConvention": "equalSideSettingsEnterOnce"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["spine", "pelvis"],
+      "evidenceRefs": ["life-fitness-2026-mts-chest-press", "ackland-2008-shoulder-moment-arms", "cabral-2022-pectoralis-regions"],
+      "execution": {
+        "sideOrDirection": "Use the same selected stack value on both sides, enter that per-working-side value once, complete all repetitions with one arm, then repeat on the other side.",
+        "startingPosition": "On the Hammer Strength MTSCP only, adjust the seat and select the equal per-side load. Keep the other arm at rest and compare history only on this fixture.",
+        "movement": "Press one independent arm forward through its converging path while keeping the torso against the pad.",
+        "endpoint": "Finish at the comfortable machine-defined endpoint without forcing the shoulder forward.",
+        "returnPhase": "Return the working arm alone under control through its diverging path.",
+        "controlledJoints": "Keep the non-working arm still and resist trunk rotation toward or away from the working side.",
+        "supportAndPosture": "Keep the pelvis and torso against the machine support with both feet planted.",
+        "disqualifyingCompensations": ["Moving both independent arms changes the one-arm history.", "Using unequal stack settings cannot be represented by this one-value history.", "Adding the two stack selections together changes the working-side load meaning.", "Rotating or lifting the torso from the pad adds momentum."]
       }
     }
   ]
