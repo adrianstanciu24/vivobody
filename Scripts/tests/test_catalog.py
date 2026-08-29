@@ -182,10 +182,26 @@ COMPREHENSIVE_EXPANSION_EVIDENCE_IDS = {
     "anders-2006-ace-glutes-to-max",
 }
 
+MUST_HAVE_EXPANSION_RECORD_IDS = {
+    "barbell-clean-and-jerk",
+    "two-dumbbell-forward-lunge",
+    "standing-ez-bar-curl",
+    "bilateral-barbell-lying-triceps-extension",
+}
+
+MUST_HAVE_EXPANSION_FAMILY_IDS = {"clean-and-jerk"}
+
+MUST_HAVE_EXPANSION_EVIDENCE_IDS = {
+    "iwf-2025-technical-competition-rules",
+    "riemann-2012-anterior-lunge-external-load",
+    "brandao-2020-exercise-order",
+}
+
 HISTORICAL_BATCH_EXCLUSION_RECORD_IDS = (
     ESSENTIAL_EXPANSION_RECORD_IDS
     | REQUESTED_EXERCISE_RECORD_IDS
     | COMPREHENSIVE_EXPANSION_RECORD_IDS
+    | MUST_HAVE_EXPANSION_RECORD_IDS
 )
 
 
@@ -2261,112 +2277,70 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         original = self.late_lower_body_closure_families["dynamic-lunge"]
-        expected = [
+        rules = {rule["id"]: rule for rule in original["exerciseRules"]}
+        self.assertEqual(
+            set(rules),
             {
-                "id": "forward-step-binds-selected-lead-landing-topology",
-                "description": (
-                    "A selected-lead forward step requires the exact "
-                    "lead-foot landing and return topology from Comfort et al."
-                ),
-                "when": {
-                    "field": "variant.stepDirection",
-                    "operator": "equals",
-                    "value": "selectedLeadForward",
-                },
-                "then": [
-                    {
-                        "field": "variant.selectedLeadFootTransition",
-                        "value": "stepsForwardThenReturns",
-                    },
-                    {
-                        "field": "variant.contralateralFootTransition",
-                        "value": "remainsAtStartThenReceivesReturn",
-                    },
-                    {
-                        "field": "variant.landingFoot",
-                        "value": "selectedLead",
-                    },
-                    {
-                        "field": "variant.selectedLeadFootContact",
-                        "value": "stepsThenWholeFootMaintained",
-                    },
-                ],
-                "requirePresent": [],
-                "requireAbsent": [],
+                "forward-step-binds-selected-lead-landing-topology",
+                "reverse-step-binds-planted-front-foot-topology",
+                "paired-dumbbell-forward-lunge-fixture",
+                "no-implement-pins-bodyweight-fixture",
+                "whole-foot-contact-pins-bodyweight-forward-fixture",
+                "maintained-contact-pins-bodyweight-reverse-fixture",
+                "unreported-contact-pins-loaded-forward-fixture",
             },
-            {
-                "id": "reverse-step-binds-planted-front-foot-topology",
-                "description": (
-                    "A contralateral rearward step requires the selected front "
-                    "foot to remain planted while the rear foot lands and "
-                    "returns."
-                ),
-                "when": {
-                    "field": "variant.stepDirection",
-                    "operator": "equals",
-                    "value": "contralateralRearward",
-                },
-                "then": [
-                    {
-                        "field": "variant.selectedLeadFootTransition",
-                        "value": "remainsPlantedThroughout",
-                    },
-                    {
-                        "field": "variant.contralateralFootTransition",
-                        "value": "stepsRearwardThenReturns",
-                    },
-                    {
-                        "field": "variant.landingFoot",
-                        "value": "contralateral",
-                    },
-                    {
-                        "field": "variant.selectedLeadFootContact",
-                        "value": "maintainedOnStartPlate",
-                    },
-                ],
-                "requirePresent": [],
-                "requireAbsent": [],
-            },
-        ]
-        self.assertEqual(original["exerciseRules"], expected)
-
-        mutation_count = 0
-        for rule in original["exerciseRules"]:
-            matches = [
-                exercise
+        )
+        self.assertEqual(
+            [
+                exercise["catalogID"]
                 for exercise in original["exercises"]
-                if self.rule_matches_exercise(rule, exercise)
-            ]
-            self.assertEqual(len(matches), 1)
-            self.assertEqual(
-                sum(
-                    not self.rule_matches_exercise(rule, exercise)
-                    for exercise in original["exercises"]
-                ),
-                1,
-            )
-            for assertion in rule["then"]:
-                mutated = copy.deepcopy(matches[0])
-                self.set_rule_field(
-                    mutated,
-                    assertion["field"],
-                    "mutated",
+                if self.rule_matches_exercise(
+                    rules["paired-dumbbell-forward-lunge-fixture"], exercise
                 )
-                with self.subTest(
-                    rule=rule["id"],
-                    field=assertion["field"],
+            ],
+            ["two-dumbbell-forward-lunge"],
+        )
+        dumbbell_rule = rules["paired-dumbbell-forward-lunge-fixture"]
+        self.assertEqual(
+            {item["field"]: item.get("value") for item in dumbbell_rule["then"]},
+            {
+                "equipment": "dumbbell",
+                "laterality": "unilateral",
+                "loadMode": "external",
+                "variant.upperLimbPosition": "armsAtSidesHoldingPairedImplements",
+                "variant.stepDirection": "selectedLeadForward",
+                "variant.stepLengthCriterion": "seventyPercentSelectedLeadLegLength",
+                "variant.selectedLeadFootContact": "sourceUnreportedAfterForwardStep",
+                "variant.depthCriterion": "maximumComfortableDepth",
+                "variant.loadPlacement": "pairedAtSides",
+                "variant.gripOrientation": "neutral",
+                "variant.loadAccounting": "perImplement",
+                "variant.externalLoadPrescription": "twelvePointFiveToFiftyPercentBodyMassTotal",
+                "variant.fixedPath": False,
+                "variant.cadenceProtocol": "loweringAttemptedWithinTwoSecondsConcentricUnreported",
+            },
+        )
+        mutations = (
+            ("bodyweight-forward-lunge", "variant.selectedLeadFootContact", "sourceUnreportedAfterForwardStep"),
+            ("bodyweight-forward-lunge", "loadMode", "external"),
+            ("bodyweight-reverse-lunge", "variant.loadPlacement", "pairedAtSides"),
+            ("bodyweight-reverse-lunge", "variant.gripOrientation", "neutral"),
+            ("two-dumbbell-forward-lunge", "variant.implementConfiguration", "none"),
+        )
+        for catalog_id, field, value in mutations:
+            family = copy.deepcopy(original)
+            mutated = next(
+                exercise for exercise in family["exercises"]
+                if exercise["catalogID"] == catalog_id
+            )
+            self.set_rule_field(mutated, field, value)
+            with self.subTest(catalog_id=catalog_id, field=field):
+                with self.assertRaisesRegex(
+                    catalog.ValidationFailure, "violates exercise rule"
                 ):
-                    with self.assertRaisesRegex(
-                        catalog.ValidationFailure,
-                        "violates exercise rule " + re.escape(rule["id"]),
-                    ):
-                        catalog.validate_exercise_rule_matches(
-                            mutated,
-                            [rule],
-                            "mutated dynamic-lunge topology",
-                        )
-                mutation_count += 1
-        self.assertEqual(mutation_count, 8)
+                    catalog.validate_family(
+                        family, self.foundation, "mutated dynamic-lunge"
+                    )
 
     def test_late_lower_body_required_roles_are_removed_and_demoted_directly(
         self,
@@ -2453,8 +2427,8 @@ class CatalogFoundationTests(unittest.TestCase):
                             f"fails muscle requirement {requirement_index}",
                         )
                     demotion_count += 1
-        self.assertEqual(removal_count, 40)
-        self.assertEqual(demotion_count, 15)
+        self.assertEqual(removal_count, 51)
+        self.assertEqual(demotion_count, 20)
 
     def test_late_lower_body_stability_providers_are_exact(self) -> None:
         expected = {
@@ -2501,6 +2475,7 @@ class CatalogFoundationTests(unittest.TestCase):
         }
         expected["bodyweight-forward-lunge"] = lunge_providers
         expected["bodyweight-reverse-lunge"] = lunge_providers
+        expected["two-dumbbell-forward-lunge"] = lunge_providers
 
         actual = {}
         for family in self.late_lower_body_closure_families.values():
@@ -2584,7 +2559,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 "bodyPosition": enum("standing"),
                 "torsoSupport": enum("none"),
                 "trunkOrientation": enum("upright"),
-                "upperLimbPosition": enum("crossed"),
+                "upperLimbPosition": enum(
+                    "crossed", "armsAtSidesHoldingPairedImplements"
+                ),
                 "startSupport": enum("bilateralStanding"),
                 "stepDirection": enum(
                     "selectedLeadForward", "contralateralRearward"
@@ -2598,10 +2575,13 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
                 "landingFoot": enum("selectedLead", "contralateral"),
                 "selectedLeadFootContact": enum(
-                    "stepsThenWholeFootMaintained", "maintainedOnStartPlate"
+                    "stepsThenWholeFootMaintained", "maintainedOnStartPlate",
+                    "sourceUnreportedAfterForwardStep",
                 ),
                 "landingDemand": enum("dynamicFootContact"),
-                "depthCriterion": enum("fullSelfSelectedDepth"),
+                "depthCriterion": enum(
+                    "fullSelfSelectedDepth", "maximumComfortableDepth"
+                ),
                 "returnTopology": enum("returnToBilateralStart"),
                 "spineMotion": enum("nonstandardized"),
                 "pelvisMotion": enum("nonstandardized"),
@@ -2609,9 +2589,25 @@ class CatalogFoundationTests(unittest.TestCase):
                 "kneeMotion": enum("extends"),
                 "ankleMotion": enum("plantarflexes"),
                 "footMotion": enum("positionHeldDuringLoadedPhase"),
-                "loadPlacement": enum("none"),
+                "loadPlacement": enum("none", "pairedAtSides"),
                 "eccentricSeconds": number(3, 3),
                 "concentricSeconds": number(2, 2),
+                "stepLengthCriterion": enum(
+                    "sourceUnreported", "seventyPercentSelectedLeadLegLength"
+                ),
+                "gripOrientation": enum("notApplicable", "neutral"),
+                "implementConfiguration": enum(
+                    "none", "pairedDumbbellLikeImplements"
+                ),
+                "loadAccounting": enum("notApplicable", "perImplement"),
+                "externalLoadPrescription": enum(
+                    "twelvePointFiveToFiftyPercentBodyMassTotal"
+                ),
+                "fixedPath": ("boolean", False),
+                "cadenceProtocol": enum(
+                    "threeSecondEccentricTwoSecondConcentric",
+                    "loweringAttemptedWithinTwoSecondsConcentricUnreported",
+                ),
                 "lowerBodyContribution": enum(
                     "compoundHipKneeAnkleExtension"
                 ),
@@ -2622,11 +2618,11 @@ class CatalogFoundationTests(unittest.TestCase):
         ):
             actual = {}
             for axis in family["variantAxes"]:
-                self.assertTrue(axis["required"])
                 axis_id = axis["id"]
                 observed = {
                     exercise["variant"][axis_id]
                     for exercise in family["exercises"]
+                    if axis_id in exercise["variant"]
                 }
                 if axis["valueType"] == "enum":
                     actual[axis_id] = (
@@ -2642,8 +2638,9 @@ class CatalogFoundationTests(unittest.TestCase):
                         {axis["minimum"], axis["maximum"]},
                     )
                 elif axis["valueType"] == "boolean":
-                    actual[axis_id] = ("boolean", axis["fixedValue"])
-                    self.assertEqual(observed, {axis["fixedValue"]})
+                    expected_value = axis.get("fixedValue", next(iter(observed)))
+                    actual[axis_id] = ("boolean", expected_value)
+                    self.assertEqual(observed, {expected_value})
                 else:
                     self.fail(
                         f"unexpected late-closure axis type "
@@ -2670,6 +2667,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 for axis in original["variantAxes"]:
                     family = copy.deepcopy(original)
                     axis_id = axis["id"]
+                    if axis_id not in exercise["variant"]:
+                        continue
                     if axis["valueType"] == "enum":
                         value = "mutated"
                         expected_error = re.escape(
@@ -2681,11 +2680,14 @@ class CatalogFoundationTests(unittest.TestCase):
                             f"variant.{axis_id} exceeds {axis['maximum']}"
                         )
                     elif axis["valueType"] == "boolean":
-                        value = not axis["fixedValue"]
-                        expected_error = re.escape(
-                            f"variant.{axis_id} must equal fixed value "
-                            f"{axis['fixedValue']!r}"
-                        )
+                        value = not exercise["variant"][axis_id]
+                        if "fixedValue" in axis:
+                            expected_error = re.escape(
+                                f"variant.{axis_id} must equal fixed value "
+                                f"{axis['fixedValue']!r}"
+                            )
+                        else:
+                            expected_error = "violates exercise rule"
                     else:
                         self.fail(
                             f"unexpected late-closure axis type "
@@ -2724,7 +2726,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             ),
                         )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 102)
+        self.assertEqual(mutation_count, 146)
 
     def test_matching_rule_requires_explicit_additional_stability_demand(self) -> None:
         family = self.family_copy()
@@ -6322,6 +6324,7 @@ class CatalogFoundationTests(unittest.TestCase):
             *ESSENTIAL_EXPANSION_FAMILY_IDS,
             *REQUESTED_EXERCISE_FAMILY_IDS,
             *COMPREHENSIVE_EXPANSION_FAMILY_IDS,
+            *MUST_HAVE_EXPANSION_FAMILY_IDS,
         }
         self.assertEqual(
             {family["id"] for family in self.real_families},
@@ -6329,7 +6332,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            196,
+            200,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -7141,7 +7144,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         }
                         for exercise in family["exercises"]
                         if exercise["catalogID"]
-                        not in COMPREHENSIVE_EXPANSION_RECORD_IDS
+                        not in HISTORICAL_BATCH_EXCLUSION_RECORD_IDS
                     ],
                 }
             )
@@ -7153,7 +7156,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "e27d1f113cd13a56d3cb67b1b5f7c42b26979ff28a8d82d1b3a29b264fc0ba73",
+            "a8ace489e4a4940736df0367112a243cf7667dc00137cdc562c96a3d45467c89",
         )
 
     def test_batch2_forbids_every_other_known_prime_action(self) -> None:
@@ -7265,6 +7268,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "split-jerk",
             "squat-clean",
             "wall-sit",
+            "clean-and-jerk",
         }
         actual_family_ids = set()
         for original in self.real_families:
@@ -7473,7 +7477,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         )
                     mutation_count += 1
 
-        self.assertEqual(mutation_count, 368)
+        self.assertEqual(mutation_count, 420)
 
     def test_conditioned_rotation_cannot_be_broadened_per_exercise(
         self,
@@ -7614,6 +7618,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "highCablePushdown",
                 "overheadCableExtension",
                 "gravityLoadedDumbbell",
+                "gravityLoadedBarbell",
             ],
         )
         self.assertEqual(
@@ -7624,6 +7629,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "dumbbellHandle",
                 "straightCableBar",
                 "rope",
+                "barbellShapeUnreported",
             ],
         )
         self.assertEqual(
@@ -11479,7 +11485,7 @@ class CatalogFoundationTests(unittest.TestCase):
             normalized_lunge,
         )
         self.assertIn("| `hip-hinge` | 1 |", roadmap)
-        self.assertIn("| `dynamic-lunge` | 2 |", roadmap)
+        self.assertIn("| `dynamic-lunge` | 3 |", roadmap)
         self.assertIn(
             "Later review activated both the good-morning hinge owner and the "
             "forward/reverse dynamic-lunge family",
@@ -11603,8 +11609,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 "name": "Dynamic Lunge",
                 "fixed": ("compound", "lunge", None, ("sagittal",)),
                 "allowed": (
-                    ("bodyweight",), ("dynamicStrength",), ("reps",),
-                    ("nonComparable",), ("unilateral",),
+                    ("bodyweight", "dumbbell"), ("dynamicStrength",),
+                    ("reps",), ("nonComparable", "external"),
+                    ("unilateral",),
                 ),
                 "basis": ("hip.extension",),
                 "prime": (
@@ -11635,16 +11642,20 @@ class CatalogFoundationTests(unittest.TestCase):
                     "stabilizer": (
                         "medialHamstrings", "bicepsFemoris", "gluteMed",
                         "abs", "obliques", "lumbarExtensors",
+                        "externalRotators", "trapeziusUpper", "triceps",
+                        "fingerFlexors", "extensorCarpiRadialis",
                     ),
                 },
                 "reps": (5, 15),
                 "evidence": (
                     "arnold-2010-lower-limb",
                     "comfort-2015-forward-reverse-lunge-kinetics",
+                    "riemann-2012-anterior-lunge-external-load",
                 ),
                 "roster": (
                     "bodyweight-forward-lunge",
                     "bodyweight-reverse-lunge",
+                    "two-dumbbell-forward-lunge",
                 ),
             },
         }
@@ -11786,6 +11797,22 @@ class CatalogFoundationTests(unittest.TestCase):
                     "comfort-2015-forward-reverse-lunge-kinetics",
                 ),
             },
+            "two-dumbbell-forward-lunge": {
+                "name": "Two-Dumbbell Forward Lunge",
+                "aliases": (
+                    "Dumbbell Forward Lunge",
+                    "Paired-Dumbbell Forward Lunge",
+                    "Dumbbell Anterior Lunge",
+                ),
+                "setup": (
+                    "dumbbell", "unilateral", "dynamicStrength", "reps",
+                    "external", 0, 20, 10, 8, 95,
+                ),
+                "evidence": (
+                    "riemann-2012-anterior-lunge-external-load",
+                ),
+                "stability": ("shoulder", "scapula", "elbow", "wrist", "hand"),
+            },
         }
         lunge_roles = {
             "vasti": "primary",
@@ -11802,6 +11829,16 @@ class CatalogFoundationTests(unittest.TestCase):
         }
         expected["bodyweight-forward-lunge"]["roles"] = lunge_roles
         expected["bodyweight-reverse-lunge"]["roles"] = lunge_roles
+        expected["two-dumbbell-forward-lunge"]["roles"] = {
+            **lunge_roles,
+            "externalRotators": "stabilizer",
+            "trapeziusUpper": "stabilizer",
+            "triceps": "stabilizer",
+            "fingerFlexors": "stabilizer",
+            "extensorCarpiRadialis": "stabilizer",
+        }
+        for fixture in expected.values():
+            fixture.setdefault("stability", ())
 
         actual = {}
         for family in self.late_lower_body_closure_families.values():
@@ -11822,9 +11859,9 @@ class CatalogFoundationTests(unittest.TestCase):
                         for item in exercise["involvement"]
                     },
                     "evidence": tuple(exercise["evidenceRefs"]),
+                    "stability": tuple(exercise["additionalStabilityDemands"]),
                 }
                 self.assertEqual(exercise["additionalPrimeActions"], [])
-                self.assertEqual(exercise["additionalStabilityDemands"], [])
                 self.assertTrue(
                     catalog.EXECUTION_REQUIRED_FIELDS
                     <= exercise["execution"].keys()
@@ -11947,6 +11984,13 @@ class CatalogFoundationTests(unittest.TestCase):
                     "landing": "contralateral",
                     "contact": "maintainedOnStartPlate",
                 },
+                "two-dumbbell-forward-lunge": {
+                    "direction": "selectedLeadForward",
+                    "lead": "stepsForwardThenReturns",
+                    "other": "remainsAtStartThenReceivesReturn",
+                    "landing": "selectedLead",
+                    "contact": "sourceUnreportedAfterForwardStep",
+                },
             },
         )
         authored_lunge_names = " ".join(
@@ -11956,11 +12000,11 @@ class CatalogFoundationTests(unittest.TestCase):
         ).lower()
         for excluded in (
             "walking", "alternating", "stationary", "lateral", "crossover",
-            "jump", "barbell", "dumbbell",
+            "jump", "barbell",
         ):
             with self.subTest(family="dynamic-lunge", excluded=excluded):
                 self.assertNotIn(excluded, authored_lunge_names)
-        for exercise in lunge["exercises"]:
+        for exercise in lunge["exercises"][:2]:
             self.assertEqual(exercise["equipment"], "bodyweight")
             self.assertEqual(exercise["loadMode"], "nonComparable")
             self.assertEqual(exercise["bodyweightFraction"], 0)
@@ -15209,7 +15253,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 219)
+        self.assertEqual(len(source_by_id), 222)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -15356,8 +15400,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             10,
         )
-        self.assertEqual(len(self.real_families), 82)
-        self.assertEqual(len(self.foundation.evidence_ids), 219)
+        self.assertEqual(len(self.real_families), 83)
+        self.assertEqual(len(self.foundation.evidence_ids), 222)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -16713,7 +16757,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_proposal = " ".join(proposal.split())
 
         self.assertIn(
-            "82 reviewed families are active, containing 196 exercises",
+            "83 reviewed families are active, containing 200 exercises",
             roadmap,
         )
         self.assertIn(
@@ -16726,8 +16770,8 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
         self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **196** |", roadmap)
-        self.assertIn("Eighty-two reviewed family files", families_readme)
+        self.assertIn("| **Total** | **200** |", roadmap)
+        self.assertIn("Eighty-three reviewed family files", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
             "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
@@ -17839,9 +17883,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 82)
-        self.assertEqual(len(records), 196)
-        self.assertEqual(len(self.foundation.evidence_ids), 219)
+        self.assertEqual(len(self.real_families), 83)
+        self.assertEqual(len(records), 200)
+        self.assertEqual(len(self.foundation.evidence_ids), 222)
         self.assertEqual(
             {
                 key: upright[key]
@@ -18187,7 +18231,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| `finger-flexion-grip` | 1 |", roadmap)
-        self.assertIn("| **Total** | **196** |", roadmap)
+        self.assertIn("| **Total** | **200** |", roadmap)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -18583,6 +18627,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "inclineBilateralSupinatedDumbbell",
                 "standingBilateralSupinatedDumbbell",
                 "standingBilateralNeutralDumbbell",
+                "standingEZBarbell",
             },
         )
         fixture_rules = {
@@ -20979,21 +21024,21 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("No catalog-roadmap work item remains unresolved", roadmap)
         self.assertIn("| `diagonal-pull` | 1 |", roadmap)
-        self.assertIn("| **Total** | **196** |", roadmap)
+        self.assertIn("| **Total** | **200** |", roadmap)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_82_families_and_196_exercises(
+    def test_runtime_projection_is_exactly_83_families_and_200_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 196)
+        self.assertEqual(len(records), 200)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 82)
+        self.assertEqual(len({record["familyID"] for record in records}), 83)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -21154,6 +21199,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "mid-thigh-clean-pull", "nordic-curl", "power-clean",
                 "roman-chair-hip-extension", "wall-sit",
                 "squat-clean",
+                "clean-and-jerk",
             },
             "core": {
                 "anti-extension", "anti-lateral-flexion", "anti-rotation",
@@ -21356,7 +21402,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 196)
+            self.assertEqual(len(emitted), 200)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -21608,8 +21654,63 @@ class CatalogFoundationTests(unittest.TestCase):
         source_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_ids), 219)
+        self.assertEqual(len(source_ids), 222)
         self.assertTrue(COMPREHENSIVE_EXPANSION_EVIDENCE_IDS <= source_ids)
+
+    def test_must_have_expansion_is_source_exact_and_runtime_visible(self) -> None:
+        families = {family["id"]: family for family in self.real_families}
+        exercises = {
+            exercise["catalogID"]: exercise
+            for family in self.real_families
+            for exercise in family["exercises"]
+        }
+        self.assertTrue(MUST_HAVE_EXPANSION_RECORD_IDS <= exercises.keys())
+        self.assertTrue(MUST_HAVE_EXPANSION_EVIDENCE_IDS <= self.foundation.evidence_ids)
+
+        combined = families["clean-and-jerk"]
+        self.assertEqual(
+            [phase["id"] for phase in combined["movementSignature"]["movementPhases"]],
+            [
+                "clean-first-pull", "clean-second-pull", "clean-pull-under",
+                "clean-full-front-squat-catch", "clean-recovery", "jerk-dip",
+                "jerk-propulsion", "jerk-arm-drive-and-split-receive",
+                "jerk-recovery",
+            ],
+        )
+        self.assertEqual(
+            exercises["barbell-clean-and-jerk"]["variant"]["loadContinuity"],
+            "sameBarbellSameLoadBothParts",
+        )
+
+        lunge = exercises["two-dumbbell-forward-lunge"]
+        self.assertEqual(lunge["variant"]["loadAccounting"], "perImplement")
+        self.assertEqual(
+            lunge["variant"]["implementConfiguration"],
+            "pairedDumbbellLikeImplements",
+        )
+        self.assertNotIn("eccentricSeconds", lunge["variant"])
+        self.assertNotIn("concentricSeconds", lunge["variant"])
+
+        curl = exercises["standing-ez-bar-curl"]
+        self.assertEqual(curl["variant"]["handleType"], "undulatedEZBarbell")
+        self.assertEqual(curl["variant"]["wristPosture"], "unreported")
+
+        extension = exercises["bilateral-barbell-lying-triceps-extension"]
+        self.assertEqual(
+            extension["variant"]["handleType"], "barbellShapeUnreported"
+        )
+        self.assertEqual(extension["variant"]["loadAccounting"], "totalBarAndPlates")
+        self.assertNotIn("Skull Crusher", extension["aliases"])
+
+        runtime_ids = {
+            record["catalogID"]
+            for record in catalog.compile_runtime_catalog(self.real_families)
+        }
+        self.assertTrue(MUST_HAVE_EXPANSION_RECORD_IDS <= runtime_ids)
+        proposal = (
+            catalog.SPEC_ROOT / "proposals" / "must-have-expansion-2026-08.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Status: active as four source-bounded records", proposal)
 
 if __name__ == "__main__":
     unittest.main()

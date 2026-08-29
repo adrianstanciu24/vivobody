@@ -1,0 +1,113 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "clean-and-jerk",
+  "name": "Clean and Jerk",
+  "definition": "A bilateral floor-start barbell Power lift that combines one full squat clean and one split jerk under one unchanged load and one repetition history. The athlete completes the clean to a full front-squat receive, stands with the feet on one line and the knees extended, becomes motionless in the front rack, then performs a split jerk to straight-arm overhead lockout and recovers both feet to one line before the floor reset. The IWF standard directly establishes Clean and Jerk as one lift and owns the clean-to-jerk transition and completion criteria. Exact clean and isolated split-jerk studies support the narrowed phase geometry; no reviewed experiment measures this exact combined repetition end to end. Categorical actions and muscle roles are transparent mechanics and anatomy inferences, not measured contribution rankings. Power-clean catches, hang starts, symmetric jerk receives, clean and press, thrusters, component-only lifts, and complexes with independently logged loads remain outside this family. The 45-pound, 20-kilogram, and three-repetition seeds are product defaults rather than source prescriptions.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "arnold-2010-lower-limb",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "nsca-2023-weightlifting-position",
+    "khuyagbaatar-2024-snatch-clean-kinematics",
+    "arauz-2026-snatch-clean-biomechanics",
+    "soriano-2024-push-press-jerk",
+    "iwf-2025-technical-competition-rules"
+  ],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "hinge", "direction": null, "planes": ["sagittal", "frontal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["barbell"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.flexion", "shoulder.abduction"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "clean-first-pull", "name": "Clean First Pull", "primeActions": ["hip.extension", "knee.extension"]},
+      {"id": "clean-second-pull", "name": "Clean Second Pull", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion", "scapula.elevation"]},
+      {"id": "clean-pull-under", "name": "Clean Pull Under", "primeActions": ["elbow.flexion"]},
+      {"id": "clean-full-front-squat-catch", "name": "Clean Full Front-Squat Catch", "primeActions": [], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "clean-recovery", "name": "Clean Recovery", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion"]},
+      {"id": "jerk-dip", "name": "Jerk Dip", "primeActions": [], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "jerk-propulsion", "name": "Jerk Propulsion", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion"]},
+      {"id": "jerk-arm-drive-and-split-receive", "name": "Jerk Arm Drive and Split Receive", "primeActions": ["shoulder.flexion", "shoulder.abduction", "scapula.upwardRotation", "scapula.posteriorTilt", "elbow.extension"], "yieldingActions": ["knee.flexion"]},
+      {"id": "jerk-recovery", "name": "Jerk Recovery", "primeActions": ["knee.extension"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.downwardRotation", "scapula.anteriorTilt",
+      "shoulder.extension", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation",
+      "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension",
+      "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation",
+      "knee.flexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}, {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["trapeziusUpper"], "minimumRole": "secondary"}, {"anyOf": ["bicepsBrachii"], "minimumRole": "secondary"},
+      {"anyOf": ["deltoidAnterior"], "minimumRole": "secondary"}, {"anyOf": ["triceps"], "minimumRole": "secondary"},
+      {"anyOf": ["serratus"], "minimumRole": "secondary"}, {"anyOf": ["gastrocnemius"], "minimumRole": "secondary"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "vasti"],
+      "secondary": ["medialHamstrings", "rectusFemoris", "gastrocnemius", "soleus", "trapeziusUpper", "bicepsBrachii", "brachialis", "brachioradialis", "deltoidAnterior", "deltoidLateral", "supraspinatus", "triceps", "serratus", "trapeziusLower"],
+      "stabilizer": ["bicepsFemoris", "gluteMed", "fingerFlexors", "extensorCarpiRadialis", "externalRotators", "subscapularis", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "startPosition", "valueType": "enum", "required": true, "description": "The reviewed floor start.", "allowedValues": ["floorBarCloseToShins"]},
+    {"id": "cleanGrip", "valueType": "enum", "required": true, "description": "The reviewed clean grip.", "allowedValues": ["pronatedCleanWidthSelfSelected"]},
+    {"id": "cleanTransitionTopology", "valueType": "enum", "required": true, "description": "The observed rebend without separate role credit.", "allowedValues": ["observedRebendNoSeparateActionCredit"]},
+    {"id": "cleanPullSequence", "valueType": "enum", "required": true, "description": "The clean pull and turnover order.", "allowedValues": ["firstPullSecondPullElbowLedPullUnder"]},
+    {"id": "cleanReceivingStrategy", "valueType": "enum", "required": true, "description": "The narrowed squat-clean receive.", "allowedValues": ["fullFrontSquatHipCreaseBelowKnee"]},
+    {"id": "cleanRecoveryStrategy", "valueType": "enum", "required": true, "description": "The completed clean recovery before the jerk.", "allowedValues": ["standFeetInlineKneesExtended"]},
+    {"id": "cleanToJerkTransition", "valueType": "enum", "required": true, "description": "The IWF completion boundary between both parts.", "allowedValues": ["motionlessFrontRackFeetInlineKneesExtended"]},
+    {"id": "jerkDipStyle", "valueType": "enum", "required": true, "description": "The countermovement before jerk propulsion.", "allowedValues": ["jerkCountermovement"]},
+    {"id": "jerkReceivingStrategy", "valueType": "enum", "required": true, "description": "The narrowed asymmetric jerk receive.", "allowedValues": ["oneFootForwardOneFootBack"]},
+    {"id": "jerkLeadFoot", "valueType": "enum", "required": true, "description": "The source does not prescribe one universal lead side.", "allowedValues": ["unreportedNoUniversalPrescription"]},
+    {"id": "jerkFootContact", "valueType": "enum", "required": true, "description": "The flight and split-contact boundary.", "allowedValues": ["leavesFloorThenSplitContact"]},
+    {"id": "jerkArmEndpoint", "valueType": "enum", "required": true, "description": "The overhead receive requirement.", "allowedValues": ["elbowsFullyExtendedOverhead"]},
+    {"id": "jerkRecoveryStrategy", "valueType": "enum", "required": true, "description": "The complete overhead recovery.", "allowedValues": ["feetReturnToSameLineBarOverhead"]},
+    {"id": "loadContinuity", "valueType": "enum", "required": true, "description": "Both parts use one unchanged logged load.", "allowedValues": ["sameBarbellSameLoadBothParts"]},
+    {"id": "interRepSupport", "valueType": "enum", "required": true, "description": "Where the bar resets after the complete lift.", "allowedValues": ["floorAfterCompleteLift"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the bar.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 1, "maximum": 5}},
+  "exercises": [
+    {
+      "catalogID": "barbell-clean-and-jerk",
+      "name": "Barbell Clean and Jerk",
+      "aliases": ["Clean and Jerk", "Clean & Jerk", "Olympic Clean and Jerk"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "power", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 3, "searchPriority": 99,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"}, {"muscle": "vasti", "role": "primary"},
+        {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "brachialis", "role": "secondary"}, {"muscle": "brachioradialis", "role": "secondary"},
+        {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "deltoidLateral", "role": "secondary"}, {"muscle": "supraspinatus", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"}, {"muscle": "trapeziusLower", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "startPosition": "floorBarCloseToShins", "cleanGrip": "pronatedCleanWidthSelfSelected", "cleanTransitionTopology": "observedRebendNoSeparateActionCredit",
+        "cleanPullSequence": "firstPullSecondPullElbowLedPullUnder", "cleanReceivingStrategy": "fullFrontSquatHipCreaseBelowKnee", "cleanRecoveryStrategy": "standFeetInlineKneesExtended",
+        "cleanToJerkTransition": "motionlessFrontRackFeetInlineKneesExtended", "jerkDipStyle": "jerkCountermovement", "jerkReceivingStrategy": "oneFootForwardOneFootBack",
+        "jerkLeadFoot": "unreportedNoUniversalPrescription", "jerkFootContact": "leavesFloorThenSplitContact", "jerkArmEndpoint": "elbowsFullyExtendedOverhead",
+        "jerkRecoveryStrategy": "feetReturnToSameLineBarOverhead", "loadContinuity": "sameBarbellSameLoadBothParts", "interRepSupport": "floorAfterCompleteLift", "fixedPath": false
+      },
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "seth-2019-shoulder-work", "nsca-2023-weightlifting-position", "khuyagbaatar-2024-snatch-clean-kinematics", "arauz-2026-snatch-clean-biomechanics", "soriano-2024-push-press-jerk", "iwf-2025-technical-competition-rules"],
+      "execution": {
+        "startingPosition": "Stand about hip-width with the bar on the floor close to your shins and take a self-selected overhand clean grip.",
+        "movement": "Keep the bar close through the first pull and rebend, extend the hips, knees, and ankles rapidly and shrug, then bend the elbows to pull under and receive the bar across the front shoulders in a full squat.",
+        "endpoint": "Stand fully with your feet on one line and become still; dip, drive the bar upward, split one foot forward and the other back, and receive it overhead with both elbows straight.",
+        "returnPhase": "Recover until both feet are on one line under the locked-out bar, become still, then lower the bar to the floor before the next repetition.",
+        "controlledJoints": "Control hip, knee, and ankle flexion in the clean catch and knee flexion in the split receive; complete the clean recovery before beginning the jerk.",
+        "supportAndPosture": "Brace the trunk, keep a secure two-hand grip, and use no external support.",
+        "disqualifyingCompensations": ["Receiving the clean above full-squat depth changes the fixture into a Power Clean and Jerk.", "Beginning the jerk before a still standing clean recovery leaves this family.", "Receiving the jerk with both feet symmetric changes the fixture into a push jerk.", "Pressing to lockout after the receive is a press-out rather than the reviewed jerk.", "Omitting either the clean or the jerk logs a component lift instead of the combined exercise."]
+      }
+    }
+  ]
+}

@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 82 reviewed families are active, containing 196 exercises.
+- 83 reviewed families are active, containing 200 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 219 registered evidence sources.
+  44 joint actions, and 222 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -49,6 +49,9 @@ are discovery handles, not guaranteed final family IDs.
   extend existing owners; walking lunge, externally rotating face pull,
   upper-arm-pad shoulder abduction, and kneeling ab-wheel rollout use four new
   families because their topology or load interface changes the contract.
+- The must-have follow-up added the combined Barbell Clean and Jerk as a new
+  ordered-phase family and added source-bounded loaded forward-lunge, EZ-bar
+  curl, and lying barbell triceps-extension fixtures to existing owners.
 - No catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
   one source-exact seated 45-degree cable fixture, both Batch-3 nonstandard
   press branches are closed, and the generic grip discovery handle is resolved
@@ -80,8 +83,8 @@ batch siblings.
 | `upper-arm-pad-shoulder-abduction` | 1 |
 | `shoulder-external-rotation` | 3 |
 | `shoulder-internal-rotation` | 2 |
-| `elbow-flexion` | 9 |
-| `elbow-extension` | 7 |
+| `elbow-flexion` | 10 |
+| `elbow-extension` | 8 |
 | `externally-rotating-face-pull` | 1 |
 | `forearm-pronation` | 1 |
 | `forearm-supination` | 1 |
@@ -117,7 +120,7 @@ batch siblings.
 | `hip-thrust-bridge` | 2 |
 | `split-stance-squat` | 3 |
 | `step-up` | 2 |
-| `dynamic-lunge` | 2 |
+| `dynamic-lunge` | 3 |
 | `walking-lunge` | 1 |
 | `hip-abduction` | 2 |
 | `hip-adduction` | 2 |
@@ -142,11 +145,12 @@ batch siblings.
 | `kettlebell-swing` | 1 |
 | `hang-power-snatch` | 1 |
 | `split-jerk` | 1 |
+| `clean-and-jerk` | 1 |
 | `wall-sit` | 1 |
 | `hollow-hold` | 1 |
 | `passive-dead-hang` | 1 |
 | `active-dead-hang` | 1 |
-| **Total** | **196** |
+| **Total** | **200** |
 
 ## Foundation gates
 

@@ -1253,6 +1253,152 @@
     ]
   },
   {
+    "familyID": "clean-and-jerk",
+    "catalogID": "barbell-clean-and-jerk",
+    "name": "Barbell Clean and Jerk",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 3,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Clean and Jerk",
+      "Clean & Jerk",
+      "Olympic Clean and Jerk"
+    ],
+    "searchPriority": 99,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand about hip-width with the bar on the floor close to your shins and take a self-selected overhand clean grip.",
+      "movement": "Keep the bar close through the first pull and rebend, extend the hips, knees, and ankles rapidly and shrug, then bend the elbows to pull under and receive the bar across the front shoulders in a full squat.",
+      "endpoint": "Stand fully with your feet on one line and become still; dip, drive the bar upward, split one foot forward and the other back, and receive it overhead with both elbows straight.",
+      "returnPhase": "Recover until both feet are on one line under the locked-out bar, become still, then lower the bar to the floor before the next repetition.",
+      "controlledJoints": "Control hip, knee, and ankle flexion in the clean catch and knee flexion in the split receive; complete the clean recovery before beginning the jerk.",
+      "supportAndPosture": "Brace the trunk, keep a secure two-hand grip, and use no external support.",
+      "disqualifyingCompensations": [
+        "Receiving the clean above full-squat depth changes the fixture into a Power Clean and Jerk.",
+        "Beginning the jerk before a still standing clean recovery leaves this family.",
+        "Receiving the jerk with both feet symmetric changes the fixture into a push jerk.",
+        "Pressing to lockout after the receive is a press-out rather than the reviewed jerk.",
+        "Omitting either the clean or the jerk logs a component lift instead of the combined exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "conventional-deadlift",
     "catalogID": "conventional-barbell-deadlift",
     "name": "Conventional Barbell Deadlift",
@@ -2069,6 +2215,114 @@
     ]
   },
   {
+    "familyID": "dynamic-lunge",
+    "catalogID": "two-dumbbell-forward-lunge",
+    "name": "Two-Dumbbell Forward Lunge",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Dumbbell Forward Lunge",
+      "Paired-Dumbbell Forward Lunge",
+      "Dumbbell Anterior Lunge"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand upright with one dumbbell in each hand at your sides, palms facing inward. Enter the weight of one dumbbell, not the pair.",
+      "movement": "Step the selected lead foot forward about 70% of that leg's length and lower toward your maximum comfortable depth while keeping the dumbbells at your sides.",
+      "endpoint": "Reach the deepest comfortable lunge you can control without turning it into a stationary split squat.",
+      "returnPhase": "Immediately push through the selected lead leg and step back until both feet are together.",
+      "controlledJoints": "Keep each wrist and elbow steady while the lead hip, knee, and ankle drive the return.",
+      "supportAndPosture": "Keep the torso upright and both dumbbells hanging independently at your sides.",
+      "disqualifyingCompensations": [
+        "Leaving the feet split between repetitions turns the movement into a split squat.",
+        "Carrying the dumbbells at the shoulders changes the reviewed side-held load placement.",
+        "Continuing forward into another step turns it into a walking lunge."
+      ],
+      "sideOrDirection": "Finish the set with the same selected lead leg, then repeat on the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "elbow-extension",
     "catalogID": "single-arm-supinated-cable-triceps-pushdown",
     "name": "Single-Arm Supinated Cable Triceps Pushdown",
@@ -2390,6 +2644,72 @@
         "Tilting the upper arm back overhead turns the lying extension into an overhead extension."
       ],
       "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+    },
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-extension",
+    "catalogID": "bilateral-barbell-lying-triceps-extension",
+    "name": "Bilateral Barbell Lying Triceps Extension",
+    "group": "arms",
+    "defaultWeight": 30,
+    "defaultWeightKg": 15,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Lying Barbell Triceps Press",
+      "Barbell Lying Triceps Extension"
+    ],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Lie on your back with your torso supported and hold one barbell with both hands above the chest. Record the total bar-and-plate load and use a comfortable grip.",
+      "movement": "Keep both upper arms at 90 degrees of shoulder flexion while bending both elbows together.",
+      "endpoint": "Stop when the elbows reach 90 degrees of flexion, matching the source's standardized displacement.",
+      "returnPhase": "Extend both elbows together to full extension without turning the movement into a press.",
+      "controlledJoints": "Keep the upper arms at the reviewed 90-degree shoulder position while the elbows move.",
+      "supportAndPosture": "Keep the torso supported and still, and maintain the same comfortable grip throughout the repetition.",
+      "disqualifyingCompensations": [
+        "Moving the upper arms toward the torso turns the extension into a close-grip press.",
+        "Moving one elbow before the other leaves the simultaneous two-arm fixture.",
+        "Lowering beyond the source's 90-degree elbow-flexion endpoint changes the reviewed displacement."
+      ]
     },
     "involvement": [
       {
@@ -2825,6 +3145,81 @@
       "disqualifyingCompensations": [
         "Leaning backward or driving with the knees changes the strict curl.",
         "Swinging the upper arms forward adds a shoulder-flexion repetition."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "brachialis",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-flexion",
+    "catalogID": "standing-ez-bar-curl",
+    "name": "Standing EZ-Bar Curl",
+    "group": "arms",
+    "defaultWeight": 30,
+    "defaultWeightKg": 15,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "EZ-Bar Curl",
+      "Standing EZ Curl",
+      "EZ-Bar Biceps Curl"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log the total loaded EZ bar, including plates. Stand upright and take a comfortable two-hand grip on the angled sections of the bar.",
+      "movement": "Curl the bar by bending both elbows together without rotating the forearms.",
+      "endpoint": "End at the top of your controlled curl range with both hands still on the same angled sections.",
+      "returnPhase": "Lower the bar under control so the complete up-and-down repetition lasts about three seconds.",
+      "controlledJoints": "Keep the wrists steady and move both elbows together.",
+      "supportAndPosture": "Keep the trunk and knees still without external support.",
+      "disqualifyingCompensations": [
+        "Using a straight bar changes the implement and hand angle.",
+        "Rotating or alternating the arms changes the simultaneous fixed-grip curl.",
+        "Leaning backward or driving with the knees changes the strict curl."
       ]
     },
     "involvement": [

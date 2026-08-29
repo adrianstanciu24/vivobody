@@ -2827,7 +2827,7 @@
       "pmid": "30013836",
       "pmcid": "PMC6047503",
       "url": "https://doi.org/10.7717/peerj.5165",
-      "scope": "Resistance-trained men performed standing straight-bar curls with both forearms supinated, ten repetitions at sixty-five percent one-repetition maximum, and a three-second repetition cadence. Trunk movement and knee flexion were monitored to exclude cheating while right-arm biceps-brachii and brachioradialis EMG and elbow goniometry were recorded. The source does not establish brachialis activity, hypertrophy ranking, universal grip width, or a product load seed."
+      "scope": "Resistance-trained men performed standing bilateral curls with a straight bar, an undulated EZ bar, and dumbbells for ten repetitions at sixty-five percent one-repetition maximum and a three-second repetition cadence. The straight-bar condition held the forearms supinated; the EZ-bar condition held them near semipronation. Trunk movement and knee flexion were monitored to exclude cheating while right-arm biceps-brachii and brachioradialis EMG and elbow goniometry were recorded. The source supports the separate straight- and EZ-bar fixtures and measured-muscle participation, not brachialis activity, force or hypertrophy ranking, universal grip width, wrist posture, upper-arm angle, or a product load seed."
     },
     {
       "id": "oliveira-2009-dumbbell-curl-shoulder-position",
@@ -3441,6 +3441,56 @@
       "pmcid": "PMC12550948",
       "url": "https://doi.org/10.3390/muscles4040045",
       "scope": "The traditional condition used an upright bilateral dumbbell curl with supinated forearms and full controlled elbow range while biceps activity was measured. It supports the exact bilateral traditional fixture and biceps participation, not a complete elbow-flexor hierarchy or alternating execution."
+    },
+    {
+      "id": "iwf-2025-technical-competition-rules",
+      "sourceType": "officialTechnicalStandard",
+      "title": "IWF Technical and Competition Rules & Regulations 2025",
+      "authors": [
+        "International Weightlifting Federation"
+      ],
+      "year": 2025,
+      "url": "https://iwf.sport/wp-content/uploads/downloads/2025/11/IWF-TCRR-2025-as-of-05-November-2025.pdf",
+      "scope": "The International Weightlifting Federation recognizes Clean and Jerk as one lift and defines a clean from the platform to the shoulders, a completed clean recovery with feet on one line and legs extended, a motionless front-rack transition, a jerk in one motion to full arm extension, and a final recovery with feet on one line and arms and legs extended. The rules permit either split or bent-leg receiving strategies, so they establish the combined topology and completion criteria but do not independently prove this catalog's narrower full-squat clean plus split-jerk fixture, its exact phase actions, muscle roles, grip changes, lead side, angles, or product defaults."
+    },
+    {
+      "id": "riemann-2012-anterior-lunge-external-load",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Biomechanical Analysis of the Anterior Lunge During 4 External-Load Conditions",
+      "authors": [
+        "Bryan L. Riemann",
+        "Shelley Lapinski",
+        "Lyndsay Smith",
+        "George Davies"
+      ],
+      "year": 2012,
+      "doi": "10.4085/1062-6050-47.4.16",
+      "pmid": "22889652",
+      "pmcid": "PMC3396296",
+      "url": "https://doi.org/10.4085/1062-6050-47.4.16",
+      "scope": "Sixteen recreationally active adults performed barefoot anterior step-and-return lunges under zero, twelve-and-a-half, twenty-five, and fifty percent body-mass external-load conditions. The loaded conditions used one purpose-built dumbbell-like implement in each hand at the sides, each supplying half the total load, while the dominant leg stepped forward seventy percent of leg length, the torso stayed erect, and the athlete descended as far as comfortably possible before immediately pushing backward to feet together. Three-dimensional kinematics and force plates directly support the sagittal hip, knee, and ankle motion, extensor moments and work, step-and-return topology, load placement, and equal half-total implement loading. Mapping the apparatus to ordinary dumbbells, logging one implement rather than the pair total, and named muscle roles are disclosed product and anatomy-mechanics inferences; the study does not establish conventional iron-dumbbell geometry, upper-body EMG, a universal foot-contact strategy, arbitrary stride lengths, exact concentric cadence, or product defaults."
+    },
+    {
+      "id": "brandao-2020-exercise-order",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Varying the Order of Combinations of Single- and Multi-Joint Exercises Differentially Affects Resistance Training Adaptations",
+      "authors": [
+        "Lucas Brandao",
+        "Vitor de Salles Painelli",
+        "Thiago Lasevicius",
+        "Carla Silva-Batista",
+        "Helderson Brendon",
+        "Brad Jon Schoenfeld",
+        "Andre Yui Aihara",
+        "Fabiano Nassar Cardoso",
+        "Bergson de Almeida Peres",
+        "Emerson Luiz Teixeira"
+      ],
+      "year": 2020,
+      "doi": "10.1519/JSC.0000000000003550",
+      "pmid": "32149887",
+      "url": "https://doi.org/10.1519/JSC.0000000000003550",
+      "scope": "Forty-three young men completed a randomized ten-week resistance-training study containing an exact bilateral lying barbell triceps press. The task fixed shoulder flexion at ninety degrees, extended both elbows fully concentrically, flexed them to ninety degrees eccentrically, and used a metallic stop to standardize barbell displacement. It supports the bilateral barbell elbow-extension fixture and triceps involvement. It does not report the bar shape, grip width, forearm orientation, wrist posture, support surface, face-relative bar trajectory, fixed external path, or product load seed; the separately reported pronated two-hundred-percent-bi-acromial grip belongs only to the bench-press condition and must not be transferred."
     },
     {
       "id": "anders-2006-ace-glutes-to-max",

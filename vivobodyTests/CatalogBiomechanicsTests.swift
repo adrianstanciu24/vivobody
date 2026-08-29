@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 82 reviewed families compile to 196 exercises with stable
+//  product: 83 reviewed families compile to 200 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 196)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 82)
+        #expect(CatalogData.records.count == 200)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 83)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")

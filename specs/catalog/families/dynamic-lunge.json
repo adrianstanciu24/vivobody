@@ -3,10 +3,11 @@
   "schemaVersion": 1,
   "id": "dynamic-lunge",
   "name": "Dynamic Lunge",
-  "definition": "A bodyweight unilateral-emphasis compound repetition that begins in upright bilateral standing, transitions into an asymmetric sagittal lunge, and returns to the same bilateral start. The active roster owns Comfort et al.'s exact forward and reverse step-and-return fixtures. In the forward record, the selected lead foot steps onto a second force plate, lands, remains fully planted through self-selected depth, and steps back to the start. In the reverse record, the selected front foot remains planted while the contralateral foot steps backward, lands, and returns forward. Both use a three-second eccentric phase, a two-second concentric phase, crossed upper limbs, and lead-side hip extension, knee extension, and ankle plantarflexion during the ascent. The records credit the same conservative regional role envelope because the study measured lead-limb joint kinematics, kinetics, and ground-reaction forces rather than individual-muscle activity. Stationary split squats, walking or alternating lunges, external loads, fixed stride lengths, lateral or crossover paths, jumps, and continuous locomotion remain outside this contract.",
+  "definition": "A unilateral-emphasis compound repetition that begins in upright bilateral standing, steps into an asymmetric sagittal lunge, and returns to the same bilateral start. The roster owns Comfort et al.'s exact bodyweight forward and reverse fixtures plus Riemann et al.'s externally loaded forward fixture: a selected lead step of 70% leg length, paired dumbbell-like implements held neutrally at the sides, maximum comfortable depth, and an immediate push back to feet together. The product maps that paired hand load to dumbbells and records each dumbbell separately; the source did not test commercial dumbbells or prescribe a lifter-facing per-hand starting load. The studies measured joint mechanics and ground-reaction forces rather than individual-muscle activity, so all records retain a conservative regional role envelope. Stationary split squats, walking or alternating lunges, lateral or crossover paths, jumps, and continuous locomotion remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
-    "comfort-2015-forward-reverse-lunge-kinetics"
+    "comfort-2015-forward-reverse-lunge-kinetics",
+    "riemann-2012-anterior-lunge-external-load"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -25,7 +26,8 @@
   },
   "allowed": {
     "equipment": [
-      "bodyweight"
+      "bodyweight",
+      "dumbbell"
     ],
     "modalities": [
       "dynamicStrength"
@@ -34,7 +36,8 @@
       "reps"
     ],
     "loadModes": [
-      "nonComparable"
+      "nonComparable",
+      "external"
     ],
     "lateralities": [
       "unilateral"
@@ -186,7 +189,12 @@
         "gluteMed",
         "abs",
         "obliques",
-        "lumbarExtensors"
+        "lumbarExtensors",
+        "externalRotators",
+        "trapeziusUpper",
+        "triceps",
+        "fingerFlexors",
+        "extensorCarpiRadialis"
       ]
     }
   },
@@ -232,9 +240,10 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "crossed"
+        "crossed",
+        "armsAtSidesHoldingPairedImplements"
       ],
-      "description": "The source-prescribed crossed upper-extremity position without an implement or balance support."
+      "description": "The source-prescribed crossed-arm bodyweight setup or paired side-held implement setup."
     },
     {
       "id": "startSupport",
@@ -291,9 +300,10 @@
       "required": true,
       "allowedValues": [
         "stepsThenWholeFootMaintained",
-        "maintainedOnStartPlate"
+        "maintainedOnStartPlate",
+        "sourceUnreportedAfterForwardStep"
       ],
-      "description": "The selected lead foot either lands fully and remains in contact or stays planted on the first plate throughout."
+      "description": "The selected lead foot either lands fully and remains in contact, stays planted on the first plate, or preserves the loaded study's unreported post-step contact detail."
     },
     {
       "id": "landingDemand",
@@ -309,7 +319,8 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "fullSelfSelectedDepth"
+        "fullSelfSelectedDepth",
+        "maximumComfortableDepth"
       ],
       "description": "The source instructed full depth or as far down as possible rather than a fixed knee angle or ground-touch target."
     },
@@ -381,14 +392,15 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "none"
+        "none",
+        "pairedAtSides"
       ],
-      "description": "The reviewed fixtures use only bodyweight with no external implement."
+      "description": "The bodyweight fixtures use no implement; the loaded fixture holds one implement at each side."
     },
     {
       "id": "eccentricSeconds",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "minimum": 3,
       "maximum": 3,
       "description": "The standardized source cadence from foot contact to maximum lead-knee flexion."
@@ -396,10 +408,75 @@
     {
       "id": "concentricSeconds",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "minimum": 2,
       "maximum": 2,
       "description": "The standardized source cadence from maximum lead-knee flexion to stepping-foot lift-off."
+    },
+    {
+      "id": "stepLengthCriterion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "sourceUnreported",
+        "seventyPercentSelectedLeadLegLength"
+      ],
+      "description": "Whether step length was unreported or standardized to 70% of the selected lead leg length."
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "notApplicable",
+        "neutral"
+      ],
+      "description": "The hand orientation for the paired load, or not applicable for bodyweight records."
+    },
+    {
+      "id": "implementConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none",
+        "pairedDumbbellLikeImplements"
+      ],
+      "description": "The source fixture used purpose-built dumbbell-like tracking implements; the catalog maps that geometry to paired dumbbells without claiming commercial dumbbells were tested."
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "notApplicable",
+        "perImplement"
+      ],
+      "description": "The entered external load is the weight of one dumbbell, not the combined pair."
+    },
+    {
+      "id": "externalLoadPrescription",
+      "valueType": "enum",
+      "required": false,
+      "allowedValues": [
+        "twelvePointFiveToFiftyPercentBodyMassTotal"
+      ],
+      "description": "The study tested total external loads from 12.5% through 50% of body mass; this is evidence context, not a user prescription."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": false,
+      "description": "The paired implements do not constrain the athlete to a guided path."
+    },
+    {
+      "id": "cadenceProtocol",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "threeSecondEccentricTwoSecondConcentric",
+        "loweringAttemptedWithinTwoSecondsConcentricUnreported"
+      ],
+      "description": "The exact study cadence: Comfort standardized both phases; Riemann limited the lowering attempt to two seconds but did not report a concentric duration."
     },
     {
       "id": "lowerBodyContribution",
@@ -441,7 +518,10 @@
         },
         {
           "field": "variant.selectedLeadFootContact",
-          "value": "stepsThenWholeFootMaintained"
+          "allowedValues": [
+            "stepsThenWholeFootMaintained",
+            "sourceUnreportedAfterForwardStep"
+          ]
         }
       ],
       "requirePresent": [],
@@ -472,6 +552,103 @@
           "field": "variant.selectedLeadFootContact",
           "value": "maintainedOnStartPlate"
         }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "paired-dumbbell-forward-lunge-fixture",
+      "description": "The paired dumbbell-like implement branch preserves Riemann et al.'s forward step, 70% leg-length target, maximum comfortable depth, side-held neutral grip, total body-mass loading range, and per-implement product accounting.",
+      "when": {
+        "field": "variant.implementConfiguration",
+        "operator": "equals",
+        "value": "pairedDumbbellLikeImplements"
+      },
+      "then": [
+        { "field": "equipment", "value": "dumbbell" },
+        { "field": "laterality", "value": "unilateral" },
+        { "field": "loadMode", "value": "external" },
+        { "field": "variant.upperLimbPosition", "value": "armsAtSidesHoldingPairedImplements" },
+        { "field": "variant.stepDirection", "value": "selectedLeadForward" },
+        { "field": "variant.stepLengthCriterion", "value": "seventyPercentSelectedLeadLegLength" },
+        { "field": "variant.selectedLeadFootContact", "value": "sourceUnreportedAfterForwardStep" },
+        { "field": "variant.depthCriterion", "value": "maximumComfortableDepth" },
+        { "field": "variant.loadPlacement", "value": "pairedAtSides" },
+        { "field": "variant.gripOrientation", "value": "neutral" },
+        { "field": "variant.loadAccounting", "value": "perImplement" },
+        { "field": "variant.externalLoadPrescription", "value": "twelvePointFiveToFiftyPercentBodyMassTotal" },
+        { "field": "variant.fixedPath", "value": false },
+        { "field": "variant.cadenceProtocol", "value": "loweringAttemptedWithinTwoSecondsConcentricUnreported" }
+      ],
+      "requirePresent": [
+        "variant.externalLoadPrescription",
+        "variant.fixedPath"
+      ],
+      "requireAbsent": [
+        "variant.eccentricSeconds",
+        "variant.concentricSeconds"
+      ],
+      "requireInvolvement": [
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "shoulder",
+        "scapula",
+        "elbow",
+        "wrist",
+        "hand"
+      ]
+    },
+    {
+      "id": "no-implement-pins-bodyweight-fixture",
+      "description": "The no-implement branch remains the bodyweight Comfort fixture with its exact cadence and no external-load fields.",
+      "when": {"field": "variant.implementConfiguration", "operator": "equals", "value": "none"},
+      "then": [
+        {"field": "equipment", "value": "bodyweight"},
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "variant.upperLimbPosition", "value": "crossed"},
+        {"field": "variant.loadPlacement", "value": "none"},
+        {"field": "variant.stepLengthCriterion", "value": "sourceUnreported"},
+        {"field": "variant.gripOrientation", "value": "notApplicable"},
+        {"field": "variant.loadAccounting", "value": "notApplicable"},
+        {"field": "variant.cadenceProtocol", "value": "threeSecondEccentricTwoSecondConcentric"}
+      ],
+      "requirePresent": ["variant.eccentricSeconds", "variant.concentricSeconds"],
+      "requireAbsent": ["variant.externalLoadPrescription", "variant.fixedPath"]
+    },
+    {
+      "id": "whole-foot-contact-pins-bodyweight-forward-fixture",
+      "description": "Comfort's whole-foot forward contact belongs only to the bodyweight forward fixture.",
+      "when": {"field": "variant.selectedLeadFootContact", "operator": "equals", "value": "stepsThenWholeFootMaintained"},
+      "then": [
+        {"field": "equipment", "value": "bodyweight"},
+        {"field": "variant.stepDirection", "value": "selectedLeadForward"},
+        {"field": "variant.implementConfiguration", "value": "none"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "maintained-contact-pins-bodyweight-reverse-fixture",
+      "description": "Comfort's continuously planted selected lead foot belongs only to the bodyweight reverse fixture.",
+      "when": {"field": "variant.selectedLeadFootContact", "operator": "equals", "value": "maintainedOnStartPlate"},
+      "then": [
+        {"field": "equipment", "value": "bodyweight"},
+        {"field": "variant.stepDirection", "value": "contralateralRearward"},
+        {"field": "variant.implementConfiguration", "value": "none"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "unreported-contact-pins-loaded-forward-fixture",
+      "description": "The source-unreported post-step contact belongs only to the loaded paired-implement forward fixture.",
+      "when": {"field": "variant.selectedLeadFootContact", "operator": "equals", "value": "sourceUnreportedAfterForwardStep"},
+      "then": [
+        {"field": "equipment", "value": "dumbbell"},
+        {"field": "variant.stepDirection", "value": "selectedLeadForward"},
+        {"field": "variant.implementConfiguration", "value": "pairedDumbbellLikeImplements"}
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -530,6 +707,11 @@
         "loadPlacement": "none",
         "eccentricSeconds": 3,
         "concentricSeconds": 2,
+        "stepLengthCriterion": "sourceUnreported",
+        "gripOrientation": "notApplicable",
+        "implementConfiguration": "none",
+        "loadAccounting": "notApplicable",
+        "cadenceProtocol": "threeSecondEccentricTwoSecondConcentric",
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
@@ -604,6 +786,11 @@
         "loadPlacement": "none",
         "eccentricSeconds": 3,
         "concentricSeconds": 2,
+        "stepLengthCriterion": "sourceUnreported",
+        "gripOrientation": "notApplicable",
+        "implementConfiguration": "none",
+        "loadAccounting": "notApplicable",
+        "cadenceProtocol": "threeSecondEccentricTwoSecondConcentric",
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
@@ -624,6 +811,99 @@
           "Letting the front heel lift turns the lunge into a toe-balanced stance."
         ],
         "sideOrDirection": "Finish the set with the same selected front leg, then repeat on the other side."
+      }
+    },
+    {
+      "catalogID": "two-dumbbell-forward-lunge",
+      "name": "Two-Dumbbell Forward Lunge",
+      "aliases": [
+        "Dumbbell Forward Lunge",
+        "Paired-Dumbbell Forward Lunge",
+        "Dumbbell Anterior Lunge"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 8,
+      "searchPriority": 95,
+      "involvement": [
+        { "muscle": "vasti", "role": "primary" },
+        { "muscle": "gluteMax", "role": "primary" },
+        { "muscle": "rectusFemoris", "role": "secondary" },
+        { "muscle": "gastrocnemius", "role": "secondary" },
+        { "muscle": "soleus", "role": "secondary" },
+        { "muscle": "medialHamstrings", "role": "stabilizer" },
+        { "muscle": "bicepsFemoris", "role": "stabilizer" },
+        { "muscle": "gluteMed", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "trapeziusUpper", "role": "stabilizer" },
+        { "muscle": "triceps", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closedDuringLoadedPhase",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "trunkOrientation": "upright",
+        "upperLimbPosition": "armsAtSidesHoldingPairedImplements",
+        "startSupport": "bilateralStanding",
+        "stepDirection": "selectedLeadForward",
+        "selectedLeadFootTransition": "stepsForwardThenReturns",
+        "contralateralFootTransition": "remainsAtStartThenReceivesReturn",
+        "landingFoot": "selectedLead",
+        "selectedLeadFootContact": "sourceUnreportedAfterForwardStep",
+        "landingDemand": "dynamicFootContact",
+        "depthCriterion": "maximumComfortableDepth",
+        "returnTopology": "returnToBilateralStart",
+        "spineMotion": "nonstandardized",
+        "pelvisMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeldDuringLoadedPhase",
+        "loadPlacement": "pairedAtSides",
+        "stepLengthCriterion": "seventyPercentSelectedLeadLegLength",
+        "gripOrientation": "neutral",
+        "implementConfiguration": "pairedDumbbellLikeImplements",
+        "loadAccounting": "perImplement",
+        "externalLoadPrescription": "twelvePointFiveToFiftyPercentBodyMassTotal",
+        "fixedPath": false,
+        "cadenceProtocol": "loweringAttemptedWithinTwoSecondsConcentricUnreported",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "shoulder",
+        "scapula",
+        "elbow",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "riemann-2012-anterior-lunge-external-load"
+      ],
+      "execution": {
+        "startingPosition": "Stand upright with one dumbbell in each hand at your sides, palms facing inward. Enter the weight of one dumbbell, not the pair.",
+        "movement": "Step the selected lead foot forward about 70% of that leg's length and lower toward your maximum comfortable depth while keeping the dumbbells at your sides.",
+        "endpoint": "Reach the deepest comfortable lunge you can control without turning it into a stationary split squat.",
+        "returnPhase": "Immediately push through the selected lead leg and step back until both feet are together.",
+        "controlledJoints": "Keep each wrist and elbow steady while the lead hip, knee, and ankle drive the return.",
+        "supportAndPosture": "Keep the torso upright and both dumbbells hanging independently at your sides.",
+        "disqualifyingCompensations": [
+          "Leaving the feet split between repetitions turns the movement into a split squat.",
+          "Carrying the dumbbells at the shoulders changes the reviewed side-held load placement.",
+          "Continuing forward into another step turns it into a walking lunge."
+        ],
+        "sideOrDirection": "Finish the set with the same selected lead leg, then repeat on the other side."
       }
     }
   ]
