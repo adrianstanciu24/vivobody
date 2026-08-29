@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 83 reviewed families compile to 200 exercises with stable
+//  product: 85 reviewed families compile to 206 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 200)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 83)
+        #expect(CatalogData.records.count == 206)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 85)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -107,6 +107,33 @@ struct CatalogBiomechanicsTests {
             #expect(record.loadMode == .nonComparable)
             #expect(record.defaultDuration == 30)
             #expect(!item.tracksResistance)
+        }
+    }
+
+    @Test func commercialMachineFirstWaveUsesHonestLoadSemantics() throws {
+        let expected: [(String, String)] = [
+            ("life-fitness-pro2-assisted-dip-machine", "dip"),
+            ("life-fitness-pro2-seated-triceps-extension", "elbow-extension"),
+            ("technogym-selection-machine-glute-kickback", "hip-extension"),
+            ("life-fitness-pro2-upper-arm-pad-pec-fly", "upper-arm-pad-chest-fly"),
+        ]
+
+        for (catalogID, familyID) in expected {
+            let record = try #require(CatalogData.record(forCatalogID: catalogID))
+            #expect(record.familyID == familyID)
+            #expect(record.equipment == .machine)
+        }
+
+        let assisted = try #require(
+            CatalogData.record(forCatalogID: "life-fitness-pro2-assisted-dip-machine")
+        )
+        #expect(assisted.loadMode == .assistanceSubtracted)
+        #expect(assisted.bodyweightFraction == 1)
+
+        for (catalogID, _) in expected.dropFirst() {
+            let record = try #require(CatalogData.record(forCatalogID: catalogID))
+            #expect(record.loadMode == .external)
+            #expect(record.bodyweightFraction == 0)
         }
     }
 

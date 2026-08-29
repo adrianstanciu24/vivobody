@@ -68,37 +68,6 @@ extension ExerciseDetailScreen {
         }
     }
 
-    /// One keyed legend row: the role's color dot (same ramp the model
-    /// renders) + role label + the muscle names that carry it. Rows
-    /// for roles with no muscles hide themselves. Replaces both the
-    /// old dots-only legend and the separate mid-screen Muscles list.
-    @ViewBuilder
-    func anatomyRoleRow(role: MuscleRole, muscles: [Muscle]) -> some View {
-        if !muscles.isEmpty {
-            let rgb = MuscleColor.rgb(
-                for: role.anatomyMapChannels,
-                theme: colorScheme == .dark ? .dark : .light
-            )
-            HStack(alignment: .firstTextBaseline, spacing: Space.md) {
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(Color(red: rgb.red, green: rgb.green, blue: rgb.blue))
-                        .frame(width: 9, height: 9)
-                    Text(role.displayName)
-                        .sectionLabelStyle(Opacity.soft)
-                        .minimumScaleFactor(0.7)
-                }
-                .frame(width: 100, alignment: .leading)
-                Text(muscles.map(\.displayName).joined(separator: " · "))
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(role == .primary ? Ink.secondary : Ink.tertiary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .accessibilityElement(children: .combine)
-        }
-    }
-
     // MARK: - Performance rows
 
     /// Effective resistance and 1RM belong together: the first explains

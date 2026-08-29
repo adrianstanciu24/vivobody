@@ -1,0 +1,65 @@
+{
+  "name": "catalog-machine-first-wave-assisted-dip",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Life Fitness Pro 2 Assisted Dip Machine,"
+        },
+        "direction": "up",
+        "maxSwipes": 45
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Life Fitness Pro 2 Assisted Dip Machine,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Movement",
+          "valueContains": "compound"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Life Fitness Pro 2 Assisted Dip Machine"
+    },
+    {
+      "labelContains": "Muscles used by Life Fitness Pro 2 Assisted Dip Machine"
+    },
+    {
+      "label": "Movement",
+      "valueContains": "compound"
+    },
+    {
+      "label": "Movement",
+      "valueContains": "push"
+    }
+  ],
+  "forbidden": []
+}

@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Eighty-four reviewed family files containing 202 exercises are currently
+Eighty-five reviewed family files containing 206 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-224-source foundation. Each uses a coverage batch whose exercises
+227-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -119,6 +119,15 @@ extend existing owners; `walking-lunge`, `externally-rotating-face-pull`,
 separate because their support topology, coupled actions, load interface, or
 tracking semantics cross an existing family boundary. The Ab Wheel is
 first-class equipment with non-comparable, no-resistance-input semantics.
+
+The first commercial-machine wave adds four model-exact records: Life Fitness
+Pro 2 assisted dip and seated triceps extension expand their action-compatible
+owners, Technogym Selection Glute expands `hip-extension`, and the padded
+Life Fitness Pro 2 pec fly uses a separate `upper-arm-pad-chest-fly` contract.
+Each selectorized load is comparable only on its exact fixture; selected dip
+assistance is subtracted from bodyweight and explicitly becomes easier as it
+increases. Generic hip-thrust and abdominal-crunch machines remain proposals
+until their exact topology and joint-motion boundaries are sourced.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber

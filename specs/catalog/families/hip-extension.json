@@ -3,11 +3,13 @@
   "schemaVersion": 1,
   "id": "hip-extension",
   "name": "Hip Extension Isolation",
-  "definition": "A strict unilateral open-chain isolation movement in which the femur extends relative to a position-held pelvis while the spine and knee postures remain held. The roster owns a prone-table bent-knee fixture from 30 degrees of hip flexion to 5 degrees of extension and a standing low-pulley ankle-cuff fixture that uses two-hand machine support and extends the near-straight working leg 15 to 20 degrees behind the body. Gluteus maximus is primary and the medial hamstrings are secondary; the visible biceps-femoris region remains stabilizer-only because its unsplit mesh cannot distinguish the hip-extending long head from the monoarticular short head. Bridges, hip thrusts, hinges, quadruped kickbacks, machines, bands, unsupported cable variants, and movements driven by the pelvis or spine remain outside this contract.",
+  "definition": "A strict unilateral open-chain isolation movement in which the femur extends relative to a position-held pelvis while the spine and knee postures remain held. The roster owns a prone-table bent-knee fixture, a supported low-pulley ankle-cuff fixture, and the Technogym Selection Glute machine triangulated from Stien's Selection kickback trial and the matching manufacturer manual. The study moves from approximately 90 degrees of hip flexion to neutral with the knee held near 170 degrees; the manual pins the pad, platform, roller, handgrip, and selectorized cable-lever topology. Pelvis and spine position-held semantics narrow the manual's instructed pad contact and are not measured kinematics. Gluteus maximus is primary and medial hamstrings are secondary by anatomy-mechanics inference. Stien measured a biceps-femoris site, while the app combines long and short heads in one visible mesh; that combined app region remains stabilizer-only. Bridges, hip thrusts, hinges, quadruped kickbacks, other machines, bands, unsupported cable variants, and movements driven by the pelvis or spine remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "jeon-2016-prone-table-hip-extension",
-    "cybex-2008-mg500-manual"
+    "cybex-2008-mg500-manual",
+    "stien-2021-machine-kickback",
+    "technogym-undated-selection-glute-manual"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -27,7 +29,8 @@
   "allowed": {
     "equipment": [
       "bodyweight",
-      "cable"
+      "cable",
+      "machine"
     ],
     "modalities": [
       "dynamicStrength"
@@ -169,7 +172,8 @@
       "description": "The external surface directly supporting the torso.",
       "allowedValues": [
         "table",
-        "none"
+        "none",
+        "abdominalPad"
       ]
     },
     {
@@ -179,7 +183,8 @@
       "description": "The external surface directly supporting the pelvis; support does not by itself claim that pelvic motion was eliminated.",
       "allowedValues": [
         "table",
-        "unsupportedPositionHeld"
+        "unsupportedPositionHeld",
+        "hipsAgainstPad"
       ]
     },
     {
@@ -215,7 +220,7 @@
       "required": true,
       "description": "The reviewed hip-flexion angle at the start of the concentric phase, measured from anatomical neutral.",
       "minimum": 0,
-      "maximum": 30
+      "maximum": 90
     },
     {
       "id": "hipEndExtensionDegrees",
@@ -239,7 +244,7 @@
       "valueType": "number",
       "required": false,
       "description": "The reviewed knee-flexion posture held throughout the repetition.",
-      "minimum": 90,
+      "minimum": 10,
       "maximum": 90
     },
     {
@@ -247,14 +252,14 @@
       "valueType": "enum",
       "required": true,
       "description": "The source-exact hip range without converting a reported interval into a fabricated single endpoint.",
-      "allowedValues": ["thirtyFlexionToFiveExtension", "neutralToFifteenToTwentyExtension"]
+      "allowedValues": ["thirtyFlexionToFiveExtension", "neutralToFifteenToTwentyExtension", "ninetyFlexionToNeutral"]
     },
     {
       "id": "kneePosture",
       "valueType": "enum",
       "required": true,
       "description": "The knee posture held while the femur extends.",
-      "allowedValues": ["ninetyDegreesFlexed", "slightlyFlexedNearExtension"]
+      "allowedValues": ["ninetyDegreesFlexed", "slightlyFlexedNearExtension", "tenDegreesFlexed"]
     },
     {
       "id": "movingSegment",
@@ -272,7 +277,8 @@
       "description": "Where an external resistance implement contacts the athlete; the reviewed gravity-loaded limb has no external interface.",
       "allowedValues": [
         "none",
-        "ankleCuffAboveAnkle"
+        "ankleCuffAboveAnkle",
+        "workingLegRoller"
       ]
     },
     {
@@ -282,22 +288,29 @@
       "description": "How resistance is created in the reviewed fixture.",
       "allowedValues": [
         "limbSegmentGravity",
-        "lowPulleyCable"
+        "lowPulleyCable",
+        "selectorizedCableLever"
       ]
     },
     {
       "id": "fixedPath",
       "valueType": "boolean",
       "required": true,
-      "fixedValue": false,
-      "description": "Whether rails or a lever constrain an external load path; the unsupported moving limb follows no fixed external path."
+      "description": "Whether a machine lever constrains the external resistance path; the table and cable branches remain free-path."
     },
     {
       "id": "handSupport",
       "valueType": "enum",
       "required": true,
       "description": "The source-exact upper-body support used to hold the trunk and pelvis position.",
-      "allowedValues": ["none", "bothHandsOnPressingArmAtWaistHeight"]
+      "allowedValues": ["none", "bothHandsOnPressingArmAtWaistHeight", "machineHandgrips"]
+    },
+    {
+      "id": "machineFixture",
+      "valueType": "enum",
+      "required": false,
+      "description": "The exact commercial machine whose setup and stack history are reviewed.",
+      "allowedValues": ["technogymSelectionGlute"]
     },
     {
       "id": "loadAccounting",
@@ -334,9 +347,10 @@
         {"field": "variant.rangeOfMotion", "value": "thirtyFlexionToFiveExtension"}, {"field": "variant.kneePosture", "value": "ninetyDegreesFlexed"},
         {"field": "variant.kneeFlexionDegrees", "value": 90}, {"field": "variant.loadInterface", "value": "none"},
         {"field": "variant.resistanceGeometry", "value": "limbSegmentGravity"}, {"field": "variant.handSupport", "value": "none"}
+        , {"field": "variant.fixedPath", "value": false}
       ],
       "requirePresent": ["variant.hipEndExtensionDegrees", "variant.kneeFlexionDegrees"],
-      "requireAbsent": ["variant.loadAccounting"]
+      "requireAbsent": ["variant.loadAccounting", "variant.machineFixture"]
     },
     {
       "id": "standing-cable-fixture-pins-ankle-cuff-and-support",
@@ -347,11 +361,27 @@
         {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.pelvisSupport", "value": "unsupportedPositionHeld"},
         {"field": "variant.hipStartFlexionDegrees", "value": 0}, {"field": "variant.rangeOfMotion", "value": "neutralToFifteenToTwentyExtension"},
         {"field": "variant.kneePosture", "value": "slightlyFlexedNearExtension"}, {"field": "variant.loadInterface", "value": "ankleCuffAboveAnkle"},
-        {"field": "variant.resistanceGeometry", "value": "lowPulleyCable"}, {"field": "variant.handSupport", "value": "bothHandsOnPressingArmAtWaistHeight"},
+        {"field": "variant.resistanceGeometry", "value": "lowPulleyCable"}, {"field": "variant.handSupport", "value": "bothHandsOnPressingArmAtWaistHeight"}, {"field": "variant.fixedPath", "value": false},
         {"field": "variant.loadAccounting", "value": "enteredExternalLoadSameFixtureOnly"}
       ],
       "requirePresent": ["variant.loadAccounting"],
-      "requireAbsent": ["variant.hipEndExtensionDegrees", "variant.kneeFlexionDegrees"]
+      "requireAbsent": ["variant.hipEndExtensionDegrees", "variant.kneeFlexionDegrees", "variant.machineFixture"]
+    },
+    {
+      "id": "machine-fixture-pins-technogym-selection-glute",
+      "description": "The machine branch is only the studied unilateral Technogym Selection Glute fixture and preserves its supported 90-degree-to-neutral range and near-extended knee.",
+      "when": {"field": "equipment", "operator": "equals", "value": "machine"},
+      "then": [
+        {"field": "loadMode", "value": "external"}, {"field": "variant.bodyPosition", "value": "standingFacingMachine"},
+        {"field": "variant.torsoSupport", "value": "abdominalPad"}, {"field": "variant.pelvisSupport", "value": "hipsAgainstPad"},
+        {"field": "variant.hipStartFlexionDegrees", "value": 90}, {"field": "variant.rangeOfMotion", "value": "ninetyFlexionToNeutral"},
+        {"field": "variant.kneePosture", "value": "tenDegreesFlexed"}, {"field": "variant.kneeFlexionDegrees", "value": 10},
+        {"field": "variant.loadInterface", "value": "workingLegRoller"}, {"field": "variant.resistanceGeometry", "value": "selectorizedCableLever"},
+        {"field": "variant.fixedPath", "value": true}, {"field": "variant.handSupport", "value": "machineHandgrips"},
+        {"field": "variant.machineFixture", "value": "technogymSelectionGlute"}, {"field": "variant.loadAccounting", "value": "enteredExternalLoadSameFixtureOnly"}
+      ],
+      "requirePresent": ["variant.kneeFlexionDegrees", "variant.machineFixture", "variant.loadAccounting"],
+      "requireAbsent": ["variant.hipEndExtensionDegrees"]
     }
   ],
   "exercises": [
@@ -468,6 +498,26 @@
         "controlledJoints": "Hold the slight knee bend and keep the toes and kneecap facing forward.",
         "supportAndPosture": "Use both hands for support while keeping the standing leg and trunk still.",
         "disqualifyingCompensations": ["Arching the back or rotating the pelvis changes the isolated hip action.", "Bending and straightening the working knee adds a knee-driven movement.", "Moving the cuff away from just above the ankle changes the reviewed resistance geometry."],
+        "sideOrDirection": "Complete all repetitions on one side, then repeat with the other leg."
+      }
+    },
+    {
+      "catalogID": "technogym-selection-machine-glute-kickback",
+      "name": "Technogym Selection Machine Glute Kickback",
+      "aliases": ["Glute Kickback Machine", "Machine Hip Extension"],
+      "equipment": "machine", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 96,
+      "involvement": [{"muscle": "gluteMax", "role": "primary"}, {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}],
+      "variant": {"kineticChain": "open", "bodyPosition": "standingFacingMachine", "torsoSupport": "abdominalPad", "pelvisSupport": "hipsAgainstPad", "pelvisMotion": "positionHeld", "spineMotion": "positionHeld", "hipMotion": "extends", "hipStartFlexionDegrees": 90, "kneeMotion": "positionHeld", "kneeFlexionDegrees": 10, "rangeOfMotion": "ninetyFlexionToNeutral", "kneePosture": "tenDegreesFlexed", "movingSegment": "thigh", "loadInterface": "workingLegRoller", "resistanceGeometry": "selectorizedCableLever", "fixedPath": true, "handSupport": "machineHandgrips", "machineFixture": "technogymSelectionGlute", "loadAccounting": "enteredExternalLoadSameFixtureOnly", "lowerBodyContribution": "isolatedJointMotion"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["stien-2021-machine-kickback", "technogym-undated-selection-glute-manual", "arnold-2010-lower-limb"],
+      "execution": {
+        "startingPosition": "Compare the entered load only on this Technogym Selection Glute fixture. Face the machine, keep the abdomen and hips against the pad, hold the handgrips, plant the support foot on the platform, and place the working leg in front of the roller with the hip near 90 degrees of flexion and the knee slightly bent.",
+        "movement": "Drive the working thigh backward through the lever path while holding the pelvis, spine, and knee positions.",
+        "endpoint": "Stop when the working hip reaches approximately neutral.",
+        "returnPhase": "Allow the lever to bring the thigh forward under control to the approximately 90-degree hip-flexion start.",
+        "controlledJoints": "Create the repetition by moving the thigh backward while keeping the knee slightly bent and still and the hips against the pad.",
+        "supportAndPosture": "Keep the support foot planted, the abdomen and hips against the pad, and both hands on the machine.",
+        "disqualifyingCompensations": ["Arching or rotating the trunk changes the isolated hip action.", "Bending and straightening the working knee adds a knee-driven movement.", "Using another machine model or resistance interface changes the fixture-specific load history."],
         "sideOrDirection": "Complete all repetitions on one side, then repeat with the other leg."
       }
     }

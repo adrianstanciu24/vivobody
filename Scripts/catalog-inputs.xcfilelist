@@ -78,6 +78,7 @@ $(SRCROOT)/specs/catalog/families/step-up.json
 $(SRCROOT)/specs/catalog/families/suitcase-carry.json
 $(SRCROOT)/specs/catalog/families/sumo-deadlift.json
 $(SRCROOT)/specs/catalog/families/trap-bar-deadlift.json
+$(SRCROOT)/specs/catalog/families/upper-arm-pad-chest-fly.json
 $(SRCROOT)/specs/catalog/families/upper-arm-pad-shoulder-abduction.json
 $(SRCROOT)/specs/catalog/families/upright-row.json
 $(SRCROOT)/specs/catalog/families/vertical-press.json

@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "elbow-extension",
   "name": "Elbow Extension",
-  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. The roster admits the reviewed cable and dumbbell fixtures plus Brandao et al.'s bilateral lying barbell triceps press: shoulder flexed to 90 degrees, elbow flexing to 90 degrees and returning to full extension, with a metallic stop standardizing displacement. That source does not report the bar shape, grip width, forearm orientation, wrist posture, support surface, or face-relative bar path, so the barbell record preserves each unknown and does not claim the broader skull-crusher fixture. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials.",
+  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. The roster admits reviewed cable, dumbbell, barbell, and exact Life Fitness Pro 2 PSTE selectorized fixtures. The PSTE supports both upper arms on a pad, aligns the elbows with the pivots, and guides self-adjusting handles; its manual does not report forearm orientation or wrist posture, so both remain unreported. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials. Other machine topologies remain outside this contract.",
   "evidenceRefs": [
     "holzbaur-2005-upper-extremity",
     "alves-2018-triceps-shoulder-position",
@@ -11,7 +11,9 @@
     "villalba-2024-pushdown-forearm-position",
     "hussain-2020-triceps-pushdown-fatigue",
     "ace-2026-triceps-pushdown",
-    "brandao-2020-exercise-order"
+    "brandao-2020-exercise-order",
+    "life-fitness-2007-pro2-series-manual",
+    "murray-1995-elbow-forearm-moment-arms"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -32,7 +34,8 @@
     "equipment": [
       "cable",
       "dumbbell",
-      "barbell"
+      "barbell",
+      "machine"
     ],
     "modalities": [
       "dynamicStrength"
@@ -219,6 +222,20 @@
       ]
     },
     {
+      "id": "upperArmSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external pad supports the upper arms while the elbows move.",
+      "allowedValues": ["none", "upperArmPad"]
+    },
+    {
+      "id": "hipContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-reported hip contact used during the fixture; most reviewed free-weight and cable sources do not report one.",
+      "allowedValues": ["unreported", "hipsAgainstLowerBackPad"]
+    },
+    {
       "id": "upperArmPosition",
       "valueType": "enum",
       "required": true,
@@ -226,7 +243,8 @@
       "allowedValues": [
         "atSide",
         "flexed90",
-        "overhead"
+        "overhead",
+        "padSupportedPivotAligned"
       ]
     },
     {
@@ -298,7 +316,8 @@
         "dumbbellHandle",
         "straightCableBar",
         "rope",
-        "barbellShapeUnreported"
+        "barbellShapeUnreported",
+        "selfAdjustingMachineHandles"
       ]
     },
     {
@@ -310,7 +329,8 @@
         "highCablePushdown",
         "overheadCableExtension",
         "gravityLoadedDumbbell",
-        "gravityLoadedBarbell"
+        "gravityLoadedBarbell",
+        "selectorizedCamLever"
       ]
     },
     {
@@ -322,6 +342,20 @@
         "enteredExternalLoadSameFixtureOnly",
         "totalBarAndPlates"
       ]
+    },
+    {
+      "id": "seatedFixture",
+      "valueType": "enum",
+      "required": false,
+      "description": "A discriminator that keeps the two reviewed seated topologies from forming unsupported combinations.",
+      "allowedValues": ["unsupportedOverheadDumbbell", "lifeFitnessPro2PSTE"]
+    },
+    {
+      "id": "machineFixture",
+      "valueType": "enum",
+      "required": false,
+      "description": "The exact commercial machine whose setup and stack history are reviewed.",
+      "allowedValues": ["lifeFitnessPro2PSTE"]
     },
     {
       "id": "torsoInclination",
@@ -348,7 +382,6 @@
       "id": "fixedPath",
       "valueType": "boolean",
       "required": true,
-      "fixedValue": false,
       "description": "Whether rails or a lever machine constrain the external load path; cable direction alone is not a fixed path."
     },
     {
@@ -467,37 +500,85 @@
       "requireAbsent": []
     },
     {
-      "id": "seated-extension-is-unsupported-overhead-dumbbell",
-      "description": "The directly reviewed seated extension is an unsupported neutral-forearm overhead dumbbell fixture with free scapular translation.",
-      "when": {
-        "field": "variant.bodyPosition",
-        "operator": "equals",
-        "value": "seated"
-      },
+      "id": "seated-extension-requires-reviewed-fixture",
+      "description": "Every seated record declares which of the two reviewed seated topologies it uses.",
+      "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "seated"},
+      "then": [{"field": "equipment", "allowedValues": ["dumbbell", "machine"]}],
+      "requirePresent": ["variant.seatedFixture"],
+      "requireAbsent": []
+    },
+    {
+      "id": "unsupported-overhead-dumbbell-pins-seated-fixture",
+      "description": "The reviewed seated dumbbell record remains unsupported, overhead, neutral-forearm, and free-path.",
+      "when": {"field": "variant.seatedFixture", "operator": "equals", "value": "unsupportedOverheadDumbbell"},
       "then": [
-        {
-          "field": "equipment",
-          "value": "dumbbell"
-        },
-        {
-          "field": "variant.torsoSupport",
-          "value": "none"
-        },
-        {
-          "field": "variant.scapularTranslation",
-          "value": "free"
-        },
-        {
-          "field": "variant.upperArmPosition",
-          "value": "overhead"
-        },
-        {
-          "field": "variant.forearmOrientation",
-          "value": "neutral"
-        }
+        {"field": "equipment", "value": "dumbbell"}, {"field": "variant.bodyPosition", "value": "seated"},
+        {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "free"},
+        {"field": "variant.forearmSupport", "value": "none"}, {"field": "variant.upperArmSupport", "value": "none"},
+        {"field": "variant.hipContact", "value": "unreported"}, {"field": "variant.upperArmPosition", "value": "overhead"},
+        {"field": "variant.forearmOrientation", "value": "neutral"}, {"field": "variant.fixedPath", "value": false}
       ],
       "requirePresent": [],
+      "requireAbsent": ["variant.machineFixture"]
+    },
+    {
+      "id": "machine-extension-pins-life-fitness-pste",
+      "description": "The machine branch is only the seated Life Fitness Pro 2 PSTE selectorized lever with supported upper arms and an exact-fixture load history.",
+      "when": {"field": "equipment", "operator": "equals", "value": "machine"},
+      "then": [
+        {"field": "laterality", "value": "bilateral"}, {"field": "variant.bodyPosition", "value": "seated"},
+        {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "free"},
+        {"field": "variant.forearmSupport", "value": "none"}, {"field": "variant.upperArmSupport", "value": "upperArmPad"},
+        {"field": "variant.hipContact", "value": "hipsAgainstLowerBackPad"}, {"field": "variant.seatedFixture", "value": "lifeFitnessPro2PSTE"},
+        {"field": "variant.machineFixture", "value": "lifeFitnessPro2PSTE"},
+        {"field": "variant.upperArmPosition", "value": "padSupportedPivotAligned"}, {"field": "variant.forearmOrientation", "value": "unreported"},
+        {"field": "variant.wristPosture", "value": "unreported"}, {"field": "variant.handleType", "value": "selfAdjustingMachineHandles"},
+        {"field": "variant.resistanceGeometry", "value": "selectorizedCamLever"}, {"field": "variant.loadAccounting", "value": "enteredExternalLoadSameFixtureOnly"},
+        {"field": "variant.fixedPath", "value": true}
+      ],
+      "requirePresent": ["variant.loadAccounting", "variant.machineFixture", "variant.seatedFixture"],
+      "requireAbsent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth"]
+    },
+    {
+      "id": "non-machine-extension-has-free-external-path",
+      "description": "The reviewed cable, dumbbell, and barbell fixtures do not constrain the implement to a lever path.",
+      "when": {"field": "equipment", "operator": "notEquals", "value": "machine"},
+      "then": [
+        {"field": "variant.fixedPath", "value": false}, {"field": "variant.upperArmSupport", "value": "none"},
+        {"field": "variant.hipContact", "value": "unreported"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.machineFixture"]
+    },
+    {
+      "id": "machine-fixture-reverses-to-pste-branch",
+      "description": "The exact PSTE identity cannot be attached to a free-weight or cable record.",
+      "when": {"field": "variant.machineFixture", "operator": "equals", "value": "lifeFitnessPro2PSTE"},
+      "then": [
+        {"field": "equipment", "value": "machine"}, {"field": "variant.seatedFixture", "value": "lifeFitnessPro2PSTE"},
+        {"field": "variant.loadAccounting", "value": "enteredExternalLoadSameFixtureOnly"}
+      ],
+      "requirePresent": ["variant.seatedFixture", "variant.loadAccounting"],
       "requireAbsent": []
+    },
+    {
+      "id": "pste-seated-fixture-reverses-to-machine",
+      "description": "The exact Life Fitness Pro 2 PSTE seated topology cannot be attached to the unsupported dumbbell fixture.",
+      "when": {"field": "variant.seatedFixture", "operator": "equals", "value": "lifeFitnessPro2PSTE"},
+      "then": [
+        {"field": "equipment", "value": "machine"}, {"field": "variant.machineFixture", "value": "lifeFitnessPro2PSTE"},
+        {"field": "variant.loadAccounting", "value": "enteredExternalLoadSameFixtureOnly"}
+      ],
+      "requirePresent": ["variant.machineFixture", "variant.loadAccounting"],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-seated-extension-omits-seated-fixture",
+      "description": "Standing and lying records cannot claim a seated topology.",
+      "when": {"field": "variant.bodyPosition", "operator": "notEquals", "value": "seated"},
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": ["variant.seatedFixture"]
     },
     {
       "id": "supine-extension-preserves-reviewed-support-and-flexed90-fixtures",
@@ -660,9 +741,9 @@
       "id": "unsupported-extension-requires-trunk-control",
       "description": "Standing and unsupported seated extensions require explicit spine and pelvis stability with obliques assigned as a stabilizer.",
       "when": {
-        "field": "variant.bodyPosition",
-        "operator": "notEquals",
-        "value": "supine"
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "none"
       },
       "then": [],
       "requirePresent": [],
@@ -805,6 +886,8 @@
         "torsoSupport": "none",
         "scapularTranslation": "free",
         "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
         "upperArmPosition": "atSide",
         "elbowMotion": "extends",
         "forearmMotion": "angleHeld",
@@ -898,6 +981,8 @@
         "torsoSupport": "none",
         "scapularTranslation": "free",
         "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
         "upperArmPosition": "atSide",
         "elbowMotion": "extends",
         "forearmMotion": "angleHeld",
@@ -986,6 +1071,8 @@
         "torsoSupport": "none",
         "scapularTranslation": "free",
         "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
         "upperArmPosition": "overhead",
         "elbowMotion": "extends",
         "forearmMotion": "angleHeld",
@@ -1074,6 +1161,9 @@
         "torsoSupport": "none",
         "scapularTranslation": "free",
         "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
+        "seatedFixture": "unsupportedOverheadDumbbell",
         "upperArmPosition": "overhead",
         "elbowMotion": "extends",
         "forearmMotion": "angleHeld",
@@ -1157,6 +1247,8 @@
         "torsoSupport": "bench",
         "scapularTranslation": "supportConstrained",
         "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
         "upperArmPosition": "flexed90",
         "elbowMotion": "extends",
         "forearmMotion": "angleHeld",
@@ -1219,6 +1311,8 @@
         "torsoSupport": "lyingSurfaceUnreported",
         "scapularTranslation": "unstandardized",
         "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
         "upperArmPosition": "flexed90",
         "elbowMotion": "extends",
         "forearmMotion": "angleHeld",
@@ -1264,7 +1358,7 @@
         {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}
       ],
       "variant": {
-        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none",
+        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none", "upperArmSupport": "none", "hipContact": "unreported",
         "upperArmPosition": "atSide", "elbowMotion": "extends", "forearmMotion": "angleHeld", "forearmOrientation": "pronated",
         "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "straightCableBar",
         "resistanceGeometry": "highCablePushdown", "loadAccounting": "enteredExternalLoadSameFixtureOnly", "torsoInclination": "slightForward", "upperArmTorsoRelationship": "closeNotTouching",
@@ -1295,7 +1389,7 @@
         {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}
       ],
       "variant": {
-        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none",
+        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none", "upperArmSupport": "none", "hipContact": "unreported",
         "upperArmPosition": "atSide", "elbowMotion": "extends", "forearmMotion": "angleHeld", "forearmOrientation": "neutral",
         "wristMotion": "angleHeld", "wristPosture": "neutral", "handTask": "staticImplementHold", "handleType": "rope",
         "resistanceGeometry": "highCablePushdown", "loadAccounting": "enteredExternalLoadSameFixtureOnly", "fixedPath": false, "lowerBodyContribution": "none"
@@ -1310,6 +1404,25 @@
         "controlledJoints": "Keep the shoulders, upper arms, forearms, and wrists in their starting alignment while the elbows move.",
         "supportAndPosture": "Keep the torso vertical and do not lean bodyweight onto the rope.",
         "disqualifyingCompensations": ["Moving the upper arms forward turns the pushdown into a shoulder-driven cable movement.", "Leaning onto the rope changes the strict pushdown into a bodyweight-assisted push.", "Moving one arm before the other leaves the simultaneous two-arm fixture."]
+      }
+    },
+    {
+      "catalogID": "life-fitness-pro2-seated-triceps-extension",
+      "name": "Life Fitness Pro 2 Seated Triceps Extension",
+      "aliases": ["Machine Triceps Extension", "Seated Machine Triceps Extension", "Selectorized Triceps Extension"],
+      "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 95,
+      "involvement": [{"muscle": "triceps", "role": "primary"}, {"muscle": "brachioradialis", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "variant": {"kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "none", "scapularTranslation": "free", "forearmSupport": "none", "upperArmSupport": "upperArmPad", "hipContact": "hipsAgainstLowerBackPad", "upperArmPosition": "padSupportedPivotAligned", "elbowMotion": "extends", "forearmMotion": "angleHeld", "forearmOrientation": "unreported", "wristMotion": "angleHeld", "wristPosture": "unreported", "handTask": "staticImplementHold", "handleType": "selfAdjustingMachineHandles", "resistanceGeometry": "selectorizedCamLever", "loadAccounting": "enteredExternalLoadSameFixtureOnly", "seatedFixture": "lifeFitnessPro2PSTE", "machineFixture": "lifeFitnessPro2PSTE", "fixedPath": true, "lowerBodyContribution": "none"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["spine", "pelvis"], "evidenceRefs": ["life-fitness-2007-pro2-series-manual", "murray-1995-elbow-forearm-moment-arms"],
+      "execution": {
+        "startingPosition": "Compare the entered load only on this Life Fitness Pro 2 PSTE fixture. Sit with the hips against the lower-back pad, place both upper arms fully on the arm pad, align the elbows with the machine pivots, take the self-adjusting handles, position the feet under the foot bar, and hinge forward from the hips with the back straight.",
+        "movement": "Extend both elbows together while keeping both upper arms on the pad.",
+        "endpoint": "Finish at full elbow extension without lifting either upper arm from the pad.",
+        "returnPhase": "Allow both handles to return under control until the elbows are flexed at the start position.",
+        "controlledJoints": "Create the repetition only by straightening the elbows, letting the self-adjusting handles follow naturally without deliberately turning the forearms or bending the wrists.",
+        "supportAndPosture": "Keep the hips against the lower-back pad, the back straight, both upper arms on the arm pad, and both feet under the foot bar.",
+        "disqualifyingCompensations": ["Lifting an upper arm from the pad changes the reviewed supported fixture.", "Driving through the torso or feet adds body momentum.", "Using another machine model or independent lever topology changes the fixture-specific load history."]
       }
     }
   ]

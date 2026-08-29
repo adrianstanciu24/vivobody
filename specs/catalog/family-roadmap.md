@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 84 reviewed families are active, containing 202 exercises.
+- 85 reviewed families are active, containing 206 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 224 registered evidence sources.
+  44 joint actions, and 227 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -52,7 +52,12 @@ are discovery handles, not guaranteed final family IDs.
 - The must-have follow-up added the combined Barbell Clean and Jerk as a new
   ordered-phase family and added source-bounded loaded forward-lunge, EZ-bar
   curl, and lying barbell triceps-extension fixtures to existing owners.
-- No catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
+- The first commercial-machine wave added exact Life Fitness Pro 2 assisted
+  dip, seated triceps-extension, and upper-arm-pad pec-fly fixtures plus the
+  studied Technogym Selection Glute kickback. Machine hip thrust and seated
+  abdominal crunch remain evidence-blocked with concrete unlocks in the wave
+  proposal.
+- No original catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
   one source-exact seated 45-degree cable fixture, both Batch-3 nonstandard
   press branches are closed, and the generic grip discovery handle is resolved
   by explicit task ownership rather than a catch-all family.
@@ -77,6 +82,7 @@ batch siblings.
 | `shoulder-horizontal-abduction-row` | 6 |
 | `shoulder-extension-isolation` | 3 |
 | `chest-fly` | 4 |
+| `upper-arm-pad-chest-fly` | 1 |
 | `reverse-fly` | 4 |
 | `shoulder-flexion-raise` | 1 |
 | `shoulder-abduction-raise` | 3 |
@@ -84,7 +90,7 @@ batch siblings.
 | `shoulder-external-rotation` | 3 |
 | `shoulder-internal-rotation` | 2 |
 | `elbow-flexion` | 11 |
-| `elbow-extension` | 8 |
+| `elbow-extension` | 9 |
 | `externally-rotating-face-pull` | 1 |
 | `forearm-pronation` | 1 |
 | `forearm-supination` | 1 |
@@ -98,13 +104,13 @@ batch siblings.
 | `scapular-elevation` | 3 |
 | `scapular-depression` | 1 |
 | `upright-row` | 1 |
-| `dip` | 2 |
+| `dip` | 3 |
 | `push-press` | 1 |
 | `landmine-press` | 1 |
 | `knee-extension` | 3 |
 | `knee-flexion` | 4 |
 | `nordic-curl` | 1 |
-| `hip-extension` | 2 |
+| `hip-extension` | 3 |
 | `roman-chair-hip-extension` | 1 |
 | `hip-flexion` | 1 |
 | `ankle-plantarflexion` | 4 |
@@ -151,7 +157,7 @@ batch siblings.
 | `hollow-hold` | 1 |
 | `passive-dead-hang` | 1 |
 | `active-dead-hang` | 1 |
-| **Total** | **202** |
+| **Total** | **206** |
 
 ## Foundation gates
 

@@ -1,0 +1,49 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "upper-arm-pad-chest-fly", "name": "Upper-Arm-Pad Chest Fly",
+  "definition": "A seated fixed-path shoulder-horizontal-adduction isolation on the exact Life Fitness Pro 2 PSPEC fixture. Both elbows and forearms remain comfortably against the lever pads while the athlete grips and rotates the handles and brings the elbows toward one another. This combined pad-and-handle joint interface differs from the handled-only chest-fly contract, so the exact fixture owns a separate family without claiming that the pads eliminate hand loading. Handled-only machines, free weights, cables, bands, pressing, rear-delt use, and other pec-deck topologies remain outside it.",
+  "evidenceRefs": ["life-fitness-2007-pro2-series-manual", "ackland-2008-shoulder-moment-arms", "holzbaur-2005-upper-extremity"],
+  "fixed": {"mechanic": "isolation", "trainingRole": "push", "pattern": null, "direction": null, "planes": ["transverse"]},
+  "groupPolicy": {"default": "chest", "allowed": ["chest"]},
+  "allowed": {"equipment": ["machine"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.horizontalAdduction"], "primeActions": ["shoulder.horizontalAdduction"],
+    "forbiddenPrimeActions": ["shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "knee.flexion", "knee.extension", "ankle.plantarflexion"],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["pectoralisMajorSternocostal"], "minimumRole": "primary"}, {"anyOf": ["pectoralisMajorClavicular"], "minimumRole": "secondary"}, {"anyOf": ["deltoidAnterior"], "minimumRole": "secondary"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["trapeziusMiddle"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["pectoralisMajorSternocostal"], "secondary": ["pectoralisMajorClavicular", "deltoidAnterior"], "stabilizer": ["externalRotators", "serratus", "trapeziusMiddle", "triceps", "fingerFlexors", "extensorCarpiRadialis"]}
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The padded upper arms move in an open chain.", "allowedValues": ["open"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The exact reviewed fixture is seated.", "allowedValues": ["seated"]},
+    {"id": "torsoSupport", "valueType": "enum", "required": true, "description": "A posterior pad supports the torso.", "allowedValues": ["posteriorBackPad"]},
+    {"id": "scapularTranslation", "valueType": "enum", "required": true, "description": "Posterior support constrains scapular translation without creating a scapular prime action.", "allowedValues": ["supportConstrained"]},
+    {"id": "loadInterface", "valueType": "enum", "required": true, "description": "Both forearms and elbows remain comfortably against the lever pads while the athlete grips and rotates the handles.", "allowedValues": ["bilateralForearmAndElbowPadsWithHandles"]},
+    {"id": "machineFixture", "valueType": "enum", "required": true, "description": "The exact selectorized fixture whose stack history may be compared.", "allowedValues": ["lifeFitnessPro2PSPEC"]},
+    {"id": "armSequence", "valueType": "enum", "required": true, "description": "Both lever arms move together.", "allowedValues": ["simultaneousBilateral"]},
+    {"id": "upperArmPath", "valueType": "enum", "required": true, "description": "The machine guides both upper arms through horizontal adduction.", "allowedValues": ["leverGuidedHorizontalAdduction"]},
+    {"id": "elbowMotion", "valueType": "enum", "required": true, "description": "Elbow angle is held while the upper arms move.", "allowedValues": ["angleHeld"]},
+    {"id": "startAdjustment", "valueType": "enum", "required": true, "description": "The reviewed machine provides an adjustable start position.", "allowedValues": ["userSelected"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The entered stack value is comparable only on this same fixture.", "allowedValues": ["enteredExternalLoadSameFixtureOnly"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": true, "description": "The machine levers constrain the pad path."},
+    {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "description": "The seated lower body does not drive the levers.", "allowedValues": ["none"]}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 8, "maximum": 20}},
+  "exercises": [{
+    "catalogID": "life-fitness-pro2-upper-arm-pad-pec-fly", "name": "Life Fitness Pro 2 Upper-Arm-Pad Pec Fly", "aliases": ["Upper-Arm-Pad Pec Deck", "Elbow-Pad Pec Deck", "Upper-Arm-Pad Machine Pec Fly"],
+    "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 12, "searchPriority": 95,
+    "involvement": [{"muscle": "pectoralisMajorSternocostal", "role": "primary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}],
+    "variant": {"kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "posteriorBackPad", "scapularTranslation": "supportConstrained", "loadInterface": "bilateralForearmAndElbowPadsWithHandles", "machineFixture": "lifeFitnessPro2PSPEC", "armSequence": "simultaneousBilateral", "upperArmPath": "leverGuidedHorizontalAdduction", "elbowMotion": "angleHeld", "startAdjustment": "userSelected", "loadAccounting": "enteredExternalLoadSameFixtureOnly", "fixedPath": true, "lowerBodyContribution": "none"},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["life-fitness-2007-pro2-series-manual", "ackland-2008-shoulder-moment-arms"],
+    "execution": {
+      "startingPosition": "Compare the entered load only on this Life Fitness Pro 2 PSPEC fixture. Sit against the back pad, choose a comfortable start, keep both elbows slightly below shoulder height, and keep both elbows and forearms comfortably against the pads while gripping the handles.",
+      "movement": "Grip and rotate both handles while bringing the elbows toward one another through the guided lever path and keeping the forearms on the pads.",
+      "endpoint": "Stop when the elbows meet or reach the machine's comfortable closed position.",
+      "returnPhase": "Open both lever arms together under control to the selected start position.",
+      "controlledJoints": "Create the repetition by bringing both upper arms inward while holding the elbow angle and maintaining the combined pad-and-handle contact.",
+      "supportAndPosture": "Keep the torso against the posterior pad and the lower body still.",
+      "disqualifyingCompensations": ["Letting either elbow or forearm leave its pad changes the reviewed combined pad-and-handle interface.", "Lifting the torso from the back pad adds body momentum.", "Moving one lever before the other leaves the simultaneous two-arm fixture."]
+    }
+  }]
+}

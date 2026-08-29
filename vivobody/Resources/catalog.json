@@ -2045,6 +2045,92 @@
     ]
   },
   {
+    "familyID": "dip",
+    "catalogID": "life-fitness-pro2-assisted-dip-machine",
+    "name": "Life Fitness Pro 2 Assisted Dip Machine",
+    "group": "chest",
+    "defaultWeight": 40,
+    "defaultWeightKg": 20,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Machine-Assisted Dip",
+      "Counterbalanced Dip"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 1,
+    "modality": "dynamicStrength",
+    "loadMode": "assistanceSubtracted",
+    "execution": {
+      "startingPosition": "On the Life Fitness Pro 2 PSADC, select the assistance, set the lower handles inward or outward, unfold the knee pad, and kneel on it with the arms straight. Keep that handle position for the set. Compare assistance only on this same fixture; a larger selected value makes the repetition easier.",
+      "movement": "Bend both elbows and lower the body with the knees staying on the guided platform.",
+      "endpoint": "Stop at a comfortable bottom position with the shoulders behind neutral and the elbows flexed.",
+      "returnPhase": "Press through both fixed handles to return to straight elbows while the platform rises with the knees.",
+      "controlledJoints": "Extend both elbows and bring the upper arms back toward the torso without swinging or kicking.",
+      "supportAndPosture": "Keep both knees on the assistance platform and brace the torso between the fixed handles.",
+      "disqualifyingCompensations": [
+        "Stepping off the knee platform turns the repetition into an unassisted bar dip.",
+        "Driving the platform with the feet or bouncing changes the reviewed knee-supported assistance.",
+        "Using another assisted-dip mechanism changes the fixture-specific assistance history."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "dynamic-lunge",
     "catalogID": "bodyweight-forward-lunge",
     "name": "Bodyweight Forward Lunge",
@@ -2867,6 +2953,77 @@
       },
       {
         "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-extension",
+    "catalogID": "life-fitness-pro2-seated-triceps-extension",
+    "name": "Life Fitness Pro 2 Seated Triceps Extension",
+    "group": "arms",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Machine Triceps Extension",
+      "Seated Machine Triceps Extension",
+      "Selectorized Triceps Extension"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Compare the entered load only on this Life Fitness Pro 2 PSTE fixture. Sit with the hips against the lower-back pad, place both upper arms fully on the arm pad, align the elbows with the machine pivots, take the self-adjusting handles, position the feet under the foot bar, and hinge forward from the hips with the back straight.",
+      "movement": "Extend both elbows together while keeping both upper arms on the pad.",
+      "endpoint": "Finish at full elbow extension without lifting either upper arm from the pad.",
+      "returnPhase": "Allow both handles to return under control until the elbows are flexed at the start position.",
+      "controlledJoints": "Create the repetition only by straightening the elbows, letting the self-adjusting handles follow naturally without deliberately turning the forearms or bending the wrists.",
+      "supportAndPosture": "Keep the hips against the lower-back pad, the back straight, both upper arms on the arm pad, and both feet under the foot bar.",
+      "disqualifyingCompensations": [
+        "Lifting an upper arm from the pad changes the reviewed supported fixture.",
+        "Driving through the torso or feet adds body momentum.",
+        "Using another machine model or independent lever topology changes the fixture-specific load history."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
         "role": "stabilizer"
       },
       {
@@ -4804,6 +4961,65 @@
         "Arching the back or rotating the pelvis changes the isolated hip action.",
         "Bending and straightening the working knee adds a knee-driven movement.",
         "Moving the cuff away from just above the ankle changes the reviewed resistance geometry."
+      ],
+      "sideOrDirection": "Complete all repetitions on one side, then repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "hip-extension",
+    "catalogID": "technogym-selection-machine-glute-kickback",
+    "name": "Technogym Selection Machine Glute Kickback",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Glute Kickback Machine",
+      "Machine Hip Extension"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Compare the entered load only on this Technogym Selection Glute fixture. Face the machine, keep the abdomen and hips against the pad, hold the handgrips, plant the support foot on the platform, and place the working leg in front of the roller with the hip near 90 degrees of flexion and the knee slightly bent.",
+      "movement": "Drive the working thigh backward through the lever path while holding the pelvis, spine, and knee positions.",
+      "endpoint": "Stop when the working hip reaches approximately neutral.",
+      "returnPhase": "Allow the lever to bring the thigh forward under control to the approximately 90-degree hip-flexion start.",
+      "controlledJoints": "Create the repetition by moving the thigh backward while keeping the knee slightly bent and still and the hips against the pad.",
+      "supportAndPosture": "Keep the support foot planted, the abdomen and hips against the pad, and both hands on the machine.",
+      "disqualifyingCompensations": [
+        "Arching or rotating the trunk changes the isolated hip action.",
+        "Bending and straightening the working knee adds a knee-driven movement.",
+        "Using another machine model or resistance interface changes the fixture-specific load history."
       ],
       "sideOrDirection": "Complete all repetitions on one side, then repeat with the other leg."
     },
@@ -13318,6 +13534,85 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "upper-arm-pad-chest-fly",
+    "catalogID": "life-fitness-pro2-upper-arm-pad-pec-fly",
+    "name": "Life Fitness Pro 2 Upper-Arm-Pad Pec Fly",
+    "group": "chest",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Upper-Arm-Pad Pec Deck",
+      "Elbow-Pad Pec Deck",
+      "Upper-Arm-Pad Machine Pec Fly"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Compare the entered load only on this Life Fitness Pro 2 PSPEC fixture. Sit against the back pad, choose a comfortable start, keep both elbows slightly below shoulder height, and keep both elbows and forearms comfortably against the pads while gripping the handles.",
+      "movement": "Grip and rotate both handles while bringing the elbows toward one another through the guided lever path and keeping the forearms on the pads.",
+      "endpoint": "Stop when the elbows meet or reach the machine's comfortable closed position.",
+      "returnPhase": "Open both lever arms together under control to the selected start position.",
+      "controlledJoints": "Create the repetition by bringing both upper arms inward while holding the elbow angle and maintaining the combined pad-and-handle contact.",
+      "supportAndPosture": "Keep the torso against the posterior pad and the lower body still.",
+      "disqualifyingCompensations": [
+        "Letting either elbow or forearm leave its pad changes the reviewed combined pad-and-handle interface.",
+        "Lifting the torso from the back pad adds body momentum.",
+        "Moving one lever before the other leaves the simultaneous two-arm fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
       }
     ]

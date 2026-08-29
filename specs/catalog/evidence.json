@@ -3532,6 +3532,44 @@
       "year": 2024,
       "url": "https://kb.cybexintl.com/Owners_Manuals/Strength/Life_Fitness_Insignia_Series_Owners_Manual_9481201_Rev_BE.pdf",
       "scope": "The manufacturer manual defines the exact SS-BCD dependent bilateral selectorized biceps-curl fixture: seated height adjustment, full upper-arm pad contact, elbow-to-pivot alignment, palms-up straight-arm start, dependent handled curl, held elbow contact, top pause, and controlled return. It anchors apparatus topology, support, laterality, grip orientation, and execution, not a numeric shoulder or pad angle, wrist posture, cam torque profile, cross-machine load equivalence, or machine-specific muscle ranking."
+    },
+    {
+      "id": "life-fitness-2007-pro2-series-manual",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Pro 2 Series Owner's Manual",
+      "authors": [
+        "Life Fitness"
+      ],
+      "year": 2007,
+      "url": "https://device.report/m/f8393be3cf33bbf5f60a02352840c0a881ed7964f5c446db575f24bfb7ebca5b.pdf",
+      "scope": "The April 2007 manufacturer manual defines three exact Pro 2 selectorized fixtures used by this catalog. PSADC uses lower dip handles that the athlete selects inward or outward and holds fixed during the repetition, plus a folding knee pad whose selected stack mass assists the bilateral dip. PSTE places the hips against a lower-back pad while the athlete hinges forward with a straight back, supports both upper arms fully on a pad, aligns the elbows to the pivots, uses self-adjusting handles and a foot bar, and prescribes full elbow extension with controlled return; forearm orientation and wrist posture are not reported. PSPEC uses a posterior pad, adjustable start, elbows slightly below shoulder height, elbows and forearms kept comfortably against lever pads while the handles are gripped and rotated, and a controlled elbows-together action. The manual anchors fixture identity, contacts, assistance direction, laterality, and execution, not cross-machine stack equivalence, numeric joint ranges, muscle rankings, or outcomes."
+    },
+    {
+      "id": "stien-2021-machine-kickback",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographic Comparison of Five Lower-Limb Muscles between Single- and Multi-Joint Exercises among Trained Men",
+      "authors": [
+        "Nicolay Stien",
+        "Atle Hole Saeterbakken",
+        "Vidar Andersen"
+      ],
+      "year": 2021,
+      "doi": "10.52082/jssm.2021.56",
+      "pmid": "33707987",
+      "pmcid": "PMC7919354",
+      "url": "https://doi.org/10.52082/jssm.2021.56",
+      "scope": "Resistance-trained men performed unilateral left-leg hip extensions on a Technogym Selection kickback fixture. The setup placed the iliac crest against the front bolster, moved the hip from approximately ninety degrees of flexion to neutral, and held the knee near one-hundred-seventy degrees while surface EMG measured gluteus maximus and a biceps-femoris site. It directly anchors the study fixture, unilateral topology, supported position, hip range, held near-extended knee, and participation of the measured muscles. It does not establish the product name or model code, stack equivalence, medial-hamstring activity, a complete muscle-role hierarchy, pelvis or spine kinematics, or chronic training outcomes. The app, not the study, combines the long and short biceps-femoris heads in one visible mesh, so the catalog conservatively keeps that region stabilizer-only."
+    },
+    {
+      "id": "technogym-undated-selection-glute-manual",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Selection Glute User Manual",
+      "authors": [
+        "Technogym"
+      ],
+      "year": 2026,
+      "url": "https://www.manualslib.com/manual/1510290/Technogym-Selection-Glute.html",
+      "scope": "This undated manufacturer manual is registered with retrieval year 2026, not a claimed publication year. It identifies the Selection Glute product and defines an abdomen pad, a lever operated through rollers, a cable-linked selectorized weight stack, a required front handgrip, a platform foot aligned to the ROM pivot, the other leg placed in front of the roller, hips held against the pad, a backward leg drive, and a slower controlled return. It supports the exact product topology and contacts and visually matches the study-reported Technogym Selection kickback fixture. It does not specify the roller's anatomical contact location, measure pelvis or spine kinematics, establish stack equivalence, or rank muscles. Treating pelvis and spine position as held is a disclosed catalog narrowing of the instructed pad contact rather than a measured kinematic result."
     }
   ]
 }

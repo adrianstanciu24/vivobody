@@ -1,0 +1,50 @@
+{
+  "name": "catalog-machine-first-wave-pec-fly-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Life Fitness Pro 2 Upper-Arm-Pad Pec Fly,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Life Fitness Pro 2 Upper-Arm-Pad Pec Fly,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Life Fitness Pro 2 Upper-Arm-Pad Pec Fly"
+    },
+    {
+      "labelContains": "Muscles used by Life Fitness Pro 2 Upper-Arm-Pad Pec Fly"
+    }
+  ],
+  "forbidden": []
+}

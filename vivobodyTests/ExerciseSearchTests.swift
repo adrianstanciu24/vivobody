@@ -79,7 +79,7 @@ struct ExerciseSearchTests {
         let catalog = bundledCatalog()
         let expected: [(String, String)] = [
             ("Nordic Curl", "nordic-curl"),
-            ("Preacher Curl", "barbell-preacher-curl"),
+            ("Preacher Curl", "machine-preacher-curl"),
             ("Incline Dumbbell Curl", "bilateral-incline-dumbbell-curl"),
             ("Mid-Thigh Clean Pull", "barbell-mid-thigh-clean-pull"),
             ("Full Clean", "barbell-squat-clean"),
@@ -89,6 +89,24 @@ struct ExerciseSearchTests {
             ("Hollow Body Hold", "hollow-hold"),
             ("Passive Dead Hang", "passive-dead-hang"),
             ("Active Dead Hang", "active-dead-hang"),
+        ]
+
+        for (query, catalogID) in expected {
+            let ranked = ExerciseSearch.rank(items: catalog, query: query)
+            #expect(ranked.first?.catalogID == catalogID)
+        }
+    }
+
+    @Test func commercialMachineFirstWaveIsDiscoverableAndKeepsNeighborQueriesDistinct() {
+        let catalog = bundledCatalog()
+        let expected: [(String, String)] = [
+            ("Assisted Dip Machine", "life-fitness-pro2-assisted-dip-machine"),
+            ("Seated Machine Triceps Extension", "life-fitness-pro2-seated-triceps-extension"),
+            ("Glute Kickback Machine", "technogym-selection-machine-glute-kickback"),
+            ("Upper-Arm-Pad Pec Deck", "life-fitness-pro2-upper-arm-pad-pec-fly"),
+            ("Machine Pec Fly", "life-fitness-pro2-upper-arm-pad-pec-fly"),
+            ("Cable Glute Kickback", "supported-cable-ankle-cuff-hip-extension"),
+            ("Machine Chest Fly", "seated-handled-lever-machine-chest-fly"),
         ]
 
         for (query, catalogID) in expected {
