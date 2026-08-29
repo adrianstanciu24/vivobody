@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 83 reviewed families are active, containing 200 exercises.
+- 84 reviewed families are active, containing 202 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 222 registered evidence sources.
+  44 joint actions, and 224 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -83,7 +83,7 @@ batch siblings.
 | `upper-arm-pad-shoulder-abduction` | 1 |
 | `shoulder-external-rotation` | 3 |
 | `shoulder-internal-rotation` | 2 |
-| `elbow-flexion` | 10 |
+| `elbow-flexion` | 11 |
 | `elbow-extension` | 8 |
 | `externally-rotating-face-pull` | 1 |
 | `forearm-pronation` | 1 |
@@ -110,6 +110,7 @@ batch siblings.
 | `ankle-plantarflexion` | 4 |
 | `bilateral-squat` | 4 |
 | `inclined-leg-press` | 1 |
+| `horizontal-leg-press` | 1 |
 | `machine-hack-squat` | 1 |
 | `conventional-deadlift` | 1 |
 | `sumo-deadlift` | 1 |
@@ -150,7 +151,7 @@ batch siblings.
 | `hollow-hold` | 1 |
 | `passive-dead-hang` | 1 |
 | `active-dead-hang` | 1 |
-| **Total** | **200** |
+| **Total** | **202** |
 
 ## Foundation gates
 

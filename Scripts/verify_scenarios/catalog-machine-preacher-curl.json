@@ -1,0 +1,51 @@
+{
+  "name": "catalog-machine-preacher-curl",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Machine Preacher Curl,"
+        },
+        "direction": "up",
+        "maxSwipes": 45
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Machine Preacher Curl,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Machine Preacher Curl"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "labelContains": "Muscles used by Machine Preacher Curl"
+    }
+  ],
+  "forbidden": []
+}

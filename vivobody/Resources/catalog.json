@@ -3599,6 +3599,68 @@
     ]
   },
   {
+    "familyID": "elbow-flexion",
+    "catalogID": "machine-preacher-curl",
+    "name": "Machine Preacher Curl",
+    "group": "arms",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Selectorized Machine Preacher Curl",
+      "Life Fitness Insignia Series Biceps Curl - Dependent"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Compare the entered load only on this same Life Fitness Insignia SS-BCD fixture. Sit down, adjust the seat so the backs of both upper arms rest fully on the arm pad, align the elbows with the machine pivot, and take the handles with palms up from the straight-arm start.",
+      "movement": "Curl both dependent handles toward the upper arms while keeping both elbows on the pad.",
+      "endpoint": "Briefly hold the top position with both elbows flexed and both upper arms fully supported.",
+      "returnPhase": "Lower the handles slowly to the straight-arm start.",
+      "controlledJoints": "Create the repetition through simultaneous elbow flexion while keeping the palms up; the source does not specify a wrist posture.",
+      "supportAndPosture": "Keep both upper arms against the pad and maintain the seated setup throughout the set.",
+      "disqualifyingCompensations": [
+        "Lifting an upper arm from the pad leaves the reviewed machine fixture.",
+        "Alternating the handles or rotating the forearms changes the dependent palms-up task.",
+        "Using another machine model, independent arms, or a plate-loaded mechanism changes the load history and fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "brachialis",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "externally-rotating-face-pull",
     "catalogID": "high-pulley-rope-face-pull-with-external-rotation",
     "name": "High-Pulley Rope Face Pull with Deliberate External Rotation",
@@ -5240,6 +5302,67 @@
       },
       {
         "muscle": "gluteMax",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "horizontal-leg-press",
+    "catalogID": "horizontal-leg-press",
+    "name": "Horizontal Leg Press",
+    "group": "legs",
+    "defaultWeight": 90,
+    "defaultWeightKg": 40,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "David F210 Horizontal Leg Press",
+      "Seated Horizontal Leg Press"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Compare the entered load only on this same David F210 fixture. Sit with your torso and pelvis supported, set the machine to the reviewed start, and place both feet securely on the sled.",
+      "movement": "Press the sled along its horizontal track by extending both hips and knees at a normal controlled tempo.",
+      "endpoint": "Finish with the knees fully extended and the hips at the reviewed endpoint without forcefully locking the knees.",
+      "returnPhase": "Return the sled under control until the hips and knees reach the reviewed seventy-degree start angles.",
+      "controlledJoints": "Keep both knees tracking consistently with the feet throughout the press and return.",
+      "supportAndPosture": "Keep the torso and pelvis supported and use the same foot position and machine setup for the set.",
+      "disqualifyingCompensations": [
+        "Lifting the pelvis or losing torso support leaves the reviewed fixture.",
+        "Bouncing, shortening the range, or changing foot position makes the repetitions inconsistent."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
         "role": "stabilizer"
       }
     ]

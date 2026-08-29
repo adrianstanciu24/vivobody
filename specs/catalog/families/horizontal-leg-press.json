@@ -1,0 +1,103 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "horizontal-leg-press",
+  "name": "Horizontal Leg Press",
+  "definition": "A bilateral compound machine squat pattern performed on the reviewed David F210 horizontal leg press. The athlete remains seated and supported while pressing a sled along its linear horizontal track from seventy-degree hip and knee angles to full knee extension and a one-hundred-twenty-degree hip angle, then returns under control at a self-selected normal tempo. The exact machine, joint-angle range, support, and horizontal sled path are contract boundaries. Other seated, inclined, plate-loaded, or lever-driven leg presses require separate review. Entered load is comparable only on the same fixture.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "kotikangas-2025-horizontal-leg-press"],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {
+    "equipment": ["machine"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["external"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension", "knee.extension"],
+    "stabilityDemands": ["pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"},
+      {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"},
+      {"anyOf": ["medialHamstrings"], "minimumRole": "stabilizer"},
+      {"anyOf": ["bicepsFemoris"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "vasti"],
+      "secondary": ["rectusFemoris"],
+      "stabilizer": ["medialHamstrings", "bicepsFemoris"]
+    }
+  },
+  "variantAxes": [
+    {"id": "machineFixture", "valueType": "enum", "required": true, "description": "The directly reviewed horizontal leg-press fixture.", "allowedValues": ["davidF210"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The externally supported athlete posture.", "allowedValues": ["seatedSupported"]},
+    {"id": "trackGeometry", "valueType": "enum", "required": true, "description": "The directly reported sled path.", "allowedValues": ["linearHorizontalSled"]},
+    {"id": "startJointAngles", "valueType": "enum", "required": true, "description": "The source-defined start using 180 degrees as full extension.", "allowedValues": ["hipAndKneeSeventyDegrees"]},
+    {"id": "endJointAngles", "valueType": "enum", "required": true, "description": "The source-defined press endpoint.", "allowedValues": ["kneeFullExtensionHipOneHundredTwentyDegrees"]},
+    {"id": "cadence", "valueType": "enum", "required": true, "description": "The reviewed repetition tempo and return behavior.", "allowedValues": ["selfSelectedNormalControlledReturn"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether the sled constrains the external path.", "fixedValue": true},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The entered external-load value remains comparable only on this exact fixture.", "allowedValues": ["enteredExternalLoadSameFixtureOnly"]}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [
+    {
+      "catalogID": "horizontal-leg-press",
+      "name": "Horizontal Leg Press",
+      "aliases": ["David F210 Horizontal Leg Press", "Seated Horizontal Leg Press"],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 90,
+      "defaultWeightKg": 40,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "vasti", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}
+      ],
+      "variant": {
+        "machineFixture": "davidF210",
+        "bodyPosition": "seatedSupported",
+        "trackGeometry": "linearHorizontalSled",
+        "startJointAngles": "hipAndKneeSeventyDegrees",
+        "endJointAngles": "kneeFullExtensionHipOneHundredTwentyDegrees",
+        "cadence": "selfSelectedNormalControlledReturn",
+        "fixedPath": true,
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "kotikangas-2025-horizontal-leg-press"],
+      "execution": {
+        "startingPosition": "Compare the entered load only on this same David F210 fixture. Sit with your torso and pelvis supported, set the machine to the reviewed start, and place both feet securely on the sled.",
+        "movement": "Press the sled along its horizontal track by extending both hips and knees at a normal controlled tempo.",
+        "endpoint": "Finish with the knees fully extended and the hips at the reviewed endpoint without forcefully locking the knees.",
+        "returnPhase": "Return the sled under control until the hips and knees reach the reviewed seventy-degree start angles.",
+        "controlledJoints": "Keep both knees tracking consistently with the feet throughout the press and return.",
+        "supportAndPosture": "Keep the torso and pelvis supported and use the same foot position and machine setup for the set.",
+        "disqualifyingCompensations": [
+          "Lifting the pelvis or losing torso support leaves the reviewed fixture.",
+          "Bouncing, shortening the range, or changing foot position makes the repetitions inconsistent."
+        ]
+      }
+    }
+  ]
+}

@@ -37,6 +37,7 @@ $(SRCROOT)/specs/catalog/families/hip-hinge.json
 $(SRCROOT)/specs/catalog/families/hip-internal-rotation.json
 $(SRCROOT)/specs/catalog/families/hip-thrust-bridge.json
 $(SRCROOT)/specs/catalog/families/hollow-hold.json
+$(SRCROOT)/specs/catalog/families/horizontal-leg-press.json
 $(SRCROOT)/specs/catalog/families/horizontal-press.json
 $(SRCROOT)/specs/catalog/families/incline-press.json
 $(SRCROOT)/specs/catalog/families/inclined-leg-press.json

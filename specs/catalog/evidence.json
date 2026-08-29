@@ -3504,6 +3504,34 @@
       "year": 2006,
       "url": "https://www.acefitness.org/getfit/GlutesStudy2006.pdf",
       "scope": "The ACE-funded report defines a forward step-up onto an approximately fifteen-inch platform while holding a dumbbell in each hand, driving through the lead heel, keeping the trail leg passive, and completing same-lead repetitions. It anchors implement, height, direction, and lead-leg intent; terminal trail-foot contact and descent order are not reported, and the report is not peer reviewed."
+    },
+    {
+      "id": "kotikangas-2025-horizontal-leg-press",
+      "sourceType": "experimentalNeuromuscularStudy",
+      "title": "Acute neuromuscular fatigue, hormonal responses, and recovery in males during high-volume resistance exercises: Smith machine back squat vs horizontal leg press",
+      "authors": [
+        "Johanna Kotikangas",
+        "Simon Walker",
+        "Keijo Häkkinen",
+        "Heikki Peltonen"
+      ],
+      "year": 2025,
+      "doi": "10.1007/s00421-025-05793-3",
+      "pmid": "40323412",
+      "pmcid": "PMC12479625",
+      "url": "https://doi.org/10.1007/s00421-025-05793-3",
+      "scope": "Recreationally active men performed bilateral horizontal leg presses on a David F210 with a sled traveling on a linear horizontal track, moving from seventy-degree hip and knee angles to full knee extension and one-hundred-twenty-degree hip angle at a self-selected normal tempo. It directly anchors the exact fixture, supported posture, path, joint motion, and quadriceps participation. It does not report foot stance, ankle motion, machine-stack equivalence, gluteus-maximus or rectus-femoris activity, or a complete muscle-role hierarchy."
+    },
+    {
+      "id": "life-fitness-2024-insignia-series-manual",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Insignia Series Owner's Manual",
+      "authors": [
+        "Life Fitness"
+      ],
+      "year": 2024,
+      "url": "https://kb.cybexintl.com/Owners_Manuals/Strength/Life_Fitness_Insignia_Series_Owners_Manual_9481201_Rev_BE.pdf",
+      "scope": "The manufacturer manual defines the exact SS-BCD dependent bilateral selectorized biceps-curl fixture: seated height adjustment, full upper-arm pad contact, elbow-to-pivot alignment, palms-up straight-arm start, dependent handled curl, held elbow contact, top pause, and controlled return. It anchors apparatus topology, support, laterality, grip orientation, and execution, not a numeric shoulder or pad angle, wrist posture, cam torque profile, cross-machine load equivalence, or machine-specific muscle ranking."
     }
   ]
 }
