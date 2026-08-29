@@ -1,0 +1,52 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "walking-lunge",
+  "name": "Walking Lunge",
+  "definition": "A continuous forward-travel compound lunge in which alternating lead legs accept a new split stance, lower under control, and drive the body into the next step without returning to bilateral standing between repetitions. The source-exact roster contains one two-dumbbell fixture with both loads held at the sides and logged per implement. Stationary split squats, step-and-return lunges, reverse or lateral lunges, same-lead repetitions, one-dumbbell placements, and jumping lunges remain outside this family.",
+  "evidenceRefs": ["nsca-2012-basics-strength-conditioning", "comfort-2015-forward-reverse-lunge-kinetics", "stastny-2015-split-squat-dumbbell-position", "arnold-2010-lower-limb"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "lunge", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["dumbbell"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["vasti"], "minimumRole": "primary"}, {"anyOf": ["gluteMax"], "minimumRole": "primary"}, {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"}, {"anyOf": ["gastrocnemius", "soleus"], "minimumRole": "secondary"}, {"anyOf": ["medialHamstrings", "bicepsFemoris"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMed"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}, {"anyOf": ["obliques"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["vasti", "gluteMax"], "secondary": ["rectusFemoris", "gastrocnemius", "soleus"], "stabilizer": ["medialHamstrings", "bicepsFemoris", "gluteMed", "externalRotators", "trapeziusUpper", "triceps", "fingerFlexors", "extensorCarpiRadialis", "abs", "obliques", "lumbarExtensors"]}
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The lead foot is fixed during each loaded stance.", "allowedValues": ["closed"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The athlete travels forward while upright.", "allowedValues": ["standing"]},
+    {"id": "torsoSupport", "valueType": "enum", "required": true, "description": "No external torso support is used.", "allowedValues": ["none"]},
+    {"id": "travelDirection", "valueType": "enum", "required": true, "description": "The body advances forward.", "allowedValues": ["forward"]},
+    {"id": "leadSequence", "valueType": "enum", "required": true, "description": "Lead legs alternate on successive steps.", "allowedValues": ["alternatingContinuous"]},
+    {"id": "interRepSupport", "valueType": "enum", "required": true, "description": "Each repetition flows through split support into the next step without a bilateral reset.", "allowedValues": ["continuousForwardProgressNoBilateralReset"]},
+    {"id": "strideLength", "valueType": "enum", "required": true, "description": "The source does not prescribe a numeric stride length.", "allowedValues": ["unreported"]},
+    {"id": "depth", "valueType": "enum", "required": true, "description": "The reviewed lunge uses a controlled comfortable depth without a numeric angle claim.", "allowedValues": ["sourceControlledUnreported"]},
+    {"id": "loadPlacement", "valueType": "enum", "required": true, "description": "One matching dumbbell hangs beside each thigh.", "allowedValues": ["pairedAtSides"]},
+    {"id": "gripOrientation", "valueType": "enum", "required": true, "description": "Both forearms remain neutral.", "allowedValues": ["neutral"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The logged scalar is one dumbbell's weight.", "allowedValues": ["perImplement"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The torso is braced rather than used to create the repetition.", "allowedValues": ["positionHeld"]},
+    {"id": "hipMotion", "valueType": "enum", "required": true, "description": "The lead hip extends during ascent.", "allowedValues": ["extends"]},
+    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "The lead knee extends during ascent.", "allowedValues": ["extends"]},
+    {"id": "ankleMotion", "valueType": "enum", "required": true, "description": "The lead ankle contributes plantarflexion during ascent and travel.", "allowedValues": ["plantarflexes"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No machine constrains the dumbbells or body path."},
+    {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "description": "Hip, knee, and ankle extension create each forward ascent.", "allowedValues": ["compoundHipKneeAnkleExtension"]}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 20}},
+  "exercises": [{
+    "catalogID": "two-dumbbell-continuous-walking-lunge", "name": "Two-Dumbbell Continuous Walking Lunge", "aliases": ["Dumbbell Walking Lunge", "Two-Dumbbell Walking Lunge"],
+    "equipment": "dumbbell", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0,
+    "defaultWeight": 15, "defaultWeightKg": 7.5, "reps": 10, "searchPriority": 95,
+    "involvement": [{"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"}, {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}],
+    "variant": {"kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "travelDirection": "forward", "leadSequence": "alternatingContinuous", "interRepSupport": "continuousForwardProgressNoBilateralReset", "strideLength": "unreported", "depth": "sourceControlledUnreported", "loadPlacement": "pairedAtSides", "gripOrientation": "neutral", "loadAccounting": "perImplement", "spineMotion": "positionHeld", "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "fixedPath": false, "lowerBodyContribution": "compoundHipKneeAnkleExtension"},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [],
+    "evidenceRefs": ["nsca-2012-basics-strength-conditioning", "comfort-2015-forward-reverse-lunge-kinetics", "stastny-2015-split-squat-dumbbell-position"],
+    "execution": {"startingPosition": "Log one dumbbell's weight, not the pair total. Stand tall with one matching dumbbell beside each thigh and room to travel forward.", "movement": "Step forward with one leg, lower under control into a split stance, then drive through the lead foot and carry the trail leg directly into the next forward step.", "endpoint": "Finish each repetition as the opposite foot lands ahead to begin the next lunge; do not stop in a feet-together stance.", "returnPhase": "Continue forward by alternating lead legs for the prescribed repetitions.", "controlledJoints": "Keep the dumbbells still, wrists neutral, trunk braced, and each lead knee tracking over the foot.", "supportAndPosture": "Use no hand support and do not push the dumbbells with body swing.", "disqualifyingCompensations": ["Returning to feet-together standing after every step turns the task into step-and-return lunges.", "Repeating one lead leg leaves the alternating walking fixture.", "Jumping between stances turns the exercise into a jumping lunge."], "sideOrDirection": "Alternate lead legs continuously while traveling forward; count each completed step as one repetition."}
+  }]
+}

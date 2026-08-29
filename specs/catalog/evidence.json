@@ -3223,6 +3223,237 @@
       "pmcid": "PMC385259",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC385259/",
       "scope": "Healthy active women performed supine pelvic-tilt and abdominal-hollowing tasks in standard, supported-leg, and unsupported flexed-hip and flexed-knee positions while rectus-abdominis and external-oblique surface EMG was measured. It supports abdominal participation in posterior pelvic control, not the exact long-lever Hollow Hold or a universal categorical role ranking."
+    },
+    {
+      "id": "ace-2025-romanian-deadlift",
+      "sourceType": "officialTechnicalStandard",
+      "title": "The ACE Do It Better Series: The Romanian Deadlift",
+      "authors": [
+        "Pete McCall"
+      ],
+      "year": 2025,
+      "url": "https://www.acefitness.org/continuing-education/certified/may-2025/8865/the-ace-do-it-better-series-the-romanian-deadlift/",
+      "scope": "ACE specifies a top-start Romanian deadlift with hip-width feet, slight knee bend, a pronated barbell held at the thighs, a hip hinge to about knee or mid-shin height, and a return to the thigh start; it explicitly permits adapting the same instructions to one dumbbell in each hand. It anchors the continuous barbell and paired-dumbbell fixtures, not floor contact, an exact cadence, numeric muscle ranking, or a universal bottom landmark."
+    },
+    {
+      "id": "nsca-2012-basics-strength-conditioning",
+      "sourceType": "officialTechnicalStandard",
+      "title": "The NSCA's Basics of Strength and Conditioning Manual",
+      "authors": [
+        "William A. Sands",
+        "Jacob J. Wurth",
+        "Jennifer K. Hewit"
+      ],
+      "year": 2012,
+      "url": "https://www.nsca.com/contentassets/48a12160221541acbdc048498d77192d/basics_of_strength_and_conditioning_manual.pdf",
+      "scope": "The NSCA manual provides source-exact technical descriptions for the top-start Romanian deadlift, a continuous alternating walking lunge with dumbbells at the sides, and simultaneous bilateral dumbbell lateral raises to shoulder height. It supports those setup and sequence boundaries, not universal loads, muscle-magnitude rankings, or unreported stride dimensions."
+    },
+    {
+      "id": "nsca-2016-division-i-basketball-injury-screening",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Methods for Screening and Preventing Common Injuries in Division I Basketball Players",
+      "authors": [
+        "Casey Cathrall"
+      ],
+      "year": 2016,
+      "url": "https://www.nsca.com/contentassets/9dab08fc28274f3ba1d76af31bbbe40b/coach3.1-screening_and_preventing_common_injuries_in_division_i_basketball_players.pdf",
+      "scope": "NSCA Coach defines a dumbbell Bulgarian split squat with the rear foot on a bench, the lead foot stepped forward, a dumbbell held at each side, controlled lowering until the lead thigh is parallel, and a heel-driven return. It establishes the two-dumbbell rear-foot-elevated fixture but does not report bench height or quantify load distribution."
+    },
+    {
+      "id": "nasm-2026-goblet-squat",
+      "sourceType": "officialTechnicalStandard",
+      "title": "The Goblet Squat",
+      "authors": [
+        "Kinsey Mahaffey",
+        "National Academy of Sports Medicine"
+      ],
+      "year": 2026,
+      "url": "https://www.nasm.org/resource-center/exercise-library/goblet-squat",
+      "scope": "NASM specifies a kettlebell held vertically by the horns at the chest, a symmetric stance, controlled squat descent, and standing return. It anchors the kettlebell goblet interface and execution boundary, not a universal load, exact individual joint angles, or categorical muscle ranking."
+    },
+    {
+      "id": "collins-2021-goblet-landmine-squat",
+      "sourceType": "experimentalKineticsEMGStudy",
+      "title": "Differences in Muscle Activity and Kinetics Between the Goblet Squat and Landmine Squat in Men and Women",
+      "authors": [
+        "Kyle S. Collins",
+        "Lukus A. Klawitter",
+        "Roman W. Waldera",
+        "Sean J. Mahoney",
+        "Bryan K. Christensen"
+      ],
+      "year": 2021,
+      "doi": "10.1519/JSC.0000000000004094",
+      "pmid": "34341315",
+      "url": "https://doi.org/10.1519/JSC.0000000000004094",
+      "scope": "Goblet and landmine squats were compared with force-plate kinetics and surface EMG of vastus medialis, vastus lateralis, semitendinosus, and biceps femoris. The study supports conservative quadriceps and hamstring participation for the goblet squat, but it did not collect kinematics or pin the kettlebell horn grip and complete setup tuple."
+    },
+    {
+      "id": "lee-2017-smith-squat-human-machine",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "A 3D Human-Machine Integrated Design and Analysis Framework for Squat Exercises with a Smith Machine",
+      "authors": [
+        "Haerin Lee",
+        "Moonki Jung",
+        "Ki-Kwang Lee",
+        "Sang Hun Lee"
+      ],
+      "year": 2017,
+      "doi": "10.3390/s17020299",
+      "pmid": "28178184",
+      "pmcid": "PMC5336117",
+      "url": "https://doi.org/10.3390/s17020299",
+      "scope": "Participants performed upper-back Smith-machine squats on a vertical rail with a shoulder-width stance, zero horizontal foot offset, and a thigh-parallel endpoint while motion was tracked. It anchors the exact machine path and stance geometry, not a universal repetition duration, load seed, or complete muscle-role hierarchy."
+    },
+    {
+      "id": "cybex-2008-mg500-manual",
+      "sourceType": "officialTechnicalStandard",
+      "title": "MG 500 Multi-Gym Owner's and Service Manual",
+      "authors": [
+        "Cybex International"
+      ],
+      "year": 2008,
+      "url": "https://kb.cybexintl.com/Owners_Manuals/Strength/58600.pdf",
+      "scope": "The manufacturer manual defines the MG500 bilateral lever knee extension, handled chest fly, and low-pulley ankle-strap hip extension setups. It anchors device geometry, contact surfaces, movement directions, and adjustment boundaries, not cross-machine load equivalence or exercise-specific muscle rankings."
+    },
+    {
+      "id": "cybex-2008-plate-loaded-manual",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Plate Loaded Owner's and Service Manual",
+      "authors": [
+        "Cybex International"
+      ],
+      "year": 2008,
+      "url": "https://kb.cybexintl.com/Owners_Manuals/Strength/55399.pdf",
+      "scope": "The manufacturer manual defines a bilateral seated calf-raise machine with supported forefeet, flexed knees beneath a thigh pad, and simultaneous heel motion. It anchors the apparatus topology and laterality; the exact ninety-degree knee angle and muscle-role distinction come from separately cited research."
+    },
+    {
+      "id": "hammer-strength-2025-select-manual",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Hammer Select Owner's Manual",
+      "authors": [
+        "Life Fitness",
+        "Hammer Strength"
+      ],
+      "year": 2025,
+      "url": "https://kb.cybexintl.com/Owners_Manuals/Strength/Hammer_Select_9510901.pdf",
+      "scope": "The manufacturer manual defines the bilateral standing shoulder-pad calf raise and the seated, chest-supported lateral-raise machine whose pads contact the upper arms near the elbows. It anchors machine contacts, bilateral execution, and fixed paths, not cross-machine load equivalence or a complete muscle hierarchy."
+    },
+    {
+      "id": "ace-2026-shrug",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Shrug",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/72/shrug/",
+      "scope": "ACE specifies a standing bilateral barbell shrug with a shoulder-width pronated grip, straight arms, direct upward shoulder elevation, and controlled lowering without rolling. It anchors the front-held barbell fixture and execution boundary, not quantitative scapular kinematics or muscle ranking."
+    },
+    {
+      "id": "ace-2026-hammer-curl",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Hammer Curl",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/10/hammer-curl/",
+      "scope": "ACE specifies standing dumbbells beside the thighs with neutral forearms, upper arms held near the torso, one or both elbows flexing in unison, and a controlled neutral-grip return. It anchors the simultaneous bilateral hammer-curl fixture, not a measured muscle-magnitude ranking."
+    },
+    {
+      "id": "ace-2026-triceps-pushdown",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Triceps Pushdowns",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/185/triceps-pushdowns/",
+      "scope": "ACE specifies a bilateral high-cable rope pushdown with a neutral grip, upper arms held beside the torso, elbow extension, and controlled return. It establishes the rope attachment and bilateral sequence; the exact supporting EMG source uses a straight pronated attachment."
+    },
+    {
+      "id": "nsca-2020-face-pull",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Face Pull (Machine)",
+      "authors": [
+        "National Strength and Conditioning Association"
+      ],
+      "year": 2020,
+      "url": "https://www.nsca.com/education/articles/kinetic-select/face-pull-machine/",
+      "scope": "The NSCA technique uses a rope on a high pulley, standing support, bilateral pull toward the face, scapular retraction and shoulder horizontal abduction followed by deliberate external rotation. It anchors the exact coupled-action fixture, not ranked individual-muscle magnitudes or a face-height cable anchor."
+    },
+    {
+      "id": "ruth-gourley-2020-rowing-strength-part2",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Strength Training Practices for Rowing—Part 2: Strength Training for Performance",
+      "authors": [
+        "Williamson Ruth",
+        "Blake Gourley"
+      ],
+      "year": 2020,
+      "url": "https://www.nsca.com/education/articles/nsca-coach/strength-training-practices-for-rowing-part-2-strength-training-for-performance/",
+      "scope": "The NSCA article specifies a kneeling ab-wheel rollout that rolls outward through shoulder flexion and hip extension while torso tension is maintained, then reverses to the kneeling start. It anchors dynamic repetition topology and the anti-extension boundary, not a numeric endpoint distance or direct muscle ranking."
+    },
+    {
+      "id": "hildenbrand-2004-abslide",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Abdominal Muscle Activity While Performing Trunk-Flexion Exercises Using the Ab Roller, ABslide, FitBall, and Conventionally Performed Trunk Curls",
+      "authors": [
+        "Kasee Hildenbrand",
+        "Larry Noble"
+      ],
+      "year": 2004,
+      "pmid": "15085210",
+      "pmcid": "PMC385260",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC385260/",
+      "scope": "Surface EMG compared abdominal activity during several devices, including the assisted ABslide. It supports rectus-abdominis and oblique participation in a rollout-like task, not mechanical equivalence to an unassisted plain ab wheel, exact wheel geometry, or universal role magnitudes."
+    },
+    {
+      "id": "jee-2020-bilateral-dumbbell-lateral-raise",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Kinematic Comparisons of Increased Exercise Repetitions and Intensities on the Dominant and Non-Dominant Upper Limbs for Prevention of Dyskinesia",
+      "authors": [
+        "Haemi Jee"
+      ],
+      "year": 2020,
+      "doi": "10.18502/ijph.v49i10.4690",
+      "pmid": "33346238",
+      "pmcid": "PMC7719663",
+      "url": "https://doi.org/10.18502/ijph.v49i10.4690",
+      "scope": "Participants performed simultaneous bilateral dumbbell lateral raises while wrist-mounted sensors measured abduction and adduction kinematics across repeated low- and high-intensity trials. It supports bilateral loaded topology and a roughly ten-to-one-hundred-degree study task, not deltoid activation, muscle ranking, or the catalog's separately sourced shoulder-height endpoint."
+    },
+    {
+      "id": "parpa-2025-traditional-dumbbell-bayesian-curl",
+      "sourceType": "experimentalEMGStudy",
+      "title": "An Exploratory Study of Biceps Brachii Electromyographic Activity During Traditional Dumbbell Versus Bayesian Cable Curls",
+      "authors": [
+        "Koulla Parpa",
+        "Antreas Vasiliou",
+        "Marcos Michaelides",
+        "Karuppasamy Govindasamy",
+        "Anton Chernov",
+        "Konstantina Intziegianni"
+      ],
+      "year": 2025,
+      "doi": "10.3390/muscles4040045",
+      "pmid": "41133617",
+      "pmcid": "PMC12550948",
+      "url": "https://doi.org/10.3390/muscles4040045",
+      "scope": "The traditional condition used an upright bilateral dumbbell curl with supinated forearms and full controlled elbow range while biceps activity was measured. It supports the exact bilateral traditional fixture and biceps participation, not a complete elbow-flexor hierarchy or alternating execution."
+    },
+    {
+      "id": "anders-2006-ace-glutes-to-max",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Glutes to the Max",
+      "authors": [
+        "Mark Anders",
+        "John Porcari",
+        "Blake Ristvedt"
+      ],
+      "year": 2006,
+      "url": "https://www.acefitness.org/getfit/GlutesStudy2006.pdf",
+      "scope": "The ACE-funded report defines a forward step-up onto an approximately fifteen-inch platform while holding a dumbbell in each hand, driving through the lead heel, keeping the trail leg passive, and completing same-lead repetitions. It anchors implement, height, direction, and lead-leg intent; terminal trail-foot contact and descent order are not reported, and the report is not peer reviewed."
     }
   ]
 }

@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 78 reviewed families compile to 176 exercises with stable
+//  product: 82 reviewed families compile to 196 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 176)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 78)
+        #expect(CatalogData.records.count == 196)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 82)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -108,6 +108,53 @@ struct CatalogBiomechanicsTests {
             #expect(record.defaultDuration == 30)
             #expect(!item.tracksResistance)
         }
+    }
+
+    @Test func comprehensiveExpansionFixturesReachTheRuntimeProjection() throws {
+        let expected: [(String, String)] = [
+            ("continuous-top-start-barbell-romanian-deadlift", "romanian-deadlift"),
+            ("two-dumbbell-continuous-romanian-deadlift", "romanian-deadlift"),
+            ("kettlebell-goblet-squat", "bilateral-squat"),
+            ("smith-machine-upper-back-squat", "bilateral-squat"),
+            ("two-dumbbell-rear-foot-elevated-split-squat", "split-stance-squat"),
+            ("two-dumbbell-continuous-walking-lunge", "walking-lunge"),
+            ("upright-bilateral-lever-machine-leg-extension", "knee-extension"),
+            ("bilateral-standing-shoulder-pad-machine-calf-raise", "ankle-plantarflexion"),
+            ("bilateral-seated-thigh-pad-machine-calf-raise", "ankle-plantarflexion"),
+            ("simultaneous-bilateral-dumbbell-lateral-raise", "shoulder-abduction-raise"),
+            ("standing-bilateral-supinated-dumbbell-curl", "elbow-flexion"),
+            ("bilateral-dumbbell-hammer-curl", "elbow-flexion"),
+            ("bilateral-rope-cable-triceps-pushdown", "elbow-extension"),
+            ("high-pulley-rope-face-pull-with-external-rotation", "externally-rotating-face-pull"),
+            ("standing-bilateral-barbell-shrug", "scapular-elevation"),
+            ("seated-handled-lever-machine-chest-fly", "chest-fly"),
+            ("supported-cable-ankle-cuff-hip-extension", "hip-extension"),
+            ("seated-upper-arm-pad-machine-lateral-raise", "upper-arm-pad-shoulder-abduction"),
+            ("two-dumbbell-forward-step-up", "step-up"),
+            ("kneeling-ab-wheel-rollout", "kneeling-ab-wheel-rollout"),
+        ]
+
+        for (catalogID, familyID) in expected {
+            let record = try #require(CatalogData.record(forCatalogID: catalogID))
+            #expect(record.familyID == familyID)
+            #expect(record.modality == .dynamicStrength)
+            #expect(record.trackingMode == .reps)
+        }
+
+        let rollout = try #require(
+            CatalogData.record(forCatalogID: "kneeling-ab-wheel-rollout")
+        )
+        let item = ExerciseCatalogItem(record: rollout, createdAt: .distantPast)
+        #expect(rollout.equipment == .abWheel)
+        #expect(rollout.loadMode == .nonComparable)
+        #expect(!item.tracksResistance)
+
+        let facePull = try #require(
+            CatalogData.record(
+                forCatalogID: "high-pulley-rope-face-pull-with-external-rotation"
+            )
+        )
+        #expect(facePull.name == "High-Pulley Rope Face Pull with Deliberate External Rotation")
     }
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {
@@ -302,6 +349,21 @@ struct CatalogBiomechanicsTests {
             #expect(record.muscleInvolvement.role(for: .fingerFlexors) == .stabilizer)
             #expect(record.muscleInvolvement.role(for: .lumbarExtensors) == .stabilizer)
         }
+    }
+
+    @Test func abWheelEquipmentHasNoInventedResistanceAxis() {
+        #expect(Equipment.abWheel.rawValue == "abWheel")
+        #expect(Equipment.abWheel.displayName == "Ab Wheel")
+        #expect(Equipment.abWheel.requiresNonComparableLoad)
+        #expect(!ExerciseResistanceCapability.tracksResistance(
+            loadMode: .nonComparable,
+            equipment: .abWheel
+        ))
+        #expect(ExerciseResistanceCapability.normalizedWeight(
+            45,
+            loadMode: .nonComparable,
+            equipment: .abWheel
+        ) == 0)
     }
 
     @Test func sumoDeadliftKeepsThreeJointCompoundRuntimeSignature() throws {

@@ -3,10 +3,11 @@
   "schemaVersion": 1,
   "id": "hip-extension",
   "name": "Hip Extension Isolation",
-  "definition": "A strict unilateral open-chain isolation movement in which the femur extends relative to a supported, position-held pelvis while the spine and knee positions remain held. The initial roster is limited to the directly reviewed prone-table fixture with the knee held at 90 degrees, the torso and pelvis supported by the table, and hip motion from 30 degrees of flexion to 5 degrees of extension. Gluteus maximus is the primary hip extensor; the medial hamstrings remain secondary despite their reduced contribution in the flexed-knee posture. The visible biceps-femoris region is credited only for stabilizing the held knee because its unsplit body-model mesh cannot distinguish the hip-extending long head from the monoarticular short head. Bridges, hip thrusts, hinges, quadruped kickbacks, standing cable or machine extensions, bands, external loads, straight-knee variants, and movements driven by the pelvis or spine remain outside this contract.",
+  "definition": "A strict unilateral open-chain isolation movement in which the femur extends relative to a position-held pelvis while the spine and knee postures remain held. The roster owns a prone-table bent-knee fixture from 30 degrees of hip flexion to 5 degrees of extension and a standing low-pulley ankle-cuff fixture that uses two-hand machine support and extends the near-straight working leg 15 to 20 degrees behind the body. Gluteus maximus is primary and the medial hamstrings are secondary; the visible biceps-femoris region remains stabilizer-only because its unsplit mesh cannot distinguish the hip-extending long head from the monoarticular short head. Bridges, hip thrusts, hinges, quadruped kickbacks, machines, bands, unsupported cable variants, and movements driven by the pelvis or spine remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
-    "jeon-2016-prone-table-hip-extension"
+    "jeon-2016-prone-table-hip-extension",
+    "cybex-2008-mg500-manual"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -25,7 +26,8 @@
   },
   "allowed": {
     "equipment": [
-      "bodyweight"
+      "bodyweight",
+      "cable"
     ],
     "modalities": [
       "dynamicStrength"
@@ -34,7 +36,8 @@
       "reps"
     ],
     "loadModes": [
-      "nonComparable"
+      "nonComparable",
+      "external"
     ],
     "lateralities": [
       "unilateral"
@@ -155,7 +158,8 @@
       "required": true,
       "description": "The whole-body posture used by the reviewed hip-extension fixture.",
       "allowedValues": [
-        "prone"
+        "prone",
+        "standingFacingMachine"
       ]
     },
     {
@@ -164,7 +168,8 @@
       "required": true,
       "description": "The external surface directly supporting the torso.",
       "allowedValues": [
-        "table"
+        "table",
+        "none"
       ]
     },
     {
@@ -173,7 +178,8 @@
       "required": true,
       "description": "The external surface directly supporting the pelvis; support does not by itself claim that pelvic motion was eliminated.",
       "allowedValues": [
-        "table"
+        "table",
+        "unsupportedPositionHeld"
       ]
     },
     {
@@ -208,13 +214,13 @@
       "valueType": "number",
       "required": true,
       "description": "The reviewed hip-flexion angle at the start of the concentric phase, measured from anatomical neutral.",
-      "minimum": 30,
+      "minimum": 0,
       "maximum": 30
     },
     {
       "id": "hipEndExtensionDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "description": "The reviewed hip-extension angle at the concentric endpoint, measured beyond anatomical neutral.",
       "minimum": 5,
       "maximum": 5
@@ -231,10 +237,24 @@
     {
       "id": "kneeFlexionDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "description": "The reviewed knee-flexion posture held throughout the repetition.",
       "minimum": 90,
       "maximum": 90
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-exact hip range without converting a reported interval into a fabricated single endpoint.",
+      "allowedValues": ["thirtyFlexionToFiveExtension", "neutralToFifteenToTwentyExtension"]
+    },
+    {
+      "id": "kneePosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The knee posture held while the femur extends.",
+      "allowedValues": ["ninetyDegreesFlexed", "slightlyFlexedNearExtension"]
     },
     {
       "id": "movingSegment",
@@ -251,7 +271,8 @@
       "required": true,
       "description": "Where an external resistance implement contacts the athlete; the reviewed gravity-loaded limb has no external interface.",
       "allowedValues": [
-        "none"
+        "none",
+        "ankleCuffAboveAnkle"
       ]
     },
     {
@@ -260,7 +281,8 @@
       "required": true,
       "description": "How resistance is created in the reviewed fixture.",
       "allowedValues": [
-        "limbSegmentGravity"
+        "limbSegmentGravity",
+        "lowPulleyCable"
       ]
     },
     {
@@ -269,6 +291,20 @@
       "required": true,
       "fixedValue": false,
       "description": "Whether rails or a lever constrain an external load path; the unsupported moving limb follows no fixed external path."
+    },
+    {
+      "id": "handSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-exact upper-body support used to hold the trunk and pelvis position.",
+      "allowedValues": ["none", "bothHandsOnPressingArmAtWaistHeight"]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": false,
+      "description": "Cable-stack load is comparable only on the same fixture and setup.",
+      "allowedValues": ["enteredExternalLoadSameFixtureOnly"]
     },
     {
       "id": "lowerBodyContribution",
@@ -286,7 +322,38 @@
       "maximum": 15
     }
   },
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "prone-bodyweight-fixture-pins-table-range",
+      "description": "The prone fixture preserves its exact table support, 30-to-5-degree range, and 90-degree knee posture.",
+      "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
+      "then": [
+        {"field": "loadMode", "value": "nonComparable"}, {"field": "variant.bodyPosition", "value": "prone"},
+        {"field": "variant.torsoSupport", "value": "table"}, {"field": "variant.pelvisSupport", "value": "table"},
+        {"field": "variant.hipStartFlexionDegrees", "value": 30}, {"field": "variant.hipEndExtensionDegrees", "value": 5},
+        {"field": "variant.rangeOfMotion", "value": "thirtyFlexionToFiveExtension"}, {"field": "variant.kneePosture", "value": "ninetyDegreesFlexed"},
+        {"field": "variant.kneeFlexionDegrees", "value": 90}, {"field": "variant.loadInterface", "value": "none"},
+        {"field": "variant.resistanceGeometry", "value": "limbSegmentGravity"}, {"field": "variant.handSupport", "value": "none"}
+      ],
+      "requirePresent": ["variant.hipEndExtensionDegrees", "variant.kneeFlexionDegrees"],
+      "requireAbsent": ["variant.loadAccounting"]
+    },
+    {
+      "id": "standing-cable-fixture-pins-ankle-cuff-and-support",
+      "description": "The reviewed cable fixture starts from neutral, uses a low pulley and cuff above the ankle, braces both hands at waist height, and preserves the reported 15-to-20-degree endpoint interval.",
+      "when": {"field": "equipment", "operator": "equals", "value": "cable"},
+      "then": [
+        {"field": "loadMode", "value": "external"}, {"field": "variant.bodyPosition", "value": "standingFacingMachine"},
+        {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.pelvisSupport", "value": "unsupportedPositionHeld"},
+        {"field": "variant.hipStartFlexionDegrees", "value": 0}, {"field": "variant.rangeOfMotion", "value": "neutralToFifteenToTwentyExtension"},
+        {"field": "variant.kneePosture", "value": "slightlyFlexedNearExtension"}, {"field": "variant.loadInterface", "value": "ankleCuffAboveAnkle"},
+        {"field": "variant.resistanceGeometry", "value": "lowPulleyCable"}, {"field": "variant.handSupport", "value": "bothHandsOnPressingArmAtWaistHeight"},
+        {"field": "variant.loadAccounting", "value": "enteredExternalLoadSameFixtureOnly"}
+      ],
+      "requirePresent": ["variant.loadAccounting"],
+      "requireAbsent": ["variant.hipEndExtensionDegrees", "variant.kneeFlexionDegrees"]
+    }
+  ],
   "exercises": [
     {
       "catalogID": "prone-table-bent-knee-hip-extension",
@@ -334,10 +401,13 @@
         "hipEndExtensionDegrees": 5,
         "kneeMotion": "positionHeld",
         "kneeFlexionDegrees": 90,
+        "rangeOfMotion": "thirtyFlexionToFiveExtension",
+        "kneePosture": "ninetyDegreesFlexed",
         "movingSegment": "thigh",
         "loadInterface": "none",
         "resistanceGeometry": "limbSegmentGravity",
         "fixedPath": false,
+        "handSupport": "none",
         "lowerBodyContribution": "isolatedJointMotion"
       },
       "additionalPrimeActions": [],
@@ -357,6 +427,47 @@
           "Straightening the working knee during the lift turns the bent-knee hip extension into a straight-leg raise.",
           "Rocking the pelvis or arching the back turns the isolated hip extension into a spine-driven back extension."
         ],
+        "sideOrDirection": "Complete all repetitions on one side, then repeat with the other leg."
+      }
+    },
+    {
+      "catalogID": "supported-cable-ankle-cuff-hip-extension",
+      "name": "Supported Cable Ankle-Cuff Hip Extension",
+      "aliases": ["Standing Cable Hip Extension", "Cable Glute Kickback"],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"}, {"muscle": "medialHamstrings", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open", "bodyPosition": "standingFacingMachine", "torsoSupport": "none",
+        "pelvisSupport": "unsupportedPositionHeld", "pelvisMotion": "positionHeld", "spineMotion": "positionHeld",
+        "hipMotion": "extends", "hipStartFlexionDegrees": 0, "kneeMotion": "positionHeld",
+        "rangeOfMotion": "neutralToFifteenToTwentyExtension", "kneePosture": "slightlyFlexedNearExtension",
+        "movingSegment": "thigh", "loadInterface": "ankleCuffAboveAnkle", "resistanceGeometry": "lowPulleyCable",
+        "fixedPath": false, "handSupport": "bothHandsOnPressingArmAtWaistHeight",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly", "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["cybex-2008-mg500-manual", "arnold-2010-lower-limb"],
+      "execution": {
+        "startingPosition": "Attach an ankle cuff just above the working ankle to the low pulley, face the machine, and brace both hands on its pressing arm at waist height. Stand tall with a slight bend in the working knee. Log the entered stack load and compare it only on this same fixture and setup.",
+        "movement": "Keep the pelvis and spine still while extending the working thigh straight behind the body.",
+        "endpoint": "Stop with the working leg 15 to 20 degrees behind the body; the source reports this interval rather than one exact endpoint.",
+        "returnPhase": "Bring the thigh forward under control to the neutral start without letting the stack pull the pelvis forward.",
+        "controlledJoints": "Hold the slight knee bend and keep the toes and kneecap facing forward.",
+        "supportAndPosture": "Use both hands for support while keeping the standing leg and trunk still.",
+        "disqualifyingCompensations": ["Arching the back or rotating the pelvis changes the isolated hip action.", "Bending and straightening the working knee adds a knee-driven movement.", "Moving the cuff away from just above the ankle changes the reviewed resistance geometry."],
         "sideOrDirection": "Complete all repetitions on one side, then repeat with the other leg."
       }
     }

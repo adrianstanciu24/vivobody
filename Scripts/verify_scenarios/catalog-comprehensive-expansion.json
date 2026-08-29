@@ -1,0 +1,51 @@
+{
+  "name": "catalog-comprehensive-expansion",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Continuous Top-Start Barbell Romanian Deadlift,"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Continuous Top-Start Barbell Romanian Deadlift,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Continuous Top-Start Barbell Romanian Deadlift"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "labelContains": "Muscles used by Continuous Top-Start Barbell Romanian Deadlift"
+    }
+  ],
+  "forbidden": []
+}

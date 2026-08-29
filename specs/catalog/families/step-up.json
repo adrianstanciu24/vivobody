@@ -3,11 +3,12 @@
   "schemaVersion": 1,
   "id": "step-up",
   "name": "Forward Step-Up",
-  "definition": "A lead-limb closed-chain compound step in which the lead foot begins on a raised platform while the athlete raises the body to a brief bilateral standing position on that platform without pushing off or hopping from the trail leg. The trail foot then returns to the lower floor, followed by the lead foot; replacing the same lead foot on the platform resets the next repetition. The initial roster owns only the exact 21-centimeter bodyweight forward stepping sequence studied with three-dimensional hip, knee, and ankle kinematics and kinetics. It does not generalize that geometry to a gym-style continuous set that leaves the lead foot on the platform, arbitrary box heights, external loads, a hovering trail foot, continuous stair climbing, step-downs, or lateral, crossover, diagonal, reverse, explosive, or machine-stepping tasks. The fixed lunge pattern is Vivobody's broader app-level classification for unilateral asymmetric-support lower-body compounds; the family ID names the raised-lead-foot geometry that distinguishes this task from a stationary split squat or dynamic lunge.",
+  "definition": "A lead-limb closed-chain compound step in which the lead foot begins on a raised platform and raises the body without propulsive help from the trail leg. The roster owns two source-exact forward fixtures: a complete 21-centimeter bodyweight sequence with bilateral top support and both feet returning to the floor, and an approximately 38-centimeter two-dumbbell sequence that repeats one lead side while leaving terminal trail-foot contact and descent order unreported. The contract preserves those unknowns rather than converting them into a generic continuous step-up. Other box heights, trail-leg propulsion, hand support, stair climbing, step-downs, and lateral, crossover, diagonal, reverse, explosive, or machine-stepping tasks remain outside this family.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "simenz-2012-loaded-step-up-variations",
-    "wang-2003-forward-lateral-step-up-biomechanics"
+    "wang-2003-forward-lateral-step-up-biomechanics",
+    "anders-2006-ace-glutes-to-max"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -26,7 +27,8 @@
   },
   "allowed": {
     "equipment": [
-      "bodyweight"
+      "bodyweight",
+      "dumbbell"
     ],
     "modalities": [
       "dynamicStrength"
@@ -35,7 +37,8 @@
       "reps"
     ],
     "loadModes": [
-      "nonComparable"
+      "nonComparable",
+      "external"
     ],
     "lateralities": [
       "unilateral"
@@ -187,7 +190,12 @@
         "gluteMed",
         "abs",
         "obliques",
-        "lumbarExtensors"
+        "lumbarExtensors",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "trapeziusUpper",
+        "brachialis"
       ]
     }
   },
@@ -196,7 +204,7 @@
       "id": "kineticChain",
       "valueType": "enum",
       "required": true,
-      "description": "The lead-limb chain relationship: the load-bearing lead foot remains fixed on the platform through the loaded ascent and trail-foot descent, then steps down to finish the full sequence. This value does not claim that the trail foot is fixed.",
+      "description": "The lead-limb chain relationship: the load-bearing lead foot remains fixed on the platform through ascent; each record separately preserves its reported or unreported descent sequence.",
       "allowedValues": [
         "closed"
       ]
@@ -241,33 +249,35 @@
       "id": "platformHeightCm",
       "valueType": "number",
       "required": true,
-      "description": "The vertical difference between the lower floor and platform; the active fixture pins Wang et al.'s 21-centimeter step.",
+      "description": "The source-exact vertical difference between the lower floor and platform.",
       "minimum": 21,
-      "maximum": 21
+      "maximum": 38
     },
     {
       "id": "leadFootTransition",
       "valueType": "enum",
       "required": true,
-      "description": "The lead foot remains on the platform through ascent and trail-foot descent, then steps to the lower floor after the trail foot as the studied sequence ends.",
+      "description": "The source-authored lead-foot sequence after ascent, including an explicit source-unreported value when terminal order is not described.",
       "allowedValues": [
-        "platformToFloorAfterTrailDescent"
+        "platformToFloorAfterTrailDescent",
+        "terminalTransitionUnreported"
       ]
     },
     {
       "id": "trailFootTransition",
       "valueType": "enum",
       "required": true,
-      "description": "The trail foot's deliberate within-repetition transition; it moves from the lower floor to the platform and returns to the lower floor before the lead foot steps down.",
+      "description": "The source-authored trail-foot transition, including an explicit source-unreported value when terminal contact and descent order are not described.",
       "allowedValues": [
-        "floorToPlatformToFloor"
+        "floorToPlatformToFloor",
+        "terminalContactAndDescentUnreported"
       ]
     },
     {
       "id": "trailLegPropulsion",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the lower trail leg may push or hop to create the ascent; Wang et al. explicitly prohibited both.",
+      "description": "Whether the lower trail leg may deliberately push or hop to create the ascent; the reviewed sources preserve lead-leg propulsion.",
       "allowedValues": [
         "prohibited"
       ]
@@ -278,25 +288,28 @@
       "required": true,
       "description": "The reviewed upper endpoint and support phase before descent.",
       "allowedValues": [
-        "bilateralPlatformBriefPause"
+        "bilateralPlatformBriefPause",
+        "terminalTrailFootContactUnreported"
       ]
     },
     {
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "Whether an external implement is placed on the athlete; the active fixture is bodyweight-only.",
+      "description": "Whether the fixture is bodyweight-only or uses one matched dumbbell in each hand.",
       "allowedValues": [
-        "none"
+        "none",
+        "pairedDumbbellsAtSides"
       ]
     },
     {
       "id": "rangeOfMotion",
       "valueType": "enum",
       "required": true,
-      "description": "The reviewed endpoint convention from the raised-lead-foot start to bilateral standing on the platform and then bilateral standing on the lower floor.",
+      "description": "The reviewed endpoint convention; records preserve whether terminal bilateral support and descent order were reported or left unspecified.",
       "allowedValues": [
-        "raisedLeadStartToPlatformStandingToFloor"
+        "raisedLeadStartToPlatformStandingToFloor",
+        "raisedLeadStartToSourceUnreportedTerminalSequence"
       ]
     },
     {
@@ -348,18 +361,20 @@
       "id": "footContact",
       "valueType": "enum",
       "required": true,
-      "description": "The whole-task contact pattern: the lead foot loads the platform through ascent and trail-foot descent, then both feet finish on the lower floor.",
+      "description": "The whole-task contact pattern, preserving known lead-platform support and any source-unreported terminal sequence.",
       "allowedValues": [
-        "leadLoadsPlatformThenBothReturnFloor"
+        "leadLoadsPlatformThenBothReturnFloor",
+        "leadLoadsPlatformTerminalContactUnreported"
       ]
     },
     {
       "id": "interRepFootTransition",
       "valueType": "enum",
       "required": true,
-      "description": "The reset required after the studied sequence ends with both feet on the lower floor; the same lead foot is replaced fully on the platform before the next repetition.",
+      "description": "The authored between-repetition reset, or an explicit source-unreported value when the publication does not describe it.",
       "allowedValues": [
-        "leadFloorToPlatformReset"
+        "leadFloorToPlatformReset",
+        "sameLeadRepeatedTerminalOrderUnreported"
       ]
     },
     {
@@ -370,6 +385,27 @@
       "allowedValues": [
         "none"
       ]
+    },
+    {
+      "id": "implementConfiguration",
+      "valueType": "enum",
+      "required": false,
+      "description": "The paired free-weight implementation when external load is used.",
+      "allowedValues": ["pairedDumbbells"]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": false,
+      "description": "The logged scalar is one dumbbell's weight rather than the pair total.",
+      "allowedValues": ["perImplement"]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Neither reviewed fixture constrains the athlete to a machine path."
     },
     {
       "id": "lowerBodyContribution",
@@ -387,7 +423,47 @@
       "maximum": 15
     }
   },
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-fixture-pins-complete-twenty-one-centimeter-sequence",
+      "description": "The bodyweight fixture preserves the complete studied transition and has no external-load fields.",
+      "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
+      "then": [
+        {"field": "loadMode", "value": "nonComparable"}, {"field": "variant.platformHeightCm", "value": 21},
+        {"field": "variant.leadFootTransition", "value": "platformToFloorAfterTrailDescent"},
+        {"field": "variant.trailFootTransition", "value": "floorToPlatformToFloor"},
+        {"field": "variant.topSupport", "value": "bilateralPlatformBriefPause"}, {"field": "variant.loadPlacement", "value": "none"},
+        {"field": "variant.rangeOfMotion", "value": "raisedLeadStartToPlatformStandingToFloor"},
+        {"field": "variant.footContact", "value": "leadLoadsPlatformThenBothReturnFloor"},
+        {"field": "variant.interRepFootTransition", "value": "leadFloorToPlatformReset"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.implementConfiguration", "variant.loadAccounting"]
+    },
+    {
+      "id": "dumbbell-fixture-pins-paired-load-and-reported-unknowns",
+      "description": "The loaded fixture uses two dumbbells and an approximately 38-centimeter platform while preserving the source's unreported terminal contact and descent sequence.",
+      "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
+      "then": [
+        {"field": "loadMode", "value": "external"}, {"field": "variant.platformHeightCm", "value": 38},
+        {"field": "variant.leadFootTransition", "value": "terminalTransitionUnreported"},
+        {"field": "variant.trailFootTransition", "value": "terminalContactAndDescentUnreported"},
+        {"field": "variant.topSupport", "value": "terminalTrailFootContactUnreported"},
+        {"field": "variant.loadPlacement", "value": "pairedDumbbellsAtSides"},
+        {"field": "variant.rangeOfMotion", "value": "raisedLeadStartToSourceUnreportedTerminalSequence"},
+        {"field": "variant.footContact", "value": "leadLoadsPlatformTerminalContactUnreported"},
+        {"field": "variant.interRepFootTransition", "value": "sameLeadRepeatedTerminalOrderUnreported"},
+        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"}, {"field": "variant.loadAccounting", "value": "perImplement"}
+      ],
+      "requirePresent": ["variant.implementConfiguration", "variant.loadAccounting"],
+      "requireAbsent": [],
+      "requireMuscleRequirements": [
+        {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"},
+        {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}
+      ],
+      "requireAdditionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"]
+    }
+  ],
   "exercises": [
     {
       "catalogID": "bodyweight-forward-step-up-21cm",
@@ -438,6 +514,7 @@
         "footContact": "leadLoadsPlatformThenBothReturnFloor",
         "interRepFootTransition": "leadFloorToPlatformReset",
         "interRepSupport": "none",
+        "fixedPath": false,
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
@@ -458,6 +535,54 @@
           "Pulling on a rail for help turns the unsupported step-up into an assisted step."
         ],
         "sideOrDirection": "Switch lead sides after the set."
+      }
+    },
+    {
+      "catalogID": "two-dumbbell-forward-step-up",
+      "name": "Two-Dumbbell Forward Step-Up",
+      "aliases": ["38 cm Dumbbell Forward Step-Up", "15-Inch Dumbbell Forward Step-Up"],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "leadFootRaisedStart",
+        "stepDirection": "forward", "platformHeightCm": 38, "leadFootTransition": "terminalTransitionUnreported",
+        "trailFootTransition": "terminalContactAndDescentUnreported", "trailLegPropulsion": "prohibited",
+        "topSupport": "terminalTrailFootContactUnreported", "loadPlacement": "pairedDumbbellsAtSides",
+        "rangeOfMotion": "raisedLeadStartToSourceUnreportedTerminalSequence", "spineMotion": "nonstandardized",
+        "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "footMotion": "positionHeld",
+        "footContact": "leadLoadsPlatformTerminalContactUnreported", "interRepFootTransition": "sameLeadRepeatedTerminalOrderUnreported",
+        "interRepSupport": "none", "implementConfiguration": "pairedDumbbells", "loadAccounting": "perImplement",
+        "fixedPath": false, "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
+      "evidenceRefs": ["anders-2006-ace-glutes-to-max", "arnold-2010-lower-limb"],
+      "execution": {
+        "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side, face an approximately 38-centimeter platform, and place the full lead foot on top.",
+        "movement": "Drive through the lead heel and extend the lead hip, knee, and ankle to raise the body without pushing off from the trail leg.",
+        "endpoint": "Finish the ascent under control. The source did not report whether the trail foot must contact the platform at the top.",
+        "returnPhase": "Descend under control and repeat with the same lead leg. The source did not report the exact trail-foot contact or foot-descent order, so keep one consistent sequence rather than treating an invented order as canonical.",
+        "controlledJoints": "Keep the lead knee tracking with the foot and both dumbbells still at the sides.",
+        "supportAndPosture": "Use no hand support and keep the trunk controlled throughout the step.",
+        "disqualifyingCompensations": ["Pushing or hopping from the trail leg changes the lead-leg task.", "Using a materially different platform height changes the reviewed fixture.", "Swinging or resting the dumbbells away from the sides changes the load placement."],
+        "sideOrDirection": "Complete the set with one lead leg, then repeat with the other leg."
       }
     }
   ]

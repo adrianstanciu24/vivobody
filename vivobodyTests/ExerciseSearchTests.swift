@@ -105,6 +105,39 @@ struct ExerciseSearchTests {
         ])
     }
 
+    @Test func comprehensiveExpansionIsDiscoverableByLifterFacingNames() {
+        let catalog = bundledCatalog()
+        let expected: [(String, String)] = [
+            ("Romanian Deadlift", "continuous-top-start-barbell-romanian-deadlift"),
+            ("Dumbbell RDL", "two-dumbbell-continuous-romanian-deadlift"),
+            ("Goblet Squat", "kettlebell-goblet-squat"),
+            ("Vertical Smith Upper-Back Squat", "smith-machine-upper-back-squat"),
+            ("Dumbbell Bulgarian Split Squat", "two-dumbbell-rear-foot-elevated-split-squat"),
+            ("Barbell RFESS", "barbell-rear-foot-elevated-split-squat"),
+            ("Dumbbell RFESS", "two-dumbbell-rear-foot-elevated-split-squat"),
+            ("Dumbbell Walking Lunge", "two-dumbbell-continuous-walking-lunge"),
+            ("Machine Leg Extension", "upright-bilateral-lever-machine-leg-extension"),
+            ("Standing Machine Calf Raise", "bilateral-standing-shoulder-pad-machine-calf-raise"),
+            ("Seated Machine Calf Raise", "bilateral-seated-thigh-pad-machine-calf-raise"),
+            ("Bilateral Dumbbell Lateral Raise", "simultaneous-bilateral-dumbbell-lateral-raise"),
+            ("Standing Dumbbell Biceps Curl", "standing-bilateral-supinated-dumbbell-curl"),
+            ("Dumbbell Hammer Curl", "bilateral-dumbbell-hammer-curl"),
+            ("Rope Triceps Pushdown", "bilateral-rope-cable-triceps-pushdown"),
+            ("Rope Face Pull", "high-pulley-rope-face-pull-with-external-rotation"),
+            ("Barbell Shrug", "standing-bilateral-barbell-shrug"),
+            ("Seated Handled Machine Chest Fly", "seated-handled-lever-machine-chest-fly"),
+            ("Cable Glute Kickback", "supported-cable-ankle-cuff-hip-extension"),
+            ("Upper-Arm-Pad Machine Lateral Raise", "seated-upper-arm-pad-machine-lateral-raise"),
+            ("38 cm Dumbbell Forward Step-Up", "two-dumbbell-forward-step-up"),
+            ("Ab Wheel Rollout", "kneeling-ab-wheel-rollout"),
+        ]
+
+        for (query, catalogID) in expected {
+            let ranked = ExerciseSearch.rank(items: catalog, query: query)
+            #expect(ranked.first?.catalogID == catalogID)
+        }
+    }
+
     @Test func genericCleanAndSnatchKeepPowerNeighborsAheadOfSquatFixtures() throws {
         let catalog = bundledCatalog()
         let cleanIDs = ExerciseSearch.rank(items: catalog, query: "clean").compactMap(\.catalogID)

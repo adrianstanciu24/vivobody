@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 78 reviewed families are active, containing 176 exercises.
+- 82 reviewed families are active, containing 196 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 201 registered evidence sources.
+  44 joint actions, and 219 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -45,6 +45,10 @@ are discovery handles, not guaranteed final family IDs.
   `spine-flexion` and added separate `hollow-hold`, `passive-dead-hang`, and
   `active-dead-hang` owners. The additive `hang` pattern keeps both hangs out
   of Vertical Pull coverage.
+- The comprehensive lifter expansion added 20 source-exact records. Sixteen
+  extend existing owners; walking lunge, externally rotating face pull,
+  upper-arm-pad shoulder abduction, and kneeling ab-wheel rollout use four new
+  families because their topology or load interface changes the contract.
 - No catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
   one source-exact seated 45-degree cable fixture, both Batch-3 nonstandard
   press branches are closed, and the generic grip discovery handle is resolved
@@ -69,14 +73,16 @@ batch siblings.
 | `shoulder-extension-row` | 12 |
 | `shoulder-horizontal-abduction-row` | 6 |
 | `shoulder-extension-isolation` | 3 |
-| `chest-fly` | 3 |
+| `chest-fly` | 4 |
 | `reverse-fly` | 4 |
 | `shoulder-flexion-raise` | 1 |
-| `shoulder-abduction-raise` | 2 |
+| `shoulder-abduction-raise` | 3 |
+| `upper-arm-pad-shoulder-abduction` | 1 |
 | `shoulder-external-rotation` | 3 |
 | `shoulder-internal-rotation` | 2 |
-| `elbow-flexion` | 7 |
-| `elbow-extension` | 6 |
+| `elbow-flexion` | 9 |
+| `elbow-extension` | 7 |
+| `externally-rotating-face-pull` | 1 |
 | `forearm-pronation` | 1 |
 | `forearm-supination` | 1 |
 | `wrist-flexion` | 1 |
@@ -86,20 +92,20 @@ batch siblings.
 | `finger-flexion-grip` | 1 |
 | `scapular-protraction` | 1 |
 | `scapular-retraction` | 1 |
-| `scapular-elevation` | 2 |
+| `scapular-elevation` | 3 |
 | `scapular-depression` | 1 |
 | `upright-row` | 1 |
 | `dip` | 2 |
 | `push-press` | 1 |
 | `landmine-press` | 1 |
-| `knee-extension` | 2 |
+| `knee-extension` | 3 |
 | `knee-flexion` | 4 |
 | `nordic-curl` | 1 |
-| `hip-extension` | 1 |
+| `hip-extension` | 2 |
 | `roman-chair-hip-extension` | 1 |
 | `hip-flexion` | 1 |
-| `ankle-plantarflexion` | 2 |
-| `bilateral-squat` | 2 |
+| `ankle-plantarflexion` | 4 |
+| `bilateral-squat` | 4 |
 | `inclined-leg-press` | 1 |
 | `machine-hack-squat` | 1 |
 | `conventional-deadlift` | 1 |
@@ -107,11 +113,12 @@ batch siblings.
 | `trap-bar-deadlift` | 2 |
 | `single-leg-deadlift` | 3 |
 | `hip-hinge` | 1 |
-| `romanian-deadlift` | 3 |
+| `romanian-deadlift` | 5 |
 | `hip-thrust-bridge` | 2 |
-| `split-stance-squat` | 2 |
-| `step-up` | 1 |
+| `split-stance-squat` | 3 |
+| `step-up` | 2 |
 | `dynamic-lunge` | 2 |
+| `walking-lunge` | 1 |
 | `hip-abduction` | 2 |
 | `hip-adduction` | 2 |
 | `ankle-dorsiflexion` | 1 |
@@ -122,6 +129,7 @@ batch siblings.
 | `spine-lateral-flexion` | 1 |
 | `spine-rotation` | 1 |
 | `anti-extension` | 1 |
+| `kneeling-ab-wheel-rollout` | 1 |
 | `anti-lateral-flexion` | 1 |
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
@@ -138,7 +146,7 @@ batch siblings.
 | `hollow-hold` | 1 |
 | `passive-dead-hang` | 1 |
 | `active-dead-hang` | 1 |
-| **Total** | **176** |
+| **Total** | **196** |
 
 ## Foundation gates
 
@@ -418,8 +426,8 @@ that boundary and adds two separate owners rather than broadening
 
 7. `conventional-deadlift` — one bilateral barbell floor-contact fixture with
    material hip, knee, and ankle motion while spinal motion remains unmeasured
-8. `romanian-deadlift` — three bilateral barbell floor-contact fixtures:
-   Romanian, 15-centimeter step Romanian, and stiff-leg deadlift
+8. `romanian-deadlift` — three bilateral barbell floor-contact fixtures plus
+   source-exact continuous top-start barbell and paired-dumbbell fixtures
 
 The Romanian-family contract records the reviewed knee instructions without
 calling an ordinary Romanian deadlift position-held.
@@ -435,17 +443,16 @@ owners without weakening either bilateral contract:
 Staggered/B-stance remains deferred because its direct intervention does not
 report the rear-foot load share, knee behavior, range, grip, or bar path needed
 to distinguish it truthfully from a true single-leg or bilateral hinge.
-Kettlebell, cable, Smith-machine, arbitrary-handle, and other equipment or
-support geometries remain future evidence decisions rather than inferred
-substitutions.
+Cable and arbitrary-handle deadlift geometries remain future evidence
+decisions rather than inferred substitutions.
 
 Dynamic lunge owns the reviewed landing, deceleration, changing support, and
 return-to-bilateral-standing transitions for exact forward and reverse
-fixtures. `split-stance-squat` remains the fixed-foot owner. Walking and
-alternating lunges, external loads, fixed stride lengths, and continuous
-locomotion remain outside both contracts. Leg press, generic-height step-ups,
-and lateral/crossover step-ups remain explicit future decisions rather than
-automatic variants.
+fixtures. `split-stance-squat` remains the fixed-foot owner. The later
+`walking-lunge` owner admits only a paired-dumbbell continuous alternating
+fixture; fixed stride lengths and other walking-lunge loads remain outside it.
+Leg press, generic-height step-ups, and lateral/crossover step-ups remain
+explicit future decisions rather than automatic variants.
 
 ## Batch 6 — Lower-body taxonomy-sensitive isolation (5)
 

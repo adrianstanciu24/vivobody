@@ -182,7 +182,7 @@ struct CustomExerciseEditorSheet: View {
     }
 
     private var hasValidLoadProfile: Bool {
-        if draft.equipment == .band {
+        if draft.equipment.requiresNonComparableLoad {
             return draft.loadMode == .nonComparable && draft.bodyweightFraction == 0
         }
         switch draft.loadMode {
@@ -686,7 +686,7 @@ struct CustomExerciseEditorSheet: View {
         case .loadMode:
             CatalogChoiceSheet(
                 title: "Load Interpretation",
-                options: draft.equipment == .band
+                options: draft.equipment.requiresNonComparableLoad
                     ? [ExerciseLoadMode.nonComparable]
                     : ExerciseLoadMode.allCases,
                 label: { $0.customExerciseChoiceLabel },
@@ -706,7 +706,7 @@ struct CustomExerciseEditorSheet: View {
 
     private func applyEquipment(_ equipment: Equipment) {
         draft.equipment = equipment
-        if equipment == .band {
+        if equipment.requiresNonComparableLoad {
             draft.loadMode = .nonComparable
             draft.bodyweightFraction = 0
         }

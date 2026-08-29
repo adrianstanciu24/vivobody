@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Seventy-eight reviewed family files containing 176 exercises are currently
+Eighty-two reviewed family files containing 196 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-201-source foundation. Each uses a coverage batch whose exercises
+219-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -50,7 +50,7 @@ boundary are mechanics adaptations from a bar-end study; the handstand record
 discloses that its exact apparatus is directly reviewed while its dynamic
 action and mover policy transfer from vertical press.
 
-Batch 4 adds eight exercises across `knee-extension`, `knee-flexion`,
+Batch 4 originally added eight exercises across `knee-extension`, `knee-flexion`,
 `hip-extension`, `hip-flexion`, and `ankle-plantarflexion`. The rosters preserve
 the exact reviewed posture contrasts: reclined versus upright leg extension,
 seated versus prone leg curl, bent-knee prone-table hip extension, straight-
@@ -58,7 +58,7 @@ versus bent-knee machine calf raise, and one supine bodyweight active straight-
 leg raise to active end range. The hip-flexion fixture reports its pelvis and
 spine motion as nonstandardized rather than inventing position-held claims.
 
-Batch 5 and its deadlift follow-up add thirteen exercises across
+Batch 5 and its initial deadlift follow-up added thirteen exercises across
 `bilateral-squat`, `hip-thrust-bridge`, `split-stance-squat`, `step-up`,
 `hip-hinge`, `dynamic-lunge`, `conventional-deadlift`, and
 `romanian-deadlift`. The original nine records remain the reviewed squat,
@@ -112,6 +112,13 @@ duration-only bodyweight records with non-comparable load. Passive and Active
 Dead Hang remain distinct histories and use the `hang` pattern rather than
 claiming Vertical Pull coverage. Their standards establish fixture geometry;
 categorical roles are explicitly bounded anatomy-and-mechanics inferences.
+
+The comprehensive lifter expansion adds 20 source-exact records. Sixteen
+extend existing owners; `walking-lunge`, `externally-rotating-face-pull`,
+`upper-arm-pad-shoulder-abduction`, and `kneeling-ab-wheel-rollout` remain
+separate because their support topology, coupled actions, load interface, or
+tracking semantics cross an existing family boundary. The Ab Wheel is
+first-class equipment with non-comparable, no-resistance-input semantics.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
@@ -345,15 +352,13 @@ barbell but not a high/low site or hand orientation, so its upper-back placement
 and pronated control grip are bounded figure- and mechanics-derived encodings,
 not textual-method precision.
 
-`fixedPath` remains an external-load question in Batch 5. Squat,
-hip-thrust/bridge, and stationary split-squat require the boolean and pin it
-`false`. The bodyweight-only step-up deliberately omits the axis because no
-external load path exists; omission must not be interpreted as an unreviewed
-machine or rail-guided branch.
+`fixedPath` remains a fixture-path question in Batch 5. Squat now includes both
+free-load and Smith-machine paths. Hip-thrust/bridge, stationary split-squat,
+and both bodyweight and dumbbell step-ups require the boolean and pin it
+`false`; their fixture relationships are enforced by explicit exercise rules.
 
-The one-record split-squat and step-up contracts keep their boundaries in
-required single-value axes rather than always-true exercise rules. Every such
-axis is mutation-tested directly. Step-up records Wang et al.'s complete task:
+Every single-value axis is mutation-tested directly. Step-up records Wang et
+al.'s complete task:
 the trail foot returns from platform to floor, the lead foot follows, and the
 same lead foot is replaced on the platform before the next repetition. That is
 not the continuous gym repetition in which the lead foot stays elevated.
@@ -509,8 +514,11 @@ neutral forearm orientation, extended held elbows, and a 40-second product
 detent. Their 60 lb /
 27.5 kg and 50 lb / 22.5 kg seeds are product defaults, not source-derived
 universal prescriptions. `loadAccounting: perImplement` means each logged seed
-is one implement: either equal farmer-carry dumbbell rather than their combined
-pair, or the single suitcase-carry dumbbell. Ordinary gait propulsion remains
+is one implement, never the sum of a matched pair. Every paired-dumbbell
+fixture added by the comprehensive expansion states this directly in its
+starting instructions; the same convention applies to the separately reviewed
+carry fixtures. Ordinary gait
+propulsion remains
 `lowerBodyContribution: walkingPropulsion` rather than becoming a set of
 training-defining hip, knee, or ankle prime actions; gait-related spinal motion
 is honestly `nonstandardized`, not fabricated as absent.

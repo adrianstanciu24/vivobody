@@ -2,7 +2,7 @@
 //  ActiveExerciseCardLoadPresentation.swift
 //  vivobody
 //
-//  Active-workout presentation rules for resistance and unloaded bodyweight work.
+//  Active-workout presentation rules for resistance and unloaded exercise work.
 //
 
 import Foundation
@@ -10,7 +10,7 @@ import SwiftUI
 import VivoKit
 
 extension ActiveExerciseCard {
-    var isUnloadedBodyweightExercise: Bool {
+    var isUnloadedExercise: Bool {
         !exercise.tracksResistance
     }
 

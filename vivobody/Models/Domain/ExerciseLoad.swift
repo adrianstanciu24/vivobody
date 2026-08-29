@@ -177,15 +177,20 @@ nonisolated enum ExerciseLoad {
     }
 }
 
-/// Whether a fixture has a user-entered resistance axis. Bands remain
-/// editable even though their load is non-comparable; unloaded bodyweight
-/// fixtures do not invent a pound value merely because WorkoutSet stores one.
+extension Equipment {
+    var requiresNonComparableLoad: Bool {
+        self == .band || self == .abWheel
+    }
+}
+
+/// Whether a fixture has a user-entered resistance axis. Bands remain editable,
+/// while unloaded bodyweight and ab-wheel fixtures do not invent a pound value.
 nonisolated enum ExerciseResistanceCapability {
     static func tracksResistance(
         loadMode: ExerciseLoadMode,
         equipment: Equipment?
     ) -> Bool {
-        !(loadMode == .nonComparable && equipment == .bodyweight)
+        !(loadMode == .nonComparable && (equipment == .bodyweight || equipment == .abWheel))
     }
 
     static func normalizedWeight(

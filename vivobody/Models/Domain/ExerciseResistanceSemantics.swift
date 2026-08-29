@@ -82,8 +82,8 @@ extension String {
 }
 
 extension ExerciseCatalogItem {
-    /// False only for an unloaded bodyweight fixture. Non-comparable bands
-    /// retain the real resistance value entered by the user.
+    /// False for fixtures such as unloaded bodyweight work and ab-wheel rollouts.
+    /// Non-comparable bands retain the real resistance value entered by the user.
     var tracksResistance: Bool {
         ExerciseResistanceCapability.tracksResistance(
             loadMode: loadMode,

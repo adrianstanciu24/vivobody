@@ -3,12 +3,13 @@
   "schemaVersion": 1,
   "id": "scapular-elevation",
   "name": "Scapular Elevation",
-  "definition": "A strict open-chain scapular isolation whose concentric phase elevates the scapulae while humeral and elbow angles remain fixed. The contract admits the directly measured single-arm dumbbell shoulder shrug and Lee et al.'s exact bilateral stabilization shrug at 30 degrees of frontal-plane abduction. Both model the observed upward rotation as a coupled prime action instead of pretending that a shrug is pure vertical translation: levator scapulae and upper trapezius elevate the scapula, while upper trapezius, serratus, and in the 30-degree fixture lower trapezius contribute to upward rotation. The dumbbell trace showed smaller model-specific abduction/adduction and winging coordinates; those remain disclosed coupling rather than incorrectly relabeled catalog actions. The stabilization fixture uses no external training load: two source trials, a five-second hold at the individual maximum-height target bars, light radial-wrist contact with frontal guides, inclinometer-maintained abduction, and investigator stabilization of the chin and thorax are pinned as laboratory topology. Lee et al. measured scapular upward-rotation angle immediately after each exercise condition rather than continuously through the shrug, so the coupled action is a condition-level finding rather than a dynamic angle trace. Rolling shrugs, overhead shrugs, trap-bar and barbell variants, machine shrugs, carries, upright rows, unsupported 30-degree shrugs, neck motion, and leg-driven pulls remain outside this narrow contract.",
+  "definition": "A strict open-chain scapular isolation whose concentric phase elevates the scapulae while humeral and elbow angles remain fixed. The contract admits a single-arm dumbbell shoulder shrug, a standing bilateral front-held barbell shrug, and Lee et al.'s exact bilateral stabilization shrug at 30 degrees of frontal-plane abduction. All model upward rotation as a coupled prime action instead of pretending that a shrug is pure vertical translation. The stabilization fixture preserves its no-load laboratory topology. Rolling, overhead, behind-body, trap-bar, machine, carry, upright-row, neck-motion, strapped, and leg-driven variants remain outside this narrow contract.",
   "evidenceRefs": [
     "castelein-2016-scapular-muscles-shrug",
     "lee-2016-stabilization-shrug-upward-rotation",
     "seth-2019-shoulder-work",
-    "werthel-2019-trapezius-transfer"
+    "werthel-2019-trapezius-transfer",
+    "ace-2026-shrug"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -28,6 +29,7 @@
   "allowed": {
     "equipment": [
       "dumbbell",
+      "barbell",
       "other"
     ],
     "modalities": [
@@ -220,7 +222,7 @@
         "atSide",
         "abducted30"
       ],
-      "description": "The maintained humerothoracic position: beside the torso in the dumbbell fixture or abducted 30 degrees in the stabilization fixture, without dynamic humeral elevation."
+      "description": "The maintained humerothoracic position: beside the torso in the loaded dumbbell and barbell fixtures or abducted 30 degrees in the stabilization fixture, without dynamic humeral elevation."
     },
     {
       "id": "humerothoracicElevationDegrees",
@@ -283,9 +285,10 @@
       "required": true,
       "allowedValues": [
         "neutral",
+        "pronated",
         "notReported"
       ],
-      "description": "The thumb-forward dumbbell posture or the explicitly unreported radioulnar orientation in Lee et al.'s no-implement fixture."
+      "description": "The thumb-forward dumbbell posture, palms-down barbell posture, or explicitly unreported radioulnar orientation in Lee et al.'s no-implement fixture."
     },
     {
       "id": "handTask",
@@ -295,7 +298,7 @@
         "staticImplementHold",
         "none"
       ],
-      "description": "Whether the hands statically hold a dumbbell or carry no training implement in the laboratory stabilization shrug."
+      "description": "Whether the hands statically hold the dumbbell or barbell implement or carry no training implement in the laboratory stabilization shrug."
     },
     {
       "id": "resistanceGeometry",
@@ -303,9 +306,24 @@
       "required": true,
       "allowedValues": [
         "gravityLoadedDumbbell",
+        "gravityLoadedBarbell",
         "armSegmentGravity"
       ],
-      "description": "Whether a dumbbell supplies the downward load or the laboratory task elevates only the arm segments against gravity."
+      "description": "Whether a dumbbell or barbell supplies the downward load or the laboratory task elevates only the arm segments against gravity."
+    },
+    {
+      "id": "gripWidth",
+      "valueType": "enum",
+      "required": false,
+      "description": "The barbell hand spacing; non-barbell fixtures omit this field.",
+      "allowedValues": ["shoulderWidth"]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": false,
+      "description": "The barbell fixture logs total bar-and-plate load.",
+      "allowedValues": ["totalBarAndPlates"]
     },
     {
       "id": "humerothoracicAngleControl",
@@ -343,7 +361,7 @@
       "required": true,
       "minimum": 0,
       "maximum": 5,
-      "description": "The source-prescribed hold at maximum shrug height: five seconds in Lee et al.'s stabilization condition and no prescribed top hold in the dumbbell fixture."
+      "description": "The source-prescribed hold at maximum shrug height: five seconds in Lee et al.'s stabilization condition and no prescribed top hold in either loaded fixture."
     },
     {
       "id": "wristGuide",
@@ -407,7 +425,7 @@
         { "field": "variant.wristGuide", "value": "none" }
       ],
       "requirePresent": [],
-      "requireAbsent": [],
+      "requireAbsent": ["variant.gripWidth", "variant.loadAccounting"],
       "requireMuscleRequirements": [
         {
           "anyOf": [
@@ -452,7 +470,7 @@
         { "field": "variant.wristGuide", "value": "radialBordersAgainstPlasticGuides" }
       ],
       "requirePresent": [],
-      "requireAbsent": [],
+      "requireAbsent": ["variant.gripWidth", "variant.loadAccounting"],
       "requireMuscleRequirements": [
         {
           "anyOf": [
@@ -468,6 +486,28 @@
         }
       ],
       "requireAdditionalStabilityDemands": []
+    },
+    {
+      "id": "barbell-fixture-is-front-held-bilateral-shrug",
+      "description": "The barbell branch is the strict bilateral front-held pronated shrug with total-load accounting.",
+      "when": {"field": "equipment", "operator": "equals", "value": "barbell"},
+      "then": [
+        {"field": "laterality", "value": "bilateral"}, {"field": "loadMode", "value": "external"},
+        {"field": "variant.upperArmPosition", "value": "atSide"}, {"field": "variant.humerothoracicElevationDegrees", "value": 0},
+        {"field": "variant.elevationPlane", "value": "notApplicable"}, {"field": "variant.humeralRotation", "value": "neutral"},
+        {"field": "variant.forearmOrientation", "value": "pronated"}, {"field": "variant.handTask", "value": "staticImplementHold"},
+        {"field": "variant.resistanceGeometry", "value": "gravityLoadedBarbell"}, {"field": "variant.gripWidth", "value": "shoulderWidth"},
+        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}, {"field": "variant.humerothoracicAngleControl", "value": "none"},
+        {"field": "variant.craniocervicothoracicStabilization", "value": "none"}, {"field": "variant.shrugHeightTarget", "value": "none"},
+        {"field": "variant.topHoldSeconds", "value": 0}, {"field": "variant.wristGuide", "value": "none"}
+      ],
+      "requirePresent": ["variant.gripWidth", "variant.loadAccounting"],
+      "requireAbsent": [],
+      "requireMuscleRequirements": [
+        {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"},
+        {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}
+      ],
+      "requireAdditionalStabilityDemands": ["wrist", "hand"]
     }
   ],
   "recommended": {
@@ -655,6 +695,40 @@
           "Adding external load turns the no-load stabilization shrug into a loaded shrug.",
           "Dipping the legs to drive upward turns the shrug into a leg-driven pull."
         ]
+      }
+    },
+    {
+      "catalogID": "standing-bilateral-barbell-shrug",
+      "name": "Standing Bilateral Barbell Shrug",
+      "aliases": ["Barbell Shrug", "Standing Barbell Shrug"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
+      "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 10, "searchPriority": 96,
+      "involvement": [
+        {"muscle": "levatorScapulae", "role": "primary"}, {"muscle": "trapeziusUpper", "role": "primary"},
+        {"muscle": "serratus", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "contralateralSupport": "none", "scapularTranslation": "free",
+        "upperArmPosition": "atSide", "humerothoracicElevationDegrees": 0, "elevationPlane": "notApplicable", "humeralRotation": "neutral",
+        "elbowMotion": "angleHeld", "elbowPosture": "extended", "forearmMotion": "angleHeld", "forearmOrientation": "pronated",
+        "handTask": "staticImplementHold", "resistanceGeometry": "gravityLoadedBarbell", "gripWidth": "shoulderWidth",
+        "loadAccounting": "totalBarAndPlates", "humerothoracicAngleControl": "none", "craniocervicothoracicStabilization": "none",
+        "shrugHeightTarget": "none", "topHoldSeconds": 0, "wristGuide": "none", "fixedPath": false,
+        "lowerBodyContribution": "none", "neckContribution": "none"
+      },
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["wrist", "hand"],
+      "evidenceRefs": ["ace-2026-shrug", "castelein-2016-scapular-muscles-shrug", "seth-2019-shoulder-work"],
+      "execution": {
+        "startingPosition": "Stand tall with feet about hip-width apart. Hold a barbell in front of the thighs with a shoulder-width palms-down grip, straight elbows, and no straps or hooks.",
+        "movement": "Elevate both shoulder blades directly upward without bending the elbows.",
+        "endpoint": "Finish with both shoulder blades as high as they comfortably go.",
+        "returnPhase": "Lower under control without rolling the shoulders, moving the neck, or leaning the trunk.",
+        "controlledJoints": "Keep both upper arms at the sides and both elbows straight.",
+        "supportAndPosture": "Keep the trunk and lower body still while the bar remains in front of the thighs.",
+        "disqualifyingCompensations": ["Rolling the shoulders forward or back turns the lift into a rolling shrug.", "Bending the elbows turns the shrug into an upright row.", "Dipping the legs to heave the bar turns the shrug into a leg-driven pull.", "Moving the bar behind the body or using straps leaves the reviewed fixture."]
       }
     }
   ]

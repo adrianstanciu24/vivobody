@@ -2,8 +2,7 @@
 //  ExerciseCatalog.swift
 //  vivobody
 //
-//  Persistent catalog of lifts used to build templates or add exercises
-//  mid-workout. Stored as @Model so users can extend it with custom entries:
+//  Persistent catalog used for templates, mid-workout additions, and custom entries:
 //  name, muscle group, equipment, mechanic, training role, compound pattern,
 //  direction, aliases, categorical muscle roles, and sensible defaults.
 //
@@ -11,8 +10,7 @@
 //  (see `CatalogData`) on every launch, so ongoing exercise-authoring edits,
 //  additions, and removals reach the development store. User logging defaults,
 //  favorites, measured 1RM values, and custom entries remain untouched.
-//  Templates and sessions copy stable catalog IDs plus display fields at
-//  creation time, so deleting a catalog entry never breaks logged workouts.
+//  Templates and sessions copy stable IDs and display fields, preserving logged workouts.
 //
 
 import Foundation
@@ -34,6 +32,7 @@ nonisolated enum Equipment: String, Codable, Hashable, CaseIterable {
     case band
     case gripTrainer
     case trapBar
+    case abWheel
     case other
 
     nonisolated var displayName: String {
@@ -47,6 +46,7 @@ nonisolated enum Equipment: String, Codable, Hashable, CaseIterable {
         case .band: "Band"
         case .gripTrainer: "Grip Trainer"
         case .trapBar: "Trap Bar"
+        case .abWheel: "Ab Wheel"
         case .other: "Other"
         }
     }

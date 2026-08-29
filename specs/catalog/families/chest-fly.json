@@ -3,13 +3,14 @@
   "schemaVersion": 1,
   "id": "chest-fly",
   "name": "Chest Fly",
-  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally adducts the upper arms with a fixed, nearly extended elbow posture. The admitted roster is limited to the directly reviewed flat dumbbell, standing elastic-band, and standing dual-cable fixtures. Each branch preserves its reviewed support, arm path, grip disclosure, and resistance geometry; machine, unilateral, bodyweight, pressing, and elbow-extension variants remain outside this contract.",
+  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally adducts the upper arms with a fixed, nearly extended elbow posture. The roster owns source-exact flat dumbbell, standing elastic-band, standing dual-cable, and seated handled lever-machine fixtures. Each branch preserves its reviewed support, arm path, load interface, and resistance geometry; upper-arm-pad machines, unilateral, bodyweight, pressing, and elbow-extension variants remain outside this contract.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "holzbaur-2005-upper-extremity",
     "bergquist-2018-band-free-weight-fly",
     "welsch-2005-dumbbell-fly",
-    "schutz-2022-chest-exercise-joint-loading"
+    "schutz-2022-chest-exercise-joint-loading",
+    "cybex-2008-mg500-manual"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -30,7 +31,8 @@
     "equipment": [
       "dumbbell",
       "band",
-      "cable"
+      "cable",
+      "machine"
     ],
     "modalities": [
       "dynamicStrength"
@@ -167,7 +169,8 @@
       "description": "The reviewed body position used for the fly.",
       "allowedValues": [
         "supine",
-        "standing"
+        "standing",
+        "seated"
       ]
     },
     {
@@ -177,7 +180,8 @@
       "description": "The external surface directly supporting the torso.",
       "allowedValues": [
         "bench",
-        "none"
+        "none",
+        "posteriorBackPad"
       ]
     },
     {
@@ -225,7 +229,8 @@
       "description": "The reviewed upper-arm path relative to the torso.",
       "allowedValues": [
         "flared",
-        "sidewaysInCablePlane"
+        "sidewaysInCablePlane",
+        "leverGuidedFlared"
       ]
     },
     {
@@ -240,8 +245,8 @@
       "id": "handleType",
       "valueType": "enum",
       "required": false,
-      "description": "The directly reviewed cable handles.",
-      "allowedValues": ["singleCableHandles"]
+      "description": "The directly reviewed cable or machine handles.",
+      "allowedValues": ["singleCableHandles", "bilateralLeverHandles"]
     },
     {
       "id": "cableAnchorHeight",
@@ -282,15 +287,21 @@
       "id": "loadAccounting",
       "valueType": "enum",
       "required": false,
-      "description": "The logged scalar means the selected weight on each matching stack, not their sum.",
-      "allowedValues": ["perStack"]
+      "description": "Whether the logged scalar is one matched cable-stack setting or the entered load on one exact machine fixture.",
+      "allowedValues": ["perStack", "enteredExternalLoadSameFixtureOnly"]
+    },
+    {
+      "id": "machineFixture",
+      "valueType": "enum",
+      "required": false,
+      "description": "The exact handled lever-machine fixture documented by the manufacturer.",
+      "allowedValues": ["cybexMG500ChestFly"]
     },
     {
       "id": "fixedPath",
       "valueType": "boolean",
       "required": true,
-      "description": "Whether an external guide fixes the arm path.",
-      "fixedValue": false
+      "description": "Whether an external lever fixes the arm path."
     }
   ],
   "recommended": {
@@ -324,10 +335,14 @@
         {
           "field": "variant.scapularTranslation",
           "value": "supportConstrained"
-        }
+        },
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.upperArmPath", "value": "flared"},
+        {"field": "variant.upperArmElevationDegrees", "value": 90},
+        {"field": "variant.fixedPath", "value": false}
       ],
-      "requirePresent": [],
-      "requireAbsent": []
+      "requirePresent": ["variant.upperArmElevationDegrees"],
+      "requireAbsent": ["variant.handleType", "variant.cableAnchorHeight", "variant.stanceConfiguration", "variant.torsoInclination", "variant.resistanceGeometry", "variant.loadDistribution", "variant.loadAccounting", "variant.machineFixture"]
     },
     {
       "id": "band-fly-uses-standing-free-scapula-semantics",
@@ -349,10 +364,14 @@
         {
           "field": "variant.scapularTranslation",
           "value": "free"
-        }
+        },
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.upperArmPath", "value": "flared"},
+        {"field": "variant.upperArmElevationDegrees", "value": 90},
+        {"field": "variant.fixedPath", "value": false}
       ],
-      "requirePresent": [],
-      "requireAbsent": [],
+      "requirePresent": ["variant.upperArmElevationDegrees"],
+      "requireAbsent": ["variant.handleType", "variant.cableAnchorHeight", "variant.stanceConfiguration", "variant.torsoInclination", "variant.resistanceGeometry", "variant.loadDistribution", "variant.loadAccounting", "variant.machineFixture"],
       "requireMuscleRequirements": [
         {
           "anyOf": [
@@ -368,30 +387,6 @@
       ]
     },
     {
-      "id": "non-cable-fly-preserves-reviewed-arm-fixture",
-      "description": "The dumbbell and band branches retain the neutral grip, flared shoulder-height arm path, and omit every cable-only setup field.",
-      "when": {
-        "field": "equipment",
-        "operator": "notEquals",
-        "value": "cable"
-      },
-      "then": [
-        {"field": "variant.gripOrientation", "value": "neutral"},
-        {"field": "variant.upperArmPath", "value": "flared"},
-        {"field": "variant.upperArmElevationDegrees", "value": 90}
-      ],
-      "requirePresent": ["variant.upperArmElevationDegrees"],
-      "requireAbsent": [
-        "variant.handleType",
-        "variant.cableAnchorHeight",
-        "variant.stanceConfiguration",
-        "variant.torsoInclination",
-        "variant.resistanceGeometry",
-        "variant.loadDistribution",
-        "variant.loadAccounting"
-      ]
-    },
-    {
       "id": "dual-cable-fly-pins-reviewed-tower-geometry",
       "description": "The cable branch preserves the exact two-tower standing fixture and per-stack load meaning.",
       "when": {"field": "equipment", "operator": "equals", "value": "cable"},
@@ -402,12 +397,26 @@
         {"field": "variant.handleType", "value": "singleCableHandles"}, {"field": "variant.cableAnchorHeight", "value": "headLevel"},
         {"field": "variant.stanceConfiguration", "value": "lungeEitherLegForward"}, {"field": "variant.torsoInclination", "value": "forwardNonNumeric"},
         {"field": "variant.resistanceGeometry", "value": "dualCableCoplanar"}, {"field": "variant.loadDistribution", "value": "equalAcrossTwoTowers"},
-        {"field": "variant.loadAccounting", "value": "perStack"}
+        {"field": "variant.loadAccounting", "value": "perStack"}, {"field": "variant.fixedPath", "value": false}
       ],
       "requirePresent": ["variant.handleType", "variant.cableAnchorHeight", "variant.stanceConfiguration", "variant.torsoInclination", "variant.resistanceGeometry", "variant.loadDistribution", "variant.loadAccounting"],
-      "requireAbsent": ["variant.upperArmElevationDegrees"],
+      "requireAbsent": ["variant.upperArmElevationDegrees", "variant.machineFixture"],
       "requireMuscleRequirements": [{"anyOf": ["abs", "obliques", "lumbarExtensors"], "minimumRole": "stabilizer"}],
       "requireAdditionalStabilityDemands": ["spine", "pelvis"]
+    },
+    {
+      "id": "handled-machine-fly-pins-seated-lever-fixture",
+      "description": "The reviewed machine fly uses seated posterior support and bilateral handles on a fixed lever path; entered load is comparable only on that exact fixture.",
+      "when": {"field": "equipment", "operator": "equals", "value": "machine"},
+      "then": [
+        {"field": "loadMode", "value": "external"}, {"field": "variant.bodyPosition", "value": "seated"},
+        {"field": "variant.torsoSupport", "value": "posteriorBackPad"}, {"field": "variant.scapularTranslation", "value": "supportConstrained"},
+        {"field": "variant.gripOrientation", "value": "neutral"}, {"field": "variant.upperArmPath", "value": "leverGuidedFlared"},
+        {"field": "variant.handleType", "value": "bilateralLeverHandles"}, {"field": "variant.loadAccounting", "value": "enteredExternalLoadSameFixtureOnly"},
+        {"field": "variant.machineFixture", "value": "cybexMG500ChestFly"}, {"field": "variant.fixedPath", "value": true}
+      ],
+      "requirePresent": ["variant.handleType", "variant.loadAccounting", "variant.machineFixture"],
+      "requireAbsent": ["variant.upperArmElevationDegrees", "variant.cableAnchorHeight", "variant.stanceConfiguration", "variant.torsoInclination", "variant.resistanceGeometry", "variant.loadDistribution"]
     }
   ],
   "exercises": [
@@ -616,6 +625,46 @@
         "controlledJoints": "Keep both elbows slightly bent and move the arms symmetrically.",
         "supportAndPosture": "Hold the lunge stance and forward torso position without stepping or twisting.",
         "disqualifyingCompensations": ["Bending and straightening the elbows changes the fly into a cable press.", "Stepping, twisting, or allowing one side to lead changes the reviewed balanced path."]
+      }
+    },
+    {
+      "catalogID": "seated-handled-lever-machine-chest-fly",
+      "name": "Seated Handled Lever-Machine Chest Fly",
+      "aliases": ["Seated Handled Machine Chest Fly", "Handled Lever Chest Fly"],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"},
+        {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open", "lowerBodyContribution": "none", "bodyPosition": "seated", "torsoSupport": "posteriorBackPad",
+        "scapularTranslation": "supportConstrained", "gripOrientation": "neutral", "elbowMotion": "angleHeld", "elbowPosture": "nearExtended",
+        "upperArmPath": "leverGuidedFlared", "handleType": "bilateralLeverHandles", "loadAccounting": "enteredExternalLoadSameFixtureOnly",
+        "machineFixture": "cybexMG500ChestFly", "fixedPath": true
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["cybex-2008-mg500-manual", "ackland-2008-shoulder-moment-arms", "holzbaur-2005-upper-extremity"],
+      "execution": {
+        "startingPosition": "Sit against the back pad, adjust the seat so both handles align with the chest, and take one handle in each hand with a fixed slight elbow bend. Log the entered machine load and compare it only on this same fixture.",
+        "movement": "Bring both handled levers inward together by sweeping the upper arms across the chest.",
+        "endpoint": "Finish when the handles meet at the machine's controlled end position without pressing through the elbows.",
+        "returnPhase": "Let both levers open under control to the starting position while keeping the elbow angle fixed.",
+        "controlledJoints": "Keep the wrists neutral, elbows slightly bent, and both sides moving simultaneously.",
+        "supportAndPosture": "Keep the torso against the posterior pad and the feet stable throughout the set.",
+        "disqualifyingCompensations": ["Bending and straightening the elbows turns the fly into a press.", "Leaving the back pad to create momentum changes the reviewed supported fixture.", "Using upper-arm pads instead of handles changes the load interface and family."]
       }
     }
   ]

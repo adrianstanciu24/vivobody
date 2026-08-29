@@ -3,9 +3,10 @@
   "schemaVersion": 1,
   "id": "knee-extension",
   "name": "Knee Extension",
-  "definition": "A strict open-chain machine isolation in which the lower leg extends at the knee while the hip, pelvis, spine, ankle, and foot remain held. The initial roster contains only the directly trained unilateral lever-machine conditions at approximately 40 and 90 degrees of hip flexion. Vasti remain primary in both; rectus femoris is primary in the reclined 40-degree condition and secondary in the upright 90-degree condition because the directly reviewed intervention found substantially greater rectus-femoris hypertrophy with reduced hip flexion but did not make it cease contributing upright. Bilateral machines, cables, bands, reverse Nordics, sissy squats, rehabilitation terminal extensions, partial ranges, and compound knee-extension tasks remain outside this family.",
+  "definition": "A strict open-chain lever-machine isolation in which one lower leg or both linked lower legs extend at the knee while the hip, pelvis, spine, ankle, and foot remain held. The roster contains directly trained unilateral conditions at approximately 40 and 90 degrees of hip flexion plus a manufacturer-defined upright bilateral fixture whose exact hip and knee angles are source-unreported. Vasti remain primary throughout; rectus femoris is primary in the reclined 40-degree condition and secondary in the upright unilateral condition. The bilateral vasti-primary and rectus-femoris-secondary roles are conservative action-and-anatomy inferences, not outcomes extrapolated from the unilateral trials. Independent alternating lever arms, cables, bands, reverse Nordics, sissy squats, rehabilitation terminal extensions, partial ranges, and compound knee-extension tasks remain outside this family.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
+    "cybex-2008-mg500-manual",
     "larsen-2025-leg-extension-hip-flexion",
     "mitsuya-2023-leg-extension-hip-flexion"
   ],
@@ -38,7 +39,8 @@
       "external"
     ],
     "lateralities": [
-      "unilateral"
+      "unilateral",
+      "bilateral"
     ]
   },
   "movementSignature": {
@@ -140,9 +142,10 @@
       "required": true,
       "allowedValues": [
         "reclined",
-        "seated"
+        "seated",
+        "seatedSourceUnreportedAngles"
       ],
-      "description": "The directly reviewed torso relationship used to hold the authored hip-flexion posture."
+      "description": "The reviewed torso relationship; the bilateral manufacturer fixture is upright but does not report a numeric hip angle."
     },
     {
       "id": "torsoSupport",
@@ -192,10 +195,10 @@
     {
       "id": "hipFlexionDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "minimum": 40,
       "maximum": 90,
-      "description": "Held hip flexion from anatomical neutral; only the rule-pinned 40- and 90-degree research fixtures are admitted."
+      "description": "Held hip flexion from anatomical neutral for the unilateral research fixtures; omitted when the manufacturer source reports no numeric angle."
     },
     {
       "id": "kneeMotion",
@@ -209,18 +212,18 @@
     {
       "id": "kneeStartFlexionDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "minimum": 110,
       "maximum": 110,
-      "description": "Canonical knee flexion at the start of the directly reviewed repetition."
+      "description": "Knee flexion at the start of the unilateral research fixtures; omitted for the source-unreported bilateral range."
     },
     {
       "id": "kneeEndFlexionDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "minimum": 0,
       "maximum": 0,
-      "description": "Canonical knee flexion at the concentric endpoint; zero represents full extension."
+      "description": "Knee flexion at the endpoint of the unilateral research fixtures; omitted for the source-unreported bilateral range."
     },
     {
       "id": "ankleMotion",
@@ -266,6 +269,24 @@
         "leverKneeExtension"
       ],
       "description": "The reviewed knee-extension machine mechanism."
+    },
+    {
+      "id": "limbSequence",
+      "valueType": "enum",
+      "required": false,
+      "description": "The linked bilateral fixture moves both lower legs together; unilateral fixtures omit this field.",
+      "allowedValues": [
+        "simultaneousBilateral"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "The entered stack or machine value is comparable only on the same machine fixture.",
+      "allowedValues": [
+        "enteredExternalLoadSameFixtureOnly"
+      ]
     },
     {
       "id": "fixedPath",
@@ -364,6 +385,59 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "bilateral-leg-extension-moves-together",
+      "description": "The manufacturer-defined bilateral fixture uses linked simultaneous lower-leg motion while preserving its source-unreported joint angles.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "bilateral"
+      },
+      "then": [
+        {
+          "field": "variant.limbSequence",
+          "value": "simultaneousBilateral"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seatedSourceUnreportedAngles"
+        }
+      ],
+      "requirePresent": [
+        "variant.limbSequence"
+      ],
+      "requireAbsent": [
+        "variant.hipFlexionDegrees",
+        "variant.kneeStartFlexionDegrees",
+        "variant.kneeEndFlexionDegrees"
+      ]
+    },
+    {
+      "id": "unilateral-leg-extension-omits-bilateral-sequence",
+      "description": "Single-leg research fixtures retain their measured joint-angle tuple and cannot claim simultaneous bilateral motion.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "unilateral"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "allowedValues": [
+            "reclined",
+            "seated"
+          ]
+        }
+      ],
+      "requirePresent": [
+        "variant.hipFlexionDegrees",
+        "variant.kneeStartFlexionDegrees",
+        "variant.kneeEndFlexionDegrees"
+      ],
+      "requireAbsent": [
+        "variant.limbSequence"
+      ]
     }
   ],
   "recommended": {
@@ -417,12 +491,14 @@
         "movingSegment": "lowerLeg",
         "loadInterface": "distalShinPad",
         "machineType": "leverKneeExtension",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
         "fixedPath": true,
         "lowerBodyContribution": "isolatedJointMotion"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
+        "cybex-2008-mg500-manual",
         "larsen-2025-leg-extension-hip-flexion",
         "mitsuya-2023-leg-extension-hip-flexion"
       ],
@@ -484,6 +560,7 @@
         "movingSegment": "lowerLeg",
         "loadInterface": "distalShinPad",
         "machineType": "leverKneeExtension",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
         "fixedPath": true,
         "lowerBodyContribution": "isolatedJointMotion"
       },
@@ -505,6 +582,73 @@
           "Swinging the lower leg up with momentum turns the leg extension into a leg swing."
         ],
         "sideOrDirection": "Complete the set with one leg, then repeat with the other leg."
+      }
+    },
+    {
+      "catalogID": "upright-bilateral-lever-machine-leg-extension",
+      "name": "Upright Bilateral Lever-Machine Leg Extension",
+      "aliases": [
+        "Bilateral Machine Leg Extension",
+        "Machine Leg Extension",
+        "Leg Extension"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 12,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seatedSourceUnreportedAngles",
+        "torsoSupport": "machinePad",
+        "pelvisSupport": "machineSeat",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "kneeMotion": "extends",
+        "ankleMotion": "positionHeld",
+        "footMotion": "positionHeld",
+        "movingSegment": "lowerLeg",
+        "loadInterface": "distalShinPad",
+        "machineType": "leverKneeExtension",
+        "limbSequence": "simultaneousBilateral",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "cybex-2008-mg500-manual"
+      ],
+      "execution": {
+        "startingPosition": "Sit upright in the linked two-leg lever knee-extension machine. Adjust the back pad to align both knees with the machine's pivots, place both feet under the lower-leg pads, and lightly hold the handles. The manufacturer does not report numeric hip or knee angles. Compare the entered load only on this same machine.",
+        "movement": "Straighten both knees together.",
+        "endpoint": "Reach the machine's comfortable extended position and pause; the manufacturer does not report a numeric endpoint angle.",
+        "returnPhase": "Return both lower legs together under control.",
+        "controlledJoints": "Keep your pelvis, back, hips, ankles, and feet still.",
+        "supportAndPosture": "Keep your back against the upright machine pad and your pelvis on the seat.",
+        "disqualifyingCompensations": [
+          "Moving one leg before the other leaves the simultaneous two-leg fixture.",
+          "Rocking the pelvis or arching the back to move the pad turns the leg extension into a trunk-driven heave.",
+          "Swinging the lower legs up with momentum turns the leg extension into a leg swing."
+        ]
       }
     }
   ]

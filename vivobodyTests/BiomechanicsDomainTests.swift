@@ -413,6 +413,10 @@ struct BiomechanicsDomainTests {
             records: [record(equipment: .band, loadMode: .external)]
         )
         expectValidationError(
+            .comparableAbWheelLoad("test"),
+            records: [record(equipment: .abWheel, loadMode: .external)]
+        )
+        expectValidationError(
             .invalidModalityTracking("test"),
             records: [record(trackingMode: .duration, defaultDuration: 30, modality: .dynamicStrength)]
         )

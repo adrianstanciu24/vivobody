@@ -3,9 +3,11 @@
   "schemaVersion": 1,
   "id": "ankle-plantarflexion",
   "name": "Ankle Plantarflexion",
-  "definition": "A strict closed-chain machine calf raise in which the heel rises through ankle plantarflexion while the forefoot remains supported and the knee, hip, pelvis, spine, and foot orientation remain held. The initial roster contains only the directly trained unilateral standing and seated machine conditions at 0 and 90 degrees of knee flexion. Soleus is primary in both; gastrocnemius is primary with the knee extended and secondary with the knee flexed, reflecting direct individual-muscle hypertrophy rather than assigning both postures identical anatomy. Flexor hallucis longus is anatomy-permitted but not authored because the source did not measure it and deliberate toe flexion is excluded. Bilateral, free-weight, Smith, leg-press, donkey, bodyweight, balance, jumping, partial-range, rotated-foot, and toe-flexion variants remain outside this family.",
+  "definition": "A strict closed-chain machine calf raise in which one heel or both heels rise through ankle plantarflexion while the forefoot remains supported and the knee, hip, pelvis, spine, and foot orientation remain held. The roster contains unilateral and simultaneous bilateral versions of the directly trained standing and seated machine conditions at 0 and 90 degrees of knee flexion. Soleus is primary in both postures; gastrocnemius is primary with the knee extended and secondary with the knee flexed, reflecting direct individual-muscle hypertrophy rather than assigning both postures identical anatomy. Flexor hallucis longus is anatomy-permitted but not authored because the source did not measure it and deliberate toe flexion is excluded. Alternating, free-weight, Smith, leg-press, donkey, bodyweight, balance, jumping, partial-range, rotated-foot, and toe-flexion variants remain outside this family.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
+    "cybex-2008-plate-loaded-manual",
+    "hammer-strength-2025-select-manual",
     "kinoshita-2023-standing-seated-calf-raise"
   ],
   "fixed": {
@@ -37,7 +39,8 @@
       "external"
     ],
     "lateralities": [
-      "unilateral"
+      "unilateral",
+      "bilateral"
     ]
   },
   "movementSignature": {
@@ -282,6 +285,24 @@
       "description": "The reviewed calf-raise machine mechanism."
     },
     {
+      "id": "limbSequence",
+      "valueType": "enum",
+      "required": false,
+      "description": "The bilateral fixtures move both ankles together; unilateral fixtures omit this field.",
+      "allowedValues": [
+        "simultaneousBilateral"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "The entered stack or machine value is comparable only on the same machine fixture.",
+      "allowedValues": [
+        "enteredExternalLoadSameFixtureOnly"
+      ]
+    },
+    {
       "id": "fixedPath",
       "valueType": "boolean",
       "required": true,
@@ -426,6 +447,39 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "bilateral-calf-raise-moves-together",
+      "description": "Bilateral calf raises use simultaneous ankle motion.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "bilateral"
+      },
+      "then": [
+        {
+          "field": "variant.limbSequence",
+          "value": "simultaneousBilateral"
+        }
+      ],
+      "requirePresent": [
+        "variant.limbSequence"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "unilateral-calf-raise-omits-bilateral-sequence",
+      "description": "Single-leg calf raises cannot claim simultaneous bilateral motion.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "unilateral"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.limbSequence"
+      ]
     }
   ],
   "recommended": {
@@ -480,12 +534,14 @@
         "heelSupport": "none",
         "loadInterface": "shoulderPad",
         "machineType": "standingCalfRaise",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
         "fixedPath": true,
         "lowerBodyContribution": "isolatedJointMotion"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
+        "hammer-strength-2025-select-manual",
         "kinoshita-2023-standing-seated-calf-raise"
       ],
       "execution": {
@@ -547,12 +603,14 @@
         "heelSupport": "none",
         "loadInterface": "distalThighPad",
         "machineType": "seatedCalfRaise",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
         "fixedPath": true,
         "lowerBodyContribution": "isolatedJointMotion"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
+        "cybex-2008-plate-loaded-manual",
         "kinoshita-2023-standing-seated-calf-raise"
       ],
       "execution": {
@@ -567,6 +625,146 @@
           "Curling the toes turns the calf raise into a toe-flexion exercise."
         ],
         "sideOrDirection": "Finish the set on the working side, then repeat with the other leg."
+      }
+    },
+    {
+      "catalogID": "bilateral-standing-shoulder-pad-machine-calf-raise",
+      "name": "Bilateral Standing Shoulder-Pad Machine Calf Raise",
+      "aliases": [
+        "Standing Machine Calf Raise",
+        "Standing Calf Raise Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "gastrocnemius",
+          "role": "primary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "primary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "pelvisSupport": "none",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "kneeMotion": "positionHeld",
+        "kneeFlexionDegrees": 0,
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footOrientation": "neutral",
+        "movingSegment": "foot",
+        "forefootSupport": "machinePlatform",
+        "heelSupport": "none",
+        "loadInterface": "shoulderPad",
+        "machineType": "standingCalfRaise",
+        "limbSequence": "simultaneousBilateral",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "kinoshita-2023-standing-seated-calf-raise",
+        "hammer-strength-2025-select-manual"
+      ],
+      "execution": {
+        "startingPosition": "Stand in a two-leg calf-raise machine with both forefeet centered on the platform and both shoulders beneath the load pads. Compare the entered load only on this same machine.",
+        "movement": "Raise both heels together as high as you can.",
+        "endpoint": "Finish at the highest heel position you can reach with both knees straight.",
+        "returnPhase": "Lower both heels together under control without bending the knees or curling the toes.",
+        "controlledJoints": "Keep both knees straight and hold your hips, back, knees, and feet steady.",
+        "supportAndPosture": "Stand tall on the machine platform with the load pads resting on your shoulders.",
+        "disqualifyingCompensations": [
+          "Moving one heel before the other leaves the simultaneous two-leg fixture.",
+          "Bending and straightening the knees turns the calf raise into a knee-driven bounce.",
+          "Curling the toes turns the calf raise into a toe-flexion exercise."
+        ]
+      }
+    },
+    {
+      "catalogID": "bilateral-seated-thigh-pad-machine-calf-raise",
+      "name": "Bilateral Seated Thigh-Pad Machine Calf Raise",
+      "aliases": [
+        "Seated Machine Calf Raise",
+        "Seated Calf Raise Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "soleus",
+          "role": "primary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "seated",
+        "torsoSupport": "none",
+        "pelvisSupport": "machineSeat",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "kneeMotion": "positionHeld",
+        "kneeFlexionDegrees": 90,
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footOrientation": "neutral",
+        "movingSegment": "foot",
+        "forefootSupport": "machinePlatform",
+        "heelSupport": "none",
+        "loadInterface": "distalThighPad",
+        "machineType": "seatedCalfRaise",
+        "limbSequence": "simultaneousBilateral",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "kinoshita-2023-standing-seated-calf-raise",
+        "cybex-2008-plate-loaded-manual"
+      ],
+      "execution": {
+        "startingPosition": "Sit in a two-leg calf-raise machine with both forefeet centered on the platform, both knees bent near 90 degrees, and the lower thighs beneath the load pad. Compare the entered load only on this same machine.",
+        "movement": "Raise both heels together as high as you can.",
+        "endpoint": "Finish at the highest heel position you can reach while both knees remain bent.",
+        "returnPhase": "Lower both heels together under control without straightening the knees or curling the toes.",
+        "controlledJoints": "Keep both knees bent near 90 degrees and hold the hips, pelvis, back, knees, and feet still.",
+        "supportAndPosture": "Sit tall on the machine seat with the load pad resting on both lower thighs.",
+        "disqualifyingCompensations": [
+          "Moving one heel before the other leaves the simultaneous two-leg fixture.",
+          "Straightening the knees turns the seated calf raise into a standing-style raise.",
+          "Curling the toes turns the calf raise into a toe-flexion exercise."
+        ]
       }
     }
   ]

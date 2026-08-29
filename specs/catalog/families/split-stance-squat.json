@@ -3,12 +3,13 @@
   "schemaVersion": 1,
   "id": "split-stance-squat",
   "name": "Stationary Split Squat",
-  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns a floor-supported split squat and the directly reviewed high-bar rear-foot-elevated fixture; both keep their contacts fixed and return through lead-side hip extension, knee extension, and ankle plantarflexion. The elevated branch pins rear support to base-of-patella height and individualizes stance from the lead patella-over-toe relationship at the reviewed depth. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, dumbbell, kettlebell, bodyweight, and deficit branches remain outside this contract.",
+  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns a floor-supported barbell split squat plus two source-exact rear-foot-elevated fixtures: a high-bar setup with the rear foot fixed at patella height and a two-dumbbell setup with the top of the rear foot supported on a bench of unreported height. Each keeps its contacts fixed and returns through lead-side hip extension, knee extension, and ankle plantarflexion. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, kettlebell, bodyweight, and deficit branches remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "song-2023-split-squat-step-length",
     "stastny-2015-split-squat-dumbbell-position",
-    "mackey-2021-bulgarian-split-squat"
+    "mackey-2021-bulgarian-split-squat",
+    "nsca-2016-division-i-basketball-injury-screening"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -27,7 +28,8 @@
   },
   "allowed": {
     "equipment": [
-      "barbell"
+      "barbell",
+      "dumbbell"
     ],
     "modalities": [
       "dynamicStrength"
@@ -273,10 +275,11 @@
       "id": "stanceLength",
       "valueType": "enum",
       "required": true,
-      "description": "The reviewed long split stance, approximately equal to greater-trochanter-to-lateral-malleolus leg length. Song et al. taped a 100-percent condition but did not report the exact foot landmark, so the contract does not encode a false numeric ratio.",
+      "description": "The source-authored stance length; the barbell split stance is individualized from the reviewed leg-length method while the dumbbell fixture preserves an unreported distance.",
       "allowedValues": [
         "approximatelyLegLength",
-        "individualizedPatellaOverLeadToeAtParallel"
+        "individualizedPatellaOverLeadToeAtParallel",
+        "sourceUnreported"
       ]
     },
     {
@@ -292,20 +295,22 @@
       "id": "trailFootSupport",
       "valueType": "enum",
       "required": true,
-      "description": "The trail-foot contact retained throughout the repetition; the reviewed split stance uses the forefoot rather than an elevated rear support.",
+      "description": "The source-authored trail-foot contact retained throughout the repetition, whether floor forefoot or elevated rear-foot support.",
       "allowedValues": [
         "forefootFloor",
-        "elevatedBoxFootFixedAgainstPosteriorStop"
+        "elevatedBoxFootFixedAgainstPosteriorStop",
+        "elevatedBenchTopOfFoot"
       ]
     },
     {
       "id": "rearSupportHeight",
       "valueType": "enum",
       "required": true,
-      "description": "The reviewed rear-contact height; floor means no elevation, while the Bulgarian fixture uses the athlete's base-of-patella height.",
+      "description": "The source-authored rear-contact height: floor for the split squat, base-of-patella height for the barbell elevated-box fixture, and source-unreported height for the dumbbell bench fixture.",
       "allowedValues": [
         "floor",
-        "baseOfPatellaToGround"
+        "baseOfPatellaToGround",
+        "sourceUnreported"
       ]
     },
     {
@@ -321,26 +326,28 @@
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "Where the barbell is supported; the source figure supports posterior upper-back placement but does not establish a precise high- versus low-bar site.",
+      "description": "The source-authored external-load placement: an upper-back barbell or one dumbbell held at each side.",
       "allowedValues": [
         "upperBackBarbell",
-        "highBarUpperBackBarbell"
+        "highBarUpperBackBarbell",
+        "pairedBesideBody"
       ]
     },
     {
       "id": "gripOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The bilateral hand orientation used to control the upper-back barbell; pronation is figure- and mechanics-derived rather than stated in the textual methods.",
+      "description": "The source-authored grip orientation for the barbell or paired-dumbbell fixture.",
       "allowedValues": [
-        "pronated"
+        "pronated",
+        "neutral"
       ]
     },
     {
       "id": "rangeOfMotion",
       "valueType": "enum",
       "required": true,
-      "description": "The reviewed bottom-position criterion for the lead limb; the lead thigh reaches approximately parallel to the floor.",
+      "description": "The source-authored bottom-position criterion: lead-thigh parallel or approximately ninety degrees of lead-knee flexion.",
       "allowedValues": [
         "leadThighParallel",
         "leadKneeApproximatelyNinetyDegrees"
@@ -350,7 +357,7 @@
       "id": "trunkOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The instructed and video-checked sagittal trunk orientation.",
+      "description": "The source-authored sagittal trunk orientation, including nonstandardized posture when no numeric or categorical target is reported.",
       "allowedValues": [
         "erect",
         "nonstandardized"
@@ -360,7 +367,7 @@
       "id": "spineMotion",
       "valueType": "enum",
       "required": true,
-      "description": "The source instructed and video-checked an erect gross torso but did not measure segmental spinal motion; deliberate spinal motion is not a prime action, while the exact lumbar path remains unstandardized.",
+      "description": "The sources do not establish a numeric segmental spinal path; deliberate spinal motion is not a prime action and the exact lumbar path remains unstandardized.",
       "allowedValues": [
         "nonstandardized"
       ]
@@ -405,7 +412,7 @@
       "id": "footContact",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the lead full-foot and trail forefoot contacts remain on the floor through descent, ascent, and lockout.",
+      "description": "Whether the lead full-foot and the authored trail support remain fixed through descent, ascent, and lockout.",
       "allowedValues": [
         "continuous"
       ]
@@ -424,7 +431,27 @@
       "valueType": "boolean",
       "required": true,
       "fixedValue": false,
-      "description": "Whether rails or a lever constrain the barbell path; the reviewed straight-bar fixture is free weight."
+      "description": "Whether rails or a lever constrain the source-authored free-weight path."
+    },
+    {
+      "id": "implementConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the source-exact fixture uses one straight barbell or a matched dumbbell in each hand.",
+      "allowedValues": [
+        "straightBarbell",
+        "pairedDumbbells"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the logged load maps to the physical implements.",
+      "allowedValues": [
+        "totalBarAndPlates",
+        "perImplement"
+      ]
     },
     {
       "id": "lowerBodyContribution",
@@ -452,7 +479,9 @@
         {"field": "variant.rearSupportHeight", "value": "floor"},
         {"field": "variant.loadPlacement", "value": "upperBackBarbell"},
         {"field": "variant.rangeOfMotion", "value": "leadThighParallel"},
-        {"field": "variant.trunkOrientation", "value": "erect"}
+        {"field": "variant.trunkOrientation", "value": "erect"},
+        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
+        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -466,7 +495,38 @@
         {"field": "variant.stanceLength", "value": "individualizedPatellaOverLeadToeAtParallel"},
         {"field": "variant.rangeOfMotion", "value": "leadKneeApproximatelyNinetyDegrees"},
         {"field": "variant.loadPlacement", "value": "highBarUpperBackBarbell"},
-        {"field": "variant.trunkOrientation", "value": "nonstandardized"}
+        {"field": "variant.trunkOrientation", "value": "nonstandardized"},
+        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
+        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bench-top-of-foot-support-uses-paired-dumbbells",
+      "description": "The reviewed dumbbell fixture places the top of the rear foot on a bench whose height and stance length were not reported.",
+      "when": {"field": "variant.trailFootSupport", "operator": "equals", "value": "elevatedBenchTopOfFoot"},
+      "then": [
+        {"field": "equipment", "value": "dumbbell"},
+        {"field": "variant.rearSupportHeight", "value": "sourceUnreported"},
+        {"field": "variant.stanceLength", "value": "sourceUnreported"},
+        {"field": "variant.rangeOfMotion", "value": "leadThighParallel"},
+        {"field": "variant.loadPlacement", "value": "pairedBesideBody"},
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.trunkOrientation", "value": "nonstandardized"},
+        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"},
+        {"field": "variant.loadAccounting", "value": "perImplement"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-load-is-paired-per-implement",
+      "description": "A dumbbell record uses two matched implements while the user logs one dumbbell's weight.",
+      "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
+      "then": [
+        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"},
+        {"field": "variant.loadAccounting", "value": "perImplement"}
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -529,6 +589,8 @@
         "footContact": "continuous",
         "interRepSupport": "none",
         "fixedPath": false,
+        "implementConfiguration": "straightBarbell",
+        "loadAccounting": "totalBarAndPlates",
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
@@ -554,7 +616,7 @@
     {
       "catalogID": "barbell-rear-foot-elevated-split-squat",
       "name": "Barbell Rear-Foot-Elevated Split Squat",
-      "aliases": ["Barbell Bulgarian Split Squat", "Barbell Bulgarian Squat"],
+      "aliases": ["Barbell Bulgarian Split Squat", "Barbell Bulgarian Squat", "Barbell RFESS"],
       "equipment": "barbell",
       "laterality": "unilateral",
       "modality": "dynamicStrength",
@@ -580,7 +642,9 @@
         "interRepFootTransition": "none", "loadPlacement": "highBarUpperBackBarbell", "gripOrientation": "pronated",
         "rangeOfMotion": "leadKneeApproximatelyNinetyDegrees", "trunkOrientation": "nonstandardized", "spineMotion": "nonstandardized",
         "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "footMotion": "positionHeld",
-        "footContact": "continuous", "interRepSupport": "none", "fixedPath": false, "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+        "footContact": "continuous", "interRepSupport": "none", "fixedPath": false,
+        "implementConfiguration": "straightBarbell", "loadAccounting": "totalBarAndPlates",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -594,6 +658,51 @@
         "supportAndPosture": "Maintain the high-bar position while the unreported trunk angle remains consistent across the set.",
         "disqualifyingCompensations": ["Losing or sliding the rear-foot support changes the reviewed fixture.", "Stepping or drifting from the individualized stance changes the stationary split squat."],
         "sideOrDirection": "Complete the set with one lead leg, then repeat with the other leg leading."
+      }
+    },
+    {
+      "catalogID": "two-dumbbell-rear-foot-elevated-split-squat",
+      "name": "Two-Dumbbell Rear-Foot-Elevated Split Squat",
+      "aliases": ["Dumbbell Bulgarian Split Squat", "Dumbbell Rear-Foot-Elevated Split Squat", "Dumbbell RFESS"],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 8,
+      "searchPriority": 94,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "splitSagittal",
+        "stanceLength": "sourceUnreported", "leadFootSupport": "fullFootFloor", "trailFootSupport": "elevatedBenchTopOfFoot",
+        "rearSupportHeight": "sourceUnreported", "interRepFootTransition": "none", "loadPlacement": "pairedBesideBody", "gripOrientation": "neutral",
+        "rangeOfMotion": "leadThighParallel", "trunkOrientation": "nonstandardized", "spineMotion": "nonstandardized",
+        "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "footMotion": "positionHeld",
+        "footContact": "continuous", "interRepSupport": "none", "fixedPath": false,
+        "implementConfiguration": "pairedDumbbells", "loadAccounting": "perImplement", "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["mackey-2021-bulgarian-split-squat", "nsca-2016-division-i-basketball-injury-screening"],
+      "execution": {
+        "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side, place the lead foot fully on the floor, and rest the top of the rear foot on a stable bench. The source did not report a bench height or numeric stance length.",
+        "movement": "Lower with both foot contacts fixed until the lead thigh is approximately parallel to the floor.",
+        "endpoint": "Reach lead-thigh-parallel depth without shifting the feet or lifting the rear foot from the bench.",
+        "returnPhase": "Push through the lead foot and extend the lead hip, knee, and ankle to return to the same split stance.",
+        "controlledJoints": "Keep the lead knee tracking with the foot and both dumbbells moving together at your sides.",
+        "supportAndPosture": "Keep the torso braced and use the bench only to support the top of the rear foot.",
+        "disqualifyingCompensations": ["Stepping between repetitions turns the movement into a lunge.", "Pushing deliberately through the rear foot changes the lead-leg fixture.", "Using a barbell or holding the dumbbells away from the sides changes the reviewed load placement."],
+        "sideOrDirection": "Complete all repetitions with one lead leg, then repeat with the other leg."
       }
     }
   ]

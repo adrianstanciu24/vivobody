@@ -56,7 +56,7 @@ extension ActiveExerciseCard {
 
     @ViewBuilder
     func completedRepsHero(_ top: WorkoutSet?) -> some View {
-        if isUnloadedBodyweightExercise {
+        if isUnloadedExercise {
             completedUnloadedRepsHero(top)
         } else {
             completedLoadedRepsHero(top)

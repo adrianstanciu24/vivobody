@@ -266,13 +266,7 @@ nonisolated enum CatalogData {
                 }
             }
 
-            // A band color or nominal stack value is not a force at the
-            // joint: resistance varies through the range of motion and
-            // between products. Until the model captures a calibrated
-            // force curve, band work must remain explicitly unranked.
-            if record.equipment == .band, record.loadMode != .nonComparable {
-                throw ValidationError.comparableBandLoad(record.catalogID)
-            }
+            try validateEquipmentLoad(record)
 
             switch record.mechanic {
             case .compound:
@@ -330,6 +324,18 @@ nonisolated enum CatalogData {
             .split(whereSeparator: \.isWhitespace)
             .joined(separator: " ")
             .lowercased()
+    }
+
+    /// Rejects equipment whose catalog identity does not define a comparable load.
+    private static func validateEquipmentLoad(_ record: CatalogRecord) throws {
+        switch record.equipment {
+        case .band where record.loadMode != .nonComparable:
+            throw ValidationError.comparableBandLoad(record.catalogID)
+        case .abWheel where record.loadMode != .nonComparable:
+            throw ValidationError.comparableAbWheelLoad(record.catalogID)
+        default:
+            break
+        }
     }
 
     private static func validateExecution(_ record: CatalogRecord) throws {
@@ -418,6 +424,7 @@ nonisolated enum CatalogData {
         case invalidModalityTracking(String)
         case invalidLoadFraction(String)
         case comparableBandLoad(String)
+        case comparableAbWheelLoad(String)
         case invalidMechanicPattern(String)
         case invalidTrainingRole(String)
         case emptyInvolvement(String)
@@ -447,6 +454,7 @@ nonisolated enum CatalogData {
             case let .invalidModalityTracking(id): "record '\(id)' has modality-incompatible tracking"
             case let .invalidLoadFraction(id): "record '\(id)' has load-mode-incompatible bodyweight fraction"
             case let .comparableBandLoad(id): "band record '\(id)' claims a comparable load"
+            case let .comparableAbWheelLoad(id): "ab-wheel record '\(id)' claims a comparable load"
             case let .invalidMechanicPattern(id): "record '\(id)' has mechanic-incompatible movement pattern"
             case let .invalidTrainingRole(id): "record '\(id)' has a training role incompatible with its compound pattern"
             case let .emptyInvolvement(id): "record '\(id)' has no muscle involvement"

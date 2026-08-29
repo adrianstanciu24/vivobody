@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "shoulder-abduction-raise",
   "name": "Lateral Raise",
-  "definition": "A strict single-joint raise in which an open-chain upper arm abducts from the side to shoulder height in the frontal plane while the elbow angle, neutral humeral rotation, torso, and lower body remain controlled. Scapular upward rotation and posterior tilt are normal coupled elevation actions, not fixed-ratio claims. Upper trapezius is a secondary dynamic contributor to the declared upward rotation, not the exercise's primary shoulder target: loaded arm-elevation modeling supports positive scapular work, and a direct small unweighted held-position comparison observed its activity increasing gradually in both abduction and flexion. The categorical role does not assert equal magnitude to lateral deltoid or equal recruitment across elevation paths. The initial roster represents the strict frontal-path subset prescribed in the direct cable-versus-dumbbell trial; symptom-driven intermediate frontal-to-scapular accommodations reported for some participants do not admit scaption into this family.",
+  "definition": "A strict single-joint raise in which one open-chain upper arm or both upper arms simultaneously abduct from the side to shoulder height in the frontal plane while the elbow angle, neutral humeral rotation, torso, and lower body remain controlled. Scapular upward rotation and posterior tilt are normal coupled elevation actions, not fixed-ratio claims. Upper trapezius is a secondary dynamic contributor to the declared upward rotation, not the exercise's primary shoulder target: loaded arm-elevation modeling supports positive scapular work, and a direct small unweighted held-position comparison observed its activity increasing gradually in both abduction and flexion. The categorical role does not assert equal magnitude to lateral deltoid or equal recruitment across elevation paths. The roster represents the strict frontal-path subset prescribed in the direct cable-versus-dumbbell trial; symptom-driven intermediate frontal-to-scapular accommodations, alternating repetitions, and upper-arm-pad machines do not enter this family.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "holzbaur-2005-upper-extremity",
@@ -12,7 +12,9 @@
     "morihara-2011-scapular-muscles-flexion-abduction",
     "parry-2012-dumbbell-shoulder-elevation",
     "hecker-2021-deltoid-flexion-abduction",
-    "larsen-2025-cable-dumbbell-lateral-raise"
+    "larsen-2025-cable-dumbbell-lateral-raise",
+    "nsca-2012-basics-strength-conditioning",
+    "jee-2020-bilateral-dumbbell-lateral-raise"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -44,7 +46,8 @@
       "external"
     ],
     "lateralities": [
-      "unilateral"
+      "unilateral",
+      "bilateral"
     ]
   },
   "movementSignature": {
@@ -283,6 +286,24 @@
       ]
     },
     {
+      "id": "armSequence",
+      "valueType": "enum",
+      "required": false,
+      "description": "The bilateral dumbbell fixture raises both arms together; unilateral fixtures omit this field.",
+      "allowedValues": [
+        "simultaneousBilateral"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": false,
+      "description": "The paired-dumbbell fixture logs one dumbbell's weight rather than the pair total.",
+      "allowedValues": [
+        "perImplement"
+      ]
+    },
+    {
       "id": "cablePulleyAlignmentAtStart",
       "valueType": "enum",
       "required": false,
@@ -322,6 +343,49 @@
       "requirePresent": [],
       "requireAbsent": [
         "variant.cablePulleyAlignmentAtStart"
+      ]
+    },
+    {
+      "id": "bilateral-raise-moves-both-arms-together",
+      "description": "The bilateral dumbbell fixture is simultaneous and uses per-dumbbell load accounting.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "bilateral"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.armSequence",
+          "value": "simultaneousBilateral"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "perImplement"
+        }
+      ],
+      "requirePresent": [
+        "variant.armSequence",
+        "variant.loadAccounting"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "unilateral-raise-omits-bilateral-fields",
+      "description": "Single-arm raises do not claim a bilateral sequence or paired load.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "unilateral"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.armSequence",
+        "variant.loadAccounting"
       ]
     }
   ],
@@ -418,7 +482,8 @@
         "morihara-2011-scapular-muscles-flexion-abduction",
         "parry-2012-dumbbell-shoulder-elevation",
         "hecker-2021-deltoid-flexion-abduction",
-        "larsen-2025-cable-dumbbell-lateral-raise"
+        "larsen-2025-cable-dumbbell-lateral-raise",
+        "nsca-2012-basics-strength-conditioning"
       ],
       "execution": {
         "startingPosition": "Stand upright with one dumbbell beside your thigh, your palm facing your body, and your elbow nearly straight.",
@@ -536,6 +601,114 @@
           "Raising the arm in front of the body turns the lateral raise into a front raise."
         ],
         "sideOrDirection": "Finish the set with the working arm, then repeat with the other arm."
+      }
+    },
+    {
+      "catalogID": "simultaneous-bilateral-dumbbell-lateral-raise",
+      "name": "Simultaneous Bilateral Dumbbell Lateral Raise",
+      "aliases": [
+        "Bilateral Dumbbell Lateral Raise",
+        "Two-Dumbbell Lateral Raise"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 12,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "deltoidLateral",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "elevationPath": "frontal",
+        "humerothoracicStartElevationDegrees": 0,
+        "humerothoracicEndElevationDegrees": 90,
+        "elbowMotion": "angleHeld",
+        "humeralRotation": "neutral",
+        "lowerBodyContribution": "none",
+        "contralateralSupport": "none",
+        "armSequence": "simultaneousBilateral",
+        "loadAccounting": "perImplement"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ludewig-2009-multiplanar-humeral-elevation",
+        "morihara-2011-scapular-muscles-flexion-abduction",
+        "parry-2012-dumbbell-shoulder-elevation",
+        "hecker-2021-deltoid-flexion-abduction",
+        "larsen-2025-cable-dumbbell-lateral-raise",
+        "jee-2020-bilateral-dumbbell-lateral-raise",
+        "nsca-2012-basics-strength-conditioning"
+      ],
+      "execution": {
+        "startingPosition": "Log one dumbbell's weight, not the pair total. Stand upright with one matching dumbbell beside each thigh, palms facing inward, and elbows nearly straight.",
+        "movement": "Raise both upper arms together directly out to the sides.",
+        "endpoint": "Stop when both upper arms reach shoulder height.",
+        "returnPhase": "Lower both dumbbells together under control.",
+        "controlledJoints": "Keep both elbows nearly straight and the lower body still.",
+        "supportAndPosture": "Stand upright without external support. Avoid shrugging, leaning, or using lower-body drive.",
+        "disqualifyingCompensations": [
+          "Alternating the arms leaves the simultaneous two-arm fixture.",
+          "Shrugging the shoulders turns the raise into a shrug.",
+          "Swinging the dumbbells with hip drive turns the strict raise into a momentum swing.",
+          "Raising the arms in front of the body turns the lateral raise into a front raise."
+        ]
       }
     }
   ]

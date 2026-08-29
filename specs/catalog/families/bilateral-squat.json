@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "bilateral-squat",
   "name": "Bilateral Squat",
-  "definition": "A bilateral closed-chain compound squat in which both feet remain planted while the hips and knees flex to a reviewed thigh-parallel bottom position, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The initial roster is limited to hip-width straight-bar back and canonical clean-grip front squats with no external support, no machine guidance, and no floor reset; clean grip is a figure- and mechanics-derived product setup rather than a controlled study factor. The reviewed back-squat sources do not consistently report a high- versus low-bar site, so the canonical back-squat record does not invent that distinction. Vasti and gluteus maximus are the principal training emphases; rectus femoris, gastrocnemius, and soleus remain meaningful dynamic contributors, while the visible medial-hamstring region controls the hip, pelvis, and knee rather than receiving dynamic squat credit from excitation alone. The trunk, loaded grip, shoulder girdle, pelvis, and feet control the free bar and body segments. Hip hinges, floor pulls, hip thrusts and bridges, unilateral or split-stance squats, lunges, step-ups, leg presses, hack and pendulum squats, belt squats, Smith squats, safety-bar and transformer-bar variants, box squats, heel-elevated squats, partial or full-depth squats, overhead squats, squat jumps, and thrusters remain outside this first contract.",
+  "definition": "A bilateral closed-chain compound squat in which both feet remain planted while the hips and knees flex to a reviewed thigh-parallel bottom position, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns source-exact straight-bar back and front squats, a chest-held kettlebell goblet squat, and a vertical-rail Smith upper-back squat with zero horizontal foot offset. Each branch preserves its reported load position, grip, stance, and path instead of generalizing across squat fixtures. Vasti and gluteus maximus are the principal training emphases; rectus femoris, gastrocnemius, and soleus remain meaningful dynamic contributors, while the visible medial-hamstring region controls the hip, pelvis, and knee. Split-stance squats, lunges, step-ups, leg presses, hack and pendulum squats, belt squats, other Smith geometries, safety-bar and transformer-bar variants, box squats, heel-elevated squats, partial or full-depth squats, overhead squats, squat jumps, and thrusters remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "armstrong-2022-squat-movement-dynamics",
@@ -13,7 +13,10 @@
     "mccormick-2023-front-back-squat-bracing",
     "purzel-2026-powerlifting-squat-joint-moments",
     "sinclair-2022-back-squat-foot-angle",
-    "yavuz-2015-front-back-squat-emg"
+    "yavuz-2015-front-back-squat-emg",
+    "nasm-2026-goblet-squat",
+    "collins-2021-goblet-landmine-squat",
+    "lee-2017-smith-squat-human-machine"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -32,7 +35,9 @@
   },
   "allowed": {
     "equipment": [
-      "barbell"
+      "barbell",
+      "kettlebell",
+      "machine"
     ],
     "modalities": [
       "dynamicStrength"
@@ -257,7 +262,7 @@
       "id": "stanceConfiguration",
       "valueType": "enum",
       "required": true,
-      "description": "The bilateral relationship of the two feet; both reviewed fixtures use a symmetric, non-split stance.",
+      "description": "The bilateral relationship of the two feet; every admitted fixture uses a symmetric, non-split stance.",
       "allowedValues": [
         "symmetricBilateral"
       ]
@@ -268,27 +273,30 @@
       "required": true,
       "description": "The reviewed heel-to-heel stance width relative to the athlete's hips.",
       "allowedValues": [
-        "hipWidth"
+        "hipWidth",
+        "shoulderWidth"
       ]
     },
     {
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "Where the straight barbell is supported on the athlete during the squat.",
+      "description": "Where the bar or single kettlebell is supported during the exact squat fixture.",
       "allowedValues": [
         "upperBackBarbell",
-        "anteriorDeltoidClavicleBarbell"
+        "anteriorDeltoidClavicleBarbell",
+        "kettlebellVerticalAtChestByHorns"
       ]
     },
     {
       "id": "gripOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The canonical bilateral hand orientation used to control the straight barbell.",
+      "description": "The bilateral hand configuration used to control the bar or kettlebell in the exact fixture.",
       "allowedValues": [
         "pronated",
-        "cleanGrip"
+        "cleanGrip",
+        "hornGrip"
       ]
     },
     {
@@ -367,8 +375,45 @@
       "id": "fixedPath",
       "valueType": "boolean",
       "required": true,
-      "fixedValue": false,
-      "description": "Whether rails or a lever constrain the barbell path; both reviewed straight-bar fixtures are free weight."
+      "description": "Whether rails constrain the implement path; only the exact Smith-machine branch is fixed."
+    },
+    {
+      "id": "implementConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The implement arrangement used by the exact fixture.",
+      "allowedValues": [
+        "straightBarbell",
+        "singleKettlebell",
+        "verticalSmithBar"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the entered load maps to the free-weight or machine fixture.",
+      "allowedValues": [
+        "totalBarAndPlates",
+        "totalSingleImplement",
+        "enteredExternalLoadSameFixtureOnly"
+      ]
+    },
+    {
+      "id": "railOrientationDegrees",
+      "valueType": "number",
+      "required": false,
+      "description": "The Smith rail angle from vertical for the directly reviewed machine.",
+      "minimum": 0,
+      "maximum": 0
+    },
+    {
+      "id": "footOffsetFromBarCm",
+      "valueType": "number",
+      "required": false,
+      "description": "The horizontal foot offset from the Smith bar line in the source fixture.",
+      "minimum": 0,
+      "maximum": 0
     },
     {
       "id": "lowerBodyContribution",
@@ -389,7 +434,7 @@
   "exerciseRules": [
     {
       "id": "upper-back-load-uses-back-squat-setup",
-      "description": "An upper-back straight bar is the reviewed free-weight back-squat setup; this value does not fabricate an unreported high- versus low-bar site.",
+      "description": "An upper-back bar uses a pronated control grip; free-bar records do not fabricate an unreported high- versus low-bar site, while the Smith branch separately pins its rail geometry.",
       "when": {
         "field": "variant.loadPlacement",
         "operator": "equals",
@@ -466,6 +511,61 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "barbell-fixtures-use-free-straight-bar-accounting",
+      "description": "Free-bar squat records log total bar-and-plate load and have no Smith geometry.",
+      "when": {"field": "equipment", "operator": "equals", "value": "barbell"},
+      "then": [
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
+        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"]
+    },
+    {
+      "id": "goblet-fixture-pins-single-kettlebell",
+      "description": "The reviewed goblet squat holds one vertical kettlebell by its horns at the chest.",
+      "when": {"field": "equipment", "operator": "equals", "value": "kettlebell"},
+      "then": [
+        {"field": "variant.stanceWidth", "value": "shoulderWidth"},
+        {"field": "variant.loadPlacement", "value": "kettlebellVerticalAtChestByHorns"},
+        {"field": "variant.gripOrientation", "value": "hornGrip"},
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.implementConfiguration", "value": "singleKettlebell"},
+        {"field": "variant.loadAccounting", "value": "totalSingleImplement"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"]
+    },
+    {
+      "id": "smith-fixture-pins-reviewed-vertical-zero-offset-path",
+      "description": "The reviewed Smith squat uses a vertical rail, zero horizontal foot offset from the bar line, and upper-back placement.",
+      "when": {"field": "equipment", "operator": "equals", "value": "machine"},
+      "then": [
+        {"field": "variant.stanceWidth", "value": "shoulderWidth"},
+        {"field": "variant.loadPlacement", "value": "upperBackBarbell"},
+        {"field": "variant.gripOrientation", "value": "pronated"},
+        {"field": "variant.fixedPath", "value": true},
+        {"field": "variant.implementConfiguration", "value": "verticalSmithBar"},
+        {"field": "variant.loadAccounting", "value": "enteredExternalLoadSameFixtureOnly"},
+        {"field": "variant.railOrientationDegrees", "value": 0},
+        {"field": "variant.footOffsetFromBarCm", "value": 0}
+      ],
+      "requirePresent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"],
+      "requireAbsent": []
+    },
+    {
+      "id": "horn-grip-identifies-goblet-load",
+      "description": "A horn grip belongs to the single-kettlebell goblet fixture.",
+      "when": {"field": "variant.gripOrientation", "operator": "equals", "value": "hornGrip"},
+      "then": [
+        {"field": "equipment", "value": "kettlebell"},
+        {"field": "variant.loadPlacement", "value": "kettlebellVerticalAtChestByHorns"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -519,6 +619,8 @@
         "footContact": "continuous",
         "interRepSupport": "none",
         "fixedPath": false,
+        "implementConfiguration": "straightBarbell",
+        "loadAccounting": "totalBarAndPlates",
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
@@ -596,6 +698,8 @@
         "footContact": "continuous",
         "interRepSupport": "none",
         "fixedPath": false,
+        "implementConfiguration": "straightBarbell",
+        "loadAccounting": "totalBarAndPlates",
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
@@ -618,6 +722,94 @@
           "Bouncing at the bottom turns the squat into a rebound squat.",
           "Dropping the elbows tips the torso forward and turns the front squat into a good morning."
         ]
+      }
+    },
+    {
+      "catalogID": "kettlebell-goblet-squat",
+      "name": "Kettlebell Goblet Squat",
+      "aliases": ["KB Goblet Squat"],
+      "equipment": "kettlebell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"},
+        {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "shoulderWidth", "loadPlacement": "kettlebellVerticalAtChestByHorns", "gripOrientation": "hornGrip",
+        "rangeOfMotion": "thighParallel", "spineMotion": "nonstandardized", "hipMotion": "extends", "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes", "footMotion": "positionHeld", "footContact": "continuous", "interRepSupport": "none",
+        "fixedPath": false, "implementConfiguration": "singleKettlebell", "loadAccounting": "totalSingleImplement",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["nasm-2026-goblet-squat", "collins-2021-goblet-landmine-squat", "arnold-2010-lower-limb"],
+      "execution": {
+        "startingPosition": "Stand with both feet about shoulder-width apart and hold one kettlebell vertically at your chest by its horns.",
+        "movement": "Sit the hips down and back while bending both knees and keeping the kettlebell close to the chest.",
+        "endpoint": "Stop when the upper thighs are approximately parallel to the floor.",
+        "returnPhase": "Drive through both feet and extend the hips, knees, and ankles to stand tall with the kettlebell still at the chest.",
+        "controlledJoints": "Keep the knees tracking with the feet and the elbows under control without turning the movement into a press.",
+        "supportAndPosture": "Brace the trunk, keep both feet planted, and use no external torso support.",
+        "disqualifyingCompensations": ["Lowering the kettlebell away from the chest changes the reviewed goblet fixture.", "Stopping above thigh-parallel depth changes the reviewed range.", "Pressing the kettlebell overhead adds an upper-body prime action."]
+      }
+    },
+    {
+      "catalogID": "smith-machine-upper-back-squat",
+      "name": "Smith Machine Upper-Back Squat",
+      "aliases": ["Vertical Smith Upper-Back Squat", "Zero-Offset Smith Squat"],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"},
+        {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "shoulderWidth", "loadPlacement": "upperBackBarbell", "gripOrientation": "pronated", "rangeOfMotion": "thighParallel",
+        "spineMotion": "nonstandardized", "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld", "footContact": "continuous", "interRepSupport": "none", "fixedPath": true,
+        "implementConfiguration": "verticalSmithBar", "loadAccounting": "enteredExternalLoadSameFixtureOnly",
+        "railOrientationDegrees": 0, "footOffsetFromBarCm": 0, "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["lee-2017-smith-squat-human-machine", "arnold-2010-lower-limb"],
+      "execution": {
+        "startingPosition": "Use the reviewed vertical-rail Smith setup, place the bar across the upper back, and stand with both feet shoulder-width apart directly under the bar line with zero forward or backward offset. Log the entered machine load and compare it only on the same fixture.",
+        "movement": "Unlock the bar and bend the hips and knees while following the vertical rail path.",
+        "endpoint": "Stop when the upper thighs are approximately parallel to the floor.",
+        "returnPhase": "Drive through both feet and extend the hips, knees, and ankles to return to standing along the same vertical path.",
+        "controlledJoints": "Keep both knees tracking with the feet and do not shift the stance away from the bar line.",
+        "supportAndPosture": "Brace the trunk, keep both feet planted, and retain the upper-back bar position.",
+        "disqualifyingCompensations": ["Moving the feet forward or backward changes the reviewed zero-offset geometry.", "Using angled rails changes the reviewed machine fixture.", "Placing the bar on the front of the shoulders changes the reviewed load position."]
       }
     }
   ]

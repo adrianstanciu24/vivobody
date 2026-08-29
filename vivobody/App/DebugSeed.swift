@@ -2,7 +2,7 @@
 //  DebugSeed.swift
 //  vivobody
 //
-//  Debug-only seed data and UI-test support, isolated from @main and Release builds.
+//  Debug-only seed and UI-test support isolated from @main and Release builds.
 //
 
 import Foundation
@@ -11,9 +11,7 @@ import VivoKit
 
 #if DEBUG
 
-    /// UI-test and verification helpers driven by launch arguments.
-    /// Reset wipes the store for a clean test base; seeds insert focused
-    /// workout states; requestedTab chooses a capture start tab.
+    /// Launch-argument helpers that seed UI-test states and choose a capture tab.
     enum UITestSupport {
         static func requestedTab() -> AppTab? {
             guard let index = CommandLine.arguments.firstIndex(of: "--verify-tab"),
@@ -24,9 +22,8 @@ import VivoKit
 
         static func resetIfRequested(in context: ModelContext) {
             guard CommandLine.arguments.contains("--ui-test-reset") else { return }
-            // UI tests normally land on the tab shell. The focused onboarding
-            // fixture deliberately reverses that gate so the one-time cover can
-            // be visually verified through the same deterministic reset path.
+            // The onboarding fixture reverses the normal tab-shell gate so its
+            // one-time cover can use the same deterministic reset path.
             let shouldShowOnboarding = CommandLine.arguments.contains("--ui-test-onboarding")
             UserDefaults.standard.set(!shouldShowOnboarding, forKey: SettingsKey.onboardingCompleted)
             deleteAll(WorkoutSession.self, in: context)
@@ -57,6 +54,7 @@ import VivoKit
             }
             if CommandLine.arguments.contains("--ui-test-active-band")
                 || CommandLine.arguments.contains("--ui-test-active-no-load")
+                || CommandLine.arguments.contains("--ui-test-active-ab-wheel")
             {
                 seedActiveLoadPresentation(in: context)
             }
@@ -174,17 +172,19 @@ import VivoKit
             ))) ?? []
             guard existing.isEmpty else { return }
 
-            let isNoLoad = CommandLine.arguments.contains("--ui-test-active-no-load")
+            let isAbWheel = CommandLine.arguments.contains("--ui-test-active-ab-wheel")
+            let isNoLoad = isAbWheel || CommandLine.arguments.contains("--ui-test-active-no-load")
             let exercise = debugCatalogExercise(
-                named: isNoLoad ? "Bodyweight Forward Lunge" : "Standing Band Fly",
+                named: isAbWheel
+                    ? "Kneeling Ab-Wheel Rollout"
+                    : isNoLoad ? "Bodyweight Forward Lunge" : "Standing Band Fly",
                 plannedSets: 3,
                 plannedReps: isNoLoad ? 12 : 15,
                 plannedWeight: 0,
                 sortOrder: 0
             )
             if isNoLoad {
-                // Simulate a legacy/stale draft so the UI proof covers
-                // interpretation and normalization, not just a clean seed.
+                // Simulate a stale draft to prove interpretation and normalization.
                 exercise.plannedWeight = 45
                 for set in exercise.sets {
                     set.weight = 45

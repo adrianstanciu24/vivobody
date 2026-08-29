@@ -1,0 +1,68 @@
+{
+  "name": "catalog-ab-wheel-expansion",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterCore"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "libraryExerciseFilterCore",
+        "value": "Selected"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Kneeling Ab-Wheel Rollout,"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Kneeling Ab-Wheel Rollout,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Kneeling Ab-Wheel Rollout"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "labelContains": "Muscles used by Kneeling Ab-Wheel Rollout"
+    }
+  ],
+  "forbidden": []
+}

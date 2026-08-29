@@ -1,0 +1,51 @@
+{
+  "name": "catalog-machine-expansion",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Seated Handled Lever-Machine Chest Fly,"
+        },
+        "direction": "up",
+        "maxSwipes": 8
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Seated Handled Lever-Machine Chest Fly,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Seated Handled Lever-Machine Chest Fly"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "labelContains": "Muscles used by Seated Handled Lever-Machine Chest Fly"
+    }
+  ],
+  "forbidden": []
+}

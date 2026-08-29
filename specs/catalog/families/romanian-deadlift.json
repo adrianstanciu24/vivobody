@@ -3,13 +3,15 @@
   "schemaVersion": 1,
   "id": "romanian-deadlift",
   "name": "Romanian and Stiff-Leg Deadlift",
-  "definition": "A bilateral unsupported barbell hinge in which both feet remain planted, the athlete lifts a free bar from the floor to standing through hip extension, and the plates return to the floor at the end of every repetition. The roster is limited to Coratella et al.'s six-repetition, 80-percent-one-repetition-maximum fixtures: a Romanian deadlift from the same floor as the feet, a stiff-leg deadlift from that floor, and a Romanian deadlift performed with both feet on a 15-centimeter step while the bar remains on the lower floor. This is not a generic continuous Romanian-deadlift contract: top-start repetitions that stop above the floor, arbitrary deficits, other loads, and other equipment remain outside it. The fixed 95-pound / 42.5-kilogram runtime seeds are product initialization, not claims that those loads equal 80 percent of any athlete's maximum. Coratella et al. prescribed slightly flexed knees for both Romanian fixtures and extended knees throughout the stiff-leg fixture, but collected no kinematics. Their methods also say to finish the Romanian lift with both hips and knees fully extended, while Lee et al.'s deeper floor-touch Romanian fixture and Lyons et al.'s uncoached Romanian technique show that material knee excursion can occur. Knee position is therefore recorded as a prescribed technique with unmeasured kinematics, never as position held; knee extension is not declared as a training-defining prime because the exact active fixtures provide no measured invariant knee action and the source characterizes these as hip-dominant, isometric-knee variations. Hip extension is the sole dynamic prime. The straight-spine instruction and measured erector-spinae excitation support resisting spinal flexion, not fabricated dynamic spinal extension. Medial hamstrings and gluteus maximus are non-ranked co-primary contributors, while lumbar extensors oppose the declared spinal-flexion tendency. The visible biceps-femoris region remains a stabilizer because its combined mesh cannot distinguish the hip-extending long head from the short head. Surface-EMG differences among the three fixtures support their distinction but do not establish numeric contribution, equal activation, hypertrophy, or equipment equivalence.",
+  "definition": "A bilateral unsupported hip-dominant hinge with planted feet, a braced spine, and either a free barbell or paired dumbbells. The roster preserves three reviewed floor-contact barbell fixtures and adds source-exact continuous top-start barbell and paired-dumbbell fixtures that reverse near mid-shin without touching down. Floor-touch and continuous identities remain separate so their histories do not merge. Hip extension is the sole dynamic prime; prescribed knee technique remains nondefining, and the straight-spine instruction supports resisting spinal flexion rather than inventing dynamic spinal extension. Arbitrary deficits, staggered or single-leg support, rotating grips, and floor-start dumbbell variants remain outside this family.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
     "coratella-2022-romanian-step-stiff-leg-deadlift",
     "lee-2018-conventional-romanian-deadlift",
-    "lyons-2026-conventional-romanian-deadlift"
+    "lyons-2026-conventional-romanian-deadlift",
+    "ace-2025-romanian-deadlift",
+    "nsca-2012-basics-strength-conditioning"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -28,7 +30,8 @@
   },
   "allowed": {
     "equipment": [
-      "barbell"
+      "barbell",
+      "dumbbell"
     ],
     "modalities": [
       "dynamicStrength"
@@ -263,7 +266,7 @@
       "id": "stanceWidth",
       "valueType": "enum",
       "required": true,
-      "description": "Coratella et al. standardized the feet at hip distance.",
+      "description": "The source-authored stance width; research fixtures use hip distance while technique records preserve their separately reported stance.",
       "allowedValues": [
         "hipDistance"
       ]
@@ -290,7 +293,7 @@
       "id": "supportSurface",
       "valueType": "enum",
       "required": true,
-      "description": "The surface under both feet: the same floor that supports the bar, or the directly studied 15-centimeter step above it.",
+      "description": "The surface under both feet: the floor or the directly studied 15-centimeter step above it.",
       "allowedValues": [
         "floor",
         "fifteenCentimeterStep"
@@ -308,27 +311,31 @@
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "Both hands hold the free bar in front of the body.",
+      "description": "The source-authored free-weight placement: a barbell in front of the body or one dumbbell beside each leg.",
       "allowedValues": [
-        "handsInFrontOfBody"
+        "handsInFrontOfBody",
+        "pairedBesideLegs"
       ]
     },
     {
       "id": "gripWidth",
       "valueType": "enum",
       "required": true,
-      "description": "The study standardized both hands at shoulder distance.",
+      "description": "The reported hand spacing when a shared bar is used; independent handles use an explicit not-applicable value.",
       "allowedValues": [
-        "shoulderDistance"
+        "shoulderDistance",
+        "notApplicableIndependentHandles"
       ]
     },
     {
       "id": "gripOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The publication reported grip width but not forearm orientation.",
+      "description": "The source-authored forearm orientation, including an explicit unreported value where the study did not specify it.",
       "allowedValues": [
-        "unreported"
+        "unreported",
+        "pronated",
+        "neutral"
       ]
     },
     {
@@ -344,16 +351,17 @@
       "id": "externalLoadPrescription",
       "valueType": "enum",
       "required": true,
-      "description": "Each reviewed fixture used 80 percent of that variation's separately tested one-repetition maximum.",
+      "description": "The source-authored external-load prescription: variant-specific 80-percent one-repetition maximum in the research protocol or source-unspecified in technique records.",
       "allowedValues": [
-        "eightyPercentVariantSpecificOneRepMaximum"
+        "eightyPercentVariantSpecificOneRepMaximum",
+        "sourceUnspecified"
       ]
     },
     {
       "id": "hipMotion",
       "valueType": "enum",
       "required": true,
-      "description": "Hip extension creates the reviewed ascent from the floor to standing.",
+      "description": "Hip extension creates the concentric return to standing from the authored bottom position, whether floor-touching or continuous.",
       "allowedValues": [
         "extends"
       ]
@@ -371,29 +379,32 @@
       "id": "kneeTechnique",
       "valueType": "enum",
       "required": true,
-      "description": "The directly instructed knee distinction. Romanian fixtures begin slightly flexed and finish fully extended, whereas the stiff-leg fixture prescribes extension throughout; Coratella et al. did not measure either trajectory.",
+      "description": "The source-authored knee technique: the research Romanian fixture moves from slight flexion toward extension, the stiff-leg fixture stays extended, and continuous technique records hold slight flexion.",
       "allowedValues": [
         "slightlyFlexedStartToExtendedEndpointKinematicsUnmeasured",
-        "extendedThroughoutKinematicsUnmeasured"
+        "extendedThroughoutKinematicsUnmeasured",
+        "slightlyFlexedHeld"
       ]
     },
     {
       "id": "rangeOfMotion",
       "valueType": "enum",
       "required": true,
-      "description": "The source-exact bar-to-floor relationship rather than a universal hip, knee, or trunk angle.",
+      "description": "The source-exact implement range: floor-touching research paths or a continuous top-start path ending near mid-shin without floor contact.",
       "allowedValues": [
         "floorAtFootLevelToStanding",
-        "floorFifteenCentimetersBelowFeetToStanding"
+        "floorFifteenCentimetersBelowFeetToStanding",
+        "topStartToMidShinWithoutFloorContact"
       ]
     },
     {
       "id": "tempo",
       "valueType": "enum",
       "required": true,
-      "description": "The study used two-second ascending and descending phases with an approximately half-second isometric phase and visual timing feedback.",
+      "description": "The source-authored tempo: measured two-second phases in the research protocol or controlled but otherwise unreported technique timing.",
       "allowedValues": [
-        "twoSecondsEachPhaseWithHalfSecondIsometric"
+        "twoSecondsEachPhaseWithHalfSecondIsometric",
+        "controlledSourceUnreported"
       ]
     },
     {
@@ -401,16 +412,31 @@
       "valueType": "boolean",
       "required": true,
       "fixedValue": false,
-      "description": "No rail, lever, or other mechanism constrains the free barbell path."
+      "description": "No rail, lever, or other mechanism constrains the free-weight path."
     },
     {
       "id": "interRepSupport",
       "valueType": "enum",
       "required": true,
-      "description": "The plates touch the floor at the end of every repetition, but the source did not locate its half-second isometric phase or prescribe a pause, reset, or complete unloading there.",
+      "description": "Whether the implement contacts the floor without a prescribed reset or remains continuously unsupported by the floor between repetitions.",
       "allowedValues": [
-        "floorContactNoSpecifiedReset"
+        "floorContactNoSpecifiedReset",
+        "noneContinuous"
       ]
+    },
+    {
+      "id": "implementConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-exact free-weight configuration.",
+      "allowedValues": ["straightBarbell", "pairedDumbbells"]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Barbell fixtures log total bar-and-plate load; paired dumbbells log one implement.",
+      "allowedValues": ["totalBarAndPlates", "perImplement"]
     },
     {
       "id": "lowerBodyContribution",
@@ -425,7 +451,7 @@
   "recommended": {
     "defaultReps": {
       "minimum": 6,
-      "maximum": 6
+      "maximum": 15
     }
   },
   "exerciseRules": [
@@ -494,7 +520,10 @@
       "then": [
         {
           "field": "variant.rangeOfMotion",
-          "value": "floorAtFootLevelToStanding"
+          "allowedValues": [
+            "floorAtFootLevelToStanding",
+            "topStartToMidShinWithoutFloorContact"
+          ]
         }
       ],
       "requirePresent": [],
@@ -543,6 +572,72 @@
       "requireAbsent": [
         "variant.platformHeightCm"
       ]
+    },
+    {
+      "id": "dumbbells-pin-continuous-paired-fixture",
+      "description": "Dumbbells admit only the source-exact continuous paired implementation and per-implement load convention.",
+      "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
+      "then": [
+        {"field": "variant.supportSurface", "value": "floor"},
+        {"field": "variant.loadPlacement", "value": "pairedBesideLegs"},
+        {"field": "variant.gripWidth", "value": "notApplicableIndependentHandles"},
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.externalLoadPrescription", "value": "sourceUnspecified"},
+        {"field": "variant.kneeTechnique", "value": "slightlyFlexedHeld"},
+        {"field": "variant.rangeOfMotion", "value": "topStartToMidShinWithoutFloorContact"},
+        {"field": "variant.tempo", "value": "controlledSourceUnreported"},
+        {"field": "variant.interRepSupport", "value": "noneContinuous"},
+        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"},
+        {"field": "variant.loadAccounting", "value": "perImplement"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.platformHeightCm"]
+    },
+    {
+      "id": "barbell-pins-single-implement-accounting",
+      "description": "Every barbell fixture records a single straight bar and total bar-and-plate load.",
+      "when": {"field": "equipment", "operator": "equals", "value": "barbell"},
+      "then": [
+        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
+        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"},
+        {"field": "variant.loadPlacement", "value": "handsInFrontOfBody"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "continuous-range-pins-top-start-contract",
+      "description": "The source-exact top-start range has no floor contact and uses the controlled unreported cadence.",
+      "when": {"field": "variant.rangeOfMotion", "operator": "equals", "value": "topStartToMidShinWithoutFloorContact"},
+      "then": [
+        {"field": "variant.supportSurface", "value": "floor"},
+        {"field": "variant.kneeTechnique", "value": "slightlyFlexedHeld"},
+        {"field": "variant.externalLoadPrescription", "value": "sourceUnspecified"},
+        {"field": "variant.tempo", "value": "controlledSourceUnreported"},
+        {"field": "variant.interRepSupport", "value": "noneContinuous"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.platformHeightCm"]
+    },
+    {
+      "id": "continuous-support-requires-top-start-range",
+      "description": "No inter-repetition support is admitted only for the reviewed top-start continuous branch.",
+      "when": {"field": "variant.interRepSupport", "operator": "equals", "value": "noneContinuous"},
+      "then": [{"field": "variant.rangeOfMotion", "value": "topStartToMidShinWithoutFloorContact"}],
+      "requirePresent": [],
+      "requireAbsent": ["variant.platformHeightCm"]
+    },
+    {
+      "id": "floor-contact-support-preserves-reviewed-protocol",
+      "description": "Floor-contact fixtures retain the original study prescription and cadence.",
+      "when": {"field": "variant.interRepSupport", "operator": "equals", "value": "floorContactNoSpecifiedReset"},
+      "then": [
+        {"field": "equipment", "value": "barbell"},
+        {"field": "variant.externalLoadPrescription", "value": "eightyPercentVariantSpecificOneRepMaximum"},
+        {"field": "variant.tempo", "value": "twoSecondsEachPhaseWithHalfSecondIsometric"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -550,9 +645,7 @@
       "catalogID": "barbell-romanian-deadlift",
       "name": "Floor-Touch Barbell Romanian Deadlift",
       "aliases": [
-        "Barbell Romanian Deadlift",
-        "Romanian Deadlift",
-        "RDL"
+        "Floor-Touch Romanian Deadlift"
       ],
       "equipment": "barbell",
       "laterality": "bilateral",
@@ -643,6 +736,8 @@
         "tempo": "twoSecondsEachPhaseWithHalfSecondIsometric",
         "fixedPath": false,
         "interRepSupport": "floorContactNoSpecifiedReset",
+        "implementConfiguration": "straightBarbell",
+        "loadAccounting": "totalBarAndPlates",
         "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"
       },
       "additionalPrimeActions": [],
@@ -762,6 +857,8 @@
         "tempo": "twoSecondsEachPhaseWithHalfSecondIsometric",
         "fixedPath": false,
         "interRepSupport": "floorContactNoSpecifiedReset",
+        "implementConfiguration": "straightBarbell",
+        "loadAccounting": "totalBarAndPlates",
         "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"
       },
       "additionalPrimeActions": [],
@@ -881,6 +978,8 @@
         "tempo": "twoSecondsEachPhaseWithHalfSecondIsometric",
         "fixedPath": false,
         "interRepSupport": "floorContactNoSpecifiedReset",
+        "implementConfiguration": "straightBarbell",
+        "loadAccounting": "totalBarAndPlates",
         "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"
       },
       "additionalPrimeActions": [],
@@ -902,6 +1001,22 @@
           "Stopping the plates at foot level instead of the lower floor removes the directly studied 15-centimeter range."
         ]
       }
+    },
+    {
+      "catalogID": "continuous-top-start-barbell-romanian-deadlift", "name": "Continuous Top-Start Barbell Romanian Deadlift", "aliases": ["Barbell Romanian Deadlift", "Romanian Deadlift", "RDL"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 8, "searchPriority": 99,
+      "involvement": [{"muscle": "medialHamstrings", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"}, {"muscle": "lumbarExtensors", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "gastrocnemius", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "variant": {"kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral", "stanceWidth": "hipDistance", "footOrientation": "unreported", "footContact": "continuous", "supportSurface": "floor", "loadPlacement": "handsInFrontOfBody", "gripWidth": "shoulderDistance", "gripOrientation": "pronated", "shoulderPosition": "drawnBackAndDown", "externalLoadPrescription": "sourceUnspecified", "hipMotion": "extends", "spineMotion": "straightPostureInstructedKinematicsUnmeasured", "kneeTechnique": "slightlyFlexedHeld", "rangeOfMotion": "topStartToMidShinWithoutFloorContact", "tempo": "controlledSourceUnreported", "fixedPath": false, "interRepSupport": "noneContinuous", "implementConfiguration": "straightBarbell", "loadAccounting": "totalBarAndPlates", "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ace-2025-romanian-deadlift", "nsca-2012-basics-strength-conditioning", "coratella-2022-romanian-step-stiff-leg-deadlift", "lee-2018-conventional-romanian-deadlift"],
+      "execution": {"startingPosition": "Take the bar from a rack at thigh-to-waist height, stand with feet hip-width apart, hold it in front of the thighs with a shoulder-width palms-down grip, and keep a slight knee bend.", "movement": "Push the hips back and hinge while keeping the bar close to the legs and the spine long.", "endpoint": "Reverse near mid-shin, or earlier when hamstring tension limits the hinge, without touching the floor.", "returnPhase": "Drive the hips forward to stand and bring the bar back to the thighs, then begin the next repetition without setting it down.", "controlledJoints": "Keep the slight knee bend, straight elbows, and braced spine throughout.", "supportAndPosture": "Keep both feet planted and do not use a rack or floor between repetitions.", "disqualifyingCompensations": ["Touching or resetting the bar on the floor turns the fixture into a floor-contact Romanian deadlift.", "Bending the knees into a squat changes the hip-dominant hinge.", "Rounding the spine or pulling the bar away from the legs leaves the reviewed technique."]}
+    },
+    {
+      "catalogID": "two-dumbbell-continuous-romanian-deadlift", "name": "Two-Dumbbell Continuous Romanian Deadlift", "aliases": ["Two-Dumbbell Romanian Deadlift", "Dumbbell Romanian Deadlift", "Dumbbell RDL"],
+      "equipment": "dumbbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 8, "searchPriority": 96,
+      "involvement": [{"muscle": "medialHamstrings", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"}, {"muscle": "lumbarExtensors", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "gastrocnemius", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "variant": {"kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral", "stanceWidth": "hipDistance", "footOrientation": "unreported", "footContact": "continuous", "supportSurface": "floor", "loadPlacement": "pairedBesideLegs", "gripWidth": "notApplicableIndependentHandles", "gripOrientation": "neutral", "shoulderPosition": "drawnBackAndDown", "externalLoadPrescription": "sourceUnspecified", "hipMotion": "extends", "spineMotion": "straightPostureInstructedKinematicsUnmeasured", "kneeTechnique": "slightlyFlexedHeld", "rangeOfMotion": "topStartToMidShinWithoutFloorContact", "tempo": "controlledSourceUnreported", "fixedPath": false, "interRepSupport": "noneContinuous", "implementConfiguration": "pairedDumbbells", "loadAccounting": "perImplement", "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ace-2025-romanian-deadlift", "nsca-2012-basics-strength-conditioning", "lee-2018-conventional-romanian-deadlift"],
+      "execution": {"startingPosition": "Log one dumbbell's weight, not the pair total. Stand with feet hip-width apart, one matching dumbbell beside each thigh, palms facing inward, and a slight knee bend.", "movement": "Push the hips back and hinge while keeping both dumbbells close to the legs and the spine long.", "endpoint": "Reverse near mid-shin, or earlier when hamstring tension limits the hinge, without touching the floor.", "returnPhase": "Drive the hips forward to stand and return both dumbbells beside the thighs, then begin the next repetition without setting them down.", "controlledJoints": "Keep the slight knee bend, straight elbows, neutral wrists, and braced spine throughout.", "supportAndPosture": "Keep both feet planted and both dumbbells moving together.", "disqualifyingCompensations": ["Touching or resetting the dumbbells on the floor leaves the continuous top-start fixture.", "Alternating the dumbbells changes the paired implementation.", "Bending the knees into a squat or rounding the spine changes the reviewed hinge."]}
     }
   ]
 }

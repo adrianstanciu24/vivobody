@@ -170,7 +170,7 @@ EXPECTED_SPLIT_MESHES = {
 
 EQUIPMENT = {
     "barbell", "dumbbell", "cable", "machine", "bodyweight",
-    "kettlebell", "band", "gripTrainer", "trapBar", "other",
+    "kettlebell", "band", "gripTrainer", "trapBar", "abWheel", "other",
 }
 MECHANICS = {"compound", "isolation"}
 TRAINING_ROLES = {"push", "pull", "legs", "core", "other"}
@@ -1881,6 +1881,8 @@ def validate_exercise(
         require(bodyweight_fraction > 0, f"{context} {load_mode} load requires positive bodyweightFraction")
     if exercise["equipment"] == "band":
         require(load_mode == "nonComparable", f"{context} band resistance must remain nonComparable")
+    if exercise["equipment"] == "abWheel":
+        require(load_mode == "nonComparable", f"{context} ab-wheel load must remain nonComparable")
 
     modality = exercise["modality"]
     tracking_mode = exercise["trackingMode"]

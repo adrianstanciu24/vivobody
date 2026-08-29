@@ -19,6 +19,7 @@ $(SRCROOT)/specs/catalog/families/dip.json
 $(SRCROOT)/specs/catalog/families/dynamic-lunge.json
 $(SRCROOT)/specs/catalog/families/elbow-extension.json
 $(SRCROOT)/specs/catalog/families/elbow-flexion.json
+$(SRCROOT)/specs/catalog/families/externally-rotating-face-pull.json
 $(SRCROOT)/specs/catalog/families/farmer-carry.json
 $(SRCROOT)/specs/catalog/families/finger-flexion-grip.json
 $(SRCROOT)/specs/catalog/families/forearm-pronation.json
@@ -41,6 +42,7 @@ $(SRCROOT)/specs/catalog/families/inclined-leg-press.json
 $(SRCROOT)/specs/catalog/families/kettlebell-swing.json
 $(SRCROOT)/specs/catalog/families/knee-extension.json
 $(SRCROOT)/specs/catalog/families/knee-flexion.json
+$(SRCROOT)/specs/catalog/families/kneeling-ab-wheel-rollout.json
 $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/machine-hack-squat.json
 $(SRCROOT)/specs/catalog/families/mid-thigh-clean-pull.json
@@ -74,9 +76,11 @@ $(SRCROOT)/specs/catalog/families/step-up.json
 $(SRCROOT)/specs/catalog/families/suitcase-carry.json
 $(SRCROOT)/specs/catalog/families/sumo-deadlift.json
 $(SRCROOT)/specs/catalog/families/trap-bar-deadlift.json
+$(SRCROOT)/specs/catalog/families/upper-arm-pad-shoulder-abduction.json
 $(SRCROOT)/specs/catalog/families/upright-row.json
 $(SRCROOT)/specs/catalog/families/vertical-press.json
 $(SRCROOT)/specs/catalog/families/vertical-pull.json
+$(SRCROOT)/specs/catalog/families/walking-lunge.json
 $(SRCROOT)/specs/catalog/families/wall-sit.json
 $(SRCROOT)/specs/catalog/families/wrist-extension.json
 $(SRCROOT)/specs/catalog/families/wrist-flexion.json

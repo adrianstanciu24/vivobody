@@ -209,6 +209,106 @@
     ]
   },
   {
+    "familyID": "ankle-plantarflexion",
+    "catalogID": "bilateral-standing-shoulder-pad-machine-calf-raise",
+    "name": "Bilateral Standing Shoulder-Pad Machine Calf Raise",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Standing Machine Calf Raise",
+      "Standing Calf Raise Machine"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand in a two-leg calf-raise machine with both forefeet centered on the platform and both shoulders beneath the load pads. Compare the entered load only on this same machine.",
+      "movement": "Raise both heels together as high as you can.",
+      "endpoint": "Finish at the highest heel position you can reach with both knees straight.",
+      "returnPhase": "Lower both heels together under control without bending the knees or curling the toes.",
+      "controlledJoints": "Keep both knees straight and hold your hips, back, knees, and feet steady.",
+      "supportAndPosture": "Stand tall on the machine platform with the load pads resting on your shoulders.",
+      "disqualifyingCompensations": [
+        "Moving one heel before the other leaves the simultaneous two-leg fixture.",
+        "Bending and straightening the knees turns the calf raise into a knee-driven bounce.",
+        "Curling the toes turns the calf raise into a toe-flexion exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gastrocnemius",
+        "role": "primary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "primary"
+      }
+    ]
+  },
+  {
+    "familyID": "ankle-plantarflexion",
+    "catalogID": "bilateral-seated-thigh-pad-machine-calf-raise",
+    "name": "Bilateral Seated Thigh-Pad Machine Calf Raise",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Seated Machine Calf Raise",
+      "Seated Calf Raise Machine"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit in a two-leg calf-raise machine with both forefeet centered on the platform, both knees bent near 90 degrees, and the lower thighs beneath the load pad. Compare the entered load only on this same machine.",
+      "movement": "Raise both heels together as high as you can.",
+      "endpoint": "Finish at the highest heel position you can reach while both knees remain bent.",
+      "returnPhase": "Lower both heels together under control without straightening the knees or curling the toes.",
+      "controlledJoints": "Keep both knees bent near 90 degrees and hold the hips, pelvis, back, knees, and feet still.",
+      "supportAndPosture": "Sit tall on the machine seat with the load pad resting on both lower thighs.",
+      "disqualifyingCompensations": [
+        "Moving one heel before the other leaves the simultaneous two-leg fixture.",
+        "Straightening the knees turns the seated calf raise into a standing-style raise.",
+        "Curling the toes turns the calf raise into a toe-flexion exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "soleus",
+        "role": "primary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      }
+    ]
+  },
+  {
     "familyID": "anti-extension",
     "catalogID": "plank",
     "name": "Stable Forearm Plank",
@@ -643,6 +743,201 @@
     ]
   },
   {
+    "familyID": "bilateral-squat",
+    "catalogID": "kettlebell-goblet-squat",
+    "name": "Kettlebell Goblet Squat",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "kettlebell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "KB Goblet Squat"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with both feet about shoulder-width apart and hold one kettlebell vertically at your chest by its horns.",
+      "movement": "Sit the hips down and back while bending both knees and keeping the kettlebell close to the chest.",
+      "endpoint": "Stop when the upper thighs are approximately parallel to the floor.",
+      "returnPhase": "Drive through both feet and extend the hips, knees, and ankles to stand tall with the kettlebell still at the chest.",
+      "controlledJoints": "Keep the knees tracking with the feet and the elbows under control without turning the movement into a press.",
+      "supportAndPosture": "Brace the trunk, keep both feet planted, and use no external torso support.",
+      "disqualifyingCompensations": [
+        "Lowering the kettlebell away from the chest changes the reviewed goblet fixture.",
+        "Stopping above thigh-parallel depth changes the reviewed range.",
+        "Pressing the kettlebell overhead adds an upper-body prime action."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "bilateral-squat",
+    "catalogID": "smith-machine-upper-back-squat",
+    "name": "Smith Machine Upper-Back Squat",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Vertical Smith Upper-Back Squat",
+      "Zero-Offset Smith Squat"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Use the reviewed vertical-rail Smith setup, place the bar across the upper back, and stand with both feet shoulder-width apart directly under the bar line with zero forward or backward offset. Log the entered machine load and compare it only on the same fixture.",
+      "movement": "Unlock the bar and bend the hips and knees while following the vertical rail path.",
+      "endpoint": "Stop when the upper thighs are approximately parallel to the floor.",
+      "returnPhase": "Drive through both feet and extend the hips, knees, and ankles to return to standing along the same vertical path.",
+      "controlledJoints": "Keep both knees tracking with the feet and do not shift the stance away from the bar line.",
+      "supportAndPosture": "Brace the trunk, keep both feet planted, and retain the upper-back bar position.",
+      "disqualifyingCompensations": [
+        "Moving the feet forward or backward changes the reviewed zero-offset geometry.",
+        "Using angled rails changes the reviewed machine fixture.",
+        "Placing the bar on the front of the shoulders changes the reviewed load position."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "chest-fly",
     "catalogID": "flat-dumbbell-fly",
     "name": "Flat Dumbbell Fly",
@@ -875,6 +1170,84 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "chest-fly",
+    "catalogID": "seated-handled-lever-machine-chest-fly",
+    "name": "Seated Handled Lever-Machine Chest Fly",
+    "group": "chest",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Seated Handled Machine Chest Fly",
+      "Handled Lever Chest Fly"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit against the back pad, adjust the seat so both handles align with the chest, and take one handle in each hand with a fixed slight elbow bend. Log the entered machine load and compare it only on this same fixture.",
+      "movement": "Bring both handled levers inward together by sweeping the upper arms across the chest.",
+      "endpoint": "Finish when the handles meet at the machine's controlled end position without pressing through the elbows.",
+      "returnPhase": "Let both levers open under control to the starting position while keeping the elbow angle fixed.",
+      "controlledJoints": "Keep the wrists neutral, elbows slightly bent, and both sides moving simultaneously.",
+      "supportAndPosture": "Keep the torso against the posterior pad and the feet stable throughout the set.",
+      "disqualifyingCompensations": [
+        "Bending and straightening the elbows turns the fly into a press.",
+        "Leaving the back pad to create momentum changes the reviewed supported fixture.",
+        "Using upper-arm pads instead of handles changes the load interface and family."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
       }
     ]
@@ -1722,7 +2095,7 @@
     "modality": "dynamicStrength",
     "loadMode": "external",
     "execution": {
-      "startingPosition": "Stand at a high cable, and hold a single handle with the working palm facing up.",
+      "startingPosition": "Stand at a high cable, and hold a single handle with the working palm facing up. Compare the entered load only on this same cable station and attachment.",
       "movement": "Straighten the elbow from about 90 degrees.",
       "endpoint": "End the pushdown with your elbow fully straight.",
       "returnPhase": "Return under control without moving the shoulder or rotating the forearm.",
@@ -1792,7 +2165,7 @@
     "modality": "dynamicStrength",
     "loadMode": "external",
     "execution": {
-      "startingPosition": "Stand at a high cable, and hold a single handle with the working palm facing down.",
+      "startingPosition": "Stand at a high cable, and hold a single handle with the working palm facing down. Compare the entered load only on this same cable station and attachment.",
       "movement": "Straighten the elbow from about 90 degrees.",
       "endpoint": "End the pushdown with your elbow fully straight.",
       "returnPhase": "Return under control without moving the shoulder or rotating the forearm.",
@@ -1866,7 +2239,7 @@
     "modality": "dynamicStrength",
     "loadMode": "external",
     "execution": {
-      "startingPosition": "Stand with one arm overhead and the palm facing up while the cable pulls against you.",
+      "startingPosition": "Stand with one arm overhead and the palm facing up while the cable pulls against you. Compare the entered load only on this same cable station and attachment.",
       "movement": "Straighten the elbow from about 90 degrees.",
       "endpoint": "End the extension with your elbow fully straight.",
       "returnPhase": "Return under control.",
@@ -2073,7 +2446,7 @@
     "modality": "dynamicStrength",
     "loadMode": "external",
     "execution": {
-      "startingPosition": "Stand at the high cable holding the straight bar with both palms down at shoulder width, keep the upper arms close to the torso, and lean slightly forward.",
+      "startingPosition": "Stand at the high cable holding the straight bar with both palms down at shoulder width, keep the upper arms close to the torso, and lean slightly forward. Compare the entered load only on this same cable station and attachment.",
       "movement": "Move only the forearms downward until both elbows reach full extension.",
       "endpoint": "End with both elbows fully straight and the bar clear of the torso.",
       "returnPhase": "Return through the full range while preserving the same upper-arm and torso positions.",
@@ -2082,6 +2455,81 @@
       "disqualifyingCompensations": [
         "Leaning onto the bar changes the strict pushdown into a bodyweight-assisted push.",
         "Moving the upper arms or allowing one arm to lead changes the reviewed two-arm elbow extension."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-extension",
+    "catalogID": "bilateral-rope-cable-triceps-pushdown",
+    "name": "Bilateral Rope Cable Triceps Pushdown",
+    "group": "arms",
+    "defaultWeight": 30,
+    "defaultWeightKg": 15,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Rope Cable Triceps Pushdown",
+      "Bilateral Rope Pushdown",
+      "Rope Triceps Pushdown"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand upright facing a cable set above your head. Hold one rope end in each hand with a neutral grip, brace your trunk, and keep both upper arms beside the torso. Compare the entered load only on this same cable station and attachment.",
+      "movement": "Extend both elbows together and press the rope toward the floor.",
+      "endpoint": "Finish with both elbows straight but not forcefully locked and the wrists still neutral.",
+      "returnPhase": "Allow both elbows to flex together under control until the upper arms would begin to drift forward.",
+      "controlledJoints": "Keep the shoulders, upper arms, forearms, and wrists in their starting alignment while the elbows move.",
+      "supportAndPosture": "Keep the torso vertical and do not lean bodyweight onto the rope.",
+      "disqualifyingCompensations": [
+        "Moving the upper arms forward turns the pushdown into a shoulder-driven cable movement.",
+        "Leaning onto the rope changes the strict pushdown into a bodyweight-assisted push.",
+        "Moving one arm before the other leaves the simultaneous two-arm fixture."
       ]
     },
     "involvement": [
@@ -2571,7 +3019,7 @@
     "modality": "dynamicStrength",
     "loadMode": "external",
     "execution": {
-      "startingPosition": "Recline against a 45-degree bench with a dumbbell in each hand, palms facing up, and both upper arms hanging behind the torso.",
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Recline against a 45-degree bench with a dumbbell in each hand, palms facing up, and both upper arms hanging behind the torso.",
       "movement": "Flex both elbows together while keeping the torso supported and the upper-arm position unchanged.",
       "endpoint": "Finish at the top of the controlled elbow-flexion range with both palms still facing up.",
       "returnPhase": "Lower both dumbbells together under control until the elbows approach extension.",
@@ -2602,6 +3050,269 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-flexion",
+    "catalogID": "standing-bilateral-supinated-dumbbell-curl",
+    "name": "Standing Bilateral Supinated Dumbbell Curl",
+    "group": "arms",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Bilateral Dumbbell Curl",
+      "Standing Dumbbell Biceps Curl"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Stand with one matching dumbbell in each hand, both palms facing forward, elbows extended, and upper arms beside the torso.",
+      "movement": "Flex both elbows together without moving the shoulders.",
+      "endpoint": "Finish at the top of the controlled range with both palms still facing up.",
+      "returnPhase": "Lower both dumbbells together under control toward elbow extension.",
+      "controlledJoints": "Keep both palms facing up, both wrists neutral, and the upper arms beside the torso.",
+      "supportAndPosture": "Keep the trunk and lower body still.",
+      "disqualifyingCompensations": [
+        "Alternating the arms leaves the simultaneous two-arm fixture.",
+        "Leaning backward or driving with the knees changes the strict curl.",
+        "Swinging the upper arms forward or rotating the palms changes the reviewed task."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "brachialis",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-flexion",
+    "catalogID": "bilateral-dumbbell-hammer-curl",
+    "name": "Bilateral Dumbbell Hammer Curl",
+    "group": "arms",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Bilateral Hammer Curl",
+      "Dumbbell Hammer Curl",
+      "Standing Dumbbell Hammer Curl"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Stand with one matching dumbbell in each hand, palms facing the thighs, elbows extended, and upper arms beside the torso.",
+      "movement": "Flex both elbows together without turning the forearms.",
+      "endpoint": "Finish at the top of the controlled range with both palms still facing inward.",
+      "returnPhase": "Lower both dumbbells together under control toward elbow extension.",
+      "controlledJoints": "Keep both forearms neutral, both wrists straight, and the upper arms beside the torso.",
+      "supportAndPosture": "Keep the trunk and lower body still.",
+      "disqualifyingCompensations": [
+        "Alternating the arms leaves the simultaneous two-arm fixture.",
+        "Leaning backward or driving with the knees changes the strict curl.",
+        "Turning the palms or swinging the upper arms changes the reviewed hammer curl."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "brachialis",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "externally-rotating-face-pull",
+    "catalogID": "high-pulley-rope-face-pull-with-external-rotation",
+    "name": "High-Pulley Rope Face Pull with Deliberate External Rotation",
+    "group": "shoulders",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Externally Rotating Rope Face Pull",
+      "High-Pulley Face Pull with External Rotation"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand facing a high pulley with one rope end in each hand, arms reaching toward the cable, and the trunk braced. Compare the entered load only on this same cable station and rope attachment.",
+      "movement": "Draw the shoulder blades together and pull both rope ends toward the face while the elbows bend and move outward; finish by deliberately rotating both shoulders outward.",
+      "endpoint": "Finish near the face with the rope ends separated, shoulder blades drawn together, and forearms in the source-prescribed outward-rotation position.",
+      "returnPhase": "Reverse the rotation and extend both arms together under control toward the high pulley.",
+      "controlledJoints": "Keep both wrists neutral and do not replace shoulder rotation with wrist twisting.",
+      "supportAndPosture": "Keep the torso and lower body still; do not lean backward to move the rope.",
+      "disqualifyingCompensations": [
+        "Omitting the outward-rotation finish turns the fixture into a different face pull or high row.",
+        "Pulling from a face-height or low cable leaves the source-exact high-pulley setup.",
+        "Leaning backward or driving with the legs turns the strict pull into a body-driven row."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidPosterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
         "role": "stabilizer"
       }
     ]
@@ -3577,6 +4288,65 @@
       "disqualifyingCompensations": [
         "Straightening the working knee during the lift turns the bent-knee hip extension into a straight-leg raise.",
         "Rocking the pelvis or arching the back turns the isolated hip extension into a spine-driven back extension."
+      ],
+      "sideOrDirection": "Complete all repetitions on one side, then repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "hip-extension",
+    "catalogID": "supported-cable-ankle-cuff-hip-extension",
+    "name": "Supported Cable Ankle-Cuff Hip Extension",
+    "group": "legs",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Standing Cable Hip Extension",
+      "Cable Glute Kickback"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Attach an ankle cuff just above the working ankle to the low pulley, face the machine, and brace both hands on its pressing arm at waist height. Stand tall with a slight bend in the working knee. Log the entered stack load and compare it only on this same fixture and setup.",
+      "movement": "Keep the pelvis and spine still while extending the working thigh straight behind the body.",
+      "endpoint": "Stop with the working leg 15 to 20 degrees behind the body; the source reports this interval rather than one exact endpoint.",
+      "returnPhase": "Bring the thigh forward under control to the neutral start without letting the stack pull the pelvis forward.",
+      "controlledJoints": "Hold the slight knee bend and keep the toes and kneecap facing forward.",
+      "supportAndPosture": "Use both hands for support while keeping the standing leg and trunk still.",
+      "disqualifyingCompensations": [
+        "Arching the back or rotating the pelvis changes the isolated hip action.",
+        "Bending and straightening the working knee adds a knee-driven movement.",
+        "Moving the cuff away from just above the ankle changes the reviewed resistance geometry."
       ],
       "sideOrDirection": "Complete all repetitions on one side, then repeat with the other leg."
     },
@@ -5471,6 +6241,57 @@
     ]
   },
   {
+    "familyID": "knee-extension",
+    "catalogID": "upright-bilateral-lever-machine-leg-extension",
+    "name": "Upright Bilateral Lever-Machine Leg Extension",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Bilateral Machine Leg Extension",
+      "Machine Leg Extension",
+      "Leg Extension"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit upright in the linked two-leg lever knee-extension machine. Adjust the back pad to align both knees with the machine's pivots, place both feet under the lower-leg pads, and lightly hold the handles. The manufacturer does not report numeric hip or knee angles. Compare the entered load only on this same machine.",
+      "movement": "Straighten both knees together.",
+      "endpoint": "Reach the machine's comfortable extended position and pause; the manufacturer does not report a numeric endpoint angle.",
+      "returnPhase": "Return both lower legs together under control.",
+      "controlledJoints": "Keep your pelvis, back, hips, ankles, and feet still.",
+      "supportAndPosture": "Keep your back against the upright machine pad and your pelvis on the seat.",
+      "disqualifyingCompensations": [
+        "Moving one leg before the other leaves the simultaneous two-leg fixture.",
+        "Rocking the pelvis or arching the back to move the pad turns the leg extension into a trunk-driven heave.",
+        "Swinging the lower legs up with momentum turns the leg extension into a leg swing."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      }
+    ]
+  },
+  {
     "familyID": "knee-flexion",
     "catalogID": "seated-unilateral-machine-leg-curl",
     "name": "Seated Unilateral Machine Leg Curl",
@@ -5698,6 +6519,94 @@
       {
         "muscle": "gracilis",
         "role": "secondary"
+      }
+    ]
+  },
+  {
+    "familyID": "kneeling-ab-wheel-rollout",
+    "catalogID": "kneeling-ab-wheel-rollout",
+    "name": "Kneeling Ab-Wheel Rollout",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "abWheel",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Kneeling Ab Rollout"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Kneel with both knees supported on the floor and hold both ab-wheel handles with the wheel beneath the shoulders. No resistance weight is logged for this fixture.",
+      "movement": "Roll the wheel forward as the shoulders flex and hips extend while keeping the torso tight against spinal extension.",
+      "endpoint": "Reach only the farthest controlled position that preserves the braced torso; the source does not prescribe a distance.",
+      "returnPhase": "Reverse the wheel under control through shoulder extension and hip flexion until you return to the kneeling start.",
+      "controlledJoints": "Keep the elbows near straight and prevent the lower back from sagging or arching.",
+      "supportAndPosture": "Keep both knees in contact with the floor and both hands on the wheel.",
+      "disqualifyingCompensations": [
+        "Sagging or arching the spine leaves the braced rollout fixture.",
+        "Holding the endpoint for time instead of completing repetitions turns the task into a rollout hold.",
+        "Standing on the feet or using an assisted return device changes the reviewed fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lats",
+        "role": "secondary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
       }
     ]
   },
@@ -6683,9 +7592,7 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Barbell Romanian Deadlift",
-      "Romanian Deadlift",
-      "RDL"
+      "Floor-Touch Romanian Deadlift"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -6900,6 +7807,204 @@
         "Keeping the knees extended throughout turns the movement into an unreviewed step stiff-leg deadlift.",
         "Bending the knees deeply turns the hinge into a deficit squat-like floor pull.",
         "Stopping the plates at foot level instead of the lower floor removes the directly studied 15-centimeter range."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "romanian-deadlift",
+    "catalogID": "continuous-top-start-barbell-romanian-deadlift",
+    "name": "Continuous Top-Start Barbell Romanian Deadlift",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Barbell Romanian Deadlift",
+      "Romanian Deadlift",
+      "RDL"
+    ],
+    "searchPriority": 99,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Take the bar from a rack at thigh-to-waist height, stand with feet hip-width apart, hold it in front of the thighs with a shoulder-width palms-down grip, and keep a slight knee bend.",
+      "movement": "Push the hips back and hinge while keeping the bar close to the legs and the spine long.",
+      "endpoint": "Reverse near mid-shin, or earlier when hamstring tension limits the hinge, without touching the floor.",
+      "returnPhase": "Drive the hips forward to stand and bring the bar back to the thighs, then begin the next repetition without setting it down.",
+      "controlledJoints": "Keep the slight knee bend, straight elbows, and braced spine throughout.",
+      "supportAndPosture": "Keep both feet planted and do not use a rack or floor between repetitions.",
+      "disqualifyingCompensations": [
+        "Touching or resetting the bar on the floor turns the fixture into a floor-contact Romanian deadlift.",
+        "Bending the knees into a squat changes the hip-dominant hinge.",
+        "Rounding the spine or pulling the bar away from the legs leaves the reviewed technique."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "romanian-deadlift",
+    "catalogID": "two-dumbbell-continuous-romanian-deadlift",
+    "name": "Two-Dumbbell Continuous Romanian Deadlift",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Two-Dumbbell Romanian Deadlift",
+      "Dumbbell Romanian Deadlift",
+      "Dumbbell RDL"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Stand with feet hip-width apart, one matching dumbbell beside each thigh, palms facing inward, and a slight knee bend.",
+      "movement": "Push the hips back and hinge while keeping both dumbbells close to the legs and the spine long.",
+      "endpoint": "Reverse near mid-shin, or earlier when hamstring tension limits the hinge, without touching the floor.",
+      "returnPhase": "Drive the hips forward to stand and return both dumbbells beside the thighs, then begin the next repetition without setting them down.",
+      "controlledJoints": "Keep the slight knee bend, straight elbows, neutral wrists, and braced spine throughout.",
+      "supportAndPosture": "Keep both feet planted and both dumbbells moving together.",
+      "disqualifyingCompensations": [
+        "Touching or resetting the dumbbells on the floor leaves the continuous top-start fixture.",
+        "Alternating the dumbbells changes the paired implementation.",
+        "Bending the knees into a squat or rounding the spine changes the reviewed hinge."
       ]
     },
     "involvement": [
@@ -7206,6 +8311,89 @@
     ]
   },
   {
+    "familyID": "scapular-elevation",
+    "catalogID": "standing-bilateral-barbell-shrug",
+    "name": "Standing Bilateral Barbell Shrug",
+    "group": "back",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Barbell Shrug",
+      "Standing Barbell Shrug"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand tall with feet about hip-width apart. Hold a barbell in front of the thighs with a shoulder-width palms-down grip, straight elbows, and no straps or hooks.",
+      "movement": "Elevate both shoulder blades directly upward without bending the elbows.",
+      "endpoint": "Finish with both shoulder blades as high as they comfortably go.",
+      "returnPhase": "Lower under control without rolling the shoulders, moving the neck, or leaning the trunk.",
+      "controlledJoints": "Keep both upper arms at the sides and both elbows straight.",
+      "supportAndPosture": "Keep the trunk and lower body still while the bar remains in front of the thighs.",
+      "disqualifyingCompensations": [
+        "Rolling the shoulders forward or back turns the lift into a rolling shrug.",
+        "Bending the elbows turns the shrug into an upright row.",
+        "Dipping the legs to heave the bar turns the shrug into a leg-driven pull.",
+        "Moving the bar behind the body or using straps leaves the reviewed fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "levatorScapulae",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "scapular-protraction",
     "catalogID": "supine-dumbbell-scapular-punch",
     "name": "Supine Dumbbell Scapular Punch",
@@ -7485,6 +8673,97 @@
         "Raising the arm in front of the body turns the lateral raise into a front raise."
       ],
       "sideOrDirection": "Finish the set with the working arm, then repeat with the other arm."
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidLateral",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "shoulder-abduction-raise",
+    "catalogID": "simultaneous-bilateral-dumbbell-lateral-raise",
+    "name": "Simultaneous Bilateral Dumbbell Lateral Raise",
+    "group": "shoulders",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Bilateral Dumbbell Lateral Raise",
+      "Two-Dumbbell Lateral Raise"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Stand upright with one matching dumbbell beside each thigh, palms facing inward, and elbows nearly straight.",
+      "movement": "Raise both upper arms together directly out to the sides.",
+      "endpoint": "Stop when both upper arms reach shoulder height.",
+      "returnPhase": "Lower both dumbbells together under control.",
+      "controlledJoints": "Keep both elbows nearly straight and the lower body still.",
+      "supportAndPosture": "Stand upright without external support. Avoid shrugging, leaning, or using lower-body drive.",
+      "disqualifyingCompensations": [
+        "Alternating the arms leaves the simultaneous two-arm fixture.",
+        "Shrugging the shoulders turns the raise into a shrug.",
+        "Swinging the dumbbells with hip drive turns the strict raise into a momentum swing.",
+        "Raising the arms in front of the body turns the lateral raise into a front raise."
+      ]
     },
     "involvement": [
       {
@@ -10606,7 +11885,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Barbell Bulgarian Split Squat",
-      "Barbell Bulgarian Squat"
+      "Barbell Bulgarian Squat",
+      "Barbell RFESS"
     ],
     "searchPriority": 92,
     "bodyweightFraction": 0,
@@ -10624,6 +11904,114 @@
         "Stepping or drifting from the individualized stance changes the stationary split squat."
       ],
       "sideOrDirection": "Complete the set with one lead leg, then repeat with the other leg leading."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "split-stance-squat",
+    "catalogID": "two-dumbbell-rear-foot-elevated-split-squat",
+    "name": "Two-Dumbbell Rear-Foot-Elevated Split Squat",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Dumbbell Bulgarian Split Squat",
+      "Dumbbell Rear-Foot-Elevated Split Squat",
+      "Dumbbell RFESS"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side, place the lead foot fully on the floor, and rest the top of the rear foot on a stable bench. The source did not report a bench height or numeric stance length.",
+      "movement": "Lower with both foot contacts fixed until the lead thigh is approximately parallel to the floor.",
+      "endpoint": "Reach lead-thigh-parallel depth without shifting the feet or lifting the rear foot from the bench.",
+      "returnPhase": "Push through the lead foot and extend the lead hip, knee, and ankle to return to the same split stance.",
+      "controlledJoints": "Keep the lead knee tracking with the foot and both dumbbells moving together at your sides.",
+      "supportAndPosture": "Keep the torso braced and use the bench only to support the top of the rear foot.",
+      "disqualifyingCompensations": [
+        "Stepping between repetitions turns the movement into a lunge.",
+        "Pushing deliberately through the rear foot changes the lead-leg fixture.",
+        "Using a barbell or holding the dumbbells away from the sides changes the reviewed load placement."
+      ],
+      "sideOrDirection": "Complete all repetitions with one lead leg, then repeat with the other leg."
     },
     "involvement": [
       {
@@ -10891,6 +12279,113 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "step-up",
+    "catalogID": "two-dumbbell-forward-step-up",
+    "name": "Two-Dumbbell Forward Step-Up",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "38 cm Dumbbell Forward Step-Up",
+      "15-Inch Dumbbell Forward Step-Up"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side, face an approximately 38-centimeter platform, and place the full lead foot on top.",
+      "movement": "Drive through the lead heel and extend the lead hip, knee, and ankle to raise the body without pushing off from the trail leg.",
+      "endpoint": "Finish the ascent under control. The source did not report whether the trail foot must contact the platform at the top.",
+      "returnPhase": "Descend under control and repeat with the same lead leg. The source did not report the exact trail-foot contact or foot-descent order, so keep one consistent sequence rather than treating an invented order as canonical.",
+      "controlledJoints": "Keep the lead knee tracking with the foot and both dumbbells still at the sides.",
+      "supportAndPosture": "Use no hand support and keep the trunk controlled throughout the step.",
+      "disqualifyingCompensations": [
+        "Pushing or hopping from the trail leg changes the lead-leg task.",
+        "Using a materially different platform height changes the reviewed fixture.",
+        "Swinging or resting the dumbbells away from the sides changes the load placement."
+      ],
+      "sideOrDirection": "Complete the set with one lead leg, then repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
         "role": "stabilizer"
       }
     ]
@@ -11305,6 +12800,80 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "upper-arm-pad-shoulder-abduction",
+    "catalogID": "seated-upper-arm-pad-machine-lateral-raise",
+    "name": "Seated Upper-Arm-Pad Machine Lateral Raise",
+    "group": "shoulders",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Upper-Arm-Pad Machine Lateral Raise",
+      "Elbow-Pad Machine Lateral Raise"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit facing the machine with your chest against the support pad and the lever pads contacting the outer upper arms near the elbows. Compare the entered load only on this same machine.",
+      "movement": "Raise both elbows outward together through the lever path.",
+      "endpoint": "Stop when both upper arms reach shoulder height.",
+      "returnPhase": "Lower both lever arms together under control.",
+      "controlledJoints": "Keep the upper arms in contact with the pads and do not turn the movement into elbow or hand pressure.",
+      "supportAndPosture": "Keep the chest on the support pad and the lower body still.",
+      "disqualifyingCompensations": [
+        "Pressing with handles instead of the upper-arm pads leaves the reviewed interface.",
+        "Lifting the chest from the pad adds torso momentum.",
+        "Moving one arm before the other leaves the simultaneous two-arm fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidLateral",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
         "role": "stabilizer"
       }
     ]
@@ -13608,6 +15177,113 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "walking-lunge",
+    "catalogID": "two-dumbbell-continuous-walking-lunge",
+    "name": "Two-Dumbbell Continuous Walking Lunge",
+    "group": "legs",
+    "defaultWeight": 15,
+    "defaultWeightKg": 7.5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Dumbbell Walking Lunge",
+      "Two-Dumbbell Walking Lunge"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Stand tall with one matching dumbbell beside each thigh and room to travel forward.",
+      "movement": "Step forward with one leg, lower under control into a split stance, then drive through the lead foot and carry the trail leg directly into the next forward step.",
+      "endpoint": "Finish each repetition as the opposite foot lands ahead to begin the next lunge; do not stop in a feet-together stance.",
+      "returnPhase": "Continue forward by alternating lead legs for the prescribed repetitions.",
+      "controlledJoints": "Keep the dumbbells still, wrists neutral, trunk braced, and each lead knee tracking over the foot.",
+      "supportAndPosture": "Use no hand support and do not push the dumbbells with body swing.",
+      "disqualifyingCompensations": [
+        "Returning to feet-together standing after every step turns the task into step-and-return lunges.",
+        "Repeating one lead leg leaves the alternating walking fixture.",
+        "Jumping between stances turns the exercise into a jumping lunge."
+      ],
+      "sideOrDirection": "Alternate lead legs continuously while traveling forward; count each completed step as one repetition."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
         "role": "stabilizer"
       },
       {

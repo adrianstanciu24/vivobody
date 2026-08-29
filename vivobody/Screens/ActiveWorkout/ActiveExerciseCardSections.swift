@@ -225,7 +225,7 @@ extension ActiveExerciseCard {
 
             if session.activeSet(for: exercise) != nil,
                exercise.trackingMode == .reps,
-               !isUnloadedBodyweightExercise
+               !isUnloadedExercise
             {
                 VStack(alignment: .leading, spacing: Space.sm) {
                     Text("STEP")
@@ -244,7 +244,7 @@ extension ActiveExerciseCard {
     var repsHero: some View {
         if exercise.loadMode == .bodyweightAdded {
             bodyweightRepsHero
-        } else if isUnloadedBodyweightExercise {
+        } else if isUnloadedExercise {
             unloadedRepsHero
         } else {
             externalLoadRepsHero
@@ -418,7 +418,7 @@ extension ActiveExerciseCard {
 
     @ViewBuilder
     var durationLoadControl: some View {
-        if isUnloadedBodyweightExercise {
+        if isUnloadedExercise {
             EmptyView()
         } else if exercise.loadMode == .bodyweightAdded {
             VStack(alignment: .leading, spacing: Space.xs) {

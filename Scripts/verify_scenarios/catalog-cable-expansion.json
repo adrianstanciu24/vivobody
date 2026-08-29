@@ -1,0 +1,51 @@
+{
+  "name": "catalog-cable-expansion",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^High-Pulley Rope Face Pull with Deliberate External Rotation,"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^High-Pulley Rope Face Pull with Deliberate External Rotation,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "High-Pulley Rope Face Pull with Deliberate External Rotation"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "labelContains": "Muscles used by High-Pulley Rope Face Pull with Deliberate External Rotation"
+    }
+  ],
+  "forbidden": []
+}
