@@ -137,6 +137,12 @@ workflow, artifacts, and scenario format are in
 
 ## Plans and durable decisions
 
+Keep a compact root-level `worklog.md` for ongoing work. Record the current
+goal, relevant progress and next steps, and user steering instructions so work
+can resume without reconstructing context. Prune completed or stale entries;
+the worklog is transient coordination, not a substitute for an execution plan
+or durable decision record.
+
 Create a checked-in execution plan only for expensive, risky, or multi-session
 work: persistence migrations, HealthKit or StoreKit changes, widgets, watchOS,
 large UX changes, and similarly irreversible cross-cutting work. Small changes
