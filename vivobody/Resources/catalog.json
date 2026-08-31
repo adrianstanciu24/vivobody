@@ -892,6 +892,104 @@
   },
   {
     "familyID": "bilateral-squat",
+    "catalogID": "single-dumbbell-goblet-squat",
+    "name": "Single-Dumbbell Goblet Squat",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Dumbbell Goblet Squat",
+      "DB Goblet Squat"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with both feet about hip-width apart. Cup the top head of one dumbbell with both hands and hold it vertically at chest height. Log the complete dumbbell once.",
+      "movement": "Brace, keep the chest upright, and bend both hips and knees while keeping the dumbbell secure at the chest.",
+      "endpoint": "Descend until the thighs are approximately parallel to the floor, or deeper only while you can keep the reviewed position under control.",
+      "returnPhase": "Drive through both feet and extend the hips, knees, and ankles to stand tall with the dumbbell still at the chest.",
+      "controlledJoints": "Keep the knees tracking with the feet and the elbows controlled without turning the movement into a press.",
+      "supportAndPosture": "Keep both feet planted, the trunk braced, and the dumbbell vertical at chest height.",
+      "disqualifyingCompensations": [
+        "Turning the dumbbell horizontal or holding two dumbbells changes the reviewed goblet fixture.",
+        "Stopping above approximately thigh-parallel depth changes the reviewed range.",
+        "Pressing the dumbbell overhead adds an upper-body prime action."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "bilateral-squat",
     "catalogID": "smith-machine-upper-back-squat",
     "name": "Smith Machine Upper-Back Squat",
     "group": "legs",
@@ -2674,6 +2772,113 @@
     ]
   },
   {
+    "familyID": "dynamic-lunge",
+    "catalogID": "two-dumbbell-reverse-lunge",
+    "name": "Two-Dumbbell Reverse Lunge",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Dumbbell Reverse Lunge",
+      "Paired-Dumbbell Reverse Lunge"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand upright with one equal dumbbell in each hand at your sides, palms facing inward. Log one dumbbell's weight, not the pair total.",
+      "movement": "Keep the selected front heel grounded and step the other foot backward by 70% of the distance from the selected side's front hip landmark to the inner knee landmark. Lower under control with an upright trunk.",
+      "endpoint": "Stop with the rear knee approaching the floor without touching it.",
+      "returnPhase": "Drive through the selected front leg, extend the hip and knee, and bring the rear foot forward until both feet are together and the knees are fully extended.",
+      "controlledJoints": "Keep both dumbbells at your sides, both elbows and wrists steady, and the selected front heel on the floor.",
+      "supportAndPosture": "Keep the trunk upright and use no external support or rear-knee contact.",
+      "disqualifyingCompensations": [
+        "Leaving the feet split between repetitions turns the movement into a stationary split squat.",
+        "Touching the rear knee to the floor changes the reviewed endpoint.",
+        "Alternating the lead leg within the set changes this selected-side fixture."
+      ],
+      "sideOrDirection": "Finish the set with the same selected front leg, then repeat on the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "elbow-extension",
     "catalogID": "single-arm-supinated-cable-triceps-pushdown",
     "name": "Single-Arm Supinated Cable Triceps Pushdown",
@@ -4233,6 +4438,95 @@
         "Marching in place turns the farmer carry into a stationary hold.",
         "Carrying a single dumbbell turns the farmer carry into a suitcase carry.",
         "Using straps or hooks turns the carry into a grip-assisted walk."
+      ],
+      "sideOrDirection": "Walk forward the whole time; avoid turning or marching in place."
+    },
+    "involvement": [
+      {
+        "muscle": "fingerFlexors",
+        "role": "primary"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "farmer-carry",
+    "catalogID": "high-handle-trap-bar-farmer-carry",
+    "name": "High-Handle Trap-Bar Farmer Carry",
+    "group": "arms",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 40,
+    "equipment": "trapBar",
+    "mechanic": "compound",
+    "trainingRole": "other",
+    "pattern": "carry",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Trap-Bar Farmer Carry",
+      "Trap-Bar Farmer Walk",
+      "Hex-Bar Farmer Carry"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Load both sleeves equally and log the complete trap-bar frame plus every plate on both sleeves once. Stand inside the closed frame, take the high handles with a closed neutral grip, and lift the bar from the floor to standing; this pickup is setup, not a credited deadlift repetition.",
+      "movement": "With both elbows extended and the frame controlled around the body, walk continuously forward on a level surface without letting the load swing.",
+      "endpoint": "When the set time ends, stop under control and lower the frame to the floor with the same high-handle deadlift posture; the set still records one timed carry, not a deadlift repetition.",
+      "controlledJoints": "Keep both arms straight, the high handles beside the body, and the frame balanced without straps or hooks.",
+      "supportAndPosture": "Keep the head and chest upright, avoid overstriding, and remain centered inside the closed frame.",
+      "disqualifyingCompensations": [
+        "Using the low handles or an open frame leaves the reviewed fixture.",
+        "Counting repeated floor pickups turns the set into trap-bar deadlifts.",
+        "Standing still or marching in place turns the carry into a hold.",
+        "Using straps or hooks turns it into a grip-assisted walk."
       ],
       "sideOrDirection": "Walk forward the whole time; avoid turning or marching in place."
     },
@@ -10074,6 +10368,89 @@
   },
   {
     "familyID": "scapular-elevation",
+    "catalogID": "bilateral-dumbbell-shrug",
+    "name": "Bilateral Dumbbell Shrug",
+    "group": "back",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Two-Dumbbell Shrug",
+      "Dumbbell Shrug"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Take a stable split stance and hold one matching dumbbell beside each thigh with a closed neutral grip and both elbows fully extended. Log one dumbbell's weight, not the pair total.",
+      "movement": "Elevate both shoulder blades directly upward at the same time without bending the elbows or rotating the shoulders.",
+      "endpoint": "Finish with both shoulder blades as high as they comfortably go while the dumbbells remain beside the thighs.",
+      "returnPhase": "Lower both shoulder blades under control without rolling, bending the elbows, moving the neck, or leaning the trunk.",
+      "controlledJoints": "Keep both upper arms at the sides, both elbows straight, and both wrists neutral.",
+      "supportAndPosture": "Keep the split stance and trunk stable without using leg drive.",
+      "disqualifyingCompensations": [
+        "Rolling the shoulders forward or back turns the lift into a rolling shrug.",
+        "Bending the elbows turns the shrug into an upright row.",
+        "Dipping the legs to heave the dumbbells turns it into a leg-driven pull.",
+        "Using one dumbbell turns it into the one-arm fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "levatorScapulae",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "scapular-elevation",
     "catalogID": "bilateral-30-degree-stabilization-shrug",
     "name": "Bilateral 30-Degree Stabilization Shrug",
     "group": "back",
@@ -10302,6 +10679,72 @@
       },
       {
         "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "scapular-pull-up",
+    "catalogID": "scapular-pull-up",
+    "name": "Scapular Pull-Up",
+    "group": "back",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal",
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Shoulder-Blade Pull-Up",
+      "Straight-Arm Scapular Pull-Up"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Take a shoulder-width closed overhand grip on a horizontal pull-up bar, fully extend both elbows, lift the feet clear of the floor, and let the shoulder blades rise naturally.",
+      "movement": "Keep both elbows straight and pull both shoulder blades down and back so the body rises slightly without swinging.",
+      "endpoint": "Finish with the shoulders away from the ears and the shoulder blades drawn down and back, then pause briefly without inventing a timed hold.",
+      "returnPhase": "Return under control until the shoulder blades are naturally elevated again before starting the next repetition.",
+      "controlledJoints": "Keep both elbows fully extended and do not add shoulder or elbow pulling motion.",
+      "supportAndPosture": "Support the full bodyweight through both hands with no foot assistance, kipping, or leg swing.",
+      "disqualifyingCompensations": [
+        "Holding the down-and-back position for time turns the exercise into an Active Dead Hang.",
+        "Bending the elbows or pulling the chest toward the bar turns it into a Pull-Up.",
+        "Using hip or leg swing turns it into a kipping variation."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "trapeziusLower",
+        "role": "primary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
       }
     ]
@@ -13876,6 +14319,114 @@
   },
   {
     "familyID": "split-stance-squat",
+    "catalogID": "two-dumbbell-stationary-split-squat",
+    "name": "Two-Dumbbell Stationary Split Squat",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Two-Dumbbell Split Squat",
+      "Dumbbell Split Squat",
+      "Stationary Dumbbell Split Squat"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side and take a fixed split stance about as long as the distance from the outside of your hip to the outside of your ankle. Keep the lead foot flat and the rear forefoot on the floor.",
+      "movement": "Keep both foot contacts fixed and lower with an erect torso until the lead thigh is approximately parallel to the floor.",
+      "endpoint": "Stop at lead-thigh-parallel depth without shortening the stance or moving either foot.",
+      "returnPhase": "Push through the lead foot and extend the lead hip, knee, and ankle to return to the same split stance.",
+      "controlledJoints": "Keep the lead knee tracking with the foot and both dumbbells hanging neutrally at your sides.",
+      "supportAndPosture": "Keep the torso erect and use no rear-foot elevation or external support.",
+      "disqualifyingCompensations": [
+        "Stepping between repetitions turns the movement into a lunge.",
+        "Elevating the rear foot turns it into a rear-foot-elevated split squat.",
+        "Holding one dumbbell or moving the pair away from the sides changes the reviewed load geometry."
+      ],
+      "sideOrDirection": "Complete all repetitions with one lead leg, then repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "split-stance-squat",
     "catalogID": "barbell-rear-foot-elevated-split-squat",
     "name": "Barbell Rear-Foot-Elevated Split Squat",
     "group": "legs",
@@ -14072,7 +14623,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "brachialis",
+        "muscle": "triceps",
         "role": "stabilizer"
       },
       {

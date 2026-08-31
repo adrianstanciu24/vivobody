@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "bilateral-squat",
   "name": "Bilateral Squat",
-  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures plus one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion; those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply only to loaded branches. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and full-depth variants remain outside this contract.",
+  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures; NASM's single-dumbbell goblet fixture descending to approximately thigh parallel or deeper as mobility allows; and one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion. Those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply only to loaded branches. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and otherwise unbounded full-depth variants remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "armstrong-2022-squat-movement-dynamics",
@@ -15,6 +15,7 @@
     "sinclair-2022-back-squat-foot-angle",
     "yavuz-2015-front-back-squat-emg",
     "nasm-2026-goblet-squat",
+    "nasm-2026-goblet-squat-exercise-library",
     "collins-2021-goblet-landmine-squat",
     "lee-2017-smith-squat-human-machine",
     "escamilla-2025-bodyweight-floor-squat"
@@ -38,6 +39,7 @@
     "equipment": [
       "barbell",
       "kettlebell",
+      "dumbbell",
       "machine",
       "bodyweight"
     ],
@@ -249,11 +251,12 @@
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "Where the bar or single kettlebell is supported during the exact squat fixture.",
+      "description": "Where the bar, kettlebell, or dumbbell is supported during the exact squat fixture.",
       "allowedValues": [
         "upperBackBarbell",
         "anteriorDeltoidClavicleBarbell",
         "kettlebellVerticalAtChestByHorns",
+        "dumbbellVerticalAtChestCuppingTopHead",
         "none"
       ]
     },
@@ -261,11 +264,12 @@
       "id": "gripOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The bilateral hand configuration used to control the bar or kettlebell in the exact fixture.",
+      "description": "The bilateral hand configuration used to control the bar, kettlebell, or dumbbell in the exact fixture.",
       "allowedValues": [
         "pronated",
         "cleanGrip",
         "hornGrip",
+        "bothHandsCuppingTopHead",
         "notApplicable"
       ]
     },
@@ -273,9 +277,10 @@
       "id": "rangeOfMotion",
       "valueType": "enum",
       "required": true,
-      "description": "The reviewed depth class; the upper thighs reach approximately parallel to the floor before the ascent.",
+      "description": "The reviewed depth class: a fixed approximately parallel endpoint, NASM's dumbbell-goblet parallel-or-deeper endpoint, or the exact bodyweight knee-flexion target.",
       "allowedValues": [
         "thighParallel",
+        "thighParallelOrDeeperAsMobilityAllows",
         "approximately100DegreesKneeFlexion"
       ]
     },
@@ -356,6 +361,7 @@
       "allowedValues": [
         "straightBarbell",
         "singleKettlebell",
+        "singleDumbbell",
         "verticalSmithBar",
         "none"
       ]
@@ -535,6 +541,22 @@
       "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"]
     },
     {
+      "id": "dumbbell-goblet-fixture-pins-single-vertical-dumbbell",
+      "description": "NASM's reviewed dumbbell goblet squat cups the top head of one vertical dumbbell at the chest and descends to approximately parallel or deeper as mobility allows.",
+      "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
+      "then": [
+        {"field": "variant.stanceWidth", "value": "hipWidth"},
+        {"field": "variant.loadPlacement", "value": "dumbbellVerticalAtChestCuppingTopHead"},
+        {"field": "variant.gripOrientation", "value": "bothHandsCuppingTopHead"},
+        {"field": "variant.rangeOfMotion", "value": "thighParallelOrDeeperAsMobilityAllows"},
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.implementConfiguration", "value": "singleDumbbell"},
+        {"field": "variant.loadAccounting", "value": "totalSingleImplement"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"]
+    },
+    {
       "id": "smith-fixture-pins-reviewed-vertical-zero-offset-path",
       "description": "The reviewed Smith squat uses a vertical rail, zero horizontal foot offset from the bar line, and upper-back placement.",
       "when": {"field": "equipment", "operator": "equals", "value": "machine"},
@@ -568,7 +590,7 @@
       "when": {"field": "equipment", "operator": "notEquals", "value": "bodyweight"},
       "then": [
         {"field": "loadMode", "value": "external"},
-        {"field": "variant.rangeOfMotion", "value": "thighParallel"}
+        {"field": "variant.rangeOfMotion", "allowedValues": ["thighParallel", "thighParallelOrDeeperAsMobilityAllows"]}
       ],
       "requirePresent": [],
       "requireAbsent": ["variant.footOrientation", "variant.supportSurface", "variant.cadenceProtocol"],
@@ -580,6 +602,17 @@
         {"anyOf": ["brachialis"], "minimumRole": "stabilizer"}
       ],
       "requireAdditionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"]
+    },
+    {
+      "id": "parallel-or-deeper-depth-is-dumbbell-goblet-only",
+      "description": "The mobility-bounded parallel-or-deeper endpoint belongs only to NASM's single-dumbbell goblet fixture.",
+      "when": {"field": "variant.rangeOfMotion", "operator": "equals", "value": "thighParallelOrDeeperAsMobilityAllows"},
+      "then": [
+        {"field": "equipment", "value": "dumbbell"},
+        {"field": "variant.implementConfiguration", "value": "singleDumbbell"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     },
     {
       "id": "bodyweight-depth-is-bodyweight-only",
@@ -850,6 +883,50 @@
         "controlledJoints": "Keep the knees tracking with the feet and the elbows under control without turning the movement into a press.",
         "supportAndPosture": "Brace the trunk, keep both feet planted, and use no external torso support.",
         "disqualifyingCompensations": ["Lowering the kettlebell away from the chest changes the reviewed goblet fixture.", "Stopping above thigh-parallel depth changes the reviewed range.", "Pressing the kettlebell overhead adds an upper-body prime action."]
+      }
+    },
+    {
+      "catalogID": "single-dumbbell-goblet-squat",
+      "name": "Single-Dumbbell Goblet Squat",
+      "aliases": ["Dumbbell Goblet Squat", "DB Goblet Squat"],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"},
+        {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "hipWidth", "loadPlacement": "dumbbellVerticalAtChestCuppingTopHead", "gripOrientation": "bothHandsCuppingTopHead",
+        "rangeOfMotion": "thighParallelOrDeeperAsMobilityAllows", "spineMotion": "nonstandardized", "hipMotion": "extends", "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes", "footMotion": "positionHeld", "footContact": "continuous", "interRepSupport": "none",
+        "fixedPath": false, "implementConfiguration": "singleDumbbell", "loadAccounting": "totalSingleImplement",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
+      "evidenceRefs": ["nasm-2026-goblet-squat-exercise-library", "collins-2021-goblet-landmine-squat", "arnold-2010-lower-limb"],
+      "execution": {
+        "startingPosition": "Stand with both feet about hip-width apart. Cup the top head of one dumbbell with both hands and hold it vertically at chest height. Log the complete dumbbell once.",
+        "movement": "Brace, keep the chest upright, and bend both hips and knees while keeping the dumbbell secure at the chest.",
+        "endpoint": "Descend until the thighs are approximately parallel to the floor, or deeper only while you can keep the reviewed position under control.",
+        "returnPhase": "Drive through both feet and extend the hips, knees, and ankles to stand tall with the dumbbell still at the chest.",
+        "controlledJoints": "Keep the knees tracking with the feet and the elbows controlled without turning the movement into a press.",
+        "supportAndPosture": "Keep both feet planted, the trunk braced, and the dumbbell vertical at chest height.",
+        "disqualifyingCompensations": ["Turning the dumbbell horizontal or holding two dumbbells changes the reviewed goblet fixture.", "Stopping above approximately thigh-parallel depth changes the reviewed range.", "Pressing the dumbbell overhead adds an upper-body prime action."]
       }
     },
     {

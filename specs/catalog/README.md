@@ -15,7 +15,7 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
   opposition map, and an independent anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
   them against another list written in the same family file.
-- `evidence.json` tracks exactly 248 primary musculoskeletal sources and
+- `evidence.json` tracks exactly 255 primary musculoskeletal sources and
   authoritative technical standards supporting capability profiles and exact
   fixtures. A citation supports a rule; it does not turn EMG, a model estimate,
   or coaching guidance into a universal numeric contribution.
@@ -418,4 +418,4 @@ exactly 44 joint actions, all muscles have evidence-backed action profiles,
 family prime actions have capable movers, and stability demands have capable
 assigned muscles. The two posterior-serratus mesh bases are explicitly pinned
 as non-trainable scene surfaces rather than lumbar proxies. The runtime
-projection is pinned to exactly 96 active families and 225 exercises.
+projection is pinned to exactly 97 active families and 231 exercises.

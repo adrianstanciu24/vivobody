@@ -3,11 +3,13 @@
   "schemaVersion": 1,
   "id": "split-stance-squat",
   "name": "Stationary Split Squat",
-  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns a floor-supported barbell split squat plus two source-exact rear-foot-elevated fixtures: a high-bar setup with the rear foot fixed at patella height and a two-dumbbell setup with the top of the rear foot supported on a bench of unreported height. Each keeps its contacts fixed and returns through lead-side hip extension, knee extension, and ankle plantarflexion. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, kettlebell, bodyweight, and deficit branches remain outside this contract.",
+  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns floor-supported barbell and paired-dumbbell split squats using an approximately leg-length stance, lead thigh-parallel endpoint, erect torso, full lead-foot contact, and rear-forefoot floor support. It also owns two source-exact rear-foot-elevated fixtures: a high-bar setup with the rear foot fixed at patella height and a two-dumbbell setup with the top of the rear foot supported on a bench of unreported height. Each keeps its contacts fixed and returns through lead-side hip extension, knee extension, and ankle plantarflexion. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, kettlebell, bodyweight, and deficit branches remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "song-2023-split-squat-step-length",
     "stastny-2015-split-squat-dumbbell-position",
+    "usmc-2017-dumbbell-split-squat",
+    "nsca-2024-tsac-report-74-dumbbell-split-squat",
     "mackey-2021-bulgarian-split-squat",
     "nsca-2016-division-i-basketball-injury-screening"
   ],
@@ -186,7 +188,8 @@
       },
       {
         "anyOf": [
-          "brachialis"
+          "brachialis",
+          "triceps"
         ],
         "minimumRole": "stabilizer"
       },
@@ -228,6 +231,7 @@
         "externalRotators",
         "trapeziusUpper",
         "brachialis",
+        "triceps",
         "abs",
         "obliques",
         "lumbarExtensors"
@@ -275,7 +279,7 @@
       "id": "stanceLength",
       "valueType": "enum",
       "required": true,
-      "description": "The source-authored stance length; the barbell split stance is individualized from the reviewed leg-length method while the dumbbell fixture preserves an unreported distance.",
+      "description": "The source-authored stance length; both floor fixtures preserve the reviewed leg-length method while the elevated dumbbell fixture preserves an unreported distance.",
       "allowedValues": [
         "approximatelyLegLength",
         "individualizedPatellaOverLeadToeAtParallel",
@@ -472,16 +476,13 @@
   "exerciseRules": [
     {
       "id": "floor-trail-support-has-no-elevation",
-      "description": "The original split squat keeps the trail forefoot on the floor.",
+      "description": "Both reviewed floor split squats keep the trail forefoot on the floor and share the exact Song geometry.",
       "when": {"field": "variant.trailFootSupport", "operator": "equals", "value": "forefootFloor"},
       "then": [
         {"field": "variant.stanceLength", "value": "approximatelyLegLength"},
         {"field": "variant.rearSupportHeight", "value": "floor"},
-        {"field": "variant.loadPlacement", "value": "upperBackBarbell"},
         {"field": "variant.rangeOfMotion", "value": "leadThighParallel"},
-        {"field": "variant.trunkOrientation", "value": "erect"},
-        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
-        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+        {"field": "variant.trunkOrientation", "value": "erect"}
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -525,8 +526,66 @@
       "description": "A dumbbell record uses two matched implements while the user logs one dumbbell's weight.",
       "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
       "then": [
+        {"field": "variant.loadPlacement", "value": "pairedBesideBody"},
+        {"field": "variant.gripOrientation", "value": "neutral"},
         {"field": "variant.implementConfiguration", "value": "pairedDumbbells"},
         {"field": "variant.loadAccounting", "value": "perImplement"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [{"muscle": "triceps", "role": "stabilizer"}]
+    },
+    {
+      "id": "paired-beside-body-placement-identifies-dumbbells",
+      "description": "Paired side-held loading belongs only to the two reviewed dumbbell fixtures.",
+      "when": {"field": "variant.loadPlacement", "operator": "equals", "value": "pairedBesideBody"},
+      "then": [
+        {"field": "equipment", "value": "dumbbell"},
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"},
+        {"field": "variant.loadAccounting", "value": "perImplement"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "straight-barbell-configuration-identifies-barbell-loading",
+      "description": "A straight barbell configuration cannot inherit paired-dumbbell placement or accounting.",
+      "when": {"field": "variant.implementConfiguration", "operator": "equals", "value": "straightBarbell"},
+      "then": [
+        {"field": "equipment", "value": "barbell"},
+        {"field": "variant.loadPlacement", "allowedValues": ["upperBackBarbell", "highBarUpperBackBarbell"]},
+        {"field": "variant.gripOrientation", "value": "pronated"},
+        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [{"muscle": "brachialis", "role": "stabilizer"}]
+    },
+    {
+      "id": "upper-back-placement-identifies-floor-barbell-split-squat",
+      "description": "The ordinary upper-back barbell placement belongs only to the floor-supported barbell split squat.",
+      "when": {"field": "variant.loadPlacement", "operator": "equals", "value": "upperBackBarbell"},
+      "then": [
+        {"field": "equipment", "value": "barbell"},
+        {"field": "variant.trailFootSupport", "value": "forefootFloor"},
+        {"field": "variant.gripOrientation", "value": "pronated"},
+        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
+        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "high-bar-placement-identifies-elevated-barbell-split-squat",
+      "description": "The high-bar placement belongs only to the patella-height rear-foot-elevated barbell fixture.",
+      "when": {"field": "variant.loadPlacement", "operator": "equals", "value": "highBarUpperBackBarbell"},
+      "then": [
+        {"field": "equipment", "value": "barbell"},
+        {"field": "variant.trailFootSupport", "value": "elevatedBoxFootFixedAgainstPosteriorStop"},
+        {"field": "variant.gripOrientation", "value": "pronated"},
+        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
+        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -614,6 +673,51 @@
       }
     },
     {
+      "catalogID": "two-dumbbell-stationary-split-squat",
+      "name": "Two-Dumbbell Stationary Split Squat",
+      "aliases": ["Two-Dumbbell Split Squat", "Dumbbell Split Squat", "Stationary Dumbbell Split Squat"],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 8,
+      "searchPriority": 95,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "splitSagittal",
+        "stanceLength": "approximatelyLegLength", "leadFootSupport": "fullFootFloor", "trailFootSupport": "forefootFloor",
+        "rearSupportHeight": "floor", "interRepFootTransition": "none", "loadPlacement": "pairedBesideBody", "gripOrientation": "neutral",
+        "rangeOfMotion": "leadThighParallel", "trunkOrientation": "erect", "spineMotion": "nonstandardized",
+        "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "footMotion": "positionHeld",
+        "footContact": "continuous", "interRepSupport": "none", "fixedPath": false,
+        "implementConfiguration": "pairedDumbbells", "loadAccounting": "perImplement", "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["song-2023-split-squat-step-length", "usmc-2017-dumbbell-split-squat", "stastny-2015-split-squat-dumbbell-position", "nsca-2024-tsac-report-74-dumbbell-split-squat"],
+      "execution": {
+        "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side and take a fixed split stance about as long as the distance from the outside of your hip to the outside of your ankle. Keep the lead foot flat and the rear forefoot on the floor.",
+        "movement": "Keep both foot contacts fixed and lower with an erect torso until the lead thigh is approximately parallel to the floor.",
+        "endpoint": "Stop at lead-thigh-parallel depth without shortening the stance or moving either foot.",
+        "returnPhase": "Push through the lead foot and extend the lead hip, knee, and ankle to return to the same split stance.",
+        "controlledJoints": "Keep the lead knee tracking with the foot and both dumbbells hanging neutrally at your sides.",
+        "supportAndPosture": "Keep the torso erect and use no rear-foot elevation or external support.",
+        "disqualifyingCompensations": ["Stepping between repetitions turns the movement into a lunge.", "Elevating the rear foot turns it into a rear-foot-elevated split squat.", "Holding one dumbbell or moving the pair away from the sides changes the reviewed load geometry."],
+        "sideOrDirection": "Complete all repetitions with one lead leg, then repeat with the other leg."
+      }
+    },
+    {
       "catalogID": "barbell-rear-foot-elevated-split-squat",
       "name": "Barbell Rear-Foot-Elevated Split Squat",
       "aliases": ["Barbell Bulgarian Split Squat", "Barbell Bulgarian Squat", "Barbell RFESS"],
@@ -679,7 +783,7 @@
         {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
         {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
         {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
-        {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
         {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
       ],
       "variant": {

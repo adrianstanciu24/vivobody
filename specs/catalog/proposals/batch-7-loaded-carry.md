@@ -224,6 +224,12 @@ fixture and removes the old cross-record dependency.
 | Walking lunge with dumbbells | Exclude | The lunge repetition, not the carry, defines the exercise. |
 | Ordinary walking with a backpack | Exclude | No hand-held grip and a different load-placement family. |
 
+Later follow-up: the conventional closed-frame high-handle trap-bar fixture is
+now active under
+[`default-candidate-follow-up-2026-08.md`](default-candidate-follow-up-2026-08.md).
+Other trap-bar geometries and low-handle carry histories remain outside that
+source-bounded branch.
+
 ## Evidence registration payload
 
 Register these sources only in the same change that activates the family.

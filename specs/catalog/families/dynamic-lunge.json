@@ -3,11 +3,12 @@
   "schemaVersion": 1,
   "id": "dynamic-lunge",
   "name": "Dynamic Lunge",
-  "definition": "A unilateral-emphasis compound repetition that begins in upright bilateral standing, steps into an asymmetric sagittal lunge, and returns to the same bilateral start. The roster owns Comfort et al.'s exact bodyweight forward and reverse fixtures plus Riemann et al.'s externally loaded forward fixture: a selected lead step of 70% leg length, paired dumbbell-like implements held neutrally at the sides, maximum comfortable depth, and an immediate push back to feet together. The product maps that paired hand load to dumbbells and records each dumbbell separately; the source did not test commercial dumbbells or prescribe a lifter-facing per-hand starting load. The studies measured joint mechanics and ground-reaction forces rather than individual-muscle activity, so all records retain a conservative regional role envelope. Stationary split squats, walking or alternating lunges, lateral or crossover paths, jumps, and continuous locomotion remain outside this contract.",
+  "definition": "A unilateral-emphasis compound repetition that begins in upright bilateral standing, steps into an asymmetric sagittal lunge, and returns to the same bilateral start. The roster owns Comfort et al.'s exact bodyweight forward and reverse fixtures, Riemann et al.'s externally loaded forward fixture, and Gao et al.'s paired-dumbbell reverse fixture. The loaded records use a 70%-leg-length step and side-held equal implements but preserve their different source depth, cadence, foot-contact, and implement contracts. The product records one dumbbell rather than the pair total; no study load becomes a universal prescription. The studies measure lower-limb mechanics and selected muscle activity without establishing a universal cross-muscle ranking, so every record retains a conservative regional role envelope. Stationary split squats, walking or alternating lunges, lateral or crossover paths, jumps, and continuous locomotion remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "comfort-2015-forward-reverse-lunge-kinetics",
-    "riemann-2012-anterior-lunge-external-load"
+    "riemann-2012-anterior-lunge-external-load",
+    "gao-2025-dumbbell-reverse-lunge"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -301,9 +302,10 @@
       "allowedValues": [
         "stepsThenWholeFootMaintained",
         "maintainedOnStartPlate",
+        "maintainedWithHeelGrounded",
         "sourceUnreportedAfterForwardStep"
       ],
-      "description": "The selected lead foot either lands fully and remains in contact, stays planted on the first plate, or preserves the loaded study's unreported post-step contact detail."
+      "description": "The selected lead foot either lands fully and remains in contact, stays planted on Comfort's first plate, stays planted with the heel grounded in Gao's reverse fixture, or preserves Riemann's unreported post-step contact detail."
     },
     {
       "id": "landingDemand",
@@ -320,9 +322,10 @@
       "required": true,
       "allowedValues": [
         "fullSelfSelectedDepth",
-        "maximumComfortableDepth"
+        "maximumComfortableDepth",
+        "rearKneeApproachesFloorWithoutContact"
       ],
-      "description": "The source instructed full depth or as far down as possible rather than a fixed knee angle or ground-touch target."
+      "description": "The source endpoint is full self-selected depth, maximum comfortable depth, or Gao's rear knee approaching the floor without contact."
     },
     {
       "id": "returnTopology",
@@ -419,9 +422,10 @@
       "required": true,
       "allowedValues": [
         "sourceUnreported",
-        "seventyPercentSelectedLeadLegLength"
+        "seventyPercentSelectedLeadLegLength",
+        "seventyPercentAsisToMedialTibialCondyleLength"
       ],
-      "description": "Whether step length was unreported or standardized to 70% of the selected lead leg length."
+      "description": "Step length is unreported, Riemann's 70% selected-lead-leg measure, or Gao's distinct 70% anterior-superior-iliac-spine to medial-tibial-condyle measure."
     },
     {
       "id": "gripOrientation",
@@ -439,9 +443,10 @@
       "required": true,
       "allowedValues": [
         "none",
-        "pairedDumbbellLikeImplements"
+        "pairedDumbbellLikeImplements",
+        "pairedDumbbells"
       ],
-      "description": "The source fixture used purpose-built dumbbell-like tracking implements; the catalog maps that geometry to paired dumbbells without claiming commercial dumbbells were tested."
+      "description": "Riemann used purpose-built dumbbell-like tracking implements while Gao used a matched commercial dumbbell in each hand; the values remain distinct."
     },
     {
       "id": "loadAccounting",
@@ -458,9 +463,10 @@
       "valueType": "enum",
       "required": false,
       "allowedValues": [
-        "twelvePointFiveToFiftyPercentBodyMassTotal"
+        "twelvePointFiveToFiftyPercentBodyMassTotal",
+        "tenKilogramsPerDumbbellStudyLoad"
       ],
-      "description": "The study tested total external loads from 12.5% through 50% of body mass; this is evidence context, not a user prescription."
+      "description": "Riemann tested total external loads from 12.5% through 50% of body mass; Gao used one fixed 10-kilogram dumbbell per hand. Both values are evidence context, not user prescriptions."
     },
     {
       "id": "fixedPath",
@@ -474,9 +480,10 @@
       "required": true,
       "allowedValues": [
         "threeSecondEccentricTwoSecondConcentric",
-        "loweringAttemptedWithinTwoSecondsConcentricUnreported"
+        "loweringAttemptedWithinTwoSecondsConcentricUnreported",
+        "participantAverageRecordedNoUniversalSeconds"
       ],
-      "description": "The exact study cadence: Comfort standardized both phases; Riemann limited the lowering attempt to two seconds but did not report a concentric duration."
+      "description": "The exact study timing: Comfort standardized both phases; Riemann limited the lowering attempt to two seconds; Gao recorded each participant's average trial duration without publishing a universal phase duration."
     },
     {
       "id": "lowerBodyContribution",
@@ -550,7 +557,7 @@
         },
         {
           "field": "variant.selectedLeadFootContact",
-          "value": "maintainedOnStartPlate"
+          "allowedValues": ["maintainedOnStartPlate", "maintainedWithHeelGrounded"]
         }
       ],
       "requirePresent": [],
@@ -601,6 +608,38 @@
       ]
     },
     {
+      "id": "paired-dumbbell-reverse-lunge-fixture",
+      "description": "The exact paired-dumbbell branch preserves Gao et al.'s reverse step, 70% leg-length target, grounded front heel, rear-knee near-floor endpoint, side-held neutral grip, study load, and per-implement product accounting.",
+      "when": {
+        "field": "variant.implementConfiguration",
+        "operator": "equals",
+        "value": "pairedDumbbells"
+      },
+      "then": [
+        {"field": "equipment", "value": "dumbbell"},
+        {"field": "laterality", "value": "unilateral"},
+        {"field": "loadMode", "value": "external"},
+        {"field": "variant.upperLimbPosition", "value": "armsAtSidesHoldingPairedImplements"},
+        {"field": "variant.stepDirection", "value": "contralateralRearward"},
+        {"field": "variant.stepLengthCriterion", "value": "seventyPercentAsisToMedialTibialCondyleLength"},
+        {"field": "variant.selectedLeadFootContact", "value": "maintainedWithHeelGrounded"},
+        {"field": "variant.depthCriterion", "value": "rearKneeApproachesFloorWithoutContact"},
+        {"field": "variant.loadPlacement", "value": "pairedAtSides"},
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.loadAccounting", "value": "perImplement"},
+        {"field": "variant.externalLoadPrescription", "value": "tenKilogramsPerDumbbellStudyLoad"},
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.cadenceProtocol", "value": "participantAverageRecordedNoUniversalSeconds"}
+      ],
+      "requirePresent": ["variant.externalLoadPrescription", "variant.fixedPath"],
+      "requireAbsent": ["variant.eccentricSeconds", "variant.concentricSeconds"],
+      "requireInvolvement": [
+        {"muscle": "fingerFlexors", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}
+      ],
+      "requireAdditionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"]
+    },
+    {
       "id": "no-implement-pins-bodyweight-fixture",
       "description": "The no-implement branch remains the bodyweight Comfort fixture with its exact cadence and no external-load fields.",
       "when": {"field": "variant.implementConfiguration", "operator": "equals", "value": "none"},
@@ -637,6 +676,29 @@
         {"field": "equipment", "value": "bodyweight"},
         {"field": "variant.stepDirection", "value": "contralateralRearward"},
         {"field": "variant.implementConfiguration", "value": "none"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "grounded-heel-contact-pins-loaded-reverse-fixture",
+      "description": "Gao's maintained front-heel contact belongs only to the paired-dumbbell reverse fixture.",
+      "when": {"field": "variant.selectedLeadFootContact", "operator": "equals", "value": "maintainedWithHeelGrounded"},
+      "then": [
+        {"field": "equipment", "value": "dumbbell"},
+        {"field": "variant.stepDirection", "value": "contralateralRearward"},
+        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "rear-knee-near-floor-depth-pins-loaded-reverse-fixture",
+      "description": "The rear-knee near-floor endpoint without contact belongs only to Gao's paired-dumbbell reverse fixture.",
+      "when": {"field": "variant.depthCriterion", "operator": "equals", "value": "rearKneeApproachesFloorWithoutContact"},
+      "then": [
+        {"field": "variant.stepDirection", "value": "contralateralRearward"},
+        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"}
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -904,6 +966,53 @@
           "Continuing forward into another step turns it into a walking lunge."
         ],
         "sideOrDirection": "Finish the set with the same selected lead leg, then repeat on the other side."
+      }
+    },
+    {
+      "catalogID": "two-dumbbell-reverse-lunge",
+      "name": "Two-Dumbbell Reverse Lunge",
+      "aliases": ["Dumbbell Reverse Lunge", "Paired-Dumbbell Reverse Lunge"],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closedDuringLoadedPhase", "bodyPosition": "standing", "torsoSupport": "none", "trunkOrientation": "upright",
+        "upperLimbPosition": "armsAtSidesHoldingPairedImplements", "startSupport": "bilateralStanding", "stepDirection": "contralateralRearward",
+        "selectedLeadFootTransition": "remainsPlantedThroughout", "contralateralFootTransition": "stepsRearwardThenReturns", "landingFoot": "contralateral",
+        "selectedLeadFootContact": "maintainedWithHeelGrounded", "landingDemand": "dynamicFootContact", "depthCriterion": "rearKneeApproachesFloorWithoutContact",
+        "returnTopology": "returnToBilateralStart", "spineMotion": "nonstandardized", "pelvisMotion": "nonstandardized",
+        "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "footMotion": "positionHeldDuringLoadedPhase",
+        "loadPlacement": "pairedAtSides", "stepLengthCriterion": "seventyPercentAsisToMedialTibialCondyleLength", "gripOrientation": "neutral",
+        "implementConfiguration": "pairedDumbbells", "loadAccounting": "perImplement", "externalLoadPrescription": "tenKilogramsPerDumbbellStudyLoad",
+        "fixedPath": false, "cadenceProtocol": "participantAverageRecordedNoUniversalSeconds", "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
+      "evidenceRefs": ["gao-2025-dumbbell-reverse-lunge", "comfort-2015-forward-reverse-lunge-kinetics", "arnold-2010-lower-limb"],
+      "execution": {
+        "startingPosition": "Stand upright with one equal dumbbell in each hand at your sides, palms facing inward. Log one dumbbell's weight, not the pair total.",
+        "movement": "Keep the selected front heel grounded and step the other foot backward by 70% of the distance from the selected side's front hip landmark to the inner knee landmark. Lower under control with an upright trunk.",
+        "endpoint": "Stop with the rear knee approaching the floor without touching it.",
+        "returnPhase": "Drive through the selected front leg, extend the hip and knee, and bring the rear foot forward until both feet are together and the knees are fully extended.",
+        "controlledJoints": "Keep both dumbbells at your sides, both elbows and wrists steady, and the selected front heel on the floor.",
+        "supportAndPosture": "Keep the trunk upright and use no external support or rear-knee contact.",
+        "disqualifyingCompensations": ["Leaving the feet split between repetitions turns the movement into a stationary split squat.", "Touching the rear knee to the floor changes the reviewed endpoint.", "Alternating the lead leg within the set changes this selected-side fixture."],
+        "sideOrDirection": "Finish the set with the same selected front leg, then repeat on the other side."
       }
     }
   ]

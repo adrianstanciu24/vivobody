@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "farmer-carry",
   "name": "Farmer Carry",
-  "definition": "A duration-tracked bilateral dumbbell carry in which equal implements create a continuous tendency to open both hands while the athlete walks forward on a level surface with the upper arms at the sides, neutral humeral and forearm rotation, the elbows held extended, and no grip assistance. The sagittal family plane is grounded in resisted hand.fingerExtension. Ordinary gait remains the locomotor substrate rather than a set of training-defining prime actions. Ellestad, McGill, and Stastny directly support balanced bilateral carriage, the trunk-control envelope, and the reviewed lower-limb control surfaces. Loaded-grip, upper-limb, and soleus assignments not measured by those panels are explicitly anatomy-and-mechanics-derived. Holds, suitcase carriage, marching in place, backward or turning paths, uneven paired loads, straps, trap bars, rack, overhead, front-loaded, yoke, and lunge variants remain outside this contract.",
+  "definition": "A duration-tracked bilateral carry in which equal side loading creates a continuous tendency to open both hands while the athlete walks forward on a level surface with the upper arms at the sides, neutral humeral and forearm rotation, the elbows held extended, and no grip assistance. The roster owns paired dumbbells and Lockie and Lazar's exact conventional closed dual-height hex frame carried from its high handles. The trap-bar pickup is setup rather than a credited deadlift repetition, and the product maps the source's distance task to duration tracking. The sagittal family plane is grounded in resisted hand.fingerExtension; ordinary gait remains locomotor substrate rather than training-defining prime actions. Loaded-grip and support roles not directly measured for the trap bar are transparent carry-mechanics transfers. Holds, suitcase carriage, marching in place, backward or turning paths, uneven loads, straps, low or arbitrary trap-bar handles, open frames, rack, overhead, front-loaded, yoke, and lunge variants remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
@@ -12,7 +12,8 @@
     "mirakhorlo-2018-hand-wrist-model",
     "ellestad-2024-loaded-carry-muscle-activation",
     "mcgill-2013-one-two-hand-carry",
-    "stastny-2015-farmers-walk-lower-limb"
+    "stastny-2015-farmers-walk-lower-limb",
+    "lockie-lazar-2017-hexagonal-bar-technique"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -31,7 +32,8 @@
   },
   "allowed": {
     "equipment": [
-      "dumbbell"
+      "dumbbell",
+      "trapBar"
     ],
     "modalities": [
       "isometricStrength"
@@ -273,6 +275,20 @@
       ]
     },
     {
+      "id": "gripClosure",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the source explicitly closes the hand around the handle.",
+      "allowedValues": ["sourceUnreported", "closed"]
+    },
+    {
+      "id": "handleGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The independent dumbbell handles or parallel side handles of the closed frame.",
+      "allowedValues": ["independentDumbbellHandles", "parallelFrameSideHandles"]
+    },
+    {
       "id": "elbowMotion",
       "valueType": "enum",
       "required": true,
@@ -318,12 +334,63 @@
       ]
     },
     {
+      "id": "implementConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The independent paired dumbbells or single closed hexagonal frame used by the exact fixture.",
+      "allowedValues": ["pairedDumbbells", "closedDualHeightHexFrame"]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether independent implements hang beside the legs or the athlete walks inside a closed frame with handles beside the body.",
+      "allowedValues": ["pairedIndependentAtSides", "athleteInsideClosedFrameHandlesAtSides"]
+    },
+    {
+      "id": "frameGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact trap-bar frame class, or not applicable to independent dumbbells.",
+      "allowedValues": ["notApplicable", "conventionalClosedDualHeightHexFrame"]
+    },
+    {
+      "id": "handleHeight",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-selected high handles on the dual-height frame, distinct from unsupported low or arbitrary handles.",
+      "allowedValues": ["notApplicable", "highHandlesApproximatelyTenCentimetersAboveLowCenters"]
+    },
+    {
+      "id": "approximateHandleSpacingCm",
+      "valueType": "number",
+      "required": false,
+      "minimum": 64,
+      "maximum": 64,
+      "description": "The approximately 64-centimeter center-to-center handle spacing reported for the conventional frame."
+    },
+    {
+      "id": "pickupTopology",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-authored start, with the trap-bar floor lift treated only as setup for the timed carry.",
+      "allowedValues": ["standingWithPairedDumbbells", "highHandleFloorLiftSetupNotCreditedRep"]
+    },
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The level walking surface used by the bounded product fixture.",
+      "allowedValues": ["levelSurface"]
+    },
+    {
       "id": "loadAccounting",
       "valueType": "enum",
       "required": true,
-      "description": "How the logged weight is interpreted: each dumbbell's weight is entered, not the combined bilateral total.",
+      "description": "Dumbbells log one implement; the trap bar logs the complete frame plus all plates on both sleeves once.",
       "allowedValues": [
-        "perImplement"
+        "perImplement",
+        "totalBarAndPlates"
       ]
     },
     {
@@ -352,7 +419,59 @@
       "description": "Whether rails or a lever guide the athlete or the freely held dumbbells."
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "dumbbell-carry-pins-independent-pair-accounting",
+      "description": "The dumbbell fixture uses two equal independent implements and logs one dumbbell.",
+      "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
+      "then": [
+        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"},
+        {"field": "variant.loadPlacement", "value": "pairedIndependentAtSides"},
+        {"field": "variant.gripClosure", "value": "sourceUnreported"},
+        {"field": "variant.handleGeometry", "value": "independentDumbbellHandles"},
+        {"field": "variant.frameGeometry", "value": "notApplicable"},
+        {"field": "variant.handleHeight", "value": "notApplicable"},
+        {"field": "variant.pickupTopology", "value": "standingWithPairedDumbbells"},
+        {"field": "variant.loadAccounting", "value": "perImplement"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.approximateHandleSpacingCm"]
+    },
+    {
+      "id": "trap-bar-carry-pins-high-handle-closed-frame",
+      "description": "The trap-bar fixture uses the high handles of a conventional closed dual-height frame and logs the complete frame and plates once.",
+      "when": {"field": "equipment", "operator": "equals", "value": "trapBar"},
+      "then": [
+        {"field": "variant.implementConfiguration", "value": "closedDualHeightHexFrame"},
+        {"field": "variant.loadPlacement", "value": "athleteInsideClosedFrameHandlesAtSides"},
+        {"field": "variant.gripClosure", "value": "closed"},
+        {"field": "variant.handleGeometry", "value": "parallelFrameSideHandles"},
+        {"field": "variant.frameGeometry", "value": "conventionalClosedDualHeightHexFrame"},
+        {"field": "variant.handleHeight", "value": "highHandlesApproximatelyTenCentimetersAboveLowCenters"},
+        {"field": "variant.approximateHandleSpacingCm", "value": 64},
+        {"field": "variant.pickupTopology", "value": "highHandleFloorLiftSetupNotCreditedRep"},
+        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+      ],
+      "requirePresent": ["variant.approximateHandleSpacingCm"],
+      "requireAbsent": []
+    },
+    {
+      "id": "per-implement-accounting-identifies-dumbbells",
+      "description": "Per-implement accounting cannot be combined with the single trap-bar frame.",
+      "when": {"field": "variant.loadAccounting", "operator": "equals", "value": "perImplement"},
+      "then": [{"field": "equipment", "value": "dumbbell"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "total-bar-accounting-identifies-trap-bar",
+      "description": "Total bar-and-plate accounting belongs only to the reviewed trap-bar carry.",
+      "when": {"field": "variant.loadAccounting", "operator": "equals", "value": "totalBarAndPlates"},
+      "then": [{"field": "equipment", "value": "trapBar"}],
+      "requirePresent": ["variant.approximateHandleSpacingCm"],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "two-dumbbell-farmer-carry",
@@ -431,6 +550,14 @@
         "forearmMotion": "angleHeld",
         "forearmOrientation": "neutral",
         "handTask": "staticImplementHold",
+        "implementConfiguration": "pairedDumbbells",
+        "loadPlacement": "pairedIndependentAtSides",
+        "gripClosure": "sourceUnreported",
+        "handleGeometry": "independentDumbbellHandles",
+        "frameGeometry": "notApplicable",
+        "handleHeight": "notApplicable",
+        "pickupTopology": "standingWithPairedDumbbells",
+        "supportSurface": "levelSurface",
         "loadAccounting": "perImplement",
         "spineMotion": "nonstandardized",
         "lowerBodyContribution": "walkingPropulsion",
@@ -454,6 +581,74 @@
           "Carrying a single dumbbell turns the farmer carry into a suitcase carry.",
           "Using straps or hooks turns the carry into a grip-assisted walk."
         ],
+        "sideOrDirection": "Walk forward the whole time; avoid turning or marching in place."
+      }
+    },
+    {
+      "catalogID": "high-handle-trap-bar-farmer-carry",
+      "name": "High-Handle Trap-Bar Farmer Carry",
+      "aliases": ["Trap-Bar Farmer Carry", "Trap-Bar Farmer Walk", "Hex-Bar Farmer Carry"],
+      "equipment": "trapBar",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 1,
+      "defaultDuration": 40,
+      "searchPriority": 94,
+      "involvement": [
+        {"muscle": "fingerFlexors", "role": "primary"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "trapeziusUpper", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "vasti", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "upperArmPosition": "atSide",
+        "humeralRotation": "neutral",
+        "carryPath": "continuousForwardWalk",
+        "loadSymmetry": "balancedBilateral",
+        "gripAssistance": "none",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "handTask": "staticImplementHold",
+        "implementConfiguration": "closedDualHeightHexFrame",
+        "loadPlacement": "athleteInsideClosedFrameHandlesAtSides",
+        "gripClosure": "closed",
+        "handleGeometry": "parallelFrameSideHandles",
+        "frameGeometry": "conventionalClosedDualHeightHexFrame",
+        "handleHeight": "highHandlesApproximatelyTenCentimetersAboveLowCenters",
+        "approximateHandleSpacingCm": 64,
+        "pickupTopology": "highHandleFloorLiftSetupNotCreditedRep",
+        "supportSurface": "levelSurface",
+        "loadAccounting": "totalBarAndPlates",
+        "spineMotion": "nonstandardized",
+        "lowerBodyContribution": "walkingPropulsion",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["lockie-lazar-2017-hexagonal-bar-technique", "ellestad-2024-loaded-carry-muscle-activation", "mcgill-2013-one-two-hand-carry", "stastny-2015-farmers-walk-lower-limb"],
+      "execution": {
+        "startingPosition": "Load both sleeves equally and log the complete trap-bar frame plus every plate on both sleeves once. Stand inside the closed frame, take the high handles with a closed neutral grip, and lift the bar from the floor to standing; this pickup is setup, not a credited deadlift repetition.",
+        "movement": "With both elbows extended and the frame controlled around the body, walk continuously forward on a level surface without letting the load swing.",
+        "endpoint": "When the set time ends, stop under control and lower the frame to the floor with the same high-handle deadlift posture; the set still records one timed carry, not a deadlift repetition.",
+        "controlledJoints": "Keep both arms straight, the high handles beside the body, and the frame balanced without straps or hooks.",
+        "supportAndPosture": "Keep the head and chest upright, avoid overstriding, and remain centered inside the closed frame.",
+        "disqualifyingCompensations": ["Using the low handles or an open frame leaves the reviewed fixture.", "Counting repeated floor pickups turns the set into trap-bar deadlifts.", "Standing still or marching in place turns the carry into a hold.", "Using straps or hooks turns it into a grip-assisted walk."],
         "sideOrDirection": "Walk forward the whole time; avoid turning or marching in place."
       }
     }

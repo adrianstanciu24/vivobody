@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 96 reviewed families are active, containing 225 exercises.
+- 97 reviewed families are active, containing 231 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 248 registered evidence sources.
+  44 joint actions, and 255 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -68,6 +68,12 @@ are discovery handles, not guaranteed final family IDs.
   Unloaded bodyweight and GHD records remain non-comparable, elevated push-ups
   disclose cohort-average effective-load proxies, and the four explosive
   barbell records use the existing Power modality.
+- The exact default-candidate follow-up added six source-bounded fixtures.
+  Five expand their action-compatible owners; `scapular-pull-up` remains a
+  separate depression-plus-retraction history because neither single-action
+  scapular family can own that two-plane signature truthfully. Paired
+  dumbbells log one implement, while the high-handle trap-bar carry logs the
+  complete frame and all plates once.
 - No original catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
   one source-exact seated 45-degree cable fixture, both Batch-3 nonstandard
   press branches are closed, and the generic grip discovery handle is resolved
@@ -113,8 +119,9 @@ batch siblings.
 | `finger-flexion-grip` | 1 |
 | `scapular-protraction` | 1 |
 | `scapular-retraction` | 1 |
-| `scapular-elevation` | 3 |
+| `scapular-elevation` | 4 |
 | `scapular-depression` | 1 |
+| `scapular-pull-up` | 1 |
 | `upright-row` | 1 |
 | `dip` | 3 |
 | `seated-dip-press` | 1 |
@@ -128,7 +135,7 @@ batch siblings.
 | `roman-chair-hip-extension` | 1 |
 | `hip-flexion` | 1 |
 | `ankle-plantarflexion` | 5 |
-| `bilateral-squat` | 5 |
+| `bilateral-squat` | 6 |
 | `inclined-leg-press` | 2 |
 | `horizontal-leg-press` | 1 |
 | `machine-hack-squat` | 1 |
@@ -140,9 +147,9 @@ batch siblings.
 | `romanian-deadlift` | 5 |
 | `hip-thrust-bridge` | 2 |
 | `bodyweight-glute-bridge` | 1 |
-| `split-stance-squat` | 3 |
+| `split-stance-squat` | 4 |
 | `step-up` | 2 |
-| `dynamic-lunge` | 3 |
+| `dynamic-lunge` | 4 |
 | `walking-lunge` | 1 |
 | `lateral-lunge` | 1 |
 | `hip-abduction` | 2 |
@@ -160,7 +167,7 @@ batch siblings.
 | `kneeling-ab-wheel-rollout` | 1 |
 | `anti-lateral-flexion` | 1 |
 | `anti-rotation` | 1 |
-| `farmer-carry` | 1 |
+| `farmer-carry` | 2 |
 | `suitcase-carry` | 1 |
 | `hanging-leg-raise` | 2 |
 | `power-clean` | 1 |
@@ -179,7 +186,7 @@ batch siblings.
 | `hollow-hold` | 1 |
 | `passive-dead-hang` | 1 |
 | `active-dead-hang` | 1 |
-| **Total** | **225** |
+| **Total** | **231** |
 
 ## Foundation gates
 

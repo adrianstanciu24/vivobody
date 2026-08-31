@@ -3196,7 +3196,7 @@
       ],
       "year": 2020,
       "url": "https://www.benning.army.mil/tenant/wtc/content/PDF/ARN45013-ATP_7-22.02-001-WEB-4.pdf",
-      "scope": "The Army standard defines a Straight-Arm Hang on a horizontal pull-up bar using a closed overhand grip and straight arms as the start for pull-up and straight-arm-pull drills. It supports the bar, grip closure and orientation, unsupported suspension, and extended-elbow boundary, not passive-versus-active scapular posture or exercise-specific muscle rankings."
+      "scope": "The Army standard defines a Straight-Arm Hang on a horizontal pull-up bar using a closed overhand grip and straight arms, then prescribes five to ten Straight-Arm Pull repetitions that lift the unsupported body while the arms stay straight, draw the shoulder blades together, and return to the start. It supports the bar, closed overhand grip, unsupported suspension, extended-elbow repetition, return, and source rep range. It does not report grip width, name scapular depression, measure scapular kinematics, or establish muscle rankings."
     },
     {
       "id": "crossfit-2026-bar-hanging",
@@ -3262,14 +3262,13 @@
     {
       "id": "nasm-2026-goblet-squat",
       "sourceType": "officialTechnicalStandard",
-      "title": "The Goblet Squat",
+      "title": "The Goblet Squat: A Trainer's Coaching and Programming Guide",
       "authors": [
-        "Kinsey Mahaffey",
-        "National Academy of Sports Medicine"
+        "Kinsey Mahaffey"
       ],
       "year": 2026,
-      "url": "https://www.nasm.org/resource-center/exercise-library/goblet-squat",
-      "scope": "NASM specifies a kettlebell held vertically by the horns at the chest, a symmetric stance, controlled squat descent, and standing return. It anchors the kettlebell goblet interface and execution boundary, not a universal load, exact individual joint angles, or categorical muscle ranking."
+      "url": "https://www.nasm.org/resource-center/blog/training/how-to-perform-goblet-squats",
+      "scope": "NASM's coaching guide permits a kettlebell held by the horns or ball or a vertical dumbbell held against the chest, with a hip-to-shoulder-width stance and controlled self-limited depth. It anchors the existing kettlebell horn-grip goblet interface and general standing return. It does not establish the exercise-library page's exact top-head dumbbell grip, hip-width stance, approximately parallel endpoint, a universal load, or categorical muscle ranking."
     },
     {
       "id": "collins-2021-goblet-landmine-squat",
@@ -3876,6 +3875,90 @@
       "year": 2020,
       "url": "https://www.nsca.com/education/articles/kinetic-select/glute-ham-raise/",
       "scope": "The NSCA technique standard defines the glute-ham bench setup with ankles between rollers, feet against a platform, thighs just above the knees on the pad, an approximately ninety-degree knee start, and aligned shoulders, hips, and knees. It sequences the descent through knee extension then hip flexion and the return through hip extension then knee flexion. It anchors the exact GHD topology and ordered phases, not external-load accounting, direct joint kinetics, muscle ranking, or outcome claims."
+    },
+    {
+      "id": "nasm-2026-goblet-squat-exercise-library",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Goblet Squat",
+      "authors": [
+        "National Academy of Sports Medicine"
+      ],
+      "year": 2026,
+      "url": "https://www.nasm.org/resource-center/exercise-library/goblet-squat",
+      "scope": "NASM specifies one dumbbell held vertically at chest height with both hands cupping the top, a hip-width bilateral stance, controlled hip-and-knee flexion to approximately thigh parallel or deeper as mobility allows, and a standing return while the weight remains at the chest. It anchors the exact single-dumbbell interface, stance, depth class, and execution boundary. It does not prescribe a universal load, report detailed joint kinetics, or establish a categorical cross-muscle ranking."
+    },
+    {
+      "id": "usmc-2017-dumbbell-split-squat",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Dumbbell Split Squat",
+      "authors": [
+        "Matthew Holfinger",
+        "U.S. Marine Corps Training and Education Command"
+      ],
+      "year": 2017,
+      "url": "https://www.dvidshub.net/video/548725/dumbbell-split-squat",
+      "scope": "The U.S. Marine Corps standard specifies a stationary staggered stance with the lead foot flat, one dumbbell in each hand hanging beside the body, locked elbows, a vertical hip drop, and return without stepping. It directly supports the paired side-held implement and fixed-contact floor topology. It does not report stance length, a lead-thigh-parallel endpoint, equal numeric dumbbell mass, per-implement logging, or a complete muscle hierarchy."
+    },
+    {
+      "id": "nsca-2024-tsac-report-74-dumbbell-split-squat",
+      "sourceType": "officialTechnicalStandard",
+      "title": "On-Duty Strength and Conditioning Programming Considerations for Police Officers",
+      "authors": [
+        "Brandon Holder",
+        "Merrick Lincoln"
+      ],
+      "year": 2024,
+      "url": "https://www.nsca.com/globalassets/education/tsac-report/tsac-report-74.pdf",
+      "scope": "NSCA TSAC Report 74 programs dumbbell split squats for two sets of ten to twelve repetitions on each side while holding two dumbbells by the sides. It supports a paired side-held fixture and both-side prescription. It does not establish stance length, foot-contact details, depth, joint mechanics, muscle roles, or product load accounting."
+    },
+    {
+      "id": "gao-2025-dumbbell-reverse-lunge",
+      "sourceType": "experimentalKinematicsKineticsEMGStudy",
+      "title": "Effects of Loading Positions on Lower Limb Biomechanics During Lunge Squat in Men with Different Training Experience",
+      "authors": [
+        "Lidong Gao",
+        "Fekete Gusztáv",
+        "Zixiang Gao"
+      ],
+      "year": 2025,
+      "doi": "10.5334/paah.489",
+      "url": "https://doi.org/10.5334/paah.489",
+      "scope": "Twenty-four healthy men performed reverse lunge squats with the right leg leading and one equal 10-kilogram dumbbell at each side. The backward step used 70 percent of anterior-superior-iliac-spine to medial-tibial-condyle length; the lead heel stayed grounded, the trunk remained straight, the rear knee approached without touching the floor, and the athlete returned to bilateral standing. Participant-average trial duration was recorded without a universal phase duration. Three-dimensional hip, knee, and ankle mechanics plus rectus-femoris, gluteus-maximus, biceps-femoris, gastrocnemius, and tibialis-anterior surface EMG were collected. Mirroring to both selectable lead sides, neutral grip, product defaults, per-implement logging, and unmeasured muscle roles are disclosed product or anatomy-and-mechanics inferences."
+    },
+    {
+      "id": "ace-2026-standing-dumbbell-shrug",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Standing Shrug",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/75/standing-shrug/",
+      "scope": "ACE specifies a split stance with one dumbbell beside each thigh, closed neutral grips, fully extended elbows, a braced erect torso, simultaneous slow upward shoulder elevation without rotation or elbow flexion, and controlled lowering. It anchors the paired-dumbbell fixture and strict execution boundary. It does not establish equal numeric dumbbell mass, per-implement accounting, absence of grip assistance, quantitative scapular kinematics, or muscle ranking."
+    },
+    {
+      "id": "la-county-fire-2025-scapular-pull-up",
+      "sourceType": "officialTechnicalStandard",
+      "title": "How to Build Up to a Pull-Up",
+      "authors": [
+        "Los Angeles County Fire Department"
+      ],
+      "year": 2025,
+      "url": "https://fire.lacounty.gov/wp-content/uploads/2025/01/Workout-Plan.pdf",
+      "scope": "The Los Angeles County Fire Department standard defines a scapular pull-up from a hanging straight-arm position by pulling the scapulae down and back, lifting the body several inches without elbow flexion, holding briefly, and returning under control. It directly establishes the combined depression-plus-retraction endpoint, straight-arm body rise, brief unquantified pause, and return. It does not report grip width, three-dimensional scapular kinematics, exercise-specific EMG, or a muscle hierarchy."
+    },
+    {
+      "id": "lockie-lazar-2017-hexagonal-bar-technique",
+      "sourceType": "peerReviewedTechnicalArticle",
+      "title": "Exercise Technique: Applying the Hexagonal Bar to Strength and Power Training",
+      "authors": [
+        "Robert G. Lockie",
+        "Adrina Lazar"
+      ],
+      "year": 2017,
+      "doi": "10.1519/SSC.0000000000000327",
+      "url": "https://doi.org/10.1519/SSC.0000000000000327",
+      "scope": "The peer-reviewed NSCA technique article defines a farmer walk using the high handles of a conventional closed dual-height hexagonal frame. It reports approximately 0.64-meter parallel handle spacing and approximately 0.10-meter high-to-low handle separation, equal loading on both sleeves, a closed grip, a high-handle deadlift pickup, extended arms beside the body, upright head and chest, controlled forward walking without load swing or overstriding, and a controlled return to the floor. It directly supports only this high-handle closed-frame fixture. It does not authorize low or arbitrary handles, open frames, a universal frame mass, product duration tracking, load-accounting vocabulary, no-straps-or-hooks assistance semantics, a universally level support surface, or muscle ranking."
     }
   ]
 }

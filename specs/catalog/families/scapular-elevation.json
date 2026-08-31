@@ -3,13 +3,14 @@
   "schemaVersion": 1,
   "id": "scapular-elevation",
   "name": "Scapular Elevation",
-  "definition": "A strict open-chain scapular isolation whose concentric phase elevates the scapulae while humeral and elbow angles remain fixed. The contract admits a single-arm dumbbell shoulder shrug, a standing bilateral front-held barbell shrug, and Lee et al.'s exact bilateral stabilization shrug at 30 degrees of frontal-plane abduction. All model upward rotation as a coupled prime action instead of pretending that a shrug is pure vertical translation. The stabilization fixture preserves its no-load laboratory topology. Rolling, overhead, behind-body, trap-bar, machine, carry, upright-row, neck-motion, strapped, and leg-driven variants remain outside this narrow contract.",
+  "definition": "A strict open-chain scapular isolation whose concentric phase elevates one or both scapulae while humeral and elbow angles remain fixed. The contract admits single-arm and simultaneous bilateral side-held dumbbell shrugs, a standing bilateral front-held barbell shrug, and Lee et al.'s exact bilateral stabilization shrug at 30 degrees of frontal-plane abduction. The paired-dumbbell fixture preserves ACE's split stance and logs one dumbbell; the single-dumbbell, barbell, and no-implement branches retain separate accounting. All model upward rotation as a coupled prime action instead of pretending that a shrug is pure vertical translation. Rolling, overhead, behind-body, trap-bar, machine, carry, upright-row, neck-motion, strapped, and leg-driven variants remain outside this narrow contract.",
   "evidenceRefs": [
     "castelein-2016-scapular-muscles-shrug",
     "lee-2016-stabilization-shrug-upward-rotation",
     "seth-2019-shoulder-work",
     "werthel-2019-trapezius-transfer",
-    "ace-2026-shrug"
+    "ace-2026-shrug",
+    "ace-2026-standing-dumbbell-shrug"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -188,6 +189,13 @@
       "description": "The gross body position used by the measured shoulder-shrug fixture."
     },
     {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": ["sourceUnreported", "splitStance", "hipWidthBilateral", "shoulderWidthBilateral"],
+      "description": "The source-authored lower-body stance retained while the legs do not create the shrug."
+    },
+    {
       "id": "torsoSupport",
       "valueType": "enum",
       "required": true,
@@ -301,6 +309,20 @@
       "description": "Whether the hands statically hold the dumbbell or barbell implement or carry no training implement in the laboratory stabilization shrug."
     },
     {
+      "id": "implementConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": ["singleDumbbell", "pairedDumbbells", "straightBarbell", "none"],
+      "description": "The exact implement count and arrangement, which keeps single- and paired-dumbbell histories distinct."
+    },
+    {
+      "id": "scapularSequence",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": ["unilateralWorkingSide", "simultaneousBilateral"],
+      "description": "Whether one working scapula or both scapulae elevate during each repetition."
+    },
+    {
       "id": "resistanceGeometry",
       "valueType": "enum",
       "required": true,
@@ -321,9 +343,9 @@
     {
       "id": "loadAccounting",
       "valueType": "enum",
-      "required": false,
-      "description": "The barbell fixture logs total bar-and-plate load.",
-      "allowedValues": ["totalBarAndPlates"]
+      "required": true,
+      "description": "How the logged scalar maps to the exact single, paired, barbell, or unloaded fixture.",
+      "allowedValues": ["totalSingleImplement", "perImplement", "totalBarAndPlates", "notApplicable"]
     },
     {
       "id": "humerothoracicAngleControl",
@@ -401,15 +423,14 @@
   ],
   "exerciseRules": [
     {
-      "id": "dumbbell-fixture-is-arms-at-side-unilateral-shrug",
-      "description": "The reviewed external-load fixture is the unilateral arms-at-side dumbbell shrug without laboratory guides or manual stabilization.",
+      "id": "dumbbell-fixtures-are-arms-at-side-loaded-shrugs",
+      "description": "Both reviewed dumbbell fixtures hold neutral-grip implements at the sides without laboratory guides or manual stabilization.",
       "when": {
         "field": "equipment",
         "operator": "equals",
         "value": "dumbbell"
       },
       "then": [
-        { "field": "laterality", "value": "unilateral" },
         { "field": "loadMode", "value": "external" },
         { "field": "variant.upperArmPosition", "value": "atSide" },
         { "field": "variant.humerothoracicElevationDegrees", "value": 0 },
@@ -417,6 +438,7 @@
         { "field": "variant.humeralRotation", "value": "neutral" },
         { "field": "variant.forearmOrientation", "value": "neutral" },
         { "field": "variant.handTask", "value": "staticImplementHold" },
+        { "field": "variant.implementConfiguration", "allowedValues": ["singleDumbbell", "pairedDumbbells"] },
         { "field": "variant.resistanceGeometry", "value": "gravityLoadedDumbbell" },
         { "field": "variant.humerothoracicAngleControl", "value": "none" },
         { "field": "variant.craniocervicothoracicStabilization", "value": "none" },
@@ -424,8 +446,8 @@
         { "field": "variant.topHoldSeconds", "value": 0 },
         { "field": "variant.wristGuide", "value": "none" }
       ],
-      "requirePresent": [],
-      "requireAbsent": ["variant.gripWidth", "variant.loadAccounting"],
+      "requirePresent": ["variant.loadAccounting"],
+      "requireAbsent": ["variant.gripWidth"],
       "requireMuscleRequirements": [
         {
           "anyOf": [
@@ -446,6 +468,34 @@
       ]
     },
     {
+      "id": "single-dumbbell-configuration-is-unilateral",
+      "description": "The single-dumbbell fixture remains a unilateral shrug and logs the complete dumbbell once.",
+      "when": {"field": "variant.implementConfiguration", "operator": "equals", "value": "singleDumbbell"},
+      "then": [
+        {"field": "equipment", "value": "dumbbell"},
+        {"field": "laterality", "value": "unilateral"},
+        {"field": "variant.stanceConfiguration", "value": "sourceUnreported"},
+        {"field": "variant.scapularSequence", "value": "unilateralWorkingSide"},
+        {"field": "variant.loadAccounting", "value": "totalSingleImplement"}
+      ],
+      "requirePresent": ["variant.loadAccounting"],
+      "requireAbsent": ["variant.gripWidth"]
+    },
+    {
+      "id": "paired-dumbbell-configuration-is-simultaneous-bilateral",
+      "description": "ACE's paired-dumbbell fixture uses a split stance, simultaneous bilateral elevation, and per-implement accounting.",
+      "when": {"field": "variant.implementConfiguration", "operator": "equals", "value": "pairedDumbbells"},
+      "then": [
+        {"field": "equipment", "value": "dumbbell"},
+        {"field": "laterality", "value": "bilateral"},
+        {"field": "variant.stanceConfiguration", "value": "splitStance"},
+        {"field": "variant.scapularSequence", "value": "simultaneousBilateral"},
+        {"field": "variant.loadAccounting", "value": "perImplement"}
+      ],
+      "requirePresent": ["variant.loadAccounting"],
+      "requireAbsent": ["variant.gripWidth"]
+    },
+    {
       "id": "other-fixture-is-bilateral-stabilization-shrug",
       "description": "The only admitted other-equipment fixture is Lee et al.'s bilateral 30-degree laboratory stabilization shrug.",
       "when": {
@@ -462,15 +512,19 @@
         { "field": "variant.humeralRotation", "value": "notReported" },
         { "field": "variant.forearmOrientation", "value": "notReported" },
         { "field": "variant.handTask", "value": "none" },
+        { "field": "variant.implementConfiguration", "value": "none" },
+        { "field": "variant.scapularSequence", "value": "simultaneousBilateral" },
         { "field": "variant.resistanceGeometry", "value": "armSegmentGravity" },
+        { "field": "variant.stanceConfiguration", "value": "shoulderWidthBilateral" },
+        { "field": "variant.loadAccounting", "value": "notApplicable" },
         { "field": "variant.humerothoracicAngleControl", "value": "digitalInclinometer" },
         { "field": "variant.craniocervicothoracicStabilization", "value": "investigatorManual" },
         { "field": "variant.shrugHeightTarget", "value": "individualMaximumTargetBars" },
         { "field": "variant.topHoldSeconds", "value": 5 },
         { "field": "variant.wristGuide", "value": "radialBordersAgainstPlasticGuides" }
       ],
-      "requirePresent": [],
-      "requireAbsent": ["variant.gripWidth", "variant.loadAccounting"],
+      "requirePresent": ["variant.loadAccounting"],
+      "requireAbsent": ["variant.gripWidth"],
       "requireMuscleRequirements": [
         {
           "anyOf": [
@@ -496,7 +550,9 @@
         {"field": "variant.upperArmPosition", "value": "atSide"}, {"field": "variant.humerothoracicElevationDegrees", "value": 0},
         {"field": "variant.elevationPlane", "value": "notApplicable"}, {"field": "variant.humeralRotation", "value": "neutral"},
         {"field": "variant.forearmOrientation", "value": "pronated"}, {"field": "variant.handTask", "value": "staticImplementHold"},
+        {"field": "variant.implementConfiguration", "value": "straightBarbell"}, {"field": "variant.scapularSequence", "value": "simultaneousBilateral"},
         {"field": "variant.resistanceGeometry", "value": "gravityLoadedBarbell"}, {"field": "variant.gripWidth", "value": "shoulderWidth"},
+        {"field": "variant.stanceConfiguration", "value": "hipWidthBilateral"},
         {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}, {"field": "variant.humerothoracicAngleControl", "value": "none"},
         {"field": "variant.craniocervicothoracicStabilization", "value": "none"}, {"field": "variant.shrugHeightTarget", "value": "none"},
         {"field": "variant.topHoldSeconds", "value": 0}, {"field": "variant.wristGuide", "value": "none"}
@@ -578,6 +634,7 @@
       "variant": {
         "kineticChain": "open",
         "bodyPosition": "standing",
+        "stanceConfiguration": "sourceUnreported",
         "torsoSupport": "none",
         "contralateralSupport": "none",
         "scapularTranslation": "free",
@@ -590,7 +647,10 @@
         "forearmMotion": "angleHeld",
         "forearmOrientation": "neutral",
         "handTask": "staticImplementHold",
+        "implementConfiguration": "singleDumbbell",
+        "scapularSequence": "unilateralWorkingSide",
         "resistanceGeometry": "gravityLoadedDumbbell",
+        "loadAccounting": "totalSingleImplement",
         "humerothoracicAngleControl": "none",
         "craniocervicothoracicStabilization": "none",
         "shrugHeightTarget": "none",
@@ -625,6 +685,50 @@
       }
     },
     {
+      "catalogID": "bilateral-dumbbell-shrug",
+      "name": "Bilateral Dumbbell Shrug",
+      "aliases": ["Two-Dumbbell Shrug", "Dumbbell Shrug"],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "levatorScapulae", "role": "primary"}, {"muscle": "trapeziusUpper", "role": "primary"},
+        {"muscle": "serratus", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open", "bodyPosition": "standing", "stanceConfiguration": "splitStance", "torsoSupport": "none",
+        "contralateralSupport": "none", "scapularTranslation": "free", "upperArmPosition": "atSide", "humerothoracicElevationDegrees": 0,
+        "elevationPlane": "notApplicable", "humeralRotation": "neutral", "elbowMotion": "angleHeld", "elbowPosture": "extended",
+        "forearmMotion": "angleHeld", "forearmOrientation": "neutral", "handTask": "staticImplementHold",
+        "implementConfiguration": "pairedDumbbells", "scapularSequence": "simultaneousBilateral", "resistanceGeometry": "gravityLoadedDumbbell",
+        "loadAccounting": "perImplement", "humerothoracicAngleControl": "none", "craniocervicothoracicStabilization": "none",
+        "shrugHeightTarget": "none", "topHoldSeconds": 0, "wristGuide": "none", "fixedPath": false,
+        "lowerBodyContribution": "none", "neckContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": ["wrist", "hand"],
+      "evidenceRefs": ["ace-2026-standing-dumbbell-shrug", "castelein-2016-scapular-muscles-shrug", "seth-2019-shoulder-work"],
+      "execution": {
+        "startingPosition": "Take a stable split stance and hold one matching dumbbell beside each thigh with a closed neutral grip and both elbows fully extended. Log one dumbbell's weight, not the pair total.",
+        "movement": "Elevate both shoulder blades directly upward at the same time without bending the elbows or rotating the shoulders.",
+        "endpoint": "Finish with both shoulder blades as high as they comfortably go while the dumbbells remain beside the thighs.",
+        "returnPhase": "Lower both shoulder blades under control without rolling, bending the elbows, moving the neck, or leaning the trunk.",
+        "controlledJoints": "Keep both upper arms at the sides, both elbows straight, and both wrists neutral.",
+        "supportAndPosture": "Keep the split stance and trunk stable without using leg drive.",
+        "disqualifyingCompensations": ["Rolling the shoulders forward or back turns the lift into a rolling shrug.", "Bending the elbows turns the shrug into an upright row.", "Dipping the legs to heave the dumbbells turns it into a leg-driven pull.", "Using one dumbbell turns it into the one-arm fixture."]
+      }
+    },
+    {
       "catalogID": "bilateral-30-degree-stabilization-shrug",
       "name": "Bilateral 30-Degree Stabilization Shrug",
       "aliases": [
@@ -656,6 +760,7 @@
       "variant": {
         "kineticChain": "open",
         "bodyPosition": "standing",
+        "stanceConfiguration": "shoulderWidthBilateral",
         "torsoSupport": "none",
         "contralateralSupport": "none",
         "scapularTranslation": "free",
@@ -668,7 +773,10 @@
         "forearmMotion": "angleHeld",
         "forearmOrientation": "notReported",
         "handTask": "none",
+        "implementConfiguration": "none",
+        "scapularSequence": "simultaneousBilateral",
         "resistanceGeometry": "armSegmentGravity",
+        "loadAccounting": "notApplicable",
         "humerothoracicAngleControl": "digitalInclinometer",
         "craniocervicothoracicStabilization": "investigatorManual",
         "shrugHeightTarget": "individualMaximumTargetBars",
@@ -711,10 +819,10 @@
         {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
       ],
       "variant": {
-        "kineticChain": "open", "bodyPosition": "standing", "torsoSupport": "none", "contralateralSupport": "none", "scapularTranslation": "free",
+        "kineticChain": "open", "bodyPosition": "standing", "stanceConfiguration": "hipWidthBilateral", "torsoSupport": "none", "contralateralSupport": "none", "scapularTranslation": "free",
         "upperArmPosition": "atSide", "humerothoracicElevationDegrees": 0, "elevationPlane": "notApplicable", "humeralRotation": "neutral",
         "elbowMotion": "angleHeld", "elbowPosture": "extended", "forearmMotion": "angleHeld", "forearmOrientation": "pronated",
-        "handTask": "staticImplementHold", "resistanceGeometry": "gravityLoadedBarbell", "gripWidth": "shoulderWidth",
+        "handTask": "staticImplementHold", "implementConfiguration": "straightBarbell", "scapularSequence": "simultaneousBilateral", "resistanceGeometry": "gravityLoadedBarbell", "gripWidth": "shoulderWidth",
         "loadAccounting": "totalBarAndPlates", "humerothoracicAngleControl": "none", "craniocervicothoracicStabilization": "none",
         "shrugHeightTarget": "none", "topHoldSeconds": 0, "wristGuide": "none", "fixedPath": false,
         "lowerBodyContribution": "none", "neckContribution": "none"

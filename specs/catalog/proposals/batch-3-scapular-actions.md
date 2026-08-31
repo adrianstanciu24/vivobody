@@ -142,6 +142,11 @@ The active family admits only `Standing Band Scapular Depression`. Dips,
 seated press-ups, weight-relief raises, scapular pull-ups, straight-arm
 pulldowns, and passive hangs remain outside it.
 
+Later follow-up: `scapular-pull-up` is now a separate active family under
+[`default-candidate-follow-up-2026-08.md`](default-candidate-follow-up-2026-08.md)
+because its reviewed depression-plus-retraction cycle cannot enter this
+depression-only owner.
+
 ## Resolved ownership: scapular upward rotation
 
 There is no standalone `scapular-upward-rotation` family.

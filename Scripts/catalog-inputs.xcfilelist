@@ -65,6 +65,7 @@ $(SRCROOT)/specs/catalog/families/romanian-deadlift.json
 $(SRCROOT)/specs/catalog/families/scapular-depression.json
 $(SRCROOT)/specs/catalog/families/scapular-elevation.json
 $(SRCROOT)/specs/catalog/families/scapular-protraction.json
+$(SRCROOT)/specs/catalog/families/scapular-pull-up.json
 $(SRCROOT)/specs/catalog/families/scapular-retraction.json
 $(SRCROOT)/specs/catalog/families/seated-dip-press.json
 $(SRCROOT)/specs/catalog/families/shoulder-abduction-raise.json

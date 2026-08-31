@@ -278,6 +278,11 @@ The seed is a product default, not an evidence claim about training intensity.
 | Dumbbell squat | Defer | Hands-at-sides loading changes grip, trunk, and external moment geometry. |
 | Bodyweight squat | Defer | Load mode and volume-credit semantics differ; no external-load seed or reviewed bodyweight fraction. |
 | Heel-elevated squat | Defer | Changes ankle posture and work distribution; it is not merely a stance value. |
+
+Later follow-up: the source-exact single-dumbbell branch is now active under
+[`default-candidate-follow-up-2026-08.md`](default-candidate-follow-up-2026-08.md).
+The original deferral remains the historical boundary for unreviewed goblet
+fixtures.
 | Box squat | Exclude from initial branch | `interRepSupport` would be `box`; sitting/reset mechanics and posterior strategy need direct evidence. |
 | Pin or Anderson squat | Exclude from initial branch | External bar support and dead-start semantics differ. |
 | Full/deep squat | Defer | Depth changes glute/adductor demand; the active axis intentionally admits only thigh-parallel. |

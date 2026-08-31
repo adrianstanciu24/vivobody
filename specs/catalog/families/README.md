@@ -1,7 +1,7 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Ninety-six reviewed family files containing 225 exercises are currently
+Ninety-seven reviewed family files containing 231 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,

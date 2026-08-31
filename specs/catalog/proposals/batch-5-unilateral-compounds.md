@@ -370,6 +370,12 @@ depth is invented from the full self-selected-depth instruction.
 | Loaded, lateral, crossover, or jumping lunge | Exclude from `dynamic-lunge` | Comfort's active fixtures are unloaded sagittal step-and-return repetitions. |
 | Stationary lunge or split squat | Exclude from `dynamic-lunge` | Fixed feet and no landing remain owned by `split-stance-squat`. |
 
+Later follow-up: exact paired-dumbbell stationary split-squat and reverse-lunge
+fixtures are now active under
+[`default-candidate-follow-up-2026-08.md`](default-candidate-follow-up-2026-08.md).
+This does not broaden either owner to arbitrary loaded, alternating, or walking
+variants.
+
 ## Evidence entries required at activation
 
 The following IDs and metadata are pre-declared so activation does not invent

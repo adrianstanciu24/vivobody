@@ -1,0 +1,51 @@
+{
+  "name": "catalog-default-candidate-follow-up",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^High-Handle Trap-Bar Farmer Carry,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^High-Handle Trap-Bar Farmer Carry,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · HOLD"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "High-Handle Trap-Bar Farmer Carry"
+    },
+    {
+      "label": "STRENGTH · HOLD"
+    },
+    {
+      "labelContains": "Muscles used by High-Handle Trap-Bar Farmer Carry"
+    }
+  ],
+  "forbidden": []
+}

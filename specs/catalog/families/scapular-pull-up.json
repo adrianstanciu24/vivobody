@@ -1,0 +1,181 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "scapular-pull-up",
+  "name": "Scapular Pull-Up",
+  "definition": "A strict bilateral suspended repetition performed from a closed pronated grip on a horizontal pull-up bar with unsupported feet and fully extended elbows. Each repetition begins with the scapulae naturally elevated, pulls them down and back so the straight-arm body rises slightly, pauses briefly at the source-explicit endpoint, and returns under control to naturally elevated suspension. Shoulder-width grip and no deliberate swing are conservative catalog narrowings rather than reported Army or LA County measurements. The source-exact prime signature combines scapular depression and retraction; gravity also tends to open the fingers throughout the set. Lower-trapezius, grip, and support-chain roles are anatomy-and-mechanics inferences rather than exact-fixture muscle rankings. Active and Passive Dead Hangs, full Pull-Ups, flexed-arm holds, kipping, weighted or assisted variants, climbing-edge hangs, and depression without retraction remain outside this narrow contract.",
+  "evidenceRefs": [
+    "gaffney-2014-trapezius-subdivisions",
+    "seth-2019-shoulder-work",
+    "holzbaur-2005-upper-extremity",
+    "mirakhorlo-2018-hand-wrist-model",
+    "murray-1995-elbow-forearm-moment-arms",
+    "ferrer-uris-2023-finger-dead-hangs",
+    "army-2020-straight-arm-hang",
+    "la-county-fire-2025-scapular-pull-up"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": ["frontal", "transverse"]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": ["back"]
+  },
+  "allowed": {
+    "equipment": ["bodyweight"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["bilateral"]
+  },
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 10
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": ["scapula.depression", "scapula.retraction"],
+    "primeActions": ["scapula.depression", "scapula.retraction"],
+    "resistedActions": ["hand.fingerExtension"],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.protraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "forearm", "wrist", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["trapeziusLower"], "minimumRole": "primary"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "secondary"},
+      {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"},
+      {"anyOf": ["triceps"], "minimumRole": "stabilizer"},
+      {"anyOf": ["brachioradialis"], "minimumRole": "stabilizer"},
+      {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["trapeziusLower"],
+      "secondary": ["fingerFlexors"],
+      "stabilizer": ["externalRotators", "triceps", "brachioradialis", "extensorCarpiRadialis"]
+    }
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "allowedValues": ["closed"], "description": "Both hands remain fixed to the support bar while the suspended body moves slightly."},
+    {"id": "supportImplement", "valueType": "enum", "required": true, "allowedValues": ["horizontalPullUpBar"], "description": "The fixed horizontal bar supporting the suspended body."},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "allowedValues": ["suspended"], "description": "The whole-body relationship to the bar and floor."},
+    {"id": "gripClosure", "valueType": "enum", "required": true, "allowedValues": ["closed"], "description": "The thumb closes around the pull-up bar."},
+    {"id": "gripOrientation", "valueType": "enum", "required": true, "allowedValues": ["pronated"], "description": "The reviewed overhand palm and forearm orientation."},
+    {"id": "gripWidth", "valueType": "enum", "required": true, "allowedValues": ["shoulderWidth"], "description": "The catalog's narrow product spacing; the Army and LA County standards do not report a width."},
+    {"id": "footSupport", "valueType": "enum", "required": true, "allowedValues": ["none"], "description": "The feet do not unload the suspended repetition."},
+    {"id": "upperArmPosition", "valueType": "enum", "required": true, "allowedValues": ["overhead"], "description": "The upper arms remain overhead without creating a shoulder prime action."},
+    {"id": "elbowMotion", "valueType": "enum", "required": true, "allowedValues": ["extendedHeld"], "description": "Both elbows stay fully extended, excluding a full Pull-Up."},
+    {"id": "startScapularPosture", "valueType": "enum", "required": true, "allowedValues": ["naturallyElevated"], "description": "Each repetition starts and resets with the shoulders naturally elevated in suspension."},
+    {"id": "endpointScapularPosture", "valueType": "enum", "required": true, "allowedValues": ["depressedAndRetracted"], "description": "The source-explicit down-and-back endpoint that raises the straight-arm body slightly."},
+    {"id": "endpointControl", "valueType": "enum", "required": true, "allowedValues": ["briefSourceUnquantifiedPause"], "description": "LA County prescribes a brief top hold without reporting a duration."},
+    {"id": "scapularMotion", "valueType": "enum", "required": true, "allowedValues": ["cyclesElevationToDepressionRetraction"], "description": "The shoulder blades deliberately cycle through the exact two-action repetition."},
+    {"id": "bodyMotion", "valueType": "enum", "required": true, "allowedValues": ["slightVerticalRiseNoDeliberateSwing"], "description": "Scapular motion lifts the body slightly without kipping or leg swing."},
+    {"id": "repetitionTopology", "valueType": "enum", "required": true, "allowedValues": ["returnToNaturalElevationBetweenReps"], "description": "Every repetition returns under control to the naturally elevated suspended start."},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No rail or lever guides the suspended body."},
+    {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "allowedValues": ["none"], "description": "The lower body does not propel or assist the repetition."}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "scapular-pull-up",
+      "name": "Scapular Pull-Up",
+      "aliases": ["Shoulder-Blade Pull-Up", "Straight-Arm Scapular Pull-Up"],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 94,
+      "involvement": [
+        {"muscle": "trapeziusLower", "role": "primary"},
+        {"muscle": "fingerFlexors", "role": "secondary"},
+        {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"},
+        {"muscle": "brachioradialis", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "supportImplement": "horizontalPullUpBar",
+        "bodyPosition": "suspended",
+        "gripClosure": "closed",
+        "gripOrientation": "pronated",
+        "gripWidth": "shoulderWidth",
+        "footSupport": "none",
+        "upperArmPosition": "overhead",
+        "elbowMotion": "extendedHeld",
+        "startScapularPosture": "naturallyElevated",
+        "endpointScapularPosture": "depressedAndRetracted",
+        "endpointControl": "briefSourceUnquantifiedPause",
+        "scapularMotion": "cyclesElevationToDepressionRetraction",
+        "bodyMotion": "slightVerticalRiseNoDeliberateSwing",
+        "repetitionTopology": "returnToNaturalElevationBetweenReps",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["army-2020-straight-arm-hang", "la-county-fire-2025-scapular-pull-up", "ferrer-uris-2023-finger-dead-hangs"],
+      "execution": {
+        "startingPosition": "Take a shoulder-width closed overhand grip on a horizontal pull-up bar, fully extend both elbows, lift the feet clear of the floor, and let the shoulder blades rise naturally.",
+        "movement": "Keep both elbows straight and pull both shoulder blades down and back so the body rises slightly without swinging.",
+        "endpoint": "Finish with the shoulders away from the ears and the shoulder blades drawn down and back, then pause briefly without inventing a timed hold.",
+        "returnPhase": "Return under control until the shoulder blades are naturally elevated again before starting the next repetition.",
+        "controlledJoints": "Keep both elbows fully extended and do not add shoulder or elbow pulling motion.",
+        "supportAndPosture": "Support the full bodyweight through both hands with no foot assistance, kipping, or leg swing.",
+        "disqualifyingCompensations": ["Holding the down-and-back position for time turns the exercise into an Active Dead Hang.", "Bending the elbows or pulling the chest toward the bar turns it into a Pull-Up.", "Using hip or leg swing turns it into a kipping variation."]
+      }
+    }
+  ]
+}
