@@ -1,0 +1,154 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "lateral-lunge",
+  "name": "Lateral Lunge",
+  "definition": "A bodyweight side-step lunge in which one foot travels laterally by 60 percent of body height, the lead leg descends to a self-selected depth, and the athlete drives back to bilateral standing. Hip abduction and adduction and the corresponding gluteus-medius and adductor-longus/brevis roles are transparent anatomy-and-mechanics inferences from the source-exact lateral displacement and Arnold capability map; Riemann et al. directly measured sagittal lower-limb mechanics but did not measure frontal-plane joint moments, muscle activity, or a relative muscle ranking. Forward, reverse, walking, Cossack, split-squat, lateral step-up, jumping, loaded, and differently standardized stride variants remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "riemann-2013-forward-lateral-lunge"],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": ["sagittal", "frontal"]
+  },
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {
+    "equipment": ["bodyweight"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["unilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension", "hip.adduction"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "lateral-step-and-descent", "name": "Lateral Step and Descent", "primeActions": ["hip.abduction"], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "return-to-standing", "name": "Return to Standing", "primeActions": ["hip.adduction", "hip.extension", "knee.extension", "ankle.plantarflexion"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["gluteMax"], "minimumRole": "secondary"},
+      {"anyOf": ["gluteMed"], "minimumRole": "secondary"},
+      {"anyOf": ["adductorLongusBrevis"], "minimumRole": "secondary"},
+      {"anyOf": ["gastrocnemius", "soleus"], "minimumRole": "secondary"},
+      {"anyOf": ["abs", "obliques"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["vasti"],
+      "secondary": ["gluteMax", "gluteMed", "adductorLongusBrevis", "rectusFemoris", "gastrocnemius", "soleus"],
+      "stabilizer": ["medialHamstrings", "bicepsFemoris", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The lead foot remains fixed during the loaded stance.", "allowedValues": ["closed"]},
+    {"id": "startPosition", "valueType": "enum", "required": true, "description": "The exact bilateral standing start.", "allowedValues": ["feetTogetherStanding"]},
+    {"id": "travelDirection", "valueType": "enum", "required": true, "description": "The stepping foot travels directly to the side.", "allowedValues": ["lateral"]},
+    {"id": "stepLengthPercentBodyHeight", "valueType": "number", "required": true, "description": "The source-standardized lateral step length as a percentage of standing body height.", "minimum": 60, "maximum": 60},
+    {"id": "returnStrategy", "valueType": "enum", "required": true, "description": "The athlete pushes back to the original bilateral stance after every repetition.", "allowedValues": ["stepAndReturnToStart"]},
+    {"id": "loadPlacement", "valueType": "enum", "required": true, "description": "No external load is held.", "allowedValues": ["none"]},
+    {"id": "torsoStrategy", "valueType": "enum", "required": true, "description": "The trunk remains controlled without deliberate side bending or rotation.", "allowedValues": ["controlledNoSideBendOrRotation"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No machine constrains the body path.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "bodyweight-lateral-lunge-60-percent-height",
+      "name": "60%-Height Bodyweight Lateral Lunge",
+      "aliases": ["Bodyweight Lateral Lunge", "60-Percent-Body-Height Lateral Lunge", "Side Lunge"],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 97,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"},
+        {"muscle": "gluteMax", "role": "secondary"},
+        {"muscle": "adductorLongusBrevis", "role": "secondary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gastrocnemius", "role": "secondary"},
+        {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "gluteMed", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "startPosition": "feetTogetherStanding",
+        "travelDirection": "lateral",
+        "stepLengthPercentBodyHeight": 60,
+        "returnStrategy": "stepAndReturnToStart",
+        "loadPlacement": "none",
+        "torsoStrategy": "controlledNoSideBendOrRotation",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["riemann-2013-forward-lateral-lunge"],
+      "execution": {
+        "startingPosition": "Stand with feet together and mark a side step equal to 60 percent of your standing height.",
+        "movement": "Step directly to one side, accept weight on that leg, and lower through the lead hip and knee while the other leg stays long.",
+        "endpoint": "Reach a controlled bottom position with the lead foot planted.",
+        "returnPhase": "Drive through the lead foot and push back to the original feet-together stance.",
+        "controlledJoints": "Track the lead knee with the foot and keep the trunk from twisting or leaning sharply sideways.",
+        "supportAndPosture": "Use no hand support or external load and keep the trunk controlled without deliberate side bending or rotation.",
+        "disqualifyingCompensations": [
+          "Stepping forward or backward changes the exercise into another lunge direction.",
+          "Remaining in a wide stance changes the step-and-return fixture.",
+          "Using a different standardized step length leaves the source-exact record."
+        ],
+        "sideOrDirection": "Complete the prescribed repetitions to one side, then repeat to the other side."
+      }
+    }
+  ]
+}

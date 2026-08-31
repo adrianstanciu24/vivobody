@@ -170,7 +170,8 @@ EXPECTED_SPLIT_MESHES = {
 
 EQUIPMENT = {
     "barbell", "dumbbell", "cable", "machine", "bodyweight",
-    "kettlebell", "band", "gripTrainer", "trapBar", "abWheel", "other",
+    "kettlebell", "band", "gripTrainer", "trapBar", "abWheel",
+    "gluteHamDeveloper", "other",
 }
 MECHANICS = {"compound", "isolation"}
 TRAINING_ROLES = {"push", "pull", "legs", "core", "other"}

@@ -1,0 +1,151 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "straight-leg-sit-up",
+  "name": "Straight-Leg Sit-Up",
+  "definition": "A full-range floor sit-up that begins with both legs straight and unanchored, curls the trunk from the floor, and continues through hip flexion until the torso reaches upright sitting. Cordo et al. own the exact geometry; the abdominal and hip-flexor roles combine Andersson et al.'s multi-variant EMG with reviewed anatomy and do not claim an exact-fixture relative magnitude ranking. The exact roster owns only the arms-crossed, straight-leg, unanchored fixture. Partial curl-ups, bent-knee or anchored sit-ups, V-ups, leg raises, kipping repetitions, and externally loaded versions remain outside this family.",
+  "evidenceRefs": ["andersson-1997-abdominal-hip-flexor-exercises", "arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "cordo-2003-straight-leg-sit-up"],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {
+    "equipment": ["bodyweight"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["spine.flexion"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "sit-up-ascent", "name": "Sit-Up Ascent", "primeActions": ["spine.flexion", "hip.flexion"]},
+      {"id": "controlled-return", "name": "Controlled Return", "primeActions": [], "yieldingActions": ["spine.extension", "hip.extension"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["abs"], "minimumRole": "primary"},
+      {"anyOf": ["iliopsoas"], "minimumRole": "primary"},
+      {"anyOf": ["obliques"], "minimumRole": "secondary"},
+      {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"}
+    ],
+    "allowedByRole": {
+      "primary": ["abs", "iliopsoas"],
+      "secondary": ["obliques", "rectusFemoris"],
+      "stabilizer": ["vasti", "gluteMax"]
+    }
+  },
+  "variantAxes": [
+    {"id": "startPosition", "valueType": "enum", "required": true, "description": "The reviewed start posture.", "allowedValues": ["backOnFloorLegsStraight"]},
+    {"id": "legConfiguration", "valueType": "enum", "required": true, "description": "Both legs remain straight throughout the sit-up.", "allowedValues": ["straightTogether"]},
+    {"id": "footAnchor", "valueType": "enum", "required": true, "description": "The feet are not held by a person or object.", "allowedValues": ["none"]},
+    {"id": "armPosition", "valueType": "enum", "required": true, "description": "The source-controlled arm placement.", "allowedValues": ["crossedOverChest"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The trunk curls from the floor before reaching upright sitting.", "allowedValues": ["flexesThenReturns"]},
+    {"id": "hipMotion", "valueType": "enum", "required": true, "description": "Hip flexion completes the full sit-up.", "allowedValues": ["flexesThenReturns"]},
+    {"id": "endpoint", "valueType": "enum", "required": true, "description": "The full sit-up endpoint.", "allowedValues": ["uprightSitting"]},
+    {"id": "momentum", "valueType": "enum", "required": true, "description": "The repetition is controlled without an arm swing or leg anchor.", "allowedValues": ["controlledNoKip"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No external guide constrains the torso.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "straight-leg-unanchored-sit-up",
+      "name": "Straight-Leg Unanchored Sit-Up",
+      "aliases": ["Straight-Leg Sit-Up", "Bodyweight Straight-Leg Sit-Up", "Unanchored Sit-Up"],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "abs", "role": "primary"},
+        {"muscle": "iliopsoas", "role": "primary"},
+        {"muscle": "obliques", "role": "secondary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "vasti", "role": "stabilizer"}
+      ],
+      "variant": {
+        "startPosition": "backOnFloorLegsStraight",
+        "legConfiguration": "straightTogether",
+        "footAnchor": "none",
+        "armPosition": "crossedOverChest",
+        "spineMotion": "flexesThenReturns",
+        "hipMotion": "flexesThenReturns",
+        "endpoint": "uprightSitting",
+        "momentum": "controlledNoKip",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["andersson-1997-abdominal-hip-flexor-exercises", "cordo-2003-straight-leg-sit-up"],
+      "execution": {
+        "startingPosition": "Lie on your back with both legs straight and together, feet unanchored, and arms crossed over the chest.",
+        "movement": "Curl the trunk from the floor and continue smoothly at the hips until reaching upright sitting without swinging the arms.",
+        "endpoint": "Finish upright with the legs still straight and the feet still unanchored.",
+        "returnPhase": "Lower the torso to the floor under control, reversing the same path.",
+        "controlledJoints": "Keep both knees straight and avoid twisting or using a sudden hip snap.",
+        "supportAndPosture": "Keep the legs together and do not wedge the feet under an anchor.",
+        "disqualifyingCompensations": [
+          "Bending the knees changes the reviewed straight-leg fixture.",
+          "Anchoring the feet changes the force-sharing condition.",
+          "Stopping at a short trunk curl turns the repetition into a curl-up."
+        ]
+      }
+    }
+  ]
+}

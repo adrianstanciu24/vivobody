@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "bilateral-squat",
   "name": "Bilateral Squat",
-  "definition": "A bilateral closed-chain compound squat in which both feet remain planted while the hips and knees flex to a reviewed thigh-parallel bottom position, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns source-exact straight-bar back and front squats, a chest-held kettlebell goblet squat, and a vertical-rail Smith upper-back squat with zero horizontal foot offset. Each branch preserves its reported load position, grip, stance, and path instead of generalizing across squat fixtures. Vasti and gluteus maximus are the principal training emphases; rectus femoris, gastrocnemius, and soleus remain meaningful dynamic contributors, while the visible medial-hamstring region controls the hip, pelvis, and knee. Split-stance squats, lunges, step-ups, leg presses, hack and pendulum squats, belt squats, other Smith geometries, safety-bar and transformer-bar variants, box squats, heel-elevated squats, partial or full-depth squats, overhead squats, squat jumps, and thrusters remain outside this contract.",
+  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures plus one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion; those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply only to loaded branches. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and full-depth variants remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "armstrong-2022-squat-movement-dynamics",
@@ -16,7 +16,8 @@
     "yavuz-2015-front-back-squat-emg",
     "nasm-2026-goblet-squat",
     "collins-2021-goblet-landmine-squat",
-    "lee-2017-smith-squat-human-machine"
+    "lee-2017-smith-squat-human-machine",
+    "escamilla-2025-bodyweight-floor-squat"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -37,7 +38,8 @@
     "equipment": [
       "barbell",
       "kettlebell",
-      "machine"
+      "machine",
+      "bodyweight"
     ],
     "modalities": [
       "dynamicStrength"
@@ -46,7 +48,8 @@
       "reps"
     ],
     "loadModes": [
-      "external"
+      "external",
+      "nonComparable"
     ],
     "lateralities": [
       "bilateral"
@@ -105,11 +108,6 @@
       "foot.toeExtension"
     ],
     "stabilityDemands": [
-      "shoulder",
-      "scapula",
-      "elbow",
-      "wrist",
-      "hand",
       "spine",
       "pelvis",
       "hip",
@@ -155,37 +153,6 @@
           "soleus"
         ],
         "minimumRole": "secondary"
-      },
-      {
-        "anyOf": [
-          "fingerFlexors"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "extensorCarpiRadialis"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "deltoidAnterior",
-          "externalRotators"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "trapeziusUpper"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "brachialis"
-        ],
-        "minimumRole": "stabilizer"
       },
       {
         "anyOf": [
@@ -274,7 +241,8 @@
       "description": "The reviewed heel-to-heel stance width relative to the athlete's hips.",
       "allowedValues": [
         "hipWidth",
-        "shoulderWidth"
+        "shoulderWidth",
+        "slightlyWiderThanHipWidth"
       ]
     },
     {
@@ -285,7 +253,8 @@
       "allowedValues": [
         "upperBackBarbell",
         "anteriorDeltoidClavicleBarbell",
-        "kettlebellVerticalAtChestByHorns"
+        "kettlebellVerticalAtChestByHorns",
+        "none"
       ]
     },
     {
@@ -296,7 +265,8 @@
       "allowedValues": [
         "pronated",
         "cleanGrip",
-        "hornGrip"
+        "hornGrip",
+        "notApplicable"
       ]
     },
     {
@@ -305,7 +275,8 @@
       "required": true,
       "description": "The reviewed depth class; the upper thighs reach approximately parallel to the floor before the ascent.",
       "allowedValues": [
-        "thighParallel"
+        "thighParallel",
+        "approximately100DegreesKneeFlexion"
       ]
     },
     {
@@ -385,7 +356,8 @@
       "allowedValues": [
         "straightBarbell",
         "singleKettlebell",
-        "verticalSmithBar"
+        "verticalSmithBar",
+        "none"
       ]
     },
     {
@@ -396,7 +368,8 @@
       "allowedValues": [
         "totalBarAndPlates",
         "totalSingleImplement",
-        "enteredExternalLoadSameFixtureOnly"
+        "enteredExternalLoadSameFixtureOnly",
+        "notApplicable"
       ]
     },
     {
@@ -423,6 +396,27 @@
       "allowedValues": [
         "compoundHipKneeAnkleExtension"
       ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": false,
+      "description": "The exact bodyweight protocol's self-selected outward foot angle.",
+      "allowedValues": ["selfSelectedToeOut"]
+    },
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": false,
+      "description": "The stable support surface beneath both feet.",
+      "allowedValues": ["floor"]
+    },
+    {
+      "id": "cadenceProtocol",
+      "valueType": "enum",
+      "required": false,
+      "description": "The approximate source-controlled angular pace rather than a universal training cadence.",
+      "allowedValues": ["approximately45DegreesPerSecond"]
     }
   ],
   "recommended": {
@@ -517,6 +511,7 @@
       "description": "Free-bar squat records log total bar-and-plate load and have no Smith geometry.",
       "when": {"field": "equipment", "operator": "equals", "value": "barbell"},
       "then": [
+        {"field": "variant.stanceWidth", "value": "hipWidth"},
         {"field": "variant.fixedPath", "value": false},
         {"field": "variant.implementConfiguration", "value": "straightBarbell"},
         {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
@@ -566,6 +561,95 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "loaded-squats-require-implement-support-contract",
+      "description": "Every loaded branch retains its hand and shoulder support-chain requirements, while the bodyweight fixture does not inherit them.",
+      "when": {"field": "equipment", "operator": "notEquals", "value": "bodyweight"},
+      "then": [
+        {"field": "loadMode", "value": "external"},
+        {"field": "variant.rangeOfMotion", "value": "thighParallel"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.footOrientation", "variant.supportSurface", "variant.cadenceProtocol"],
+      "requireMuscleRequirements": [
+        {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"},
+        {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"},
+        {"anyOf": ["deltoidAnterior", "externalRotators"], "minimumRole": "stabilizer"},
+        {"anyOf": ["trapeziusUpper"], "minimumRole": "stabilizer"},
+        {"anyOf": ["brachialis"], "minimumRole": "stabilizer"}
+      ],
+      "requireAdditionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"]
+    },
+    {
+      "id": "bodyweight-depth-is-bodyweight-only",
+      "description": "The approximately 100-degree depth belongs only to the reviewed bodyweight floor squat.",
+      "when": {"field": "variant.rangeOfMotion", "operator": "equals", "value": "approximately100DegreesKneeFlexion"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-stance-is-bodyweight-only",
+      "description": "The slightly-wider-than-hip stance belongs only to the reviewed bodyweight floor squat.",
+      "when": {"field": "variant.stanceWidth", "operator": "equals", "value": "slightlyWiderThanHipWidth"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "no-load-placement-is-bodyweight-only",
+      "description": "No implement placement belongs only to the reviewed bodyweight floor squat.",
+      "when": {"field": "variant.loadPlacement", "operator": "equals", "value": "none"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "not-applicable-grip-is-bodyweight-only",
+      "description": "A not-applicable grip belongs only to the reviewed bodyweight floor squat.",
+      "when": {"field": "variant.gripOrientation", "operator": "equals", "value": "notApplicable"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "no-implement-is-bodyweight-only",
+      "description": "No implement configuration belongs only to the reviewed bodyweight floor squat.",
+      "when": {"field": "variant.implementConfiguration", "operator": "equals", "value": "none"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "not-applicable-load-accounting-is-bodyweight-only",
+      "description": "Not-applicable load accounting belongs only to the reviewed bodyweight floor squat.",
+      "when": {"field": "variant.loadAccounting", "operator": "equals", "value": "notApplicable"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-floor-squat-fixture",
+      "description": "The bodyweight branch is the exact stable-floor, two-leg squat to approximately 100 degrees of knee flexion with no implement.",
+      "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
+      "then": [
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "bodyweightFraction", "value": 0},
+        {"field": "variant.stanceWidth", "value": "slightlyWiderThanHipWidth"},
+        {"field": "variant.loadPlacement", "value": "none"},
+        {"field": "variant.gripOrientation", "value": "notApplicable"},
+        {"field": "variant.rangeOfMotion", "value": "approximately100DegreesKneeFlexion"},
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.implementConfiguration", "value": "none"},
+        {"field": "variant.loadAccounting", "value": "notApplicable"},
+        {"field": "variant.footOrientation", "value": "selfSelectedToeOut"},
+        {"field": "variant.supportSurface", "value": "floor"},
+        {"field": "variant.cadenceProtocol", "value": "approximately45DegreesPerSecond"}
+      ],
+      "requirePresent": ["variant.footOrientation", "variant.supportSurface", "variant.cadenceProtocol"],
+      "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"],
+      "requireAdditionalStabilityDemands": []
     }
   ],
   "exercises": [
@@ -624,7 +708,7 @@
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
+      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
       "evidenceRefs": [
         "armstrong-2022-squat-movement-dynamics",
         "gorsic-2024-squat-load-placement",
@@ -703,7 +787,7 @@
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
+      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
       "evidenceRefs": [
         "armstrong-2022-squat-movement-dynamics",
         "gorsic-2024-squat-load-placement",
@@ -756,7 +840,7 @@
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
+      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
       "evidenceRefs": ["nasm-2026-goblet-squat", "collins-2021-goblet-landmine-squat", "arnold-2010-lower-limb"],
       "execution": {
         "startingPosition": "Stand with both feet about shoulder-width apart and hold one kettlebell vertically at your chest by its horns.",
@@ -800,7 +884,7 @@
         "railOrientationDegrees": 0, "footOffsetFromBarCm": 0, "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
+      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
       "evidenceRefs": ["lee-2017-smith-squat-human-machine", "arnold-2010-lower-limb"],
       "execution": {
         "startingPosition": "Use the reviewed vertical-rail Smith setup, place the bar across the upper back, and stand with both feet shoulder-width apart directly under the bar line with zero forward or backward offset. Log the entered machine load and compare it only on the same fixture.",
@@ -810,6 +894,67 @@
         "controlledJoints": "Keep both knees tracking with the feet and do not shift the stance away from the bar line.",
         "supportAndPosture": "Brace the trunk, keep both feet planted, and retain the upper-back bar position.",
         "disqualifyingCompensations": ["Moving the feet forward or backward changes the reviewed zero-offset geometry.", "Using angled rails changes the reviewed machine fixture.", "Placing the bar on the front of the shoulders changes the reviewed load position."]
+      }
+    },
+    {
+      "catalogID": "bodyweight-floor-squat-100-degrees",
+      "name": "100° Two-Leg Bodyweight Floor Squat",
+      "aliases": ["Bodyweight Squat", "Air Squat", "100-Degree Bodyweight Floor Squat"],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"},
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gastrocnemius", "role": "secondary"},
+        {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "slightlyWiderThanHipWidth",
+        "loadPlacement": "none",
+        "gripOrientation": "notApplicable",
+        "rangeOfMotion": "approximately100DegreesKneeFlexion",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "implementConfiguration": "none",
+        "loadAccounting": "notApplicable",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension",
+        "footOrientation": "selfSelectedToeOut",
+        "supportSurface": "floor",
+        "cadenceProtocol": "approximately45DegreesPerSecond"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "escamilla-2025-bodyweight-floor-squat"],
+      "execution": {
+        "startingPosition": "Stand on a stable floor with both feet slightly wider than hip width and use a comfortable self-selected outward foot angle.",
+        "movement": "Bend the hips and knees at a controlled pace while keeping both feet planted and the trunk braced.",
+        "endpoint": "Stop at approximately 100 degrees of knee flexion; do not relabel this endpoint as thigh parallel.",
+        "returnPhase": "Drive through both feet and extend the hips, knees, and ankles to return to standing.",
+        "controlledJoints": "Track both knees with the feet and avoid deliberately rounding or arching the back.",
+        "supportAndPosture": "Use no implement, hand support, unstable surface, or external load.",
+        "disqualifyingCompensations": ["Using one leg or a split stance leaves the two-leg fixture.", "Adding a jump changes the exercise into a squat jump.", "Stopping at a different knee-flexion endpoint leaves the source-exact record."]
       }
     }
   ]

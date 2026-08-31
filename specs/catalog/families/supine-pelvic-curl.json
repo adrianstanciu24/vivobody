@@ -1,0 +1,151 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "supine-pelvic-curl",
+  "name": "Supine Pelvic Curl",
+  "definition": "A floor-supported reverse-crunch fixture that begins with both hips and knees at 90 degrees, holds the knee angle, and curls the pelvis and spine toward the ribs before returning until the pelvis rests on the floor and the knees are directly over the hips. The arms remain out with palms down and the legs do not swing. Iliopsoas and rectus-femoris stabilizer roles are conservative anatomy-and-mechanics inferences for the held leg geometry, not Willett- or ACE-measured rankings. Upper-trunk curl-ups, full sit-ups, hanging leg raises, glute bridges, leg swings, and elbow reverse curls remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "willett-2001-reverse-curl", "ace-2026-reverse-crunch"],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {
+    "equipment": ["bodyweight"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["spine.flexion"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "pelvic-curl", "name": "Pelvic Curl", "primeActions": ["spine.flexion"]},
+      {"id": "controlled-return", "name": "Controlled Return", "primeActions": [], "yieldingActions": ["spine.extension"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["abs"], "minimumRole": "primary"},
+      {"anyOf": ["obliques"], "minimumRole": "secondary"}
+    ],
+    "allowedByRole": {
+      "primary": ["abs"],
+      "secondary": ["obliques"],
+      "stabilizer": ["iliopsoas", "rectusFemoris"]
+    }
+  },
+  "variantAxes": [
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed floor posture.", "allowedValues": ["backOnFloor"]},
+    {"id": "armSupport", "valueType": "enum", "required": true, "description": "Both arms remain spread on the floor with palms down.", "allowedValues": ["armsOutPalmsDown"]},
+    {"id": "startHipFlexionDegrees", "valueType": "number", "required": true, "description": "The exact starting hip angle.", "minimum": 90, "maximum": 90},
+    {"id": "startKneeFlexionDegrees", "valueType": "number", "required": true, "description": "The exact starting knee angle held through the curl.", "minimum": 90, "maximum": 90},
+    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "The knee angle remains unchanged while the pelvis curls.", "allowedValues": ["positionHeld"]},
+    {"id": "pelvisMotion", "valueType": "enum", "required": true, "description": "The pelvis and spine curl toward the ribs before returning to the floor.", "allowedValues": ["curlsTowardRibsThenReturns"]},
+    {"id": "returnEndpoint", "valueType": "enum", "required": true, "description": "The source-defined bottom position.", "allowedValues": ["pelvisOnFloorKneesOverHips"]},
+    {"id": "upperBackSupport", "valueType": "enum", "required": true, "description": "The upper back remains supported throughout.", "allowedValues": ["heldOnFloor"]},
+    {"id": "momentum", "valueType": "enum", "required": true, "description": "The pelvis is curled without a leg swing.", "allowedValues": ["controlledNoSwing"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No external guide constrains the legs or pelvis.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "supine-reverse-crunch",
+      "name": "Supine Reverse Crunch",
+      "aliases": ["Reverse Crunch", "Supine Reverse Curl", "Pelvic Reverse Curl"],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 98,
+      "involvement": [
+        {"muscle": "abs", "role": "primary"},
+        {"muscle": "obliques", "role": "secondary"},
+        {"muscle": "iliopsoas", "role": "stabilizer"},
+        {"muscle": "rectusFemoris", "role": "stabilizer"}
+      ],
+      "variant": {
+        "bodyPosition": "backOnFloor",
+        "armSupport": "armsOutPalmsDown",
+        "startHipFlexionDegrees": 90,
+        "startKneeFlexionDegrees": 90,
+        "kneeMotion": "positionHeld",
+        "pelvisMotion": "curlsTowardRibsThenReturns",
+        "returnEndpoint": "pelvisOnFloorKneesOverHips",
+        "upperBackSupport": "heldOnFloor",
+        "momentum": "controlledNoSwing",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["willett-2001-reverse-curl", "ace-2026-reverse-crunch"],
+      "execution": {
+        "startingPosition": "Lie on your back with arms spread and palms down, and hold both hips and knees at 90 degrees.",
+        "movement": "Keep the knee angle unchanged while curling the pelvis and lower spine toward the ribs without swinging the legs.",
+        "endpoint": "Stop at the highest controlled pelvic curl while the upper back remains supported.",
+        "returnPhase": "Lower under control until the pelvis and spine contact the floor and the knees are directly over the hips.",
+        "controlledJoints": "Keep both knees at the same angle and create the repetition by curling the pelvis rather than throwing the legs.",
+        "supportAndPosture": "Press the spread arms lightly into the floor while keeping the head and upper back supported.",
+        "disqualifyingCompensations": [
+          "Swinging the legs uses momentum instead of a controlled pelvic curl.",
+          "Changing the knee angle turns the task into a different leg movement.",
+          "Lifting the upper back turns the movement into a larger trunk curl."
+        ]
+      }
+    }
+  ]
+}

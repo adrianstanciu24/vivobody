@@ -97,6 +97,31 @@ struct ExerciseSearchTests {
         }
     }
 
+    @Test func defaultCatalogGapFixturesAreDiscoverableByLifterNames() {
+        let catalog = bundledCatalog()
+        let expected: [(String, String)] = [
+            ("Bodyweight Squat", "bodyweight-floor-squat-100-degrees"),
+            ("Bodyweight Glute Bridge", "bodyweight-supine-glute-bridge-90-degrees"),
+            ("Single-Leg Bodyweight Heel Raise", "wall-balanced-single-leg-bodyweight-heel-raise"),
+            ("Hands-Elevated Push-Up", "hands-elevated-push-up-30-48-cm"),
+            ("Feet-Elevated Push-Up", "feet-elevated-push-up-30-48-cm"),
+            ("Straight-Leg Sit-Up", "straight-leg-unanchored-sit-up"),
+            ("Reverse Crunch", "supine-reverse-crunch"),
+            ("Bodyweight Lateral Lunge", "bodyweight-lateral-lunge-60-percent-height"),
+            ("Hang Power Clean", "barbell-hang-power-clean"),
+            ("Power Snatch", "barbell-power-snatch-from-floor"),
+            ("Push Jerk", "barbell-push-jerk"),
+            ("Thruster", "barbell-thruster"),
+            ("Dumbbell Pullover", "two-hand-single-dumbbell-pullover"),
+            ("Glute-Ham Raise", "ghd-glute-ham-raise"),
+        ]
+
+        for (query, catalogID) in expected {
+            let ranked = ExerciseSearch.rank(items: catalog, query: query)
+            #expect(ranked.first?.catalogID == catalogID)
+        }
+    }
+
     @Test func commercialMachineFirstWaveIsDiscoverableAndKeepsNeighborQueriesDistinct() {
         let catalog = bundledCatalog()
         let expected: [(String, String)] = [

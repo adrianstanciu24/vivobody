@@ -1,0 +1,115 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "power-snatch",
+  "name": "Power Snatch",
+  "definition": "A bilateral barbell power lift from the floor that completes the first and second pulls, pulls under, receives the bar overhead with the hip crease above the knees, and recovers to standing. Lee et al. directly support the floor power-snatch kinetics and Ronai supplies the technique boundary; shoulder and scapular actions and categorical upper-body roles are anatomy transfers rather than exercise-specific magnitude rankings. Hang starts, full-squat receives, pulls without an overhead catch, and overhead squats remain outside this family.",
+  "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "lee-2018-power-snatch-kinetics", "ronai-2017-power-snatch-technique", "seth-2019-shoulder-work"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "hinge", "direction": null, "planes": ["sagittal", "frontal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["barbell"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.flexion", "shoulder.abduction"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "first-pull", "name": "First Pull", "primeActions": ["hip.extension", "knee.extension"]},
+      {"id": "second-pull", "name": "Second Pull", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion", "scapula.elevation"]},
+      {"id": "pull-under", "name": "Pull Under", "primeActions": ["elbow.flexion"]},
+      {"id": "overhead-power-catch", "name": "Overhead Power Catch", "primeActions": ["shoulder.flexion", "shoulder.abduction", "scapula.upwardRotation", "scapula.posteriorTilt", "elbow.extension"], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "recovery", "name": "Recovery", "primeActions": ["hip.extension", "knee.extension"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "shoulder.extension",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}, {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["deltoidAnterior"], "minimumRole": "secondary"}, {"anyOf": ["triceps"], "minimumRole": "secondary"},
+      {"anyOf": ["serratus"], "minimumRole": "secondary"}, {"anyOf": ["gastrocnemius"], "minimumRole": "secondary"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "vasti"],
+      "secondary": ["medialHamstrings", "rectusFemoris", "gastrocnemius", "soleus", "trapeziusUpper", "bicepsBrachii", "brachialis", "brachioradialis", "deltoidAnterior", "deltoidLateral", "supraspinatus", "triceps", "serratus", "trapeziusLower"],
+      "stabilizer": ["bicepsFemoris", "gluteMed", "fingerFlexors", "extensorCarpiRadialis", "externalRotators", "subscapularis", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "startPosition", "valueType": "enum", "required": true, "description": "The reviewed floor start.", "allowedValues": ["floorBarCloseToShins"]},
+    {"id": "grip", "valueType": "enum", "required": true, "description": "The reviewed wide overhand grip.", "allowedValues": ["pronatedSnatchWidthSelfSelected"]},
+    {"id": "kneeRebend", "valueType": "enum", "required": true, "description": "The observed transition is recorded without treating it as a separate scored phase.", "allowedValues": ["observedNoSeparateCredit"]},
+    {"id": "pullSequence", "valueType": "enum", "required": true, "description": "The floor pull, second pull, and pull-under sequence.", "allowedValues": ["firstPullSecondPullThenPullUnder"]},
+    {"id": "receivingStrategy", "valueType": "enum", "required": true, "description": "The defining overhead power receive.", "allowedValues": ["overheadPowerCatchHipCreaseAboveKnee"]},
+    {"id": "armEndpoint", "valueType": "enum", "required": true, "description": "The required overhead lockout.", "allowedValues": ["elbowsFullyExtendedOverhead"]},
+    {"id": "recoveryStrategy", "valueType": "enum", "required": true, "description": "The required completion after receiving.", "allowedValues": ["standFromPowerCatch"]},
+    {"id": "interRepSupport", "valueType": "enum", "required": true, "description": "The bar returns to the floor between repetitions.", "allowedValues": ["floor"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The logged scalar is the total bar plus plates.", "allowedValues": ["totalBarAndPlates"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No external guide constrains the bar.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "barbell-power-snatch-from-floor", "name": "Barbell Power Snatch from Floor", "aliases": ["Power Snatch", "Floor Power Snatch"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "power", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0,
+      "defaultWeight": 45, "defaultWeightKg": 20, "reps": 3, "searchPriority": 97,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"}, {"muscle": "vasti", "role": "primary"}, {"muscle": "medialHamstrings", "role": "secondary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "brachialis", "role": "secondary"},
+        {"muscle": "brachioradialis", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "deltoidLateral", "role": "secondary"},
+        {"muscle": "supraspinatus", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"},
+        {"muscle": "trapeziusLower", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "subscapularis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {"startPosition": "floorBarCloseToShins", "grip": "pronatedSnatchWidthSelfSelected", "kneeRebend": "observedNoSeparateCredit", "pullSequence": "firstPullSecondPullThenPullUnder", "receivingStrategy": "overheadPowerCatchHipCreaseAboveKnee", "armEndpoint": "elbowsFullyExtendedOverhead", "recoveryStrategy": "standFromPowerCatch", "interRepSupport": "floor", "loadAccounting": "totalBarAndPlates", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "lee-2018-power-snatch-kinetics", "ronai-2017-power-snatch-technique", "seth-2019-shoulder-work"],
+      "execution": {
+        "startingPosition": "Log the total bar plus plates. Set the bar on the floor close to the shins and take a wide overhand snatch grip.",
+        "movement": "Lift the bar from the floor, accelerate through the second pull, extend the hips, knees, and ankles, then pull under as the bar travels overhead.",
+        "endpoint": "Receive the bar overhead with fully straight elbows and the hip crease above the knees.",
+        "returnPhase": "Stand fully from the catch, then lower the bar under control to the floor.",
+        "controlledJoints": "Keep the bar close and control hip, knee, and ankle flexion in the receive.",
+        "supportAndPosture": "Brace the trunk and keep the wide two-hand grip secure throughout.",
+        "disqualifyingCompensations": ["Starting from the hang changes the exercise into a hang power snatch.", "Receiving below power depth changes the exercise into a full snatch.", "Stopping without an overhead catch changes the repetition into a snatch pull."]
+      }
+    }
+  ]
+}

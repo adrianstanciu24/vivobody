@@ -1,0 +1,147 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "bodyweight-glute-bridge",
+  "name": "Bodyweight Glute Bridge",
+  "definition": "A floor-supported bodyweight bridge in which both feet remain planted, the knees hold the reviewed 90-degree setup, and the hips reach each lifter's maximum controlled extension before returning under control. The exact roster owns only the two-leg, arms-down, 90-degree fixture. The source model's biceps-femoris long-head and adductor-magnus findings remain stabilizer-only because Vivobody's merged regions cannot honestly receive hip-extension credit. Loaded hip thrusts and bridges that deliberately extend the knees, single-leg bridges, feet-elevated bridges, articulated spinal bridges, and externally loaded variants remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "takeshita-2022-bridge-knee-angle"],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {
+    "equipment": ["bodyweight"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension"],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax"],
+      "secondary": [],
+      "stabilizer": ["bicepsFemoris", "adductorMagnus", "abs", "obliques", "lumbarExtensors", "gluteMed", "soleus"]
+    }
+  },
+  "variantAxes": [
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed floor-supported posture.", "allowedValues": ["backOnFloor"]},
+    {"id": "upperBodySupport", "valueType": "enum", "required": true, "description": "The reviewed upper-body contact with the floor.", "allowedValues": ["headShouldersArmsOnFloor"]},
+    {"id": "footSupport", "valueType": "enum", "required": true, "description": "Both bare feet remain planted on the floor.", "allowedValues": ["bothFeetFlatOnFloor"]},
+    {"id": "kneeFlexionDegrees", "valueType": "number", "required": true, "description": "The reviewed starting knee-flexion setup held through the repetition.", "minimum": 90, "maximum": 90},
+    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "The knees hold their setup rather than creating the bridge.", "allowedValues": ["positionHeld"]},
+    {"id": "hipMotion", "valueType": "enum", "required": true, "description": "The hips extend to raise the pelvis.", "allowedValues": ["extendsThenReturns"]},
+    {"id": "endpoint", "valueType": "enum", "required": true, "description": "The source-selected maximum controlled hip-extension angle.", "allowedValues": ["maximumControlledHipExtensionSourceSelected"]},
+    {"id": "cadence", "valueType": "enum", "required": true, "description": "The exact phase timing used in the source.", "allowedValues": ["twoUpOneHoldTwoDown"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No machine constrains the body path.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "bodyweight-supine-glute-bridge-90-degrees",
+      "name": "90° Bodyweight Supine Glute Bridge",
+      "aliases": ["Bodyweight Glute Bridge", "Floor Glute Bridge", "90-Degree Bodyweight Supine Glute Bridge"],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 98,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"},
+        {"muscle": "adductorMagnus", "role": "stabilizer"},
+        {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}
+      ],
+      "variant": {
+        "bodyPosition": "backOnFloor",
+        "upperBodySupport": "headShouldersArmsOnFloor",
+        "footSupport": "bothFeetFlatOnFloor",
+        "kneeFlexionDegrees": 90,
+        "kneeMotion": "positionHeld",
+        "hipMotion": "extendsThenReturns",
+        "endpoint": "maximumControlledHipExtensionSourceSelected",
+        "cadence": "twoUpOneHoldTwoDown",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["takeshita-2022-bridge-knee-angle"],
+      "execution": {
+        "startingPosition": "Lie on your back with both feet flat, knees set to 90 degrees, and the head, shoulders, and arms resting on the floor.",
+        "movement": "Press through both feet and extend the hips for two seconds while keeping the knees at the same angle.",
+        "endpoint": "Hold for one second at your maximum controlled hip-extension angle.",
+        "returnPhase": "Lower the pelvis to the floor over two seconds while keeping both feet planted.",
+        "controlledJoints": "Create the repetition at the hips; do not straighten the knees or arch the lower back.",
+        "supportAndPosture": "Keep the head, shoulders, arms, and both feet in contact with the floor.",
+        "disqualifyingCompensations": [
+          "Straightening the knees changes the reviewed bridge action.",
+          "Lifting one foot changes the exercise into a single-leg bridge.",
+          "Overarching the lower back instead of extending the hips leaves the reviewed fixture."
+        ]
+      }
+    }
+  ]
+}

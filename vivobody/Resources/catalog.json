@@ -309,6 +309,57 @@
     ]
   },
   {
+    "familyID": "ankle-plantarflexion",
+    "catalogID": "wall-balanced-single-leg-bodyweight-heel-raise",
+    "name": "Wall-Balanced Single-Leg Bodyweight Heel Raise",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Single-Leg Bodyweight Heel Raise",
+      "Bodyweight Single-Leg Calf Raise",
+      "Light-Wall-Balance Single-Leg Heel Raise"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand on one leg with that knee straight, suspend the other foot, and touch the wall lightly at shoulder height with the hands for balance only.",
+      "movement": "Raise the working heel at least five centimeters without bending the knee or pushing into the wall.",
+      "endpoint": "Finish each repetition at or above the five-centimeter heel-rise mark.",
+      "returnPhase": "Lower the heel under control to the floor and continue on the same side.",
+      "controlledJoints": "Keep the working knee extended and avoid bouncing through the ankle or curling the toes.",
+      "supportAndPosture": "Use the wall only for light balance; do not transfer meaningful body weight into the hands.",
+      "disqualifyingCompensations": [
+        "Pushing into the wall unloads the working leg and leaves the exact fixture.",
+        "Bending the knee changes the extended-knee calf raise.",
+        "Rising less than five centimeters does not meet the reviewed repetition criterion."
+      ],
+      "sideOrDirection": "Complete the full set on one working leg, then repeat on the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "gastrocnemius",
+        "role": "primary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "primary"
+      }
+    ]
+  },
+  {
     "familyID": "anti-extension",
     "catalogID": "plank",
     "name": "Stable Forearm Plank",
@@ -933,6 +984,154 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "bilateral-squat",
+    "catalogID": "bodyweight-floor-squat-100-degrees",
+    "name": "100° Two-Leg Bodyweight Floor Squat",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Bodyweight Squat",
+      "Air Squat",
+      "100-Degree Bodyweight Floor Squat"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand on a stable floor with both feet slightly wider than hip width and use a comfortable self-selected outward foot angle.",
+      "movement": "Bend the hips and knees at a controlled pace while keeping both feet planted and the trunk braced.",
+      "endpoint": "Stop at approximately 100 degrees of knee flexion; do not relabel this endpoint as thigh parallel.",
+      "returnPhase": "Drive through both feet and extend the hips, knees, and ankles to return to standing.",
+      "controlledJoints": "Track both knees with the feet and avoid deliberately rounding or arching the back.",
+      "supportAndPosture": "Use no implement, hand support, unstable surface, or external load.",
+      "disqualifyingCompensations": [
+        "Using one leg or a split stance leaves the two-leg fixture.",
+        "Adding a jump changes the exercise into a squat jump.",
+        "Stopping at a different knee-flexion endpoint leaves the source-exact record."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "bodyweight-glute-bridge",
+    "catalogID": "bodyweight-supine-glute-bridge-90-degrees",
+    "name": "90° Bodyweight Supine Glute Bridge",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Bodyweight Glute Bridge",
+      "Floor Glute Bridge",
+      "90-Degree Bodyweight Supine Glute Bridge"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with both feet flat, knees set to 90 degrees, and the head, shoulders, and arms resting on the floor.",
+      "movement": "Press through both feet and extend the hips for two seconds while keeping the knees at the same angle.",
+      "endpoint": "Hold for one second at your maximum controlled hip-extension angle.",
+      "returnPhase": "Lower the pelvis to the floor over two seconds while keeping both feet planted.",
+      "controlledJoints": "Create the repetition at the hips; do not straighten the knees or arch the lower back.",
+      "supportAndPosture": "Keep the head, shoulders, arms, and both feet in contact with the floor.",
+      "disqualifyingCompensations": [
+        "Straightening the knees changes the reviewed bridge action.",
+        "Lifting one foot changes the exercise into a single-leg bridge.",
+        "Overarching the lower back instead of extending the hips leaves the reviewed fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "adductorMagnus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
         "role": "stabilizer"
       }
     ]
@@ -1761,6 +1960,72 @@
       },
       {
         "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "decline-press",
+    "catalogID": "hands-elevated-push-up-30-48-cm",
+    "name": "30.48 cm Hands-Elevated Push-Up",
+    "group": "chest",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "12-Inch Hands-Elevated Push-Up",
+      "Hands-Elevated Push-Up",
+      "Incline Push-Up"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0.55,
+    "modality": "dynamicStrength",
+    "loadMode": "bodyweightAdded",
+    "execution": {
+      "startingPosition": "Place both hands on one stable horizontal surface exactly 30.48 centimeters high, set both feet on the floor, and form a straight line from head to heels.",
+      "movement": "Bend the elbows and lower the straight body under control.",
+      "endpoint": "Reach a consistent self-selected bottom position without collapsing between the shoulders.",
+      "returnPhase": "Press the surface away until the elbows are straight, allowing the shoulder blades to move naturally around the rib cage.",
+      "controlledJoints": "Keep the trunk and pelvis aligned and track the elbows consistently without collapsing between the shoulders.",
+      "supportAndPosture": "Keep both hands on the same 30.48-centimeter surface and both feet on the floor throughout. The displayed 55-percent bodyweight component is a cohort-average peak-force proxy; added-load placement is not standardized.",
+      "disqualifyingCompensations": [
+        "Using a different hand-support height leaves the exact fixture.",
+        "Bending at the hips breaks the straight-body push-up position.",
+        "Dropping to the knees changes the exercise into a knee-supported push-up."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
         "role": "stabilizer"
       }
     ]
@@ -4342,6 +4607,192 @@
     ]
   },
   {
+    "familyID": "glute-ham-raise",
+    "catalogID": "ghd-glute-ham-raise",
+    "name": "GHD Glute-Ham Raise",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "gluteHamDeveloper",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Glute-Ham Raise",
+      "Glute-Ham Developer Raise",
+      "GHR"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set the glute-ham developer so both feet and lower legs are secure, the thighs contact the rounded pad just above the knees, and the shoulders, hips, and knees align upright with the knees bent about 90 degrees. Cross the arms over the chest.",
+      "movement": "Straighten the knees to lower the aligned body toward horizontal, then flex the hips to continue the controlled descent while the trunk stays braced.",
+      "endpoint": "Continue the hip-flexion stage until the braced upper body is nearly perpendicular to the floor without losing the lower-leg anchor.",
+      "returnPhase": "Extend the hips to bring the trunk back toward horizontal, then bend the knees to pull the aligned body into the upright finish.",
+      "controlledJoints": "Keep the ordered knee-then-hip descent and hip-then-knee return; do not turn the repetition into only a back extension or only a knee curl.",
+      "supportAndPosture": "Keep both legs secured, the trunk braced, and the hands off the apparatus.",
+      "disqualifyingCompensations": [
+        "Holding the hips fixed turns the exercise toward a Nordic curl.",
+        "Keeping the knees fixed turns the exercise toward a back extension.",
+        "Pushing with the hands makes the repetition assisted.",
+        "Holding an external load leaves the reviewed body-resistance fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "bicepsFemoris",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "hang-power-clean",
+    "catalogID": "barbell-hang-power-clean",
+    "name": "Barbell Hang Power Clean",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 3,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Hang Power Clean",
+      "Power Clean from Hang"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log the total bar plus plates. Stand upright with the bar held at arms' length against the hips in a comfortable overhand clean grip.",
+      "movement": "Lower the bar to just above the knees, hold for approximately one second, then extend the hips, knees, and ankles explosively and bend the elbows only after that extension to pull under.",
+      "endpoint": "Receive the bar in the front rack with the hip crease above the knees.",
+      "returnPhase": "Stand fully from the catch, then lower the bar under control to the upright arms-length position before the next repetition.",
+      "controlledJoints": "Control hip and knee flexion during loading and receiving while keeping the bar close.",
+      "supportAndPosture": "Brace the trunk and keep a secure two-hand grip without external support.",
+      "disqualifyingCompensations": [
+        "Starting from the floor changes the exercise into a floor power clean.",
+        "Skipping the approximately one-second hold changes the reviewed hang setup.",
+        "Receiving below power depth changes the exercise into a full clean.",
+        "Stopping without a front-rack catch changes the repetition into a clean pull."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "hang-power-snatch",
     "catalogID": "barbell-hang-power-snatch",
     "name": "Barbell Hang Power Snatch",
@@ -6794,6 +7245,73 @@
     ]
   },
   {
+    "familyID": "incline-press",
+    "catalogID": "feet-elevated-push-up-30-48-cm",
+    "name": "30.48 cm Feet-Elevated Push-Up",
+    "group": "chest",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "12-Inch Feet-Elevated Push-Up",
+      "Feet-Elevated Push-Up",
+      "Decline Push-Up"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0.7,
+    "modality": "dynamicStrength",
+    "loadMode": "bodyweightAdded",
+    "execution": {
+      "startingPosition": "Place both feet on one stable horizontal surface exactly 30.48 centimeters high, set both hands on the floor, and form a straight line from head to heels.",
+      "movement": "Bend the elbows and lower the straight body under control.",
+      "endpoint": "Reach a consistent self-selected bottom position without collapsing between the shoulders.",
+      "returnPhase": "Press the floor away until the elbows are straight, allowing the shoulder blades to move naturally around the rib cage.",
+      "controlledJoints": "Keep the trunk and pelvis aligned and track the elbows consistently without collapsing between the shoulders.",
+      "supportAndPosture": "Keep both feet on the same 30.48-centimeter surface and both hands on the floor throughout. The displayed 70-percent bodyweight component is a cohort-average peak-force proxy; added-load placement is not standardized.",
+      "disqualifyingCompensations": [
+        "Using a different foot-support height leaves the exact fixture.",
+        "Bending at the hips breaks the straight-body push-up position.",
+        "Dropping to the knees changes the exercise into a knee-supported push-up."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "inclined-leg-press",
     "catalogID": "45-degree-incline-leg-press",
     "name": "45° Incline Leg Press",
@@ -7597,6 +8115,90 @@
     ]
   },
   {
+    "familyID": "lateral-lunge",
+    "catalogID": "bodyweight-lateral-lunge-60-percent-height",
+    "name": "60%-Height Bodyweight Lateral Lunge",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Bodyweight Lateral Lunge",
+      "60-Percent-Body-Height Lateral Lunge",
+      "Side Lunge"
+    ],
+    "searchPriority": 97,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand with feet together and mark a side step equal to 60 percent of your standing height.",
+      "movement": "Step directly to one side, accept weight on that leg, and lower through the lead hip and knee while the other leg stays long.",
+      "endpoint": "Reach a controlled bottom position with the lead foot planted.",
+      "returnPhase": "Drive through the lead foot and push back to the original feet-together stance.",
+      "controlledJoints": "Track the lead knee with the foot and keep the trunk from twisting or leaning sharply sideways.",
+      "supportAndPosture": "Use no hand support or external load and keep the trunk controlled without deliberate side bending or rotation.",
+      "disqualifyingCompensations": [
+        "Stepping forward or backward changes the exercise into another lunge direction.",
+        "Remaining in a wide stance changes the step-and-return fixture.",
+        "Using a different standardized step length leaves the source-exact record."
+      ],
+      "sideOrDirection": "Complete the prescribed repetitions to one side, then repeat to the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorLongusBrevis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "machine-hack-squat",
     "catalogID": "machine-hack-squat",
     "name": "Maxicam Hack Squat",
@@ -8080,6 +8682,280 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "power-snatch",
+    "catalogID": "barbell-power-snatch-from-floor",
+    "name": "Barbell Power Snatch from Floor",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 3,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Power Snatch",
+      "Floor Power Snatch"
+    ],
+    "searchPriority": 97,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log the total bar plus plates. Set the bar on the floor close to the shins and take a wide overhand snatch grip.",
+      "movement": "Lift the bar from the floor, accelerate through the second pull, extend the hips, knees, and ankles, then pull under as the bar travels overhead.",
+      "endpoint": "Receive the bar overhead with fully straight elbows and the hip crease above the knees.",
+      "returnPhase": "Stand fully from the catch, then lower the bar under control to the floor.",
+      "controlledJoints": "Keep the bar close and control hip, knee, and ankle flexion in the receive.",
+      "supportAndPosture": "Brace the trunk and keep the wide two-hand grip secure throughout.",
+      "disqualifyingCompensations": [
+        "Starting from the hang changes the exercise into a hang power snatch.",
+        "Receiving below power depth changes the exercise into a full snatch.",
+        "Stopping without an overhead catch changes the repetition into a snatch pull."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "push-jerk",
+    "catalogID": "barbell-push-jerk",
+    "name": "Barbell Push Jerk",
+    "group": "shoulders",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 3,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Push Jerk",
+      "Symmetric-Receive Push Jerk"
+    ],
+    "searchPriority": 97,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log the total bar plus plates. Stand with the bar in the front rack and both feet in a symmetric stance.",
+      "movement": "Dip quickly, drive through the hips, knees, and ankles, then move under the rising bar as both feet briefly leave the floor.",
+      "endpoint": "Receive symmetrically in a second dip with both elbows fully straight overhead.",
+      "returnPhase": "Stand fully with the feet inline, then lower the bar under control to the front rack.",
+      "controlledJoints": "Keep the dip and drive straight and receive with controlled hip, knee, and ankle flexion.",
+      "supportAndPosture": "Brace the trunk and keep a secure two-hand grip without torso support.",
+      "disqualifyingCompensations": [
+        "Keeping both feet planted changes the lift into a push press.",
+        "Receiving in a split stance changes the lift into a split jerk.",
+        "Pressing to lockout after the receive is a press-out."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
         "role": "stabilizer"
       }
     ]
@@ -10080,6 +10956,85 @@
       },
       {
         "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "shoulder-extension-isolation",
+    "catalogID": "two-hand-single-dumbbell-pullover",
+    "name": "Two-Hand Single-Dumbbell Pullover",
+    "group": "chest",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Dumbbell Pullover",
+      "Flat-Bench Dumbbell Pullover",
+      "Two-Hand Dumbbell Pullover"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log the one dumbbell's full marked weight once. Lie along a flat bench with both feet on the floor and the glutes, thorax, and head supported; hold one dumbbell securely in both hands above the shoulders.",
+      "movement": "Keep the same comfortable elbow bend while lowering the dumbbell overhead through a controlled full range.",
+      "endpoint": "Stop at the furthest controlled overhead position before the back lifts or the elbows change angle.",
+      "returnPhase": "Extend the shoulders to bring the same single dumbbell back vertically above the shoulders.",
+      "controlledJoints": "Keep the elbow angle fixed and do not turn the return into an elbow-straightening exercise.",
+      "supportAndPosture": "Keep both feet on the floor and the glutes, thorax, and head supported by the flat bench.",
+      "disqualifyingCompensations": [
+        "Bending and straightening the elbows turns the pullover into an elbow-extension exercise.",
+        "Lifting the back or glutes off the bench changes the reviewed support fixture.",
+        "Using two dumbbells changes the one-implement logging contract."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
+        "muscle": "lats",
+        "role": "secondary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
         "role": "stabilizer"
       },
       {
@@ -13445,6 +14400,68 @@
     ]
   },
   {
+    "familyID": "straight-leg-sit-up",
+    "catalogID": "straight-leg-unanchored-sit-up",
+    "name": "Straight-Leg Unanchored Sit-Up",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Straight-Leg Sit-Up",
+      "Bodyweight Straight-Leg Sit-Up",
+      "Unanchored Sit-Up"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with both legs straight and together, feet unanchored, and arms crossed over the chest.",
+      "movement": "Curl the trunk from the floor and continue smoothly at the hips until reaching upright sitting without swinging the arms.",
+      "endpoint": "Finish upright with the legs still straight and the feet still unanchored.",
+      "returnPhase": "Lower the torso to the floor under control, reversing the same path.",
+      "controlledJoints": "Keep both knees straight and avoid twisting or using a sudden hip snap.",
+      "supportAndPosture": "Keep the legs together and do not wedge the feet under an anchor.",
+      "disqualifyingCompensations": [
+        "Bending the knees changes the reviewed straight-leg fixture.",
+        "Anchoring the feet changes the force-sharing condition.",
+        "Stopping at a short trunk curl turns the repetition into a curl-up."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "suitcase-carry",
     "catalogID": "single-dumbbell-suitcase-carry",
     "name": "Single-Dumbbell Suitcase Carry",
@@ -13634,6 +14651,196 @@
       },
       {
         "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "supine-pelvic-curl",
+    "catalogID": "supine-reverse-crunch",
+    "name": "Supine Reverse Crunch",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Reverse Crunch",
+      "Supine Reverse Curl",
+      "Pelvic Reverse Curl"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with arms spread and palms down, and hold both hips and knees at 90 degrees.",
+      "movement": "Keep the knee angle unchanged while curling the pelvis and lower spine toward the ribs without swinging the legs.",
+      "endpoint": "Stop at the highest controlled pelvic curl while the upper back remains supported.",
+      "returnPhase": "Lower under control until the pelvis and spine contact the floor and the knees are directly over the hips.",
+      "controlledJoints": "Keep both knees at the same angle and create the repetition by curling the pelvis rather than throwing the legs.",
+      "supportAndPosture": "Press the spread arms lightly into the floor while keeping the head and upper back supported.",
+      "disqualifyingCompensations": [
+        "Swinging the legs uses momentum instead of a controlled pelvic curl.",
+        "Changing the knee angle turns the task into a different leg movement.",
+        "Lifting the upper back turns the movement into a larger trunk curl."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "thruster",
+    "catalogID": "barbell-thruster",
+    "name": "Barbell Thruster",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Thruster",
+      "Front-Squat-to-Press",
+      "Barbell Squat to Press"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log the total bar plus plates. Stand with the bar secured in a two-hand front rack.",
+      "movement": "Squat until the hip crease passes below the knees, then rise directly into the overhead press in one fluid motion without pausing at the front rack.",
+      "endpoint": "Finish standing tall with both elbows fully straight and the bar overhead.",
+      "returnPhase": "Lower the bar under control to the front rack and begin the next full squat without adding a jerk dip.",
+      "controlledJoints": "Track the knees with the feet, brace the trunk, and keep the squat-to-press transition continuous.",
+      "supportAndPosture": "Maintain a secure two-hand front-rack grip and keep the trunk braced through the continuous drive.",
+      "disqualifyingCompensations": [
+        "Pausing or resetting between the squat and press changes the continuous thruster.",
+        "Using a second dip or rebending the knees under the bar turns the finish into a jerk.",
+        "Stopping above full-squat depth leaves the reviewed fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
         "role": "stabilizer"
       },
       {

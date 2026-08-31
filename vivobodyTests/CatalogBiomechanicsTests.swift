@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 87 reviewed families compile to 211 exercises with stable
+//  product: 96 reviewed families compile to 225 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 211)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 87)
+        #expect(CatalogData.records.count == 225)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 96)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -220,6 +220,109 @@ struct CatalogBiomechanicsTests {
             )
         )
         #expect(facePull.name == "High-Pulley Rope Face Pull with Deliberate External Rotation")
+    }
+
+    @Test func defaultCatalogGapFixturesReachTheRuntimeProjection() throws {
+        let expected: [(
+            catalogID: String,
+            name: String,
+            familyID: String,
+            equipment: Equipment,
+            modality: ExerciseModality,
+            loadMode: ExerciseLoadMode
+        )] = [
+            (
+                "bodyweight-floor-squat-100-degrees",
+                "100° Two-Leg Bodyweight Floor Squat",
+                "bilateral-squat", .bodyweight, .dynamicStrength, .nonComparable
+            ),
+            (
+                "bodyweight-supine-glute-bridge-90-degrees",
+                "90° Bodyweight Supine Glute Bridge",
+                "bodyweight-glute-bridge", .bodyweight, .dynamicStrength, .nonComparable
+            ),
+            (
+                "wall-balanced-single-leg-bodyweight-heel-raise",
+                "Wall-Balanced Single-Leg Bodyweight Heel Raise",
+                "ankle-plantarflexion", .bodyweight, .dynamicStrength, .nonComparable
+            ),
+            (
+                "hands-elevated-push-up-30-48-cm",
+                "30.48 cm Hands-Elevated Push-Up",
+                "decline-press", .bodyweight, .dynamicStrength, .bodyweightAdded
+            ),
+            (
+                "feet-elevated-push-up-30-48-cm",
+                "30.48 cm Feet-Elevated Push-Up",
+                "incline-press", .bodyweight, .dynamicStrength, .bodyweightAdded
+            ),
+            (
+                "straight-leg-unanchored-sit-up",
+                "Straight-Leg Unanchored Sit-Up",
+                "straight-leg-sit-up", .bodyweight, .dynamicStrength, .nonComparable
+            ),
+            (
+                "supine-reverse-crunch",
+                "Supine Reverse Crunch",
+                "supine-pelvic-curl", .bodyweight, .dynamicStrength, .nonComparable
+            ),
+            (
+                "bodyweight-lateral-lunge-60-percent-height",
+                "60%-Height Bodyweight Lateral Lunge",
+                "lateral-lunge", .bodyweight, .dynamicStrength, .nonComparable
+            ),
+            (
+                "barbell-hang-power-clean",
+                "Barbell Hang Power Clean",
+                "hang-power-clean", .barbell, .power, .external
+            ),
+            (
+                "barbell-power-snatch-from-floor",
+                "Barbell Power Snatch from Floor",
+                "power-snatch", .barbell, .power, .external
+            ),
+            (
+                "barbell-push-jerk",
+                "Barbell Push Jerk",
+                "push-jerk", .barbell, .power, .external
+            ),
+            (
+                "barbell-thruster",
+                "Barbell Thruster",
+                "thruster", .barbell, .power, .external
+            ),
+            (
+                "two-hand-single-dumbbell-pullover",
+                "Two-Hand Single-Dumbbell Pullover",
+                "shoulder-extension-isolation", .dumbbell, .dynamicStrength, .external
+            ),
+            (
+                "ghd-glute-ham-raise",
+                "GHD Glute-Ham Raise",
+                "glute-ham-raise", .gluteHamDeveloper, .dynamicStrength, .nonComparable
+            ),
+        ]
+
+        for fixture in expected {
+            let record = try #require(
+                CatalogData.record(forCatalogID: fixture.catalogID)
+            )
+            #expect(record.name == fixture.name)
+            #expect(record.familyID == fixture.familyID)
+            #expect(record.equipment == fixture.equipment)
+            #expect(record.modality == fixture.modality)
+            #expect(record.trackingMode == .reps)
+            #expect(record.loadMode == fixture.loadMode)
+        }
+
+        let handsElevated = try #require(
+            CatalogData.record(forCatalogID: "hands-elevated-push-up-30-48-cm")
+        )
+        let feetElevated = try #require(
+            CatalogData.record(forCatalogID: "feet-elevated-push-up-30-48-cm")
+        )
+        #expect(handsElevated.bodyweightFraction == 0.55)
+        #expect(feetElevated.bodyweightFraction == 0.70)
     }
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {
@@ -429,6 +532,34 @@ struct CatalogBiomechanicsTests {
             loadMode: .nonComparable,
             equipment: .abWheel
         ) == 0)
+    }
+
+    @Test func ghdEquipmentKeepsFixtureLocalResistanceSemantics() throws {
+        #expect(Equipment.gluteHamDeveloper.rawValue == "gluteHamDeveloper")
+        #expect(Equipment.gluteHamDeveloper.displayName == "GHD")
+        #expect(!Equipment.gluteHamDeveloper.requiresNonComparableLoad)
+
+        let record = try #require(
+            CatalogData.record(forCatalogID: "ghd-glute-ham-raise")
+        )
+        let item = ExerciseCatalogItem(record: record, createdAt: .distantPast)
+        #expect(record.equipment == .gluteHamDeveloper)
+        #expect(record.loadMode == .nonComparable)
+        #expect(record.defaultWeight == 0)
+        #expect(!item.tracksResistance)
+        #expect(!ExerciseResistanceCapability.tracksResistance(
+            loadMode: .nonComparable,
+            equipment: .gluteHamDeveloper
+        ))
+        #expect(ExerciseResistanceCapability.normalizedWeight(
+            45,
+            loadMode: .nonComparable,
+            equipment: .gluteHamDeveloper
+        ) == 0)
+        #expect(ExerciseResistanceCapability.tracksResistance(
+            loadMode: .external,
+            equipment: .gluteHamDeveloper
+        ))
     }
 
     @Test func sumoDeadliftKeepsThreeJointCompoundRuntimeSignature() throws {

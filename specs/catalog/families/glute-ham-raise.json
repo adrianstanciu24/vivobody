@@ -1,0 +1,157 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "glute-ham-raise",
+  "name": "Glute-Ham Raise",
+  "definition": "A bilateral body-resistance raise on a glute-ham developer in which the knees first extend toward horizontal, the hips then flex to lower the trunk, and the athlete returns by extending the hips before flexing the knees. The NSCA standard owns this exact two-stage topology; McAllister et al. support only the overlapping knee-flexion segment and hamstring activity, not the full fixture. Gluteus-maximus and trunk-stabilizer roles are categorical anatomy-and-mechanics inferences from the ordered hip extension and held-spine demand, not an exact unloaded-fixture hierarchy reported by either source. Nordic curls that hold the hips, machine leg curls, Roman-chair extensions that hold the knees, reverse hypers, razor-curl shortcuts, hand-assisted repetitions, and externally loaded variants remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "mcallister-2014-hamstring-exercises", "nsca-2020-glute-ham-raise-standard"],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {
+    "equipment": ["gluteHamDeveloper"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "knee-extension-descent", "name": "Knee-Extension Descent", "primeActions": [], "yieldingActions": ["knee.extension"]},
+      {"id": "hip-hinge-descent", "name": "Hip-Hinge Descent", "primeActions": [], "yieldingActions": ["hip.flexion"]},
+      {"id": "hip-extension-return", "name": "Hip-Extension Return", "primeActions": ["hip.extension"]},
+      {"id": "knee-flexion-finish", "name": "Knee-Flexion Finish", "primeActions": ["knee.flexion"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["bicepsFemoris"], "minimumRole": "primary"},
+      {"anyOf": ["medialHamstrings"], "minimumRole": "primary"},
+      {"anyOf": ["gluteMax"], "minimumRole": "secondary"},
+      {"anyOf": ["abs", "obliques", "lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["bicepsFemoris", "medialHamstrings"],
+      "secondary": ["gluteMax"],
+      "stabilizer": ["abs", "obliques", "lumbarExtensors", "gluteMed"]
+    }
+  },
+  "variantAxes": [
+    {"id": "supportApparatus", "valueType": "enum", "required": true, "description": "The source-reviewed support device.", "allowedValues": ["gluteHamDeveloper"]},
+    {"id": "lowerLegSupport", "valueType": "enum", "required": true, "description": "Both lower legs and feet are secured by the GHD pads.", "allowedValues": ["ghdFootplateAndRollerPads"]},
+    {"id": "thighSupport", "valueType": "enum", "required": true, "description": "The rounded pad contacts the thighs just above the knees.", "allowedValues": ["roundedPadJustAboveKnees"]},
+    {"id": "hipMotion", "valueType": "enum", "required": true, "description": "The hips flex during lowering and extend during the return.", "allowedValues": ["flexesThenExtends"]},
+    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "The knees extend during lowering and flex during the return.", "allowedValues": ["extendsThenFlexes"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The trunk remains braced rather than curling or extending to create the repetition.", "allowedValues": ["positionHeld"]},
+    {"id": "armStrategy", "valueType": "enum", "required": true, "description": "The arms stay crossed without pushing on the apparatus.", "allowedValues": ["crossedNoHandAssist"]},
+    {"id": "externalLoad", "valueType": "enum", "required": true, "description": "No external implement is held.", "allowedValues": ["none"]},
+    {"id": "rangeOfMotion", "valueType": "enum", "required": true, "description": "The reviewed descent continues until the braced upper body is nearly perpendicular to the floor.", "allowedValues": ["uprightToNearPerpendicularBottom"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "The apparatus supports but does not guide the torso through rails.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "ghd-glute-ham-raise",
+      "name": "GHD Glute-Ham Raise",
+      "aliases": ["Glute-Ham Raise", "Glute-Ham Developer Raise", "GHR"],
+      "equipment": "gluteHamDeveloper",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 6,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "bicepsFemoris", "role": "primary"},
+        {"muscle": "medialHamstrings", "role": "primary"},
+        {"muscle": "gluteMax", "role": "secondary"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "supportApparatus": "gluteHamDeveloper",
+        "lowerLegSupport": "ghdFootplateAndRollerPads",
+        "thighSupport": "roundedPadJustAboveKnees",
+        "hipMotion": "flexesThenExtends",
+        "kneeMotion": "extendsThenFlexes",
+        "spineMotion": "positionHeld",
+        "armStrategy": "crossedNoHandAssist",
+        "externalLoad": "none",
+        "rangeOfMotion": "uprightToNearPerpendicularBottom",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["mcallister-2014-hamstring-exercises", "nsca-2020-glute-ham-raise-standard"],
+      "execution": {
+        "startingPosition": "Set the glute-ham developer so both feet and lower legs are secure, the thighs contact the rounded pad just above the knees, and the shoulders, hips, and knees align upright with the knees bent about 90 degrees. Cross the arms over the chest.",
+        "movement": "Straighten the knees to lower the aligned body toward horizontal, then flex the hips to continue the controlled descent while the trunk stays braced.",
+        "endpoint": "Continue the hip-flexion stage until the braced upper body is nearly perpendicular to the floor without losing the lower-leg anchor.",
+        "returnPhase": "Extend the hips to bring the trunk back toward horizontal, then bend the knees to pull the aligned body into the upright finish.",
+        "controlledJoints": "Keep the ordered knee-then-hip descent and hip-then-knee return; do not turn the repetition into only a back extension or only a knee curl.",
+        "supportAndPosture": "Keep both legs secured, the trunk braced, and the hands off the apparatus.",
+        "disqualifyingCompensations": [
+          "Holding the hips fixed turns the exercise toward a Nordic curl.",
+          "Keeping the knees fixed turns the exercise toward a back extension.",
+          "Pushing with the hands makes the repetition assisted.",
+          "Holding an external load leaves the reviewed body-resistance fixture."
+        ]
+      }
+    }
+  ]
+}

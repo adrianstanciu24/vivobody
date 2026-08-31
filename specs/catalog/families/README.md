@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Eighty-seven reviewed family files containing 211 exercises are currently
+Ninety-six reviewed family files containing 225 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-232-source foundation. Each uses a coverage batch whose exercises
+248-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -139,6 +139,15 @@ unused side on its independent safety. Hammer MTSCP and MTSSP single-arm
 records require equal stack settings and enter that per-working-side value
 once, never the sum of two stacks. Belt Squat remains proposal
 only until one exact fixture supplies reproducible ROM and load semantics.
+
+The default-catalog gap closure adds 14 source-bounded essentials. Five
+fixtures expand `bilateral-squat`, `ankle-plantarflexion`, `incline-press`,
+`decline-press`, and `shoulder-extension-isolation`; nine new owners preserve
+distinct bridge, trunk-flexion, lateral-lunge, explosive-lift, thruster, and
+GHD mechanics. Bodyweight and GHD fixtures without a meaningful resistance
+input remain non-comparable. Elevated push-ups disclose their cohort-average
+effective-bodyweight proxies, and all four barbell Power fixtures retain
+ordered phases and external-load logging.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber

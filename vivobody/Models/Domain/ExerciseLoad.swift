@@ -184,13 +184,19 @@ extension Equipment {
 }
 
 /// Whether a fixture has a user-entered resistance axis. Bands remain editable,
-/// while unloaded bodyweight and ab-wheel fixtures do not invent a pound value.
+/// while unloaded bodyweight, ab-wheel, and GHD fixtures do not invent a pound
+/// value.
 nonisolated enum ExerciseResistanceCapability {
     static func tracksResistance(
         loadMode: ExerciseLoadMode,
         equipment: Equipment?
     ) -> Bool {
-        !(loadMode == .nonComparable && (equipment == .bodyweight || equipment == .abWheel))
+        !(
+            loadMode == .nonComparable
+                && (equipment == .bodyweight
+                    || equipment == .abWheel
+                    || equipment == .gluteHamDeveloper)
+        )
     }
 
     static func normalizedWeight(

@@ -122,7 +122,14 @@ struct StrengthRoutineBuilderTests {
         for purpose in purposes {
             #expect(purpose.allowsRoutineEquipment(.bodyweight))
             #expect(!purpose.allowsRoutineEquipment(.barbell))
+            #expect(!purpose.allowsRoutineEquipment(.gluteHamDeveloper))
         }
+
+        let ghdPurpose = ExercisePickerPurpose.routineInclude(
+            excludedIDs: [],
+            equipment: [.gluteHamDeveloper]
+        )
+        #expect(ghdPurpose.allowsRoutineEquipment(.gluteHamDeveloper))
     }
 
     @Test func includesAndExclusionsAreHonored() {

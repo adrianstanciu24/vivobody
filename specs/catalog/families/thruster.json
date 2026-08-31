@@ -1,0 +1,109 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "thruster",
+  "name": "Thruster",
+  "definition": "A bilateral barbell power exercise that combines a full front squat with an uninterrupted drive into overhead lockout in one fluid repetition. The hip crease passes below the knees and the ascent continues directly into the press without a second dip or jerk receive. The CrossFit guide owns the exact movement standard and Mangine et al. support its bar-velocity and power behavior; categorical muscle roles use reviewed anatomy rather than exercise-specific magnitude rankings. Front squats, shallow-dip push presses, jerks, paused squat-to-press combinations, and clean-and-jerk repetitions remain outside this family.",
+  "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "arnold-2010-lower-limb", "crossfit-2020-thruster-standard", "holzbaur-2005-upper-extremity", "mangine-2025-thruster-kinetics", "seth-2019-shoulder-work"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "squat", "direction": null, "planes": ["sagittal", "frontal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {"equipment": ["barbell"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.flexion", "shoulder.abduction"], "primeActions": [],
+    "movementPhases": [
+      {"id": "full-front-squat-descent", "name": "Full Front-Squat Descent", "primeActions": [], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "uninterrupted-drive", "name": "Uninterrupted Drive", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion", "shoulder.flexion", "shoulder.abduction", "scapula.upwardRotation", "scapula.posteriorTilt", "elbow.extension"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "shoulder.extension",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["vasti"], "minimumRole": "primary"}, {"anyOf": ["gluteMax"], "minimumRole": "primary"}, {"anyOf": ["deltoidAnterior"], "minimumRole": "primary"},
+      {"anyOf": ["gastrocnemius"], "minimumRole": "secondary"}, {"anyOf": ["soleus"], "minimumRole": "secondary"}, {"anyOf": ["triceps"], "minimumRole": "secondary"},
+      {"anyOf": ["serratus"], "minimumRole": "secondary"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["vasti", "gluteMax", "deltoidAnterior"],
+      "secondary": ["rectusFemoris", "medialHamstrings", "gastrocnemius", "soleus", "deltoidLateral", "supraspinatus", "triceps", "serratus", "trapeziusUpper", "trapeziusLower"],
+      "stabilizer": ["bicepsFemoris", "gluteMed", "fingerFlexors", "extensorCarpiRadialis", "externalRotators", "subscapularis", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "loadPlacement", "valueType": "enum", "required": true, "description": "The bar starts and returns in the front rack.", "allowedValues": ["frontRack"]},
+    {"id": "squatDepth", "valueType": "enum", "required": true, "description": "The required full front-squat depth.", "allowedValues": ["hipCreaseBelowKnee"]},
+    {"id": "transition", "valueType": "enum", "required": true, "description": "The squat ascent flows directly into the press without a pause.", "allowedValues": ["continuousSquatToPressNoPause"]},
+    {"id": "pressPath", "valueType": "enum", "required": true, "description": "The bar travels from the front rack through the shoulder-blade-assisted overhead press path.", "allowedValues": ["frontRackToOverhead"]},
+    {"id": "receiveStrategy", "valueType": "enum", "required": true, "description": "The overhead finish has no second dip or jerk receive.", "allowedValues": ["noSecondDipOrRebend"]},
+    {"id": "armEndpoint", "valueType": "enum", "required": true, "description": "The required overhead lockout.", "allowedValues": ["elbowsFullyExtendedOverhead"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The logged scalar is the total bar plus plates.", "allowedValues": ["totalBarAndPlates"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No external guide constrains the bar.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "barbell-thruster", "name": "Barbell Thruster", "aliases": ["Thruster", "Front-Squat-to-Press", "Barbell Squat to Press"],
+      "equipment": "barbell", "laterality": "bilateral", "modality": "power", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0,
+      "defaultWeight": 45, "defaultWeightKg": 20, "reps": 6, "searchPriority": 98,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"}, {"muscle": "deltoidAnterior", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"},
+        {"muscle": "soleus", "role": "secondary"}, {"muscle": "deltoidLateral", "role": "secondary"}, {"muscle": "supraspinatus", "role": "secondary"},
+        {"muscle": "triceps", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"}, {"muscle": "trapeziusUpper", "role": "secondary"},
+        {"muscle": "trapeziusLower", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "subscapularis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {"loadPlacement": "frontRack", "squatDepth": "hipCreaseBelowKnee", "transition": "continuousSquatToPressNoPause", "pressPath": "frontRackToOverhead", "receiveStrategy": "noSecondDipOrRebend", "armEndpoint": "elbowsFullyExtendedOverhead", "loadAccounting": "totalBarAndPlates", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "arnold-2010-lower-limb", "crossfit-2020-thruster-standard", "holzbaur-2005-upper-extremity", "mangine-2025-thruster-kinetics", "seth-2019-shoulder-work"],
+      "execution": {
+        "startingPosition": "Log the total bar plus plates. Stand with the bar secured in a two-hand front rack.",
+        "movement": "Squat until the hip crease passes below the knees, then rise directly into the overhead press in one fluid motion without pausing at the front rack.",
+        "endpoint": "Finish standing tall with both elbows fully straight and the bar overhead.",
+        "returnPhase": "Lower the bar under control to the front rack and begin the next full squat without adding a jerk dip.",
+        "controlledJoints": "Track the knees with the feet, brace the trunk, and keep the squat-to-press transition continuous.",
+        "supportAndPosture": "Maintain a secure two-hand front-rack grip and keep the trunk braced through the continuous drive.",
+        "disqualifyingCompensations": ["Pausing or resetting between the squat and press changes the continuous thruster.", "Using a second dip or rebending the knees under the bar turns the finish into a jerk.", "Stopping above full-squat depth leaves the reviewed fixture."]
+      }
+    }
+  ]
+}

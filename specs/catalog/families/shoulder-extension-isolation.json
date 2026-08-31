@@ -3,12 +3,13 @@
   "schemaVersion": 1,
   "id": "shoulder-extension-isolation",
   "name": "Shoulder Extension Isolation",
-  "definition": "An open-chain isolation movement whose concentric phase extends the shoulder from a flexed overhead start while the elbow angle remains fixed. The admitted roster is limited to the directly reviewed barbell pullover and bilateral straight-arm cable pulldown; dumbbell, band, machine, unilateral, bodyweight, bent-arm, and rowing variants remain outside this contract.",
+  "definition": "An open-chain isolation movement whose concentric phase extends the shoulder from a flexed overhead start while the elbow angle remains fixed. The roster owns directly reviewed barbell and single-dumbbell flat-bench pullovers plus bilateral straight-arm cable pulldowns. The dumbbell fixture uses one short plate-loaded implement held securely in both hands and logs that implement's full marked mass once; the source does not disclose an inner-plate or handle contact, numeric elbow angle, or numeric overhead endpoint. Band, machine, unilateral, bodyweight, bent-arm, rowing, and elbow-extension variants remain outside this contract.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "holzbaur-2005-upper-extremity",
     "marchetti-2011-barbell-pullover",
-    "muyor-2022-pullover-straight-arm-pulldown"
+    "muyor-2022-pullover-straight-arm-pulldown",
+    "campos-2017-barbell-dumbbell-pullover"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -29,7 +30,8 @@
   "allowed": {
     "equipment": [
       "barbell",
-      "cable"
+      "cable",
+      "dumbbell"
     ],
     "modalities": [
       "dynamicStrength"
@@ -193,17 +195,19 @@
       "required": true,
       "description": "The canonical forearm and hand orientation through the working range.",
       "allowedValues": [
-        "pronated"
+        "pronated",
+        "neutral"
       ]
     },
     {
       "id": "relativeGripWidth",
       "valueType": "enum",
       "required": true,
-      "description": "Hand spacing relative to shoulder width on the reviewed straight bar.",
+      "description": "The reviewed relationship between the two hands.",
       "allowedValues": [
         "shoulderWidth",
-        "wide"
+        "wide",
+        "narrow"
       ]
     },
     {
@@ -221,7 +225,8 @@
       "required": true,
       "description": "The maintained elbow posture through the working range.",
       "allowedValues": [
-        "nearExtended"
+        "nearExtended",
+        "fixedAngleSourceUnreported"
       ]
     },
     {
@@ -230,7 +235,8 @@
       "required": true,
       "description": "The categorical shoulder position at the start of the concentric phase.",
       "allowedValues": [
-        "overheadEarlobe"
+        "overheadEarlobe",
+        "sourceSelectedFullShoulderFlexion"
       ]
     },
     {
@@ -240,7 +246,8 @@
       "description": "The categorical hand and load endpoint of the concentric phase.",
       "allowedValues": [
         "overChest",
-        "thighs"
+        "thighs",
+        "verticalOverShoulders"
       ]
     },
     {
@@ -251,6 +258,48 @@
       "allowedValues": [
         "none"
       ]
+    },
+    {
+      "id": "gripConfiguration",
+      "valueType": "enum",
+      "required": false,
+      "description": "The source-reported security of the two-hand dumbbell grip.",
+      "allowedValues": ["closed"]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": false,
+      "description": "Where the hands contact the single dumbbell; the source leaves this detail unreported.",
+      "allowedValues": ["sourceUnreported"]
+    },
+    {
+      "id": "implementConfiguration",
+      "valueType": "enum",
+      "required": false,
+      "description": "The exact dumbbell construction and implement count.",
+      "allowedValues": ["singleShortPlateLoadedDumbbell"]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": false,
+      "description": "How the single logged resistance value maps to the implement.",
+      "allowedValues": ["totalSingleImplement"]
+    },
+    {
+      "id": "benchContact",
+      "valueType": "enum",
+      "required": false,
+      "description": "The body regions supported by the flat bench.",
+      "allowedValues": ["headThoraxGlutesSupported"]
+    },
+    {
+      "id": "footSupport",
+      "valueType": "enum",
+      "required": false,
+      "description": "The directly reviewed foot contact.",
+      "allowedValues": ["bothFeetOnFloor"]
     }
   ],
   "recommended": {
@@ -282,8 +331,20 @@
           "value": "supportConstrained"
         },
         {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
           "field": "variant.relativeGripWidth",
           "value": "shoulderWidth"
+        },
+        {
+          "field": "variant.elbowPosture",
+          "value": "nearExtended"
+        },
+        {
+          "field": "variant.startArmZone",
+          "value": "overheadEarlobe"
         },
         {
           "field": "variant.concentricEndZone",
@@ -325,6 +386,18 @@
           "value": "free"
         },
         {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
+          "field": "variant.elbowPosture",
+          "value": "nearExtended"
+        },
+        {
+          "field": "variant.startArmZone",
+          "value": "overheadEarlobe"
+        },
+        {
           "field": "variant.concentricEndZone",
           "value": "thighs"
         }
@@ -340,6 +413,90 @@
           "muscle": "pectoralisMajorSternocostal",
           "role": "secondary"
         }
+      ]
+    },
+    {
+      "id": "non-dumbbell-omits-single-dumbbell-axes",
+      "description": "Barbell and cable fixtures cannot inherit the single-dumbbell grip, implement, accounting, or support fields.",
+      "when": {"field": "equipment", "operator": "notEquals", "value": "dumbbell"},
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.gripConfiguration",
+        "variant.loadInterface",
+        "variant.implementConfiguration",
+        "variant.loadAccounting",
+        "variant.benchContact",
+        "variant.footSupport"
+      ]
+    },
+    {
+      "id": "neutral-grip-is-single-dumbbell-only",
+      "description": "The neutral grip belongs only to the single-dumbbell pullover.",
+      "when": {"field": "variant.gripOrientation", "operator": "equals", "value": "neutral"},
+      "then": [{"field": "equipment", "value": "dumbbell"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "narrow-grip-is-single-dumbbell-only",
+      "description": "The narrow two-hand spacing belongs only to the single-dumbbell pullover.",
+      "when": {"field": "variant.relativeGripWidth", "operator": "equals", "value": "narrow"},
+      "then": [{"field": "equipment", "value": "dumbbell"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "source-unreported-elbow-posture-is-single-dumbbell-only",
+      "description": "The source-unreported held elbow angle belongs only to the single-dumbbell fixture.",
+      "when": {"field": "variant.elbowPosture", "operator": "equals", "value": "fixedAngleSourceUnreported"},
+      "then": [{"field": "equipment", "value": "dumbbell"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "source-selected-start-is-single-dumbbell-only",
+      "description": "The source-selected full-flexion start belongs only to the single-dumbbell fixture.",
+      "when": {"field": "variant.startArmZone", "operator": "equals", "value": "sourceSelectedFullShoulderFlexion"},
+      "then": [{"field": "equipment", "value": "dumbbell"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "vertical-over-shoulders-end-is-single-dumbbell-only",
+      "description": "The vertical-over-shoulders endpoint belongs only to the single-dumbbell fixture.",
+      "when": {"field": "variant.concentricEndZone", "operator": "equals", "value": "verticalOverShoulders"},
+      "then": [{"field": "equipment", "value": "dumbbell"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "single-dumbbell-pullover-fixture",
+      "description": "The dumbbell branch is the exact flat-bench, two-hand, single-implement pullover and preserves source-unreported grip contact and elbow angle.",
+      "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
+      "then": [
+        {"field": "variant.bodyPosition", "value": "supine"},
+        {"field": "variant.torsoSupport", "value": "bench"},
+        {"field": "variant.scapularTranslation", "value": "supportConstrained"},
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.relativeGripWidth", "value": "narrow"},
+        {"field": "variant.elbowMotion", "value": "angleHeld"},
+        {"field": "variant.elbowPosture", "value": "fixedAngleSourceUnreported"},
+        {"field": "variant.startArmZone", "value": "sourceSelectedFullShoulderFlexion"},
+        {"field": "variant.concentricEndZone", "value": "verticalOverShoulders"},
+        {"field": "variant.lowerBodyContribution", "value": "none"},
+        {"field": "variant.gripConfiguration", "value": "closed"},
+        {"field": "variant.loadInterface", "value": "sourceUnreported"},
+        {"field": "variant.implementConfiguration", "value": "singleShortPlateLoadedDumbbell"},
+        {"field": "variant.loadAccounting", "value": "totalSingleImplement"},
+        {"field": "variant.benchContact", "value": "headThoraxGlutesSupported"},
+        {"field": "variant.footSupport", "value": "bothFeetOnFloor"}
+      ],
+      "requirePresent": ["variant.gripConfiguration", "variant.loadInterface", "variant.implementConfiguration", "variant.loadAccounting", "variant.benchContact", "variant.footSupport"],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"},
+        {"muscle": "lats", "role": "secondary"}
       ]
     }
   ],
@@ -606,6 +763,68 @@
         "disqualifyingCompensations": [
           "Rowing the bar down with bending elbows turns the straight-arm pulldown into a row.",
           "Bending and straightening the elbows turns the straight-arm pulldown into a triceps pushdown."
+        ]
+      }
+    },
+    {
+      "catalogID": "two-hand-single-dumbbell-pullover",
+      "name": "Two-Hand Single-Dumbbell Pullover",
+      "aliases": ["Dumbbell Pullover", "Flat-Bench Dumbbell Pullover", "Two-Hand Dumbbell Pullover"],
+      "groupOverride": "chest",
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 98,
+      "involvement": [
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"},
+        {"muscle": "lats", "role": "secondary"},
+        {"muscle": "teresMajor", "role": "secondary"},
+        {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "serratus", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "supine",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "narrow",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "fixedAngleSourceUnreported",
+        "startArmZone": "sourceSelectedFullShoulderFlexion",
+        "concentricEndZone": "verticalOverShoulders",
+        "lowerBodyContribution": "none",
+        "gripConfiguration": "closed",
+        "loadInterface": "sourceUnreported",
+        "implementConfiguration": "singleShortPlateLoadedDumbbell",
+        "loadAccounting": "totalSingleImplement",
+        "benchContact": "headThoraxGlutesSupported",
+        "footSupport": "bothFeetOnFloor"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "campos-2017-barbell-dumbbell-pullover", "holzbaur-2005-upper-extremity"],
+      "execution": {
+        "startingPosition": "Log the one dumbbell's full marked weight once. Lie along a flat bench with both feet on the floor and the glutes, thorax, and head supported; hold one dumbbell securely in both hands above the shoulders.",
+        "movement": "Keep the same comfortable elbow bend while lowering the dumbbell overhead through a controlled full range.",
+        "endpoint": "Stop at the furthest controlled overhead position before the back lifts or the elbows change angle.",
+        "returnPhase": "Extend the shoulders to bring the same single dumbbell back vertically above the shoulders.",
+        "controlledJoints": "Keep the elbow angle fixed and do not turn the return into an elbow-straightening exercise.",
+        "supportAndPosture": "Keep both feet on the floor and the glutes, thorax, and head supported by the flat bench.",
+        "disqualifyingCompensations": [
+          "Bending and straightening the elbows turns the pullover into an elbow-extension exercise.",
+          "Lifting the back or glutes off the bench changes the reviewed support fixture.",
+          "Using two dumbbells changes the one-implement logging contract."
         ]
       }
     }

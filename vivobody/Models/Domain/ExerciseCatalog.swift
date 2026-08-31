@@ -31,8 +31,7 @@ nonisolated enum Equipment: String, Codable, Hashable, CaseIterable {
     case kettlebell
     case band
     case gripTrainer
-    case trapBar
-    case abWheel
+    case trapBar, abWheel, gluteHamDeveloper
     case other
 
     nonisolated var displayName: String {
@@ -47,6 +46,7 @@ nonisolated enum Equipment: String, Codable, Hashable, CaseIterable {
         case .gripTrainer: "Grip Trainer"
         case .trapBar: "Trap Bar"
         case .abWheel: "Ab Wheel"
+        case .gluteHamDeveloper: "GHD"
         case .other: "Other"
         }
     }

@@ -1,47 +1,40 @@
 # Current work
 
-Goal: add the second reviewed wave of missing commercial-gym machine exercises
-without merging incompatible fixture or unilateral load histories.
+Goal: add the exact fourteen evidence-reviewed catalog gaps approved on
+2026-08-30 without merging distinct movement or load histories.
 
-Primary candidates: seated dip press, padded plate-loaded pullover, belt squat,
-single-leg 45-degree leg press, independent-arm chest press, and
-independent-arm shoulder press.
+Approved fixtures:
 
-Later candidates: pendulum squat, Smith hip thrust/RDL/split squat, horizontal
-calf press, and machine tibialis raise.
+- 100-degree two-leg bodyweight floor squat; 90-degree bodyweight supine glute
+  bridge; single-leg bodyweight heel raise with light wall balance.
+- Exact 30.48-centimeter hands-elevated and feet-elevated push-ups; straight-leg
+  unanchored sit-up; reverse curl/reverse crunch; 60%-height lateral lunge.
+- Barbell hang power clean, floor-start power snatch, push jerk, and thruster;
+  single-dumbbell pullover; glute-ham raise on a GHD.
 
 Progress:
 
-- Duplicate and alias scan found no exact active duplicates.
-- Three independent read-only discovery lanes completed biomechanics,
-  contract-boundary, and product/load reviews, then unanimously resolved the
-  two material fixture disputes.
-- Five source-exact exercises are drafted: two new families for the ERGO-FIT
-  VECTOR seated dip press and Hammer PL-PO padded pullover, plus exact Panatta
-  1FW090, MTSCP, and MTSSP expansions.
-- Belt Squat remains a separate proposal because Joseph's Wenning Gen4 study
-  does not define reproducible ROM or load accounting and cannot transfer to
-  Hammer's different anchors and loading points. Hammer PL-DIP also remains a
-  fixture-specific proposal because current evidence does not close the
-  compound humeral-motion gate.
-- The coordinating agent is the only writer for catalog sources, evidence,
-  generated output, documentation, and tests.
-- The later candidates have proposal-only ownership and concrete evidence
-  unlocks in `machine-second-wave-2026-08.md`.
-- The generated projection is 87 runtime families, 211 exercises, and 232
-  evidence sources. Catalog generation and all 431 Python contract tests pass.
-- Independent post-draft evidence, contract, and product reviews pass after
-  correcting the Panatta coupling direction, MTS false precision, reverse
-  ownership rules, and one-value per-side load semantics.
-- `Scripts/check.sh` passes, and the targeted `CatalogBiomechanicsTests` suite
-  passes all 15 tests on the headless iPhone 17 Pro simulator.
-- The `catalog-machine-second-wave` Baguette scenario passes. Its inspected
-  screenshot shows the PL-PO detail without clipping, and the accessibility
-  tree exposes the title, `STRENGTH · REPS`, and muscle-summary semantics.
+- All fourteen exact fixtures are authored as five existing-family expansions
+  plus nine narrow new families; the generated projection is 96 families, 225
+  exercises, and 248 evidence sources.
+- Duplicate, biomechanics, catalog-boundary, product-semantics, exact-roster,
+  mutation, generated-runtime, search, load, and routine-equipment gates pass.
+- Three independent read-only reviews found no remaining evidence, ownership,
+  mechanics, or deterministic-selection blocker.
+- Barbell Thruster is intentionally authored as Power/Reps, keeping it outside
+  hypertrophy hard-set and estimated-1RM analytics.
+- `Scripts/check.sh`, 436 catalog tests, and 62 focused Swift tests pass.
+- Inspected headless Baguette evidence proves `GHR` search, the one-record GHD
+  Library filter, unclipped GHD detail anatomy, reps-plus-RIR/no-load GHD
+  logging, `Front-Squat-to-Press` search, and weight-plus-reps/no-RIR Thruster
+  logging.
+- The canonical load-semantics spec now matches bodyweight, Ab Wheel, and GHD
+  no-resistance behavior; the independent final diff review has no remaining
+  actionable finding.
 
 Next:
 
-- Final diff review and handoff.
+- None; ready for handoff.
 
-User steering: proceed with the explicitly listed second wave and preserve the
-separate belt-squat boundary established by DOI 10.2478/hukin-2019-0126.
+User steering: add all fourteen approved fixtures; do not substitute adjacent
+variants or weaken exact source and load boundaries.

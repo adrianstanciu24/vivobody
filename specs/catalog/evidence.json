@@ -210,7 +210,7 @@
       "doi": "10.1519/JSC.0b013e31820c8587",
       "pmid": "21873902",
       "url": "https://doi.org/10.1519/JSC.0b013e31820c8587",
-      "scope": "Ground-reaction-force estimates for standard, knee-supported, and hand- or foot-elevated push-up loading as fractions of body mass."
+      "scope": "Ground-reaction-force measurements compare standard, knee-supported, and hand- or foot-elevated push-ups. The exact 30.48-centimeter conditions produced cohort mean peak upper-limb vertical-force fractions of approximately 0.55 with the hands elevated and 0.70 with the feet elevated. Those coefficients are fixture-specific force proxies, not constant equivalent barbell loads, muscle-emphasis evidence, or portable values for other support heights."
     },
     {
       "id": "lee-2019-pectoralis-force-direction",
@@ -1481,7 +1481,7 @@
       "doi": "10.1519/JSC.0000000000004810",
       "pmid": "39072653",
       "url": "https://doi.org/10.1519/JSC.0000000000004810",
-      "scope": "Eighteen resistance-trained men performed push presses, push jerks, and split jerks at 60, 75, and 90 percent of exercise one-repetition maximum. Force-time and task data support the planted-foot push-press boundary as well as split-jerk flight, a one-foot-forward and one-foot-back receive, and recovery to a standing lockout. The study does not provide joint-resolved lower-limb moments, scapular kinematics, or a muscle-role hierarchy; it also leaves exact grip and lead-foot prescriptions unreported."
+      "scope": "Eighteen resistance-trained men performed push presses, push jerks, and split jerks at 60, 75, and 90 percent of exercise one-repetition maximum. Force-time and task data support the planted-foot push-press boundary, the push jerk's flight and symmetric second-dip receive, split-jerk flight and asymmetric receive, and recovery to standing lockout. The study does not provide joint-resolved lower-limb moments, scapular kinematics, or a muscle-role hierarchy. It also leaves exact grip dimensions and numeric foot displacement unreported."
     },
     {
       "id": "larsen-2025-leg-extension-hip-flexion",
@@ -2979,7 +2979,7 @@
       "doi": "10.52082/jssm.2023.778",
       "pmid": "38045750",
       "url": "https://doi.org/10.52082/jssm.2023.778",
-      "scope": "Lifters performed hang power snatches and related pulls while vastus lateralis, gluteus maximus, rectus abdominis, erector spinae, and trapezius activity was measured. It supports material lower-body, trapezius, and trunk activity, not upper-limb joint actions or categorical role ranking."
+      "scope": "Lifters first raised the bar to an upright arms-length position, lowered it until just above the knees, held that hang for approximately one second, then performed hang power cleans and hang power snatches with an explosive pull and power receive while vastus lateralis, gluteus maximus, rectus abdominis, erector spinae, and trapezius activity was measured. It anchors that exact upright-to-just-above-knee setup and supports material lower-body, trapezius, and trunk activity, not a mid-thigh start, upper-limb joint actions, or categorical role ranking."
     },
     {
       "id": "murphy-riemann-2025-kettlebell-swing-hip-kinetics",
@@ -3615,6 +3615,267 @@
       "year": 2026,
       "url": "https://www.lifefitness.com/en-eu/catalog/strength-training/selectorized/mts-iso-lateral-shoulder-press",
       "scope": "This current manufacturer page is registered with retrieval year 2026, not a claimed publication year. It defines the exact MTSSP selectorized shoulder-press fixture with separate one-hundred-fifty-pound or seventy-five-kilogram stacks, independent converging and diverging counterbalanced arms, pivot-away grips, an adjustable seat, and belt-and-pulley resistance. It anchors fixture identity, independent unilateral topology, posterior support, and a working-side stack history. It does not prescribe grip orientation, exact press inclination or joint range, unilateral sequencing cadence, muscle ranking, or equivalence between sides, stacks, or other machines."
+    },
+    {
+      "id": "escamilla-2025-bodyweight-floor-squat",
+      "sourceType": "experimentalKinematicsKineticsEMGStudy",
+      "title": "Patellofemoral Joint Loading During Bodyweight One-Legged and Two-Legged BOSU and Floor Squats",
+      "authors": [
+        "Rafael F. Escamilla",
+        "Naiquan Zheng",
+        "Toran D. MacLeod",
+        "Rodney Imamura",
+        "Kevin E. Wilk",
+        "Shangcheng Wang",
+        "Robert Asuncion",
+        "Irwin S. Thompson",
+        "Arnel L. Aguinaldo",
+        "Glenn S. Fleisig"
+      ],
+      "year": 2025,
+      "doi": "10.26603/001c.128628",
+      "pmid": "39906057",
+      "pmcid": "PMC11788085",
+      "url": "https://doi.org/10.26603/001c.128628",
+      "scope": "Sixteen experienced healthy adults performed two-legged bodyweight squats on a stable floor from standing to approximately one hundred degrees of knee flexion and back to standing while three-dimensional kinematics, ground reaction forces, inverse dynamics, lower-limb EMG, and a patellofemoral model were recorded. The protocol supports the stable bilateral floor fixture, self-selected stance, bodyweight-only loading, approximately one-hundred-degree knee endpoint, and dynamic hip, knee, and ankle involvement. Its patellofemoral focus and small trained sample do not establish a universal squat depth, a complete regional muscle hierarchy, or equivalence with externally loaded squats."
+    },
+    {
+      "id": "takeshita-2022-bridge-knee-angle",
+      "sourceType": "experimentalKinematicsEMGModelStudy",
+      "title": "Effects of Knee Flexion Angles on the Joint Force and Muscle Force during Bridging Exercise: A Musculoskeletal Model Simulation",
+      "authors": [
+        "Yasufumi Takeshita",
+        "Masayuki Kawada",
+        "Takasuke Miyazaki",
+        "Yuki Nakai",
+        "Sota Araki",
+        "Shintaro Nakatsuji",
+        "Yuta Matsuzawa",
+        "Shobu Nakashima",
+        "Ryoji Kiyama"
+      ],
+      "year": 2022,
+      "doi": "10.1155/2022/7975827",
+      "pmid": "35677781",
+      "pmcid": "PMC9168199",
+      "url": "https://doi.org/10.1155/2022/7975827",
+      "scope": "Fifteen healthy young men performed barefoot supine bodyweight bridges with the arms and torso resting on the floor at sixty-, ninety-, and one-hundred-twenty-degree knee positions, raising the pelvis for two seconds, holding maximal hip extension for one second, and lowering for two seconds. Motion capture and surface EMG were measured while joint and muscle forces were model-estimated. The ninety-degree condition directly anchors the exact bodyweight fixture and cadence; modeled forces are not direct measurements and do not establish universal contribution magnitudes or outcomes."
+    },
+    {
+      "id": "flanagan-2005-heel-raise-biomechanics",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Biomechanics of the Heel-Raise Exercise",
+      "authors": [
+        "Sean P. Flanagan",
+        "Joo-Eun Song",
+        "Man-Ying Wang",
+        "Gail A. Greendale",
+        "Stanley P. Azen",
+        "George J. Salem"
+      ],
+      "year": 2005,
+      "doi": "10.1123/japa.13.2.160",
+      "pmid": "15995262",
+      "url": "https://doi.org/10.1123/japa.13.2.160",
+      "scope": "Sixteen older adults performed double- and single-leg heel raises with no external resistance and with added loads while kinematics and inverse-dynamics kinetics were recorded. It directly distinguishes the greater unilateral ankle demand and supports a bodyweight single-leg plantarflexion repetition. The older cohort and reduced single-leg range and velocity do not establish one universal cadence, excursion, or muscle-role magnitude."
+    },
+    {
+      "id": "manago-2021-single-leg-heel-raise",
+      "sourceType": "experimentalStrengthStudy",
+      "title": "The Validity of the Single-Leg Heel Raise Test in People With Multiple Sclerosis: A Cross-Sectional Study",
+      "authors": [
+        "Mark M. Mañago",
+        "Paul W. Kline",
+        "Michael O. Harris-Love",
+        "Cory L. Christiansen"
+      ],
+      "year": 2021,
+      "doi": "10.3389/fneur.2021.650297",
+      "pmid": "34354656",
+      "pmcid": "PMC8333614",
+      "url": "https://doi.org/10.3389/fneur.2021.650297",
+      "scope": "The protocol defines a unilateral bodyweight heel raise with the stance knee extended, the other leg suspended, light wall contact for balance, a controlled return, and a minimum five-centimeter heel rise. It anchors the exact test geometry and per-side repetition boundary. The multiple-sclerosis sample and validity objective do not establish a universal training prescription, healthy-population performance norm, or muscle ranking."
+    },
+    {
+      "id": "andersson-1997-abdominal-hip-flexor-exercises",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Abdominal and Hip Flexor Muscle Activation During Various Training Exercises",
+      "authors": [
+        "Eva A. Andersson",
+        "Johnny Nilsson",
+        "Zhijia Ma",
+        "Alf Thorstensson"
+      ],
+      "year": 1997,
+      "doi": "10.1007/s004210050135",
+      "pmid": "9118976",
+      "url": "https://doi.org/10.1007/s004210050135",
+      "scope": "Six healthy men performed thirty-eight static and dynamic trunk- and hip-flexion exercises with varied leg positions and support. Surface EMG sampled rectus abdominis, external and internal obliques, rectus femoris, and sartorius, while fine-wire EMG sampled iliacus. It supports abdominal and hip-flexor participation in hip-flexion sit-ups generally; the multi-variant study does not isolate Vivobody's exact straight-leg, unanchored, arms-crossed fixture or establish a universal relative muscle ranking."
+    },
+    {
+      "id": "cordo-2003-straight-leg-sit-up",
+      "sourceType": "experimentalKinematicsKineticsEMGStudy",
+      "title": "The Sit-Up: Complex Kinematics and Muscle Activity in Voluntary Axial Movement",
+      "authors": [
+        "Paul J. Cordo",
+        "Victor S. Gurfinkel",
+        "Terrence C. Smith",
+        "Paul W. Hodges",
+        "Simon M. P. Verschueren",
+        "Simon Brumagne"
+      ],
+      "year": 2003,
+      "doi": "10.1016/S1050-6411(03)00023-3",
+      "pmid": "12706604",
+      "url": "https://doi.org/10.1016/S1050-6411(03)00023-3",
+      "scope": "Eight healthy adults performed repeated sit-ups with arms crossed over the chest and straight unconstrained legs while support forces, segment kinematics, and eight-muscle EMG were recorded. The task contained serial trunk-curling and pelvis-rotation components and supports a combined spinal- and hip-flexion family rather than an abdominal isolation. The small sample and phase-varying activity do not establish one universal muscle ranking or loaded-variant transfer."
+    },
+    {
+      "id": "willett-2001-reverse-curl",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Relative Activity of Abdominal Muscles During Commonly Prescribed Strengthening Exercises",
+      "authors": [
+        "G. M. Willett",
+        "J. E. Hyde",
+        "M. B. Uhrlaub",
+        "C. L. Wendel",
+        "G. M. Karst"
+      ],
+      "year": 2001,
+      "pmid": "11726260",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11726260/",
+      "scope": "Twenty-five healthy adults performed a reverse curl among five abdominal exercises while upper and lower rectus-abdominis and external-oblique EMG were recorded. It directly supports meaningful whole-region abdominal and oblique participation. Regional surface EMG does not prove separate upper and lower muscles, complete joint mechanics, force, hypertrophy, or a quantitative hierarchy."
+    },
+    {
+      "id": "ace-2026-reverse-crunch",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Reverse Ab Crunch",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/76/reverse-crunch/",
+      "scope": "This current exercise standard is registered with retrieval year 2026, not a claimed publication year. It specifies a floor start with arms spread and palms down, hips and knees at 90 degrees, a pelvis-and-spine curl toward the ribs without changing knee angle, and a controlled return until the pelvis contacts the mat and the knees are directly above the hips. It anchors geometry and sequence, not measured muscle magnitude, medical safety, or a distinct lower-abdominal region."
+    },
+    {
+      "id": "riemann-2013-forward-lateral-lunge",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Biomechanical Comparison of Forward and Lateral Lunges at Varying Step Lengths",
+      "authors": [
+        "Bryan L. Riemann",
+        "Amanda Congleton",
+        "Rebecca Ward",
+        "George J. Davies"
+      ],
+      "year": 2013,
+      "pmid": "23584319",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23584319/",
+      "scope": "Healthy adults performed bodyweight forward and lateral step-and-return lunges at self-selected and standardized step lengths while lower-limb kinematics and joint kinetics were measured. The standardized lateral condition used a step equal to sixty percent of body height and supports the exact sideways step, lead-leg loading, comfortable depth, and return to feet together. It does not provide individual-muscle EMG, one universal depth, or an externally loaded transfer."
+    },
+    {
+      "id": "lee-2018-power-snatch-kinetics",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Evaluating the Contribution of Lower Extremity Kinetics to Whole Body Power Output During the Power Snatch",
+      "authors": [
+        "Sangwoo Lee",
+        "Kyle D. DeRosia",
+        "Landon M. Lamie"
+      ],
+      "year": 2018,
+      "doi": "10.1080/14763141.2017.1371216",
+      "pmid": "28933236",
+      "url": "https://doi.org/10.1080/14763141.2017.1371216",
+      "scope": "Ten experienced weightlifters performed floor-start power snatches at sixty percent of one-repetition maximum while three-dimensional motion analysis quantified hip, knee, and ankle net joint torques and whole-body power. It directly supports dynamic lower-limb contribution and Power classification. It does not establish the full technical sequence, upper-body actions, or a complete categorical muscle hierarchy."
+    },
+    {
+      "id": "ronai-2017-power-snatch-technique",
+      "sourceType": "peerReviewedTechnicalArticle",
+      "title": "The Power Snatch",
+      "authors": [
+        "Peter Ronai"
+      ],
+      "year": 2017,
+      "doi": "10.1249/FIT.0000000000000310",
+      "url": "https://doi.org/10.1249/FIT.0000000000000310",
+      "scope": "The peer-reviewed ACSM technique article defines the power snatch as a wide-grip barbell lift from the floor through first pull, transition, second pull, turnover, and an overhead catch above full-squat depth, followed by standing completion. It anchors the floor-start power-catch topology, not joint-resolved kinetics, muscle rankings, one universal grip width, or product defaults."
+    },
+    {
+      "id": "crossfit-2020-thruster-standard",
+      "sourceType": "officialTechnicalStandard",
+      "title": "CrossFit Level 1 Training Guide: The Thruster",
+      "authors": [
+        "CrossFit, LLC"
+      ],
+      "year": 2020,
+      "url": "https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf",
+      "scope": "CrossFit's Level 1 movement guide defines a barbell thruster with a full front-rack grip, shoulder-width stance, hip crease below the knees, rapid hip-and-knee extension before the arm press, and a finish with hips, knees, and arms fully extended and the bar over the middle of the foot. It anchors the continuous full-squat-to-overhead topology, not joint-resolved kinetics, categorical muscle ranking, a universal load, or conditioning analytics."
+    },
+    {
+      "id": "mangine-2025-thruster-kinetics",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Acute Effect of a Multi-Ingredient Pre-Workout Supplement on Pacing and Kinetic Expression During Shorter and Longer Bouts of High Intensity Functional Training",
+      "authors": [
+        "Gerald T. Mangine",
+        "Christopher Staples",
+        "James W. Henley",
+        "Ashley Hines",
+        "Kristyn C. McGeehan",
+        "Wysmark Chaves",
+        "Wil King",
+        "Tiffany A. Esmat",
+        "John R. McLester",
+        "Jacob L. Grazer"
+      ],
+      "year": 2025,
+      "doi": "10.1080/15502783.2025.2529906",
+      "pmid": "40627430",
+      "pmcid": "PMC12239229",
+      "url": "https://doi.org/10.1080/15502783.2025.2529906",
+      "scope": "Twelve men and ten women with at least two years of high-intensity functional-training experience performed repeated barbell thrusters while three-dimensional motion tracking measured bar velocity and power. It supports treating the reviewed continuous barbell fixture as Power. The circuit context, sex-scaled fixed loads, and supplement objective do not establish standalone load prescription, one-repetition-maximum comparability, muscle ranking, or hypertrophy semantics."
+    },
+    {
+      "id": "campos-2017-barbell-dumbbell-pullover",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The Use of Barbell or Dumbbell Does Not Affect Muscle Activation During Pullover Exercise",
+      "authors": [
+        "Yuri de Almeida Costa Campos",
+        "Hiago Leandro Rodrigues de Souza",
+        "Sandro Fernandes da Silva",
+        "Paulo Henrique Marchetti"
+      ],
+      "year": 2017,
+      "doi": "10.1590/1517-869220172305166571",
+      "url": "https://doi.org/10.1590/1517-869220172305166571",
+      "scope": "Eleven trained men performed barbell and single-dumbbell pullovers at ninety percent of ten-repetition maximum while seven upper-body muscle sites were measured with surface EMG. The protocol anchors a flat-bench single dumbbell held in both hands, a vertical-over-shoulder to overhead path, and a held elbow angle. Similar EMG does not establish identical joint torque, load equivalence, force, hypertrophy, or universal muscle ranking."
+    },
+    {
+      "id": "mcallister-2014-hamstring-exercises",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Muscle Activation During Various Hamstring Exercises",
+      "authors": [
+        "Matt J. McAllister",
+        "Kelley G. Hammond",
+        "Brian K. Schilling",
+        "Lucas C. Ferreria",
+        "Jacob P. Reed",
+        "Lawrence W. Weiss"
+      ],
+      "year": 2014,
+      "doi": "10.1519/JSC.0000000000000302",
+      "pmid": "24149748",
+      "url": "https://doi.org/10.1519/JSC.0000000000000302",
+      "scope": "Twelve healthy weight-trained men performed a loaded glute-ham-raise condition, Romanian deadlifts, good mornings, and leg curls while selected posterior-chain muscles were recorded with surface EMG. The glute-ham condition directly supports meaningful medial- and lateral-hamstring participation in its knee-flexion segment. It is only partial-overlap evidence for the approved unloaded NSCA fixture because the tested condition does not establish the latter's complete two-stage hip-and-knee sequence, apparatus setup, force, hypertrophy, or a complete muscle hierarchy."
+    },
+    {
+      "id": "nsca-2020-glute-ham-raise-standard",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Glute Ham Raise",
+      "authors": [
+        "National Strength and Conditioning Association"
+      ],
+      "year": 2020,
+      "url": "https://www.nsca.com/education/articles/kinetic-select/glute-ham-raise/",
+      "scope": "The NSCA technique standard defines the glute-ham bench setup with ankles between rollers, feet against a platform, thighs just above the knees on the pad, an approximately ninety-degree knee start, and aligned shoulders, hips, and knees. It sequences the descent through knee extension then hip flexion and the return through hip extension then knee flexion. It anchors the exact GHD topology and ordered phases, not external-load accounting, direct joint kinetics, muscle ranking, or outcome claims."
     }
   ]
 }

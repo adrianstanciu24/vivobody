@@ -1,0 +1,146 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hang-power-clean",
+  "name": "Hang Power Clean",
+  "definition": "A bilateral barbell power lift that begins upright with the bar held at arms' length, lowers to just above the knees for an approximately one-second hang, accelerates through triple extension, pulls under, receives the bar in a front-rack power catch with the hip crease above the knees, and recovers to standing. Geisler et al. own the exact hang loading and receive topology; lower- and upper-body action roles use the catalog's reviewed anatomy maps rather than claiming exercise-specific magnitude rankings. Floor starts, no-pause hang pulls, pulls without a catch, full-squat catches, and snatch-grip overhead receives remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "geisler-2023-hang-power-lift-emg", "holzbaur-2005-upper-extremity"],
+  "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "hinge", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {
+    "equipment": ["barbell"],
+    "modalities": ["power"],
+    "trackingModes": ["reps"],
+    "loadModes": ["external"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "hang-loading", "name": "Hang Loading", "primeActions": [], "yieldingActions": ["hip.flexion", "knee.flexion"]},
+      {"id": "second-pull", "name": "Second Pull", "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion", "scapula.elevation"]},
+      {"id": "pull-under", "name": "Pull Under", "primeActions": ["elbow.flexion"]},
+      {"id": "front-rack-power-catch", "name": "Front-Rack Power Catch", "primeActions": [], "yieldingActions": ["hip.flexion", "knee.flexion", "ankle.dorsiflexion"]},
+      {"id": "recovery", "name": "Recovery", "primeActions": ["hip.extension", "knee.extension"]}
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"},
+      {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["gastrocnemius"], "minimumRole": "secondary"},
+      {"anyOf": ["trapeziusUpper"], "minimumRole": "secondary"},
+      {"anyOf": ["bicepsBrachii", "brachialis", "brachioradialis"], "minimumRole": "secondary"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"},
+      {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax", "vasti"],
+      "secondary": ["medialHamstrings", "rectusFemoris", "gastrocnemius", "soleus", "trapeziusUpper", "bicepsBrachii", "brachialis", "brachioradialis"],
+      "stabilizer": ["bicepsFemoris", "gluteMed", "fingerFlexors", "extensorCarpiRadialis", "externalRotators", "subscapularis", "abs", "obliques", "lumbarExtensors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "startBarPosition", "valueType": "enum", "required": true, "description": "The reviewed upright arms-length start before lowering to the hang.", "allowedValues": ["uprightArmsLengthAtHips"]},
+    {"id": "eccentricEndpoint", "valueType": "enum", "required": true, "description": "The bottom of the loading phase.", "allowedValues": ["justAboveKnees"]},
+    {"id": "hangPauseSeconds", "valueType": "number", "required": true, "description": "The approximately one-second hold just above the knees before acceleration.", "minimum": 1, "maximum": 1},
+    {"id": "grip", "valueType": "enum", "required": true, "description": "The reviewed clean-grip boundary.", "allowedValues": ["pronatedCleanWidthSelfSelected"]},
+    {"id": "pullSequence", "valueType": "enum", "required": true, "description": "The reviewed lower-body and arm timing.", "allowedValues": ["tripleExtensionThenElbowFlexion"]},
+    {"id": "receivingStrategy", "valueType": "enum", "required": true, "description": "The defining power-clean receive.", "allowedValues": ["frontRackHipCreaseAboveKnee"]},
+    {"id": "recoveryStrategy", "valueType": "enum", "required": true, "description": "The required completion after receiving.", "allowedValues": ["standFromPowerCatch"]},
+    {"id": "interRepSupport", "valueType": "enum", "required": true, "description": "The bar remains held between repetitions rather than returning to the floor.", "allowedValues": ["barHeldNoFloorFirstPull"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The logged scalar is the total bar plus plates.", "allowedValues": ["totalBarAndPlates"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No external guide constrains the bar.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "barbell-hang-power-clean",
+      "name": "Barbell Hang Power Clean",
+      "aliases": ["Hang Power Clean", "Power Clean from Hang"],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 3,
+      "searchPriority": 98,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"}, {"muscle": "vasti", "role": "primary"},
+        {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "bicepsBrachii", "role": "secondary"},
+        {"muscle": "brachialis", "role": "secondary"}, {"muscle": "brachioradialis", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "startBarPosition": "uprightArmsLengthAtHips", "eccentricEndpoint": "justAboveKnees", "hangPauseSeconds": 1, "grip": "pronatedCleanWidthSelfSelected",
+        "pullSequence": "tripleExtensionThenElbowFlexion", "receivingStrategy": "frontRackHipCreaseAboveKnee",
+        "recoveryStrategy": "standFromPowerCatch", "interRepSupport": "barHeldNoFloorFirstPull",
+        "loadAccounting": "totalBarAndPlates", "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "geisler-2023-hang-power-lift-emg", "holzbaur-2005-upper-extremity"],
+      "execution": {
+        "startingPosition": "Log the total bar plus plates. Stand upright with the bar held at arms' length against the hips in a comfortable overhand clean grip.",
+        "movement": "Lower the bar to just above the knees, hold for approximately one second, then extend the hips, knees, and ankles explosively and bend the elbows only after that extension to pull under.",
+        "endpoint": "Receive the bar in the front rack with the hip crease above the knees.",
+        "returnPhase": "Stand fully from the catch, then lower the bar under control to the upright arms-length position before the next repetition.",
+        "controlledJoints": "Control hip and knee flexion during loading and receiving while keeping the bar close.",
+        "supportAndPosture": "Brace the trunk and keep a secure two-hand grip without external support.",
+        "disqualifyingCompensations": ["Starting from the floor changes the exercise into a floor power clean.", "Skipping the approximately one-second hold changes the reviewed hang setup.", "Receiving below power depth changes the exercise into a full clean.", "Stopping without a front-rack catch changes the repetition into a clean pull."]
+      }
+    }
+  ]
+}

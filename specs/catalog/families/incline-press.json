@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "incline-press",
   "name": "Incline Press",
-  "definition": "A chest-oriented compound press whose resistance path is directed 15 to 45 degrees superior to a horizontal press relative to the torso. The concentric phase combines shoulder horizontal adduction and shoulder flexion with elbow extension. Flat, declined, greater-than-45-degree shoulder-dominant, fly, landmine, and unsupported overhead presses belong to other families. The current authored scope is bilateral and supported; cable, unilateral, and bodyweight variants are deferred. A feet-elevated push-up is owned by this family when closed-chain bodyweight variants are reviewed.",
+  "definition": "A chest-oriented compound press whose reviewed path is inclined relative to the torso. The family owns supported open-chain barbell, dumbbell, and machine fixtures at positive press angles plus one closed-chain bodyweight fixture with both feet on a 30.48-centimeter horizontal support. The concentric phase combines shoulder horizontal adduction, shoulder flexion, and elbow extension; the elevated push-up additionally allows free shoulder-blade travel through protraction. Its two pectoralis-major regions are co-primary as a generic push-up and anatomy transfer because the exact elevated-fixture evidence does not establish angle-specific regional emphasis. The 0.70 body-mass coefficient is an exact-fixture upper-limb force proxy, not constant equivalent external load. Flat, declined, vertical, fly, unilateral, knee-supported, differently elevated, and unsupported open-chain presses remain outside this family.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "borges-2019-bench-machine-scapula",
@@ -12,7 +12,10 @@
     "coratella-2020-bench-press-variations",
     "lee-2019-pectoralis-force-direction",
     "lauver-2016-bench-angle",
-    "rodriguez-ridao-2020-bench-inclinations"
+    "rodriguez-ridao-2020-bench-inclinations",
+    "ebben-2011-pushup-load",
+    "suprak-2013-pushup-scapula",
+    "van-den-tillaar-2019-pushup-bench"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -34,7 +37,8 @@
     "equipment": [
       "barbell",
       "dumbbell",
-      "machine"
+      "machine",
+      "bodyweight"
     ],
     "modalities": [
       "dynamicStrength"
@@ -43,7 +47,8 @@
       "reps"
     ],
     "loadModes": [
-      "external"
+      "external",
+      "bodyweightAdded"
     ],
     "lateralities": [
       "bilateral"
@@ -73,7 +78,7 @@
         "anyOf": [
           "pectoralisMajorClavicular"
         ],
-        "minimumRole": "primary"
+        "minimumRole": "secondary"
       },
       {
         "anyOf": [
@@ -96,17 +101,21 @@
     ],
     "allowedByRole": {
       "primary": [
-        "pectoralisMajorClavicular"
+        "pectoralisMajorClavicular",
+        "pectoralisMajorSternocostal"
       ],
       "secondary": [
+        "pectoralisMajorClavicular",
         "pectoralisMajorSternocostal",
         "deltoidAnterior",
-        "triceps"
+        "triceps",
+        "serratus"
       ],
       "stabilizer": [
         "serratus",
         "trapeziusMiddle",
-        "externalRotators"
+        "externalRotators",
+        "abs"
       ]
     }
   },
@@ -117,7 +126,8 @@
       "required": true,
       "description": "Whether the distal segment moves freely or remains fixed.",
       "allowedValues": [
-        "open"
+        "open",
+        "closed"
       ]
     },
     {
@@ -127,7 +137,8 @@
       "description": "The support that fixes the torso at the authored incline.",
       "allowedValues": [
         "bench",
-        "machinePad"
+        "machinePad",
+        "none"
       ]
     },
     {
@@ -136,7 +147,8 @@
       "required": true,
       "description": "Whether external posterior support limits scapular translation along the thorax; this does not classify scapular rotation or tilt.",
       "allowedValues": [
-        "supportConstrained"
+        "supportConstrained",
+        "free"
       ]
     },
     {
@@ -152,7 +164,7 @@
     {
       "id": "pressInclinationDegrees",
       "valueType": "number",
-      "required": true,
+      "required": false,
       "description": "Signed inclination of the canonical torso-relative press from horizontal: positive toward overhead and negative toward decline; a supported free-weight press uses backrest angle as the proxy.",
       "minimum": 15,
       "maximum": 45
@@ -172,6 +184,28 @@
         "smith",
         "convergingChestPress"
       ]
+    },
+    {
+      "id": "supportElevationCm",
+      "valueType": "number",
+      "required": false,
+      "description": "The exact elevation of the closed-chain foot support.",
+      "minimum": 30.48,
+      "maximum": 30.48
+    },
+    {
+      "id": "elevatedSegment",
+      "valueType": "enum",
+      "required": false,
+      "description": "The body segment supported above floor height.",
+      "allowedValues": ["feet"]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact elevated lower-body contact.",
+      "allowedValues": ["none", "feet"]
     }
   ],
   "exerciseRules": [
@@ -314,6 +348,85 @@
           "role": "stabilizer"
         }
       ]
+    },
+    {
+      "id": "non-bodyweight-is-supported-open-chain",
+      "description": "Every non-bodyweight incline fixture is a support-constrained open-chain press with a reviewed angle and no elevated-push-up axes.",
+      "when": {"field": "equipment", "operator": "notEquals", "value": "bodyweight"},
+      "then": [
+        {"field": "loadMode", "value": "external"},
+        {"field": "bodyweightFraction", "value": 0},
+        {"field": "variant.kineticChain", "value": "open"},
+        {"field": "variant.scapularTranslation", "value": "supportConstrained"},
+        {"field": "variant.lowerBodySupport", "value": "none"}
+      ],
+      "requirePresent": ["variant.pressInclinationDegrees"],
+      "requireAbsent": ["variant.supportElevationCm", "variant.elevatedSegment"],
+      "requireInvolvement": [
+        {"muscle": "pectoralisMajorClavicular", "role": "primary"},
+        {"muscle": "pectoralisMajorSternocostal", "role": "secondary"}
+      ],
+      "requireAdditionalPrimeActions": [],
+      "requireAdditionalStabilityDemands": []
+    },
+    {
+      "id": "closed-chain-is-bodyweight-only",
+      "description": "Closed-chain incline vocabulary belongs only to the feet-elevated bodyweight fixture.",
+      "when": {"field": "variant.kineticChain", "operator": "equals", "value": "closed"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "free-scapular-translation-is-bodyweight-only",
+      "description": "Free scapular translation belongs only to the feet-elevated bodyweight fixture.",
+      "when": {"field": "variant.scapularTranslation", "operator": "equals", "value": "free"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "feet-elevation-is-bodyweight-only",
+      "description": "The elevated-feet axis cannot leak onto an open-chain incline press.",
+      "when": {"field": "variant.elevatedSegment", "operator": "equals", "value": "feet"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": ["variant.supportElevationCm"],
+      "requireAbsent": []
+    },
+    {
+      "id": "feet-lower-body-support-is-bodyweight-only",
+      "description": "Feet as the authored lower-body support belongs only to the push-up branch.",
+      "when": {"field": "variant.lowerBodySupport", "operator": "equals", "value": "feet"},
+      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-feet-elevated-fixture",
+      "description": "The bodyweight branch is exactly the 30.48-centimeter feet-elevated push-up with free shoulder-blade travel and the measured force proxy.",
+      "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
+      "then": [
+        {"field": "loadMode", "value": "bodyweightAdded"},
+        {"field": "bodyweightFraction", "value": 0.7},
+        {"field": "variant.kineticChain", "value": "closed"},
+        {"field": "variant.torsoSupport", "value": "none"},
+        {"field": "variant.scapularTranslation", "value": "free"},
+        {"field": "variant.gripOrientation", "value": "pronated"},
+        {"field": "variant.supportElevationCm", "value": 30.48},
+        {"field": "variant.elevatedSegment", "value": "feet"},
+        {"field": "variant.lowerBodySupport", "value": "feet"},
+        {"field": "variant.fixedPath", "value": false}
+      ],
+      "requirePresent": ["variant.supportElevationCm", "variant.elevatedSegment", "variant.lowerBodySupport"],
+      "requireAbsent": ["variant.pressInclinationDegrees", "variant.machineType"],
+      "requireInvolvement": [
+        {"muscle": "pectoralisMajorClavicular", "role": "primary"},
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"},
+        {"muscle": "serratus", "role": "secondary"},
+        {"muscle": "abs", "role": "stabilizer"}
+      ],
+      "requireAdditionalPrimeActions": ["scapula.protraction"],
+      "requireAdditionalStabilityDemands": ["spine", "pelvis"]
     }
   ],
   "recommended": {
@@ -372,6 +485,7 @@
         "scapularTranslation": "supportConstrained",
         "gripOrientation": "pronated",
         "pressInclinationDegrees": 30,
+        "lowerBodySupport": "none",
         "fixedPath": false
       },
       "additionalPrimeActions": [],
@@ -448,6 +562,7 @@
         "scapularTranslation": "supportConstrained",
         "gripOrientation": "pronated",
         "pressInclinationDegrees": 30,
+        "lowerBodySupport": "none",
         "fixedPath": false
       },
       "additionalPrimeActions": [],
@@ -519,6 +634,7 @@
         "scapularTranslation": "supportConstrained",
         "gripOrientation": "pronated",
         "pressInclinationDegrees": 30,
+        "lowerBodySupport": "none",
         "fixedPath": true,
         "machineType": "smith"
       },
@@ -591,6 +707,7 @@
         "scapularTranslation": "supportConstrained",
         "gripOrientation": "neutral",
         "pressInclinationDegrees": 30,
+        "lowerBodySupport": "none",
         "fixedPath": true,
         "machineType": "convergingChestPress"
       },
@@ -611,6 +728,54 @@
         "disqualifyingCompensations": [
           "Setting the seat so the handles start below the chest turns the incline press into a flat machine press.",
           "Lifting the torso off the pad to push the handles turns the machine press into an unsupported press."
+        ]
+      }
+    },
+    {
+      "catalogID": "feet-elevated-push-up-30-48-cm",
+      "name": "30.48 cm Feet-Elevated Push-Up",
+      "aliases": ["12-Inch Feet-Elevated Push-Up", "Feet-Elevated Push-Up", "Decline Push-Up"],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 0.7,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 98,
+      "involvement": [
+        {"muscle": "pectoralisMajorClavicular", "role": "primary"},
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"},
+        {"muscle": "deltoidAnterior", "role": "secondary"},
+        {"muscle": "triceps", "role": "secondary"},
+        {"muscle": "serratus", "role": "secondary"},
+        {"muscle": "abs", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "supportElevationCm": 30.48,
+        "elevatedSegment": "feet",
+        "lowerBodySupport": "feet",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": ["scapula.protraction"],
+      "additionalStabilityDemands": ["spine", "pelvis"],
+      "evidenceRefs": ["ebben-2011-pushup-load", "suprak-2013-pushup-scapula", "van-den-tillaar-2019-pushup-bench"],
+      "execution": {
+        "startingPosition": "Place both feet on one stable horizontal surface exactly 30.48 centimeters high, set both hands on the floor, and form a straight line from head to heels.",
+        "movement": "Bend the elbows and lower the straight body under control.",
+        "endpoint": "Reach a consistent self-selected bottom position without collapsing between the shoulders.",
+        "returnPhase": "Press the floor away until the elbows are straight, allowing the shoulder blades to move naturally around the rib cage.",
+        "controlledJoints": "Keep the trunk and pelvis aligned and track the elbows consistently without collapsing between the shoulders.",
+        "supportAndPosture": "Keep both feet on the same 30.48-centimeter surface and both hands on the floor throughout. The displayed 70-percent bodyweight component is a cohort-average peak-force proxy; added-load placement is not standardized.",
+        "disqualifyingCompensations": [
+          "Using a different foot-support height leaves the exact fixture.",
+          "Bending at the hips breaks the straight-body push-up position.",
+          "Dropping to the knees changes the exercise into a knee-supported push-up."
         ]
       }
     }

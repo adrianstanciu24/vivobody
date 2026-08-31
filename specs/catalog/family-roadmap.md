@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 87 reviewed families are active, containing 211 exercises.
+- 96 reviewed families are active, containing 225 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 232 registered evidence sources.
+  44 joint actions, and 248 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -63,6 +63,11 @@ are discovery handles, not guaranteed final family IDs.
   variants to their action-compatible press families. Belt Squat remains a
   separate evidence-blocked family rather than inheriting ordinary squat
   mechanics or combining Wenning and Hammer fixtures.
+- The default-catalog gap closure added 14 source-bounded fixtures: five
+  expanded existing owners and nine activated distinct family contracts.
+  Unloaded bodyweight and GHD records remain non-comparable, elevated push-ups
+  disclose cohort-average effective-load proxies, and the four explosive
+  barbell records use the existing Power modality.
 - No original catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
   one source-exact seated 45-degree cable fixture, both Batch-3 nonstandard
   press branches are closed, and the generic grip discovery handle is resolved
@@ -79,14 +84,14 @@ batch siblings.
 | Family | Exercises |
 |---|---:|
 | `horizontal-press` | 14 |
-| `incline-press` | 4 |
-| `decline-press` | 4 |
+| `incline-press` | 5 |
+| `decline-press` | 5 |
 | `vertical-press` | 12 |
 | `vertical-pull` | 13 |
 | `diagonal-pull` | 1 |
 | `shoulder-extension-row` | 12 |
 | `shoulder-horizontal-abduction-row` | 6 |
-| `shoulder-extension-isolation` | 3 |
+| `shoulder-extension-isolation` | 4 |
 | `padded-machine-pullover` | 1 |
 | `chest-fly` | 4 |
 | `upper-arm-pad-chest-fly` | 1 |
@@ -118,11 +123,12 @@ batch siblings.
 | `knee-extension` | 3 |
 | `knee-flexion` | 4 |
 | `nordic-curl` | 1 |
+| `glute-ham-raise` | 1 |
 | `hip-extension` | 3 |
 | `roman-chair-hip-extension` | 1 |
 | `hip-flexion` | 1 |
-| `ankle-plantarflexion` | 4 |
-| `bilateral-squat` | 4 |
+| `ankle-plantarflexion` | 5 |
+| `bilateral-squat` | 5 |
 | `inclined-leg-press` | 2 |
 | `horizontal-leg-press` | 1 |
 | `machine-hack-squat` | 1 |
@@ -133,16 +139,20 @@ batch siblings.
 | `hip-hinge` | 1 |
 | `romanian-deadlift` | 5 |
 | `hip-thrust-bridge` | 2 |
+| `bodyweight-glute-bridge` | 1 |
 | `split-stance-squat` | 3 |
 | `step-up` | 2 |
 | `dynamic-lunge` | 3 |
 | `walking-lunge` | 1 |
+| `lateral-lunge` | 1 |
 | `hip-abduction` | 2 |
 | `hip-adduction` | 2 |
 | `ankle-dorsiflexion` | 1 |
 | `hip-internal-rotation` | 1 |
 | `hip-external-rotation` | 1 |
 | `spine-flexion` | 2 |
+| `straight-leg-sit-up` | 1 |
+| `supine-pelvic-curl` | 1 |
 | `spine-extension` | 1 |
 | `spine-lateral-flexion` | 1 |
 | `spine-rotation` | 1 |
@@ -154,18 +164,22 @@ batch siblings.
 | `suitcase-carry` | 1 |
 | `hanging-leg-raise` | 2 |
 | `power-clean` | 1 |
+| `hang-power-clean` | 1 |
 | `squat-clean` | 1 |
 | `full-snatch` | 1 |
+| `power-snatch` | 1 |
 | `mid-thigh-clean-pull` | 1 |
 | `kettlebell-swing` | 1 |
 | `hang-power-snatch` | 1 |
 | `split-jerk` | 1 |
+| `push-jerk` | 1 |
 | `clean-and-jerk` | 1 |
+| `thruster` | 1 |
 | `wall-sit` | 1 |
 | `hollow-hold` | 1 |
 | `passive-dead-hang` | 1 |
 | `active-dead-hang` | 1 |
-| **Total** | **211** |
+| **Total** | **225** |
 
 ## Foundation gates
 
