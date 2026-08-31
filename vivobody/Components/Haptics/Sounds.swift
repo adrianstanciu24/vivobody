@@ -13,9 +13,8 @@
 //  (.wav, stereo, 48 kHz, untouched level):
 //    • sfx-click — every tappable control in the app speaks with this
 //      one voice (see playButton), so a tap sounds identical everywhere.
-//    • sfx-commit — the deliberate-commit buttons (Today's START
-//      WORKOUT, COMPLETE SET), the ones allowed to sound like more
-//      than a tap.
+//    • sfx-commit — deliberate workout-start and set-completion actions,
+//      the ones allowed to sound like more than a tap.
 //    • sfx-finish-exercise — the last set of an exercise, where the
 //      button reads FINISH EXERCISE and the thing being closed out is
 //      bigger than one set.

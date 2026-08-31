@@ -157,9 +157,10 @@ enum Haptics {
         rigidImpact.prepare()
     }
 
-    /// Soft tap — subtle transitions, ambient confirmation.
-    static func soft(playsSound: Bool = true) {
-        if playsSound { Sounds.playButton() }
+    /// Soft tap — subtle transitions, ambient confirmation. A caller can
+    /// retain the soft feel while matching a stronger action's voice.
+    static func soft(playsSound: Bool = true, sound: Sounds.Effect = .click) {
+        if playsSound { Sounds.play(sound) }
         guard isEnabled else { return }
         softImpact.impactOccurred()
         softImpact.prepare()

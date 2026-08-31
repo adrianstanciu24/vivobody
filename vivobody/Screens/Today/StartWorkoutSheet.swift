@@ -118,7 +118,11 @@ struct StartWorkoutSheet: View {
     /// No "last time" header or plan summary — the CTA carries the
     /// meaning on its own.
     private var repeatSection: some View {
-        PrimaryActionButton(title: "Repeat Last Workout", inputLabels: ["Repeat Last Workout", "Repeat", "Repeat Last"]) {
+        PrimaryActionButton(
+            title: "Repeat Last Workout",
+            inputLabels: ["Repeat Last Workout", "Repeat", "Repeat Last"],
+            sound: .commit
+        ) {
             select(.repeatLast)
         }
         .accessibilityHint("Starts a workout matching your last session")
@@ -145,7 +149,12 @@ struct StartWorkoutSheet: View {
                     }
 
                     if lastSession == nil, scheduledTemplate == nil {
-                        PrimaryActionButton(title: "Start Fresh", icon: "plus", inputLabels: ["Start Fresh", "Fresh", "New Workout"]) {
+                        PrimaryActionButton(
+                            title: "Start Fresh",
+                            icon: "plus",
+                            inputLabels: ["Start Fresh", "Fresh", "New Workout"],
+                            sound: .commit
+                        ) {
                             select(.fresh)
                         }
                         .accessibilityHint("Opens the exercise picker for a fresh workout")
@@ -197,7 +206,7 @@ struct StartWorkoutSheet: View {
         action: @escaping () -> Void
     ) -> some View {
         Button {
-            Haptics.soft()
+            Haptics.soft(sound: .commit)
             action()
         } label: {
             HStack(spacing: Space.md) {

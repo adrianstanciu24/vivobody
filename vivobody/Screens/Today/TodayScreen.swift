@@ -206,9 +206,8 @@ struct TodayScreen: View {
         }
         .onAppear {
             Haptics.prepare()
-            // A soft "powered-on" tick as the screen settles in — the
-            // ambient-confirmation cousin of the workout's haptics.
-            Haptics.soft()
+            // A silent "powered-on" haptic as the screen settles in.
+            Haptics.soft(playsSound: false)
         }
         .sheet(isPresented: $showStartSheet, onDismiss: runPendingStart) {
             StartWorkoutSheet(
