@@ -92,4 +92,3 @@ exact commands, the risk-to-evidence matrix, and the Baguette scenario format.
 | Reviewing a diff | [engineering/code-review.md](engineering/code-review.md) |
 | Known compromises | [engineering/tech-debt.md](engineering/tech-debt.md) |
 | Specifications | [specs/index.md](specs/index.md) |
-| Widget and App Group provisioning | [WIDGET_IMPLEMENTATION_NOTES.md](WIDGET_IMPLEMENTATION_NOTES.md) |

@@ -2,22 +2,28 @@
 //  Sounds.swift
 //  vivobody
 //
-//  The audio twin of Haptics. Every haptic atom and pattern has a
-//  matching UI sound baked as a .caf file in Resources/Sounds. The
-//  synthesized palette (Scripts/generate_sounds.py) mimics a Teenage
-//  Engineering OP-1: warm detuned FM notes, marimba and
-//  electric-piano registers, rounded kicks, and a light tape-ish
-//  crush. Scrub detents share the same warm voice as tick/tick-deep.
+//  The audio twin of Haptics. Ordinary controls share the recorded
+//  click, while signature, rest, and scrubber feedback use the
+//  synthesized palette from Scripts/generate_sounds.py. That palette
+//  mimics a Teenage Engineering OP-1: warm detuned FM notes, marimba
+//  and electric-piano registers, rounded kicks, and a light tape-ish
+//  crush.
 //
-//  Four sounds are recordings instead, bundled exactly as delivered
-//  (.wav, stereo, 48 kHz, untouched level):
+//  Seven sounds are mastered recordings bundled as stereo, 48 kHz PCM
+//  WAV files. Supplied sources are trimmed and faded to digital silence;
+//  louder recordings are attenuated for headroom and relative balance:
 //    • sfx-click — every tappable control in the app speaks with this
 //      one voice (see playButton), so a tap sounds identical everywhere.
-//    • sfx-commit — deliberate workout-start and set-completion actions,
-//      the ones allowed to sound like more than a tap.
-//    • sfx-finish-exercise — the last set of an exercise, where the
-//      button reads FINISH EXERCISE and the thing being closed out is
-//      bigger than one set.
+//    • sfx-commit — deliberate workout-start actions, which are allowed
+//      to sound like more than an ordinary tap.
+//    • sfx-set-completion — the shared voice for COMPLETE SET and FINISH
+//      EXERCISE; their different haptic patterns still convey magnitude.
+//    • sfx-personal-record — the authored progression that opens the
+//      active-workout personal-record celebration.
+//    • sfx-timer-expired — the visible active-workout rest timer
+//      reaching 0:00.
+//    • sfx-finale — the authored completion sound for the workout
+//      Summary's DONE action.
 //    • sfx-alert — the caution before a destructive prompt (see
 //      Haptics.caution): today, the active workout's X.
 //
@@ -61,13 +67,10 @@ import AVFoundation
 enum Sounds {
     enum Effect: String, CaseIterable {
         case click, commit, alert
-        case finishExercise = "finish-exercise"
-        case tick, thunk, slam, rigid, soft, selection
-        case tickDeep = "tick-deep"
-        case success, warning, failure
+        case setCompletion = "set-completion"
+        case personalRecord = "personal-record"
+        case timerExpired = "timer-expired"
         case crescendo, breath, swell, finale
-        case rir0 = "rir-0", rir1 = "rir-1", rir2 = "rir-2"
-        case rir3 = "rir-3", rir4 = "rir-4", rir5 = "rir-5"
 
         var resourceName: String {
             "sfx-\(rawValue)"
@@ -77,7 +80,7 @@ enum Sounds {
         /// are synthesized .caf files sharing the round-robin pool.
         var isRecorded: Bool {
             switch self {
-            case .click, .commit, .alert, .finishExercise: true
+            case .click, .commit, .alert, .setCompletion, .personalRecord, .timerExpired, .finale: true
             default: false
             }
         }
@@ -197,9 +200,9 @@ enum Sounds {
                 e.connect(voice.varispeed, to: e.mainMixerNode, format: format)
             }
 
-            // Each recording keeps its own player wired at its own
-            // format, straight into the mixer: the file plays as
-            // delivered, and nothing else can take the node mid-sound.
+            // Each recording keeps its own player wired at its bundled
+            // format, straight into the mixer, so nothing else can take
+            // the node mid-sound.
             recordedPlayers = recordedBuffers.mapValues { _ in AVAudioPlayerNode() }
             for (effect, player) in recordedPlayers {
                 e.attach(player)
@@ -231,7 +234,7 @@ enum Sounds {
     /// ∓600 cents; scrubbers feed their step delta through it so a
     /// climbing value climbs in pitch too. `humanize` adds the
     /// synth palette's small pitch/level jitter. Recordings ignore
-    /// both — they play exactly as delivered.
+    /// both and play their cleaned app masters verbatim.
     static func play(_ effect: Effect, pitch: Double = 0, humanize: Bool = true) {
         guard isEnabled else { return }
         if effect.isRecorded {
@@ -266,10 +269,10 @@ enum Sounds {
         if !voice.player.isPlaying { voice.player.play() }
     }
 
-    /// Play a recording on its dedicated player: original channels,
-    /// original sample rate, original level. `.interrupts` only ever
-    /// restarts the same sound — a tap landing on top of itself, which
-    /// should sound like a new tap, not two smeared together.
+    /// Play a cleaned recording on its dedicated player at the bundled
+    /// channels, sample rate, and level. `.interrupts` only ever restarts
+    /// the same sound — a tap landing on top of itself, which should sound
+    /// like a new tap, not two smeared together.
     private static func playRecorded(_ effect: Effect) {
         guard
             let buffer = recordedBuffers[effect],
@@ -286,14 +289,6 @@ enum Sounds {
 
         player.scheduleBuffer(buffer, at: nil, options: .interrupts)
         if !player.isPlaying { player.play() }
-    }
-
-    /// The RIR selector's effort scale: one warm note per value,
-    /// heavier as reps-in-reserve approach failure. Values outside
-    /// 0…5 clamp to the nearest end.
-    static func playRIR(_ value: Int) {
-        let scale: [Effect] = [.rir0, .rir1, .rir2, .rir3, .rir4, .rir5]
-        play(scale[max(0, min(5, value))])
     }
 
     /// Emit one scroll detent for one crossed value boundary.

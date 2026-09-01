@@ -18,7 +18,6 @@ file with implementation inventories that can drift.
 | Build, tests, screenshots, or semantic flows | [engineering/verification.md](engineering/verification.md) |
 | Reviewing a diff or pull request | [engineering/code-review.md](engineering/code-review.md) |
 | Researching or implementing a larger feature | [specs/index.md](specs/index.md) and [engineering/plans/README.md](engineering/plans/README.md) |
-| Widgets, Live Activities, or App Group provisioning | [WIDGET_IMPLEMENTATION_NOTES.md](WIDGET_IMPLEMENTATION_NOTES.md) |
 | Existing compromises or cleanup | [engineering/tech-debt.md](engineering/tech-debt.md) |
 
 Treat source as canonical for volatile facts:

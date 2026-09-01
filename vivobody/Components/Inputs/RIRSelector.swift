@@ -29,11 +29,8 @@ struct RIRSelector: View {
         value >= 5 ? "5+" : "\(value)"
     }
 
-    /// Feedback graded by the effort the number represents, not by
-    /// which direction the finger moved. Every value speaks its own
-    /// warm note — higher notes mean more in the tank — and 0, to
-    /// failure, lands as a heavy thud under the lowest note. You hear
-    /// how hard the set was.
+    /// Every value uses the same recorded click. The haptic remains graded
+    /// by effort, with 0, to failure, landing as a heavier impact.
     private static func effortFeedback(for rir: Int) {
         Haptics.rir(rir)
     }

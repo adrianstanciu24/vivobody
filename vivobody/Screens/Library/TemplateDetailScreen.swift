@@ -275,7 +275,8 @@ struct TemplateDetailScreen: View {
         PrimaryActionButton(
             title: "Start Workout",
             subtitle: nil,
-            inputLabels: ["Start Workout", "Start", "Begin"]
+            inputLabels: ["Start Workout", "Start", "Begin"],
+            sound: .commit
         ) {
             appState.workout.startWorkoutFromTemplate(template)
             dismiss()

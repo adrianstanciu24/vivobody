@@ -18,7 +18,7 @@
 //  quadrants, async system callbacks. Those would machine-gun the
 //  click or fire it with nothing pressed.
 //
-//  Signature patterns and notifications keep their own synthesized
+//  Signature patterns and active notifications keep their own
 //  voices. Sound calls sit before the haptics guard so the two
 //  Me-tab toggles remain independent.
 //
@@ -142,8 +142,10 @@ enum Haptics {
     }
 
     /// Heavy slam — PRs, final set. Use sparingly so it stays meaningful.
-    static func slam() {
-        Sounds.play(.slam)
+    /// Choreographed moments may suppress the ordinary click when a longer
+    /// signature recording is already playing.
+    static func slam(playsSound: Bool = true) {
+        if playsSound { Sounds.playButton() }
         guard isEnabled else { return }
         heavyImpact.impactOccurred()
         heavyImpact.prepare()
@@ -186,13 +188,11 @@ enum Haptics {
         selectionGen.prepare()
     }
 
-    /// RIR selection — feedback graded by the effort the number
-    /// represents. Each value 0…5 speaks its own warm note (higher
-    /// notes mean more in the tank) and 0 — to failure — lands as a
-    /// heavy thud under the lowest note. The haptic mirrors the
-    /// weight: a medium impact at 0, a selection change elsewhere.
+    /// RIR selection — every choice uses the shared recorded click while
+    /// the haptic remains graded by effort: a medium impact at 0, to
+    /// failure, and a selection change elsewhere.
     static func rir(_ value: Int) {
-        Sounds.playRIR(value)
+        Sounds.playButton()
         guard isEnabled else { return }
         if value == 0 {
             mediumImpact.impactOccurred()
@@ -205,24 +205,13 @@ enum Haptics {
 
     // MARK: - Notifications
 
-    static func success() {
-        Sounds.play(.success)
+    /// Success notification feel with an optional caller-selected voice.
+    /// The summary uses haptics alone; the visible rest timer passes its
+    /// recorded expiration sound.
+    static func success(sound: Sounds.Effect? = nil) {
+        if let sound { Sounds.play(sound) }
         guard isEnabled else { return }
         notification.notificationOccurred(.success)
-        notification.prepare()
-    }
-
-    static func warning() {
-        Sounds.play(.warning)
-        guard isEnabled else { return }
-        notification.notificationOccurred(.warning)
-        notification.prepare()
-    }
-
-    static func failure() {
-        Sounds.play(.failure)
-        guard isEnabled else { return }
-        notification.notificationOccurred(.error)
         notification.prepare()
     }
 
@@ -233,7 +222,7 @@ enum Haptics {
     /// Sharpness rises alongside intensity, so each tap also feels firmer.
     ///
     /// `sound` swaps the voice while keeping the escalating taps —
-    /// the deliberate-commit buttons pass `.commit`.
+    /// set-completion buttons pass `.setCompletion`.
     static func crescendo(sound: Sounds.Effect = .crescendo) {
         Sounds.play(sound)
         guard isEnabled else { return }
@@ -303,10 +292,9 @@ enum Haptics {
         playPattern(events: [continuous, slam], curves: [intensityCurve, sharpnessCurve])
     }
 
-    /// The workout-done fanfare — a quick rising run into a double-hit
-    /// landing. Reserved for the summary card's Done button, so
-    /// finishing a session feels bigger than finishing any set.
-    /// Haptic events mirror the sound's run-up and "ba-DUM" timings.
+    /// The workout-done finale. Reserved for the summary card's Done
+    /// button, so finishing a session feels bigger than finishing any
+    /// set. The authored recording accompanies the rising haptic run.
     static func finale() {
         Sounds.play(.finale)
         guard isEnabled else { return }

@@ -55,6 +55,11 @@ echo "▸ Testing manual quality scan..."
   -s Scripts/tests \
   -p 'test_quality_scan.py'
 
+echo "▸ Testing sound generator..."
+/usr/bin/python3 -m unittest discover \
+  -s Scripts/tests \
+  -p 'test_generate_sounds.py'
+
 echo "▸ Testing VivoKit snapshot contracts..."
 swift test --package-path VivoKit
 

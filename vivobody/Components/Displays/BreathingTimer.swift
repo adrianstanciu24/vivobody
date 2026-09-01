@@ -408,7 +408,7 @@ struct BreathingTimer: View {
         case 0:
             if !hasFinished {
                 hasFinished = true
-                Haptics.success()
+                Haptics.success(sound: .timerExpired)
                 UIAccessibility.post(
                     notification: .announcement,
                     argument: "Rest complete. Go."

@@ -41,16 +41,21 @@
                     }
 
                     section(title: "NOTIFICATIONS") {
-                        HapticRow(label: "success", subtitle: "PR confirmed") { Haptics.success() }
-                        HapticRow(label: "warning", subtitle: "rest ending soon") { Haptics.warning() }
-                        HapticRow(label: "failure", subtitle: "missed rep — sparingly") { Haptics.failure() }
+                        HapticRow(label: "success", subtitle: "summary acknowledgement, haptic only") {
+                            Haptics.success()
+                        }
+                        HapticRow(label: "timer expired", subtitle: "visible rest reaches zero") {
+                            Haptics.success(sound: .timerExpired)
+                        }
                     }
 
                     section(title: "PATTERNS") {
                         HapticRow(label: "crescendo", subtitle: "set complete (signature)") { Haptics.crescendo() }
                         HapticRow(label: "breath", subtitle: "rest timer warning") { Haptics.breath() }
-                        HapticRow(label: "swell", subtitle: "PR celebration") { Haptics.swell() }
-                        HapticRow(label: "finale", subtitle: "workout done (fanfare)") { Haptics.finale() }
+                        HapticRow(label: "swell", subtitle: "PR celebration") {
+                            Haptics.swell(sound: .personalRecord)
+                        }
+                        HapticRow(label: "finale", subtitle: "workout done") { Haptics.finale() }
                     }
 
                     Spacer(minLength: 40)

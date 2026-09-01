@@ -6,8 +6,8 @@
 //  Owns no business state — emits a toggle event, animates from `isComplete`.
 //
 //  Composition of effects on idle → complete:
-//    1. Haptics.crescendo() carrying the shared commit sound — or,
-//       on the exercise's last set, swell with the finish sound
+//    1. The shared set-completion recording over a crescendo — or,
+//       on the exercise's last set, the same recording over a swell.
 //    2. The dim volt tint floods with the full completion accent.
 //    3. Numbers spring-overshoot (1.0 → 1.06 → 1.0).
 //    4. A checkmark draws on only after completion.
@@ -320,12 +320,11 @@ struct SetCompleteButton: View {
             Haptics.soft()
         } else {
             // `.peak` is the exercise's last set, where the button
-            // reads FINISH EXERCISE — its own voice under a heavier
-            // haptic, so closing out an exercise lands bigger than
-            // closing out a set.
+            // reads FINISH EXERCISE. Both actions share one completion
+            // voice; the heavier haptic makes the final set land bigger.
             switch intensity {
-            case .standard: Haptics.crescendo(sound: .commit)
-            case .peak: Haptics.swell(sound: .finishExercise)
+            case .standard: Haptics.crescendo(sound: .setCompletion)
+            case .peak: Haptics.swell(sound: .setCompletion)
             }
         }
         ripplePoint = point

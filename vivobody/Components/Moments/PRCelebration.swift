@@ -11,10 +11,10 @@
 //    • A tiny "Personal record" kicker above, a mono detail line below,
 //      and a single gold hairline that draws in under the number.
 //
-//  The "moment" comes from motion + haptics, not ornament — the same
-//  choreography as before: swell on entrance → the number slams in
-//  with overshoot (Haptics.slam) → detail settles → a calm breath on
-//  the prompt. Tap anywhere to continue.
+//  The "moment" comes from motion + sound + haptics, not ornament: the
+//  authored PR progression and swell begin together on entrance, the
+//  number lands with a silent haptic slam, then detail settles and the
+//  prompt takes a calm breath. Tap anywhere to continue.
 //
 //  Use:
 //      content.overlay {
@@ -188,7 +188,7 @@ struct PRCelebration: View {
 
     private func startSequence() {
         sequenceTask = Task { @MainActor in
-            Haptics.swell()
+            Haptics.swell(sound: .personalRecord)
 
             if reduceMotion {
                 withAnimation(.easeInOut(duration: 0.15)) { backdropVisible = true }
@@ -209,7 +209,9 @@ struct PRCelebration: View {
             do {
                 try await Task.sleep(for: .milliseconds(120))
             } catch { return }
-            Haptics.slam()
+            // Keep the physical landing without layering the synthesized
+            // slam over the authored PR recording.
+            Haptics.slam(playsSound: false)
             if reduceMotion {
                 withAnimation(.easeInOut(duration: 0.15)) {
                     valueScale = 1.0

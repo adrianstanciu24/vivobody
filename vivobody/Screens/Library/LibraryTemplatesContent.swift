@@ -207,7 +207,7 @@ struct LibraryTemplatesContent: View {
     /// same entry point Today exposes, with the same crescendo so
     /// starting a session sounds identical from either surface.
     private func startWorkout(from template: WorkoutTemplate) {
-        Haptics.crescendo()
+        Haptics.crescendo(sound: .commit)
         appState.workout.startWorkoutFromTemplate(template)
     }
 }

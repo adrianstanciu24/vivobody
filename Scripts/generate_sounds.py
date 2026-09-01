@@ -12,11 +12,12 @@ and decay jitter baked per variant. Pure stdlib (wave + math), no
 dependencies. Writes WAV to a temp dir, then converts to .caf via
 afconvert into vivobody/Resources/Sounds/.
 
-Each sound maps 1:1 to a Haptics atom or pattern; multi-event pattern
-sounds (crescendo, breath, swell) bake the haptic event timings into
-a single file so playback stays in sync with CHHapticPattern. The
-scrub detents (sfx-scrub-reps/load 1-6) are six seeded variants each
-so the round-robin in Sounds.swift never sounds machine-gunned.
+Multi-event pattern sounds (crescendo, breath, swell) bake the haptic
+event timings into a single file so playback stays in sync with
+CHHapticPattern. Rest feedback shares the same palette. The scrub detents
+(sfx-scrub-reps/load 1-6) are six seeded variants each so the round-robin
+in Sounds.swift never sounds machine-gunned. Ordinary controls, including
+RIR choices, use the supplied click recording and are not generated here.
 Signature sounds can still come from mastered WAV files in
 AudioSources via SOURCE_OVERRIDES (currently unused).
 
@@ -215,10 +216,12 @@ def place(canvas, event, at):
 
 
 def finalize(canvas, tail=0.03):
-    canvas = canvas + [0.0] * samples(tail)
-    fade = samples(0.005)
+    # Fade the actual signal before appending digital silence. Fading after
+    # padding only multiplies zeros and leaves a discontinuity at the cut.
+    fade = min(samples(0.005), len(canvas))
     for i in range(fade):
-        canvas[-fade + i] *= 1.0 - (i / fade)
+        canvas[-fade + i] *= 1.0 - ((i + 1) / fade)
+    canvas = canvas + [0.0] * samples(tail)
     peak = max(abs(v) for v in canvas) or 1.0
     if peak > 0.98:
         canvas = [v * 0.98 / peak for v in canvas]
@@ -252,82 +255,6 @@ def scrub_detent(variant, *, deep):
 
 def build_all():
     sounds = {}
-
-    # tick — encoder detent: soft contact click + a tiny warm FM tap.
-    # Quiet and mechanical, like turning an OP-1 encoder.
-    c = place([], click(0.08, lowpass_hz=4000), 0.0)
-    c = place(c, fm_blip(1500, 0.020, 0.14, ratio=1.0, index=0.8,
-                         decay_tau=0.005, lowpass_hz=5500), 0.0)
-    sounds["sfx-tick"] = finalize(bitcrush(c, downsample=2))
-
-    # tick-deep — the load scrubber's detent. A rounder small tom so
-    # weight reads as "heavy thing moving" while reps keep the light
-    # encoder tap. The ±600-cent drag tracking rides on top of this.
-    c = place([], click(0.10, lowpass_hz=2000), 0.0)
-    c = place(c, kick(300, 160, 0.050, 0.26, sweep_tau=0.012,
-                      decay_tau=0.013, drive=1.8), 0.0)
-    sounds["sfx-tick-deep"] = finalize(bitcrush(c, downsample=2))
-
-    # selection — even smaller sibling of tick, for wheel rolls.
-    c = place([], fm_blip(2100, 0.014, 0.08, ratio=1.0, index=0.5,
-                          decay_tau=0.004, lowpass_hz=7000), 0.0)
-    sounds["sfx-selection"] = finalize(bitcrush(c, downsample=2))
-
-    # soft — one warm low EP note, ambient confirmation.
-    c = place([], warm_note(330, 0.090, 0.15, index=1.2, attack=0.004,
-                            decay_tau=0.030, lowpass_hz=2200), 0.0)
-    sounds["sfx-soft"] = finalize(bitcrush(c, downsample=2))
-
-    # thunk — the workhorse. A rounded kick: less drive, more body.
-    c = place([], click(0.10), 0.0)
-    c = place(c, kick(260, 80, 0.100, 0.42, sweep_tau=0.018,
-                      decay_tau=0.032, drive=1.8), 0.0)
-    sounds["sfx-thunk"] = finalize(bitcrush(c, downsample=2))
-
-    # rigid — muted marimba click. Damped, unmusical hard stop.
-    c = place([], click(0.22, dur=0.005, lowpass_hz=3000), 0.0)
-    c = place(c, fm_blip(950, 0.020, 0.14, ratio=3.9, index=0.9,
-                         decay_tau=0.005, lowpass_hz=2400), 0.0)
-    sounds["sfx-rigid"] = finalize(bitcrush(c, downsample=2))
-
-    # slam — PR hit. Deep kick landing on a bright C-major chord stab
-    # (C4 E4 G4 C5). The chord sits above 250Hz so it actually rings
-    # through a phone speaker; the kick below supplies the weight.
-    c = place([], click(0.20, dur=0.006), 0.0)
-    c = place(c, kick(450, 60, 0.200, 0.50, sweep_tau=0.022,
-                      decay_tau=0.060, drive=2.5), 0.0)
-    c = place(c, warm_note(262, 0.260, 0.18, index=1.4,
-                           decay_tau=0.080, lowpass_hz=2400), 0.0)
-    c = place(c, warm_note(330, 0.240, 0.16, index=1.3,
-                           decay_tau=0.075, lowpass_hz=2600), 0.0)
-    c = place(c, warm_note(392, 0.240, 0.16, index=1.3,
-                           decay_tau=0.075, lowpass_hz=2800), 0.0)
-    c = place(c, warm_note(523, 0.220, 0.14, index=1.2,
-                           decay_tau=0.070, lowpass_hz=3200), 0.0)
-    sounds["sfx-slam"] = finalize(bitcrush(c, bits=11, downsample=2))
-
-    # success — "da-ding": two EP notes rising a fourth (E5 -> A5),
-    # chorus-detuned, bright but warm.
-    c = place([], warm_note(659, 0.070, 0.22, decay_tau=0.022,
-                            lowpass_hz=4200), 0.0)
-    c = place(c, warm_note(880, 0.130, 0.26, decay_tau=0.038,
-                           lowpass_hz=4500), 0.10)
-    sounds["sfx-success"] = finalize(bitcrush(c, downsample=2))
-
-    # warning — two muted same-pitch EP notes. Neutral, felt-damped.
-    c = place([], warm_note(523, 0.060, 0.22, index=1.0, decay_tau=0.018,
-                            lowpass_hz=2600), 0.0)
-    c = place(c, warm_note(523, 0.060, 0.22, index=1.0, decay_tau=0.018,
-                           lowpass_hz=2600), 0.13)
-    sounds["sfx-warning"] = finalize(bitcrush(c, downsample=2))
-
-    # failure — falling major third (B4 -> G4), the second note bending
-    # down and lingering. Wistful rather than harsh.
-    c = place([], warm_note(494, 0.080, 0.24, decay_tau=0.026,
-                            lowpass_hz=2800), 0.0)
-    c = place(c, warm_note(392, 0.160, 0.26, freq_end=370,
-                           decay_tau=0.048, lowpass_hz=2400), 0.10)
-    sounds["sfx-failure"] = finalize(bitcrush(c, downsample=2))
 
     # crescendo — three ascending marimba notes (G4 C5 E5) at the
     # haptic pattern's exact timings (0.00 / 0.10 / 0.22) and matching
@@ -373,32 +300,6 @@ def build_all():
                            decay_tau=0.060, lowpass_hz=3200), 0.38)
     sounds["sfx-swell"] = finalize(bitcrush(c, downsample=2))
 
-    # finale — the workout-done fanfare, the biggest moment in the
-    # set. A swung run-up (G4 A4 C5 E5) into a "ba-DUM" double kick
-    # landing on a wide C-major stab with a held, tape-wobbling G5 on
-    # top. Excitement, in the same warm voice as everything else.
-    c = []
-    for freq, at, amp in [(392, 0.00, 0.10), (440, 0.06, 0.13),
-                          (523, 0.12, 0.16), (659, 0.18, 0.20)]:
-        c = place(c, warm_note(freq, 0.060, amp, decay_tau=0.018,
-                               lowpass_hz=3400), at)
-    c = place(c, kick(340, 70, 0.080, 0.30, sweep_tau=0.016,
-                      decay_tau=0.024, drive=2.0), 0.26)
-    c = place(c, click(0.18, dur=0.006), 0.34)
-    c = place(c, kick(420, 62, 0.160, 0.48, sweep_tau=0.020,
-                      decay_tau=0.048, drive=2.4), 0.34)
-    c = place(c, hat(0.08, dur=0.016, seed=41), 0.34)
-    c = place(c, warm_note(262, 0.240, 0.15, index=1.4,
-                           decay_tau=0.075, lowpass_hz=2400), 0.34)
-    c = place(c, warm_note(392, 0.220, 0.13, index=1.3,
-                           decay_tau=0.070, lowpass_hz=2800), 0.34)
-    c = place(c, warm_note(659, 0.220, 0.12, index=1.2,
-                           decay_tau=0.070, lowpass_hz=3200), 0.34)
-    c = place(c, warm_note(784, 0.420, 0.16, index=1.6, attack=0.004,
-                           decay_tau=0.130, vibrato_hz=5.5,
-                           vibrato_cents=14.0, lowpass_hz=4200), 0.34)
-    sounds["sfx-finale"] = finalize(bitcrush(c, downsample=2))
-
     # rest-done — lock-screen notification chime ("rest over, lift").
     # An OP-1 boot-jingle style EP arpeggio (C5 E5 G5) swinging into a
     # held C6 with tape-wobble vibrato; longer and louder than the
@@ -415,24 +316,6 @@ def build_all():
                            decay_tau=0.130, vibrato_hz=5.5,
                            vibrato_cents=14.0, lowpass_hz=4800), 0.32)
     sounds["sfx-rest-done"] = finalize(bitcrush(c, downsample=2))
-
-    # rir-0…rir-5 — the RIR selector's effort scale. One warm EP voice
-    # descending as reps-in-reserve shrink: 5 (easy) is a small high
-    # tap, each step toward failure drops the pitch and gains body,
-    # and 0 (to failure) lands as a rounded kick under a low ring.
-    rir_notes = [196, 294, 392, 523, 659, 880]
-    for rir, freq in enumerate(rir_notes):
-        weight = (5 - rir) / 5.0
-        c = place([], warm_note(freq, 0.060 + 0.100 * weight,
-                                0.15 + 0.13 * weight,
-                                index=1.2 + 0.4 * weight,
-                                decay_tau=0.020 + 0.030 * weight,
-                                lowpass_hz=4200 - 1800 * weight), 0.0)
-        if rir == 0:
-            c = place(c, click(0.10), 0.0)
-            c = place(c, kick(260, 80, 0.100, 0.40, sweep_tau=0.018,
-                              decay_tau=0.030, drive=1.8), 0.0)
-        sounds[f"sfx-rir-{rir}"] = finalize(bitcrush(c, downsample=2))
 
     # scrub detents — six seeded variants per register for round-robin.
     for variant in range(1, 7):

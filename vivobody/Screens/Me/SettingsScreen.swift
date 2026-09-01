@@ -533,7 +533,7 @@ struct SettingsScreen: View {
                 Text("Sounds")
                     .font(Typography.sectionHeading)
                     .foregroundStyle(Ink.primary)
-                Text("Synth blips paired with the haptics")
+                Text("Feedback sounds paired with haptics")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
             }

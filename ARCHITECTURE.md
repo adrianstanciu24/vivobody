@@ -108,7 +108,7 @@ The app writes versioned Codable snapshots through
 those snapshots and render a sane fallback for missing or old versions.
 Interactive controls hand intent back to the app rather than opening SwiftData.
 Payload-shape changes require coordinated app, widget, fallback, and versioning
-work; read [WIDGET_IMPLEMENTATION_NOTES.md](WIDGET_IMPLEMENTATION_NOTES.md).
+work.
 
 ### Insights
 
