@@ -1,0 +1,140 @@
+{
+  "name": "active-completion-restoration",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-completion-restoration",
+      "-settings.weightUnit",
+      "lb"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Barbell Bench Press"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "completeSetButton",
+        "role": "AXButton",
+        "value": "not completed"
+      }
+    },
+    {
+      "tap": {
+        "label": "Personal record",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "restTimerOverlay",
+        "valueRegex": "^[0-9]+ seconds remaining of 5:00. Next: Set 2 of 2 · Barbell Bench Press$"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "today"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "label": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Personal record",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "restTimerOverlay",
+        "valueRegex": "^[0-9]+ seconds remaining of [0-9]+:[0-9]{2}[.] Next: Set 2 of 2 · Barbell Bench Press$"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "today",
+        "arguments": ["--ui-test-skip-active-rest"]
+      }
+    },
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "label": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Barbell Bench Press"
+    },
+    {
+      "label": "Set 1",
+      "value": "Completed, 155 x 6"
+    },
+    {
+      "label": "Weight",
+      "role": "AXSlider",
+      "value": "155"
+    },
+    {
+      "label": "Reps",
+      "role": "AXSlider",
+      "value": "6"
+    },
+    {
+      "identifier": "completeSetButton",
+      "role": "AXButton",
+      "value": "not completed"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "restTimerOverlay"
+    },
+    {
+      "label": "Setup Exercise",
+      "visible": true
+    }
+  ],
+  "requiredLogs": [
+    "event=session.transition kind=restore outcome=success"
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

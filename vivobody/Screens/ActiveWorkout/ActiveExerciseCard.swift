@@ -28,13 +28,11 @@
 //  (the live action), gold for complete (a finished set, exercise,
 //  or PR). They never read alike.
 //
-//  The card never owns workout state — every mutation goes through
-//  the WorkoutSession passed in by the parent screen. The completion
-//  "moment" (ripple, checkmark draw-on, haptic crescendo, auto-
-//  advance) is untouched; only the surface around it changed.
+//  The card owns instrument presentation and tap-time scrub flushing. Set
+//  completion crosses a typed coordinator boundary; analytics, persistence,
+//  and pager routing remain with the parent screen and session controller.
 //
 
-import SwiftData
 import SwiftUI
 import VivoKit
 
@@ -45,15 +43,11 @@ struct ActiveExerciseCard: View {
     /// Production persistence routes through the session-lifetime controller.
     var onImmediateUpdate: (() -> Void)? = nil
     var onScrubEnded: (() -> Void)? = nil
+    var completionActions: ActiveSetCompletionActions? = nil
     var onReplaceRequested: (() -> Void)? = nil
     /// Parent-owned cancellation generation for archive/discard/minimize.
     var scrubCancellationID: Int = 0
 
-    /// SwiftData write context persists the active draft and provides
-    /// the one-time fallback source if the shared history cache has not
-    /// finished its background build yet.
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.sessionAnalytics) private var sessionAnalytics
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
@@ -64,24 +58,14 @@ struct ActiveExerciseCard: View {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
-    /// Holds the ID of the set whose completion animation is still
-    /// playing. While set, the SetCompleteButton renders as complete
-    /// even though the session hasn't advanced yet.
-    @State var pendingCompletionSetID: UUID? = nil
-
-    /// Cancellable owner of the PR-detect + auto-advance pipeline so
-    /// a re-toggle or card disappearance can abort an in-flight run.
-    @State private var completionTask: Task<Void, Never>? = nil
-    @State private var completionGeneration: Int = 0
+    /// Owns only the cancelable acknowledgement and route timeline. Domain
+    /// mutation and persistence remain outside the card.
+    @State private var completionCoordinator = ActiveSetCompletionCoordinator()
 
     /// Semantic card actions invalidate coasting immediately rather than
     /// letting a flywheel mutate the set behind a completion or edit.
     @State private var localScrubCancellationID: Int = 0
     @State var hasPendingScrubChanges: Bool = false
-    /// Completion snapshots the visible set at tap time. Gate binding writes
-    /// synchronously until the cancellation token reaches child scrubbers.
-    @State var acceptsScrubInput: Bool = true
-
     /// When non-nil, presents the EditSetSheet for that completed
     /// set. Driven by tapping a completed set pip (its long-press
     /// menu adds delete).
@@ -94,9 +78,6 @@ struct ActiveExerciseCard: View {
     /// Per-exercise increment preference loaded from UserDefaults.
     /// Exercises without a catalog identity keep it for this card only.
     @State var sessionOnlyStep: Double? = nil
-
-    /// Surfaces failures from saving the active workout draft.
-    @State private var saveError: SaveErrorBox? = nil
 
     var body: some View {
         Group {
@@ -136,13 +117,10 @@ struct ActiveExerciseCard: View {
         } message: { setToDelete in
             Text("\(exercise.setLabel(setToDelete, unit: unit)). This can't be undone.")
         }
-        .saveErrorAlert($saveError)
         .onAppear { loadWeightStepPreference() }
-        .onDisappear {
-            completionGeneration &+= 1
-            completionTask?.cancel()
-            completionTask = nil
-            acceptsScrubInput = true
+        .onDisappear { completionCoordinator.cancel() }
+        .onChange(of: scrubCancellationID) { _, _ in
+            completionCoordinator.cancel()
         }
     }
 
@@ -274,301 +252,71 @@ struct ActiveExerciseCard: View {
 
     // MARK: - Completion pipeline
 
-    /// Run the PR-detect + auto-advance pipeline. Holds the visual
-    /// "pending" state for 550ms so the button's ripple + fill +
-    /// checkmark draw-on can land before the card moves on.
+    /// End any flywheel interaction and delegate a frozen tap-time request.
+    /// The coordinator closes its input gate before this preparation closure
+    /// invalidates coast and flushes the last visible detent.
     func handleSetToggle(_ set: WorkoutSet) {
-        // Treat tapping Complete as the end of any flywheel interaction.
-        // Flush the value visible at the tap, then stop future coast detents
-        // before the completion animation's intentional delay.
-        acceptsScrubInput = false
-        localScrubCancellationID &+= 1
-        activeScrubDidEnd()
-
-        let weight = exercise.trackedWeight(set.weight)
-        let reps = set.reps
-        let duration = set.duration
-        let exerciseName = exercise.name
-        let catalogItemID = exercise.catalogItemID
-        let catalogID = exercise.catalogID
-        let performanceSignature = exercise.performanceSignature
-        let loadProfile = exercise.loadProfile
-        let bodyweight = exercise.loadBodyweight
-
-        pendingCompletionSetID = set.id
-
-        completionGeneration &+= 1
-        let generation = completionGeneration
-        completionTask?.cancel()
-        completionTask = Task { @MainActor in
-            do {
-                try await Task.sleep(for: .milliseconds(550))
-            } catch {
-                if completionGeneration == generation {
-                    acceptsScrubInput = true
-                }
-                return
+        guard let actions = resolvedCompletionActions else { return }
+        let cardActions = ActiveSetCompletionActions(
+            commit: actions.commit,
+            currentSelection: actions.currentSelection,
+            applyRoute: actions.applyRoute,
+            onCommitted: {
+                actions.onCommitted()
+                localScrubCancellationID &+= 1
+                hasPendingScrubChanges = false
             }
-            guard completionGeneration == generation else { return }
-
-            let prKind = detectPersonalRecord(
-                exerciseName: exerciseName,
-                catalogItemID: catalogItemID,
-                catalogID: catalogID,
-                performanceSignature: performanceSignature,
-                loadProfile: loadProfile,
-                bodyweight: bodyweight,
-                weight: weight,
-                reps: reps,
-                duration: duration
-            )
-
-            let outcome = withAnimation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.85)) {
-                session.completeActiveSet(for: exercise)
-            }
-            acceptsScrubInput = true
-            saveActiveSessionChanges()
-            pendingCompletionSetID = nil
-
-            if let prKind {
-                let payload: (value: String, unit: String?)?
-                switch prKind {
-                case .weight:
-                    let effectiveLoad = loadProfile.effectiveLoad(
-                        loggedWeight: weight,
-                        bodyweight: bodyweight
-                    )
-                    payload = effectiveLoad.map {
-                        (
-                            WeightFormatter.string(
-                                $0,
-                                unit: unit,
-                                includeUnit: false
-                            ),
-                            unit.symbol
-                        )
-                    }
-                case .reps:
-                    // A rep PR advances on the rep count, so the count
-                    // is the hero — the load it happened at moves down
-                    // to the detail line.
-                    payload = ("\(reps)", reps == 1 ? "rep" : "reps")
-                case .duration:
-                    payload = (DurationFormatter.string(duration), nil)
-                }
-                if let payload {
-                    session.pendingPRValue = payload.value
-                    session.pendingPRUnit = payload.unit
-                    session.pendingPRDetail = detailLine(
-                        exerciseName: exerciseName,
-                        weight: weight,
-                        kind: prKind,
-                        loadMode: loadProfile.mode,
-                        modality: performanceSignature.modality,
-                        unit: unit
-                    )
-                    saveActiveSessionChanges()
-                }
-            }
-
-            switch outcome {
-            case let .supersetPartner(partner):
-                // Carry the user to the partner station — the app
-                // performs the swipe the superset asks for, with the
-                // same spring the pager uses, so the pairing teaches
-                // itself the first time it happens.
-                guard let partnerIdx = session.orderedExercises
-                    .firstIndex(where: { $0.id == partner.id })
-                else { break }
-                let indexBeforeBeat = session.activeExerciseIndex
-                do {
-                    try await Task.sleep(for: .milliseconds(300))
-                } catch { return }
-                // If the user swiped somewhere themselves during the
-                // acknowledgement beat, their move wins — yanking the
-                // pager after a manual swipe reads as a glitch.
-                guard session.activeExerciseIndex == indexBeforeBeat,
-                      session.activeExerciseIndex != partnerIdx
-                else { break }
-                withAnimation(reduceMotion ? nil : .spring(response: 0.55, dampingFraction: 0.85)) {
-                    session.activeExerciseIndex = partnerIdx
-                }
-                Haptics.soft(playsSound: false)
-
-            case let .supersetRoundRest(resume):
-                // Reposition behind the rest overlay so its label and
-                // the card underneath already show the next round's
-                // station when the overlay lifts.
-                if let resumeIdx = session.orderedExercises
-                    .firstIndex(where: { $0.id == resume.id }),
-                    resumeIdx != session.activeExerciseIndex
-                {
-                    session.activeExerciseIndex = resumeIdx
-                }
-
-            case .exerciseComplete:
-                let exercises = session.orderedExercises
-                let currentIdx = exercises.firstIndex { $0.id == exercise.id } ?? 0
-                // A superset can finish mid-group (unequal set counts);
-                // land past the group's already-finished partners.
-                var nextIdx = currentIdx + 1
-                while nextIdx < exercises.count,
-                      exercise.supersetID != nil,
-                      exercises[nextIdx].supersetID == exercise.supersetID,
-                      exercises[nextIdx].orderedSets.allSatisfy(\.isCompleted)
-                {
-                    nextIdx += 1
-                }
-                let cardCount = exercises.count + 1
-                if nextIdx < cardCount {
-                    let indexBeforeBeat = session.activeExerciseIndex
-                    // Keep the short acknowledgement between exercise
-                    // cards, but show the final summary immediately.
-                    if !session.isAllComplete {
-                        do {
-                            try await Task.sleep(for: .milliseconds(300))
-                        } catch { return }
-                    }
-                    // A manual swipe during the beat outranks the
-                    // scripted advance.
-                    guard session.activeExerciseIndex == indexBeforeBeat,
-                          session.activeExerciseIndex != nextIdx
-                    else { break }
-                    withAnimation(reduceMotion ? nil : .spring(response: 0.55, dampingFraction: 0.85)) {
-                        session.activeExerciseIndex = nextIdx
-                    }
-                }
-
-            case .rest, .none:
-                break
-            }
-        }
-    }
-
-    // MARK: - PR detection
-
-    /// The transparent ways a set can advance the standing record.
-    /// Dynamic strength and eligible external-load power prioritize
-    /// effective load, then reps at the same load. Comparable holds use
-    /// load then duration; non-comparable holds use duration.
-    private enum PRKind {
-        case weight
-        case reps
-        case duration
-    }
-
-    /// Returns the *kind* of PR a completed set sets, or nil if it
-    /// doesn't beat the user's previous best on this exercise. The
-    /// shared summary respects every archived exercise's snapshotted
-    /// modality, tracking, load profile, and bodyweight. The first valid
-    /// performance counts, matching the chronological history policy.
-    private func detectPersonalRecord(
-        exerciseName: String,
-        catalogItemID: UUID?,
-        catalogID: String?,
-        performanceSignature: ExercisePerformanceSignature,
-        loadProfile: ExerciseLoadProfile,
-        bodyweight: Double,
-        weight: Double,
-        reps: Int,
-        duration: TimeInterval
-    ) -> PRKind? {
-        let semanticKind = performanceSignature.performanceKind
-        guard semanticKind.supportsRecord else { return nil }
-
-        let candidateHistoryKey = ExerciseIdentity.key(
-            catalogID: catalogID,
-            catalogItemID: catalogItemID,
-            name: exerciseName,
-            performanceSignature: performanceSignature
         )
+        completionCoordinator.start(
+            setID: set.id,
+            prepare: {
+                localScrubCancellationID &+= 1
+                activeScrubDidEnd()
+                return completionIntent(for: set)
+            },
+            actions: cardActions
+        )
+    }
 
-        let candidateEffectiveLoad = semanticKind.comparesLoad
-            ? loadProfile.effectiveLoad(
-                loggedWeight: weight,
-                bodyweight: bodyweight
+    private func completionIntent(for set: WorkoutSet) -> ActiveSetCompletionIntent {
+        ActiveSetCompletionIntent(
+            sessionID: session.id,
+            exerciseID: exercise.id,
+            setID: set.id,
+            personalRecordCandidate: LivePersonalRecordCandidate(
+                exerciseName: exercise.name,
+                catalogItemID: exercise.catalogItemID,
+                catalogID: exercise.catalogID,
+                performanceSignature: exercise.performanceSignature,
+                loadProfile: exercise.loadProfile,
+                bodyweight: exercise.loadBodyweight,
+                loggedWeight: exercise.trackedWeight(set.weight),
+                repetitions: set.reps,
+                duration: set.duration,
+                priorInSessionPerformances: exercise.sets.compactMap {
+                    exercise.strengthPerformance(for: $0)
+                }
             )
-            : nil
-        guard let candidate = StrengthPerformance.make(
-            kind: semanticKind,
-            effectiveLoad: candidateEffectiveLoad,
-            reps: reps,
-            duration: duration
-        ) else { return nil }
-
-        // An unavailable cache is not an empty history. Treating it as
-        // one would celebrate any valid set as a first record.
-        guard let history = sessionAnalytics?.resolvedExerciseHistory(
-            in: modelContext
-        ) else {
-            return nil
-        }
-        let archivedPrior = history[candidateHistoryKey]?
-            .allTimeBest(for: semanticKind)
-        let inSessionPrior = exercise.sets.compactMap {
-            exercise.strengthPerformance(for: $0)
-        }
-        let priorBest = ([archivedPrior].compactMap(\.self) + inSessionPrior).reduce(
-            nil as StrengthPerformance?
-        ) { best, performance in
-            guard let best else { return performance }
-            return performance.beats(best) ? performance : best
-        }
-
-        switch candidate.advancement(over: priorBest) {
-        case .load: return .weight
-        case .repetitions: return .reps
-        case .duration: return .duration
-        case nil: return nil
-        }
+        )
     }
 
-    /// Context line under the celebration hero. Weight PRs name the
-    /// achievement ("New max"); rep PRs anchor the load the reps were
-    /// performed at, in the same logged-load vocabulary the exercise
-    /// picker uses, since the hero already claims the rep count.
-    private func detailLine(
-        exerciseName: String,
-        weight: Double,
-        kind: PRKind,
-        loadMode: ExerciseLoadMode,
-        modality: ExerciseModality,
-        unit: WeightUnit
-    ) -> String {
-        switch kind {
-        case .weight:
-            return loadMode == .external
-                ? "\(exerciseName) · New max"
-                : "\(exerciseName) · New effective load"
-        case .reps:
-            guard let load = loadMode.loggedLoadLabel(
-                weight,
+    private var resolvedCompletionActions: ActiveSetCompletionActions? {
+        if let completionActions { return completionActions }
+        #if DEBUG
+            return ActiveSetCompletionPreviewAdapter.actions(
+                session: session,
                 unit: unit,
-                includeUnit: true
-            ) else { return exerciseName }
-            return "\(exerciseName) · at \(load)"
-        case .duration:
-            return "\(exerciseName) · \(loadMode.durationRecordDetail(modality: modality))"
-        }
+                reduceMotion: reduceMotion
+            )
+        #else
+            return nil
+        #endif
     }
 
-    func saveActiveSessionChanges(cancelScrubbing: Bool = true) {
-        if cancelScrubbing {
-            localScrubCancellationID &+= 1
-        }
+    func saveActiveSessionChanges() {
+        localScrubCancellationID &+= 1
         hasPendingScrubChanges = false
-        if let onImmediateUpdate {
-            onImmediateUpdate()
-            return
-        }
-
-        session.normalizeUntrackedResistance()
-        do {
-            try modelContext.saveOrRollback()
-            SessionSideEffects.handle(.updated, session: session, in: modelContext)
-        } catch {
-            saveError = SaveErrorBox(error)
-        }
+        onImmediateUpdate?()
     }
 
     /// BareScrubber invokes this only after the drag and any coast settle.
@@ -578,8 +326,16 @@ struct ActiveExerciseCard: View {
         if let onScrubEnded {
             onScrubEnded()
         } else {
-            saveActiveSessionChanges(cancelScrubbing: false)
+            onImmediateUpdate?()
         }
+    }
+
+    var pendingCompletionSetID: UUID? {
+        completionCoordinator.pendingSetID
+    }
+
+    var acceptsScrubInput: Bool {
+        completionCoordinator.acceptsInput
     }
 
     /// One Equatable value covers parent lifecycle cancellation and local
@@ -587,35 +343,4 @@ struct ActiveExerciseCard: View {
     var effectiveScrubCancellationID: Int {
         scrubCancellationID &+ localScrubCancellationID
     }
-}
-
-#Preview("Exercise · active") {
-    let session = WorkoutSession.sample
-    return ActiveExerciseCard(
-        exercise: session.orderedExercises[0],
-        session: session
-    )
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.black.ignoresSafeArea())
-    .preferredColorScheme(.dark)
-}
-
-#Preview("Exercise · bodyweight") {
-    let exercise = Exercise(
-        name: "Pull-Up",
-        group: .back,
-        plannedSets: 3,
-        plannedReps: 8,
-        plannedWeight: 0,
-        loadMode: .bodyweightAdded,
-        bodyweightFraction: 1
-    )
-    let session = WorkoutSession(
-        exercises: [exercise],
-        bodyweightAtStart: 180
-    )
-    return ActiveExerciseCard(exercise: exercise, session: session)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black.ignoresSafeArea())
-        .preferredColorScheme(.dark)
 }

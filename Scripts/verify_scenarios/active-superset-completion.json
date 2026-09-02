@@ -1,0 +1,74 @@
+{
+  "name": "active-superset-completion",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-superset"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Barbell Bench Press"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "completeSetButton",
+        "role": "AXButton",
+        "value": "not completed"
+      }
+    },
+    {
+      "tap": {
+        "label": "Personal record",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Barbell Bent-Over Row"
+      }
+    },
+    {
+      "waitAbsent": {
+        "identifier": "restTimerOverlay"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "completeSetButton",
+        "role": "AXButton",
+        "value": "not completed"
+      }
+    },
+    {
+      "tap": {
+        "label": "Personal record",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "restTimerOverlay",
+      "role": "AXGenericElement",
+      "valueRegex": "^[0-9]+ seconds remaining of 1:30. Next: Round 2 of 3 · Barbell Bench Press [+] Barbell Bent-Over Row$"
+    }
+  ],
+  "forbidden": [],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

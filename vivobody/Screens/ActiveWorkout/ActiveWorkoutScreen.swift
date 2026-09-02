@@ -17,13 +17,13 @@ import SwiftUI
 import VivoKit
 
 struct ActiveWorkoutScreen: View {
-    @State private var session: WorkoutSession
+    @State var session: WorkoutSession
 
     /// Used only to prime the shared history summary if its background
     /// build has not finished when the user adds an exercise.
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.sessionAnalytics) private var sessionAnalytics
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.modelContext) var modelContext
+    @Environment(\.sessionAnalytics) var sessionAnalytics
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     /// Optional archive callback. Wired to the Summary card's DONE
@@ -46,6 +46,8 @@ struct ActiveWorkoutScreen: View {
     /// and settled scrubs share the session lifetime. Nil in previews.
     private let onSessionUpdate: (() -> Void)?
     private let onScrubEnded: (() -> Void)?
+    let onCompleteSet:
+        ((ActiveSetCompletionRequest, ActiveSetCompletionMutation) -> ActiveSetCompletionResult)?
     private let onReplaceExercise:
         ((UUID, ExerciseCatalogItem) -> ExerciseSubstitutionCommit)?
 
@@ -73,7 +75,7 @@ struct ActiveWorkoutScreen: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit {
+    var unit: WeightUnit {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
@@ -83,6 +85,8 @@ struct ActiveWorkoutScreen: View {
         onDiscard: (() -> Void)? = nil,
         onSessionUpdate: (() -> Void)? = nil,
         onScrubEnded: (() -> Void)? = nil,
+        onCompleteSet:
+        ((ActiveSetCompletionRequest, ActiveSetCompletionMutation) -> ActiveSetCompletionResult)? = nil,
         onReplaceExercise:
         ((UUID, ExerciseCatalogItem) -> ExerciseSubstitutionCommit)? = nil
     ) {
@@ -94,6 +98,7 @@ struct ActiveWorkoutScreen: View {
         self.onDiscard = onDiscard
         self.onSessionUpdate = onSessionUpdate
         self.onScrubEnded = onScrubEnded
+        self.onCompleteSet = onCompleteSet
         self.onReplaceExercise = onReplaceExercise
     }
 
@@ -390,6 +395,7 @@ struct ActiveWorkoutScreen: View {
                     session: session,
                     onImmediateUpdate: onSessionUpdate,
                     onScrubEnded: onScrubEnded,
+                    completionActions: activeSetCompletionActions,
                     onReplaceRequested: onReplaceExercise == nil
                         ? nil
                         : { beginReplacement(of: exercises[i]) },

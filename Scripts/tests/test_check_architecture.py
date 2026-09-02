@@ -131,6 +131,22 @@ func write(context: ModelContext) throws { try context.save() }
         self.assertIn("ARCH011", rejected)
         self.assertNotIn("ARCH011", accepted)
 
+    def test_active_exercise_card_cannot_reclaim_completion_services(self) -> None:
+        rejected = self.rules_for(
+            "vivobody/Screens/ActiveWorkout/ActiveExerciseCardRogue.swift",
+            """import SwiftData
+let analytics: SessionAnalytics? = nil
+SessionSideEffects.handle(.updated, session: session, in: modelContext)
+""",
+        )
+        accepted = self.rules_for(
+            "vivobody/Screens/ActiveWorkout/ActiveExerciseCardFocused.swift",
+            "let completion: ActiveSetCompletionActions? = nil\n",
+        )
+
+        self.assertIn("ARCH012", rejected)
+        self.assertNotIn("ARCH012", accepted)
+
     def test_debug_wrapper_may_precede_header(self) -> None:
         source = """#if DEBUG
 //

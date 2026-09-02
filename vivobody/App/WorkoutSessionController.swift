@@ -10,8 +10,9 @@
 //  SessionSideEffects so adding a future subscriber is one line.
 //
 //  Also owns active-draft persistence boundaries: semantic interactions save
-//  immediately and pending-exercise replacement is atomic. Scrubber detents
-//  remain in memory until the gesture, coast, or scene ends.
+//  immediately, set completion and pending-exercise replacement are atomic,
+//  and scrubber detents remain in memory until the gesture, coast, or scene
+//  ends.
 //
 //  Also the single dispatch site for IncomingAction — the unified
 //  enum that normalizes every external entry point (URL scheme,
@@ -456,7 +457,8 @@ final class WorkoutSessionController {
             return
         }
 
-        if session.completedAt == nil {
+        let completedAtBeforeArchive = session.completedAt
+        if completedAtBeforeArchive == nil {
             session.completedAt = Date()
         }
         session.normalizeUntrackedResistance()
@@ -475,35 +477,10 @@ final class WorkoutSessionController {
             isWorkoutExpanded = false
             AppDiagnostics.sessionTransition(kind: "archive", outcome: "success")
         } catch {
+            session.completedAt = completedAtBeforeArchive
+            context.rollback()
             lastSaveError = SaveErrorBox(error)
             AppDiagnostics.sessionTransitionFailed(kind: "archive", error: error)
-        }
-    }
-
-    // MARK: - Complete active set (widget tap)
-
-    /// Complete the active set on the current exercise, triggered by
-    /// a widget "Complete set" tap. Saves, fires update side effects,
-    /// and brings the workout sheet to the foreground.
-    func completeActiveSet() {
-        guard let session = activeSession else { return }
-        let exercises = session.orderedExercises
-        guard exercises.indices.contains(session.activeExerciseIndex) else { return }
-        let exercise = exercises[session.activeExerciseIndex]
-        let outcome = session.completeActiveSet(for: exercise)
-        // Mirror the in-app superset choreography so the sheet opens
-        // on the right station (no animation — this runs pre-present).
-        switch outcome {
-        case let .supersetPartner(target), let .supersetRoundRest(resume: target):
-            if let idx = exercises.firstIndex(where: { $0.id == target.id }) {
-                session.activeExerciseIndex = idx
-            }
-        case .rest, .exerciseComplete, .none:
-            break
-        }
-        if saveActiveSessionChanges() {
-            appState?.selectedTab = .today
-            isWorkoutExpanded = true
         }
     }
 

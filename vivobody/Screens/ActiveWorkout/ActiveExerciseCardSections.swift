@@ -6,7 +6,6 @@
 //  instrument, RIR, and actions.
 //
 
-import SwiftData
 import SwiftUI
 import VivoKit
 

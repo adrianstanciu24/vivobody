@@ -70,6 +70,9 @@ SWIFTDATA_FORBIDDEN_ROOTS = (
     "vivobodyWidgets/",
     "VivoKit/Sources/",
 )
+ACTIVE_EXERCISE_CARD_PREFIX = (
+    "vivobody/Screens/ActiveWorkout/ActiveExerciseCard"
+)
 
 RAW_GLASS_BOUNDARIES = frozenset({
     "vivobody/App/GlassStyle.swift",
@@ -87,6 +90,12 @@ RAW_GLASS_PATTERN = re.compile(r"\bglassEffect\s*\(")
 SWIFTDATA_TOKEN_PATTERN = re.compile(
     r"(?:\bimport\s+SwiftData\b|\bSwiftData\s*\.|\bModelContainer\b|"
     r"\bModelContext\b|@Model\b|@Query\b)"
+)
+ACTIVE_EXERCISE_CARD_BOUNDARY_PATTERN = re.compile(
+    r"(?:\bimport\s+SwiftData\b|\bSwiftData\s*\.|\bModelContainer\b|"
+    r"\bModelContext\b|@Model\b|@Query\b|\bmodelContext\b|"
+    r"\bSessionAnalytics\b|\bsessionAnalytics\b|\bSessionSideEffects\b|"
+    r"\bsaveOrRollback\s*\()"
 )
 LITERAL_DEFAULT_PATTERNS = (
     (re.compile(r"@AppStorage\s*\(\s*#*\""), "@AppStorage key"),
@@ -368,6 +377,15 @@ def check_swift_file(path: str, source: str) -> list[Violation]:
                 line_number(masked.code, match.start()),
                 "ARCH002",
                 "Widgets and VivoKit must not access SwiftData. Put persistence in the app and exchange versioned VivoKit snapshots.",
+            ))
+
+    if path.startswith(ACTIVE_EXERCISE_CARD_PREFIX):
+        for match in ACTIVE_EXERCISE_CARD_BOUNDARY_PATTERN.finditer(masked.code):
+            violations.append(Violation(
+                path,
+                line_number(masked.code, match.start()),
+                "ARCH012",
+                "Keep SwiftData, SessionAnalytics, and SessionSideEffects outside ActiveExerciseCard files; route completion through the typed screen/controller boundary.",
             ))
 
     if path not in RAW_GLASS_BOUNDARIES:

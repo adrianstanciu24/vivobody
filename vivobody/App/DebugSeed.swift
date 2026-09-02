@@ -10,7 +10,6 @@ import SwiftData
 import VivoKit
 
 #if DEBUG
-
     /// Launch-argument helpers that seed UI-test states and choose a capture tab.
     enum UITestSupport {
         static func requestedTab() -> AppTab? {
@@ -43,6 +42,7 @@ import VivoKit
         static func seedIfRequested(in context: ModelContext) {
             seedExerciseSubstitutionIfRequested(in: context)
             seedActiveAssistanceIfRequested(in: context)
+            CompletionRestorationSeed.prepareIfRequested(in: context)
             if CommandLine.arguments.contains("--ui-test-active-partial") {
                 seedActivePartial(in: context)
             }

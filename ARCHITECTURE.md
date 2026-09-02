@@ -85,6 +85,13 @@ widgets  activity  health  notifications
 minimize, and expansion. `SessionSideEffects` is the single fan-out for
 lifecycle effects so restoration and normal interaction cannot diverge.
 
+Expanded-workout set completion keeps presentation and persistence ownership
+separate: the active card captures immutable tap-time input, a cancelable
+coordinator sequences the acknowledgement, the screen prepares PR presentation,
+and `WorkoutSessionController` validates and saves the complete mutation before
+the screen applies its committed pager route. Active-card files do not query
+analytics, write SwiftData, or fan out session side effects.
+
 ### External entry points
 
 URLs, Handoff, Spotlight, widgets, Siri, and App Intent mailboxes normalize to

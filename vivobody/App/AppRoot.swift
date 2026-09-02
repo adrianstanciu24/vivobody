@@ -201,6 +201,12 @@ struct AppRoot: View {
                         onScrubEnded: {
                             workout.saveSettledScrub(for: session.id)
                         },
+                        onCompleteSet: { request, performMutation in
+                            workout.completeActiveSet(
+                                request,
+                                performMutation: performMutation
+                            )
+                        },
                         onReplaceExercise: { exerciseID, item in
                             let result = workout.replacePendingExercise(
                                 sessionID: session.id,
