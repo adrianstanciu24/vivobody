@@ -78,7 +78,7 @@ struct SessionDetailScreen: View {
     private var heroCard: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             header
-            heroVolume
+            heroMetric
             StatStrip(
                 stats: [
                     Stat(value: "\(durationMinutes)", unit: "min", label: "Duration"),
@@ -117,52 +117,38 @@ struct SessionDetailScreen: View {
         }
     }
 
-    private var heroVolume: some View {
+    private var heroMetric: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                Text(heroMetric.value)
+                Text(receiptMetric.value + (receiptMetric.qualifier ?? ""))
                     .font(Typography.metricHero)
                     .foregroundStyle(sessionHasPR ? Tint.complete : Ink.primary)
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                if let metricUnit = heroMetric.unit {
+                if let metricUnit = receiptMetric.unit {
                     Text(metricUnit)
                         .font(Typography.metricInline)
                         .foregroundStyle(Ink.tertiary)
                 }
             }
-            Text(heroMetric.label)
+            Text(receiptMetricLabel)
                 .panelLegendType()
                 .foregroundStyle(sessionHasPR ? Tint.complete : Ink.tertiary)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(receiptMetric.accessibilityLabel)
     }
 
-    private var heroMetric: (value: String, unit: String?, label: String) {
-        guard session.hasReceiptTonnageAxis else {
-            if session.totalReps > 0 {
-                return ("\(session.totalReps)", nil, "Reps")
-            }
-            return (DurationFormatter.compact(session.totalTimedWork), nil, "Timed work")
-        }
+    private var receiptMetric: WorkoutReceiptMetric {
+        session.primaryReceiptMetric(unit: unit)
+    }
 
-        let summary = session.receiptTonnageSummary
-        switch summary.availability {
-        case .complete:
-            return (
-                WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit),
-                unit.symbol,
-                sessionHasPR ? "Volume · personal record" : "Volume"
-            )
-        case .partial:
-            return (
-                "\(WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit))+",
-                unit.symbol,
-                "Known volume · total unavailable"
-            )
-        case .unavailable:
-            return ("—", nil, "Volume unavailable")
+    private var receiptMetricLabel: String {
+        if sessionHasPR, case .volume(.complete) = receiptMetric.kind {
+            return "\(receiptMetric.label) · personal record"
         }
+        return receiptMetric.label
     }
 
     private var topSetDetail: some View {

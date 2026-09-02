@@ -1,0 +1,106 @@
+{
+  "name": "receipt-metric-parity",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-partial",
+      "--ui-test-receipt-summary",
+      "--ui-test-widget-start-request",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "1080 pounds of volume"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "tap": {
+        "identifier": "endWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Save Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "1080 pounds of volume"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "history"
+      }
+    },
+    {
+      "wait": {
+        "identifierContains": "historySessionRow",
+        "labelContains": "1080 pounds of volume",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifierContains": "historySessionRow",
+        "labelContains": "1080 pounds of volume",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Session",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "swipe": {
+        "direction": "down",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "1080 pounds of volume"
+    }
+  ],
+  "forbidden": [],
+  "requiredLogs": [
+    "event=session.transition kind=archive outcome=success"
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

@@ -67,12 +67,8 @@ struct WorkoutSummaryCard: View {
         isHistorical ? session.duration / 60 : animatedMinutes
     }
 
-    private var tonnageAvailability: ComparableTonnageAvailability {
-        session.receiptTonnageSummary.availability
-    }
-
-    private var showsTonnage: Bool {
-        session.hasReceiptTonnageAxis
+    private var receiptMetric: WorkoutReceiptMetric {
+        session.primaryReceiptMetric(unit: unit, volumeDisplayStyle: .full)
     }
 
     private var isComplete: Bool {
@@ -87,7 +83,7 @@ struct WorkoutSummaryCard: View {
                         .padding(.top, Space.xs)
                         .powerOn(0)
 
-                    heroVolume
+                    heroMetric
                         .padding(.top, Space.xl)
                         .powerOn(1)
 
@@ -142,60 +138,29 @@ struct WorkoutSummaryCard: View {
         }
     }
 
-    private var heroVolume: some View {
+    private var heroMetric: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                if !showsTonnage {
-                    Text(nonTonnageValue)
-                        .font(Typography.metricHero)
-                        .foregroundStyle(Ink.primary)
-                        .monospacedDigit()
-                } else if tonnageAvailability == .unavailable {
-                    Text("—")
-                        .font(Typography.metricHero)
-                        .foregroundStyle(Ink.primary)
-                } else {
-                    Text(volumeValue)
-                        .font(Typography.metricHero)
-                        .foregroundStyle(Ink.primary)
-                        .monospacedDigit()
-                    if tonnageAvailability == .partial {
-                        Text("+")
-                            .font(Typography.metricInline)
-                            .foregroundStyle(Ink.secondary)
-                    }
-                    Text(unit.symbol)
+                Text(receiptMetric.value)
+                    .font(Typography.metricHero)
+                    .foregroundStyle(Ink.primary)
+                    .monospacedDigit()
+                if let qualifier = receiptMetric.qualifier {
+                    Text(qualifier)
+                        .font(Typography.metricInline)
+                        .foregroundStyle(Ink.secondary)
+                }
+                if let metricUnit = receiptMetric.unit {
+                    Text(metricUnit)
                         .font(Typography.metricInline)
                         .foregroundStyle(Ink.tertiary)
                 }
             }
-            Text(volumeLegend)
+            Text(receiptMetric.label)
                 .panelLegend()
         }
-        .accessibilityElement(children: .combine)
-    }
-
-    private var volumeValue: String {
-        let display = WeightFormatter.toDisplay(session.totalVolume, unit: unit)
-        return Self.volumeFormatter.string(from: NSNumber(value: Int(display))) ?? "\(Int(display))"
-    }
-
-    private var volumeLegend: String {
-        guard showsTonnage else { return nonTonnageLegend }
-        return switch tonnageAvailability {
-        case .complete: "Volume"
-        case .partial: "Known volume · total unavailable"
-        case .unavailable: "Volume unavailable"
-        }
-    }
-
-    private var nonTonnageValue: String {
-        if session.totalReps > 0 { return "\(session.totalReps)" }
-        return DurationFormatter.compact(session.totalTimedWork)
-    }
-
-    private var nonTonnageLegend: String {
-        session.totalReps > 0 ? "Reps" : "Timed work"
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(receiptMetric.accessibilityLabel)
     }
 
     /// The stat strip bracketed by hairlines — a ruled band on the
@@ -423,13 +388,6 @@ struct WorkoutSummaryCard: View {
     private static let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "EEEE  ·  MMM d  ·  h:mm a"
-        return f
-    }()
-
-    private static let volumeFormatter: NumberFormatter = {
-        let f = NumberFormatter()
-        f.numberStyle = .decimal
-        f.groupingSeparator = ","
         return f
     }()
 

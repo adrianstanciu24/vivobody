@@ -1,0 +1,37 @@
+{
+  "name": "receipt-live-summary",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-partial",
+      "--ui-test-receipt-summary",
+      "--ui-test-widget-start-request",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "1080 pounds of volume"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "1080 pounds of volume"
+    },
+    {
+      "identifier": "endWorkoutButton",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

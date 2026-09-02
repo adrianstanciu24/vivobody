@@ -101,10 +101,10 @@ import VivoKit
                 plannedWeight: 135,
                 sortOrder: 0
             )
-            if let first = exercise.orderedSets.first {
-                first.isCompleted = true
-            }
+            if let first = exercise.orderedSets.first { first.isCompleted = true }
             let session = WorkoutSession(exercises: [exercise], restDuration: 90)
+            // Let the semantic harness inspect the receipt without a coordinate-based horizontal swipe.
+            if CommandLine.arguments.contains("--ui-test-receipt-summary") { session.activeExerciseIndex = 1 }
             context.insert(session)
             try? context.saveOrRollback()
         }

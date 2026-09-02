@@ -114,6 +114,14 @@ enum WeightFormatter {
             ?? "\(Int(display))"
     }
 
+    /// Whole-number volume without compacting thousands. Reserved for wide
+    /// hero readouts where the existing UI promises the full grouped value.
+    static func fullVolumeValue(_ lb: Double, unit: WeightUnit) -> String {
+        let display = toDisplay(lb, unit: unit)
+        return volumeFormatter.string(from: NSNumber(value: Int(display)))
+            ?? "\(Int(display))"
+    }
+
     // MARK: - Internals
 
     private nonisolated static func formatValue(_ value: Double, digits: Int) -> String {

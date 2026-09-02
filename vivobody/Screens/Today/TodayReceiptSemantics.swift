@@ -2,40 +2,30 @@
 //  TodayReceiptSemantics.swift
 //  vivobody
 //
-//  Honest metric selection for Today's most-recent-workout receipt.
+//  Today's adapter for the shared primary workout-receipt metric.
 //
 
 import Foundation
 
 extension TodayScreen {
-    func lastWorkoutVolumeStat(for session: WorkoutSession) -> Stat {
-        guard session.hasReceiptTonnageAxis else {
-            if session.totalReps > 0 {
-                return Stat(value: "\(session.totalReps)", label: "Reps")
-            }
-            return Stat(
-                value: DurationFormatter.compact(session.totalTimedWork),
-                label: "Timed work"
-            )
+    func lastWorkoutReceiptStat(for session: WorkoutSession) -> Stat {
+        let metric = session.primaryReceiptMetric(unit: unit)
+        let accentsPersonalRecord = switch metric.kind {
+        case .volume(.complete): lastWorkoutHasPR
+        case .volume(.partial), .volume(.unavailable), .reps, .timedWork: false
+        }
+        let label = if case .volume(.partial) = metric.kind {
+            "Known volume"
+        } else {
+            metric.label
         }
 
-        let summary = session.receiptTonnageSummary
-        switch summary.availability {
-        case .complete:
-            return Stat(
-                value: volumeLabel(summary.knownSubtotal),
-                unit: unit.symbol,
-                label: "Volume",
-                accent: lastWorkoutHasPR
-            )
-        case .partial:
-            return Stat(
-                value: "\(volumeLabel(summary.knownSubtotal))+",
-                unit: unit.symbol,
-                label: "Known volume"
-            )
-        case .unavailable:
-            return Stat(value: "—", label: "Volume unavailable")
-        }
+        return Stat(
+            value: metric.value + (metric.qualifier ?? ""),
+            unit: metric.unit,
+            label: label,
+            accessibilityLabel: metric.accessibilityLabel,
+            accent: accentsPersonalRecord
+        )
     }
 }

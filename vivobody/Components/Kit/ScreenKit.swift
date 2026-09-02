@@ -187,6 +187,9 @@ struct Stat: Identifiable {
     let value: String
     var unit: String? = nil
     let label: String
+    /// Optional spoken copy for values whose display shorthand omits
+    /// important context, such as a partially known workout volume.
+    var accessibilityLabel: String? = nil
     /// When true the value is tinted Volt — reserved for the one
     /// figure on the strip that's worth celebrating (e.g. streak).
     var accent: Bool = false
@@ -266,7 +269,7 @@ struct StatStrip: View {
         }
         .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .center))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(stat.value)\(stat.unit.map { " \($0)" } ?? "") \(stat.label)")
+        .accessibilityLabel(accessibilityLabel(for: stat))
     }
 
     private func accessibleCell(_ stat: Stat) -> some View {
@@ -288,7 +291,12 @@ struct StatStrip: View {
         }
         .frame(maxWidth: .infinity, minHeight: Space.tapMin, alignment: .leading)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(stat.value)\(stat.unit.map { " \($0)" } ?? "") \(stat.label)")
+        .accessibilityLabel(accessibilityLabel(for: stat))
+    }
+
+    private func accessibilityLabel(for stat: Stat) -> String {
+        stat.accessibilityLabel
+            ?? "\(stat.value)\(stat.unit.map { " \($0)" } ?? "") \(stat.label)"
     }
 
     private func accessibleValue(_ stat: Stat) -> some View {

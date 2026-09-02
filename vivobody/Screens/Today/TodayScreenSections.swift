@@ -619,7 +619,7 @@ extension TodayScreen {
         StatStrip(
             stats: [
                 Stat(value: "\(Int(session.duration / 60))", unit: "min", label: "Time"),
-                lastWorkoutVolumeStat(for: session),
+                lastWorkoutReceiptStat(for: session),
                 Stat(value: "\(session.totalSets)", label: "Sets"),
             ],
             valueFont: Typography.statValue,

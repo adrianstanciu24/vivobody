@@ -314,6 +314,11 @@ struct SessionRow: View {
     }
 
     var body: some View {
+        let receiptMetric = session.primaryReceiptMetric(unit: unit)
+        let receiptUnit: String? = receiptMetric.kind == .reps
+            ? "reps"
+            : receiptMetric.unit
+
         HStack(alignment: .center, spacing: Space.lg) {
             VStack(alignment: .leading, spacing: Space.xs) {
                 HStack(spacing: Space.sm) {
@@ -338,12 +343,12 @@ struct SessionRow: View {
             // fingerprint) leads. The accent lives only in the rare PR
             // badge, never on every line.
             HStack(alignment: .lastTextBaseline, spacing: 4) {
-                Text(receiptMetric.value)
+                Text(receiptMetric.value + (receiptMetric.qualifier ?? ""))
                     .font(prominent ? Typography.statValue : Typography.metricInline)
                     .foregroundStyle(Ink.secondary)
                     .monospacedDigit()
-                if let metricUnit = receiptMetric.unit {
-                    Text(metricUnit)
+                if let receiptUnit {
+                    Text(receiptUnit)
                         .font(Typography.metricUnit)
                         .foregroundStyle(Ink.tertiary)
                 }
@@ -376,28 +381,6 @@ struct SessionRow: View {
     /// rows lead with their date.
     var titleLine: String {
         prominent ? workoutTitle : dateLine
-    }
-
-    private var receiptMetric: (value: String, unit: String?, accessibilityLabel: String) {
-        guard session.hasReceiptTonnageAxis else {
-            if session.totalReps > 0 {
-                return ("\(session.totalReps)", "reps", "\(session.totalReps) reps")
-            }
-            let timed = DurationFormatter.compact(session.totalTimedWork)
-            return (timed, nil, "\(timed) timed work")
-        }
-
-        let summary = session.receiptTonnageSummary
-        switch summary.availability {
-        case .complete:
-            let value = WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
-            return (value, unit.symbol, "\(value) \(unit.symbol) volume")
-        case .partial:
-            let value = WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
-            return ("\(value)+", unit.symbol, "\(value) \(unit.symbol) known volume; total unavailable")
-        case .unavailable:
-            return ("—", nil, "Volume unavailable")
-        }
     }
 
     /// Secondary line: the session's muscle fingerprint followed by
