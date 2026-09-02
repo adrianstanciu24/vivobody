@@ -64,7 +64,7 @@ struct LibraryScreen: View {
     /// (not in LibraryExercisesContent) because the segment switch
     /// recreates the content views — hoisting it keeps the selected
     /// chip stable across Templates ↔ Exercises round-trips.
-    @State private var exerciseFilter: LibraryExerciseFilter = .all
+    @State private var exerciseFilter: ExerciseCatalogFilter = .all
 
     /// Template builder sheet target. `.new` for the "+" toolbar /
     /// empty-state CTA; `.edit(template)` when a row is tapped. The

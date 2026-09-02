@@ -4,7 +4,7 @@
 //
 //  Proves launch reconciliation keeps the persistent bundled catalog aligned
 //  with the generated source while preserving user-owned defaults, favorites,
-//  measured maxes, and custom exercises.
+//  measured maxes, custom exercises, and copied template/history snapshots.
 //
 
 import Foundation
@@ -190,5 +190,53 @@ struct CatalogSyncTests {
         )
         let restored = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
         #expect(restored.contains { $0.catalogID == "barbell-bench-press" })
+    }
+
+    @Test func explicitDeletionKeepsTemplateAndWorkoutSnapshots() throws {
+        let context = try makeContext()
+        let testDefaults = try makeDefaults()
+        defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
+        ExerciseCatalogItem.synchronizeBundledCatalog(
+            in: context,
+            defaults: testDefaults.defaults
+        )
+
+        let bundled = try #require(
+            try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
+                .first { $0.catalogID == "barbell-bench-press" }
+        )
+        let catalogItemID = bundled.id
+        let templateExercise = TemplateExercise(from: bundled, sortOrder: 0)
+        let workoutExercise = Exercise(from: bundled, sortOrder: 0)
+        let template = WorkoutTemplate(
+            name: "Push Day",
+            exercises: [templateExercise]
+        )
+        let session = WorkoutSession(exercises: [workoutExercise])
+        session.completedAt = Date()
+        context.insert(template)
+        context.insert(session)
+        try context.saveOrRollback()
+
+        try ExerciseCatalogItem.deleteFromCatalog(
+            bundled,
+            in: context,
+            defaults: testDefaults.defaults
+        )
+
+        let catalog = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
+        let savedTemplateExercise = try #require(
+            try context.fetch(FetchDescriptor<TemplateExercise>()).first
+        )
+        let savedWorkoutExercise = try #require(
+            try context.fetch(FetchDescriptor<Exercise>()).first
+        )
+        #expect(!catalog.contains { $0.id == catalogItemID })
+        #expect(savedTemplateExercise.name == "Barbell Bench Press")
+        #expect(savedTemplateExercise.catalogItemID == catalogItemID)
+        #expect(savedTemplateExercise.catalogID == "barbell-bench-press")
+        #expect(savedWorkoutExercise.name == "Barbell Bench Press")
+        #expect(savedWorkoutExercise.catalogItemID == catalogItemID)
+        #expect(savedWorkoutExercise.catalogID == "barbell-bench-press")
     }
 }

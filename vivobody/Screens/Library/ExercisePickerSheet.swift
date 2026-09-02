@@ -12,9 +12,9 @@
 //  Catalog is SwiftData-backed (see ExerciseCatalogItem.swift), so general
 //  browsing purposes let users extend it inline:
 //    • Toolbar "+" — create a new custom exercise.
-//    • Long-press on any row — context menu with Favorite, Edit and
-//      Delete. Edit opens the same CustomExerciseEditorSheet in edit
-//      mode; Delete asks for confirmation, then removes the row.
+//    • Long-press on any row — context menu with Favorite, Edit, optional
+//      Duplicate as Custom, and Delete. Edit opens the same
+//      CustomExerciseEditorSheet; Delete asks for confirmation.
 //
 //  Routine-planning purposes instead expose only compatible bundled strength
 //  records and suppress every catalog mutation affordance.
@@ -30,8 +30,10 @@
 //  — the field lives in the bottom toolbar and collapses on scroll,
 //  matching Library's house style.
 //
+//  ExerciseCatalogBrowserHost owns the shared catalog/history projection and
+//  persisted row actions; this file owns purpose-specific selection and layout.
+//
 
-import SwiftData
 import SwiftUI
 import VivoKit
 
@@ -47,249 +49,101 @@ struct ExercisePickerSheet: View {
         self.onPick = onPick
     }
 
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.sessionAnalytics) private var sessionAnalytics
-
-    @Query private var items: [ExerciseCatalogItem]
-
-    /// Archived sessions — drives the "last-used" decoration on each
-    /// row. Filtering to completedAt != nil at the query level means
-    /// the in-flight session never contributes (it would otherwise
-    /// surface a "LAST" line for a set you're still doing).
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: \WorkoutSession.completedAt,
-        order: .reverse
-    )
-    private var completedSessions: [WorkoutSession]
-
-    @AppStorage(SettingsKey.weightUnit)
-    private var unitRaw: String = SettingsDefaults.weightUnit
-
-    private var unit: WeightUnit {
-        WeightUnit(rawValue: unitRaw) ?? .lb
-    }
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var query: String = ""
     @State private var editorTarget: CatalogEditorTarget?
-    @State private var pendingDeleteItem: ExerciseCatalogItem?
-    @State private var saveError: SaveErrorBox? = nil
 
-    /// Catalog scope chosen in the chip strip — All, Favorites, or a
-    /// single equipment. Shares `LibraryExerciseFilter` with the
-    /// Library exercises tab so the two surfaces speak one filter
-    /// vocabulary (the picker just never offers the Core chip).
-    @State private var filter: LibraryExerciseFilter = .all
-
-    /// "What did you last do for this exercise?" keyed by stable
-    /// copied identity, served from the fingerprint-keyed
-    /// SessionAnalytics cache so the O(N) history sweep runs at most
-    /// once per data change; picker rows do O(1) lookups. The
-    /// recompute fallback only serves previews, which don't inject
-    /// the cache.
-    private var lastInstanceLookup: [String: LastExerciseInstance] {
-        sessionAnalytics?.lastInstances ?? completedSessions.lastInstanceByExercise()
-    }
+    /// Catalog scope chosen in the chip strip — All, Favorites, a training
+    /// role, or one equipment. The picker never offers the Library-only Core
+    /// shortcut.
+    @State private var filter: ExerciseCatalogFilter = .all
 
     var body: some View {
-        let analyticsRequest = sessionAnalytics?.requestKey(
-            for: completedSessions
-        )
-        NavigationStack {
-            ZStack {
-                Surface.background.ignoresSafeArea()
+        ExerciseCatalogBrowserHost(
+            query: query,
+            filter: filter,
+            includes: { purpose.includes($0) },
+            allowsCatalogEditing: purpose.allowsCatalogEditing,
+            onEdit: { editorTarget = .edit($0) },
+            onDuplicate: { editorTarget = .duplicate($0) }
+        ) { browser, actions in
+            NavigationStack {
+                ZStack {
+                    Surface.background.ignoresSafeArea()
 
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: Space.section) {
-                        equipmentFilterStrip
-                        if isSearching {
-                            searchResultsList
-                        } else {
-                            ForEach(filteredGroups, id: \.group) { section in
-                                groupSection(group: section.group, items: section.items)
-                            }
-                            if filteredGroups.isEmpty {
-                                emptyState
+                    ScrollView {
+                        LazyVStack(alignment: .leading, spacing: Space.section) {
+                            equipmentFilterStrip(browser)
+                            if browser.isSearching {
+                                searchResultsList(browser, actions: actions)
+                            } else {
+                                ForEach(browser.sections, id: \.group) { section in
+                                    groupSection(
+                                        group: section.group,
+                                        items: section.items,
+                                        browser: browser,
+                                        actions: actions
+                                    )
+                                }
+                                if browser.sections.isEmpty {
+                                    emptyState
+                                }
                             }
                         }
+                        .padding(.top, Space.md)
+                        .padding(.bottom, Space.xxl)
                     }
-                    .padding(.top, Space.md)
-                    .padding(.bottom, Space.xxl)
+                    .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+                    .scrollBounceBehavior(.basedOnSize, axes: .vertical)
                 }
-                .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-                .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-            }
-            .navigationTitle(purpose.navigationTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    if purpose.allowsCatalogEditing {
-                        Button {
-                            editorTarget = .create
-                        } label: {
-                            Image(systemName: "plus")
+                .navigationTitle(purpose.navigationTitle)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { dismiss() }
+                    }
+                    ToolbarItem(placement: .primaryAction) {
+                        if purpose.allowsCatalogEditing {
+                            Button {
+                                editorTarget = .create
+                            } label: {
+                                Image(systemName: "plus")
+                            }
+                            .accessibilityLabel("Create custom exercise")
                         }
-                        .accessibilityLabel("Create custom exercise")
                     }
                 }
-            }
-            .searchable(text: $query, placement: .toolbar, prompt: Text("Search exercises"))
-            .searchToolbarBehavior(.minimize)
-            .sheet(item: $editorTarget) { target in
-                CustomExerciseEditorSheet(target: target)
-            }
-            .alert(
-                "Delete \"\(pendingDeleteItem?.name ?? "exercise")\"?",
-                isPresented: Binding(
-                    get: { pendingDeleteItem != nil },
-                    set: { if !$0 { pendingDeleteItem = nil } }
-                )
-            ) {
-                Button("Delete", role: .destructive) {
-                    if let item = pendingDeleteItem {
-                        delete(item)
-                    }
-                    pendingDeleteItem = nil
+                .searchable(text: $query, placement: .toolbar, prompt: Text("Search exercises"))
+                .searchToolbarBehavior(.minimize)
+                .sheet(item: $editorTarget) { target in
+                    CustomExerciseEditorSheet(target: target)
                 }
-                Button("Cancel", role: .cancel) {
-                    pendingDeleteItem = nil
-                }
-            } message: {
-                Text("This removes the exercise from the picker. Templates and history that already reference it stay intact.")
-            }
-            .saveErrorAlert($saveError)
-        }
-        .task(id: analyticsRequest) {
-            sessionAnalytics?.requestCore(for: completedSessions)
-        }
-    }
-
-    // MARK: - Filtering / grouping
-
-    /// True when the search field has real content — switches the
-    /// picker from grouped browse to a flat, relevance-ranked list.
-    private var isSearching: Bool {
-        !query.trimmingCharacters(in: .whitespaces).isEmpty
-    }
-
-    /// History keys for exercises the user has logged — the
-    /// tracked-boost set for `ExerciseSearch`.
-    private var trackedKeys: Set<String> {
-        Set(lastInstanceLookup.keys)
-    }
-
-    /// Catalog narrowed by the selected chip and the caller's
-    /// exclusion (no text filter), shared by the grouped and search
-    /// paths.
-    private var scopedItems: [ExerciseCatalogItem] {
-        items.filter { item in
-            guard !purpose.excludedItemIDs.contains(item.id), filter.matches(item) else {
-                return false
-            }
-            guard purpose.isRoutinePurpose else { return true }
-            guard let catalogID = item.catalogID else { return false }
-            return item.modality.supportsHardSetAnalytics
-                && purpose.allowsRoutineEquipment(item.equipment)
-                && purpose.allowsRoutineCatalogID(catalogID)
-        }
-    }
-
-    /// Flat, relevance-ranked results for the active query — same
-    /// ranker as the Library exercises tab so the two surfaces agree
-    /// on what "pull" should surface first.
-    private var searchResults: [ExerciseCatalogItem] {
-        ExerciseSearch.rank(items: scopedItems, query: query, trackedKeys: trackedKeys)
-    }
-
-    private var filteredGroups: [(group: MuscleGroup, items: [ExerciseCatalogItem])] {
-        let trimmed = query.trimmingCharacters(in: .whitespaces).lowercased()
-
-        // First narrow by the chip strip's scope (All / Favorites /
-        // one equipment).
-        var scope = scopedItems
-
-        // Then narrow by search query — matches against name OR any
-        // alias. Aliases let "BP" find "Barbell Bench Press"; case-insensitive
-        // substring keeps the matching forgiving. (Only reached when
-        // not searching, since the search path uses ExerciseSearch.)
-        if !trimmed.isEmpty {
-            scope = scope.filter { item in
-                if item.name.lowercased().contains(trimmed) { return true }
-                return item.aliases.contains { $0.lowercased().contains(trimmed) }
             }
         }
-        return scope.groupedByMuscle
     }
 
     // MARK: - Catalog filter strip
 
-    /// Horizontal chip strip at the top of the picker. "All" +
-    /// Favorites + Push/Pull + one chip per Equipment case. Wraps the existing
-    /// list so users can narrow before scrolling. Favorites is always
-    /// offered — with no stars set it lands on an empty state that
-    /// teaches the long-press gesture. Hidden only for an empty catalog.
+    /// Horizontal chip strip at the top of the picker. Equipment choices come
+    /// from purpose-eligible items, so routine constraints never expose a chip
+    /// that can only lead to an empty result.
     @ViewBuilder
-    private var equipmentFilterStrip: some View {
-        if !items.isEmpty {
-            ScrollView(.horizontal, showsIndicators: false) {
-                GlassEffectContainer(spacing: 8) {
-                    HStack(spacing: 8) {
-                        filterChip(.all, label: "All")
-                        filterChip(.favorites, label: "Favorites")
-                        filterChip(.trainingRole(.push), label: "Push")
-                        filterChip(.trainingRole(.pull), label: "Pull")
-                        ForEach(Equipment.allCases, id: \.self) { e in
-                            if availableEquipment.contains(e) {
-                                filterChip(.equipment(e), label: e.displayName)
-                            }
-                        }
-                    }
-                }
-                // Bleed past the LazyVStack horizontal padding so the
-                // strip can scroll edge-to-edge.
-                .padding(.horizontal, 2)
-            }
-            // The strip hugs the chips exactly, so the default scroll
-            // clip slices off the glass material's soft light-mode
-            // shadows — the cropped remainder reads as a hard-edged
-            // gray slab behind the chips. The strip is full-bleed, so
-            // unclipped overflow just falls off-screen.
-            .scrollClipDisabled()
+    private func equipmentFilterStrip(_ browser: ExerciseCatalogBrowserSnapshot) -> some View {
+        if browser.hasEligibleItems {
+            ExerciseCatalogFilterStrip(
+                options: browser.filterOptions(includingCore: false),
+                selection: $filter,
+                accessibilityPrefix: "exercisePickerFilter",
+                spacing: 8,
+                horizontalContentPadding: 2
+            )
             // Counter the LazyVStack's padding so the chips align
             // with the screen edges, not the content insets.
             .padding(.horizontal, -Space.gutter)
             .padding(.horizontal, Space.gutter)
         }
-    }
-
-    /// All distinct equipment values represented in the visible
-    /// catalog (post text-search, pre equipment-filter). Hides chips
-    /// for equipment with no entries so the strip stays honest.
-    private var availableEquipment: Set<Equipment> {
-        Set(items.map(\.equipment))
-    }
-
-    private func filterChip(_ value: LibraryExerciseFilter, label: String) -> some View {
-        let isSelected = filter == value
-        return Button {
-            Haptics.selection()
-            filter = value
-        } label: {
-            Text(label)
-                .font(Typography.sectionLabel)
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .padding(.horizontal, Space.lg)
-                .frame(minHeight: Space.tapMin)
-                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
-        }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("exercisePickerFilter\(value.accessibilitySuffix)")
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
 
     // MARK: - Sections / rows
@@ -303,34 +157,46 @@ struct ExercisePickerSheet: View {
     /// the pick-on-tap / navigate / context-menu behavior is
     /// identical to the grouped path.
     @ViewBuilder
-    private var searchResultsList: some View {
-        if searchResults.isEmpty {
+    private func searchResultsList(
+        _ browser: ExerciseCatalogBrowserSnapshot,
+        actions: ExerciseCatalogBrowserActions
+    ) -> some View {
+        if browser.searchResults.isEmpty {
             emptyState
         } else {
             VStack(spacing: 0) {
-                ForEach(Array(searchResults.enumerated()), id: \.element.id) { idx, item in
+                ForEach(Array(browser.searchResults.enumerated()), id: \.element.id) { idx, item in
                     if idx > 0 { SectionDivider() }
-                    pickerRow(item)
+                    pickerRow(item, browser: browser, actions: actions)
                 }
             }
         }
     }
 
-    private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
+    private func groupSection(
+        group: MuscleGroup,
+        items: [ExerciseCatalogItem],
+        browser: ExerciseCatalogBrowserSnapshot,
+        actions: ExerciseCatalogBrowserActions
+    ) -> some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             SectionHeader(title: group.displayName)
             VStack(spacing: 0) {
                 ForEach(Array(items.enumerated()), id: \.element.id) { idx, item in
                     if idx > 0 { SectionDivider() }
-                    pickerRow(item)
+                    pickerRow(item, browser: browser, actions: actions)
                 }
             }
         }
     }
 
     @ViewBuilder
-    private func pickerRow(_ item: ExerciseCatalogItem) -> some View {
-        let last = lastInstance(for: item)
+    private func pickerRow(
+        _ item: ExerciseCatalogItem,
+        browser: ExerciseCatalogBrowserSnapshot,
+        actions: ExerciseCatalogBrowserActions
+    ) -> some View {
+        let last = browser.lastInstance(for: item)
 
         Group {
             switch purpose {
@@ -342,7 +208,12 @@ struct ExercisePickerSheet: View {
                     onPick(item)
                     dismiss()
                 } label: {
-                    rowBody(item: item, last: last, accessory: purpose.rowAccessory)
+                    rowBody(
+                        item: item,
+                        last: last,
+                        accessory: purpose.rowAccessory,
+                        browser: browser
+                    )
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint(purpose.directPickAccessibilityHint)
@@ -361,51 +232,26 @@ struct ExercisePickerSheet: View {
                         }
                     )
                 } label: {
-                    rowBody(item: item, last: last, accessory: purpose.rowAccessory)
+                    rowBody(
+                        item: item,
+                        last: last,
+                        accessory: purpose.rowAccessory,
+                        browser: browser
+                    )
                 }
                 .buttonStyle(.plain)
             }
         }
         // General browsing keeps catalog actions available. Routine purposes
         // intentionally expose an immutable bundled subset.
-        .contextMenu {
-            if purpose.allowsCatalogEditing {
-                Button {
-                    toggleFavorite(item)
-                } label: {
-                    Label(
-                        item.isFavorite ? "Unfavorite" : "Favorite",
-                        systemImage: item.isFavorite ? "star.slash" : "star"
-                    )
-                }
-
-                Button {
-                    editorTarget = .edit(item)
-                } label: {
-                    Label("Edit", systemImage: "pencil")
-                }
-
-                if item.catalogID != nil, !item.isUserCreated {
-                    Button {
-                        editorTarget = .duplicate(item)
-                    } label: {
-                        Label("Duplicate as Custom", systemImage: "plus.square.on.square")
-                    }
-                }
-
-                Button(role: .destructive) {
-                    pendingDeleteItem = item
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                }
-            }
-        }
+        .exerciseCatalogActions(for: item, actions: actions)
     }
 
     private func rowBody(
         item: ExerciseCatalogItem,
         last: LastExerciseInstance?,
-        accessory: ExercisePickerRowAccessory
+        accessory: ExercisePickerRowAccessory,
+        browser: ExerciseCatalogBrowserSnapshot
     ) -> some View {
         let isProminent = accessory != .disclosure
         let accessoryColor: Color = switch accessory {
@@ -419,7 +265,7 @@ struct ExercisePickerSheet: View {
                     Text(item.name)
                         .font(Typography.sectionHeading)
                         .foregroundStyle(Ink.primary)
-                        .lineLimit(2)
+                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
                         .fixedSize(horizontal: false, vertical: true)
                     if item.isFavorite {
                         Image(systemName: "star.fill")
@@ -428,7 +274,7 @@ struct ExercisePickerSheet: View {
                             .accessibilityLabel("Favorite")
                     }
                 }
-                Text(rowSubtitle(item))
+                Text(browser.metadataLine(for: item))
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .lineLimit(1)
@@ -440,7 +286,7 @@ struct ExercisePickerSheet: View {
             // I aim to beat?" while the picker is still open. Never-
             // logged exercises show nothing there: the catalog holds
             // facts, not prescriptions, so no invented numbers.
-            rowRightSide(last: last)
+            rowRightSide(last: last, unit: browser.unit)
 
             Image(systemName: accessory.systemName)
                 .font(isProminent ? Typography.headline : Typography.caption)
@@ -454,10 +300,6 @@ struct ExercisePickerSheet: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func lastInstance(for item: ExerciseCatalogItem) -> LastExerciseInstance? {
-        lastInstanceLookup[item.historyKey]
-    }
-
     /// Right-side rendering of a picker row. History-only: shows
     /// `LAST · 145 lb × 8` plus the relative date below in dim mono.
     /// If that last top set is also the all-time best, it renders in
@@ -465,7 +307,7 @@ struct ExercisePickerSheet: View {
     /// their PR. Never-logged exercises get nothing — catalog
     /// defaults are input seeds, not numbers worth displaying.
     @ViewBuilder
-    private func rowRightSide(last: LastExerciseInstance?) -> some View {
+    private func rowRightSide(last: LastExerciseInstance?, unit: WeightUnit) -> some View {
         if let last {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(last.metricLabel(unit: unit))
@@ -479,23 +321,6 @@ struct ExercisePickerSheet: View {
         }
     }
 
-    /// Subtitle line for a picker row. Equipment first, then mechanic
-    /// label (compound lifts get their pattern, isolation lifts get
-    /// "Isolation"). Uppercased mono for the "metadata strip" feel
-    /// shared with the rest of the app.
-    private func rowSubtitle(_ item: ExerciseCatalogItem) -> String {
-        var parts: [String] = [item.equipment.displayName]
-        if item.mechanic == .compound, let movementLabel = item.movementLabel {
-            parts.append(movementLabel)
-        } else if item.mechanic == .isolation {
-            if let trainingRole = item.trainingRole {
-                parts.append(trainingRole.displayName)
-            }
-            parts.append("Isolation")
-        }
-        return parts.joined(separator: " · ")
-    }
-
     // MARK: - Empty state
 
     /// The Favorites scope gets a teaching empty state (title +
@@ -504,12 +329,19 @@ struct ExercisePickerSheet: View {
     @ViewBuilder
     private var emptyState: some View {
         if query.trimmingCharacters(in: .whitespaces).isEmpty, filter == .favorites {
-            ContentUnavailableView {
-                Label("No favorite exercises yet", systemImage: "dumbbell")
-            } description: {
-                Text("Long-press an exercise to favorite it.")
+            if purpose.allowsCatalogEditing {
+                ContentUnavailableView {
+                    Label("No favorite exercises yet", systemImage: "dumbbell")
+                } description: {
+                    Text("Long-press an exercise to favorite it.")
+                }
+            } else {
+                ContentUnavailableView(
+                    "No favorite exercises available",
+                    systemImage: "dumbbell"
+                )
             }
-        } else {
+        } else if purpose.allowsCatalogEditing {
             ContentUnavailableView {
                 Label(emptyStateMessage, systemImage: "dumbbell")
             } actions: {
@@ -520,6 +352,8 @@ struct ExercisePickerSheet: View {
                 }
                 .buttonStyle(PrimaryButtonStyle())
             }
+        } else {
+            ContentUnavailableView(emptyStateMessage, systemImage: "dumbbell")
         }
     }
 
@@ -528,33 +362,19 @@ struct ExercisePickerSheet: View {
         if !trimmed.isEmpty {
             return "No exercises match \"\(trimmed)\"."
         }
-        if case let .trainingRole(role) = filter {
+        switch filter {
+        case .all:
+            return purpose.isRoutinePurpose
+                ? "No compatible exercises."
+                : "Your catalog is empty.\nTap below to add an exercise."
+        case .favorites:
+            return "No favorite exercises available."
+        case .core:
+            return "No Core exercises."
+        case let .trainingRole(role):
             return "No \(role.displayName) exercises."
+        case .equipment:
+            return "No exercises for that equipment."
         }
-        return "Your catalog is empty.\nTap below to add an exercise."
-    }
-
-    // MARK: - Mutations
-
-    private func toggleFavorite(_ item: ExerciseCatalogItem) {
-        item.isFavorite.toggle()
-        do {
-            try modelContext.saveOrRollback()
-        } catch {
-            saveError = SaveErrorBox(error)
-            return
-        }
-        Haptics.tick()
-    }
-
-    private func delete(_ item: ExerciseCatalogItem) {
-        do {
-            let id = try ExerciseCatalogItem.deleteFromCatalog(item, in: modelContext)
-            SpotlightIndexer.removeExercise(id: id)
-        } catch {
-            saveError = SaveErrorBox(error)
-            return
-        }
-        Haptics.soft()
     }
 }

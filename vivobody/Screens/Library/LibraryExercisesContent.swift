@@ -3,10 +3,11 @@
 //  vivobody
 //
 //  Exercises segment content for the Library screen. Extracted
-//  from LibraryScreen.swift for file size management.
+//  from LibraryScreen.swift for file size management. Shared catalog queries,
+//  history projection, filtering, and row actions live in
+//  ExerciseCatalogBrowserHost; this file owns Library-specific hierarchy.
 //
 
-import SwiftData
 import SwiftUI
 import VivoKit
 
@@ -14,7 +15,7 @@ import VivoKit
 
 /// Exercises segment — browsable catalog. Tap an exercise row to
 /// push its detail screen (no commit CTA in this context). Long-
-/// press for Favorite / Edit / Delete via context menu. The filter
+/// press for Favorite / Edit / Duplicate / Delete via context menu. The filter
 /// strip offers training-role and equipment scopes plus prominent
 /// Favorites and Core shortcuts; favorited rows carry a star next
 /// to the name.
@@ -25,124 +26,31 @@ struct LibraryExercisesContent: View {
 
     /// Owned by LibraryScreen so the selected chip survives segment
     /// switches — this content view is recreated on every switch.
-    @Binding var exerciseFilter: LibraryExerciseFilter
+    @Binding var exerciseFilter: ExerciseCatalogFilter
 
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.sessionAnalytics) private var sessionAnalytics
-
-    @Query private var items: [ExerciseCatalogItem]
-
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: \WorkoutSession.completedAt,
-        order: .reverse
-    )
-    private var completedSessions: [WorkoutSession]
-
-    @AppStorage(SettingsKey.weightUnit)
-    private var unitRaw: String = SettingsDefaults.weightUnit
-
-    private var unit: WeightUnit {
-        WeightUnit(rawValue: unitRaw) ?? .lb
-    }
-
-    @State private var pendingDeleteItem: ExerciseCatalogItem? = nil
-    @State private var saveError: SaveErrorBox? = nil
-
-    /// Last-instance decorations come from the fingerprint-keyed
-    /// SessionAnalytics cache, so the O(sessions) sweep runs at most
-    /// once per data change instead of once per row access. The
-    /// recompute fallback only serves previews, which don't inject
-    /// the cache.
-    private var lastInstanceLookup: [String: LastExerciseInstance] {
-        sessionAnalytics?.lastInstances ?? completedSessions.lastInstanceByExercise()
-    }
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        let analyticsRequest = sessionAnalytics?.requestKey(
-            for: completedSessions
-        )
-        Group {
-            if isSearching {
-                searchList
-            } else if filteredGroups.isEmpty {
-                VStack(spacing: 0) {
-                    LibrarySegmentBar(selection: $segment)
-                    catalogFilterStrip
-                    emptyState
+        ExerciseCatalogBrowserHost(
+            query: searchText,
+            filter: exerciseFilter,
+            onEdit: { customExerciseTarget = .edit($0) },
+            onDuplicate: { customExerciseTarget = .duplicate($0) }
+        ) { browser, actions in
+            Group {
+                if browser.isSearching {
+                    searchList(browser, actions: actions)
+                } else if browser.sections.isEmpty {
+                    VStack(spacing: 0) {
+                        LibrarySegmentBar(selection: $segment)
+                        catalogFilterStrip(browser)
+                        emptyState
+                    }
+                } else {
+                    exerciseList(browser, actions: actions)
                 }
-            } else {
-                exerciseList
             }
         }
-        .task(id: analyticsRequest) {
-            sessionAnalytics?.requestCore(for: completedSessions)
-        }
-        .alert(
-            "Delete \"\(pendingDeleteItem?.name ?? "exercise")\"?",
-            isPresented: Binding(
-                get: { pendingDeleteItem != nil },
-                set: { if !$0 { pendingDeleteItem = nil } }
-            )
-        ) {
-            Button("Delete", role: .destructive) {
-                if let item = pendingDeleteItem {
-                    delete(item)
-                }
-                pendingDeleteItem = nil
-            }
-            Button("Cancel", role: .cancel) {
-                pendingDeleteItem = nil
-            }
-        } message: {
-            Text("This removes the exercise from the catalog. Templates and history that already reference it stay intact.")
-        }
-        .saveErrorAlert($saveError)
-    }
-
-    // MARK: - Filter / group
-
-    /// True when the search field has real content — drives the
-    /// switch from grouped browse to a flat, relevance-ranked list.
-    private var isSearching: Bool {
-        !searchText.trimmingCharacters(in: .whitespaces).isEmpty
-    }
-
-    /// History keys for exercises the user has actually logged, used
-    /// as the tracked-boost set for `ExerciseSearch`.
-    private var trackedKeys: Set<String> {
-        Set(lastInstanceLookup.keys)
-    }
-
-    /// Catalog narrowed by the selected chip only (no text filter).
-    /// Shared by the grouped browse path and the search-ranked path
-    /// so role, Core, and equipment scopes behave identically in both modes.
-    private var scopedItems: [ExerciseCatalogItem] {
-        items.filter { exerciseFilter.matches($0) }
-    }
-
-    /// Flat, relevance-ranked results for the active query. The chosen
-    /// catalog scope is applied first, then `ExerciseSearch`
-    /// tiers and sorts so "pull" surfaces "Pull-Up" before "Lat Pull
-    /// Down" instead of respecting muscle-group enum order.
-    private var searchResults: [ExerciseCatalogItem] {
-        ExerciseSearch.rank(items: scopedItems, query: searchText, trackedKeys: trackedKeys)
-    }
-
-    private var filteredGroups: [(group: MuscleGroup, items: [ExerciseCatalogItem])] {
-        let trimmed = searchText.trimmingCharacters(in: .whitespaces).lowercased()
-        var scope = scopedItems
-        if !trimmed.isEmpty {
-            scope = scope.filter { item in
-                if item.name.lowercased().contains(trimmed) { return true }
-                return item.aliases.contains { $0.lowercased().contains(trimmed) }
-            }
-        }
-        return scope.groupedByMuscle
-    }
-
-    private var availableEquipment: Set<Equipment> {
-        Set(items.map(\.equipment))
     }
 
     // MARK: - Catalog filter strip
@@ -150,72 +58,43 @@ struct LibraryExercisesContent: View {
     /// Favorites is always offered — selecting it with no stars set
     /// lands on an empty state that teaches the long-press gesture.
     @ViewBuilder
-    private var catalogFilterStrip: some View {
-        if !items.isEmpty {
-            ScrollView(.horizontal, showsIndicators: false) {
-                GlassEffectContainer(spacing: Space.md) {
-                    HStack(spacing: Space.md) {
-                        chip(.all, label: "All")
-                        chip(.favorites, label: "Favorites")
-                        chip(.trainingRole(.push), label: "Push")
-                        chip(.trainingRole(.pull), label: "Pull")
-                        if items.contains(where: { $0.group == .core }) {
-                            chip(.core, label: "Core")
-                        }
-                        ForEach(Equipment.allCases, id: \.self) { e in
-                            if availableEquipment.contains(e) {
-                                chip(.equipment(e), label: e.displayName)
-                            }
-                        }
-                    }
-                }
-                .padding(.horizontal, Space.gutter)
-            }
-            // The strip hugs the chips exactly, so the default scroll
-            // clip slices off the glass material's soft light-mode
-            // shadows — the cropped remainder reads as a hard-edged
-            // gray slab behind the chips. The strip is full-bleed, so
-            // unclipped overflow just falls off-screen.
-            .scrollClipDisabled()
+    private func catalogFilterStrip(_ browser: ExerciseCatalogBrowserSnapshot) -> some View {
+        if browser.hasEligibleItems {
+            ExerciseCatalogFilterStrip(
+                options: browser.filterOptions(includingCore: true),
+                selection: $exerciseFilter,
+                accessibilityPrefix: "libraryExerciseFilter",
+                spacing: Space.md,
+                horizontalContentPadding: Space.gutter
+            )
             .padding(.bottom, Space.lg)
         }
     }
 
-    private func chip(_ filter: LibraryExerciseFilter, label: String) -> some View {
-        let isSelected = exerciseFilter == filter
-        return Button {
-            Haptics.selection()
-            exerciseFilter = filter
-        } label: {
-            Text(label)
-                .font(Typography.sectionLabel)
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .padding(.horizontal, Space.lg)
-                .frame(minHeight: Space.tapMin)
-                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
-        }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("libraryExerciseFilter\(filter.accessibilitySuffix)")
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityValue(isSelected ? "Selected" : "Not selected")
-    }
-
     // MARK: - Exercise list
 
-    private var exerciseList: some View {
+    private func exerciseList(
+        _ browser: ExerciseCatalogBrowserSnapshot,
+        actions: ExerciseCatalogBrowserActions
+    ) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 // Header scrolls with the catalog so the large title
                 // collapses cleanly instead of fighting a pinned bar.
                 LibrarySegmentBar(selection: $segment)
                     .padding(.horizontal, -Space.gutter)
-                catalogFilterStrip
+                catalogFilterStrip(browser)
                     .padding(.horizontal, -Space.gutter)
 
                 LazyVStack(alignment: .leading, spacing: Space.section) {
-                    ForEach(Array(filteredGroups.enumerated()), id: \.element.group) { index, section in
-                        groupSection(group: section.group, items: section.items)
-                            .settleIn(index)
+                    ForEach(Array(browser.sections.enumerated()), id: \.element.group) { index, section in
+                        groupSection(
+                            group: section.group,
+                            items: section.items,
+                            browser: browser,
+                            actions: actions
+                        )
+                        .settleIn(index)
                     }
                 }
                 .padding(.bottom, Space.xxl + Space.xs)
@@ -235,22 +114,25 @@ struct LibraryExercisesContent: View {
     /// relevance. Rows reuse the same `row(_:)` renderer as the
     /// grouped path so the prominent/recent decoration stays
     /// consistent. Empty query keeps the grouped browse (`exerciseList`).
-    private var searchList: some View {
+    private func searchList(
+        _ browser: ExerciseCatalogBrowserSnapshot,
+        actions: ExerciseCatalogBrowserActions
+    ) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 LibrarySegmentBar(selection: $segment)
                     .padding(.horizontal, -Space.gutter)
-                catalogFilterStrip
+                catalogFilterStrip(browser)
                     .padding(.horizontal, -Space.gutter)
 
-                if searchResults.isEmpty {
+                if browser.searchResults.isEmpty {
                     emptyState
                         .padding(.top, Space.xxl)
                 } else {
                     LazyVStack(alignment: .leading, spacing: 0) {
-                        ForEach(Array(searchResults.enumerated()), id: \.element.id) { idx, item in
+                        ForEach(Array(browser.searchResults.enumerated()), id: \.element.id) { idx, item in
                             if idx > 0 { insetRowDivider }
-                            row(item)
+                            row(item, browser: browser, actions: actions)
                                 .settleIn(idx)
                         }
                     }
@@ -268,9 +150,14 @@ struct LibraryExercisesContent: View {
     /// groups: the `SectionHeader` stays on black, the group's rows
     /// sit together inside a single content card with inset
     /// hairlines between them.
-    private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
+    private func groupSection(
+        group: MuscleGroup,
+        items: [ExerciseCatalogItem],
+        browser: ExerciseCatalogBrowserSnapshot,
+        actions: ExerciseCatalogBrowserActions
+    ) -> some View {
         let trackedCount = items.reduce(into: 0) { acc, item in
-            if lastInstance(for: item) != nil { acc += 1 }
+            if browser.lastInstance(for: item) != nil { acc += 1 }
         }
 
         return VStack(alignment: .leading, spacing: Space.sm) {
@@ -281,7 +168,7 @@ struct LibraryExercisesContent: View {
             VStack(spacing: 0) {
                 ForEach(Array(items.enumerated()), id: \.element.id) { idx, item in
                     if idx > 0 { insetRowDivider }
-                    row(item)
+                    row(item, browser: browser, actions: actions)
                 }
             }
             .contentCard()
@@ -309,8 +196,12 @@ struct LibraryExercisesContent: View {
     /// everything else stays tighter. Mirrors the History list's
     /// elevated-recent / quiet-older split, keyed on the exercise's
     /// last-performed date.
-    private func row(_ item: ExerciseCatalogItem) -> some View {
-        let last = lastInstance(for: item)
+    private func row(
+        _ item: ExerciseCatalogItem,
+        browser: ExerciseCatalogBrowserSnapshot,
+        actions: ExerciseCatalogBrowserActions
+    ) -> some View {
+        let last = browser.lastInstance(for: item)
         let isRecent: Bool = {
             guard let last else { return false }
             let days = Calendar.current.dateComponents(
@@ -321,8 +212,13 @@ struct LibraryExercisesContent: View {
             return days <= 14
         }()
 
-        return rowLink(item: item) {
-            exerciseRow(item: item, last: last, prominent: last != nil && isRecent)
+        return rowLink(item: item, actions: actions) {
+            exerciseRow(
+                item: item,
+                last: last,
+                prominent: last != nil && isRecent,
+                browser: browser
+            )
         }
     }
 
@@ -332,6 +228,7 @@ struct LibraryExercisesContent: View {
     /// row tiers share one navigation site + one context menu.
     private func rowLink(
         item: ExerciseCatalogItem,
+        actions: ExerciseCatalogBrowserActions,
         @ViewBuilder label: () -> some View
     ) -> some View {
         NavigationLink {
@@ -340,33 +237,7 @@ struct LibraryExercisesContent: View {
             label()
         }
         .buttonStyle(.plain)
-        .contextMenu {
-            Button {
-                toggleFavorite(item)
-            } label: {
-                Label(
-                    item.isFavorite ? "Unfavorite" : "Favorite",
-                    systemImage: item.isFavorite ? "star.slash" : "star"
-                )
-            }
-            Button {
-                customExerciseTarget = .edit(item)
-            } label: {
-                Label("Edit", systemImage: "pencil")
-            }
-            if item.catalogID != nil, !item.isUserCreated {
-                Button {
-                    customExerciseTarget = .duplicate(item)
-                } label: {
-                    Label("Duplicate as Custom", systemImage: "plus.square.on.square")
-                }
-            }
-            Button(role: .destructive) {
-                pendingDeleteItem = item
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-        }
+        .exerciseCatalogActions(for: item, actions: actions)
     }
 
     // MARK: Exercise row
@@ -382,7 +253,8 @@ struct LibraryExercisesContent: View {
     private func exerciseRow(
         item: ExerciseCatalogItem,
         last: LastExerciseInstance?,
-        prominent: Bool
+        prominent: Bool,
+        browser: ExerciseCatalogBrowserSnapshot
     ) -> some View {
         HStack(alignment: .center, spacing: Space.md) {
             VStack(alignment: .leading, spacing: 3) {
@@ -390,7 +262,7 @@ struct LibraryExercisesContent: View {
                     Text(item.name)
                         .font(Typography.sectionHeading)
                         .foregroundStyle(prominent ? Ink.primary : Ink.secondary)
-                        .lineLimit(2)
+                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
                         .fixedSize(horizontal: false, vertical: true)
                     if item.isFavorite {
                         Image(systemName: "star.fill")
@@ -399,7 +271,7 @@ struct LibraryExercisesContent: View {
                             .accessibilityLabel("Favorite")
                     }
                 }
-                Text(metaLine(item))
+                Text(browser.metadataLine(for: item))
                     .font(Typography.caption)
                     .foregroundStyle(prominent ? Ink.tertiary : Ink.quaternary)
                     .lineLimit(1)
@@ -408,7 +280,7 @@ struct LibraryExercisesContent: View {
 
             Spacer(minLength: Space.sm)
 
-            rowTrailing(last: last, prominent: prominent)
+            rowTrailing(last: last, prominent: prominent, unit: browser.unit)
 
             Image(systemName: "chevron.right")
                 .font(Typography.caption)
@@ -429,7 +301,8 @@ struct LibraryExercisesContent: View {
     @ViewBuilder
     private func rowTrailing(
         last: LastExerciseInstance?,
-        prominent: Bool
+        prominent: Bool,
+        unit: WeightUnit
     ) -> some View {
         if let last {
             // Keep the numeral on one line and let it hold its width:
@@ -450,26 +323,6 @@ struct LibraryExercisesContent: View {
         }
     }
 
-    private func lastInstance(for item: ExerciseCatalogItem) -> LastExerciseInstance? {
-        lastInstanceLookup[item.historyKey]
-    }
-
-    /// Sentence-case meta line shared by both row tiers — same
-    /// vocabulary as History's muscle strip: "Barbell · Push" or
-    /// "Dumbbell · Isolation".
-    private func metaLine(_ item: ExerciseCatalogItem) -> String {
-        var parts: [String] = [item.equipment.displayName]
-        if item.mechanic == .compound, let movementLabel = item.movementLabel {
-            parts.append(movementLabel)
-        } else if item.mechanic == .isolation {
-            if let trainingRole = item.trainingRole {
-                parts.append(trainingRole.displayName)
-            }
-            parts.append("Isolation")
-        }
-        return parts.joined(separator: " · ")
-    }
-
     // MARK: - Empty state
 
     /// The Favorites scope gets a teaching empty state (title +
@@ -477,7 +330,9 @@ struct LibraryExercisesContent: View {
     /// wouldn't fill it; starring an existing one would.
     @ViewBuilder
     private var emptyState: some View {
-        if !isSearching, exerciseFilter == .favorites {
+        if searchText.trimmingCharacters(in: .whitespaces).isEmpty,
+           exerciseFilter == .favorites
+        {
             ContentUnavailableView {
                 Label("No favorite exercises yet", systemImage: "dumbbell")
             } description: {
@@ -511,67 +366,6 @@ struct LibraryExercisesContent: View {
             return "No \(role.displayName) exercises."
         case .equipment:
             return "No exercises for that equipment."
-        }
-    }
-
-    // MARK: - Mutations
-
-    private func toggleFavorite(_ item: ExerciseCatalogItem) {
-        item.isFavorite.toggle()
-        do {
-            try modelContext.saveOrRollback()
-        } catch {
-            saveError = SaveErrorBox(error)
-            return
-        }
-        Haptics.tick()
-    }
-
-    private func delete(_ item: ExerciseCatalogItem) {
-        do {
-            let id = try ExerciseCatalogItem.deleteFromCatalog(item, in: modelContext)
-            SpotlightIndexer.removeExercise(id: id)
-        } catch {
-            saveError = SaveErrorBox(error)
-            return
-        }
-        Haptics.soft()
-    }
-}
-
-/// Mutually-exclusive scopes for the Library exercise catalog and the
-/// exercise picker. Push, Pull, Favorites, and Core sit beside equipment
-/// filters as high-value shortcuts, while a single enum prevents
-/// contradictory chips being selected.
-enum LibraryExerciseFilter: Equatable {
-    case all
-    case favorites
-    case core
-    case trainingRole(TrainingRole)
-    case equipment(Equipment)
-
-    func matches(_ item: ExerciseCatalogItem) -> Bool {
-        switch self {
-        case .all:
-            true
-        case .favorites:
-            item.isFavorite
-        case .core:
-            item.group == .core
-        case let .trainingRole(role):
-            item.trainingRole == role
-        case let .equipment(equipment):
-            item.equipment == equipment
-        }
-    }
-
-    var accessibilitySuffix: String {
-        switch self {
-        case .all: "All"
-        case .favorites: "Favorites"
-        case .core: "Core"
-        case let .trainingRole(role): role.displayName
-        case let .equipment(equipment): equipment.displayName.replacingOccurrences(of: " ", with: "")
         }
     }
 }

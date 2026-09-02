@@ -93,6 +93,19 @@ enum ExercisePickerPurpose: Equatable {
         !isRoutinePurpose
     }
 
+    /// The source-level eligibility gate applied before catalog scopes and
+    /// search ranking. General pickers accept every non-excluded item; routine
+    /// pickers accept only reviewed bundled strength records allowed by the
+    /// planner's equipment and swap-compatibility constraints.
+    func includes(_ item: ExerciseCatalogItem) -> Bool {
+        guard !excludedItemIDs.contains(item.id) else { return false }
+        guard isRoutinePurpose else { return true }
+        guard !item.isUserCreated, let catalogID = item.catalogID else { return false }
+        return item.modality.supportsHardSetAnalytics
+            && allowsRoutineEquipment(item.equipment)
+            && allowsRoutineCatalogID(catalogID)
+    }
+
     func allowsRoutineEquipment(_ equipment: Equipment) -> Bool {
         switch self {
         case let .routineInclude(_, available),

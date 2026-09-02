@@ -1,30 +1,22 @@
 # Current work
 
-Goal: close the active-exercise-card refactor review findings without changing
-the visible instrument or weakening the controller-owned transaction.
+Goal: remove the strongest Exercise Picker / Library exercise-list duplication
+without merging their distinct navigation, row hierarchy, or purpose behavior.
 
 Progress:
 
-- Fixed the post-commit scrub race by cancelling card scrubbing again while the
-  coordinator gate is still closed, before the next set can accept input.
-- Restored external/widget foregrounding when no pending set exists and restored
-  `completedAt` after a failed archive so the retained draft remains loggable.
-- Kept the set mutation inside the completion spring while moving PR
-  presentation state outside it; removed the dead scrub-save parameter.
-- Added focused coverage for coordinator cleanup, nil-set external completion,
-  failed archive retry eligibility, and PR transaction timing. All 10 focused
-  tests pass on a clean ephemeral simulator.
-- `start-complete-rest` and `active-completion-restoration` pass in headless
-  Baguette; their settled screenshots and accessibility trees were inspected.
-- Kept the more direct all-complete summary route and documented it as a
-  deliberate parity deviation in the completed execution plan.
-- The post-fix canonical `Scripts/check.sh`, formatting, diff check, and final
-  review pass.
+- Added `ExerciseCatalogBrowserSnapshot`, shared filter-strip semantics, cached
+  history queries, and one persisted favorite/delete/action contract.
+- Migrated Library and picker rendering while retaining their separate tap,
+  navigation, hierarchy, and empty-state behavior.
+- Routine pickers now derive equipment chips from eligible items and expose no
+  catalog mutation or custom-exercise CTA.
+- Exercise names retain the compact two-line layout at standard sizes and
+  expand fully at accessibility Dynamic Type sizes in Library and pickers.
+- Focused unit tests, `Scripts/check.sh`, dark Library/picker/routine scenarios,
+  context-menu semantics, and light Accessibility Large Type evidence pass.
 
-Next:
+Next: none; ready for review.
 
-- Verify the exact acknowledgement-window flywheel gesture, haptic/audio timing,
-  one-handed reach, and real VoiceOver rotor order on a physical device.
-
-User steering: fix the six reported completion-refactor findings; retain the
-new all-complete summary route and record it as a deliberate plan deviation.
+User steering: proceed with the agreed refactor; preserve the two surfaces'
+distinct UX and handle the identified routine-picker inconsistencies explicitly.

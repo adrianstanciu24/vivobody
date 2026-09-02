@@ -1,0 +1,66 @@
+{
+  "name": "strength-routine-picker-contract",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--pro", "--ui-test-strength-routine-builder"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "strengthRoutineBuilder"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Preferences"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "tap": {
+        "label": "Preferences"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "label": "Include exercise"
+      }
+    },
+    {
+      "wait": {
+        "label": "Include Exercise"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercisePickerFilterAll",
+      "value": "Selected"
+    },
+    {
+      "identifier": "exercisePickerFilterBodyweight",
+      "value": "Not selected"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "exercisePickerFilterBarbell"
+    },
+    {
+      "label": "Create custom exercise"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

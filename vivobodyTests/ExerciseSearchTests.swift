@@ -200,8 +200,8 @@ struct ExerciseSearchTests {
 
     @Test func trainingRoleFiltersSpanCompoundAndIsolationWork() {
         let catalog = bundledCatalog()
-        let push = catalog.filter { LibraryExerciseFilter.trainingRole(.push).matches($0) }
-        let pull = catalog.filter { LibraryExerciseFilter.trainingRole(.pull).matches($0) }
+        let push = catalog.filter { ExerciseCatalogFilter.trainingRole(.push).matches($0) }
+        let pull = catalog.filter { ExerciseCatalogFilter.trainingRole(.pull).matches($0) }
 
         #expect(push.contains { $0.name == "Barbell Bench Press" && $0.mechanic == .compound })
         #expect(push.contains { $0.name == "Flat Dumbbell Fly" && $0.mechanic == .isolation })
