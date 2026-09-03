@@ -1,0 +1,39 @@
+{
+  "name": "workout-load-comparison-live-light",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-complete-summary",
+      "--ui-test-widget-start-request",
+      "--seed-history",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "workoutLoadComparisonChart",
+          "label": "Workout load comparison"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "workoutLoadComparisonChart",
+      "valueContains": "across 10 comparable workouts"
+    }
+  ],
+  "forbidden": [],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

@@ -48,6 +48,7 @@ import VivoKit
                 "--ui-test-skip-active-rest",
                 "--ui-test-active-partial",
                 "--ui-test-receipt-summary",
+                "--ui-test-active-complete-summary",
                 "--ui-test-active-bodyweight",
                 "--ui-test-active-bodyweight-duration",
                 "--ui-test-active-band",
@@ -75,6 +76,7 @@ import VivoKit
                 .completionRestoration,
                 .skipActiveRest,
                 .activePartial(showsReceiptSummary: true),
+                .activeCompleteSummary,
                 .activeBodyweight,
                 .activeBodyweightDuration,
                 .activeLoadPresentation(.abWheel),
@@ -158,6 +160,26 @@ import VivoKit
             #expect(session.orderedExercises.map(\.name) == ["Barbell Bench Press"])
             #expect(session.orderedExercises.first?.orderedSets.count == 2)
             #expect(session.orderedExercises.first?.orderedSets.map(\.isCompleted) == [true, false])
+        }
+
+        @Test func completeSummaryFixtureHasAStableLoadPath() throws {
+            let container = try makeContainer()
+            let context = container.mainContext
+
+            DebugSeedCoordinator.seedLaunchFixtures([.activeCompleteSummary], in: context)
+            DebugSeedCoordinator.seedLaunchFixtures([.activeCompleteSummary], in: context)
+
+            let sessions = try context.fetch(FetchDescriptor<WorkoutSession>())
+            let session = try #require(sessions.first)
+            #expect(sessions.count == 1)
+            #expect(session.isAllComplete)
+            #expect(session.activeExerciseIndex == 1)
+            #expect(WorkoutLoadTrace(session: session).setLoads == [
+                1080,
+                1160,
+                930,
+                825,
+            ])
         }
 
         @Test func resetClearsEveryStoreFamilyAndExternalFixtureKey() throws {

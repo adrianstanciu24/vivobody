@@ -15,12 +15,14 @@
 //      the session set an all-time record; comparable volume or the
 //      honest unloaded work metric follows as a huge monospaced numeral in the completion
 //      accent; Duration / Sets / Reps close as a stat strip, with
-//      the Top set detail and intensity line as the card's footer.
+//      the Top set detail above the load comparison.
 //    • EXERCISES — one card per exercise: group label + per-exercise
 //      volume or unloaded work (+ the PR capsule when earned), the contribution
 //      waterfall, then the set grid of `1   135 × 8` rows in tabular
 //      monospace. The top set's numerals render in the completion
 //      accent; incomplete sets dim with a hollow status pip.
+//    • LOAD COMPARISON — inside the hero below a separator, the selected
+//      workout's cumulative comparable volume against the archive average.
 //
 
 import SwiftData
@@ -29,6 +31,8 @@ import VivoKit
 
 struct SessionDetailScreen: View {
     let session: WorkoutSession
+
+    @Environment(\.sessionAnalytics) private var sessionAnalytics
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
@@ -90,11 +94,18 @@ struct SessionDetailScreen: View {
             )
             .padding(.top, Space.xs)
 
-            VStack(alignment: .leading, spacing: Space.sm) {
-                topSetDetail
-                if SessionIntensityLine.hasContent(session) {
-                    SessionIntensityLine(session: session, unit: unit)
-                }
+            topSetDetail
+
+            if let loadComparison {
+                Rectangle()
+                    .fill(Surface.edge)
+                    .frame(height: 1)
+                    .accessibilityHidden(true)
+
+                WorkoutLoadComparisonChart(
+                    comparison: loadComparison,
+                    unit: unit
+                )
             }
         }
         .padding(Space.lg)
@@ -142,6 +153,14 @@ struct SessionDetailScreen: View {
 
     private var receiptMetric: WorkoutReceiptMetric {
         session.primaryReceiptMetric(unit: unit)
+    }
+
+    private var loadComparison: WorkoutLoadComparison? {
+        guard let sessionAnalytics else { return nil }
+        return WorkoutLoadComparison.make(
+            current: WorkoutLoadTrace(session: session),
+            baseline: sessionAnalytics.workoutLoadBaseline
+        )
     }
 
     private var receiptMetricLabel: String {

@@ -406,7 +406,8 @@ struct ActiveWorkoutScreen: View {
                 WorkoutSummaryCard(
                     session: session,
                     onDone: { finishScrubbing(then: onDismiss) },
-                    onAddExercise: { showAddExercisePicker = true }
+                    onAddExercise: { showAddExercisePicker = true },
+                    loadComparison: summaryLoadComparison
                 )
             }
         }
@@ -426,6 +427,14 @@ struct ActiveWorkoutScreen: View {
 
     private var isEmpty: Bool {
         session.orderedExercises.isEmpty
+    }
+
+    private var summaryLoadComparison: WorkoutLoadComparison? {
+        guard session.isAllComplete, let sessionAnalytics else { return nil }
+        return WorkoutLoadComparison.make(
+            current: WorkoutLoadTrace(session: session),
+            baseline: sessionAnalytics.workoutLoadBaseline
+        )
     }
 
     private var activeExercise: Exercise? {

@@ -78,6 +78,10 @@ final class SessionAnalytics {
         coreReports.load
     }
 
+    var workoutLoadBaseline: WorkoutLoadBaseline {
+        coreReports.workoutLoadBaseline
+    }
+
     var lastInstances: [String: LastExerciseInstance] {
         exerciseHistorySummaries.compactMapValues {
             $0.lastExerciseInstance

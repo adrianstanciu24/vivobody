@@ -1,6 +1,6 @@
 {
-  "scan_id": "scan-2026-09-03-001",
-  "scan_date": "2026-09-03T15:19:14Z",
+  "scan_id": "scan-2026-09-03-002",
+  "scan_date": "2026-09-03T18:56:04Z",
   "scan_type": "working",
   "commit_range": "HEAD..working-tree",
   "pr_number": null,
@@ -22,7 +22,7 @@
       "DoS": 0,
       "ElevationOfPrivilege": 0
     },
-    "files_analyzed": 25
+    "files_analyzed": 26
   },
   "thresholds_triggered": []
 }

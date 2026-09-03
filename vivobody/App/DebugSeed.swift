@@ -40,6 +40,7 @@ import Foundation
         case completionRestoration
         case skipActiveRest
         case activePartial(showsReceiptSummary: Bool)
+        case activeCompleteSummary
         case activeBodyweight
         case activeBodyweightDuration
         case activeLoadPresentation(DebugActiveLoadFixture)
@@ -108,6 +109,11 @@ import Foundation
                 requested(.completionRestoration, by: "--ui-test-completion-restoration", in: arguments),
                 requested(.skipActiveRest, by: "--ui-test-skip-active-rest", in: arguments),
                 activePartialStep(in: arguments),
+                requested(
+                    .activeCompleteSummary,
+                    by: "--ui-test-active-complete-summary",
+                    in: arguments
+                ),
                 requested(.activeBodyweight, by: "--ui-test-active-bodyweight", in: arguments),
                 requested(
                     .activeBodyweightDuration,

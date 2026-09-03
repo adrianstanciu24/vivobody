@@ -1,28 +1,29 @@
 # Current work
 
-Goal: correct Training Load's Sessions driver semantics and make recent-window
-measure transitions explicit.
+Goal: add a Health-inspired cumulative workout-load comparison to the History
+session hero and the completed active-workout summary.
 
 Progress:
 
-- Training Load now uses comparable volume load when recent history supports
-  it and otherwise preserves the hard-set instrument.
-- Model, UI, docs, targeted tests, snapshot contracts, repository checks, and
-  headless evidence for both measures are complete; the execution plan records
-  exact results.
-- No persistence or VivoKit snapshot-shape change was made. Muscle surfaces
-  and `SetStimulus` remain on hard-set currency.
-- Sessions now means every workout carrying hard-set or comparable-volume work,
-  so power-only volume no longer reports zero sessions.
-- The decision, spec, and completed plan now state that one measure drives each
-  report but is reevaluated from the trailing 35 days; returning to weighted
-  work after a long gap intentionally rebuilds the recent volume baseline.
+- The pure comparison model averages fully comparable archived workouts over
+  normalized start-to-finish progress; partial or unavailable load stays hidden.
+- The shared chart is inside the History hero and above the completed live
+  receipt's exercise list. The existing receipt remains vertically scrollable.
+- The History hero omits the density and hard-set intensity line; its footer now
+  moves directly from Top set to the load-comparison separator.
+- Exact totals, redundant series labels, and one VoiceOver summary preserve the
+  meaning in dark, light, and Accessibility XXXL presentations.
+- No persistence or snapshot contract changed.
 
-Verification complete: 31 focused Training Load tests and 78 tests across the
-four affected suites passed. `Scripts/check.sh` and the headless
-`insights-showcase` scenario also passed.
+Verification complete: 19 focused model/debug-fixture tests passed,
+`Scripts/check.sh` passed, and headless scenarios passed for the live summary in
+dark, light, and Accessibility XXXL plus the archive transition and History
+detail placement.
 
-Next: retain real-history volume-load volatility as the remaining product
-observation.
+Next: observe whether normalized set progress remains the clearest comparison
+once real-world workout histories exercise the feature.
 
-User steering: use multiple agents and preserve the measure boundary above.
+User steering: keep the current Vivobody design, place the History chart below
+a separator inside the top card, and place the completed live-summary chart
+above the exercise list in a vertically scrollable receipt. Remove the
+density/hard-set line from the History workout card only.

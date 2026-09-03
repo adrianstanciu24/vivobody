@@ -156,6 +156,8 @@ struct ExerciseCatalogBrowserTests {
 
         #expect(!comparison.includes(anchor))
         #expect(comparison.includes(custom))
+        #expect(comparison.includesCoreFilter)
+        #expect(!ExercisePickerPurpose.explore.includesCoreFilter)
 
         let routine = ExercisePickerPurpose.routineSwap(
             excludedIDs: [],
@@ -183,5 +185,6 @@ struct ExerciseCatalogBrowserTests {
         #expect(!routine.includes(power))
         #expect(!routine.includes(custom))
         #expect(!routine.allowsCatalogEditing)
+        #expect(!routine.includesCoreFilter)
     }
 }

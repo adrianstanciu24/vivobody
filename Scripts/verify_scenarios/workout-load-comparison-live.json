@@ -1,0 +1,45 @@
+{
+  "name": "workout-load-comparison-live",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-complete-summary",
+      "--ui-test-widget-start-request",
+      "--seed-history",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "workoutLoadComparisonChart",
+          "label": "Workout load comparison",
+          "valueContains": "across 10 comparable workouts"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "workoutLoadComparisonChart",
+      "label": "Workout load comparison",
+      "valueContains": "This workout, 3995 pounds of comparable volume"
+    },
+    {
+      "label": "Chest, Barbell Bench Press, 3,995 lb",
+      "value": "4 of 4 sets completed"
+    }
+  ],
+  "forbidden": [],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

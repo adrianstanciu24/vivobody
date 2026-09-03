@@ -29,6 +29,8 @@ import VivoKit
                 CompletionRestorationSeed.skipActiveRest(in: context)
             case let .activePartial(showsReceiptSummary):
                 seedPartial(showsReceiptSummary: showsReceiptSummary, in: context)
+            case .activeCompleteSummary:
+                seedCompleteSummary(in: context)
             default:
                 return false
             }
@@ -74,6 +76,37 @@ import VivoKit
             if showsReceiptSummary {
                 session.activeExerciseIndex = 1
             }
+            context.insert(session)
+            try? context.saveOrRollback()
+        }
+
+        /// Completed receipt with a varied set-load path for the cumulative
+        /// current-versus-average chart. Archived history is seeded separately
+        /// so the same fixture can also prove the no-baseline state.
+        private static func seedCompleteSummary(in context: ModelContext) {
+            guard !hasActiveSession(in: context) else { return }
+
+            let exercise = debugCatalogExercise(
+                named: "Barbell Bench Press",
+                plannedSets: 4,
+                plannedReps: 8,
+                plannedWeight: 135,
+                sortOrder: 0
+            )
+            let prescriptions: [(weight: Double, reps: Int)] = [
+                (135, 8),
+                (145, 8),
+                (155, 6),
+                (165, 5),
+            ]
+            for (set, prescription) in zip(exercise.orderedSets, prescriptions) {
+                set.weight = prescription.weight
+                set.reps = prescription.reps
+                set.isCompleted = true
+            }
+
+            let session = WorkoutSession(exercises: [exercise], restDuration: 90)
+            session.activeExerciseIndex = 1
             context.insert(session)
             try? context.saveOrRollback()
         }

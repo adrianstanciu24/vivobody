@@ -16,6 +16,8 @@
 //      the same grammar as the History receipt, ruled top and bottom
 //      into a band — with the intensity line (density, hard sets) as
 //      a dim footer note beneath.
+//    • On a completed receipt, a cumulative comparable-load chart against
+//      the cached archive average, separated from the receipt metrics.
 //    • The exercise list as type rows divided by hairlines, each with
 //      its honest work metric and the same gold/dim set pips used on the pages.
 //    • Words for verbs: "Add exercise" and a gold "Done" verb
@@ -49,6 +51,10 @@ struct WorkoutSummaryCard: View {
     /// When true, renders the real final totals without the count-up
     /// or success haptic. Reserved for non-celebratory review.
     var isHistorical: Bool = false
+
+    /// Cached archive comparison supplied by the parent. It appears only on
+    /// the completed receipt and never owns a store query itself.
+    var loadComparison: WorkoutLoadComparison? = nil
 
     /// Duration count-up state lives on `session` (not @State) so it
     /// survives view remounts — e.g. minimizing to the MiniBar and
@@ -97,15 +103,30 @@ struct WorkoutSummaryCard: View {
                             .powerOn(2)
                     }
 
+                    if isComplete, let loadComparison {
+                        Rectangle()
+                            .fill(Surface.edge)
+                            .frame(height: 1)
+                            .padding(.top, Space.xl)
+                            .accessibilityHidden(true)
+
+                        WorkoutLoadComparisonChart(
+                            comparison: loadComparison,
+                            unit: unit
+                        )
+                        .padding(.top, Space.lg)
+                        .powerOn(3)
+                    }
+
                     exerciseList
                         .padding(.top, Space.xl)
-                        .powerOn(3)
+                        .powerOn(4)
 
                     Spacer(minLength: Space.xl)
 
                     actionArea
                         .padding(.top, Space.xl)
-                        .powerOn(4)
+                        .powerOn(5)
                 }
                 .padding(.top, Space.lg)
                 .padding(.bottom, Space.xl)

@@ -27,7 +27,9 @@ model under `Models/Domain/`, not an insight.
 2. Free users are attempt-gated at that entry into the screen's local
    paywall sheet (the template-creation pattern). Pro users get
    `ExercisePickerSheet` retitled "Compare With" in direct-pick mode, with
-   the anchor exercise excluded from every list.
+   the anchor exercise excluded from every list and the same catalog filter
+   set as Library Exercises, including Core when an eligible core exercise
+   exists.
    The active-workout add picker uses a separate purpose that hides both
    comparison entries, preserving the no-premium-interruption workout rule.
 3. The pick chains through the sheet's `onDismiss` into
@@ -138,6 +140,9 @@ only path to it.
   the paywall; no picker, no comparison), and
   `exercise-comparison-active-workout-hidden` (the live-session add flow has
   no comparison or comparison paywall entry).
+  `exercise-comparison-picker-filters` and its light/Accessibility variants
+  verify the Compare With picker keeps Library Exercises' All, Favorites,
+  Push, Pull, and Core shortcuts without compromising the filter-strip layout.
 
 ## Files
 

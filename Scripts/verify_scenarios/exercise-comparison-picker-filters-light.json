@@ -1,0 +1,67 @@
+{
+  "name": "exercise-comparison-picker-filters-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--pro",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-compare"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-compare"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercisePickerFilterCore",
+        "value": "Not selected"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercisePickerFilterAll",
+      "value": "Selected"
+    },
+    {
+      "identifier": "exercisePickerFilterCore",
+      "value": "Not selected"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Barbell Bench Press, Barbell · Horizontal Push"
+    }
+  ]
+}

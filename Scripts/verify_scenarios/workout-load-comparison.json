@@ -1,0 +1,109 @@
+{
+  "name": "workout-load-comparison",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-complete-summary",
+      "--ui-test-widget-start-request",
+      "--seed-history",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "workoutLoadComparisonChart",
+          "label": "Workout load comparison",
+          "valueContains": "across 10 comparable workouts"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Finish workout and return to home",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "label": "Finish workout and return to home",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "history",
+        "arguments": [
+          "-settings.weightUnit",
+          "lb",
+          "-settings.appearance",
+          "dark"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "identifierContains": "historySessionRow",
+        "labelContains": "Chest day",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifierContains": "historySessionRow",
+        "labelContains": "Chest day",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "workoutLoadComparisonChart",
+          "label": "Workout load comparison",
+          "valueContains": "across 11 comparable workouts"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "workoutLoadComparisonChart",
+      "label": "Workout load comparison",
+      "valueContains": "This workout, 3995 pounds of comparable volume"
+    }
+  ],
+  "forbidden": [],
+  "requiredLogs": [
+    "event=session.transition kind=archive outcome=success"
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

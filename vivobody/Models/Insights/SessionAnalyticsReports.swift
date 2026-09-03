@@ -21,6 +21,7 @@ extension SessionAnalytics {
         let strength: StrengthOutlookBoard
         let progress: [ExerciseProgress]
         let load: TrainingLoadReport
+        let workoutLoadBaseline: WorkoutLoadBaseline
         let consistency: ConsistencyReport
         let exerciseHistory: [String: ExerciseHistorySummary]
         let exerciseDetail: ExerciseDetailReports
@@ -83,6 +84,10 @@ extension SessionAnalytics {
                 isCancelled: isCancelled
             )
             try checkpoint()
+            let workoutLoadBaseline = WorkoutLoadBaseline.make(
+                from: common.sessions
+            )
+            try checkpoint()
             let consistency = common.consistency(
                 now: now,
                 isCancelled: isCancelled
@@ -121,6 +126,7 @@ extension SessionAnalytics {
                 strength: strength,
                 progress: progress,
                 load: load,
+                workoutLoadBaseline: workoutLoadBaseline,
                 consistency: consistency,
                 exerciseHistory: history,
                 exerciseDetail: exerciseDetail,

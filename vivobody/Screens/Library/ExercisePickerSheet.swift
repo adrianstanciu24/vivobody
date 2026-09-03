@@ -56,8 +56,7 @@ struct ExercisePickerSheet: View {
     @State private var editorTarget: CatalogEditorTarget?
 
     /// Catalog scope chosen in the chip strip — All, Favorites, a training
-    /// role, or one equipment. The picker never offers the Library-only Core
-    /// shortcut.
+    /// role, purpose-appropriate Core, or one equipment.
     @State private var filter: ExerciseCatalogFilter = .all
 
     var body: some View {
@@ -133,7 +132,7 @@ struct ExercisePickerSheet: View {
     private func equipmentFilterStrip(_ browser: ExerciseCatalogBrowserSnapshot) -> some View {
         if browser.hasEligibleItems {
             ExerciseCatalogFilterStrip(
-                options: browser.filterOptions(includingCore: false),
+                options: browser.filterOptions(includingCore: purpose.includesCoreFilter),
                 selection: $filter,
                 accessibilityPrefix: "exercisePickerFilter",
                 spacing: 8,

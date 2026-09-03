@@ -93,6 +93,14 @@ enum ExercisePickerPurpose: Equatable {
         !isRoutinePurpose
     }
 
+    /// Comparison mirrors Library's catalog scopes so users can narrow the
+    /// same exercise collection consistently. Other picker purposes retain
+    /// their focused filter set.
+    var includesCoreFilter: Bool {
+        if case .compare = self { return true }
+        return false
+    }
+
     /// The source-level eligibility gate applied before catalog scopes and
     /// search ranking. General pickers accept every non-excluded item; routine
     /// pickers accept only reviewed bundled strength records allowed by the
