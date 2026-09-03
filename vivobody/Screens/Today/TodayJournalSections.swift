@@ -73,7 +73,7 @@ struct TodayLastWorkoutSection: View {
                     Stat(value: "\(totalSets)", label: "Sets"),
                 ],
                 valueFont: Typography.statValue,
-                edgeAligned: true
+                columnWeights: [3, 4, 3]
             )
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(Space.xl)

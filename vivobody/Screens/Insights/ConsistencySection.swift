@@ -84,6 +84,10 @@ struct ConsistencySection: View {
             heatmapLegend
                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
 
+            Rectangle()
+                .fill(Surface.edge)
+                .frame(height: 0.5)
+
             weeklyVolumeSpark
                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
 

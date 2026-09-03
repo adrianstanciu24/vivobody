@@ -54,6 +54,7 @@ nonisolated struct AnalyticsSessionReplay {
     let exercises: [AnalyticsExerciseReplay]
     let totalSetEquivalent: Double
     let heavySets: Double
+    let moderateSets: Double
 
     nonisolated var date: Date {
         session.date
@@ -149,6 +150,7 @@ nonisolated struct AnalyticsAccumulator {
             exerciseEvents.reserveCapacity(session.exercises.count)
             var sessionTotal = 0.0
             var heavySets = 0.0
+            var moderateSets = 0.0
 
             for exercise in session.exercises {
                 guard !isCancelled() else { break }
@@ -167,6 +169,11 @@ nonisolated struct AnalyticsAccumulator {
                     heavySets += Double(
                         exercise.sets.count(where: {
                             $0.isAnalyticsEligible && (1 ... 5).contains($0.reps)
+                        })
+                    )
+                    moderateSets += Double(
+                        exercise.sets.count(where: {
+                            $0.isAnalyticsEligible && (6 ... 12).contains($0.reps)
                         })
                     )
                 }
@@ -202,7 +209,8 @@ nonisolated struct AnalyticsAccumulator {
                     session: session,
                     exercises: exerciseEvents,
                     totalSetEquivalent: sessionTotal,
-                    heavySets: heavySets
+                    heavySets: heavySets,
+                    moderateSets: moderateSets
                 )
             )
         }

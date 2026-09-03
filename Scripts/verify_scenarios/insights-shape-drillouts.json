@@ -55,12 +55,6 @@
       }
     },
     {
-      "swipe": {
-        "direction": "up",
-        "count": 1
-      }
-    },
-    {
       "tap": {
         "identifier": "insightsRepMixLink",
         "role": "AXButton"

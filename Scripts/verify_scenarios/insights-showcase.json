@@ -16,8 +16,8 @@
       "assert": {
         "required": [
           {
-            "identifier": "insightsModeShape",
-            "value": "Selected"
+            "label": "Training signature. All-time volume split: Chest 13 percent, Back 21 percent, Shoulders 17 percent, Legs 22 percent, Arms 26 percent. Balance 88 percent, with 5 of 6 regions represented. Arms-led · 5 regions. Dashed outlines show an even six-way split.",
+            "role": "AXGenericElement"
           },
           {
             "identifier": "insightsExerciseMixLink",
@@ -33,14 +33,22 @@
         ],
         "forbidden": [
           {
+            "identifierContains": "insightsMode"
+          },
+          {
             "identifier": "insightsEmptyState"
           }
         ]
       }
     },
     {
-      "tap": {
-        "identifier": "insightsModeLoad"
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsLoadInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 16
       }
     },
     {
@@ -50,8 +58,13 @@
       }
     },
     {
-      "tap": {
-        "identifier": "insightsModeRhythm"
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsRhythmInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 16
       }
     },
     {
@@ -61,8 +74,13 @@
       }
     },
     {
-      "tap": {
-        "identifier": "insightsModeBalance"
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 16
       }
     },
     {
@@ -70,33 +88,18 @@
         "identifier": "insightsBalanceInstrument",
         "role": "AXHeading"
       }
-    },
-    {
-      "tap": {
-        "identifier": "insightsModeShape"
-      }
     }
   ],
   "required": [
     {
-      "identifier": "insightsShapeInstrument",
+      "identifier": "insightsBalanceInstrument",
       "role": "AXHeading"
-    },
-    {
-      "label": "Training signature. All-time volume split: Chest 13 percent, Back 21 percent, Shoulders 17 percent, Legs 22 percent, Arms 26 percent. Balance 88 percent, with 5 of 6 regions represented. Arms-led · 5 regions. Dashed outlines show an even six-way split.",
-      "role": "AXGenericElement"
-    },
-    {
-      "identifier": "insightsModeShape",
-      "value": "Selected"
-    },
-    {
-      "identifier": "insightsExerciseMixLink",
-      "labelContains": "Other exercises",
-      "role": "AXButton"
     }
   ],
   "forbidden": [
+    {
+      "identifierContains": "insightsMode"
+    },
     {
       "identifier": "insightsEmptyState"
     }

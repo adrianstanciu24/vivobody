@@ -1,0 +1,44 @@
+{
+  "name": "insights-load-rep-drivers",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": ["--ui-test-insights-showcase", "--pro"]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "6–12 reps",
+          "role": "AXGenericElement"
+        },
+        "direction": "up",
+        "maxSwipes": 16
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Sessions",
+            "role": "AXGenericElement"
+          },
+          {
+            "labelContains": "1–5 reps",
+            "role": "AXGenericElement"
+          },
+          {
+            "labelContains": "6–12 reps",
+            "role": "AXGenericElement"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsLoadInstrument",
+      "role": "AXHeading"
+    }
+  ]
+}

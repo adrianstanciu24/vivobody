@@ -3,7 +3,12 @@
   "launch": {
     "reset": true,
     "tab": "insights",
-    "arguments": ["--ui-test-insights-showcase", "--pro"]
+    "arguments": [
+      "--ui-test-insights-showcase",
+      "--pro",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
   },
   "steps": [
     {
@@ -13,8 +18,13 @@
       }
     },
     {
-      "tap": {
-        "identifier": "insightsModeLoad"
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsLoadInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 30
       }
     },
     {
@@ -24,8 +34,13 @@
       }
     },
     {
-      "tap": {
-        "identifier": "insightsModeRhythm"
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsRhythmInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 30
       }
     },
     {
@@ -35,8 +50,13 @@
       }
     },
     {
-      "tap": {
-        "identifier": "insightsModeBalance"
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 30
       }
     },
     {
@@ -44,24 +64,18 @@
         "identifier": "insightsBalanceInstrument",
         "role": "AXHeading"
       }
-    },
-    {
-      "tap": {
-        "identifier": "insightsModeShape"
-      }
     }
   ],
   "required": [
     {
-      "identifier": "insightsModeShape",
-      "value": "Selected"
-    },
-    {
-      "identifier": "insightsShapeInstrument",
+      "identifier": "insightsBalanceInstrument",
       "role": "AXHeading"
     }
   ],
   "forbidden": [
+    {
+      "identifierContains": "insightsMode"
+    },
     {
       "identifier": "insightsEmptyState"
     }

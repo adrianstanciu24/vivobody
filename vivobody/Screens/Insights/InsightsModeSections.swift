@@ -2,16 +2,16 @@
 //  InsightsModeSections.swift
 //  vivobody
 //
-//  Focused mode compositions for the Insights screen. Shape keeps the
+//  Focused section compositions for the Insights screen. Shape keeps the
 //  lifetime bloom dominant and previews recent exercise/rep distributions as
 //  compact visual drill-outs; Balance keeps only the priority tug-of-war
-//  beams in the main panel and moves the qualified roster one level deeper.
+//  beams in the main scroll and moves the qualified roster one level deeper.
 //
 
 import SwiftUI
 import VivoKit
 
-struct ShapeInsightsMode: View {
+struct ShapeInsightsSection: View {
     let signature: TrainingSignature
     let dominance: ExerciseDominanceBoard
     let composition: CompositionSplit
@@ -38,7 +38,7 @@ struct ShapeInsightsMode: View {
     }
 }
 
-struct BalanceInsightsMode: View {
+struct BalanceInsightsSection: View {
     let board: AntagonistBoard
 
     var body: some View {

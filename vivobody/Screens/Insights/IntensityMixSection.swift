@@ -108,12 +108,14 @@ struct IntensityMixSection: View {
         Chart(chartRows) { row in
             BarMark(
                 x: .value("Week", row.weekStart, unit: .weekOfYear),
-                y: .value("Sets", row.sets)
+                y: .value("Sets", row.sets),
+                width: .fixed(22)
             )
             .foregroundStyle(color(row.zone))
             .opacity(row.isPartial ? 0.55 : 1)
             .cornerRadius(2)
         }
+        .chartXScale(range: .plotDimension(startPadding: 6, endPadding: 18))
         .chartXAxis { InsightChartAxis.dates() }
         .chartYAxis { InsightChartAxis.counts() }
         .frame(height: InsightChartCanvas.hero)

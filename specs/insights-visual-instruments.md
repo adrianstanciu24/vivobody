@@ -19,18 +19,18 @@ labels.
 
 ## Navigation contract
 
-- A persistent four-mode control switches between Shape, Load, Rhythm, and
-  Balance. Switching modes returns the selected instrument to its top.
-- Each mode owns one primary decision and one dominant visual.
+- The four instruments share one vertical scroll in the fixed order Shape,
+  Load, Rhythm, then Balance. No mode control separates them.
+- Each section owns one primary decision and one dominant visual.
 - Shape may link to **Exercise mix** and **Rep mix** details. Those are
   drill-outs, not permanent chapters in the main scroll.
 - Balance shows a focused set of comparisons first and links to the full
   comparison board when more qualified pairs exist.
-- Empty and loading states do not show an inert mode control.
+- Empty and loading states continue to replace the instrument panel as a whole.
 
 ## Information hierarchy
 
-Every populated mode follows the same order:
+Every populated section follows the same order:
 
 1. **Glance** — one large verdict or identity plus the dominant visual.
 2. **Compare** — labels, axes, or beams that explain the relationship encoded
@@ -72,6 +72,8 @@ meaning that is absent from position, length, label, or accessibility value.
   explanatory paragraph.
 - Exercise mix and Rep mix appear as compact visual navigation cards. Their
   full charts live on dedicated detail screens.
+- Rep mix uses readable fixed-width weekly stacks and enough trailing plot
+  inset to keep the newest date label fully visible beside the Y axis.
 - Each preview uses two independently rounded segments: orange for the top
   category and neutral gray for the combined remainder. A single compact
   legend labels both roles without requiring color interpretation.
@@ -84,15 +86,17 @@ meaning that is absent from position, length, label, or accessibility value.
 
 - Lead with the current estimated-hard-set value and a large range verdict.
 - The rolling line and personal range band are the primary comparison.
-- The hero already carries estimated hard sets; sessions and low-rep sets
-  remain one compact driver strip without repeating the hero value.
+- The hero already carries estimated hard sets; centered Sessions, 1–5 reps,
+  and 6–12 reps remain one compact driver strip without repeating the hero
+  value.
 - Baseline-building state uses the same dormant chart geometry and factual
   collection progress.
 
 ### Rhythm
 
 - Lead with weekly cadence and the six-month training calendar.
-- Weekly-set direction is a compact companion visual inside the same card.
+- Weekly-set direction is a compact companion visual inside the same card,
+  separated from the daily heatmap by a quiet hairline.
 - Days trained and average RIR are supporting reads. Rep-range distribution
   does not compete with the calendar here; it remains a Shape drill-out.
 
@@ -109,9 +113,9 @@ meaning that is absent from position, length, label, or accessibility value.
 
 ## Locked, empty, and failure states
 
-- Free users may switch modes to inspect real-data previews. The selected
-  instrument is visually obscured and removed from accessibility; the unlock
-  action is the only exposed data-area target.
+- Free users see the full ordered real-data preview visually obscured and
+  removed from accessibility; the unlock action is the only exposed data-area
+  target.
 - The persistent purchase control remains available without replacing the
   real instrument geometry.
 - No archived workouts shows the existing whole-screen first-use state.
@@ -121,8 +125,8 @@ meaning that is absent from position, length, label, or accessibility value.
 
 ## Accessibility and verification
 
-- Each mode control is at least 44 points, announces selected state, and has a
-  stable identifier.
+- Shape, Load, Rhythm, and Balance expose stable, unique section headings in
+  their visual and accessibility order.
 - Every chart or custom drawing exposes the decision, comparison, values,
   units, and timeframe without relying on color.
 - Repeated child nodes must not inherit a section identifier. Harness IDs live
@@ -141,8 +145,8 @@ meaning that is absent from position, length, label, or accessibility value.
 
 ## Implementation
 
-- The populated tab is split into persistent Shape, Load, Rhythm, and Balance
-  modes; mode changes return to the selected instrument's top.
+- The populated tab presents Shape, Load, Rhythm, and Balance as one ordered
+  vertical instrument scroll with clear section separators and no mode control.
 - Exercise mix, Rep mix, and the full balance roster are visual drill-outs.
 - `--ui-test-insights-showcase` supplies a focused deterministic history for
   normal, locked, light, and accessibility verification.

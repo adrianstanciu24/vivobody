@@ -59,10 +59,13 @@ struct TrainingLoadSection: View {
                             ),
                             Stat(
                                 value: "\(Int(report.drivers.heavySets.current.rounded()))",
-                                label: "1–5 rep sets"
+                                label: "1–5 reps"
                             ),
-                        ],
-                        edgeAligned: true
+                            Stat(
+                                value: "\(Int(report.drivers.moderateSets.current.rounded()))",
+                                label: "6–12 reps"
+                            ),
+                        ]
                     )
                 }
                 .padding(Space.xl)

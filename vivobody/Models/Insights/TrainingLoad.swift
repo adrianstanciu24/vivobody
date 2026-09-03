@@ -108,11 +108,13 @@ nonisolated struct TrainingLoadDrivers: Hashable {
     let hardSets: LoadDriver
     let sessions: LoadDriver
     let heavySets: LoadDriver
+    let moderateSets: LoadDriver
 
     static let empty = TrainingLoadDrivers(
         hardSets: LoadDriver(current: 0, usual: nil),
         sessions: LoadDriver(current: 0, usual: nil),
-        heavySets: LoadDriver(current: 0, usual: nil)
+        heavySets: LoadDriver(current: 0, usual: nil),
+        moderateSets: LoadDriver(current: 0, usual: nil)
     )
 }
 
@@ -359,6 +361,10 @@ nonisolated extension AnalyticsAccumulator {
                 heavySets: LoadDriver(
                     current: current.heavySets,
                     usual: usual == nil ? nil : Self.median(previous.map(\.heavySets))
+                ),
+                moderateSets: LoadDriver(
+                    current: current.moderateSets,
+                    usual: usual == nil ? nil : Self.median(previous.map(\.moderateSets))
                 )
             )
         )
@@ -382,12 +388,14 @@ nonisolated extension AnalyticsAccumulator {
         let date: Date
         let load: Double
         let heavySets: Double
+        let moderateSets: Double
     }
 
     private struct Window {
         let load: Double
         let sessions: Int
         let heavySets: Double
+        let moderateSets: Double
     }
 
     /// Replay completed sessions chronologically so each set is
@@ -410,7 +418,8 @@ nonisolated extension AnalyticsAccumulator {
             result.append(Measurement(
                 date: session.date,
                 load: session.totalSetEquivalent,
-                heavySets: session.heavySets
+                heavySets: session.heavySets,
+                moderateSets: session.moderateSets
             ))
         }
         return result
@@ -498,12 +507,14 @@ nonisolated extension AnalyticsAccumulator {
         calendar: Calendar,
         isCancelled: @Sendable () -> Bool
     ) -> Window {
-        guard !isCancelled() else { return Window(load: 0, sessions: 0, heavySets: 0) }
+        guard !isCancelled() else {
+            return Window(load: 0, sessions: 0, heavySets: 0, moderateSets: 0)
+        }
         guard
             let end = calendar.date(byAdding: .day, value: 1, to: day),
             let start = calendar.date(byAdding: .day, value: -6, to: day)
         else {
-            return Window(load: 0, sessions: 0, heavySets: 0)
+            return Window(load: 0, sessions: 0, heavySets: 0, moderateSets: 0)
         }
         return window(
             from: start,
@@ -552,19 +563,22 @@ nonisolated extension AnalyticsAccumulator {
         var load = 0.0
         var sessions = 0
         var heavySets = 0.0
+        var moderateSets = 0.0
         for measurement in measurements {
             guard !isCancelled() else {
-                return Window(load: 0, sessions: 0, heavySets: 0)
+                return Window(load: 0, sessions: 0, heavySets: 0, moderateSets: 0)
             }
             guard measurement.date >= start, measurement.date < end else { continue }
             load += measurement.load
             sessions += 1
             heavySets += measurement.heavySets
+            moderateSets += measurement.moderateSets
         }
         return Window(
             load: load,
             sessions: sessions,
-            heavySets: heavySets
+            heavySets: heavySets,
+            moderateSets: moderateSets
         )
     }
 

@@ -203,6 +203,9 @@ struct Stat: Identifiable {
 struct StatStrip: View {
     let stats: [Stat]
     var valueFont: Font = Typography.statValue
+    /// Relative widths for the horizontal cells. A mismatched or invalid
+    /// collection falls back to equal columns.
+    var columnWeights: [CGFloat]? = nil
     /// When true the outer cells hug the strip's edges (first leading,
     /// last trailing) while the middle stays centred. Lets the strip
     /// line up under a gutter-to-gutter section header — the title
@@ -227,19 +230,46 @@ struct StatStrip: View {
             }
             .frame(maxWidth: .infinity)
         } else {
-            HStack(spacing: 0) {
+            StatStripRowLayout(weights: resolvedColumnWeights) {
                 ForEach(Array(stats.enumerated()), id: \.element.id) { index, stat in
                     cell(stat, alignment: alignment(for: index))
-                    if index < stats.count - 1 {
+                }
+            }
+            .overlay {
+                GeometryReader { geometry in
+                    ForEach(dividerFractions, id: \.self) { fraction in
                         Rectangle()
                             .fill(Surface.edge)
                             .frame(width: 0.5)
                             .frame(minHeight: 34)
+                            .position(
+                                x: geometry.size.width * fraction,
+                                y: geometry.size.height / 2
+                            )
                     }
                 }
+                .accessibilityHidden(true)
             }
             .frame(maxWidth: .infinity)
         }
+    }
+
+    private var resolvedColumnWeights: [CGFloat] {
+        guard let columnWeights,
+              columnWeights.count == stats.count,
+              columnWeights.allSatisfy({ $0 > 0 })
+        else {
+            return Array(repeating: 1, count: stats.count)
+        }
+        return columnWeights
+    }
+
+    private var dividerFractions: [CGFloat] {
+        let total = resolvedColumnWeights.reduce(0, +)
+        return resolvedColumnWeights.dropLast().reduce(into: (offsets: [CGFloat](), sum: 0)) { result, weight in
+            result.sum += weight
+            result.offsets.append(result.sum / total)
+        }.offsets
     }
 
     private func alignment(for index: Int) -> HorizontalAlignment {

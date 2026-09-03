@@ -13,14 +13,13 @@
       }
     },
     {
-      "tap": {
-        "identifier": "insightsModeBalance"
-      }
-    },
-    {
-      "wait": {
-        "identifier": "insightsBalanceInstrument",
-        "role": "AXHeading"
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 40
       }
     },
     {

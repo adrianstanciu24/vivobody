@@ -2,106 +2,13 @@
 //  InsightsScreenSupport.swift
 //  vivobody
 //
-//  Navigation and state chrome for the Insights instrument panel. The
-//  four-mode control stays reachable while one focused read scrolls; shared
-//  drill-out, locked-preview, unlock, and empty-mark pieces keep those states
-//  visually identical without putting analytics decisions in the shell.
+//  Shared navigation, locked-preview, unlock, and empty-state pieces keep the
+//  Insights panel and its drill-outs visually consistent without putting
+//  analytics decisions in the screen shell.
 //
 
 import SwiftUI
 import VivoKit
-
-enum InsightsMode: String, CaseIterable, Identifiable {
-    case shape
-    case load
-    case rhythm
-    case balance
-
-    var id: String {
-        rawValue
-    }
-
-    var label: String {
-        rawValue.capitalized
-    }
-
-    var accessibilityHint: String {
-        switch self {
-        case .shape: "Shows lifetime training shape and recent composition"
-        case .load: "Shows current workload against your recent range"
-        case .rhythm: "Shows training cadence and calendar"
-        case .balance: "Shows opposing muscle and movement comparisons"
-        }
-    }
-
-    var accessibilityIdentifier: String {
-        "insightsMode\(label)"
-    }
-}
-
-struct InsightsModeBar: View {
-    @Binding var selection: InsightsMode
-
-    var body: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: 4) {
-                ForEach(InsightsMode.allCases) { mode in
-                    modeButton(mode)
-                        .frame(minWidth: 68, maxWidth: .infinity)
-                }
-            }
-
-            Grid(horizontalSpacing: 4, verticalSpacing: 4) {
-                GridRow {
-                    modeButton(.shape)
-                    modeButton(.load)
-                }
-                GridRow {
-                    modeButton(.rhythm)
-                    modeButton(.balance)
-                }
-            }
-        }
-        .padding(4)
-        .coloredGlassControl(cornerRadius: Radius.pill, interactive: false)
-    }
-
-    private func modeButton(_ mode: InsightsMode) -> some View {
-        let isSelected = selection == mode
-        return Button {
-            guard !isSelected else { return }
-            var transaction = Transaction()
-            transaction.disablesAnimations = true
-            withTransaction(transaction) {
-                selection = mode
-            }
-            Haptics.selection()
-        } label: {
-            Text(mode.label)
-                .font(Typography.sectionHeading)
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .lineLimit(1)
-                .fixedSize(horizontal: true, vertical: false)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, Space.sm)
-                .frame(minHeight: Space.tapMin)
-                .background {
-                    if isSelected {
-                        Capsule(style: .continuous)
-                            .fill(Tint.primary)
-                            .shadow(color: Tint.primary.opacity(0.28), radius: 8, y: 3)
-                    }
-                }
-                .contentShape(Capsule())
-        }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier(mode.accessibilityIdentifier)
-        .accessibilityLabel(mode.label)
-        .accessibilityValue(isSelected ? "Selected" : "Not selected")
-        .accessibilityHint(mode.accessibilityHint)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-}
 
 struct InsightsDrilloutScreen<Content: View>: View {
     let title: String

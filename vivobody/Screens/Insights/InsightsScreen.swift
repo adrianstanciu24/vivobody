@@ -2,14 +2,12 @@
 //  InsightsScreen.swift
 //  vivobody
 //
-//  Personal analytics as four focused visual instruments instead of one long
-//  report: Shape, Load, Rhythm, and Balance. The mode control pins beneath the
-//  collapsing navigation title; switching modes returns the instrument to its
-//  top. Secondary distributions and the full balance roster live in drill-outs.
+//  Personal analytics as one ordered instrument scroll: Shape, Load, Rhythm, then
+//  Balance. Each instrument keeps its own scope and dominant visual while
+//  secondary distributions and the full balance roster live in drill-outs.
 //
-//  Free users can switch between the same real-data instrument geometries,
-//  frozen beneath the shared blur, while one persistent bottom action carries
-//  the purchase request. Empty and loading states intentionally omit the modes.
+//  Free users see the same real-data instrument geometries frozen beneath a
+//  shared blur, while one persistent bottom action carries the purchase request.
 //
 
 import SwiftUI
@@ -17,10 +15,6 @@ import VivoKit
 
 struct InsightsScreen: View {
     @Bindable var appState: AppState
-
-    @State private var selectedMode: InsightsMode = .shape
-
-    private let modeTopID = "insightsModeTop"
 
     var body: some View {
         Group {
@@ -50,53 +44,26 @@ struct InsightsScreen: View {
         reports: SessionAnalytics.InsightsReports,
         locked: Bool
     ) -> some View {
-        ScrollViewReader { proxy in
-            ScrollView(.vertical) {
-                LazyVStack(
-                    alignment: .leading,
-                    spacing: 0,
-                    pinnedViews: [.sectionHeaders]
-                ) {
-                    Color.clear
-                        .frame(height: 1)
-                        .id(modeTopID)
-                        .accessibilityHidden(true)
-
-                    Section {
-                        instrument(
-                            reports: reports,
-                            locked: locked
-                        )
-                        .padding(.top, Space.lg)
-                        .padding(.bottom, Space.xxl)
-                    } header: {
-                        InsightsModeBar(selection: $selectedMode)
-                            .padding(.top, Space.sm)
-                            .padding(.bottom, Space.md)
-                            .background(Surface.background)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-            .scrollEdgeEffectStyle(.soft, for: .bottom)
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                if locked {
-                    InsightsUnlockButton(
-                        price: appState.pro.displayPrice,
-                        action: requestUnlock
-                    )
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, Space.sm)
-                }
-            }
-            .onChange(of: selectedMode) { _, _ in
-                var transaction = Transaction()
-                transaction.disablesAnimations = true
-                withTransaction(transaction) {
-                    proxy.scrollTo(modeTopID, anchor: .top)
-                }
+        ScrollView(.vertical) {
+            instrument(
+                reports: reports,
+                locked: locked
+            )
+            .padding(.top, Space.lg)
+            .padding(.bottom, Space.xxl)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if locked {
+                InsightsUnlockButton(
+                    price: appState.pro.displayPrice,
+                    action: requestUnlock
+                )
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, Space.sm)
             }
         }
     }
@@ -108,26 +75,24 @@ struct InsightsScreen: View {
     ) -> some View {
         if locked {
             InsightsLockedPreview(
-                title: selectedMode.label,
+                title: "Insights",
                 action: requestUnlock
             ) {
-                modeContent(reports)
+                reportContent(reports)
             }
         } else {
-            modeContent(reports)
+            reportContent(reports)
         }
     }
 
-    @ViewBuilder
-    private func modeContent(
+    private func reportContent(
         _ reports: SessionAnalytics.InsightsReports
     ) -> some View {
         let core = reports.core
         let deep = reports.deep
 
-        switch selectedMode {
-        case .shape:
-            ShapeInsightsMode(
+        return LazyVStack(alignment: .leading, spacing: 0) {
+            ShapeInsightsSection(
                 signature: TrainingSignature(
                     groupVolume: core.groupVolume,
                     cadence: core.overview.averageWorkoutsPerWeek
@@ -138,12 +103,18 @@ struct InsightsScreen: View {
                 intensityWeeks: deep.intensityWeeks,
                 migration: deep.migration
             )
-        case .load:
+
+            GroupSeparator(verticalPadding: Space.section)
+
             TrainingLoadSection(report: core.load)
-        case .rhythm:
+
+            GroupSeparator(verticalPadding: Space.section)
+
             ConsistencySection(report: deep.consistency)
-        case .balance:
-            BalanceInsightsMode(board: deep.symmetry)
+
+            GroupSeparator(verticalPadding: Space.section)
+
+            BalanceInsightsSection(board: deep.symmetry)
         }
     }
 

@@ -74,3 +74,6 @@ and proves the scheduled start through set completion.
 Consistency journal and requires one exact two-week overview plus its detail
 drill-out. It forbids the former per-day `Rest` / `Trained` values so the
 fourteen visual dots cannot silently return as fourteen VoiceOver stops.
+
+`insights-load-rep-drivers` scrolls the showcase history to Training load and
+requires the centered seven-day Sessions, 1–5 reps, and 6–12 reps driver cells.

@@ -227,6 +227,7 @@ struct TrainingLoadTests {
         #expect(abs(report.currentLoad - 4) < 0.001)
         #expect(report.drivers.sessions.current == 2)
         #expect(report.drivers.heavySets.current == 2)
+        #expect(report.drivers.moderateSets.current == 0)
     }
 
     @Test func incompleteWorkingSetsDoNotContribute() {
@@ -248,6 +249,7 @@ struct TrainingLoadTests {
         #expect(abs(report.currentLoad - 1) < 0.001)
         #expect(report.drivers.sessions.current == 1)
         #expect(report.drivers.heavySets.current == 0)
+        #expect(report.drivers.moderateSets.current == 1)
     }
 
     // MARK: - Drivers
@@ -266,6 +268,19 @@ struct TrainingLoadTests {
         #expect(report.drivers.sessions.usual == 1)
         #expect(report.drivers.heavySets.current == 6)
         #expect(report.drivers.heavySets.usual == 3)
+        #expect(report.drivers.moderateSets.current == 0)
+        #expect(report.drivers.moderateSets.usual == 0)
+    }
+
+    @Test func moderateRepDriverCountsSixThroughTwelve() {
+        let report = [
+            session(daysAgo: 1, sets: 2, reps: 6),
+            session(daysAgo: 2, sets: 3, reps: 12),
+            session(daysAgo: 3, sets: 4, reps: 13),
+            session(daysAgo: 7, sets: 5, reps: 8),
+        ].trainingLoad(now: now, calendar: calendar)
+
+        #expect(report.drivers.moderateSets.current == 5)
     }
 
     // MARK: - Recent days
