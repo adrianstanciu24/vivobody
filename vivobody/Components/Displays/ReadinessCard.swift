@@ -17,6 +17,12 @@ struct ReadinessCard: View {
     let line: ReadinessLine
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     static let scopeText = "Last 7 days"
 
@@ -25,6 +31,13 @@ struct ReadinessCard: View {
             verdict
             loadReadout
             rangeGauge
+
+            if let loadCoverageNote {
+                Text(loadCoverageNote)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
 
             if !report.recentDays.isEmpty {
                 SectionDivider()
@@ -36,7 +49,7 @@ struct ReadinessCard: View {
         .contentCard(bright: true)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Training load")
-        .accessibilityValue(Self.accessibilityValue(for: report, line: line))
+        .accessibilityValue(Self.accessibilityValue(for: report, line: line, unit: unit))
     }
 
     // MARK: - Shared container contract
@@ -46,22 +59,30 @@ struct ReadinessCard: View {
     /// scope, and secondary daily receipt all live in this value.
     static func accessibilityValue(
         for report: TrainingLoadReport,
-        line: ReadinessLine
+        line: ReadinessLine,
+        unit: WeightUnit
     ) -> String {
         var parts = [
             "\(verdictText(for: report)).",
-            "Current load: \(formatLoad(report.currentLoad)) estimated hard sets in the rolling last 7 calendar days.",
+            "Current load: \(spokenCurrentMeasure(report, unit: unit)) in the rolling last 7 calendar days.",
         ]
 
         if let usual = report.usualLoad,
            let range = report.recentRange
         {
             parts.append(
-                "Your usual load is \(formatLoad(usual)) estimated hard sets per week, based on the median of the four preceding weeks."
+                "Your usual load is \(spokenMeasure(usual, report: report, unit: unit)) per week, based on the median of the four preceding weeks."
             )
-            parts.append(
-                "Your recent range is \(formatLoad(range.lowerBound)) to \(formatLoad(range.upperBound)) estimated hard sets."
-            )
+            switch report.measure {
+            case .volumeLoad:
+                parts.append(
+                    "Your recent range is \(spokenMeasure(range.lowerBound, report: report, unit: unit)) to \(spokenMeasure(range.upperBound, report: report, unit: unit))."
+                )
+            case .hardSets:
+                parts.append(
+                    "Your recent range is \(formatLoad(range.lowerBound)) to \(formatLoad(range.upperBound)) estimated hard sets."
+                )
+            }
         } else if report.gaugeMarkerPosition != nil {
             parts.append(
                 "Your stable usual load and recent range are still forming. The current marker is provisional and compares with active prior weeks."
@@ -72,16 +93,17 @@ struct ReadinessCard: View {
             )
         }
 
+        if let coverage = loadCoverageNote(for: report, unit: unit) {
+            parts.append(coverage)
+        }
         parts.append(line.phrase)
-        if let history = dailyHistoryAccessibilityText(for: report) {
+        if let history = dailyHistoryAccessibilityText(for: report, unit: unit) {
             parts.append(history)
         }
         return parts.joined(separator: " ")
     }
 
-    /// Compatibility used by Today while its container owns the section
-    /// heading. New layouts should show `scopeText` there and let the card
-    /// own this verdict instead of repeating it.
+    /// Compatibility used by Today while its container owns the section heading.
     static func statusText(for report: TrainingLoadReport) -> String? {
         switch report.verdict {
         case .insufficient: "Range forming"
@@ -132,26 +154,34 @@ struct ReadinessCard: View {
     private var loadReadout: some View {
         Group {
             if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: Space.md) {
-                    currentMetric
-                    SectionDivider()
-                    usualMetric
-                }
+                stackedLoadReadout
             } else {
-                HStack(alignment: .bottom, spacing: Space.xl) {
-                    currentMetric
-                    Spacer(minLength: Space.sm)
-                    usualMetric
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .bottom, spacing: Space.xl) {
+                        currentMetric
+                        Spacer(minLength: Space.sm)
+                        usualMetric
+                    }
+                    stackedLoadReadout
                 }
             }
         }
         .accessibilityHidden(true)
     }
 
+    private var stackedLoadReadout: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            currentMetric
+            SectionDivider()
+            usualMetric
+        }
+    }
+
     private var currentMetric: some View {
         loadMetric(
-            value: Self.formatLoad(report.currentLoad),
-            label: "Current · last 7 days",
+            value: currentMeasureValue,
+            unit: currentMeasureUnit,
+            label: currentMetricLabel,
             font: Typography.metricLg,
             color: Tint.primaryText
         )
@@ -159,25 +189,56 @@ struct ReadinessCard: View {
 
     private var usualMetric: some View {
         loadMetric(
-            value: report.usualLoad.map(Self.formatLoad) ?? "Forming",
-            label: "Your usual · est. hard sets",
+            value: report.usualLoad.map(formatMeasureValue) ?? "Forming",
+            unit: report.measure == .volumeLoad && report.usualLoad != nil ? unit.symbol : nil,
+            label: usualMetricLabel,
             font: report.usualLoad == nil ? Typography.title : Typography.statValueCompact,
             color: Ink.primary
         )
     }
 
+    private var currentMetricLabel: String {
+        switch report.measure {
+        case .volumeLoad: "Volume load · last 7 days"
+        case .hardSets: "Current · last 7 days"
+        }
+    }
+
+    private var currentMeasureValue: String {
+        formatMeasureValue(report.currentLoad)
+    }
+
+    private var currentMeasureUnit: String? {
+        report.measure == .volumeLoad ? unit.symbol : nil
+    }
+
+    private var usualMetricLabel: String {
+        switch report.measure {
+        case .volumeLoad: "Your usual · volume load"
+        case .hardSets: "Your usual · est. hard sets"
+        }
+    }
+
     private func loadMetric(
         value: String,
+        unit: String? = nil,
         label: String,
         font: Font,
         color: Color
     ) -> some View {
         VStack(alignment: .leading, spacing: Space.xs) {
-            Text(value)
-                .font(font)
-                .foregroundStyle(color)
-                .monospacedDigit()
-                .fixedSize(horizontal: false, vertical: true)
+            HStack(alignment: .lastTextBaseline, spacing: 4) {
+                Text(value)
+                    .font(font)
+                    .foregroundStyle(color)
+                    .monospacedDigit()
+                    .fixedSize(horizontal: true, vertical: false)
+                if let unit {
+                    Text(unit)
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(Ink.tertiary)
+                }
+            }
             Text(label)
                 .panelLegend()
                 .fixedSize(horizontal: false, vertical: true)
@@ -191,14 +252,14 @@ struct ReadinessCard: View {
         VStack(alignment: .leading, spacing: Space.sm) {
             ViewThatFits(in: .horizontal) {
                 HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                    Text("Your recent range · est. hard sets")
+                    Text(recentRangeLabel)
                         .panelLegend()
                     Spacer(minLength: Space.sm)
                     rangeValue
                 }
 
                 VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("Your recent range · est. hard sets")
+                    Text(recentRangeLabel)
                         .panelLegend()
                     rangeValue
                 }
@@ -216,6 +277,13 @@ struct ReadinessCard: View {
             .foregroundStyle(formattedRange == nil ? Ink.secondary : Ink.primary)
             .monospacedDigit()
             .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var recentRangeLabel: String {
+        switch report.measure {
+        case .volumeLoad: "Your recent range · volume load"
+        case .hardSets: "Your recent range · est. hard sets"
+        }
     }
 
     private var gaugeTrack: some View {
@@ -298,9 +366,9 @@ struct ReadinessCard: View {
             HStack(spacing: Space.sm) {
                 Text("0")
                 Spacer(minLength: Space.sm)
-                Text("Usual \(Self.formatLoad(usual))")
+                Text("Usual \(formatMeasure(usual))")
                 Spacer(minLength: Space.sm)
-                Text("\(Self.formatLoad(usual * 2)) · 2×")
+                Text("\(formatMeasure(usual * 2)) · 2×")
             }
             .panelLegend()
         } else if report.gaugeMarkerPosition != nil {
@@ -321,8 +389,13 @@ struct ReadinessCard: View {
     }
 
     private var formattedRange: String? {
-        report.recentRange.map {
-            "\(Self.formatLoad($0.lowerBound))–\(Self.formatLoad($0.upperBound))"
+        report.recentRange.map { range in
+            switch report.measure {
+            case .volumeLoad:
+                "\(WeightFormatter.volumeValue(range.lowerBound, unit: unit))–\(WeightFormatter.volumeValue(range.upperBound, unit: unit)) \(unit.symbol)"
+            case .hardSets:
+                "\(Self.formatLoad(range.lowerBound))–\(Self.formatLoad(range.upperBound))"
+            }
         }
     }
 
@@ -335,7 +408,7 @@ struct ReadinessCard: View {
 
     private var accessibleAxisText: String {
         if let usual = report.usualLoad {
-            return "Scale from 0 to \(Self.formatLoad(usual * 2)) estimated hard sets; your usual is \(Self.formatLoad(usual))."
+            return "Scale from 0 to \(Self.spokenMeasure(usual * 2, report: report, unit: unit)); your usual is \(Self.spokenMeasure(usual, report: report, unit: unit))."
         }
         if report.gaugeMarkerPosition != nil {
             return "Early relative comparison while your personal range forms."
@@ -438,8 +511,43 @@ struct ReadinessCard: View {
         value.formatted(.number.precision(.fractionLength(0 ... 1)))
     }
 
+    private func formatMeasure(_ value: Double) -> String {
+        switch report.measure {
+        case .volumeLoad: WeightFormatter.volumeString(value, unit: unit)
+        case .hardSets: Self.formatLoad(value)
+        }
+    }
+
+    private func formatMeasureValue(_ value: Double) -> String {
+        switch report.measure {
+        case .volumeLoad: WeightFormatter.volumeValue(value, unit: unit)
+        case .hardSets: Self.formatLoad(value)
+        }
+    }
+
+    private static func spokenMeasure(
+        _ value: Double,
+        report: TrainingLoadReport,
+        unit: WeightUnit
+    ) -> String {
+        switch report.measure {
+        case .volumeLoad:
+            "\(WeightFormatter.fullVolumeValue(value, unit: unit)) \(unit.displayName.lowercased()) of volume load"
+        case .hardSets:
+            "\(formatLoad(value)) estimated hard sets"
+        }
+    }
+
+    private static func spokenCurrentMeasure(
+        _ report: TrainingLoadReport,
+        unit: WeightUnit
+    ) -> String {
+        spokenMeasure(report.currentLoad, report: report, unit: unit)
+    }
+
     private static func dailyHistoryAccessibilityText(
-        for report: TrainingLoadReport
+        for report: TrainingLoadReport,
+        unit: WeightUnit
     ) -> String? {
         guard !report.recentDays.isEmpty else { return nil }
         let lastID = report.recentDays.last?.id
@@ -447,11 +555,37 @@ struct ReadinessCard: View {
             let name = day.id == lastID
                 ? "Today"
                 : day.date.formatted(.dateTime.weekday(.wide))
-            let value = day.trained
-                ? "\(formatLoad(day.load)) estimated hard sets"
-                : "rest"
+            let value: String = if day.trained,
+                                   day.load == 0,
+                                   report.measure == .volumeLoad,
+                                   report.loadAvailability != .complete
+            {
+                "\(WeightFormatter.fullVolumeValue(0, unit: unit)) known \(unit.displayName.lowercased()) of volume load"
+            } else if day.trained {
+                spokenMeasure(day.load, report: report, unit: unit)
+            } else {
+                "rest"
+            }
             return "\(name), \(value)"
         }
         return "Daily history: \(readings.joined(separator: "; "))."
+    }
+
+    private static func loadCoverageNote(
+        for report: TrainingLoadReport,
+        unit: WeightUnit
+    ) -> String? {
+        guard report.measure == .volumeLoad else { return nil }
+        switch report.loadAvailability {
+        case .complete: return nil
+        case .partial:
+            return "Some sets have no comparable load, so this reading includes only known load."
+        case .unavailable:
+            return "Current sets have no comparable load, so this week's known subtotal is \(WeightFormatter.volumeString(0, unit: unit))."
+        }
+    }
+
+    private var loadCoverageNote: String? {
+        Self.loadCoverageNote(for: report, unit: unit)
     }
 }

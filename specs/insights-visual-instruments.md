@@ -52,7 +52,7 @@ the supported Dynamic Type sizes.
 | Training shape | Muscle-region share | Petal reach and area around a fixed six-region axis | All time |
 | Exercise mix | Working-set share by exercise and exercise type | Horizontal fill length | Last 4 weeks |
 | Rep mix | Low, moderate, and high-rep sets | Stacked bar height by week and fill category | Last 12 weeks |
-| Training load | Rolling seven-day estimated hard sets versus personal range | Line position, range band, endpoint | Up to last 12 weeks; current read is 7 days |
+| Training load | Rolling seven-day volume load when comparable load exists, otherwise estimated hard sets, versus personal range | Line position, range band, endpoint | Up to last 12 weeks; current read is 7 days |
 | Training rhythm | Completed sets by day and week | Calendar-cell intensity and weekly area | Last 6 months |
 | Training balance | Pair-relative effective sets | Mirrored beam length around a fixed center | Last 4 weeks |
 
@@ -84,11 +84,19 @@ meaning that is absent from position, length, label, or accessibility value.
 
 ### Load
 
-- Lead with the current estimated-hard-set value and a large range verdict.
+- Lead with the current volume-load value and the user's weight unit when
+  comparable load exists; otherwise retain the estimated-hard-set value.
+  Pair either measure with the same large range verdict.
 - The rolling line and personal range band are the primary comparison.
-- The hero already carries estimated hard sets; centered Sessions, 1–5 reps,
-  and 6–12 reps remain one compact driver strip without repeating the hero
-  value.
+- The current seven-day window and four preceding baseline windows select one
+  measure for the whole report. Selection is reevaluated as that trailing
+  35-day span moves; after a long hard-set-only period, resumed comparable
+  loading rebuilds its volume-load range from recent weeks.
+- Hard sets remain visible as a driver when volume load leads. Sessions count
+  every workout represented by either Training Load currency, including
+  external-load power; supporting drivers do not repeat the hero value.
+- When only part of the current window has comparable load, show one short
+  coverage note rather than implying the volume-load total is complete.
 - Baseline-building state uses the same dormant chart geometry and factual
   collection progress.
 

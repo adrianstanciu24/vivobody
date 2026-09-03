@@ -2,8 +2,8 @@
 //  SetStimulus.swift
 //  vivobody
 //
-//  The shared work currency: COMPLETED HARD SETS. One completed set
-//  credits each involved muscle
+//  The shared muscle-work currency: COMPLETED HARD SETS. One completed
+//  set credits each involved muscle
 //
 //      role credit × effort(RIR)
 //
@@ -26,8 +26,10 @@
 //  price work.
 //
 //  `MuscleVolume` (weekly bars, neglect list) and `MuscleDevelopment`
-//  (the 3D body) both consume this one pricing function, so every
+//  (the 3D body) both consume this one pricing function, so every muscle
 //  surface agrees on what "a set of work" is worth by construction.
+//  Training Load uses comparable volume load when available and keeps
+//  these hard sets as a driver and fallback measure.
 //
 
 import Foundation
@@ -58,9 +60,9 @@ nonisolated enum SetStimulus {
 
     // MARK: - Exercise pricing
 
-    /// The two views of one exercise's priced work: the systemic
-    /// total (training load) and the role-weighted per-muscle credit
-    /// (volume bars, 3D body).
+    /// The two views of one exercise's hard-set work: the whole-exercise
+    /// total used by Training Load's driver and fallback, and the
+    /// role-weighted per-muscle credit used by volume bars and the 3D body.
     struct ExerciseCredit {
         let setEquivalent: Double
         let byMuscle: [Muscle: Double]
@@ -92,8 +94,8 @@ nonisolated enum SetStimulus {
         price(for: exercise, parameters: parameters).byMuscle
     }
 
-    /// Whole-exercise hard-set total before muscle involvement is
-    /// applied. Training load uses this systemic value.
+    /// Whole-exercise hard-set total before muscle involvement is applied.
+    /// Training Load uses this only as a visible driver and fallback measure.
     static func setEquivalentCredit(
         for exercise: AnalyticsExerciseSnapshot,
         parameters: Parameters = .default

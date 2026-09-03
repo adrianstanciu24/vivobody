@@ -2,11 +2,12 @@
 //  AnalyticsAccumulator.swift
 //  vivobody
 //
-//  Shared chronological replay for analytics that use hard-set
-//  credit. It sorts history once and prices every exercise once via
-//  the stateless `SetStimulus` pricing, retaining immutable
-//  per-session/per-exercise results for volume, development, training
-//  load, the muscle map, and symmetry. The chronological sort exists
+//  Shared chronological replay for analytics that use hard-set credit
+//  or comparable volume load. It sorts history once, prices every
+//  exercise once via stateless `SetStimulus`, and folds the existing
+//  tonnage summary while retaining immutable per-session/per-exercise
+//  results for volume, development, Training Load, the muscle map, and
+//  symmetry. The chronological sort exists
 //  for consumers that integrate over time (the development decay
 //  model, weekly load windows) — pricing itself carries no
 //  cross-session state. It accepts only AnalyticsSnapshot values, so
@@ -53,6 +54,7 @@ nonisolated struct AnalyticsSessionReplay {
     let session: AnalyticsSessionSnapshot
     let exercises: [AnalyticsExerciseReplay]
     let totalSetEquivalent: Double
+    let volumeLoad: ComparableTonnageSummary
     let heavySets: Double
     let moderateSets: Double
 
@@ -149,6 +151,7 @@ nonisolated struct AnalyticsAccumulator {
             var exerciseEvents: [AnalyticsExerciseReplay] = []
             exerciseEvents.reserveCapacity(session.exercises.count)
             var sessionTotal = 0.0
+            var sessionVolumeLoad = ComparableTonnageSummary.zero
             var heavySets = 0.0
             var moderateSets = 0.0
 
@@ -161,6 +164,9 @@ nonisolated struct AnalyticsAccumulator {
                         byMuscle: [:]
                     )
                 sessionTotal += priced.setEquivalent
+                sessionVolumeLoad = sessionVolumeLoad.merging(
+                    exercise.comparableTonnageSummary
+                )
 
                 if pricesStimulus,
                    exercise.modality == .dynamicStrength,
@@ -209,6 +215,7 @@ nonisolated struct AnalyticsAccumulator {
                     session: session,
                     exercises: exerciseEvents,
                     totalSetEquivalent: sessionTotal,
+                    volumeLoad: sessionVolumeLoad,
                     heavySets: heavySets,
                     moderateSets: moderateSets
                 )

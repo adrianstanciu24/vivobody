@@ -59,6 +59,7 @@ import VivoKit
                 "--ui-test-single-exercise-history",
                 "--ui-test-insights-empty-instruments",
                 "--ui-test-insights-showcase",
+                "--ui-test-insights-hard-sets",
                 "--ui-test-me-showcase",
                 "--ui-test-scheduled-template",
                 "--ui-test-widget-start-request",
@@ -83,6 +84,7 @@ import VivoKit
                 .singleExerciseHistory,
                 .insightsEmptyInstruments,
                 .insightsShowcase,
+                .insightsHardSets,
                 .meShowcase,
                 .scheduledTemplate,
                 .widgetStartRequest,
@@ -286,6 +288,22 @@ import VivoKit
                 session.completedAt?.timeIntervalSince(session.startedAt)
             )
             #expect(abs(duration - 25 * 60) < 1e-9)
+        }
+
+        @Test func insightsHardSetFixtureIsIdempotentAndSelectsFallbackMeasure() throws {
+            let container = try makeContainer()
+            let context = container.mainContext
+            let steps: [DebugLaunchStep] = [.insightsHardSets]
+
+            DebugSeedCoordinator.seedLaunchFixtures(steps, in: context)
+            DebugSeedCoordinator.seedLaunchFixtures(steps, in: context)
+
+            let sessions = try context.fetch(FetchDescriptor<WorkoutSession>())
+            let sets = sessions.flatMap(\.orderedExercises).flatMap(\.orderedSets)
+            #expect(sessions.count == 20)
+            #expect(!sets.isEmpty)
+            #expect(sets.allSatisfy { $0.isCompleted && $0.weight == 0 })
+            #expect(sessions.trainingLoad().measure == .hardSets)
         }
 
         @Test func meShowcaseUsesOneClockAndNeverSeedsFutureWeight() throws {

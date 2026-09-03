@@ -1,6 +1,6 @@
 # Training Load measures volume load
 
-- Status: active
+- Status: completed
 - Started: 2026-09-03
 - Decision: [Training Load measures volume load; the muscle map measures hard sets](../../decisions/2026-09-03-training-load-measures-volume-load.md)
 - Product guidance: [Workout app principles](../../../workout-app-principles.md)
@@ -75,13 +75,14 @@ exercise-level summary is the right granularity.
 
 `TrainingLoadReport.measure` is `.volumeLoad` when the current window plus the
 four baseline windows contain any known volume load; otherwise `.hardSets`.
-This is a per-user, stable choice, not a per-week switch: a bodyweight-only
-lifter stays on hard sets, an external-load lifter stays on volume load, and
-someone who never enters weight (external mode, weight 0, `complete`
-availability, zero subtotal) also stays on hard sets. `currentLoad`,
-`usualLoad`, `ratio`, `points`, and `recentDays` are all in the chosen
-measure. The verdict, band, gauge geometry, baseline gate, and
-`provisionalRatio` logic do not change.
+This is one stable choice per generated report, not a different measure for
+each plotted week. Selection is reevaluated as the trailing 35-day span moves:
+a bodyweight-only lifter stays on hard sets, an external-load lifter stays on
+volume load while recent comparable work exists, and someone who never enters
+weight (external mode, weight 0, `complete` availability, zero subtotal) stays
+on hard sets. `currentLoad`, `usualLoad`, `ratio`, `points`, and `recentDays`
+are all in the chosen measure. The verdict, band, gauge geometry, baseline
+gate, and `provisionalRatio` logic do not change.
 
 ### Report additions
 
@@ -89,8 +90,9 @@ measure. The verdict, band, gauge geometry, baseline gate, and
 - `loadAvailability: ComparableTonnageAvailability` for the current window so
   the UI can say "some sets have no comparable load" when `.partial`.
 - `drivers.volumeLoad: LoadDriver` in canonical pounds, always populated.
-  `drivers.hardSets` keeps the RIR-discounted set count. Sessions, heavy, and
-  moderate drivers are unchanged.
+  `drivers.hardSets` keeps the RIR-discounted set count. Sessions counts every
+  workout carrying either Training Load currency, including external-load
+  power. Heavy and moderate drivers are unchanged.
 - The explicit initializer defaults `measure` to `.hardSets` and
   `loadAvailability` to `.complete` so existing fixtures, galleries, and the
   details-sheet preview compile and still describe set counts.
@@ -117,6 +119,10 @@ on harness-critical controls do not change.
   subset of their sets reads low in a week they skip that subset. The
   `partial` note is the honesty mechanism for the first release; a coverage
   fraction is a possible follow-up, not part of this plan.
+- A hard-set-only period longer than the trailing selection span can switch the
+  report to hard sets. The first comparable-load session back selects volume
+  load again and rebuilds its three active baseline weeks instead of comparing
+  against stale weighted history.
 - Volume load is more volatile week to week than set counts. The 0.8…1.3 band
   stays as is; record observed behaviour on seeded history in progress notes
   and decide separately whether to widen.
@@ -135,14 +141,14 @@ on harness-critical controls do not change.
 
 ## Milestones
 
-- [ ] **Session volume load in the replay.** `AnalyticsSessionReplay` gains a
+- [x] **Session volume load in the replay.** `AnalyticsSessionReplay` gains a
   `volumeLoad: ComparableTonnageSummary` folded from each exercise's
   `comparableTonnageSummary`. Tests: external dynamic sets sum
   load × reps; power with external load counts; isometric and non-comparable
   contribute nothing; unknown bodyweight on a bodyweight-dependent exercise
   marks the session `partial`/`unavailable`; a session with no comparable
   exercises is `.zero`.
-- [ ] **Measure selection and report.** `Measurement` and `Window` carry both
+- [x] **Measure selection and report.** `Measurement` and `Window` carry both
   hard sets and volume load; the accumulator picks `measure` by the rule
   above; report exposes `measure`, `loadAvailability`, `drivers.volumeLoad`.
   Tests: same sets with +5 lb per week yields ratio > 1 and a rising trend;
@@ -152,17 +158,17 @@ on harness-critical controls do not change.
   existing `TrainingLoadTests` pass with default fixtures (constant 100 lb ×
   8 reps means volume load and hard sets move together, so ratios are
   unchanged).
-- [ ] **Insights and Today presentation.** `TrainingLoadSection`,
+- [x] **Insights and Today presentation.** `TrainingLoadSection`,
   `TrainingLoadDetailsSheet`, `ReadinessCard`, `TodayReadinessSection`, and
   the galleries read `measure` and format through `WeightFormatter`. Add the
   Volume load driver row and the partial-coverage note. Update the
   accessibility summary strings. Verify both measures render in the galleries.
-- [ ] **Docs.** Update `TrainingLoad.swift` and `SetStimulus.swift` headers,
+- [x] **Docs.** Update `TrainingLoad.swift` and `SetStimulus.swift` headers,
   the Training load row in `specs/insights-visual-instruments.md`, and the
   `hard-set-currency.md` "Rejected alternatives" note so it says tonnage was
   rejected for the muscle currency and later adopted for Training Load with a
   link to the decision record. Mark the decision record accepted.
-- [ ] **Verification and closure.** Run the commands below, inspect
+- [x] **Verification and closure.** Run the commands below, inspect
   screenshots and accessibility trees for Insights and Today with seeded
   history in both measures, review the diff against
   `engineering/code-review.md`, record results here, and move this plan to
@@ -211,7 +217,30 @@ volume load on real (not seeded) history feels informative rather than noisy.
 - `Readiness.compute` and `UpNext.compute` read only `verdict` and
   `hasEnoughHistory`; `WidgetSnapshotWriter` passes the report through to
   them. No VivoKit change.
+- The hard-set UI scenario initially replayed the prior weighted fixture when
+  reset history had the same count and newest completion date. DEBUG reset and
+  launch seeding now invalidate `SessionAnalytics`, rejecting any pre-seed
+  report without changing the production constant-time request key.
 
 ## Result and evidence
 
-Pending.
+Completed 2026-09-03.
+
+- The replay now folds each exercise's existing comparable-tonnage summary,
+  and one report-wide measure drives the headline, verdict, trend, daily strip,
+  and baseline. Hard sets remain the fallback and a visible driver. Sessions
+  counts every workout carrying either currency, including external-load power,
+  and the long-gap measure transition is documented and tested.
+- Focused `TrainingLoadTests`, `SessionInsightsTests`, `ReadinessTests`, and
+  `UpNextTests` passed: 78 tests across four suites. VivoKit's five snapshot
+  contract tests passed with no payload change.
+- `Scripts/check.sh` passed, including architecture, naming, formatting,
+  complexity, source-size, documentation, catalog, snapshot, and build gates.
+- `insights-showcase`, `insights-accessibility`, and the new
+  `insights-hard-sets` semantic scenarios passed. Inspected artifacts confirm
+  the 2 × 2 volume-load driver hierarchy, the unchanged hard-set fallback, and
+  readable unit-bearing values at Accessibility Large. Today screenshots for
+  both measures were also inspected.
+- Independent diff review found no remaining actionable issues. The seeded
+  60% deload reads below range as intended. Week-to-week volatility on real
+  personal history remains a post-implementation product observation.

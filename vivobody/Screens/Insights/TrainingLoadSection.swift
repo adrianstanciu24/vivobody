@@ -19,6 +19,13 @@ import VivoKit
 struct TrainingLoadSection: View {
     let report: TrainingLoadReport
 
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
@@ -47,26 +54,18 @@ struct TrainingLoadSection: View {
 
                     chart
 
+                    if let loadCoverageNote {
+                        Text(loadCoverageNote)
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.tertiary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
                     Rectangle()
                         .fill(Surface.edge)
                         .frame(height: 0.5)
 
-                    StatStrip(
-                        stats: [
-                            Stat(
-                                value: "\(Int(report.drivers.sessions.current.rounded()))",
-                                label: "Sessions"
-                            ),
-                            Stat(
-                                value: "\(Int(report.drivers.heavySets.current.rounded()))",
-                                label: "1–5 reps"
-                            ),
-                            Stat(
-                                value: "\(Int(report.drivers.moderateSets.current.rounded()))",
-                                label: "6–12 reps"
-                            ),
-                        ]
-                    )
+                    driverStrip
                 }
                 .padding(Space.xl)
                 .contentCard()
@@ -95,12 +94,28 @@ struct TrainingLoadSection: View {
 
     private var currentMetric: some View {
         MetricView(
-            label: "Estimated hard sets · 7 days",
-            value: format(report.currentLoad),
+            label: currentMetricLabel,
+            value: currentMetricValue,
+            unit: currentMetricUnit,
             valueFont: Typography.metricLg,
             accent: true,
             accentColor: Tint.primaryText
         )
+    }
+
+    private var currentMetricLabel: String {
+        switch report.measure {
+        case .volumeLoad: "Volume load · 7 days"
+        case .hardSets: "Estimated hard sets · 7 days"
+        }
+    }
+
+    private var currentMetricValue: String {
+        formatMeasure(report.currentLoad)
+    }
+
+    private var currentMetricUnit: String? {
+        report.measure == .volumeLoad ? unit.symbol : nil
     }
 
     private var verdictReadout: some View {
@@ -167,15 +182,15 @@ struct TrainingLoadSection: View {
                 {
                     AreaMark(
                         x: .value("Date", point.date),
-                        yStart: .value("Range lower", lower),
-                        yEnd: .value("Range upper", upper)
+                        yStart: .value("Range lower", chartValue(lower)),
+                        yEnd: .value("Range upper", chartValue(upper))
                     )
                     .foregroundStyle(Tint.primary.opacity(0.14))
                 }
 
                 LineMark(
                     x: .value("Date", point.date),
-                    y: .value("Estimated hard sets", point.load)
+                    y: .value(chartValueLabel, chartValue(point.load))
                 )
                 .foregroundStyle(Tint.primary)
                 .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
@@ -184,7 +199,7 @@ struct TrainingLoadSection: View {
             if let latest = report.points.last {
                 PointMark(
                     x: .value("Latest date", latest.date),
-                    y: .value("Latest load", latest.load)
+                    y: .value("Latest \(chartValueLabel)", chartValue(latest.load))
                 )
                 .foregroundStyle(verdictColor)
                 .symbolSize(46)
@@ -196,7 +211,8 @@ struct TrainingLoadSection: View {
                 density: usesDetailedChartDates ? .monthDay : .monthOnly
             )
         }
-        .chartYAxis { InsightChartAxis.values(format: format) }
+        .chartXScale(range: .plotDimension(startPadding: 6, endPadding: 18))
+        .chartYAxis { InsightChartAxis.values(format: formatChartValue) }
         .frame(height: InsightChartCanvas.hero)
         // Keep Swift Charts' per-point accessibility representation so
         // VoiceOver users can inspect the trend instead of receiving a
@@ -211,7 +227,7 @@ struct TrainingLoadSection: View {
         }
         let date = latest.date.formatted(date: .abbreviated, time: .omitted)
         let count = report.points.count
-        return "\(count) daily \(count == 1 ? "value" : "values"). Latest, \(format(latest.load)) estimated hard sets on \(date)."
+        return "\(count) daily \(count == 1 ? "value" : "values"). Latest, \(spokenMeasure(latest.load)) on \(date)."
     }
 
     private var usesDetailedChartDates: Bool {
@@ -228,6 +244,92 @@ struct TrainingLoadSection: View {
             return String(format: "%.0f", value)
         }
         return String(format: "%.1f", value)
+    }
+
+    private func formatMeasure(_ value: Double) -> String {
+        switch report.measure {
+        case .volumeLoad: WeightFormatter.volumeValue(value, unit: unit)
+        case .hardSets: format(value)
+        }
+    }
+
+    private func chartValue(_ value: Double) -> Double {
+        report.measure == .volumeLoad
+            ? WeightFormatter.toDisplay(value, unit: unit)
+            : value
+    }
+
+    private func formatChartValue(_ value: Double) -> String {
+        switch report.measure {
+        case .volumeLoad:
+            WeightFormatter.volumeString(
+                WeightFormatter.toCanonical(value, unit: unit),
+                unit: unit
+            )
+        case .hardSets:
+            format(value)
+        }
+    }
+
+    private func spokenMeasure(_ value: Double) -> String {
+        switch report.measure {
+        case .volumeLoad:
+            "\(WeightFormatter.fullVolumeValue(value, unit: unit)) \(unit.displayName.lowercased()) of volume load"
+        case .hardSets:
+            "\(format(value)) estimated hard sets"
+        }
+    }
+
+    private var chartValueLabel: String {
+        switch report.measure {
+        case .volumeLoad: "Volume load in \(unit.displayName.lowercased())"
+        case .hardSets: "Estimated hard sets"
+        }
+    }
+
+    @ViewBuilder
+    private var driverStrip: some View {
+        let sessions = Stat(
+            value: "\(Int(report.drivers.sessions.current.rounded()))",
+            label: "Sessions"
+        )
+        let heavySets = Stat(
+            value: "\(Int(report.drivers.heavySets.current.rounded()))",
+            label: "1–5 reps"
+        )
+        let moderateSets = Stat(
+            value: "\(Int(report.drivers.moderateSets.current.rounded()))",
+            label: "6–12 reps"
+        )
+
+        if report.measure == .volumeLoad {
+            VStack(spacing: Space.md) {
+                StatStrip(stats: [
+                    Stat(
+                        value: format(report.drivers.hardSets.current),
+                        label: "Hard sets"
+                    ),
+                    sessions,
+                ])
+                Rectangle()
+                    .fill(Surface.edge)
+                    .frame(height: 0.5)
+                StatStrip(stats: [heavySets, moderateSets])
+            }
+        } else {
+            StatStrip(stats: [sessions, heavySets, moderateSets])
+        }
+    }
+
+    private var loadCoverageNote: String? {
+        guard report.measure == .volumeLoad else { return nil }
+        switch report.loadAvailability {
+        case .complete: return nil
+        case .partial:
+            return "Some sets have no comparable load, so this reading includes only known load."
+        case .unavailable:
+            return "Current sets have no comparable load, so this week's known subtotal is \(WeightFormatter.volumeString(0, unit: unit))."
+        }
     }
 
     private var verdictColor: Color {

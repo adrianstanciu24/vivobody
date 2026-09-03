@@ -49,6 +49,7 @@ import Foundation
         case singleExerciseHistory
         case insightsEmptyInstruments
         case insightsShowcase
+        case insightsHardSets
         case meShowcase
         case scheduledTemplate
         case widgetStartRequest
@@ -133,6 +134,7 @@ import Foundation
                     in: arguments
                 ),
                 requested(.insightsShowcase, by: "--ui-test-insights-showcase", in: arguments),
+                requested(.insightsHardSets, by: "--ui-test-insights-hard-sets", in: arguments),
                 requested(.meShowcase, by: "--ui-test-me-showcase", in: arguments),
                 requested(.scheduledTemplate, by: "--ui-test-scheduled-template", in: arguments),
                 requested(.widgetStartRequest, by: "--ui-test-widget-start-request", in: arguments),

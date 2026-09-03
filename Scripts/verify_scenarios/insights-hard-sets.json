@@ -1,0 +1,56 @@
+{
+  "name": "insights-hard-sets",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": ["--ui-test-insights-hard-sets", "--pro"]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsLoadInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 16
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Estimated hard sets · 7 days",
+            "role": "AXGenericElement"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Volume load"
+          },
+          {
+            "labelContains": "comparable load"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsLoadInstrument",
+      "role": "AXHeading"
+    },
+    {
+      "labelContains": "Estimated hard sets · 7 days",
+      "role": "AXGenericElement"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Volume load"
+    },
+    {
+      "labelContains": "comparable load"
+    }
+  ]
+}

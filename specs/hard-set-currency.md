@@ -285,9 +285,12 @@ per data-change; no new per-render work.
 
 ## Rejected alternatives
 
-- **Tonnage (weight × reps)** — rewards high-rep light junk, double-counts
-  load and reps, and was already removed once (`specs/simplify-muscle-model.md`
-  deleted the tonnage currency deliberately).
+- **Tonnage (weight × reps) as the muscle currency** — rewards high-rep
+  light junk, double-counts load and reps inside a hypertrophy-set estimate,
+  and was deliberately removed from the muscle model by
+  `specs/simplify-muscle-model.md`. Volume load was later adopted for the
+  self-relative Training Load instrument, not for per-muscle attribution; see
+  [Training Load measures volume load; the muscle map measures hard sets](../engineering/decisions/2026-09-03-training-load-measures-volume-load.md).
 - **%1RM / TRIMP-style impulse models** — the ~30-tunable Banister stack this
   codebase already replaced with the explainable integrator. Not going back.
 - **Absolute load thresholds** — meaningless across users and exercises; the

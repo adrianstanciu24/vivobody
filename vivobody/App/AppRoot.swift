@@ -124,6 +124,12 @@ struct AppRoot: View {
                         debugRoute.launchSteps,
                         in: modelContext
                     )
+                    if debugRoute.resetRequest != nil || !debugRoute.launchSteps.isEmpty {
+                        // A reset can replace history with the same count and
+                        // completion high-water mark. Reject any report the
+                        // feeder started from the pre-seed archive.
+                        appState.analytics.invalidate()
+                    }
                     if let requestedTab = debugRoute.requestedTab {
                         appState.selectedTab = requestedTab
                     }

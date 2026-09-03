@@ -2,8 +2,8 @@
 //  ReadinessCardGallery.swift
 //  vivobody
 //
-//  DEBUG gallery for Today's Training Load instrument: below, within,
-//  and above a stable personal range plus the provisional forming state.
+//  DEBUG gallery for Today's Training Load instrument: both volume-load
+//  and hard-set measures across stable and forming personal ranges.
 //  Dedicated previews exercise both appearances and Accessibility type.
 //
 
@@ -17,12 +17,14 @@
                 VStack(alignment: .leading, spacing: Space.xxl) {
                     header
 
-                    labelled("Within range") {
+                    labelled("Volume load · within range · partial") {
                         ReadinessCard(
                             report: Self.report(
-                                loads: [3, 0, 4, 0, 0, 5, 4],
+                                loads: [3200, 0, 4100, 0, 0, 5200, 3900],
                                 comparisonRatio: 1,
-                                verdict: .productive
+                                verdict: .productive,
+                                measure: .volumeLoad,
+                                loadAvailability: .partial
                             ),
                             line: ReadinessLine(
                                 lead: "Productive training load.",
@@ -31,7 +33,24 @@
                         )
                     }
 
-                    labelled("Above range") {
+                    labelled("Volume load · unavailable this week") {
+                        ReadinessCard(
+                            report: Self.report(
+                                loads: [0, 0, 0, 0, 0, 0, 0],
+                                comparisonRatio: 0,
+                                verdict: .low,
+                                measure: .volumeLoad,
+                                loadAvailability: .unavailable,
+                                usualLoad: 18400
+                            ),
+                            line: ReadinessLine(
+                                lead: "Load is lighter lately.",
+                                tail: "Build when ready."
+                            )
+                        )
+                    }
+
+                    labelled("Hard sets · above range") {
                         ReadinessCard(
                             report: Self.report(
                                 loads: [5, 6, 0, 7, 6, 8, 0],
@@ -112,7 +131,10 @@
         fileprivate static func report(
             loads: [Double],
             comparisonRatio: Double,
-            verdict: LoadVerdict
+            verdict: LoadVerdict,
+            measure: TrainingLoadMeasure = .hardSets,
+            loadAvailability: ComparableTonnageAvailability = .complete,
+            usualLoad explicitUsualLoad: Double? = nil
         ) -> TrainingLoadReport {
             var calendar = Calendar(identifier: .gregorian)
             calendar.timeZone = TimeZone(secondsFromGMT: 0)!
@@ -129,9 +151,10 @@
             }
             let current = loads.reduce(0, +)
             let isForming = verdict == .insufficient
-            let usual = isForming || comparisonRatio <= 0
+            let derivedUsual = isForming || comparisonRatio <= 0
                 ? nil
                 : current / comparisonRatio
+            let usual = explicitUsualLoad ?? derivedUsual
 
             return TrainingLoadReport(
                 currentLoad: current,
@@ -143,7 +166,9 @@
                 activeBaselineWeeks: isForming ? 2 : 4,
                 points: [],
                 recentDays: days,
-                drivers: .empty
+                drivers: .empty,
+                measure: measure,
+                loadAvailability: loadAvailability
             )
         }
     }
@@ -161,9 +186,11 @@
     #Preview("Readiness Card · Accessibility") {
         ReadinessCard(
             report: ReadinessCardGallery.report(
-                loads: [3, 0, 4, 0, 0, 5, 4],
+                loads: [3200, 0, 4100, 0, 0, 5200, 3900],
                 comparisonRatio: 1,
-                verdict: .productive
+                verdict: .productive,
+                measure: .volumeLoad,
+                loadAvailability: .partial
             ),
             line: ReadinessLine(
                 lead: "Productive training load.",

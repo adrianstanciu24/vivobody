@@ -2,8 +2,8 @@
 //  DebugInsightsSeeder.swift
 //  vivobody
 //
-//  DEBUG-only Insights fixture dispatch plus the focused power-only archive
-//  used to verify factual and unavailable instrument branches together.
+//  DEBUG-only Insights fixture dispatch, including deterministic volume-load,
+//  hard-set fallback, and unavailable instrument branches.
 //
 
 import Foundation
@@ -22,6 +22,8 @@ import SwiftData
                 seedEmptyInstruments(in: context)
             case .insightsShowcase:
                 InsightsShowcaseSeed.seed(in: context)
+            case .insightsHardSets:
+                InsightsShowcaseSeed.seedHardSetFallback(in: context)
             case .meShowcase:
                 MeShowcaseSeed.seed(in: context)
             default:

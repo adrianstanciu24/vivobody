@@ -2,10 +2,11 @@
 //  TrainingLoadTests.swift
 //  vivobodyTests
 //
-//  Guards personal rolling training load on a virtual clock: estimated
-//  hard-set equivalents, seven-day calendar windows, four prior-week
-//  baseline, recent-range bands, concrete baseline progress, drivers,
-//  and the 12-week trend.
+//  Guards personal rolling training load on a virtual clock: comparable
+//  volume-load selection, exact hard-set fallback, seven-day calendar
+//  windows, four prior-week baseline, recent-range bands, concrete
+//  baseline progress, recent-measure transitions, drivers, and the
+//  12-week trend.
 //
 
 import Foundation
@@ -30,6 +31,9 @@ struct TrainingLoadTests {
         completed: Bool = true,
         mode: TrackingMode = .reps,
         modality: ExerciseModality = .dynamicStrength,
+        loadMode: ExerciseLoadMode = .external,
+        bodyweightFraction: Double = 0,
+        bodyweightAtStart: Double = ExerciseLoad.unknownBodyweight,
         setCompleted: Bool = true,
         duration: TimeInterval = 0
     ) -> WorkoutSession {
@@ -40,7 +44,9 @@ struct TrainingLoadTests {
             plannedSets: 0,
             plannedWeight: 0,
             trackingMode: mode,
-            modality: modality
+            modality: modality,
+            loadMode: loadMode,
+            bodyweightFraction: bodyweightFraction
         )
         for i in 0..<sets {
             ex.sets.append(
@@ -53,7 +59,11 @@ struct TrainingLoadTests {
                 )
             )
         }
-        let s = WorkoutSession(exercises: [ex], startedAt: date)
+        let s = WorkoutSession(
+            exercises: [ex],
+            bodyweightAtStart: bodyweightAtStart,
+            startedAt: date
+        )
         if completed {
             s.completedAt = date
         }
@@ -116,15 +126,16 @@ struct TrainingLoadTests {
         var sessions = steadyBaseline()
         sessions.append(session(daysAgo: 2, sets: 3))
         let report = sessions.trainingLoad(now: now, calendar: calendar)
-        #expect(abs(report.currentLoad - 3) < 0.001)
-        #expect(abs((report.usualLoad ?? 0) - 3) < 0.001)
+        #expect(report.measure == .volumeLoad)
+        #expect(abs(report.currentLoad - 2400) < 0.001)
+        #expect(abs((report.usualLoad ?? 0) - 2400) < 0.001)
         #expect(abs(report.ratio - 1.0) < 0.001)
         #expect(report.provisionalRatio == nil)
         #expect(report.gaugeRatio == report.ratio)
         #expect(report.verdict == .productive)
         #expect(report.activeBaselineWeeks == 4)
-        #expect(abs((report.recentRange?.lowerBound ?? 0) - 2.4) < 0.001)
-        #expect(abs((report.recentRange?.upperBound ?? 0) - 3.9) < 0.001)
+        #expect(abs((report.recentRange?.lowerBound ?? 0) - 1920) < 0.001)
+        #expect(abs((report.recentRange?.upperBound ?? 0) - 3120) < 0.001)
     }
 
     @Test func loadReadsAboveRecentRange() {
@@ -159,8 +170,198 @@ struct TrainingLoadTests {
         ]
         sessions.append(session(daysAgo: 2, sets: 3))
         let report = sessions.trainingLoad(now: now, calendar: calendar)
-        #expect(abs((report.usualLoad ?? 0) - 3) < 0.001)
+        #expect(abs((report.usualLoad ?? 0) - 2400) < 0.001)
         #expect(report.verdict == .productive)
+    }
+
+    @Test func volumeLoadMeasureShowsProgressiveOverload() {
+        var sessions = [
+            session(daysAgo: 30, sets: 1, weight: 100),
+            session(daysAgo: 23, sets: 1, weight: 105),
+            session(daysAgo: 16, sets: 1, weight: 110),
+            session(daysAgo: 9, sets: 1, weight: 115),
+        ]
+        sessions.append(session(daysAgo: 2, sets: 1, weight: 120))
+
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+        let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: calendar.startOfDay(for: now))
+        let priorPoint = report.points.first(where: { $0.date == sevenDaysAgo })
+
+        #expect(report.measure == .volumeLoad)
+        #expect(report.ratio > 1)
+        #expect((report.points.last?.load ?? 0) > (priorPoint?.load ?? 0))
+    }
+
+    @Test func volumeLoadMeasureRecognizesDeloadAtFixedSetsAndReps() {
+        var sessions = steadyBaseline(sets: 3)
+        sessions.append(session(daysAgo: 2, sets: 3, weight: 60))
+
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+
+        #expect(report.measure == .volumeLoad)
+        #expect(abs(report.ratio - 0.6) < 0.001)
+        #expect(report.verdict == .low)
+    }
+
+    @Test func unknownBodyweightOnlyHistoryKeepsHardSetMeasure() {
+        var sessions = [9, 16, 23, 30].map {
+            session(
+                daysAgo: $0,
+                sets: 3,
+                weight: 0,
+                loadMode: .bodyweightAdded,
+                bodyweightFraction: 1
+            )
+        }
+        sessions.append(session(
+            daysAgo: 2,
+            sets: 3,
+            weight: 0,
+            loadMode: .bodyweightAdded,
+            bodyweightFraction: 1
+        ))
+
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+
+        #expect(report.measure == .hardSets)
+        #expect(report.currentLoad == 3)
+        #expect(report.usualLoad == 3)
+        #expect(report.ratio == 1)
+        #expect(report.drivers.hardSets.current == 3)
+        #expect(report.drivers.volumeLoad.current == 0)
+        #expect(report.loadAvailability == .unavailable)
+    }
+
+    @Test func zeroEnteredExternalLoadKeepsHardSetMeasure() {
+        var sessions = [9, 16, 23, 30].map {
+            session(daysAgo: $0, sets: 3, weight: 0)
+        }
+        sessions.append(session(daysAgo: 2, sets: 3, weight: 0))
+
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+
+        #expect(report.measure == .hardSets)
+        #expect(report.currentLoad == 3)
+        #expect(report.ratio == 1)
+        #expect(report.loadAvailability == .complete)
+    }
+
+    @Test func mixedComparableCoverageReportsPartial() {
+        let known = session(daysAgo: 2, sets: 1, reps: 8, weight: 100)
+        let unknown = session(
+            daysAgo: 1,
+            sets: 1,
+            reps: 8,
+            weight: 0,
+            loadMode: .bodyweightAdded,
+            bodyweightFraction: 1
+        )
+
+        let report = [known, unknown].trainingLoad(now: now, calendar: calendar)
+
+        #expect(report.measure == .volumeLoad)
+        #expect(report.currentLoad == 800)
+        #expect(report.loadAvailability == .partial)
+        #expect(report.drivers.hardSets.current == 2)
+        #expect(report.drivers.sessions.current == 2)
+    }
+
+    @Test func oldVolumeOnlyWorkDoesNotAgeHardSetFallback() {
+        let oldPower = session(
+            daysAgo: 60,
+            sets: 1,
+            reps: 3,
+            weight: 100,
+            modality: .power
+        )
+        let baseline = session(
+            daysAgo: 9,
+            sets: 2,
+            weight: 0,
+            loadMode: .bodyweightAdded,
+            bodyweightFraction: 1
+        )
+        let current = session(
+            daysAgo: 1,
+            sets: 2,
+            weight: 0,
+            loadMode: .bodyweightAdded,
+            bodyweightFraction: 1
+        )
+
+        let report = [oldPower, baseline, current].trainingLoad(now: now, calendar: calendar)
+
+        #expect(report.measure == .hardSets)
+        #expect(report.daysLogged == 9)
+        #expect(report.activeBaselineWeeks == 1)
+        #expect(report.points.count == 10)
+    }
+
+    @Test func externalPowerCanEstablishVolumeLoadBaseline() {
+        var sessions = [9, 16, 23, 30].map {
+            session(daysAgo: $0, sets: 1, reps: 3, weight: 100, modality: .power)
+        }
+        sessions.append(session(daysAgo: 2, sets: 1, reps: 3, weight: 100, modality: .power))
+
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+
+        #expect(report.measure == .volumeLoad)
+        #expect(report.daysLogged == 30)
+        #expect(report.activeBaselineWeeks == 4)
+        #expect(report.currentLoad == 300)
+        #expect(report.ratio == 1)
+        #expect(report.drivers.hardSets.current == 0)
+        #expect(report.drivers.sessions.current == 1)
+        #expect(report.drivers.sessions.usual == 1)
+    }
+
+    @Test func returningToVolumeLoadAfterHardSetOnlyGapRebuildsRecentBaseline() {
+        let oldWeighted = session(daysAgo: 70, sets: 3, weight: 100)
+        let recentBodyweight = [2, 9, 16, 23, 30].map {
+            session(
+                daysAgo: $0,
+                sets: 3,
+                weight: 0,
+                loadMode: .bodyweightAdded,
+                bodyweightFraction: 1
+            )
+        }
+        let fallback = ([oldWeighted] + recentBodyweight)
+            .trainingLoad(now: now, calendar: calendar)
+
+        #expect(fallback.measure == .hardSets)
+        #expect(fallback.hasEnoughHistory)
+
+        let resumed = ([oldWeighted] + recentBodyweight + [
+            session(daysAgo: 1, sets: 3, weight: 100),
+        ]).trainingLoad(now: now, calendar: calendar)
+
+        #expect(resumed.measure == .volumeLoad)
+        #expect(resumed.daysLogged == 70)
+        #expect(resumed.activeBaselineWeeks == 0)
+        #expect(resumed.usualLoad == nil)
+        #expect(resumed.verdict == .insufficient)
+    }
+
+    @Test func oneReportMeasureDrivesEveryRollingSample() {
+        let baselineVolume = session(daysAgo: 9, sets: 1, weight: 100)
+        let currentBodyweight = session(
+            daysAgo: 1,
+            sets: 1,
+            weight: 0,
+            loadMode: .bodyweightAdded,
+            bodyweightFraction: 1
+        )
+
+        let report = [baselineVolume, currentBodyweight]
+            .trainingLoad(now: now, calendar: calendar)
+
+        #expect(report.measure == .volumeLoad)
+        #expect(report.currentLoad == 0)
+        #expect(report.points.last?.load == 0)
+        #expect(report.recentDays.map(\.load).reduce(0, +) == 0)
+        #expect(report.recentDays[5].trained)
+        #expect(report.drivers.hardSets.current == 1)
     }
 
     // MARK: - Calendar windows
@@ -171,7 +372,7 @@ struct TrainingLoadTests {
             session(daysAgo: 7, sets: 5),
         ]
         let report = sessions.trainingLoad(now: now, calendar: calendar)
-        #expect(abs(report.currentLoad - 2) < 0.001)
+        #expect(abs(report.currentLoad - 1600) < 0.001)
     }
 
     @Test func futureAndIncompleteSessionsAreExcluded() {
@@ -181,7 +382,7 @@ struct TrainingLoadTests {
             session(daysAgo: -1, sets: 7),
         ]
         let report = sessions.trainingLoad(now: now, calendar: calendar)
-        #expect(abs(report.currentLoad - 2) < 0.001)
+        #expect(abs(report.currentLoad - 1600) < 0.001)
     }
 
     @Test func bodyweightAndTimedWorkContribute() {
@@ -224,8 +425,8 @@ struct TrainingLoadTests {
         ]
         let report = sessions.trainingLoad(now: now, calendar: calendar)
 
-        #expect(abs(report.currentLoad - 4) < 0.001)
-        #expect(report.drivers.sessions.current == 2)
+        #expect(abs(report.currentLoad - 1900) < 0.001)
+        #expect(report.drivers.sessions.current == 3)
         #expect(report.drivers.heavySets.current == 2)
         #expect(report.drivers.moderateSets.current == 0)
     }
@@ -246,7 +447,7 @@ struct TrainingLoadTests {
         ]
         let report = sessions.trainingLoad(now: now, calendar: calendar)
 
-        #expect(abs(report.currentLoad - 1) < 0.001)
+        #expect(abs(report.currentLoad - 800) < 0.001)
         #expect(report.drivers.sessions.current == 1)
         #expect(report.drivers.heavySets.current == 0)
         #expect(report.drivers.moderateSets.current == 1)
@@ -262,6 +463,8 @@ struct TrainingLoadTests {
         sessions.append(session(daysAgo: 4, sets: 3, reps: 5))
 
         let report = sessions.trainingLoad(now: now, calendar: calendar)
+        #expect(report.drivers.volumeLoad.current == 3000)
+        #expect(report.drivers.volumeLoad.usual == 1500)
         #expect(report.drivers.hardSets.current == 6)
         #expect(report.drivers.hardSets.usual == 3)
         #expect(report.drivers.sessions.current == 2)
@@ -295,17 +498,17 @@ struct TrainingLoadTests {
         #expect(report.recentDays.count == 7)
         #expect(report.recentDays == report.recentDays.sorted { $0.date < $1.date })
         #expect(report.recentDays.last?.date == calendar.startOfDay(for: now))
-        #expect(report.recentDays.last?.load == 3)
-        #expect(report.recentDays[4].load == 2)
+        #expect(report.recentDays.last?.load == 2400)
+        #expect(report.recentDays[4].load == 1600)
         // Day 7 falls outside the trailing-week strip.
-        #expect(report.recentDays.map(\.load).reduce(0, +) == 5)
+        #expect(report.recentDays.map(\.load).reduce(0, +) == 4000)
     }
 
     @Test func recentDaysZeroFillRestDays() {
         let sessions = [session(daysAgo: 3, sets: 4)]
         let report = sessions.trainingLoad(now: now, calendar: calendar)
         #expect(report.recentDays.filter(\.trained).count == 1)
-        #expect(report.recentDays[3].load == 4)
+        #expect(report.recentDays[3].load == 3200)
         #expect(report.recentDays.last?.trained == false)
     }
 
@@ -315,7 +518,7 @@ struct TrainingLoadTests {
             session(daysAgo: 1, sets: 3),
         ]
         let report = sessions.trainingLoad(now: now, calendar: calendar)
-        #expect(report.recentDays[5].load == 5)
+        #expect(report.recentDays[5].load == 4000)
     }
 
     @Test func recentDaysEmptyWithoutHistory() {
@@ -334,7 +537,7 @@ struct TrainingLoadTests {
         #expect(report.points.count == 17)
         #expect(report.points == report.points.sorted { $0.date < $1.date })
         #expect(report.points.last?.date == calendar.startOfDay(for: now))
-        #expect(report.points.last?.load == 3)
+        #expect(report.points.last?.load == 2400)
     }
 
     @Test func trendCapsAtEightyFourDailyPoints() {
@@ -350,8 +553,8 @@ struct TrainingLoadTests {
         sessions.append(session(daysAgo: 2, sets: 12))
         let report = sessions.trainingLoad(now: now, calendar: calendar)
         let latest = report.points.last
-        #expect(latest?.load == 12)
-        #expect(abs((latest?.rangeLower ?? 0) - 2.4) < 0.001)
-        #expect(abs((latest?.rangeUpper ?? 0) - 3.9) < 0.001)
+        #expect(latest?.load == 9600)
+        #expect(abs((latest?.rangeLower ?? 0) - 1920) < 0.001)
+        #expect(abs((latest?.rangeUpper ?? 0) - 3120) < 0.001)
     }
 }

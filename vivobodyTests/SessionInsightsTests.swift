@@ -85,6 +85,72 @@ struct SessionInsightsTests {
         return ex
     }
 
+    // MARK: - Analytics replay volume load
+
+    @Test func analyticsReplayFoldsComparableVolumeLoadAcrossExercises() {
+        let strength = lift(sets: [
+            (100, 10, nil, true),
+            (50, 5, nil, true),
+        ])
+        let power = lift(
+            "Power Clean",
+            .back,
+            sets: [(40, 3, nil, true)],
+            modality: .power
+        )
+        let isometric = hold("Plank", seconds: [60])
+        let nonComparable = lift(
+            "Band Row",
+            .back,
+            sets: [(4, 12, nil, true)],
+            loadMode: .nonComparable
+        )
+        let replay = AnalyticsAccumulator.replay([
+            session(minutes: 30, [strength, power, isometric, nonComparable]),
+        ])
+
+        #expect(replay.sessions.first?.volumeLoad.knownSubtotal == 1370)
+        #expect(replay.sessions.first?.volumeLoad.availability == .complete)
+    }
+
+    @Test func analyticsReplayPreservesUnavailableAndPartialVolumeLoad() {
+        let pullUp = lift(
+            "Weighted Pull-Up",
+            .back,
+            sets: [(25, 8, nil, true)],
+            loadMode: .bodyweightAdded,
+            bodyweightFraction: 1
+        )
+        let unavailable = AnalyticsAccumulator.replay([
+            session(minutes: 20, [pullUp]),
+        ])
+        #expect(unavailable.sessions.first?.volumeLoad.knownSubtotal == 0)
+        #expect(unavailable.sessions.first?.volumeLoad.availability == .unavailable)
+
+        let row = lift("Barbell Row", .back, sets: [(100, 10, nil, true)])
+        let partial = AnalyticsAccumulator.replay([
+            session(minutes: 20, [row, pullUp]),
+        ])
+        #expect(partial.sessions.first?.volumeLoad.knownSubtotal == 1000)
+        #expect(partial.sessions.first?.volumeLoad.availability == .partial)
+    }
+
+    @Test func analyticsReplayUsesZeroForSessionsWithoutComparableExercises() {
+        let replay = AnalyticsAccumulator.replay([
+            session(minutes: 10, [
+                hold("Plank", seconds: [60]),
+                lift(
+                    "Band Row",
+                    .back,
+                    sets: [(3, 12, nil, true)],
+                    loadMode: .nonComparable
+                ),
+            ]),
+        ])
+
+        #expect(replay.sessions.first?.volumeLoad == .zero)
+    }
+
     // MARK: - Density
 
     @Test func densityIsVolumePerMinute() {

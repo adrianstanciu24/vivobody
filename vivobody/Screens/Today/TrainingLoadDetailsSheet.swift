@@ -3,10 +3,11 @@
 //  vivobody
 //
 //  The decoder behind Today's compact Training Load instrument. It
-//  teaches the reading with the user's real seven-day receipt: count
-//  completed working-set credit, total the rolling week, then compare
-//  it with the user's own preceding weeks. The language deliberately
-//  avoids recovery or injury claims; load is context, not a diagnosis.
+//  teaches the selected measure with the user's real seven-day receipt:
+//  total comparable volume load when available, otherwise preserve the
+//  hard-set reading, then compare the week with the user's own preceding
+//  weeks. The language avoids recovery or injury claims; load is context,
+//  not a diagnosis.
 //
 
 import SwiftUI
@@ -16,6 +17,12 @@ struct TrainingLoadDetailsSheet: View {
     let report: TrainingLoadReport
 
     @Environment(\.dismiss) private var dismiss
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     var body: some View {
         NavigationStack {
@@ -62,25 +69,7 @@ struct TrainingLoadDetailsSheet: View {
                 .foregroundStyle(Ink.primary)
                 .fixedSize(horizontal: false, vertical: true)
 
-            HStack(alignment: .top, spacing: Space.md) {
-                heroMetric(
-                    value: format(report.currentLoad),
-                    label: "Last 7 days",
-                    accent: true
-                )
-
-                Image(systemName: "arrow.right")
-                    .font(Typography.title)
-                    .foregroundStyle(Ink.quaternary)
-                    .padding(.top, Space.md)
-                    .accessibilityHidden(true)
-
-                heroMetric(
-                    value: report.usualLoad.map(format) ?? "—",
-                    label: "Your usual",
-                    accent: false
-                )
-            }
+            heroMetrics
 
             Text(heroSummary)
                 .font(Typography.body)
@@ -92,18 +81,70 @@ struct TrainingLoadDetailsSheet: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func heroMetric(value: String, label: String, accent: Bool) -> some View {
+    private var heroMetrics: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .top, spacing: Space.md) {
+                currentHeroMetric
+
+                Image(systemName: "arrow.right")
+                    .font(Typography.title)
+                    .foregroundStyle(Ink.quaternary)
+                    .padding(.top, Space.md)
+                    .accessibilityHidden(true)
+
+                usualHeroMetric
+            }
+            .fixedSize(horizontal: true, vertical: false)
+
+            VStack(alignment: .leading, spacing: Space.md) {
+                currentHeroMetric
+                SectionDivider()
+                usualHeroMetric
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var currentHeroMetric: some View {
+        heroMetric(
+            value: currentMeasureValue,
+            unit: currentMeasureUnit,
+            label: "Last 7 days",
+            accent: true
+        )
+    }
+
+    private var usualHeroMetric: some View {
+        heroMetric(
+            value: report.usualLoad.map(formatMeasureValue) ?? "—",
+            unit: report.measure == .volumeLoad && report.usualLoad != nil ? unit.symbol : nil,
+            label: "Your usual",
+            accent: false
+        )
+    }
+
+    private func heroMetric(
+        value: String,
+        unit: String? = nil,
+        label: String,
+        accent: Bool
+    ) -> some View {
         VStack(alignment: .leading, spacing: Space.xs) {
-            Text(value)
-                .font(Typography.metricLg)
-                .foregroundStyle(accent ? Tint.primary : Ink.primary)
-                .monospacedDigit()
-                .lineLimit(1)
-                .minimumScaleFactor(0.65)
+            HStack(alignment: .lastTextBaseline, spacing: 4) {
+                Text(value)
+                    .font(Typography.metricLg)
+                    .foregroundStyle(accent ? Tint.primary : Ink.primary)
+                    .monospacedDigit()
+                    .lineLimit(1)
+                if let unit {
+                    Text(unit)
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(Ink.tertiary)
+                }
+            }
             Text(label)
                 .panelLegend()
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var heroSummary: String {
@@ -130,10 +171,17 @@ struct TrainingLoadDetailsSheet: View {
         explainerSection(number: "01", title: "Count the last 7 days") {
             VStack(alignment: .leading, spacing: Space.lg) {
                 dayBars
-                Text("Each bar is one calendar day. Together they total \(format(report.currentLoad)) estimated hard sets. Tomorrow, the oldest day rolls out and the newest rolls in.")
+                Text(weekReceiptExplanation)
                     .font(Typography.body)
                     .foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+
+                if let loadCoverageNote {
+                    Text(loadCoverageNote)
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
             .padding(Space.xl)
             .contentCard()
@@ -148,7 +196,7 @@ struct TrainingLoadDetailsSheet: View {
         return HStack(alignment: .bottom, spacing: Space.sm) {
             ForEach(days) { day in
                 VStack(spacing: Space.xs) {
-                    Text(day.load > 0 ? format(day.load) : "·")
+                    Text(day.load > 0 ? formatMeasureValue(day.load) : "·")
                         .font(Typography.metricMicro)
                         .foregroundStyle(day.load > 0 ? Ink.secondary : Ink.quaternary)
                         .monospacedDigit()
@@ -169,7 +217,7 @@ struct TrainingLoadDetailsSheet: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Seven day training receipt totaling \(format(report.currentLoad)) estimated hard sets")
+        .accessibilityLabel("Seven day training receipt totaling \(spokenCurrentMeasure)")
     }
 
     private var displayedDays: [DayLoad] {
@@ -192,9 +240,28 @@ struct TrainingLoadDetailsSheet: View {
         day.load > 0 ? Ink.tertiary : Surface.edge
     }
 
-    // MARK: - Step 2: hard-set currency
+    private var weekReceiptExplanation: String {
+        switch report.measure {
+        case .volumeLoad:
+            "Each bar is one calendar day. Together they total \(currentMeasureText) of volume load. Tomorrow, the oldest day rolls out and the newest rolls in."
+        case .hardSets:
+            "Each bar is one calendar day. Together they total \(format(report.currentLoad)) estimated hard sets. Tomorrow, the oldest day rolls out and the newest rolls in."
+        }
+    }
 
+    // MARK: - Step 2: selected measure
+
+    @ViewBuilder
     private var setDecoder: some View {
+        switch report.measure {
+        case .volumeLoad:
+            TrainingLoadVolumeDecoder(report: report, unit: unit)
+        case .hardSets:
+            hardSetDecoder
+        }
+    }
+
+    private var hardSetDecoder: some View {
         explainerSection(number: "02", title: "Weigh the work") {
             VStack(alignment: .leading, spacing: Space.lg) {
                 signalChain
@@ -314,9 +381,9 @@ struct TrainingLoadDetailsSheet: View {
                 if let range = report.productiveRange {
                     StatStrip(
                         stats: [
-                            Stat(value: format(range.lowerBound), label: "Low edge"),
-                            Stat(value: format(report.currentLoad), label: "Your week", accent: true),
-                            Stat(value: format(range.upperBound), label: "High edge"),
+                            rangeStat(value: range.lowerBound, label: "Low edge"),
+                            rangeStat(value: report.currentLoad, label: "Your week", accent: true),
+                            rangeStat(value: range.upperBound, label: "High edge"),
                         ],
                         valueFont: Typography.metricInline
                     )
@@ -392,6 +459,70 @@ struct TrainingLoadDetailsSheet: View {
 
     private func format(_ value: Double) -> String {
         value.formatted(.number.precision(.fractionLength(1)))
+    }
+
+    private func formatMeasure(_ value: Double) -> String {
+        switch report.measure {
+        case .volumeLoad: WeightFormatter.volumeString(value, unit: unit)
+        case .hardSets: format(value)
+        }
+    }
+
+    private var currentMeasureText: String {
+        formatMeasure(report.currentLoad)
+    }
+
+    private var currentMeasureValue: String {
+        formatMeasureValue(report.currentLoad)
+    }
+
+    private var currentMeasureUnit: String? {
+        report.measure == .volumeLoad ? unit.symbol : nil
+    }
+
+    private func formatMeasureValue(_ value: Double) -> String {
+        switch report.measure {
+        case .volumeLoad: WeightFormatter.volumeValue(value, unit: unit)
+        case .hardSets: format(value)
+        }
+    }
+
+    private func spokenMeasure(_ value: Double) -> String {
+        switch report.measure {
+        case .volumeLoad:
+            "\(WeightFormatter.fullVolumeValue(value, unit: unit)) \(unit.displayName.lowercased()) of volume load"
+        case .hardSets:
+            "\(format(value)) estimated hard sets"
+        }
+    }
+
+    private var spokenCurrentMeasure: String {
+        spokenMeasure(report.currentLoad)
+    }
+
+    private func rangeStat(value: Double, label: String, accent: Bool = false) -> Stat {
+        switch report.measure {
+        case .volumeLoad:
+            Stat(
+                value: WeightFormatter.volumeValue(value, unit: unit),
+                unit: unit.symbol,
+                label: label,
+                accent: accent
+            )
+        case .hardSets:
+            Stat(value: format(value), label: label, accent: accent)
+        }
+    }
+
+    private var loadCoverageNote: String? {
+        guard report.measure == .volumeLoad else { return nil }
+        switch report.loadAvailability {
+        case .complete: return nil
+        case .partial:
+            return "Some sets have no comparable load, so this total includes only known load."
+        case .unavailable:
+            return "Current sets have no comparable load, so this week's known subtotal is \(WeightFormatter.volumeString(0, unit: unit))."
+        }
     }
 }
 

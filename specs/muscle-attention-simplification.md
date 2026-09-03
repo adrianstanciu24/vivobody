@@ -89,10 +89,12 @@ Bench-style primary work, evaluated at the last session:
 | 18 sets/wk (target) for 6 / 13 / 26 wk | ~0.50 / ~0.79 / ~0.99 |
 | Layoff | ×0.90 per week (τ = 65 d), never inverted against direct work |
 
-Secondaries read at exactly half their primary. `MuscleVolume`,
-`MuscleDevelopment`, and `TrainingLoad` all consume the same
-`SetStimulus.price(for:parameters:)`, so every surface agrees on what "a set
-of work" is worth by construction.
+Secondaries read at exactly half their primary. `MuscleVolume` and
+`MuscleDevelopment` consume the same `SetStimulus.price(for:parameters:)`, so
+every muscle surface agrees on what "a set of work" is worth by construction.
+Training Load later adopted comparable volume load for systemic work while
+retaining hard sets as a fallback and driver; see
+[the decision record](../engineering/decisions/2026-09-03-training-load-measures-volume-load.md).
 
 ## Test impact
 

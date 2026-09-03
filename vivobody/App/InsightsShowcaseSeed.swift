@@ -2,8 +2,9 @@
 //  InsightsShowcaseSeed.swift
 //  vivobody
 //
-//  Focused deterministic history used to verify every Insights instrument.
-//  Debug-only fixture data stays isolated from the general UI-test launcher.
+//  Focused deterministic history used to verify every Insights instrument,
+//  with volume-load and zero-entered-load hard-set variants. Debug-only
+//  fixture data stays isolated from the general UI-test launcher.
 //
 
 import Foundation
@@ -19,6 +20,35 @@ import SwiftData
             in context: ModelContext,
             now: Date = Date(),
             calendar: Calendar = .current
+        ) {
+            seed(
+                in: context,
+                recordsEnteredLoad: true,
+                now: now,
+                calendar: calendar
+            )
+        }
+
+        /// Mirrors the showcase's completed work while recording zero
+        /// external load so Training Load exercises its hard-set fallback.
+        static func seedHardSetFallback(
+            in context: ModelContext,
+            now: Date = Date(),
+            calendar: Calendar = .current
+        ) {
+            seed(
+                in: context,
+                recordsEnteredLoad: false,
+                now: now,
+                calendar: calendar
+            )
+        }
+
+        private static func seed(
+            in context: ModelContext,
+            recordsEnteredLoad: Bool,
+            now: Date,
+            calendar: Calendar
         ) {
             let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
                 predicate: #Predicate { $0.completedAt != nil }
@@ -41,6 +71,7 @@ import SwiftData
                         ("Seated Dumbbell Overhead Press", 3, reps, 70 + recentProgress),
                         ("Wide-Grip Lat Pulldown", 2, reps, 110 + recentProgress),
                     ],
+                    recordsEnteredLoad: recordsEnteredLoad,
                     calendar: calendar,
                     now: now,
                     context: context
@@ -55,6 +86,7 @@ import SwiftData
                         ("Supinated Straight-Bar Cable Curl", 3, reps, 55 + recentProgress),
                         ("Single-Arm Supinated Cable Triceps Pushdown", 2, reps, 45 + recentProgress),
                     ],
+                    recordsEnteredLoad: recordsEnteredLoad,
                     calendar: calendar,
                     now: now,
                     context: context
@@ -67,6 +99,7 @@ import SwiftData
         private static func seedSession(
             daysAgo: Int,
             plans: [(name: String, sets: Int, reps: Int, weight: Double)],
+            recordsEnteredLoad: Bool,
             calendar: Calendar,
             now: Date,
             context: ModelContext
@@ -80,7 +113,7 @@ import SwiftData
                     named: plan.name,
                     plannedSets: plan.sets,
                     plannedReps: plan.reps,
-                    plannedWeight: plan.weight,
+                    plannedWeight: recordsEnteredLoad ? plan.weight : 0,
                     sortOrder: index
                 )
                 for (setIndex, set) in exercise.orderedSets.enumerated() {

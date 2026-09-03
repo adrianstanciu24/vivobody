@@ -1,6 +1,6 @@
 # Training Load measures volume load; the muscle map measures hard sets
 
-- Status: proposed
+- Status: accepted
 - Date: 2026-09-03
 - Owners: astanciu
 - Supersedes: none. Narrows the "one shared set currency for every surface"
@@ -33,9 +33,12 @@ weekly total compared against the same user's four-week median.
 
 Training Load computes its headline, trend, seven-day strip, and verdict from
 weekly volume load, folded from the same `ComparableTonnageSummary` History
-uses, whenever the user's recent history contains any comparable load.
-Otherwise it falls back to the existing hard-set instrument unchanged. Hard
-sets stay visible as a driver in both cases.
+uses, whenever the current seven-day window or four preceding baseline windows
+contains comparable load. Otherwise it falls back to the existing hard-set
+instrument unchanged. One measure drives the whole report, but selection is
+reevaluated as that trailing 35-day span moves. Hard sets stay visible as a
+driver in both cases, and Sessions counts every workout carrying either
+Training Load currency, including external-load power.
 
 The muscle map, 3D body, volume bars, and symmetry keep `SetStimulus` hard
 sets and are not changed. The shared-currency invariant is scoped to those
@@ -56,7 +59,10 @@ file headers and the specs must say which surface uses which. Partial load
 coverage (some exercises comparable, some not) can bias the ratio in weeks
 where the comparable subset is skipped; the report exposes availability so the
 UI can say so. Volume load is more volatile week to week than set counts; the
-band is unchanged for now and observed behaviour is recorded in the plan.
+band is unchanged for now and observed behaviour is recorded in the plan. A
+long hard-set-only period can switch the report to hard sets; when comparable
+load resumes, the volume-load range forms again from recent weighted weeks
+rather than reviving a stale older baseline.
 
 Intentionally unsupported: a load factor inside `SetStimulus`, an absolute or
 cross-user load threshold, and any change to the persistence model or widget
@@ -64,7 +70,7 @@ snapshot shape.
 
 ## Evidence
 
-- Plan: `engineering/plans/active/2026-09-03-training-load-volume-load.md`
+- Plan: `engineering/plans/completed/2026-09-03-training-load-volume-load.md`
 - Source: `vivobody/Models/Insights/TrainingLoad.swift`,
   `vivobody/Models/Insights/AnalyticsAccumulator.swift`
 - Tests: `vivobodyTests/TrainingLoadTests.swift`,
