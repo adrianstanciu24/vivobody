@@ -1,15 +1,4 @@
 {
-  "files": {
-    "vivobody/App/DebugSeed.swift": 705,
-    "vivobody/Components/Inputs/BareScrubber.swift": 920,
-    "vivobody/Models/Domain/ExerciseCatalog.swift": 659,
-    "vivobody/Models/Insights/SessionAnalytics.swift": 791,
-    "vivobody/Screens/Insights/SignatureSection.swift": 808,
-    "vivobody/Screens/Library/CustomExerciseEditorSheet.swift": 1050,
-    "vivobody/Screens/Library/ExerciseDetailSections.swift": 998,
-    "vivobody/Screens/Me/MeScreen.swift": 744,
-    "vivobody/Screens/Me/SettingsScreen.swift": 763,
-    "vivobody/Screens/Today/TodayScreenSections.swift": 650
-  },
+  "files": {},
   "threshold": 600
 }

@@ -17,11 +17,12 @@ import Testing
 
 @MainActor
 struct ExerciseEffortTests {
-
     // MARK: - Virtual clock
 
     private static let origin = Date(timeIntervalSince1970: 1_700_000_000)
-    private func day(_ n: Double) -> Date { Self.origin.addingTimeInterval(n * 86_400) }
+    private func day(_ n: Double) -> Date {
+        Self.origin.addingTimeInterval(n * 86400)
+    }
 
     // MARK: - Builders
 
@@ -82,7 +83,7 @@ struct ExerciseEffortTests {
             trackingMode: .duration,
             plannedDuration: seconds
         )
-        for i in 0..<3 {
+        for i in 0 ..< 3 {
             ex.sets.append(WorkoutSet(weight: 0, reps: 0, duration: seconds, isCompleted: true, sortOrder: i))
         }
         return ex
@@ -95,6 +96,10 @@ struct ExerciseEffortTests {
         let last = session(at: day(4), [lift(sets: [(100, 8, 2, true), (100, 8, 3, true), (100, 8, 2, true)])])
 
         let summary = [prior, last].effortSummary(forExerciseNamed: "Bench Press")
+        let pureSummary = AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(sessions: [prior, last])
+        ).effortSummary(forExerciseNamed: "Bench Press")
+        #expect(pureSummary == summary)
         #expect(summary?.verdict == .ready)
         #expect((summary?.avgRIR ?? 0) >= 2)
         #expect(summary?.lastSessionSetCount == 3)
@@ -176,6 +181,45 @@ struct ExerciseEffortTests {
 
         let summary = [prior, last].effortSummary(forExerciseNamed: "Bench Press")
         #expect(summary?.verdict == .push)
+    }
+
+    @Test func indexedReportsPreserveFirstRowAndImmediatePriorSemantics() {
+        let prior = lift(sets: [
+            (100, 8, nil, true),
+            (100, 8, nil, true),
+            (100, 8, nil, true),
+        ])
+        let ignoredPriorDuplicate = lift(sets: [
+            (300, 8, 3, true),
+            (300, 8, 3, true),
+            (300, 8, 3, true),
+        ])
+        let last = lift(sets: [
+            (95, 8, 0, true),
+            (95, 8, 0, true),
+            (95, 8, 0, true),
+        ])
+        let ignoredLastDuplicate = lift(sets: [
+            (400, 8, 3, true),
+            (400, 8, 3, true),
+            (400, 8, 3, true),
+        ])
+        let workouts = [
+            session(at: day(0), [prior, ignoredPriorDuplicate]),
+            session(at: day(4), [last, ignoredLastDuplicate]),
+        ]
+        let accumulator = AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(sessions: workouts)
+        )
+
+        let indexed = accumulator.effortSummariesByHistoryKey()[last.historyKey]
+        let focused = accumulator.effortSummary(
+            forExerciseNamed: "Bench Press"
+        )
+
+        #expect(indexed == focused)
+        #expect(indexed?.loggedSetCount == 3)
+        #expect(indexed?.verdict == .grind)
     }
 
     @Test func highRIRButIncompletePlanIsNotReady() {

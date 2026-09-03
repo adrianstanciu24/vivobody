@@ -13,7 +13,6 @@ import Testing
 
 @MainActor
 struct MuscleMappingTests {
-
     private struct TaxonomyEntry {
         let muscle: Muscle
         let displayName: String
@@ -92,7 +91,7 @@ struct MuscleMappingTests {
     ]
 
     @Test func runtimeTaxonomyExactlyMatchesTheReviewed58Regions() {
-        let expectedIDs: Set<String> = [
+        let expectedIDs: Set = [
             "pectoralisMajorClavicular", "pectoralisMajorSternocostal", "pectoralisMinor",
             "serratus", "lats", "trapeziusUpper", "trapeziusMiddle", "trapeziusLower",
             "levatorScapulae", "rhomboids", "teresMajor", "quadratusLumborum",
@@ -134,12 +133,11 @@ struct MuscleMappingTests {
         ]))
     }
 
-    @Test func catalogCoverageLeavesOnlySixExplicitFoundationHolds() {
+    @Test func catalogCoverageLeavesOnlyFiveExplicitFoundationHolds() {
         let targeted = Set(CatalogData.records.flatMap(\.involvement).map(\.muscle))
         let untargeted = Set(Muscle.allCases).subtracting(targeted)
 
         #expect(untargeted == Set([
-            .adductorMagnus,
             .fibularisLongusBrevis,
             .fibularisTertius,
             .flexorHallucisLongus,

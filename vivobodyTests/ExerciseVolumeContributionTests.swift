@@ -91,11 +91,22 @@ struct ExerciseVolumeContributionTests {
     // MARK: - Role credit
 
     @Test func rolesCreditPrimarySecondaryAndNotStabilizer() {
+        let workout = session(at: day(-1))
+        let catalogItem = item()
         let contribution = ExerciseVolumeContribution.compute(
-            sessions: [session(at: day(-1))],
-            item: item(),
+            sessions: [workout],
+            item: catalogItem,
             now: day(0)
         )
+        let pureContribution = ExerciseVolumeContribution.compute(
+            accumulator: AnalyticsAccumulator.replay(
+                AnalyticsSnapshot(sessions: [workout])
+            ),
+            historyKey: catalogItem.historyKey,
+            currentRoles: catalogItem.muscleInvolvement.roles,
+            now: day(0)
+        )
+        #expect(pureContribution == contribution)
         #expect(share(.pectoralisMajorSternocostal, in: contribution)?.sets == 3)
         #expect(share(.triceps, in: contribution)?.sets == 1.5)
         #expect(share(.serratus, in: contribution) == nil)
@@ -172,6 +183,40 @@ struct ExerciseVolumeContributionTests {
         )
         #expect(share(.pectoralisMajorSternocostal, in: contribution)?.sets == 6)
         #expect(share(.triceps, in: contribution)?.sets == 3)
+    }
+
+    @Test func indexedRawContributionRelabelsWithCurrentCatalogRoles() {
+        let workouts = [
+            session(at: day(-1)),
+            session(at: day(-3)),
+            session(at: day(-1), catalogID: "fixture-fly"),
+        ]
+        let trimmed = Muscle.Involvement(contributions: [
+            .init(muscle: .pectoralisMajorSternocostal, role: .primary),
+        ])
+        let catalogItem = item(involvement: trimmed)
+        let accumulator = AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(sessions: workouts)
+        )
+        let rawByKey = ExerciseVolumeContribution
+            .rawContributionsByHistoryKey(
+                accumulator: accumulator,
+                now: day(0)
+            )
+        let indexed = ExerciseVolumeContribution.relabel(
+            rawByKey[catalogItem.historyKey],
+            currentRoles: catalogItem.muscleInvolvement.roles
+        )
+        let focused = ExerciseVolumeContribution.compute(
+            sessions: workouts,
+            item: catalogItem,
+            now: day(0)
+        )
+
+        #expect(rawByKey.keys.count == 2)
+        #expect(indexed == focused)
+        #expect(share(.pectoralisMajorSternocostal, in: indexed)?.sets == 6)
+        #expect(share(.triceps, in: indexed)?.role == nil)
     }
 
     // MARK: - Identity and gating

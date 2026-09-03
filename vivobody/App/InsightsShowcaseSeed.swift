@@ -15,14 +15,15 @@ import SwiftData
         /// Ten weeks at two workouts per week establish load, rhythm, rep
         /// migration, composition, and several balance beams without pulling
         /// the much larger body-development fixture into Insights verification.
-        static func seed(in context: ModelContext) {
+        static func seed(
+            in context: ModelContext,
+            now: Date = Date(),
+            calendar: Calendar = .current
+        ) {
             let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
                 predicate: #Predicate { $0.completedAt != nil }
             ))) ?? []
             guard existing.isEmpty else { return }
-
-            let calendar = Calendar.current
-            let now = Date()
 
             for week in 0 ..< 10 {
                 let reps = switch week {

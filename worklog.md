@@ -1,19 +1,19 @@
 # Current work
 
-Goal: extract one shared workout-receipt metric contract while preserving the
-established live, Today, and History presentation of every metric branch.
+Goal: completed the hotspot-driven refactoring plan as behavior-preserving,
+independently reviewed ownership slices.
 
 Progress:
 
-- Added `WorkoutReceiptMetric` as the shared selection, availability, unit,
-  label, and spoken-value contract for live, Today, and History receipts.
-- Preserved full grouped volume in the live hero, compact card values elsewhere,
-  Today's short partial-volume legend, and the existing `0s` fallback.
-- Added singular VoiceOver semantics for one rep, one pound, and one kilogram.
-- The focused eight-test suite, dark, light, Accessibility Dynamic Type, and
-  cross-screen parity scenarios, structural ratchets, and `Scripts/check.sh` pass.
+- Retired all ten source-size allowances and the stale DebugSeed complexity
+  allowance without creating a replacement catch-all.
+- Passed the 305-test aggregate contract run, all selected headless Baguette
+  flows, two independent final reviews, and `Scripts/check.sh`.
+- Recorded the advisory history comparison and full closeout in
+  `engineering/plans/completed/2026-09-02-hotspot-driven-refactoring.md`.
 
-Next: none; ready for review.
+Next: physical-device checks remain for scrub/audio/haptic feel, one-handed and
+VoiceOver use, HealthKit/mail handoffs, catalog invalid-Save focus, and Training
+Signature rendering pace.
 
-User steering: fix all review findings—preserve receipt behavior, correct
-singular accessibility wording, and keep this worklog current.
+User steering: use multiple agents; preserve behavior and unrelated work.

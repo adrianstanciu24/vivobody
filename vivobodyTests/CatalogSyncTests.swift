@@ -14,6 +14,10 @@ import Testing
 
 @MainActor
 struct CatalogSyncTests {
+    private enum ExpectedSaveError: Error {
+        case failed
+    }
+
     private func makeContext() throws -> ModelContext {
         let schema = VivobodyStore.schema
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
@@ -25,6 +29,13 @@ struct CatalogSyncTests {
         let suiteName = "CatalogSyncTests.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suiteName))
         return (defaults, suiteName)
+    }
+
+    private func reconcile(
+        in context: ModelContext,
+        defaults: UserDefaults
+    ) throws -> CatalogReconciliationResult {
+        try CatalogLaunchReconciler.reconcile(in: context, defaults: defaults)
     }
 
     @Test func synchronizationAddsCurrentBundleAndPreservesCustomExercise() throws {
@@ -41,10 +52,9 @@ struct CatalogSyncTests {
         context.insert(custom)
         try context.save()
 
-        #expect(ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        ).isEmpty)
+        let result = try reconcile(in: context, defaults: testDefaults.defaults)
+        #expect(result.removedItemIDs.isEmpty)
+        #expect(result.insertedItemCount == CatalogData.records.count)
 
         let remaining = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
         #expect(remaining.count == CatalogData.records.count + 1)
@@ -57,10 +67,7 @@ struct CatalogSyncTests {
         let context = try makeContext()
         let testDefaults = try makeDefaults()
         defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
-        ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        )
+        _ = try reconcile(in: context, defaults: testDefaults.defaults)
 
         let bundled = try #require(
             try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
@@ -87,10 +94,8 @@ struct CatalogSyncTests {
         context.insert(removed)
         try context.save()
 
-        #expect(ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        ) == [removed.id])
+        let result = try reconcile(in: context, defaults: testDefaults.defaults)
+        #expect(result.removedItemIDs == [removed.id])
 
         #expect(bundled.name == authored.name)
         #expect(bundled.group == authored.group)
@@ -111,14 +116,13 @@ struct CatalogSyncTests {
         let context = try makeContext()
         let testDefaults = try makeDefaults()
         defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
-        #expect(ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        ).isEmpty)
-        #expect(ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        ).isEmpty)
+        let initial = try reconcile(in: context, defaults: testDefaults.defaults)
+        let repeated = try reconcile(in: context, defaults: testDefaults.defaults)
+        #expect(initial.removedItemIDs.isEmpty)
+        #expect(initial.insertedItemCount == CatalogData.records.count)
+        #expect(repeated.removedItemIDs.isEmpty)
+        #expect(repeated.insertedItemCount == 0)
+        #expect(repeated.reconciledItemCount == CatalogData.records.count)
         let count = try context.fetchCount(FetchDescriptor<ExerciseCatalogItem>())
         #expect(count == CatalogData.records.count)
     }
@@ -127,10 +131,7 @@ struct CatalogSyncTests {
         let context = try makeContext()
         let testDefaults = try makeDefaults()
         defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
-        ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        )
+        _ = try reconcile(in: context, defaults: testDefaults.defaults)
 
         let dip = try #require(
             try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
@@ -143,10 +144,7 @@ struct CatalogSyncTests {
         dip.isFavorite = true
         try context.save()
 
-        ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        )
+        _ = try reconcile(in: context, defaults: testDefaults.defaults)
 
         #expect(
             dip.muscleInvolvementSnapshot[
@@ -161,33 +159,24 @@ struct CatalogSyncTests {
         let context = try makeContext()
         let testDefaults = try makeDefaults()
         defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
-        ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        )
+        _ = try reconcile(in: context, defaults: testDefaults.defaults)
 
         let bundled = try #require(
             try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
                 .first { $0.catalogID == "barbell-bench-press" }
         )
-        try ExerciseCatalogItem.deleteFromCatalog(
-            bundled,
-            in: context,
-            defaults: testDefaults.defaults
-        )
+        try CatalogMutationBoundary(
+            context: context,
+            defaults: testDefaults.defaults,
+            effects: .none
+        ).delete(bundled)
 
-        ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        )
+        _ = try reconcile(in: context, defaults: testDefaults.defaults)
         let hidden = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
         #expect(!hidden.contains { $0.catalogID == "barbell-bench-press" })
 
-        ExerciseCatalogItem.clearBundledCatalogDeletions(defaults: testDefaults.defaults)
-        ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        )
+        CatalogDeletionTombstones.clear(in: testDefaults.defaults)
+        _ = try reconcile(in: context, defaults: testDefaults.defaults)
         let restored = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
         #expect(restored.contains { $0.catalogID == "barbell-bench-press" })
     }
@@ -196,10 +185,7 @@ struct CatalogSyncTests {
         let context = try makeContext()
         let testDefaults = try makeDefaults()
         defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
-        ExerciseCatalogItem.synchronizeBundledCatalog(
-            in: context,
-            defaults: testDefaults.defaults
-        )
+        _ = try reconcile(in: context, defaults: testDefaults.defaults)
 
         let bundled = try #require(
             try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
@@ -218,11 +204,11 @@ struct CatalogSyncTests {
         context.insert(session)
         try context.saveOrRollback()
 
-        try ExerciseCatalogItem.deleteFromCatalog(
-            bundled,
-            in: context,
-            defaults: testDefaults.defaults
-        )
+        try CatalogMutationBoundary(
+            context: context,
+            defaults: testDefaults.defaults,
+            effects: .none
+        ).delete(bundled)
 
         let catalog = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
         let savedTemplateExercise = try #require(
@@ -238,5 +224,46 @@ struct CatalogSyncTests {
         #expect(savedWorkoutExercise.name == "Barbell Bench Press")
         #expect(savedWorkoutExercise.catalogItemID == catalogItemID)
         #expect(savedWorkoutExercise.catalogID == "barbell-bench-press")
+    }
+
+    @Test func failedReconciliationRollsBackCanonicalEditsDeletesAndInserts() throws {
+        let context = try makeContext()
+        let testDefaults = try makeDefaults()
+        defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
+        let bundled = ExerciseCatalogItem(
+            catalogID: "barbell-bench-press",
+            name: "Locally Edited Name",
+            group: .legs,
+            defaultWeight: 222
+        )
+        let removed = ExerciseCatalogItem(
+            catalogID: "removed-test-seed",
+            name: "Removed Test Seed",
+            group: .legs,
+            defaultWeight: 35
+        )
+        context.insert(bundled)
+        context.insert(removed)
+        try context.saveOrRollback()
+
+        do {
+            _ = try CatalogLaunchReconciler.reconcile(
+                in: context,
+                defaults: testDefaults.defaults,
+                saveChanges: { _ in throw ExpectedSaveError.failed }
+            )
+            Issue.record("Expected reconciliation to throw")
+        } catch {
+            #expect(error is ExpectedSaveError)
+        }
+
+        let remaining = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
+        #expect(remaining.count == 2)
+        #expect(remaining.contains { item in
+            item.id == bundled.id
+                && item.name == "Locally Edited Name"
+                && item.group == .legs
+        })
+        #expect(remaining.contains { $0.id == removed.id })
     }
 }

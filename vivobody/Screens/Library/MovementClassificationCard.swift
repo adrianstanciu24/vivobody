@@ -2,8 +2,8 @@
 //  MovementClassificationCard.swift
 //  vivobody
 //
-//  The exercise detail screen's "Movement" section: how the lift
-//  moves, as a diagram instead of a sentence. A cardinal-plane glyph
+//  Stateless "Movement" section for Exercise Detail: how the lift
+//  moves, rendered as a diagram instead of a sentence. A cardinal-plane glyph
 //  (sagittal / frontal / transverse drawn as three intersecting
 //  ellipses, active planes lit) sits beside rows for pattern,
 //  mechanic, and laterality. The glyph absorbs multiplane
@@ -158,25 +158,6 @@ struct MovementPlanesGlyph: View {
                 width: plane == .sagittal ? side * Self.edgeOnRatio : side,
                 height: plane == .transverse ? side * Self.edgeOnRatio : side
             )
-    }
-}
-
-// MARK: - Detail screen section
-
-extension ExerciseDetailScreen {
-    /// How the lift moves, directly under the anatomy figure so the
-    /// screen reads what it works, then how it moves, then how to do
-    /// it. The builder lives beside the card for the same reason
-    /// `instructionsLink` lives in ExerciseInstructionsScreen.swift —
-    /// and to keep the oversized sections file under its ratchet.
-    var movementSection: some View {
-        MovementClassificationCard(
-            mechanic: item.mechanic,
-            movementLabel: item.movementLabel,
-            trainingRole: item.trainingRole,
-            planes: item.planes,
-            laterality: item.laterality
-        )
     }
 }
 

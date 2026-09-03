@@ -2,30 +2,30 @@
 //  ExerciseHeroHeader.swift
 //  vivobody
 //
-//  The exercise detail screen's hero: an orange modality eyebrow
-//  over the exercise name, plus a plateau / load-mode-aware
-//  readiness status pill. The eyebrow uses the same accent kicker
-//  treatment as the Insights hero's identity line, and sits above
-//  the title so it never stacks against the also-orange readiness
-//  pill below. The builders live in their own file for the same
-//  reason `movementSection` lives beside its card — to keep the
-//  oversized sections file under its ratchet.
+//  Stateless exercise-detail hero presentation: an orange modality
+//  eyebrow over the exercise name, plus an optional plateau or
+//  load-mode-aware readiness status. Archive derivation stays outside
+//  this leaf view.
 //
 
 import SwiftUI
 import VivoKit
 
-extension ExerciseDetailScreen {
-    // MARK: - Hero
+struct ExerciseHeroHeader: View {
+    let name: String
+    let modality: ExerciseModality
+    let supportsEstimatedOneRepMax: Bool
+    let plateauStatus: PlateauStatus?
+    let readinessAction: String?
 
-    var hero: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            Text(item.modality.displayName.uppercased())
+            Text(modality.displayName.uppercased())
                 .font(Typography.metricUnit)
                 .foregroundStyle(Tint.primary)
                 .tracking(1.4)
 
-            Text(item.name)
+            Text(name)
                 .font(Typography.display)
                 .foregroundStyle(Ink.primary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -46,14 +46,10 @@ extension ExerciseDetailScreen {
 
     /// Resistance progression follows the exercise's load polarity.
     /// Machine-assisted work advances by reducing assistance.
-    var readinessAction: String? {
-        effortSummary?.verdict.progressionAction(for: item.loadMode)
-    }
-
     /// Plateau wins over readiness when both could fire — a stall is
     /// the more urgent signal. Renders nothing when neither applies.
     @ViewBuilder
-    var statusPill: some View {
+    private var statusPill: some View {
         if !supportsEstimatedOneRepMax, let plateau = plateauStatus {
             pill(text: "Stalled · \(plateau.sessions) sessions", accent: false)
         } else if let readinessAction {
@@ -61,7 +57,7 @@ extension ExerciseDetailScreen {
         }
     }
 
-    func pill(text: String, accent: Bool) -> some View {
+    private func pill(text: String, accent: Bool) -> some View {
         Text(text)
             .font(Typography.metricUnit)
             .foregroundStyle(accent ? Tint.complete : Ink.tertiary)
@@ -71,3 +67,19 @@ extension ExerciseDetailScreen {
             .overlay(Capsule().stroke(accent ? Tint.primaryDim : Surface.edge, lineWidth: 1))
     }
 }
+
+#if DEBUG
+    #Preview("Exercise hero") {
+        ExerciseHeroHeader(
+            name: "Barbell Bench Press",
+            modality: .dynamicStrength,
+            supportsEstimatedOneRepMax: true,
+            plateauStatus: nil,
+            readinessAction: "add load"
+        )
+        .padding(Space.gutter)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(Color.black)
+        .preferredColorScheme(.dark)
+    }
+#endif

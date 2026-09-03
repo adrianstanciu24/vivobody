@@ -292,8 +292,7 @@ struct ExerciseCatalogBrowserHost<Content: View>: View {
 
     private func delete(_ item: ExerciseCatalogItem) {
         do {
-            let id = try ExerciseCatalogItem.deleteFromCatalog(item, in: modelContext)
-            SpotlightIndexer.removeExercise(id: id)
+            try CatalogMutationBoundary(context: modelContext).delete(item)
         } catch {
             saveError = SaveErrorBox(error)
             return

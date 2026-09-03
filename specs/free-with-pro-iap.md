@@ -117,7 +117,7 @@ resolved `isPro` flag to the App Group so widgets never touch StoreKit.
   existing templates are grandfathered: fully editable, startable,
   deletable. Only *creation* is gated.
 
-### 3. Exercise progress charts (`ExerciseDetailScreen` / `ExerciseDetailSections`)
+### 3. Exercise progress charts (`ExerciseDetailScreen` / `ExerciseDetailProgressSection`)
 - Chart sections get the same frozen-blur + unlock treatment; numeric stats
   (best set, last performed, PRs, totals) stay free.
 
@@ -201,7 +201,7 @@ silent.
 | `vivobody/App/SettingsKeys.swift` | `proUnlockedCache` key |
 | `vivobody/Screens/Insights/InsightsScreen.swift` | Frozen-blur lock state + unlock card |
 | `vivobody/Screens/Library/LibraryScreen.swift` | 5-template gate in `handlePlus` (the single create path once templates exist) |
-| `vivobody/Screens/Library/ExerciseDetailSections.swift` | Chart section lock state |
+| `vivobody/Screens/Library/ExerciseDetailProgressSection.swift` | Chart section lock state |
 | `vivobody/Screens/Library/ExerciseDetailScreen.swift` | Exercise-comparison gate; active-workout suppression |
 | `vivobody/Screens/Library/ExerciseComparisonScreen.swift` | Pro comparison surface |
 | `vivobody/Screens/Me/SettingsScreen.swift` | Pro row + HealthKit row gate |

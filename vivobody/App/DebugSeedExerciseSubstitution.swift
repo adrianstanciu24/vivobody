@@ -10,17 +10,12 @@ import Foundation
 import SwiftData
 
 #if DEBUG
-    extension UITestSupport {
-        static func seedExerciseSubstitutionIfRequested(
+    @MainActor
+    enum DebugExerciseSubstitutionSeeder {
+        static func seed(
+            _ request: DebugExerciseSubstitutionRequest,
             in context: ModelContext
         ) {
-            let seedsReplacement = CommandLine.arguments.contains(
-                "--ui-test-active-replaceable"
-            )
-            let seedsEmptyState = CommandLine.arguments.contains(
-                "--ui-test-active-zero-set"
-            )
-            guard seedsReplacement || seedsEmptyState else { return }
             let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
                 predicate: #Predicate { $0.completedAt == nil }
             ))) ?? []
@@ -28,12 +23,12 @@ import SwiftData
 
             let exercise = debugCatalogExercise(
                 named: "Barbell Bench Press",
-                plannedSets: seedsEmptyState ? 0 : 3,
+                plannedSets: request.seedsEmptyState ? 0 : 3,
                 plannedReps: 8,
                 plannedWeight: 135,
                 sortOrder: 0
             )
-            if seedsReplacement {
+            if request.seedsReplacement {
                 // Regression fixture: live rows are authoritative even if a
                 // cached uniform-plan count has drifted to zero.
                 exercise.plannedSets = 0

@@ -1,0 +1,367 @@
+{
+  "name": "settings-preferences",
+  "launch": {
+    "reset": true,
+    "tab": "me",
+    "arguments": [
+      "--static-body",
+      "--no-iap",
+      "-settings.hapticsEnabled",
+      "YES",
+      "-settings.soundsEnabled",
+      "YES"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Unlock Vivobody Pro",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Haptics",
+          "role": "AXCheckBox"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Haptics",
+            "role": "AXCheckBox",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Haptics",
+        "role": "AXCheckBox"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Sounds",
+          "role": "AXCheckBox"
+        },
+        "direction": "up",
+        "maxSwipes": 3
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Sounds",
+            "role": "AXCheckBox",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Sounds",
+        "role": "AXCheckBox"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "me",
+        "arguments": [
+          "--static-body",
+          "--no-iap"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Unlock Vivobody Pro",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Haptics",
+          "role": "AXCheckBox"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Haptics",
+            "role": "AXCheckBox",
+            "value": "0"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Haptics",
+        "role": "AXCheckBox"
+      }
+    },
+    {
+      "wait": {
+        "label": "Haptics",
+        "role": "AXCheckBox",
+        "value": "1"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Sounds",
+          "role": "AXCheckBox"
+        },
+        "direction": "up",
+        "maxSwipes": 3
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Sounds",
+            "role": "AXCheckBox",
+            "value": "0"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Sounds",
+        "role": "AXCheckBox"
+      }
+    },
+    {
+      "wait": {
+        "label": "Sounds",
+        "role": "AXCheckBox",
+        "value": "1"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "90 second rest",
+          "role": "AXButton"
+        },
+        "direction": "down",
+        "maxSwipes": 4
+      }
+    },
+    {
+      "tap": {
+        "label": "90 second rest",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "90s",
+        "role": "AXStaticText"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Reset Exercise Catalog",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 4
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Reset Exercise Catalog",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Cancel",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Cancel",
+        "role": "AXButton"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "me",
+        "arguments": [
+          "--static-body",
+          "--no-iap"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Unlock Vivobody Pro",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Haptics",
+          "role": "AXCheckBox"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Haptics",
+            "role": "AXCheckBox",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Sounds",
+          "role": "AXCheckBox"
+        },
+        "direction": "up",
+        "maxSwipes": 3
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Sounds",
+            "role": "AXCheckBox",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "me",
+        "arguments": [
+          "--static-body",
+          "--pro"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Vivobody Pro, Unlocked — thank you",
+      "role": "AXStaticText"
+    },
+    {
+      "label": "Preferences",
+      "role": "AXHeading"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Unlock Vivobody Pro",
+      "role": "AXButton"
+    }
+  ]
+}

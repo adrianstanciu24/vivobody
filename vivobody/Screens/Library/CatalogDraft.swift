@@ -173,6 +173,10 @@ struct CatalogDraft {
         )
     }
 
+    var showsLoggingDefaults: Bool {
+        trackingMode == .duration || tracksResistance
+    }
+
     var muscleSummary: String {
         let involvement = muscleInvolvement
         let primary = involvement.primary.map(\.displayName).joined(separator: " · ")
@@ -186,6 +190,111 @@ struct CatalogDraft {
         guard supportingCount > 0 else { return "\(primary) · Primary" }
         let suffix = supportingCount == 1 ? "1 supporting muscle" : "\(supportingCount) supporting muscles"
         return "\(primary) · \(suffix)"
+    }
+
+    /// Freeze the validated editor buffer into the UI-independent payload
+    /// consumed by the catalog transaction boundary.
+    func mutationInput(using validation: CatalogDraftValidation) -> CatalogMutationInput {
+        CatalogMutationInput(
+            name: validation.normalizedName,
+            execution: execution,
+            group: group,
+            defaultWeight: defaultWeight,
+            trackingMode: trackingMode,
+            modality: modality,
+            loadMode: loadMode,
+            bodyweightFraction: bodyweightFraction,
+            defaultDuration: defaultDuration,
+            equipment: equipment,
+            mechanic: mechanic,
+            trainingRole: trainingRole,
+            pattern: pattern,
+            direction: direction,
+            planes: planes,
+            laterality: laterality,
+            muscleInvolvementSnapshot: muscleInvolvementSnapshot,
+            aliases: validation.normalizedAliases
+        )
+    }
+
+    // MARK: - Dependent selections
+
+    /// Changes the browse group without inferring anatomy. A real group
+    /// change requires the user to author a fresh role map; reselecting the
+    /// current group preserves the work already entered.
+    mutating func selectMuscleGroup(_ group: MuscleGroup) {
+        guard self.group != group else { return }
+        self.group = group
+        muscleInvolvementSnapshot = [:]
+    }
+
+    /// Applies the load constraint imposed by fixtures whose resistance
+    /// cannot be compared honestly.
+    mutating func selectEquipment(_ equipment: Equipment) {
+        self.equipment = equipment
+        if equipment.requiresNonComparableLoad {
+            loadMode = .nonComparable
+            bodyweightFraction = 0
+        }
+    }
+
+    /// Every custom modality owns one required logging measure.
+    mutating func selectModality(_ modality: ExerciseModality) {
+        self.modality = modality
+        trackingMode = modality.requiredTrackingMode
+    }
+
+    /// Isolation lifts carry no compound pattern. Returning to compound
+    /// restores the editor's existing Push/Horizontal starting point only
+    /// when no prior pattern remains.
+    mutating func selectMechanic(_ mechanic: Mechanic) {
+        self.mechanic = mechanic
+        switch mechanic {
+        case .isolation:
+            pattern = nil
+            direction = nil
+        case .compound:
+            if pattern == nil {
+                pattern = .push
+                direction = .horizontal
+            }
+        }
+    }
+
+    /// Direction is meaningful only for push and pull patterns. Selecting a
+    /// push/pull pattern backfills Horizontal only when direction is absent.
+    mutating func selectPattern(_ pattern: MovementPattern) {
+        self.pattern = pattern
+        if pattern == .push || pattern == .pull {
+            if direction == nil {
+                direction = .horizontal
+            }
+        } else {
+            direction = nil
+        }
+    }
+
+    /// Bodyweight coefficients belong only to the two bodyweight load modes.
+    /// Entering one starts at 100%; leaving one clears the coefficient.
+    mutating func selectLoadMode(_ mode: ExerciseLoadMode) {
+        loadMode = mode
+        switch mode {
+        case .external, .nonComparable:
+            bodyweightFraction = 0
+        case .bodyweightAdded, .assistanceSubtracted:
+            if bodyweightFraction == 0 {
+                bodyweightFraction = 1
+            }
+        }
+    }
+
+    /// Existing editor presentation behavior repairs legacy/custom band
+    /// drafts on appearance. This intentionally remains band-only; choosing
+    /// another constrained fixture goes through `selectEquipment(_:)`.
+    mutating func normalizeBandLoadForEditorPresentation() {
+        guard equipment == .band else { return }
+        loadMode = .nonComparable
+        bodyweightFraction = 0
     }
 
     /// Split the comma-separated `aliasesInput` into a clean array.

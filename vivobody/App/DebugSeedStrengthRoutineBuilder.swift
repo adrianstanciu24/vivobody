@@ -11,7 +11,7 @@ import Foundation
 #if DEBUG
     extension UITestSupport {
         static var opensStrengthRoutineBuilder: Bool {
-            CommandLine.arguments.contains("--ui-test-strength-routine-builder")
+            route().opensStrengthRoutineBuilder
         }
     }
 #endif

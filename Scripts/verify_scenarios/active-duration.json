@@ -1,0 +1,68 @@
+{
+  "name": "active-duration",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-bodyweight-duration",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "completeSetButton",
+        "role": "AXButton",
+        "value": "not completed"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Weighted Hang Fixture"
+    },
+    {
+      "label": "Hold",
+      "role": "AXSlider"
+    },
+    {
+      "label": "Bodyweight"
+    },
+    {
+      "label": "Added load",
+      "role": "AXSlider"
+    },
+    {
+      "identifier": "completeSetButton",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Reps in reserve",
+      "role": "AXSlider",
+      "visible": true
+    },
+    {
+      "label": "Weight increment",
+      "visible": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

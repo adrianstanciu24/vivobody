@@ -12,7 +12,8 @@
 //  Only completed, positive-repetition `.dynamicStrength + .reps`
 //  work carries RIR. Every reading is gated on the `rirLogged` flag so
 //  a freshly-spawned set sitting at the default RIR 2 never
-//  masquerades as a real rating.
+//  masquerades as a real rating. Report construction runs over the
+//  immutable analytics replay; model-facing callers only build its snapshot.
 //
 
 import Foundation
@@ -65,39 +66,95 @@ nonisolated struct ExerciseEffortSummary: Hashable {
     let verdict: ProgressionVerdict
 }
 
+@MainActor
 extension [WorkoutSession] {
     /// Build an effort summary for one catalog exercise. Bundled IDs or
     /// the custom item's exact performance signature define the series;
     /// name-only rows are used only when no catalog identity exists.
     func effortSummary(for item: ExerciseCatalogItem) -> ExerciseEffortSummary? {
-        effortSummary { $0.matchesCatalogItem(item) }
+        AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(sessions: self)
+        ).effortSummary(forHistoryKey: item.historyKey)
     }
 
     /// Convenience for tests and callers that intentionally only know a
     /// display name.
     func effortSummary(forExerciseNamed name: String) -> ExerciseEffortSummary? {
+        AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(sessions: self)
+        ).effortSummary(forExerciseNamed: name)
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Build every stable exercise's effort report in one archive pass.
+    /// A session contributes only its first eligible row for a history key,
+    /// matching the focused query's long-standing duplicate-row behavior.
+    func effortSummariesByHistoryKey(
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> [String: ExerciseEffortSummary] {
+        var instancesByHistoryKey:
+            [String: [(date: Date, exercise: AnalyticsExerciseSnapshot)]] = [:]
+
+        for session in sessions {
+            guard !isCancelled() else { return [:] }
+            var capturedHistoryKeys = Set<String>()
+            for replay in session.exercises {
+                guard !isCancelled() else { return [:] }
+                let exercise = replay.exercise
+                let historyKey = exercise.historyKey
+                guard !capturedHistoryKeys.contains(historyKey),
+                      Self.isEffortEligible(exercise)
+                else { continue }
+                capturedHistoryKeys.insert(historyKey)
+                instancesByHistoryKey[historyKey, default: []].append(
+                    (session.date, exercise)
+                )
+            }
+        }
+
+        var summaries: [String: ExerciseEffortSummary] = [:]
+        summaries.reserveCapacity(instancesByHistoryKey.count)
+        for (historyKey, instances) in instancesByHistoryKey {
+            guard !isCancelled() else { return [:] }
+            if let summary = Self.effortSummary(instances: instances) {
+                summaries[historyKey] = summary
+            }
+        }
+        return summaries
+    }
+
+    /// Build a single exercise's effort report from the immutable replay.
+    /// The history key preserves bundled identity and custom-exercise
+    /// performance signatures without retaining a catalog model.
+    func effortSummary(
+        forHistoryKey historyKey: String
+    ) -> ExerciseEffortSummary? {
+        effortSummariesByHistoryKey()[historyKey]
+    }
+
+    /// Pure name-only convenience retained for fixtures and legacy callers.
+    func effortSummary(
+        forExerciseNamed name: String
+    ) -> ExerciseEffortSummary? {
         let key = name.exerciseIdentityName
-        return effortSummary { $0.name.exerciseIdentityName == key }
+        let instances: [(date: Date, exercise: AnalyticsExerciseSnapshot)] = sessions.compactMap { replay in
+            guard let exercise = replay.exercises.lazy.map(\.exercise).first(where: {
+                $0.name.exerciseIdentityName == key
+                    && Self.isEffortEligible($0)
+            }) else { return nil }
+            return (date: replay.date, exercise: exercise)
+        }
+        return Self.effortSummary(instances: instances)
     }
 
     /// Build an effort summary for one exercise (`.reps` only). Nil
     /// when the lift carries fewer than three logged RIR readings —
     /// below that the average is too noisy to act on.
-    private func effortSummary(
-        matching matches: (Exercise) -> Bool
+    private static func effortSummary(
+        instances: [(date: Date, exercise: AnalyticsExerciseSnapshot)]
     ) -> ExerciseEffortSummary? {
-        // Newest-first list of this lift's appearances. Duration
-        // exercises are excluded — they carry no RIR.
-        let instances: [(date: Date, exercise: Exercise)] = self.compactMap { session in
-            guard let ex = session.orderedExercises.first(where: {
-                matches($0)
-                    && $0.modality == .dynamicStrength
-                    && $0.loadMode.supportsLoadComparison
-                    && $0.trackingMode == .reps
-            }) else { return nil }
-            return (session.completedAt ?? session.startedAt, ex)
-        }
-        .sorted { $0.date > $1.date }
+        let instances = instances.sorted { $0.date > $1.date }
 
         guard !instances.isEmpty else { return nil }
 
@@ -142,10 +199,10 @@ extension [WorkoutSession] {
     // MARK: - Verdict
 
     private static func verdict(
-        last: Exercise,
+        last: AnalyticsExerciseSnapshot,
         lastAvg: Double,
         completedAll: Bool,
-        prior: Exercise?
+        prior: AnalyticsExerciseSnapshot?
     ) -> ProgressionVerdict {
         // Grind: hammering to failure (mean RIR ~0) while the top set
         // regressed versus the prior session.
@@ -162,7 +219,10 @@ extension [WorkoutSession] {
     /// True when `last`'s top set fell behind `prior`'s — lower
     /// effective resistance, or the same resistance for fewer reps.
     /// This preserves the inverse polarity of machine assistance.
-    private static func regressed(last: Exercise, prior: Exercise) -> Bool {
+    private static func regressed(
+        last: AnalyticsExerciseSnapshot,
+        prior: AnalyticsExerciseSnapshot
+    ) -> Bool {
         let a = top(last)
         let b = top(prior)
         guard let lastLoad = a.load, let priorLoad = b.load else {
@@ -176,15 +236,25 @@ extension [WorkoutSession] {
         return false
     }
 
-    private static func top(_ ex: Exercise) -> (load: Double?, reps: Int) {
-        guard let set = ex.representativeTopSet else { return (nil, 0) }
+    private static func top(
+        _ exercise: AnalyticsExerciseSnapshot
+    ) -> (load: Double?, reps: Int) {
+        guard let set = exercise.representativeTopSet else { return (nil, 0) }
         return (
-            ex.effectiveLoad(loggedWeight: set.weight),
+            exercise.effectiveLoad(loggedWeight: set.weight),
             set.reps
         )
     }
 
-    private func mean(_ values: [Int]) -> Double {
+    private static func isEffortEligible(
+        _ exercise: AnalyticsExerciseSnapshot
+    ) -> Bool {
+        exercise.modality == .dynamicStrength
+            && exercise.loadMode.supportsLoadComparison
+            && exercise.trackingMode == .reps
+    }
+
+    private static func mean(_ values: [Int]) -> Double {
         guard !values.isEmpty else { return 0 }
         return Double(values.reduce(0, +)) / Double(values.count)
     }

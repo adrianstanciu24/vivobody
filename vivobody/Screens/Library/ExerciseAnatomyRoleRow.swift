@@ -2,28 +2,17 @@
 //  ExerciseAnatomyRoleRow.swift
 //  vivobody
 //
-//  Adaptive muscle-role rows for the exercise-detail anatomy card.
-//  Standard text sizes retain the compact keyed legend; accessibility
-//  sizes stack each key above its muscles so labels stay intact.
+//  Adaptive leaf row for an exercise-detail anatomy legend. Standard
+//  text sizes retain the compact keyed layout; accessibility sizes
+//  stack each key above its muscles so labels stay intact.
 //
 
 import SwiftUI
 import VivoKit
 
-extension ExerciseDetailScreen {
-    /// One keyed legend row: the role's color dot (same ramp the model
-    /// renders) + role label + the muscle names that carry it. Rows
-    /// for roles with no muscles hide themselves. Replaces both the
-    /// old dots-only legend and the separate mid-screen Muscles list.
-    @ViewBuilder
-    func anatomyRoleRow(role: MuscleRole, muscles: [Muscle]) -> some View {
-        if !muscles.isEmpty {
-            ExerciseAnatomyRoleRow(role: role, muscles: muscles)
-        }
-    }
-}
-
-private struct ExerciseAnatomyRoleRow: View {
+/// One keyed legend row: the role's color dot (same ramp the model
+/// renders), role label, and the muscle names that carry it.
+struct ExerciseAnatomyRoleRow: View {
     let role: MuscleRole
     let muscles: [Muscle]
 
@@ -71,3 +60,16 @@ private struct ExerciseAnatomyRoleRow: View {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
+
+#if DEBUG
+    #Preview("Exercise anatomy role") {
+        ExerciseAnatomyRoleRow(
+            role: .primary,
+            muscles: [.pectoralisMajorClavicular, .pectoralisMajorSternocostal]
+        )
+        .padding(Space.gutter)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(Color.black)
+        .preferredColorScheme(.dark)
+    }
+#endif

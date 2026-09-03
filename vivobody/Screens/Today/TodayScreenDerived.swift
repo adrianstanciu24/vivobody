@@ -2,9 +2,8 @@
 //  TodayScreenDerived.swift
 //  vivobody
 //
-//  Derived/computed properties and static formatters extracted from
-//  TodayScreen: sorted templates, workout/PR date sets, volume and
-//  PR helpers, and the date formatters used by the journal sections.
+//  Small root-owned adapters for Today's query ordering, immutable Up Next
+//  snapshot, journal values, hero sizing, and date formatting.
 //
 
 import SwiftData
@@ -44,10 +43,6 @@ extension TodayScreen {
             .map { Calendar.current.startOfDay(for: $0.completedAt ?? $0.startedAt) })
     }
 
-    func volumeLabel(_ value: Double) -> String {
-        WeightFormatter.volumeValue(value, unit: unit)
-    }
-
     /// Whether the most recent session set a new all-time record
     /// on any exercise — the same semantics as History's PR badge and
     /// the live PR-celebration overlay. When true, the Volume stat on
@@ -55,6 +50,93 @@ extension TodayScreen {
     var lastWorkoutHasPR: Bool {
         guard let lastID = latestSession?.id else { return false }
         return appState.analytics.prSessionIDs.contains(lastID)
+    }
+
+    /// Pair the live template needed for navigation with an immutable preview.
+    /// The leaf view receives no SwiftData or analytics owner.
+    func makeUpNextSelection(
+        _ upNext: UpNext,
+        outlook: StrengthOutlookBoard,
+        defaultRestSeconds: Int
+    ) -> (template: WorkoutTemplate, presentation: TodayUpNextPresentation)? {
+        let template: WorkoutTemplate
+        let daysUntil: Int
+        let more: Int
+        let shouldEaseOff: Bool
+
+        switch upNext.kind {
+        case let .scheduled(next, otherCount, easeOff):
+            template = next
+            daysUntil = 0
+            more = otherCount
+            shouldEaseOff = easeOff
+        case let .rest(_, next, offset, otherCount):
+            guard let next else { return nil }
+            template = next
+            daysUntil = offset
+            more = otherCount
+            shouldEaseOff = false
+        case .unscheduled:
+            return nil
+        }
+
+        let source = TodayUpNextPresentation.Source(
+            template: template,
+            daysUntil: daysUntil,
+            otherScheduledCount: more,
+            shouldEaseOff: shouldEaseOff,
+            outlook: outlook
+        )
+        return (
+            template,
+            TodayUpNextPresentation(
+                source: source,
+                unit: unit,
+                defaultRestSeconds: defaultRestSeconds
+            )
+        )
+    }
+
+    /// Frozen figure height with normal-size CTA and legend clearance.
+    func bodyHeroHeight() -> CGFloat {
+        let base = heroHeight
+        guard base > 0 else { return 0 }
+        if usesAccessibilityLayout {
+            return min(base * 0.5, 420)
+        }
+        return max(
+            base * Self.minimumHeroFraction,
+            base * Self.heroFraction
+                - Self.pinnedStartBarClearance
+                - Self.developmentLegendClearance
+        )
+    }
+
+    static let heroFraction: CGFloat = 0.98
+    static let minimumHeroFraction: CGFloat = 0.68
+    static let developmentLegendClearance: CGFloat = 88
+    static let pinnedStartBarClearance: CGFloat = 104
+
+    var pinnedStartBarScrollClearance: CGFloat {
+        usesAccessibilityLayout ? 160 : Self.pinnedStartBarClearance
+    }
+
+    func streakText(_ streak: WorkoutStreak) -> String? {
+        guard streak.current > 0 else { return nil }
+        return "\(streak.current) \(streak.current == 1 ? "week" : "weeks") in a row"
+    }
+
+    func lastWorkoutMeta(for session: WorkoutSession) -> String {
+        let date = session.completedAt ?? session.startedAt
+        let calendar = Calendar.current
+        let day: String = if calendar.isDateInToday(date) {
+            "Today"
+        } else if calendar.isDateInYesterday(date) {
+            "Yesterday"
+        } else {
+            Self.dayFormatter.string(from: date)
+        }
+        return day + "  ·  " + Self.timeFormatter.string(from: date)
     }
 
     // MARK: - Formatters

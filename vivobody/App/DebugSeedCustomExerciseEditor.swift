@@ -11,7 +11,7 @@ import Foundation
 #if DEBUG
     extension UITestSupport {
         static var opensCustomExerciseEditor: Bool {
-            CommandLine.arguments.contains("--ui-test-custom-exercise-editor")
+            route().opensCustomExerciseEditor
         }
     }
 #endif

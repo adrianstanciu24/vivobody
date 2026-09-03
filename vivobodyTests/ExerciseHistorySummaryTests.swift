@@ -4,7 +4,8 @@
 //
 //  Guards the single-pass exercise-history index shared by workout
 //  startup and live PR detection: best-vs-latest behavior, prescription
-//  capture, distinct-session counts, and cache readiness.
+//  capture, distinct-session counts, bounded recent instances, and
+//  cache readiness.
 //
 
 import Foundation
@@ -83,7 +84,8 @@ struct ExerciseHistorySummaryTests {
             catalogID: "bench-press",
             group: .chest,
             plannedSets: 0,
-            plannedWeight: 0
+            plannedWeight: 0,
+            sortOrder: 1
         )
         duplicate.sets.append(
             WorkoutSet(
@@ -99,6 +101,52 @@ struct ExerciseHistorySummaryTests {
         let summary = try #require(summaries([workout])[key])
         #expect(summary.sessionCount == 1)
         #expect(summary.currentAllTimeBest == .dynamic(effectiveLoad: 105, reps: 8))
+        #expect(summary.recentInstances.count == 1)
+        #expect(summary.recentInstances[0].representativeSet.weight == 100)
+    }
+
+    @Test func recentInstancesAreBoundedDeduplicatedAndNewestFirst() throws {
+        let sessions = (0 ..< 7).map { day in
+            session(
+                daysAfterBase: Double(day),
+                sets: [(100 + Double(day), 8)]
+            )
+        }
+        let duplicate = Exercise(
+            name: "Bench Press",
+            catalogID: "bench-press",
+            group: .chest,
+            plannedSets: 0,
+            plannedWeight: 0,
+            sortOrder: 1
+        )
+        duplicate.sets.append(
+            WorkoutSet(
+                weight: 200,
+                reps: 8,
+                isCompleted: true,
+                sortOrder: 0
+            )
+        )
+        sessions[6].exercises.append(duplicate)
+
+        let shuffled = [
+            sessions[2], sessions[6], sessions[0], sessions[4],
+            sessions[1], sessions[5], sessions[3],
+        ]
+        let key = duplicate.historyKey
+        let summary = try #require(summaries(shuffled)[key])
+
+        #expect(summary.sessionCount == 7)
+        #expect(summary.recentInstances.count == ExerciseHistorySummary.recentInstanceLimit)
+        #expect(
+            summary.recentInstances.map(\.date)
+                == [6, 5, 4, 3, 2].map {
+                    baseDate.addingTimeInterval(Double($0) * 86400)
+                }
+        )
+        #expect(summary.recentInstances[0].representativeSet.weight == 106)
+        #expect(summary.currentAllTimeBest == .dynamic(effectiveLoad: 200, reps: 8))
     }
 
     @Test func nonRecordWorkStillRetainsLatestPrescription() throws {

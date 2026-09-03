@@ -5,9 +5,9 @@
 //  Builds the shared per-exercise history index used by live PR
 //  detection and workout-start prefill. One archive pass retains the
 //  standing record, latest logged prescription, distinct session
-//  count, estimated-strength readiness dates, and latest performance
-//  date so hot paths never query and rescan every historical Exercise
-//  independently.
+//  count, a bounded recent-instance ledger, estimated-strength
+//  readiness dates, and latest performance date so hot paths never
+//  query and rescan every historical Exercise independently.
 //
 
 import Foundation
@@ -47,9 +47,19 @@ nonisolated struct ExerciseHistoryInstance: Hashable {
 /// edits, so record bests are retained per semantic kind and latest
 /// prescriptions per exact performance signature.
 nonisolated struct ExerciseHistorySummary: Hashable {
+    /// Exercise Detail shows at most five archived rows. Keeping the
+    /// bound in the report prevents that screen from walking the archive
+    /// again while preserving exact all-time counts and records below.
+    static let recentInstanceLimit = 5
+
     let mostRecentInstance: ExerciseHistoryInstance
     let sessionCount: Int
     let latestPerformanceDate: Date
+    /// Newest-first, with at most one instance per workout. When a
+    /// malformed session repeats the same exercise identity, the first
+    /// exercise in stable workout order preserves the existing Detail-row
+    /// behavior while every duplicate can still contribute to the record.
+    let recentInstances: [ExerciseHistoryInstance]
     /// One date per workout that supplied a confidence-eligible e1RM
     /// sample. Exercise Detail uses this even when only one sample exists;
     /// the chart-oriented `ExerciseProgress` collection starts at two.
@@ -103,6 +113,7 @@ nonisolated struct ExerciseHistorySummary: Hashable {
         mostRecentInstance: ExerciseHistoryInstance,
         sessionCount: Int,
         latestPerformanceDate: Date,
+        recentInstances: [ExerciseHistoryInstance],
         estimatedOneRepMaxDates: [Date],
         allTimeBests: [PerformanceSemanticKind: StrengthPerformance],
         mostRecentInstancesBySignature:
@@ -111,10 +122,16 @@ nonisolated struct ExerciseHistorySummary: Hashable {
         self.mostRecentInstance = mostRecentInstance
         self.sessionCount = sessionCount
         self.latestPerformanceDate = latestPerformanceDate
+        self.recentInstances = recentInstances
         self.estimatedOneRepMaxDates = estimatedOneRepMaxDates
         self.allTimeBests = allTimeBests
         self.mostRecentInstancesBySignature = mostRecentInstancesBySignature
     }
+}
+
+private nonisolated struct RecentExerciseHistoryCandidate {
+    let instance: ExerciseHistoryInstance
+    let encounterOrder: Int
 }
 
 private nonisolated struct ExerciseHistoryBuilder {
@@ -124,6 +141,8 @@ private nonisolated struct ExerciseHistoryBuilder {
     var mostRecentInstancesBySignature:
         [ExercisePerformanceSignature: ExerciseHistoryInstance] = [:]
     var sessionIDs: Set<UUID> = []
+    var recentCandidates: [RecentExerciseHistoryCandidate] = []
+    var nextEncounterOrder = 0
     var estimatedOneRepMaxDatesBySessionID: [UUID: Date] = [:]
 
     mutating func add(
@@ -131,7 +150,27 @@ private nonisolated struct ExerciseHistoryBuilder {
         sessionID: UUID,
         hasEstimatedOneRepMax: Bool
     ) {
-        sessionIDs.insert(sessionID)
+        let isFirstInstanceInSession = sessionIDs.insert(sessionID).inserted
+        if isFirstInstanceInSession {
+            recentCandidates.append(
+                RecentExerciseHistoryCandidate(
+                    instance: instance,
+                    encounterOrder: nextEncounterOrder
+                )
+            )
+            nextEncounterOrder += 1
+            recentCandidates.sort { lhs, rhs in
+                if lhs.instance.date != rhs.instance.date {
+                    return lhs.instance.date > rhs.instance.date
+                }
+                return lhs.encounterOrder < rhs.encounterOrder
+            }
+            if recentCandidates.count > ExerciseHistorySummary.recentInstanceLimit {
+                recentCandidates.removeLast(
+                    recentCandidates.count - ExerciseHistorySummary.recentInstanceLimit
+                )
+            }
+        }
         if hasEstimatedOneRepMax {
             estimatedOneRepMaxDatesBySessionID[sessionID] = instance.date
         }
@@ -170,6 +209,7 @@ private nonisolated struct ExerciseHistoryBuilder {
             mostRecentInstance: mostRecentInstance,
             sessionCount: sessionIDs.count,
             latestPerformanceDate: latestPerformanceDate,
+            recentInstances: recentCandidates.map(\.instance),
             estimatedOneRepMaxDates:
             estimatedOneRepMaxDatesBySessionID.values.sorted(),
             allTimeBests: allTimeBests,

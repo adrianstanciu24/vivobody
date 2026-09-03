@@ -1,0 +1,135 @@
+{
+  "name": "me-showcase",
+  "launch": {
+    "reset": true,
+    "tab": "me",
+    "arguments": [
+      "--ui-test-me-showcase",
+      "--pro",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Your journey",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Insights",
+            "role": "AXButton"
+          },
+          {
+            "label": "Milestones",
+            "role": "AXHeading"
+          },
+          {
+            "label": "Next milestone, Week streak, 11 of 12",
+            "role": "AXGenericElement"
+          },
+          {
+            "label": "Personal records, See all",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Loading your training totals"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Insights",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "me",
+        "arguments": [
+          "--ui-test-me-showcase",
+          "--pro",
+          "--static-body",
+          "-settings.weightUnit",
+          "lb"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Your journey",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Body weight",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Body weight",
+            "role": "AXHeading"
+          },
+          {
+            "labelRegex": "^177[.,]6, lb, -1[.,]2 lb since last entry, Body weight trend$",
+            "role": "AXButton"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "This month",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 3
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "This month",
+      "role": "AXHeading"
+    },
+    {
+      "labelRegex": "^[0-9]+ workouts?$",
+      "role": "AXGenericElement"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Loading your training totals"
+    }
+  ]
+}

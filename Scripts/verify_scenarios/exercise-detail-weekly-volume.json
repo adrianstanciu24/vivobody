@@ -12,13 +12,7 @@
     {
       "wait": {
         "label": "Exercises",
-        "value": "Not selected"
-      }
-    },
-    {
-      "tap": {
-        "label": "Exercises",
-        "value": "Not selected"
+        "value": "Selected"
       }
     },
     {

@@ -2,20 +2,9 @@
 //  CustomExerciseEditorSheet.swift
 //  vivobody
 //
-//  Create-or-edit sheet for a catalog entry. Used in three modes:
-//    • Create    — `target = .create`, builds a new ExerciseCatalogItem
-//      and inserts it into the context on Save.
-//    • Edit      — `target = .edit(item)`, mutates the existing entry's
-//      properties in place. Bundled entries get a restricted
-//      defaults-only form so their history identity stays stable.
-//    • Duplicate — `target = .duplicate(item)`, create mode prefilled
-//      from a bundled entry: the copy keeps the source's semantics but
-//      gets a fresh identity (nil catalogID) and starts its own
-//      history, which the sheet says out loud.
-//
-//  Value-type draft buffer (CatalogDraft) — the @Model is only
-//  touched on Save, so the editor can be dismissed without polluting
-//  the catalog with half-typed entries.
+//  Root orchestration for creating, editing, or duplicating a catalog entry.
+//  It owns SwiftData, presentation, save failure, focus, and picker routing;
+//  focused sections render and edit the value-type CatalogDraft.
 //
 
 import SwiftData
@@ -39,7 +28,7 @@ enum CatalogEditorTarget: Identifiable {
     }
 }
 
-private enum CatalogPicker: String, Identifiable {
+enum CatalogPicker: String, Identifiable {
     case muscleGroup
     case equipment
     case modality
@@ -50,15 +39,6 @@ private enum CatalogPicker: String, Identifiable {
     var id: String {
         rawValue
     }
-}
-
-private enum CatalogValidationAnchor: Hashable {
-    case name
-    case muscles
-    case movementPattern
-    case direction
-    case loadMode
-    case aliases
 }
 
 struct CustomExerciseEditorSheet: View {
@@ -138,72 +118,19 @@ struct CustomExerciseEditorSheet: View {
         }
     }
 
-    private var canSave: Bool {
-        !draft.name.trimmingCharacters(in: .whitespaces).isEmpty
-            && hasValidMuscleRoles
-            && (draft.mechanic != .compound || draft.pattern != nil)
-            && (!draft.requiresDirection || draft.direction != nil)
-            && !draft.planes.isEmpty
-            && hasValidLoadProfile
-            && hasUniqueSearchTerms
-    }
-
-    private var firstValidationAnchor: CatalogValidationAnchor? {
-        if draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return .name
-        }
-        if !hasValidMuscleRoles {
-            return .muscles
-        }
-        if draft.mechanic == .compound, draft.pattern == nil {
-            return .movementPattern
-        }
-        if draft.requiresDirection, draft.direction == nil {
-            return .direction
-        }
-        if !hasValidLoadProfile {
-            return .loadMode
-        }
-        if !hasUniqueSearchTerms {
-            return .aliases
-        }
-        return nil
-    }
-
     private var editedItemID: UUID? {
         guard case let .edit(item) = target else { return nil }
         return item.id
     }
 
-    private var hasValidMuscleRoles: Bool {
-        let involvement = draft.muscleInvolvement
-        guard !involvement.isEmpty else { return false }
-        return involvement.primary.contains { $0.group == draft.group }
-    }
-
-    private var hasValidLoadProfile: Bool {
-        if draft.equipment.requiresNonComparableLoad {
-            return draft.loadMode == .nonComparable && draft.bodyweightFraction == 0
-        }
-        switch draft.loadMode {
-        case .external, .nonComparable:
-            return draft.bodyweightFraction == 0
-        case .bodyweightAdded, .assistanceSubtracted:
-            return draft.bodyweightFraction > 0
-        }
-    }
-
-    private var hasUniqueSearchTerms: Bool {
-        let ownTerms = [draft.name] + draft.parsedAliases
-        let normalizedOwn = ownTerms.map(\.catalogSearchTermKey)
-        guard normalizedOwn.allSatisfy({ !$0.isEmpty }),
-              Set(normalizedOwn).count == normalizedOwn.count else { return false }
-
-        let occupied = Set(catalogItems
+    private var validation: CatalogDraftValidation {
+        let occupiedSearchTerms = catalogItems
             .filter { $0.id != editedItemID }
             .flatMap { [$0.name] + $0.aliases }
-            .map(\.catalogSearchTermKey))
-        return occupied.isDisjoint(with: normalizedOwn)
+        return CatalogDraftValidation(
+            draft: draft,
+            occupiedSearchTerms: occupiedSearchTerms
+        )
     }
 
     var body: some View {
@@ -213,8 +140,8 @@ struct CustomExerciseEditorSheet: View {
                     VStack(alignment: .leading, spacing: Space.section) {
                         if isBundledEdit {
                             bundledIdentitySummary
-                            if showsDefaultsRow {
-                                defaultsRow
+                            if draft.showsLoggingDefaults {
+                                CustomExerciseDefaultsRow(draft: $draft, unit: unit)
                             }
                         } else {
                             if let source = duplicateSource {
@@ -245,9 +172,8 @@ struct CustomExerciseEditorSheet: View {
                     }
                 }
                 .onAppear {
-                    if !isBundledEdit, draft.equipment == .band {
-                        draft.loadMode = .nonComparable
-                        draft.bodyweightFraction = 0
+                    if !isBundledEdit {
+                        draft.normalizeBandLoadForEditorPresentation()
                     }
                     if let source = duplicateSource, !didResolveDuplicateName {
                         didResolveDuplicateName = true
@@ -283,82 +209,37 @@ struct CustomExerciseEditorSheet: View {
         .saveErrorAlert($saveError)
     }
 
-    // MARK: - Fields
-
     @ViewBuilder
     private var editorFields: some View {
-        basicsSection
-        classificationSection
-        loggingDefaultsSection
-        searchSection
-    }
-
-    private var basicsSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Basics")
-            nameField
-                .id(CatalogValidationAnchor.name)
-            muscleGroupField
-            muscleInvolvementField
-                .id(CatalogValidationAnchor.muscles)
-            equipmentField
-        }
-    }
-
-    private var classificationSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Classification")
-            modalityField
-            mechanicField
-            trainingRoleField
-
-            if draft.mechanic == .compound {
-                patternField
-                    .id(CatalogValidationAnchor.movementPattern)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-
-                if draft.requiresDirection {
-                    directionField
-                        .id(CatalogValidationAnchor.direction)
-                        .transition(.move(edge: .top).combined(with: .opacity))
-                }
+        CustomExerciseBasicsSection(
+            draft: $draft,
+            validation: validation,
+            showsValidationErrors: showsValidationErrors,
+            nameFieldFocus: $nameFieldFocused,
+            onPresentPicker: presentPicker,
+            onPresentMuscleEditor: {
+                nameFieldFocused = false
+                isMuscleEditorPresented = true
             }
-
-            planeField
-            lateralityField
-        }
-    }
-
-    private var loggingDefaultsSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Logging defaults")
-
-            loadModeField
-                .id(CatalogValidationAnchor.loadMode)
-
-            if draft.loadMode == .bodyweightAdded
-                || draft.loadMode == .assistanceSubtracted
-            {
-                bodyweightFractionField
-                    .transition(.move(edge: .top).combined(with: .opacity))
-            }
-
-            if showsDefaultsRow {
-                defaultsRow
-            }
-        }
-    }
-
-    private var showsDefaultsRow: Bool {
-        draft.trackingMode == .duration || draft.tracksResistance
-    }
-
-    private var searchSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Search")
-            aliasesField
-                .id(CatalogValidationAnchor.aliases)
-        }
+        )
+        CustomExerciseClassificationSection(
+            draft: $draft,
+            validation: validation,
+            showsValidationErrors: showsValidationErrors,
+            onPresentPicker: presentPicker
+        )
+        CustomExerciseLoggingDefaultsSection(
+            draft: $draft,
+            validation: validation,
+            showsValidationErrors: showsValidationErrors,
+            unit: unit,
+            onPresentPicker: presentPicker
+        )
+        CustomExerciseSearchSection(
+            draft: $draft,
+            validation: validation,
+            showsValidationErrors: showsValidationErrors
+        )
     }
 
     private var bundledIdentitySummary: some View {
@@ -366,7 +247,9 @@ struct CustomExerciseEditorSheet: View {
             Text(draft.name)
                 .font(Typography.title)
                 .foregroundStyle(Ink.primary)
-            if let execution = draft.execution { ExerciseInstructionSummary(execution: execution) }
+            if let execution = draft.execution {
+                ExerciseInstructionSummary(execution: execution)
+            }
             Text("Canonical mechanics, modality, load semantics, and muscle roles are locked so this exercise keeps one stable history identity.")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
@@ -383,256 +266,9 @@ struct CustomExerciseEditorSheet: View {
             .fixedSize(horizontal: false, vertical: true)
     }
 
-    private var nameField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Name")
-                .sectionLabelStyle(Opacity.medium)
-
-            TextField("", text: $draft.name, prompt: Text("e.g. Bulgarian Split Squat")
-                .foregroundStyle(Ink.quaternary))
-                .font(Typography.title)
-                .foregroundStyle(Ink.primary)
-                .focused($nameFieldFocused)
-                .submitLabel(.done)
-                .padding(.vertical, Space.sm)
-                .accessibilityLabel("Name")
-
-            Rectangle()
-                .fill(Surface.edge)
-                .frame(height: 1)
-                .accessibilityHidden(true)
-
-            if showsValidationErrors,
-               draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            {
-                validationMessage("Enter an exercise name.")
-            }
-        }
-    }
-
-    private var muscleGroupField: some View {
-        pickerRow(title: "Muscle group", value: draft.group.displayName) {
-            presentPicker(.muscleGroup)
-        }
-    }
-
-    private var muscleInvolvementField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            pickerRow(
-                title: "Muscles worked",
-                subtitle: draft.muscleSummary
-            ) {
-                nameFieldFocused = false
-                isMuscleEditorPresented = true
-            }
-
-            if showsValidationErrors, !hasValidMuscleRoles {
-                validationMessage("Choose a Primary muscle in the selected muscle group.")
-            }
-        }
-    }
-
-    // MARK: - Equipment
-
-    private var equipmentField: some View {
-        pickerRow(title: "Equipment", value: draft.equipment.displayName) {
-            presentPicker(.equipment)
-        }
-    }
-
-    // MARK: - Modality
-
-    private var modalityField: some View {
-        pickerRow(title: "Exercise type", value: draft.modality.displayName) {
-            presentPicker(.modality)
-        }
-    }
-
-    // MARK: - Mechanic
-
-    private var mechanicField: some View {
-        segmentedField(
-            title: "Mechanic",
-            selection: Binding(
-                get: { draft.mechanic },
-                set: { mechanic in
-                    applyAnimatedSelection { applyMechanic(mechanic) }
-                }
-            ),
-            options: Mechanic.allCases,
-            label: { $0.displayName }
-        )
-    }
-
-    // MARK: - Training role
-
-    private var trainingRoleField: some View {
-        pickerRow(
-            title: "Training role",
-            value: draft.trainingRole.displayName
-        ) {
-            presentPicker(.trainingRole)
-        }
-    }
-
-    /// Isolation lifts carry no pattern; compound always needs one,
-    /// so returning to compound backfills Push/Horizontal instead of
-    /// reopening an invalid nil-pattern state.
-    private func applyMechanic(_ mechanic: Mechanic) {
-        draft.mechanic = mechanic
-        switch mechanic {
-        case .isolation:
-            draft.pattern = nil
-            draft.direction = nil
-        case .compound:
-            if draft.pattern == nil {
-                draft.pattern = .push
-                draft.direction = .horizontal
-            }
-        }
-    }
-
-    // MARK: - Pattern (compound only)
-
-    private var patternField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            pickerRow(
-                title: "Movement pattern",
-                value: draft.pattern?.displayName ?? "Choose"
-            ) {
-                presentPicker(.movementPattern)
-            }
-
-            if showsValidationErrors, draft.pattern == nil {
-                validationMessage("Choose a compound movement pattern.")
-            }
-        }
-    }
-
-    // MARK: - Direction (push/pull only)
-
-    private var directionField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            segmentedField(
-                title: "Direction",
-                selection: Binding(
-                    get: { draft.direction ?? .horizontal },
-                    set: { direction in
-                        Haptics.selection()
-                        draft.direction = direction
-                    }
-                ),
-                options: PushPullDirection.allCases,
-                label: { $0.displayName }
-            )
-
-            if showsValidationErrors, draft.direction == nil {
-                validationMessage("Choose a push or pull direction.")
-            }
-        }
-    }
-
-    // MARK: - Plane (every exercise)
-
-    private var planeField: some View {
-        CatalogPlaneField(
-            title: "Plane of movement",
-            selection: $draft.planes
-        )
-    }
-
-    // MARK: - Laterality (every exercise)
-
-    private var lateralityField: some View {
-        segmentedField(
-            title: "Sides",
-            selection: Binding(
-                get: { draft.laterality },
-                set: { laterality in
-                    Haptics.selection()
-                    draft.laterality = laterality
-                }
-            ),
-            options: Laterality.allCases,
-            label: { $0.displayName }
-        )
-    }
-
-    // MARK: - Form controls
-
-    /// Metadata with more than three choices uses the canonical row
-    /// surface and opens a focused checkmark sheet. This keeps the
-    /// editor vertically scannable without clipping options offscreen.
-    private func pickerRow(
-        title: String,
-        subtitle: String? = nil,
-        value: String? = nil,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button {
-            Haptics.selection()
-            action()
-        } label: {
-            KitRow(title: title, subtitle: subtitle) {
-                HStack(spacing: Space.sm) {
-                    if let value {
-                        Text(value)
-                            .font(Typography.body)
-                            .foregroundStyle(Ink.secondary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
-                    }
-
-                    Image(systemName: "chevron.right")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.quaternary)
-                }
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(title)
-        .accessibilityValue(value ?? subtitle ?? "Not set")
-        .accessibilityHint("Opens choices")
-    }
-
-    /// Two- and three-way choices remain visible, but share one track
-    /// with a single orange thumb instead of separate glass pills.
-    private func segmentedField<Option: Hashable>(
-        title: String,
-        selection: Binding<Option>,
-        options: [Option],
-        label: @escaping (Option) -> String
-    ) -> some View {
-        CatalogSegmentedField(
-            title: title,
-            selection: selection,
-            options: options,
-            label: label
-        )
-    }
-
-    private func validationMessage(_ message: String) -> some View {
-        Text(message)
-            .font(Typography.caption)
-            .foregroundStyle(Tint.danger)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-
     private func presentPicker(_ picker: CatalogPicker) {
         nameFieldFocused = false
         activePicker = picker
-    }
-
-    private func applyAnimatedSelection(_ changes: () -> Void) {
-        Haptics.selection()
-        if reduceMotion {
-            changes()
-        } else {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                changes()
-            }
-        }
     }
 
     @ViewBuilder
@@ -644,7 +280,7 @@ struct CustomExerciseEditorSheet: View {
                 options: MuscleGroup.allCases,
                 label: { $0.displayName },
                 isSelected: { draft.group == $0 },
-                onSelect: applyMuscleGroup
+                onSelect: { draft.selectMuscleGroup($0) }
             )
 
         case .equipment:
@@ -653,7 +289,7 @@ struct CustomExerciseEditorSheet: View {
                 options: Equipment.allCases,
                 label: { $0.displayName },
                 isSelected: { draft.equipment == $0 },
-                onSelect: applyEquipment
+                onSelect: { draft.selectEquipment($0) }
             )
 
         case .modality:
@@ -662,7 +298,7 @@ struct CustomExerciseEditorSheet: View {
                 options: ExerciseModality.customExerciseChoices,
                 label: { $0.displayName },
                 isSelected: { draft.modality == $0 },
-                onSelect: applyModality
+                onSelect: { draft.selectModality($0) }
             )
 
         case .trainingRole:
@@ -680,7 +316,7 @@ struct CustomExerciseEditorSheet: View {
                 options: MovementPattern.allCases,
                 label: { $0.displayName },
                 isSelected: { draft.pattern == $0 },
-                onSelect: applyPattern
+                onSelect: { draft.selectPattern($0) }
             )
 
         case .loadMode:
@@ -691,228 +327,17 @@ struct CustomExerciseEditorSheet: View {
                     : ExerciseLoadMode.allCases,
                 label: { $0.customExerciseChoiceLabel },
                 isSelected: { draft.loadMode == $0 },
-                onSelect: applyLoadMode
+                onSelect: { draft.selectLoadMode($0) }
             )
         }
     }
 
-    private func applyMuscleGroup(_ group: MuscleGroup) {
-        guard draft.group != group else { return }
-        draft.group = group
-        // A browse group cannot safely infer anatomy (especially glute
-        // max vs. glute med), so a group change requires a fresh pick.
-        draft.muscleInvolvementSnapshot = [:]
-    }
-
-    private func applyEquipment(_ equipment: Equipment) {
-        draft.equipment = equipment
-        if equipment.requiresNonComparableLoad {
-            draft.loadMode = .nonComparable
-            draft.bodyweightFraction = 0
-        }
-    }
-
-    private func applyModality(_ modality: ExerciseModality) {
-        draft.modality = modality
-        draft.trackingMode = modality.requiredTrackingMode
-    }
-
-    private func applyPattern(_ pattern: MovementPattern) {
-        draft.pattern = pattern
-        if pattern == .push || pattern == .pull {
-            if draft.direction == nil {
-                draft.direction = .horizontal
-            }
-        } else {
-            draft.direction = nil
-        }
-    }
-
-    private func applyLoadMode(_ mode: ExerciseLoadMode) {
-        draft.loadMode = mode
-        switch mode {
-        case .external, .nonComparable:
-            draft.bodyweightFraction = 0
-        case .bodyweightAdded, .assistanceSubtracted:
-            if draft.bodyweightFraction == 0 {
-                draft.bodyweightFraction = 1
-            }
-        }
-    }
-
-    // MARK: - Aliases
-
-    private var aliasesField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Aliases")
-                    .sectionLabelStyle(Opacity.medium)
-                Spacer()
-                Text("comma-separated")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.quaternary)
-            }
-
-            TextField("", text: $draft.aliasesInput, prompt: Text("e.g. BP, Flat Bench")
-                .foregroundStyle(Ink.quaternary))
-                .font(Typography.body)
-                .foregroundStyle(Ink.primary)
-                .autocorrectionDisabled(true)
-                .textInputAutocapitalization(.words)
-                .padding(.vertical, Space.sm)
-                .accessibilityLabel("Aliases")
-
-            Rectangle()
-                .fill(Surface.edge)
-                .frame(height: 1)
-                .accessibilityHidden(true)
-
-            if showsValidationErrors,
-               !draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-               !hasUniqueSearchTerms
-            {
-                validationMessage("Name and aliases must be unique across the exercise catalog.")
-            }
-        }
-    }
-
-    private var loadModeField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            pickerRow(
-                title: "Load interpretation",
-                value: draft.loadMode.customExerciseChoiceName
-            ) {
-                presentPicker(.loadMode)
-            }
-
-            if showsValidationErrors, !hasValidLoadProfile {
-                validationMessage("Choose a load interpretation that matches this equipment.")
-            }
-        }
-    }
-
-    private var bodyweightFractionField: some View {
-        VStack(alignment: .leading, spacing: Space.xs) {
-            valueColumn(label: "Bodyweight carried") {
-                BareScrubber(
-                    value: $draft.bodyweightFraction,
-                    range: 0 ... 1,
-                    step: 0.05,
-                    pointsPerStep: 14,
-                    fontSize: 40,
-                    numberColor: Ink.primary,
-                    formatter: { value in
-                        "\(Int((value * 100).rounded()))%"
-                    },
-                    accessibilityLabel: "Bodyweight carried"
-                )
-            }
-            if showsValidationErrors, draft.bodyweightFraction == 0 {
-                validationMessage("Bodyweight load modes require a carried fraction above zero.")
-            }
-        }
-    }
-
-    private var defaultsRow: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            if draft.trackingMode == .duration || draft.tracksResistance {
-                Text("Defaults")
-                    .sectionLabelStyle(Opacity.medium)
-
-                HStack(alignment: .top, spacing: Space.xxl) {
-                    switch draft.trackingMode {
-                    case .reps:
-                        valueColumn(label: draft.loadMode.inputLabel) {
-                            BareScrubber(
-                                value: defaultWeightBinding,
-                                range: unit.strengthRange,
-                                step: unit.strengthStep,
-                                pointsPerStep: 8,
-                                fontSize: 40,
-                                unit: unit.symbol,
-                                unitFontSize: 13,
-                                numberColor: Ink.primary,
-                                unitColor: Ink.tertiary,
-                                accessibilityLabel: draft.loadMode.inputLabel,
-                                tickTone: .deep
-                            )
-                        }
-                    case .duration:
-                        valueColumn(label: draft.modality.durationLabel) {
-                            BareScrubber(
-                                value: defaultDurationBinding,
-                                range: DurationFormatter.scrubRange,
-                                step: DurationFormatter.scrubStep,
-                                pointsPerStep: 10,
-                                fontSize: 40,
-                                numberColor: Ink.primary,
-                                formatter: { DurationFormatter.string($0) },
-                                accessibilityLabel: draft.modality.durationLabel
-                            )
-                        }
-                        if draft.tracksResistance {
-                            valueColumn(label: draft.loadMode.inputLabel) {
-                                BareScrubber(
-                                    value: defaultWeightBinding,
-                                    range: unit.strengthRange,
-                                    step: unit.strengthStep,
-                                    pointsPerStep: 8,
-                                    fontSize: 40,
-                                    unit: unit.symbol,
-                                    unitFontSize: 13,
-                                    numberColor: Ink.primary,
-                                    unitColor: Ink.tertiary,
-                                    accessibilityLabel: draft.loadMode.inputLabel,
-                                    tickTone: .deep
-                                )
-                            }
-                        }
-                    }
-                    Spacer(minLength: 0)
-                }
-            }
-        }
-    }
-
-    /// A small sentence-case label above a bare scrubbing numeral —
-    /// the same composition the template editor uses, so the two
-    /// editors read identically.
-    private func valueColumn(
-        label: String,
-        @ViewBuilder scrubber: () -> some View
-    ) -> some View {
-        VStack(alignment: .leading, spacing: Space.xs) {
-            Text(label)
-                .sectionLabelStyle(Opacity.soft)
-            scrubber()
-        }
-    }
-
-    // MARK: - Default bindings
-
-    /// Scrubbed in display units; stored canonical (lb) on the draft.
-    private var defaultWeightBinding: Binding<Double> {
-        Binding(
-            get: { WeightFormatter.toDisplay(draft.defaultWeight, unit: unit) },
-            set: { draft.defaultWeight = WeightFormatter.toCanonical($0, unit: unit) }
-        )
-    }
-
-    private var defaultDurationBinding: Binding<Double> {
-        Binding(
-            get: { draft.defaultDuration },
-            set: { draft.defaultDuration = $0 }
-        )
-    }
-
-    // MARK: - Save
-
     private func attemptSave(using scrollProxy: ScrollViewProxy) {
-        guard canSave else {
+        guard validation.canSave else {
             showsValidationErrors = true
             Haptics.soft()
 
-            guard let anchor = firstValidationAnchor else { return }
+            guard let anchor = validation.firstInvalidAnchor else { return }
             if anchor == .name {
                 nameFieldFocused = true
             } else {
@@ -933,118 +358,29 @@ struct CustomExerciseEditorSheet: View {
     }
 
     private func save() {
-        guard canSave else { return }
-        let trimmedName = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let defaultWeight = draft.tracksResistance ? draft.defaultWeight : 0
-
-        let parsedAliases = draft.parsedAliases
-
-        var savedItem: ExerciseCatalogItem?
-
-        switch target {
-        case .create, .duplicate:
-            // A duplicate inherits the source's rep default — the
-            // draft has no reps field, so the create flow's 8/12
-            // heuristic would otherwise silently reset, say, a 5-rep
-            // deadlift default.
-            var sourceDefaultReps: Int? = nil
-            if case let .duplicate(source) = target {
-                sourceDefaultReps = source.defaultReps
-            }
-            let item = ExerciseCatalogItem(
-                name: trimmedName,
-                group: draft.group,
-                defaultWeight: defaultWeight,
-                defaultReps: sourceDefaultReps,
-                trackingMode: draft.trackingMode,
-                modality: draft.modality,
-                loadMode: draft.loadMode,
-                bodyweightFraction: draft.bodyweightFraction,
-                defaultDuration: draft.defaultDuration,
-                equipment: draft.equipment,
-                mechanic: draft.mechanic,
-                trainingRole: draft.trainingRole,
-                pattern: draft.mechanic == .compound ? draft.pattern : nil,
-                direction: draft.requiresDirection ? draft.direction : nil,
-                planes: draft.planes,
-                laterality: draft.laterality,
-                aliases: parsedAliases,
-                execution: draft.execution,
-                muscleInvolvement: draft.muscleInvolvement,
-                isUserCreated: true
-            )
-            modelContext.insert(item)
-            savedItem = item
-
-        case let .edit(item):
-            if isBundledEdit {
-                let weightChanged = defaultWeight != item.defaultWeight
-                item.defaultWeight = defaultWeight
-                if weightChanged {
-                    item.defaultWeightKg = unit == .kg && draft.tracksResistance
-                        ? WeightFormatter.toDisplay(defaultWeight, unit: .kg)
-                        : nil
-                }
-                item.defaultDuration = draft.defaultDuration
-                savedItem = item
-                break
-            }
-            let editedPerformanceSignature = ExercisePerformanceSignature(
-                modality: draft.modality,
-                trackingMode: draft.trackingMode,
-                loadMode: draft.loadMode,
-                bodyweightFraction: draft.bodyweightFraction,
-                tracksResistance: draft.tracksResistance
-            )
-            let performanceSemanticsChanged =
-                item.performanceSignature != editedPerformanceSignature
-            item.name = trimmedName
-            item.group = draft.group
-            let weightChanged = defaultWeight != item.defaultWeight
-            item.defaultWeight = defaultWeight
-            if weightChanged {
-                item.defaultWeightKg = unit == .kg && draft.tracksResistance
-                    ? WeightFormatter.toDisplay(defaultWeight, unit: .kg)
-                    : nil
-            }
-            item.trackingMode = draft.trackingMode
-            item.modality = draft.modality
-            item.loadMode = draft.loadMode
-            item.bodyweightFraction = draft.bodyweightFraction
-            item.defaultDuration = draft.defaultDuration
-            item.equipment = draft.equipment
-            // Setting mechanic to isolation auto-clears pattern via
-            // the model's didSet hook, so we don't need to clear it
-            // here explicitly. Order matters: mechanic first.
-            item.mechanic = draft.mechanic
-            item.trainingRole = draft.trainingRole
-            item.pattern = draft.mechanic == .compound ? draft.pattern : nil
-            item.direction = draft.requiresDirection ? draft.direction : nil
-            item.planes = draft.planes
-            item.laterality = draft.laterality
-            item.aliases = parsedAliases
-            item.execution = draft.execution
-            item.muscleInvolvementSnapshot = draft.muscleInvolvementSnapshot
-            if performanceSemanticsChanged {
-                // A measured max belongs to the old load equation. Do
-                // not silently reinterpret it after a custom exercise
-                // changes tracking, modality, assistance, or carried
-                // bodyweight semantics.
-                item.oneRepMax = nil
-            }
-            savedItem = item
-        }
-
+        guard validation.canSave else { return }
         do {
-            try modelContext.saveOrRollback()
-            if let item = savedItem {
-                SpotlightIndexer.index(item)
-            }
+            try CatalogMutationBoundary(context: modelContext).save(
+                draft.mutationInput(using: validation),
+                target: mutationTarget,
+                unit: unit
+            )
         } catch {
             saveError = SaveErrorBox(error)
             return
         }
         Haptics.thunk()
         dismiss()
+    }
+
+    private var mutationTarget: CatalogMutationTarget {
+        switch target {
+        case .create:
+            .create
+        case let .edit(item):
+            .edit(item: item)
+        case let .duplicate(source):
+            .duplicate(source: source)
+        }
     }
 }

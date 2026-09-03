@@ -12,16 +12,7 @@
 
     @MainActor
     enum CompletionRestorationSeed {
-        static func prepareIfRequested(in context: ModelContext) {
-            if CommandLine.arguments.contains("--ui-test-completion-restoration") {
-                seed(in: context)
-            }
-            if CommandLine.arguments.contains("--ui-test-skip-active-rest") {
-                skipActiveRest(in: context)
-            }
-        }
-
-        private static func seed(in context: ModelContext) {
+        static func seed(in context: ModelContext) {
             let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
                 predicate: #Predicate { $0.completedAt == nil }
             ))) ?? []
@@ -55,7 +46,7 @@
             try? context.saveOrRollback()
         }
 
-        private static func skipActiveRest(in context: ModelContext) {
+        static func skipActiveRest(in context: ModelContext) {
             var descriptor = FetchDescriptor<WorkoutSession>(
                 predicate: #Predicate { $0.completedAt == nil }
             )

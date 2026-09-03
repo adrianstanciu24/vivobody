@@ -1,8 +1,5 @@
 {
   "files": {
-    "vivobody/App/DebugSeed.swift": {
-      "seedIfRequested": 12
-    },
     "vivobody/App/WorkoutLiveActivityController.swift": {
       "startUpdatePumpIfNeeded": 11
     },

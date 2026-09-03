@@ -2,41 +2,39 @@
 //  ExerciseBestHeroCard.swift
 //  vivobody
 //
-//  The exercise detail screen's standing-record card: the huge
-//  monospaced best-set numeral over its date, plus a frequency footer
-//  (sessions · per week · last performed) behind a hairline. The
-//  footer restores the useful core of the removed Last/Times
-//  half-cards as plain facts — it never carries a verdict; progression
-//  advice stays with the Effort section. Extracted from
-//  ExerciseDetailSections to keep that file under its size ratchet.
+//  Stateless standing-record card for Exercise Detail: a prominent
+//  best-set value and an optional sessions / per-week / last-performed
+//  footer. All archive-derived copy arrives preformatted from
+//  ExerciseDetailReadModel.
 //
 
 import SwiftUI
 import VivoKit
 
-extension ExerciseDetailScreen {
-    // MARK: - Best hero card
+struct ExerciseBestHeroCard: View {
+    let bestSet: ExerciseDetailReadModel.BestSet
+    let frequency: ExerciseDetailReadModel.Frequency?
 
     /// The standing record gets a hero card with the huge monospaced
     /// numeral — the screen's one editorial moment.
-    var bestHeroCard: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Best set")
                 .sectionLabelStyle(Opacity.soft)
 
             HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                Text(bestValueString)
+                Text(bestSet.value)
                     .font(Typography.metricHero)
                     .foregroundStyle(Ink.primary)
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.45)
-                if showsBestUnit {
-                    Text(unit.symbol)
+                if let unit = bestSet.unit {
+                    Text(unit)
                         .font(Typography.statValueCompact)
                         .foregroundStyle(Ink.tertiary)
                 }
-                if let fragment = bestSetFragment {
+                if let fragment = bestSet.detail {
                     Text(fragment)
                         .font(Typography.statValueCompact)
                         .foregroundStyle(Ink.secondary)
@@ -47,12 +45,12 @@ extension ExerciseDetailScreen {
                 Spacer(minLength: 0)
             }
 
-            Text(bestSetDate ?? " ")
+            Text(bestSet.dateText ?? " ")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
 
-            if hasHistory {
-                frequencyFooter
+            if let frequency {
+                frequencyFooter(frequency)
             }
         }
         .padding(Space.lg)
@@ -61,53 +59,15 @@ extension ExerciseDetailScreen {
         .accessibilityElement(children: .combine)
     }
 
-    /// Unit symbol rides beside the hero numeral only when the record
-    /// is an actual load — duration and unranked records have none.
-    var showsBestUnit: Bool {
-        item.performanceSemanticKind.comparesLoad && bestValueString != "—"
-    }
-
-    /// The record's reps/duration fragment ("× 8", "× 0:45"), kept
-    /// separate from the date so the hero card can set it at medium
-    /// scale next to the numeral instead of burying it in a caption.
-    var bestSetFragment: String? {
-        guard let source = bestRecordSource else { return nil }
-        if !item.tracksResistance, item.trackingMode == .reps {
-            return "reps"
-        }
-        switch item.performanceSemanticKind {
-        case .dynamicLoadAndReps, .powerLoadAndReps:
-            return "× \(source.reps)"
-        case .isometricLoadAndDuration:
-            return "× \(DurationFormatter.string(source.duration))"
-        case .isometricDuration, .unrankedReps, .unrankedDuration:
-            return nil
-        }
-    }
-
-    var bestSetDate: String? {
-        bestRecordSource.map { RelativeDate.short($0.date) }
-    }
-
-    /// Resolves the same record `bestValueString` describes, as raw
-    /// values: the progress-series record point when a trend exists,
-    /// else the single logged instance.
-    private var bestRecordSource: (reps: Int, duration: TimeInterval, date: Date)? {
-        if let prog = progress {
-            guard let best = bestDisplayPoint(in: prog) else { return nil }
-            return (best.topReps, best.topDuration, best.date)
-        }
-        guard let last = lastInstance else { return nil }
-        return (last.topReps, last.topDuration, last.sessionDate)
-    }
-
     // MARK: - Frequency footer
 
     /// Sessions · per week · last performed, split by hairlines. All
     /// three facts come from the cached history index and progress
     /// series; the footer hides entirely until the exercise has been
     /// logged once.
-    var frequencyFooter: some View {
+    private func frequencyFooter(
+        _ frequency: ExerciseDetailReadModel.Frequency
+    ) -> some View {
         VStack(spacing: 0) {
             Rectangle()
                 .fill(Surface.edge)
@@ -117,22 +77,20 @@ extension ExerciseDetailScreen {
             HStack(spacing: 0) {
                 frequencyCell(
                     label: "SESSIONS",
-                    value: "\(frequencySessionCount)",
-                    accessibility: "\(frequencySessionCount) \(frequencySessionCount == 1 ? "session" : "sessions")"
+                    value: frequency.sessionCountText,
+                    accessibility: frequency.sessionsAccessibilityLabel
                 )
                 frequencyDivider
                 frequencyCell(
                     label: "PER WEEK",
-                    value: frequencyPerWeek.map { "\(InsightsFormat.perWeekLabel($0))×" } ?? "—",
-                    accessibility: frequencyPerWeek
-                        .map { "\(InsightsFormat.perWeekLabel($0)) per week" }
-                        ?? "Weekly frequency not yet available"
+                    value: frequency.perWeekText,
+                    accessibility: frequency.perWeekAccessibilityLabel
                 )
                 frequencyDivider
                 frequencyCell(
                     label: "LAST",
-                    value: frequencyLastDate.map { RelativeDate.short($0) } ?? "—",
-                    accessibility: "Last \(frequencyLastDate.map { RelativeDate.short($0) } ?? "unknown")"
+                    value: frequency.lastDateText,
+                    accessibility: frequency.lastDateAccessibilityLabel
                 )
             }
             .padding(.top, Space.md)
@@ -166,23 +124,35 @@ extension ExerciseDetailScreen {
             .padding(.horizontal, Space.md)
             .accessibilityHidden(true)
     }
-
-    /// All-time archived session count for this exercise, preferring
-    /// the cached history index; the direct archive count remains the
-    /// preview fallback.
-    var frequencySessionCount: Int {
-        sessionAnalytics?.exerciseHistorySummaries[historyKey]?.sessionCount
-            ?? sessionCount
-    }
-
-    /// Typical weekly frequency from the progress-series dates. Nil
-    /// until two sessions span at least a week.
-    var frequencyPerWeek: Double? {
-        guard let progress else { return nil }
-        return ExerciseFrequency.perWeek(sessionDates: progress.points.map(\.date))
-    }
-
-    var frequencyLastDate: Date? {
-        lastInstance?.sessionDate
-    }
 }
+
+#if DEBUG
+    #Preview("Exercise best set") {
+        ExerciseBestHeroCard(
+            bestSet: ExerciseDetailReadModel.BestSet(
+                value: "225",
+                unit: "lb",
+                detail: "× 5",
+                date: Date(timeIntervalSince1970: 0),
+                dateText: "Today",
+                accessibilityLabel: "Best set, 5 reps at 225 pounds, today"
+            ),
+            frequency: ExerciseDetailReadModel.Frequency(
+                sessionCount: 12,
+                sessionCountText: "12",
+                sessionsAccessibilityLabel: "12 sessions",
+                perWeek: 1.5,
+                perWeekText: "1.5×",
+                perWeekAccessibilityLabel: "1.5 per week",
+                lastDate: Date(timeIntervalSince1970: 0),
+                lastDateText: "Today",
+                lastDateAccessibilityLabel: "Last today",
+                accessibilityLabel: "12 sessions, 1.5 per week, last today"
+            )
+        )
+        .padding(Space.gutter)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Color.black)
+        .preferredColorScheme(.dark)
+    }
+#endif

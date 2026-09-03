@@ -10,9 +10,9 @@ import Foundation
 import SwiftData
 
 #if DEBUG
-    extension UITestSupport {
-        static func seedActiveAssistanceIfRequested(in context: ModelContext) {
-            guard CommandLine.arguments.contains("--ui-test-active-assistance") else { return }
+    @MainActor
+    enum DebugAssistanceSeeder {
+        static func seed(in context: ModelContext) {
             let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
                 predicate: #Predicate { $0.completedAt == nil }
             ))) ?? []

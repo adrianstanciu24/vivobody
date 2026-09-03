@@ -83,6 +83,10 @@
       "role": "AXHeading"
     },
     {
+      "label": "Training signature. All-time volume split: Chest 13 percent, Back 21 percent, Shoulders 17 percent, Legs 22 percent, Arms 26 percent. Balance 88 percent, with 5 of 6 regions represented. Arms-led · 5 regions. Dashed outlines show an even six-way split.",
+      "role": "AXGenericElement"
+    },
+    {
       "identifier": "insightsModeShape",
       "value": "Selected"
     },

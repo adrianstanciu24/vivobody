@@ -309,6 +309,115 @@ struct TrainingSignatureTests {
         )
     }
 
+    // MARK: - App motion and render inputs
+
+    @Test func reduceMotionSelectsStillSchedulingWithoutATimeline() {
+        #expect(SignatureMotionPolicy.schedule(reduceMotion: true) == .still)
+        #expect(
+            SignatureMotionPolicy.schedule(reduceMotion: false)
+                == .animated(minimumInterval: 1.0 / 30.0)
+        )
+    }
+
+    @Test func stillFrameFreezesEveryAmbientChannelAtItsSettledValues() {
+        let frame = SignatureMotionPolicy.renderFrame(
+            at: 42,
+            schedule: .still
+        )
+
+        #expect(frame.time == 0)
+        #expect(frame.coreBreath == 0)
+        #expect(frame.petalBreath == 1)
+        #expect(frame.satelliteOrbit == 0)
+        #expect(!frame.isAnimated)
+    }
+
+    @Test func animatedFrameDrivesBreathOrbitAndDustFromOneClock() {
+        let time = SignatureMotionPolicy.breathSeconds / 4
+        let frame = SignatureMotionPolicy.renderFrame(
+            at: time,
+            schedule: .animated(
+                minimumInterval: SignatureMotionPolicy.minimumInterval
+            )
+        )
+        let expectedOrbit = time / SignatureMotionPolicy.satelliteLapSeconds
+            * 2 * Double.pi
+
+        #expect(frame.time == time)
+        #expect(abs(frame.coreBreath - 1) < 1e-12)
+        #expect(frame.petalBreath == frame.coreBreath)
+        #expect(abs(frame.satelliteOrbit - expectedOrbit) < 1e-12)
+        #expect(frame.isAnimated)
+    }
+
+    @Test func animatedSatelliteCompletesOneLapAtTheConfiguredDuration() {
+        let frame = SignatureMotionPolicy.renderFrame(
+            at: SignatureMotionPolicy.satelliteLapSeconds,
+            schedule: .animated(
+                minimumInterval: SignatureMotionPolicy.minimumInterval
+            )
+        )
+
+        #expect(abs(frame.satelliteOrbit - 2 * Double.pi) < 1e-12)
+        #expect(abs(frame.coreBreath) < 1e-12)
+        #expect(frame.petalBreath == frame.coreBreath)
+    }
+
+    @Test func canvasPassesRetainTheirExactCompositingOrder() {
+        #expect(
+            SignatureEmblemRenderPass.drawOrder == [
+                .atmosphere,
+                .ring,
+                .spokes,
+                .satellite,
+                .equalShareGhost,
+                .petals,
+                .labels,
+                .core,
+            ]
+        )
+        #expect(SignatureEmblemRenderPass.drawOrder == SignatureEmblemRenderPass.allCases)
+    }
+
+    // MARK: - Canvas accessibility equivalent
+
+    @Test func emptySignatureAccessibilityDescriptionIsExact() {
+        let signature = TrainingSignature(groupVolume: [:], cadence: 0)
+
+        #expect(
+            SignatureAccessibilityDescription.text(for: signature)
+                == "Training signature. No signature data yet. Complete a strength set on an exercise with muscle targets to begin. Awaiting training history. Dashed outlines show an even six-way split."
+        )
+    }
+
+    @Test func populatedSignatureAccessibilityDescriptionIsExact() {
+        let signature = TrainingSignature(
+            groupVolume: [.chest: 2, .back: 1],
+            cadence: 0
+        )
+
+        #expect(
+            SignatureAccessibilityDescription.text(for: signature)
+                == "Training signature. All-time volume split: Chest 67 percent, Back 33 percent. Balance 36 percent, with 2 of 6 regions represented. Chest-led · 2 regions. Dashed outlines show an even six-way split."
+        )
+    }
+
+    @Test func signatureWithoutComparableVolumeAccessibilityDescriptionIsExact() {
+        let input = SignatureAccessibilityInput(
+            hasSignature: true,
+            hasVolume: false,
+            volumeSplit: "",
+            balancePercent: 0,
+            trainedGroupCount: 0,
+            identityLine: "No single lead · no regions"
+        )
+
+        #expect(
+            SignatureAccessibilityDescription.text(for: input)
+                == "Training signature. No completed muscle-targeted strength work yet. No single lead · no regions. Dashed outlines show an even six-way split."
+        )
+    }
+
     // MARK: - Empty
 
     @Test func emptyArchiveHasNoSignature() {

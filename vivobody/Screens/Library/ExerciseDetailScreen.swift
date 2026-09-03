@@ -59,7 +59,6 @@
 //  The rest of the screen still functions (CTA, edit/duplicate/delete).
 //
 
-import Charts
 import SwiftData
 import SwiftUI
 import VivoKit
@@ -83,7 +82,6 @@ struct ExerciseDetailScreen: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.sessionAnalytics) var sessionAnalytics
 
     /// Pro entitlement, injected by AppRoot. Optional so previews
@@ -155,99 +153,105 @@ struct ExerciseDetailScreen: View {
     /// paywall sheet can't present on top.
     @State var isPaywallPresented: Bool = false
     @State var isEditingOneRepMax: Bool = false
-    @State var range: TimeRange = .all
-    @State var chartMetric: ChartMetric = .e1rm
+    @State var range: ExerciseDetailChartRange = .all
+    @State var chartMetric: ExerciseDetailChartMetric = .e1rm
     @State private var saveError: SaveErrorBox? = nil
     /// Drives the inline nav title's fade: the hero owns the name at
     /// rest, so the bar only claims it once the hero has scrolled under.
     @State private var showsInlineTitle: Bool = false
 
-    /// Number of consecutive stale sessions before the hero flags a
-    /// plateau. Five matches the "a working block didn't move the
-    /// needle" intuition — short enough to be actionable, long enough
-    /// to ignore normal week-to-week noise.
-    static let plateauThreshold = 5
-
-    /// Which series the progress chart plots. Only offered for
-    /// `.reps` exercises — timed holds always plot duration.
-    enum ChartMetric: String, CaseIterable, Identifiable {
-        case weight, e1rm, volume, reps
-        var id: String {
-            rawValue
-        }
-
-        var label: String {
-            switch self {
-            case .weight: "Load"
-            case .e1rm: "e1RM"
-            case .volume: "Volume"
-            case .reps: "Reps"
-            }
-        }
-    }
-
-    /// Chart time-range chips. Same enum-shape as
-    /// ExerciseProgressDetail.TimeRange — kept private to this screen
-    /// because the two screens have separate lifecycles (and the
-    /// shared shape isn't reused in a meaningful enough way yet to
-    /// justify hoisting it out).
-    enum TimeRange: String, CaseIterable, Identifiable {
-        case oneMonth, threeMonths, sixMonths, all
-        var id: String {
-            rawValue
-        }
-
-        var label: String {
-            switch self {
-            case .oneMonth: "1M"
-            case .threeMonths: "3M"
-            case .sixMonths: "6M"
-            case .all: "All"
-            }
-        }
-
-        var cutoff: Date? {
-            let cal = Calendar.current
-            switch self {
-            case .oneMonth: return cal.date(byAdding: .month, value: -1, to: Date())
-            case .threeMonths: return cal.date(byAdding: .month, value: -3, to: Date())
-            case .sixMonths: return cal.date(byAdding: .month, value: -6, to: Date())
-            case .all: return nil
-            }
-        }
-    }
-
-    let prColor = Tint.complete
-
     var body: some View {
+        let now = Date()
         let analyticsRequest = sessionAnalytics?.requestKey(
-            for: completedSessions
+            for: completedSessions,
+            now: now
         )
+        let cachedReports = sessionAnalytics?.exerciseDetailCachedReports() ?? .empty
+        let readModel = ExerciseDetailReadModel.make(
+            item: item,
+            cached: cachedReports,
+            unit: unit,
+            currentBodyweight: currentBodyweight
+        )
+        let showsUnlock = pro.map {
+            !$0.isUnlocked && (
+                readModel.hasHistory
+                    || readModel.cadence != nil
+                    || readModel.weeklyVolume != nil
+            )
+        } ?? false
+
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: Space.xxl) {
-                hero
-                heroFigureSection
-                movementSection
+                ExerciseHeroHeader(
+                    name: readModel.exercise.name,
+                    modality: readModel.exercise.modality,
+                    supportsEstimatedOneRepMax: readModel.exercise.supportsEstimatedOneRepMax,
+                    plateauStatus: readModel.plateauStatus,
+                    readinessAction: readModel.effort?.verdict.progressionAction(
+                        for: readModel.exercise.loadMode
+                    )
+                )
+                ExerciseDetailAnatomySection(
+                    exerciseName: readModel.exercise.name,
+                    involvement: item.muscleInvolvement
+                )
+                MovementClassificationCard(
+                    mechanic: item.mechanic,
+                    movementLabel: item.movementLabel,
+                    trainingRole: item.trainingRole,
+                    planes: item.planes,
+                    laterality: item.laterality
+                )
                 instructionsLink
                 if allowsComparison {
                     compareLink
                 }
-                bestHeroCard
-                if showsPerformanceRows {
-                    performanceRows
+                ExerciseBestHeroCard(
+                    bestSet: readModel.bestSet,
+                    frequency: readModel.frequency
+                )
+                if readModel.effectiveLoad != nil
+                    || readModel.exercise.supportsEstimatedOneRepMax
+                {
+                    ExerciseDetailPerformanceSection(
+                        effectiveLoad: readModel.effectiveLoad,
+                        measuredOneRepMax: readModel.exercise.measuredOneRepMax,
+                        supportsEstimatedOneRepMax: readModel.exercise.supportsEstimatedOneRepMax,
+                        unit: unit,
+                        onEditOneRepMax: { isEditingOneRepMax = true }
+                    )
                 }
-                weeklyVolumeSection
-                if hasHistory || supportsEstimatedOneRepMax {
-                    if pro?.isUnlocked ?? true {
-                        chartSection
-                    } else {
-                        lockedChartSection
+                ExerciseDetailWeeklyVolumeSection(
+                    volume: readModel.weeklyVolume,
+                    isUnlocked: pro?.isUnlocked == true,
+                    onUnlock: {
+                        Haptics.soft()
+                        isPaywallPresented = true
                     }
-                }
-                progressionRhythmSection
-                effortSection
-                if hasHistory {
-                    recentSessionsSection
+                )
+                ExerciseDetailProgressSection(
+                    readModel: readModel,
+                    unit: unit,
+                    selectedMetric: $chartMetric,
+                    selectedRange: $range,
+                    isUnlocked: pro?.isUnlocked ?? true,
+                    onUnlock: { isPaywallPresented = true }
+                )
+                ExerciseDetailRhythmSection(
+                    cadence: readModel.cadence,
+                    now: readModel.now,
+                    isUnlocked: pro?.isUnlocked == true,
+                    onUnlock: {
+                        Haptics.soft()
+                        isPaywallPresented = true
+                    }
+                )
+                ExerciseDetailEffortSection(effort: readModel.effort)
+                if readModel.hasHistory {
+                    ExerciseDetailRecentSessionsSection(
+                        rows: readModel.recentSessions
+                    )
                 }
             }
             .padding(.top, 8)
@@ -271,7 +275,7 @@ struct ExerciseDetailScreen: View {
             }
         }
         .task(id: analyticsRequest) {
-            sessionAnalytics?.requestCore(for: completedSessions)
+            sessionAnalytics?.requestCore(for: completedSessions, now: now)
         }
         .screenBackground()
         .scrollEdgeEffectStyle(.soft, for: .bottom)
@@ -333,16 +337,20 @@ struct ExerciseDetailScreen: View {
             }
         }
         .safeAreaBar(edge: .bottom) {
-            VStack(spacing: 0) {
-                if showsUnlockControl {
-                    unlockProControl
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, Space.sm)
+            ExerciseDetailBottomBar(
+                showsUnlock: showsUnlock,
+                price: pro?.displayPrice,
+                onUnlock: {
+                    Haptics.soft()
+                    isPaywallPresented = true
+                },
+                onAddToWorkout: onPickAndDismiss.map { action in
+                    {
+                        Haptics.thunk()
+                        action(item)
+                    }
                 }
-                if onPickAndDismiss != nil {
-                    addToWorkoutCTA
-                }
-            }
+            )
         }
         .sheet(item: $editorTarget) { target in
             CustomExerciseEditorSheet(target: target)
@@ -371,9 +379,9 @@ struct ExerciseDetailScreen: View {
         }
         .sheet(isPresented: $isEditingOneRepMax) {
             OneRepMaxEditorSheet(
-                initialValue: oneRepMaxSeed,
+                initialValue: readModel.oneRepMaxSeed,
                 hasMeasured: item.oneRepMax != nil,
-                hasEstimate: estimatedOneRepMax != nil,
+                hasEstimate: readModel.estimatedOneRepMax != nil,
                 onSave: { newValue in
                     item.oneRepMax = newValue.flatMap { value in
                         value.isFinite && value > 0 ? value : nil
@@ -443,8 +451,7 @@ struct ExerciseDetailScreen: View {
     /// never reference catalog items directly).
     private func deleteAndDismiss() {
         do {
-            let id = try ExerciseCatalogItem.deleteFromCatalog(item, in: modelContext)
-            SpotlightIndexer.removeExercise(id: id)
+            try CatalogMutationBoundary(context: modelContext).delete(item)
         } catch {
             saveError = SaveErrorBox(error)
             return
@@ -452,12 +459,4 @@ struct ExerciseDetailScreen: View {
         Haptics.thunk()
         dismiss()
     }
-
-    // MARK: - Formatters
-
-    static let dayFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "MMM d"
-        return f
-    }()
 }

@@ -109,14 +109,22 @@ struct AppRoot: View {
                     workout.modelContext = modelContext
                 }
                 #if DEBUG
-                    UITestSupport.resetIfRequested(in: modelContext)
+                    let debugRoute = UITestSupport.route()
+                    DebugStoreResetter.reset(
+                        ifRequested: debugRoute.resetRequest,
+                        in: modelContext
+                    )
                 #endif
-                let removedCatalogItemIDs = ExerciseCatalogItem
-                    .synchronizeBundledCatalog(in: modelContext)
+                let catalogReconciliation = try? CatalogLaunchReconciler.reconcile(
+                    in: modelContext
+                )
+                let removedCatalogItemIDs = catalogReconciliation?.removedItemIDs ?? []
                 #if DEBUG
-                    UITestSupport.seedIfRequested(in: modelContext)
-                    DebugWeeklyVolumeSeeder.seedIfRequested(in: modelContext)
-                    if let requestedTab = UITestSupport.requestedTab() {
+                    DebugSeedCoordinator.seedLaunchFixtures(
+                        debugRoute.launchSteps,
+                        in: modelContext
+                    )
+                    if let requestedTab = debugRoute.requestedTab {
                         appState.selectedTab = requestedTab
                     }
                 #endif

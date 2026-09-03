@@ -3,9 +3,8 @@
 //  vivobody
 //
 //  Derived/computed state for ActiveExerciseCard, extracted from the
-//  main file: the active-page flag, set/index lookups, the display
-//  bindings (weight / reps / duration / RIR) that convert at the UI
-//  boundary, and the complete-button title. Scrub bindings mutate the
+//  main file: model-to-input assembly, set/index lookups, and display
+//  bindings that convert at the UI boundary. Scrub bindings mutate the
 //  active set immediately; their owner persists once the scrub settles.
 //
 
@@ -13,6 +12,33 @@ import SwiftUI
 
 extension ActiveExerciseCard {
     // MARK: - Derived
+
+    var cardInput: ActiveExerciseCardInput {
+        ActiveExerciseCardSource(
+            name: exercise.name,
+            supersetTag: session.supersetTag(for: exercise),
+            trackingMode: exercise.trackingMode,
+            modality: exercise.modality,
+            loadMode: exercise.loadMode,
+            tracksResistance: exercise.tracksResistance,
+            unit: unit,
+            weightStep: weightStep,
+            isActivePage: isActive,
+            scrubCancellationID: effectiveScrubCancellationID,
+            orderedSets: sets.map { set in
+                ActiveExerciseSetSnapshot(
+                    id: set.id,
+                    weight: exercise.trackedWeight(set.weight),
+                    reps: set.reps,
+                    duration: set.duration,
+                    isCompleted: set.isCompleted
+                )
+            },
+            activeSetID: session.activeSet(for: exercise)?.id,
+            pendingCompletionSetID: pendingCompletionSetID
+        )
+        .makeInput()
+    }
 
     var exerciseIndex: Int {
         session.orderedExercises.firstIndex(where: { $0.id == exercise.id }) ?? 0
@@ -32,6 +58,10 @@ extension ActiveExerciseCard {
 
     var activeIndex: Int? {
         session.activeSetIndex(for: exercise)
+    }
+
+    func workoutSet(id: UUID) -> WorkoutSet? {
+        sets.first(where: { $0.id == id })
     }
 
     var displayedWeight: Double {
@@ -87,14 +117,33 @@ extension ActiveExerciseCard {
         )
     }
 
-    /// Verb for the complete button — modality + position aware. Valid
-    /// duration work is an isometric hold; invalid legacy combinations
-    /// retain neutral time wording.
-    func completeTitle(isLastSet: Bool) -> String {
-        if exercise.trackingMode == .duration {
-            let verb = isLastSet ? "Finish" : "Complete"
-            return "\(verb) \(exercise.modality.durationLabelLowercased)"
+    var showsRIRControl: Bool {
+        cardInput.effortAction.showsRIRControl
+    }
+
+    var rirBinding: Binding<Int> {
+        Binding(
+            get: { session.activeSet(for: exercise)?.repsInReserve ?? 2 },
+            set: {
+                session.updateActiveRIR(for: exercise, rir: $0)
+                saveActiveSessionChanges()
+            }
+        )
+    }
+
+    func adjustResistance(_ direction: AccessibilityAdjustmentDirection) {
+        let adjustment: Double
+        switch direction {
+        case .increment: adjustment = weightStep
+        case .decrement: adjustment = -weightStep
+        @unknown default: return
         }
-        return isLastSet ? "Finish exercise" : "Complete set"
+        let range = unit.strengthRange
+        let current = weightDisplayBinding.wrappedValue
+        weightDisplayBinding.wrappedValue = min(
+            max(current + adjustment, range.lowerBound),
+            range.upperBound
+        )
+        activeScrubDidEnd()
     }
 }

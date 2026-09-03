@@ -2,67 +2,50 @@
 //  ExerciseWeeklyVolumeSection.swift
 //  vivobody
 //
-//  "This week" section for ExerciseDetailScreen: the hard sets this
-//  exercise delivered to each involved muscle over the trailing 7 days,
-//  joined against the cached weekly muscle totals so every row shows
-//  both the contribution and where the muscle's full week sits against
-//  its productive band. Pro-gated with the shared LockedProCover frozen
-//  treatment — the landmark model is the Insights tab's value layer.
-//  Self-gates to nothing when the window holds no volume-bearing work
-//  (idle week, non-volume modality, anatomy-less custom exercise).
+//  Focused Exercise Detail "This week" presentation. Immutable read-model
+//  rows carry the exercise contribution, weekly total, landmark, and spoken
+//  meaning; this leaf owns only the visual instrument and Pro cover.
 //
 
 import SwiftUI
 import VivoKit
 
-extension ExerciseDetailScreen {
-    /// This exercise's windowed hard-set contribution. Nil hides the
-    /// section entirely.
-    var volumeContribution: ExerciseVolumeContribution? {
-        ExerciseVolumeContribution.compute(sessions: completedSessions, item: item)
-    }
+struct ExerciseDetailWeeklyVolumeSection: View {
+    let volume: ExerciseDetailReadModel.WeeklyVolume?
+    let isUnlocked: Bool
+    let onUnlock: () -> Void
 
-    @ViewBuilder
-    var weeklyVolumeSection: some View {
-        if let contribution = volumeContribution {
-            if pro?.isUnlocked == true {
-                weeklyVolumeContent(contribution)
+    var body: some View {
+        if let volume {
+            if isUnlocked {
+                content(volume)
             } else {
-                LockedProCover(title: "This week") {
-                    Haptics.soft()
-                    isPaywallPresented = true
-                } content: {
-                    weeklyVolumeContent(contribution)
+                LockedProCover(title: "This week", action: onUnlock) {
+                    content(volume)
                 }
             }
         }
     }
 
-    func weeklyVolumeContent(_ contribution: ExerciseVolumeContribution) -> some View {
+    private func content(
+        _ volume: ExerciseDetailReadModel.WeeklyVolume
+    ) -> some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("This week")
                 .sectionLabelStyle(Opacity.medium)
 
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(
-                    Array(contribution.shares.prefix(WeeklyVolumeRow.maxRows).enumerated()),
-                    id: \.element.id
-                ) { index, share in
+                ForEach(Array(volume.rows.enumerated()), id: \.element.muscle) { index, row in
                     if index > 0 { weeklyVolumeDivider }
-                    WeeklyVolumeRow(
-                        share: share,
-                        stat: volumeStat(for: share.muscle)
-                    )
+                    WeeklyVolumeRow(row: row)
                 }
 
-                Text(
-                    "Hard sets from this exercise in the last 7 days. Bars show each muscle's full week against its \(bandLabel) productive band."
-                )
-                .font(Typography.caption)
-                .foregroundStyle(Ink.quaternary)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, Space.md)
-                .padding(.bottom, Space.xs)
+                Text(volume.caption)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.quaternary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, Space.md)
+                    .padding(.bottom, Space.xs)
             }
             .padding(.horizontal, Space.lg)
             .padding(.vertical, Space.xs)
@@ -78,22 +61,6 @@ extension ExerciseDetailScreen {
             .frame(height: 0.5)
             .accessibilityHidden(true)
     }
-
-    /// The muscle's cached weekly volume stat (totals, zone, landmark).
-    /// Nil while the analytics feed has not published yet; the row then
-    /// shows the contribution on its own.
-    func volumeStat(for muscle: Muscle) -> MuscleVolumeStat? {
-        sessionAnalytics?.volume.first { $0.muscle == muscle }
-    }
-
-    /// The shared band edges for the caption, from the first available
-    /// stat (all muscles share the default landmark).
-    private var bandLabel: String {
-        let landmark = volumeContribution?.shares
-            .compactMap { volumeStat(for: $0.muscle) }
-            .first?.landmark ?? .default
-        return "\(Int(landmark.mev))–\(Int(landmark.optimalHigh))"
-    }
 }
 
 // MARK: - Row
@@ -103,21 +70,16 @@ extension ExerciseDetailScreen {
 /// against its landmark band with this exercise's share as the
 /// trailing accent segment.
 private struct WeeklyVolumeRow: View {
-    let share: ExerciseVolumeContribution.MuscleShare
-    let stat: MuscleVolumeStat?
-
-    /// Rows are capped so a many-muscle compound cannot push the rest
-    /// of the screen below the fold.
-    static let maxRows = 4
+    let row: ExerciseDetailReadModel.WeeklyVolumeRow
 
     private var landmark: VolumeLandmark {
-        stat?.landmark ?? .default
+        row.landmark
     }
 
     /// The muscle's full weekly total. Without a published stat the
     /// contribution itself is the honest lower bound.
     private var total: Double {
-        max(stat?.effectiveSets ?? share.sets, share.sets)
+        row.totalSets
     }
 
     /// Bar scale: the band top with headroom, extended when a muscle
@@ -129,7 +91,7 @@ private struct WeeklyVolumeRow: View {
     /// The base fill dims while a muscle sits under its minimum
     /// effective volume; inside or above the band it reads full.
     private var fillTint: Color {
-        switch stat?.zone {
+        switch row.zone {
         case .under, .untrained: Ink.primary.opacity(0.42)
         case .optimal, .high, nil: Ink.primary.opacity(Opacity.strong)
         }
@@ -138,16 +100,16 @@ private struct WeeklyVolumeRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text(share.muscle.displayName)
+                Text(row.muscle.displayName)
                     .font(Typography.sectionHeading)
                     .foregroundStyle(Ink.secondary)
-                if let role = share.role {
+                if let role = row.role {
                     Text("· \(role.displayName.lowercased())")
                         .font(Typography.caption)
                         .foregroundStyle(Ink.quaternary)
                 }
                 Spacer(minLength: Space.sm)
-                Text("+\(InsightsFormat.setsLabel(share.sets))")
+                Text(row.contributionText)
                     .font(Typography.metricInline)
                     .foregroundStyle(Tint.primary)
                     .monospacedDigit()
@@ -164,8 +126,13 @@ private struct WeeklyVolumeRow: View {
                             .frame(width: width * min(total / scale, 1))
                         Capsule()
                             .fill(Tint.primary)
-                            .frame(width: width * min(share.sets / scale, 1))
-                            .offset(x: width * max(min((total - share.sets) / scale, 1), 0))
+                            .frame(width: width * min(row.contributionSets / scale, 1))
+                            .offset(
+                                x: width * max(
+                                    min((total - row.contributionSets) / scale, 1),
+                                    0
+                                )
+                            )
                             .shadow(color: Tint.primary.opacity(0.35), radius: 3)
                         bandTick(at: landmark.mev, width: width)
                         bandTick(at: landmark.optimalHigh, width: width)
@@ -174,7 +141,7 @@ private struct WeeklyVolumeRow: View {
                 .frame(height: 10)
                 .accessibilityHidden(true)
 
-                Text(InsightsFormat.setsLabel(total))
+                Text(row.totalText)
                     .font(Typography.metricMicro)
                     .foregroundStyle(Ink.tertiary)
                     .monospacedDigit()
@@ -183,7 +150,7 @@ private struct WeeklyVolumeRow: View {
         }
         .padding(.vertical, 12)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilitySummary)
+        .accessibilityLabel(row.accessibilityLabel)
     }
 
     private func bandTick(at value: Double, width: CGFloat) -> some View {
@@ -191,24 +158,6 @@ private struct WeeklyVolumeRow: View {
             .fill(Color.white.opacity(0.25))
             .frame(width: 1, height: 10)
             .offset(x: width * min(value / scale, 1))
-    }
-
-    private var accessibilitySummary: String {
-        let role = share.role.map { ", \($0.displayName.lowercased())" } ?? ""
-        let contribution =
-            "\(InsightsFormat.setsLabel(share.sets)) hard sets from this exercise this week"
-        guard let stat else {
-            return "\(share.muscle.displayName)\(role). \(contribution)."
-        }
-        let band = "\(Int(landmark.mev)) to \(Int(landmark.optimalHigh))"
-        let zonePhrase = switch stat.zone {
-        case .untrained: "with no other work this week"
-        case .under: "below the \(band) productive band"
-        case .optimal: "inside the \(band) productive band"
-        case .high: "above the \(band) productive band"
-        }
-        return "\(share.muscle.displayName)\(role). \(contribution). "
-            + "\(InsightsFormat.setsLabel(stat.effectiveSets)) total this week, \(zonePhrase)."
     }
 }
 
@@ -224,38 +173,35 @@ private struct WeeklyVolumeRow: View {
             ],
             totalSets: 12
         )
-        func stat(_ sets: Double) -> MuscleVolumeStat {
+        let stat: (Muscle, Double) -> MuscleVolumeStat = { muscle, sets in
             MuscleVolumeStat(
-                muscle: .pectoralisMajorSternocostal,
+                muscle: muscle,
                 effectiveSets: sets,
                 allTimeEffectiveSets: sets * 10,
                 daysSinceLastTrained: 1,
                 landmark: .default
             )
         }
-        return ScrollView {
+        let volume = ExerciseDetailReadModel.weeklyVolume(
+            contribution: contribution,
+            stats: [
+                stat(.pectoralisMajorSternocostal, 12.5),
+                stat(.triceps, 9.5),
+                stat(.deltoidAnterior, 6.5),
+            ]
+        )
+        ScrollView {
             VStack(spacing: Space.xxl) {
-                VStack(alignment: .leading, spacing: Space.md) {
-                    Text("This week")
-                        .sectionLabelStyle(Opacity.medium)
-                    VStack(alignment: .leading, spacing: 0) {
-                        WeeklyVolumeRow(share: contribution.shares[0], stat: stat(12.5))
-                        WeeklyVolumeRow(share: contribution.shares[1], stat: stat(9.5))
-                        WeeklyVolumeRow(share: contribution.shares[2], stat: stat(6.5))
-                    }
-                    .padding(.horizontal, Space.lg)
-                    .padding(.vertical, Space.xs)
-                    .contentCard()
-                }
-                LockedProCover(title: "This week", action: {}) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        WeeklyVolumeRow(share: contribution.shares[0], stat: stat(12.5))
-                        WeeklyVolumeRow(share: contribution.shares[1], stat: stat(9.5))
-                    }
-                    .padding(.horizontal, Space.lg)
-                    .padding(.vertical, Space.xs)
-                    .contentCard()
-                }
+                ExerciseDetailWeeklyVolumeSection(
+                    volume: volume,
+                    isUnlocked: true,
+                    onUnlock: {}
+                )
+                ExerciseDetailWeeklyVolumeSection(
+                    volume: volume,
+                    isUnlocked: false,
+                    onUnlock: {}
+                )
             }
             .padding(Space.gutter)
         }

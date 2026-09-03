@@ -12,18 +12,23 @@
 //  the card can never disagree with the Insights volume bars about what
 //  "a set of work" is worth: only completed dynamic-strength reps and
 //  completed isometric holds earn credit, RIR beyond 2 discounts, an
-//  unlogged RIR stays neutral, and stabilizers earn nothing. Scoping to
-//  a single exercise over a 7-day window keeps the pass bounded to the
-//  most recent sessions, so it runs synchronously on MainActor without
-//  touching the full-archive replay. Pure value-type output driven by
-//  an injected clock, fully testable without a simulator.
+//  unlogged RIR stays neutral, and stabilizers earn nothing. The pure
+//  accumulator overload reuses already-priced snapshot work; the model
+//  adapter only owns snapshot construction. Output is value-only and
+//  driven by an injected clock.
 //
 
 import Foundation
 
 /// One exercise's hard-set contribution per muscle over a fixed
 /// trailing window.
-struct ExerciseVolumeContribution: Hashable {
+nonisolated struct ExerciseVolumeContribution: Hashable {
+    /// Role-free cached currency produced with the core analytics generation.
+    /// Current catalog roles are deliberately applied only at presentation.
+    struct RawContribution: Hashable {
+        let setsByMuscle: [Muscle: Double]
+    }
+
     /// A single muscle's share of the windowed work.
     struct MuscleShare: Identifiable, Hashable {
         var id: Muscle {
@@ -59,27 +64,82 @@ struct ExerciseVolumeContribution: Hashable {
         now: Date = Date(),
         window: TimeInterval = window
     ) -> ExerciseVolumeContribution? {
-        let cutoff = now.addingTimeInterval(-window)
-        var totals: [Muscle: Double] = [:]
+        compute(
+            accumulator: AnalyticsAccumulator.replay(
+                AnalyticsSnapshot(sessions: sessions)
+            ),
+            historyKey: item.historyKey,
+            currentRoles: item.muscleInvolvement.roles,
+            now: now,
+            window: window
+        )
+    }
 
-        for session in sessions {
-            let date = session.completedAt ?? session.startedAt
+    /// Price one stable exercise identity from an immutable analytics replay.
+    /// Historical credits come from the snapshot; current roles only label
+    /// those shares, preserving removed muscles as roleless history.
+    static func compute(
+        accumulator: AnalyticsAccumulator,
+        historyKey: String,
+        currentRoles: [Muscle: MuscleRole],
+        now: Date,
+        window: TimeInterval = window
+    ) -> ExerciseVolumeContribution? {
+        let raw = rawContributionsByHistoryKey(
+            accumulator: accumulator,
+            now: now,
+            window: window
+        )[historyKey]
+        return relabel(raw, currentRoles: currentRoles)
+    }
+
+    /// Index all exercise contributions while the shared accumulator is hot.
+    /// This is the only archive traversal used by the core Exercise Detail
+    /// payload; per-item reads later relabel one small muscle dictionary.
+    static func rawContributionsByHistoryKey(
+        accumulator: AnalyticsAccumulator,
+        now: Date,
+        window: TimeInterval = window,
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> [String: RawContribution] {
+        let cutoff = now.addingTimeInterval(-window)
+        var totalsByHistoryKey: [String: [Muscle: Double]] = [:]
+
+        for session in accumulator.sessions {
+            guard !isCancelled() else { return [:] }
+            let date = session.date
             // Reports are snapshots "as of" now: future-dated sessions
             // cannot count as work already performed.
             guard date <= now, date >= cutoff else { continue }
-            for exercise in session.orderedExercises where exercise.matchesCatalogItem(item) {
-                for (muscle, sets) in SetStimulus.credit(for: exercise) {
-                    totals[muscle, default: 0] += sets
+            for exercise in session.exercises {
+                guard !isCancelled() else { return [:] }
+                let historyKey = exercise.exercise.historyKey
+                for (muscle, sets) in exercise.byMuscle {
+                    totalsByHistoryKey[historyKey, default: [:]][muscle, default: 0] += sets
                 }
             }
         }
 
-        let involvement = item.muscleInvolvement
-        let shares = totals.compactMap { muscle, sets -> MuscleShare? in
+        return totalsByHistoryKey.compactMapValues { totals in
+            let positive = totals.filter { $0.value > 0 }
+            return positive.isEmpty
+                ? nil
+                : RawContribution(setsByMuscle: positive)
+        }
+    }
+
+    /// Apply the catalog item's current role vocabulary to cached raw credit.
+    /// Historical muscles removed from the item remain visible as roleless.
+    static func relabel(
+        _ raw: RawContribution?,
+        currentRoles: [Muscle: MuscleRole]
+    ) -> ExerciseVolumeContribution? {
+        guard let raw else { return nil }
+        let shares = raw.setsByMuscle.compactMap { muscle, sets -> MuscleShare? in
             guard sets > 0 else { return nil }
             return MuscleShare(
                 muscle: muscle,
-                role: involvement.role(for: muscle),
+                role: currentRoles[muscle],
                 sets: sets
             )
         }

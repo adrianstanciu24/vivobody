@@ -1,0 +1,50 @@
+{
+  "name": "today-up-next",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-scheduled-template",
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Scheduled Test, 1 exercise  ·  ~(?:5|10) min, Chest · 2 sets, Barbell Bench Press, 2 × 8 (?:135 lb|61\\.2 kg)$",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 4
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Up next",
+      "role": "AXHeading"
+    },
+    {
+      "label": "TODAY",
+      "role": "AXStaticText"
+    },
+    {
+      "labelRegex": "^Scheduled Test, 1 exercise  ·  ~(?:5|10) min, Chest · 2 sets, Barbell Bench Press, 2 × 8 (?:135 lb|61\\.2 kg)$",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "todayStartWorkoutButton",
+      "label": "Start Workout",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "scheduledWorkoutStartButton"
+    },
+    {
+      "identifier": "activeWorkoutResumeBar"
+    }
+  ]
+}

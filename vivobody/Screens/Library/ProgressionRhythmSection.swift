@@ -2,53 +2,39 @@
 //  ProgressionRhythmSection.swift
 //  vivobody
 //
-//  "Load cadence" section for ExerciseDetailScreen: the median time
-//  between load increases (running-max step-ups from
-//  ProgressionCadence), a plain-language read of where the current gap
-//  sits against that pattern, and a proportional staircase that makes
-//  both timing and rising load visible. Low-sample estimates remain
-//  explicitly labeled as early reads.
-//
-//  Pro-gated with the same frameless frosted treatment as the
-//  Insights tab: the real card frozen beneath a blur, tap opens the
-//  screen's paywall sheet. Self-gates to nothing for non-comparable
-//  work or when history holds fewer than two recorded increases.
+//  Focused Exercise Detail load-cadence instrument. It renders the immutable
+//  cadence presentation prepared by ExerciseDetailReadModel and owns only the
+//  staircase motion and Pro cover.
 //
 
 import SwiftUI
 import VivoKit
 
-extension ExerciseDetailScreen {
-    /// Cadence over this exercise's chronological progress series.
-    /// Nil hides the section entirely (non-comparable work, missing
-    /// effective loads, or not enough recorded increases).
-    var progressionCadence: ProgressionCadence? {
-        guard item.performanceSemanticKind.comparesLoad,
-              let prog = progress else { return nil }
-        return ProgressionCadence.compute(points: prog.points)
-    }
+struct ExerciseDetailRhythmSection: View {
+    let cadence: ExerciseDetailReadModel.Cadence?
+    let now: Date
+    let isUnlocked: Bool
+    let onUnlock: () -> Void
 
-    @ViewBuilder
-    var progressionRhythmSection: some View {
-        if let cadence = progressionCadence {
-            if pro?.isUnlocked == true {
-                rhythmSectionContent(cadence)
+    var body: some View {
+        if let cadence {
+            if isUnlocked {
+                content(cadence)
             } else {
-                LockedProCover(title: "Load cadence") {
-                    Haptics.soft()
-                    isPaywallPresented = true
-                } content: {
-                    rhythmSectionContent(cadence)
+                LockedProCover(title: "Load cadence", action: onUnlock) {
+                    content(cadence)
                 }
             }
         }
     }
 
-    func rhythmSectionContent(_ cadence: ProgressionCadence) -> some View {
+    private func content(
+        _ cadence: ExerciseDetailReadModel.Cadence
+    ) -> some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Load cadence")
                 .sectionLabelStyle(Opacity.medium)
-            ProgressionRhythmCard(cadence: cadence, unit: unit)
+            ProgressionRhythmCard(cadence: cadence, now: now)
         }
     }
 }
@@ -56,8 +42,8 @@ extension ExerciseDetailScreen {
 // MARK: - Card
 
 private struct ProgressionRhythmCard: View {
-    let cadence: ProgressionCadence
-    let unit: WeightUnit
+    let cadence: ExerciseDetailReadModel.Cadence
+    let now: Date
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.xl) {
@@ -76,21 +62,25 @@ private struct ProgressionRhythmCard: View {
 
             VStack(alignment: .leading, spacing: Space.sm) {
                 HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                    Text(isShowingRecentSubset ? "Recent load bests" : "Load bests")
+                    Text(cadence.showsRecentSubset ? "Recent load bests" : "Load bests")
                         .panelLegend()
 
                     Spacer(minLength: Space.sm)
 
-                    Text(loadRange)
+                    Text(cadence.loadRangeText)
                         .font(Typography.metricMicro)
                         .foregroundStyle(Ink.secondary)
                         .monospacedDigit()
                 }
 
-                ProgressionStaircase(events: displayedEvents, tailTint: statusTint)
+                ProgressionStaircase(
+                    events: cadence.visibleEvents,
+                    tailTint: statusTint,
+                    now: now
+                )
 
                 HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                    Text(increaseCountLabel)
+                    Text(cadence.evidenceText)
                         .font(Typography.caption)
                         .foregroundStyle(Ink.tertiary)
 
@@ -105,7 +95,7 @@ private struct ProgressionRhythmCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentCard(bright: true)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilitySummary)
+        .accessibilityLabel(cadence.accessibilityLabel)
     }
 
     private var paceReadout: some View {
@@ -114,7 +104,7 @@ private struct ProgressionRhythmCard: View {
                 .panelLegend()
 
             HStack(alignment: .lastTextBaseline, spacing: 6) {
-                Text("~\(cadence.medianGapDays)")
+                Text(cadence.usualPaceText)
                     .font(Typography.metricLg)
                     .foregroundStyle(Ink.primary)
                     .monospacedDigit()
@@ -141,98 +131,23 @@ private struct ProgressionRhythmCard: View {
                     .shadow(color: statusTint.opacity(0.35), radius: 4)
                     .accessibilityHidden(true)
 
-                Text(currentHeadline)
+                Text(cadence.currentGapText)
                     .font(Typography.metricInline)
                     .foregroundStyle(statusTint)
                     .monospacedDigit()
             }
 
-            Text(currentDetail)
+            Text(cadence.currentDetailText)
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
                 .multilineTextAlignment(.trailing)
         }
     }
 
-    private var currentHeadline: String {
-        if cadence.daysSinceLastIncrease == 0 {
-            return "Today"
-        }
-
-        let days = cadence.daysSinceLastIncrease
-        return "\(days) \(days == 1 ? "day" : "days")"
-    }
-
-    private var currentDetail: String {
-        if cadence.daysSinceLastIncrease == 0 {
-            return "New load best"
-        }
-
-        if cadence.daysSinceLastIncrease < cadence.medianGapDays {
-            return "Within your usual interval"
-        }
-        if cadence.daysSinceLastIncrease == cadence.medianGapDays {
-            return "At your usual interval"
-        }
-
-        let beyond = cadence.daysSinceLastIncrease - cadence.medianGapDays
-        return "\(beyond) \(beyond == 1 ? "day" : "days") longer than usual"
-    }
-
     private var statusTint: Color {
         cadence.daysSinceLastIncrease == 0 || cadence.isPastUsualRhythm
             ? Tint.complete
             : Ink.secondary
-    }
-
-    private var increaseCountLabel: String {
-        let count = cadence.increases.count
-        let noun = count == 1 ? "increase" : "increases"
-        let evidence = "Based on \(count) \(noun)"
-        return cadence.isEarlyRead ? "\(evidence) · early read" : evidence
-    }
-
-    private var displayedEvents: [ProgressionCadence.Event] {
-        Array(cadence.events.suffix(ProgressionStaircase.maxEvents))
-    }
-
-    private var isShowingRecentSubset: Bool {
-        cadence.events.count > ProgressionStaircase.maxEvents
-    }
-
-    private var loadRange: String {
-        let first = WeightFormatter.string(
-            displayedEvents.first?.load ?? cadence.baseline.load,
-            unit: unit,
-            includeUnit: false
-        )
-        let latest = WeightFormatter.string(
-            displayedEvents.last?.load ?? cadence.baseline.load,
-            unit: unit,
-            includeUnit: false
-        )
-        return "\(first) → \(latest) \(unit.symbol)"
-    }
-
-    private var accessibilitySummary: String {
-        let dayUnit = cadence.medianGapDays == 1 ? "day" : "days"
-        let first = WeightFormatter.string(
-            displayedEvents.first?.load ?? cadence.baseline.load,
-            unit: unit
-        )
-        let latest = WeightFormatter.string(
-            displayedEvents.last?.load ?? cadence.baseline.load,
-            unit: unit
-        )
-        let currentGap: String
-        if cadence.daysSinceLastIncrease == 0 {
-            currentGap = "The latest increase was today"
-        } else {
-            let currentDayUnit = cadence.daysSinceLastIncrease == 1 ? "day" : "days"
-            currentGap = "It has been \(cadence.daysSinceLastIncrease) \(currentDayUnit) since the last increase"
-        }
-        let rangeContext = isShowingRecentSubset ? "Recent visible load bests" : "Visible load bests"
-        return "Load cadence. New load bests are about \(cadence.medianGapDays) \(dayUnit) apart. \(currentGap), \(currentDetail). \(increaseCountLabel). \(rangeContext) run from \(first) to \(latest)."
     }
 }
 
@@ -247,7 +162,7 @@ private struct ProgressionRhythmCard: View {
 /// first appear the staircase traces itself in and the beads pop
 /// into their sockets; Reduce Motion shows everything at rest.
 private struct ProgressionStaircase: View {
-    let events: [ProgressionCadence.Event]
+    let events: [ExerciseDetailReadModel.LoadEvent]
     /// Tint for the dotted "since last increase" lead-out.
     var tailTint: Color = Tint.complete
 
@@ -260,7 +175,6 @@ private struct ProgressionStaircase: View {
 
     /// Keep enough turns to read as a rhythm without producing a
     /// dense sparkline on long-lived exercises.
-    fileprivate static let maxEvents = 7
     private static let inset: CGFloat = 7
 
     var body: some View {
@@ -370,7 +284,7 @@ private struct ProgressionStaircase: View {
     /// span from first event to now, y is the fraction of the load
     /// climb (0 at the bottom).
     private static func unitPoints(
-        for events: [ProgressionCadence.Event],
+        for events: [ExerciseDetailReadModel.LoadEvent],
         now: Date
     ) -> [CGPoint] {
         guard let first = events.first, let last = events.last else { return [] }
@@ -489,13 +403,34 @@ private struct StaircaseArea: Shape {
             medianGapDays: 9,
             daysSinceLastIncrease: 4
         )
-        return ScrollView {
+        let cadencePresentation = ExerciseDetailReadModel.cadence(
+            cadence,
+            unit: .lb
+        )
+        let midCyclePresentation = ExerciseDetailReadModel.cadence(
+            midCycle,
+            unit: .lb
+        )
+        ScrollView {
             VStack(spacing: Space.xxl) {
-                ProgressionRhythmCard(cadence: cadence, unit: .lb)
-                ProgressionRhythmCard(cadence: midCycle, unit: .lb)
-                LockedProCover(title: "Load cadence", action: {}) {
-                    ProgressionRhythmCard(cadence: cadence, unit: .lb)
-                }
+                ExerciseDetailRhythmSection(
+                    cadence: cadencePresentation,
+                    now: now,
+                    isUnlocked: true,
+                    onUnlock: {}
+                )
+                ExerciseDetailRhythmSection(
+                    cadence: midCyclePresentation,
+                    now: now,
+                    isUnlocked: true,
+                    onUnlock: {}
+                )
+                ExerciseDetailRhythmSection(
+                    cadence: cadencePresentation,
+                    now: now,
+                    isUnlocked: false,
+                    onUnlock: {}
+                )
             }
             .padding(Space.gutter)
         }

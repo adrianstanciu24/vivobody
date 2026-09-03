@@ -58,15 +58,12 @@ struct VivobodyApp: App {
                     .warmUpKeyboardOnce()
                 #if DEBUG
                     .task {
-                        if CommandLine.arguments.contains("--seed-history") {
-                            HistorySeeder.seed(into: container.mainContext)
-                        } else if CommandLine.arguments.contains("--seed-showcase") {
-                            HistorySeeder.seedShowcase(into: container.mainContext)
-                        } else if CommandLine.arguments.contains("--seed-pr") {
-                            HistorySeeder.seedPRProximity(into: container.mainContext)
-                        } else if CommandLine.arguments.contains("--seed-templates") {
-                            HistorySeeder.seedTemplates(into: container.mainContext)
-                        }
+                        // Preserve manual fixture timing after first paint; the
+                        // pure route retains the former exclusive precedence.
+                        DebugSeedCoordinator.seedManualFixture(
+                            UITestSupport.route().manualFixture,
+                            in: container.mainContext
+                        )
                     }
                 #endif
                     .modelContainer(container)

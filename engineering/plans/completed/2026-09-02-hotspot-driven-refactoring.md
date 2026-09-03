@@ -1,8 +1,9 @@
 # Hotspot-driven refactoring
 
-- Status: active
+- Status: completed
 - Started: 2026-09-02
-- Baseline revision: `147de6c`
+- Completed: 2026-09-03
+- Baseline revision: `a706418`
 - Governing guidance: [Architecture](../../../ARCHITECTURE.md),
   [workout app principles](../../../workout-app-principles.md),
   [engineering quality](../../quality.md),
@@ -52,7 +53,7 @@ size-and-change ranking. Since then `ActiveExerciseCard.swift` has been reduced
 from 621 to 346 lines and its allowance removed; the Library/picker browsing
 contract has also been extracted.
 
-Current source checks at `147de6c` pass with ten oversized allowances and
+Current source checks at `a706418` pass with ten oversized allowances and
 nineteen complexity allowances. The remaining portfolio is:
 
 | Slice | Current signal | Responsibility to separate | Order |
@@ -95,7 +96,7 @@ tests, ratchet removal, and future change locality prove the refactor.
 
 ## Milestones
 
-- [ ] **0. Freeze and score the current behavior.** Re-run the strict Code Maat
+- [x] **0. Freeze and score the current behavior.** Re-run the strict Code Maat
   report against the starting revision, record current physical line counts and
   complexity, and save the report under `.verify/code-maat/`. For each slice,
   list the exact user branches and focused tests before production edits. Capture
@@ -104,7 +105,7 @@ tests, ratchet removal, and future change locality prove the refactor.
   useful ownership boundary, record that exception here before changing its
   ratchet.
 
-- [ ] **1. Extract the Exercise Detail vertical slice.** Build an immutable,
+- [x] **1. Extract the Exercise Detail vertical slice.** Build an immutable,
   pure `ExerciseDetailReadModel` from the existing `ExerciseHistorySummary`,
   `ExerciseProgress`, effort, cadence, and volume contracts. It owns the
   zero/one/many-session branches, recent rows, effective-load explanation,
@@ -116,7 +117,7 @@ tests, ratchet removal, and future change locality prove the refactor.
   allowance and ensure neither the root nor a replacement section becomes a
   hotspot-sized catch-all before proceeding.
 
-- [ ] **2. Isolate the active logging instrument.** First extract pure scrub
+- [x] **2. Isolate the active logging instrument.** First extract pure scrub
   calculations—axis claim, clamping, detent crossings, rubber-band distance,
   flick eligibility, and coast schedule—behind deterministic tests. Keep Task,
   haptic, animation, scene-phase, and accessibility effects in `BareScrubber`,
@@ -128,7 +129,7 @@ tests, ratchet removal, and future change locality prove the refactor.
   the `BareScrubber` allowance and delete or reduce
   `ActiveExerciseCardSections.swift` to composition only.
 
-- [ ] **3. Separate catalog semantics from the editor.** Move draft validation,
+- [x] **3. Separate catalog semantics from the editor.** Move draft validation,
   first-invalid-field selection, and dependent normalization rules into a pure
   `CatalogDraftValidation` result. Add a focused catalog mutation boundary that
   applies create/edit/duplicate/reset/delete, saves through
@@ -140,7 +141,7 @@ tests, ratchet removal, and future change locality prove the refactor.
   source-size allowances without changing identity, load, muscle, or alias
   contracts.
 
-- [ ] **4. Split analytics construction from cache orchestration.** Move the
+- [x] **4. Split analytics construction from cache orchestration.** Move the
   Sendable report payloads, widget snapshot projection, and
   `AnalyticsWorker` into focused files while keeping `SessionAnalytics` as the
   sole observable MainActor coordinator. Characterize same-key core-to-deep
@@ -150,7 +151,7 @@ tests, ratchet removal, and future change locality prove the refactor.
   no stale generation can publish and core/deep reports still share one
   accumulator.
 
-- [ ] **5. Thin the three shell screens independently.** Land one reversible
+- [x] **5. Thin the three shell screens independently.** Land one reversible
   change per screen. Today gets a pure `TodayUpNextPresentation` for scheme,
   duration, muscle summary, date, and PR-proximity copy, plus focused body,
   readiness, Up Next, and journal views. Settings keeps `@AppStorage`, HealthKit,
@@ -161,7 +162,7 @@ tests, ratchet removal, and future change locality prove the refactor.
   Do not introduce a generic card/row abstraction unless a second real consumer
   appears. Remove each allowance in its own change.
 
-- [ ] **6. Close support and renderer debt.** Turn `UITestSupport` into a small
+- [x] **6. Close support and renderer debt.** Turn `UITestSupport` into a small
   argument router and move active-workout, archived-history, template, and
   Insights fixtures into independent idempotent seeders with deterministic
   relative dates and fixed values where screenshots depend on them. Remove its
@@ -172,7 +173,7 @@ tests, ratchet removal, and future change locality prove the refactor.
   into a lifecycle-inappropriate shared renderer. Prove still and animated
   output before removing the final size allowance.
 
-- [ ] **7. Consolidate evidence and close the program.** Re-run the strict
+- [x] **7. Consolidate evidence and close the program.** Re-run the strict
   history report as an advisory comparison, inspect new temporal-coupling pairs,
   and confirm no replacement catch-all was created. Run every final gate, audit
   the complete diff series against `engineering/code-review.md`, update only
@@ -266,7 +267,18 @@ shipping the split.
 
 ## Progress and discoveries
 
-- The committed structural baseline at `147de6c` passes: 252 production Swift
+- Milestone 0 froze committed revision `a706418` under
+  `.verify/code-maat/milestone-0-a706418/`: the strict history report covered
+  149 commits / 297 entities / 1,520 changes, the source-size and complexity
+  ratchets passed with 10 and 19 allowances respectively, and the four focused
+  Exercise Detail suites passed 50 tests. `ExerciseDetailSections.swift`
+  remained the top current size/change hotspot. Its settled dark, light, and
+  Accessibility XXXL baseline captures were inspected. Exact pre-edit branch,
+  test, semantic-scenario, LOC, and ratchet inventories for milestones 2–6 are
+  recorded beside the report. An earlier aggregate UI attempt was rejected
+  because invalid Library-segment preconditions caused real timeouts while
+  stale result files still said `passed`.
+- The committed structural baseline at `a706418` passes: 252 production Swift
   files, 10 existing source-size allowances, and 19 existing complexity
   allowances.
 - The original top operational hotspot, `ActiveExerciseCard.swift`, and the
@@ -276,3 +288,114 @@ shipping the split.
   audit's top-twelve ranking. It remains last because its renderer is cohesive;
   the milestone must produce a real composition/motion/rendering boundary, not
   a cosmetic file split.
+- Milestone 1 replaced the 998-line Exercise Detail catch-all with an immutable
+  `ExerciseDetailReadModel`, one coherent worker-produced cache generation, and
+  focused leaf views. The old allowance was removed and the existing
+  `SessionAnalytics` ratchet lowered from 791 to 769 lines. Eight focused suites
+  passed 105 tests; all 11 relevant Baguette flows passed; dark, light, and
+  Accessibility XXXL screenshots were inspected and their normalized semantic
+  trees exactly matched baseline. Independent review caught and closed the
+  multi-session unknown-bodyweight Best-set fallback before the final
+  `Scripts/check.sh` pass. Physical-device audio, haptic, and scrub feel were
+  unaffected by this slice and remain outside automated evidence.
+- Milestone 2 moved scrub axis, detent, wall, rubber-band, and coast decisions
+  into a 253-line pure policy with 13 deterministic tests; `BareScrubber` now
+  owns only host gesture/effect orchestration and is 586 lines. The active card
+  now assembles one immutable instrument input for focused identity, reps,
+  duration, and effort/action leaves; its former sections file is 123 lines of
+  composition. The obsolete scrubber allowance was removed. A disposable
+  headless simulator recovered a wedged test service, after which 60 focused
+  tests, eight active-workout Baguette scenarios, baseline-equivalent dark,
+  light, and Accessibility XXXL semantics, independent review, and
+  `Scripts/check.sh` all passed. Physical scrub/flywheel feel, tick and wall
+  audio-haptics, one-handed reach, and real VoiceOver order remain device
+  checks.
+- Milestone 3 moved the catalog taxonomy, bundled launch reconciliation, pure
+  draft validation/normalization, and all create/edit/duplicate/delete/reset
+  writes behind focused owners. `ExerciseCatalog.swift` fell from 659 to 400
+  lines and the editor root from 1,050 to 387; both allowances were removed.
+  The focused suites passed 56 tests, including every frozen save-failure path,
+  post-commit Spotlight/tombstone ordering, bundled-only reconciliation,
+  ab-wheel/band normalization, and the complete draft-to-model bridge. All four
+  catalog Baguette flows passed, and inspected dark, light, and Accessibility
+  XXXL screenshots retained byte-equivalent normalized semantics and frames.
+  Baguette groups the focused navigation toolbar rather than exposing its Save
+  child, so invalid-Save focus behavior remains covered by pure tests and visual
+  inspection instead of a semantic tap. Independent review findings were closed
+  before `Scripts/check.sh` passed. The current catalog expansion also required
+  correcting its stale five-versus-six untargeted-muscle test expectation.
+- Milestone 4 left `SessionAnalytics` as the sole observable MainActor cache
+  coordinator and moved immutable report payloads, pure widget projection, and
+  the Sendable worker boundary into focused files. The coordinator fell from
+  769 to 447 lines and its allowance was removed. Nineteen deterministic
+  concurrency tests now cover same-key promotion, stale core/deep rejection,
+  invalidation, asymmetric failure retry, synchronous history fallback, widget
+  joining, and one coherent retained accumulator. Review replaced scheduler-hop
+  assertions with captured task barriers and restored cancellation checkpoints
+  between every core and deep report. `Scripts/check.sh` passed, all three
+  Insights scenarios passed, and their final accessibility trees matched the
+  frozen baseline byte-for-byte.
+- Milestone 5 reduced the Today, Settings, and Me roots to 309, 313, and 190
+  lines respectively. Today now derives one immutable Up Next presentation and
+  delegates its body, readiness, plan, and journal leaves; Settings retains all
+  integration and sheet ownership while binding-driven sections render the
+  preferences; Me builds one immutable dashboard snapshot for focused journey,
+  Insights, milestone, record, body-weight, and recap leaves. Thirty-seven new
+  presentation/policy tests joined the existing shell suites for 82 passing
+  focused tests. `today-up-next`, `settings-preferences`, `me-showcase`,
+  `today-actions`, and `today-journal-accessibility` passed headlessly, and
+  settled dark, light, and Accessibility XXXL captures were inspected. The
+  journal run also reproduced and explained a pre-existing late-evening
+  `HistorySeeder` boundary race (a randomized day-14 completion can cross
+  midnight); rerunning across midnight restored its promised count, and
+  Milestone 6 owns the deterministic fixture fix. All three old shell
+  allowances were removed, independent reviews were closed, and
+  `Scripts/check.sh` passed. HealthKit authorization, mail composition, haptic
+  feel, and real VoiceOver order remain physical-device checks.
+- Milestone 6 reduced `DebugSeed.swift` from 705 to 194 lines and split ordered
+  execution into focused active, archive, Insights, template, reset, and
+  coordinator owners. Fixed durations and shared injected clocks removed the
+  late-evening history race and prevented future same-day Me weights. The
+  Training Shape section fell from 808 to 97 lines; app-only motion scheduling,
+  exact accessibility prose, top-level Canvas pass order, and stateless petal
+  material now have named owners while VivoKit tuning and the widget boundary
+  remain unchanged. Forty-one focused tests passed across the routing/fixture
+  and Signature suites. Eight representative Baguette flows passed, including
+  Accessibility XXXL; normal-motion frames advanced while two settled Reduce
+  Motion frames one second apart were byte-identical. An initial widget run was
+  covered by the system notification prompt after the mailbox had successfully
+  started a session; dismissing it headlessly allowed the unchanged scenario to
+  pass. Independent review found no remaining parity blocker,
+  `source_size_baseline.json` now has zero allowances, the stale DebugSeed
+  complexity entry is gone, and `Scripts/check.sh` passed.
+- Milestone 7 re-ran the strict Code Maat pipeline under
+  `.verify/code-maat/milestone-7-current-worktree/`. Because `HEAD` remains the
+  frozen uncommitted baseline `a706418`, its history input has the same SHA-256
+  and therefore the same 149 commits, 297 entities, 1,520 changes, and coupling
+  rows; no historical locality improvement is claimable until the work is
+  committed and subsequent changes accumulate. The current-worktree scan is
+  conclusive for structure: 310 production Swift files, none above 600 lines,
+  no source-size allowances, and no new persistence/navigation/state catch-all.
+  The largest file is the pre-existing 589-line `StrengthRoutineBuilder`; the
+  largest new owner is the model-free 518-line `MePresentation`.
+
+## Final result
+
+- All ten frozen source-size allowances and the stale
+  `DebugSeed.seedIfRequested` complexity allowance are retired. Architecture,
+  naming, formatting, documentation, generated catalog, persistence baseline,
+  VivoKit snapshot contracts, and the canonical app build pass through
+  `Scripts/check.sh`.
+- The final aggregate contract run passed 305 tests across 25 affected suites.
+  Every milestone-specific Baguette flow recorded above passed headlessly, with
+  inspected dark/light/Accessibility evidence and explicit Reduce Motion still
+  evidence where applicable. Independent data-flow and UI reviews found no
+  actionable correctness, ownership, accessibility, or motion issue.
+- The first aggregate runner stalled in CoreSimulator before any test began; an
+  identical run on a disposable headless simulator passed and the simulator was
+  removed. No XCTest UI run or Simulator.app was used. The slices remain an
+  uncommitted working-tree series rather than separate milestone pull requests.
+- Physical-device verification remains for scrub inertia and wall feel,
+  audio/haptic timing, one-handed reach, real VoiceOver order, HealthKit and
+  mail handoffs, catalog invalid-Save focus, and Training Signature pacing/GPU
+  rendering. No persistence schema or widget payload changed.

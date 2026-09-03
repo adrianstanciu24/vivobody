@@ -4,7 +4,8 @@
 //
 //  Orthogonal exercise-programming vocabulary: mechanical complexity and
 //  conventional training placement shared by catalog, filters, and Insights.
-//  Compound movement-pattern biomechanics remain in ExerciseCatalog.swift.
+//  Compound movement-pattern biomechanics live in
+//  ExerciseCatalogTaxonomy.swift.
 //
 
 import Foundation

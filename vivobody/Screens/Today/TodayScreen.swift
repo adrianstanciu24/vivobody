@@ -2,18 +2,9 @@
 //  TodayScreen.swift
 //  vivobody
 //
-//  The app's home tab. Quiet, scannable, anchored by one dominant
-//  pinned workout action. Composes previously-built
-//  atoms into their first real screen home:
-//    • ConsistencyStrip — the rolling two weeks of workout embers,
-//      the glow ring pulsing on PR days
-//    • PrimaryActionButton — opens the workout chooser and becomes
-//      Resume / Finish while a workout is running
-//    • DigitTicker — used inside the LastWorkout stats strip
-//
-//  The screen reads AppState directly (workout dates, PR dates,
-//  last completed session) and emits a single intent: start today's
-//  workout. The shell handles presentation.
+//  The app's home tab and sole owner of Today queries, navigation,
+//  workout-start orchestration, and drill-out presentation state. Focused
+//  sections render immutable or explicit inputs around one pinned action.
 //
 
 import SwiftData
@@ -28,6 +19,9 @@ struct TodayScreen: View {
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
+
+    @AppStorage(SettingsKey.defaultRestSeconds)
+    private var defaultRestSeconds: Int = SettingsDefaults.defaultRestSeconds
 
     var unit: WeightUnit {
         WeightUnit(rawValue: unitRaw) ?? .lb
@@ -116,6 +110,11 @@ struct TodayScreen: View {
         let outlook = appState.analytics.strength
         let load = appState.analytics.load
         let readiness = latestSessions.readiness(load: load)
+        let upNextSelection = makeUpNextSelection(
+            upNext,
+            outlook: outlook,
+            defaultRestSeconds: defaultRestSeconds
+        )
         ScrollView {
             // The body leads — your trained figure is the hero
             // and the readout's subject. Up Next then names the
@@ -135,12 +134,14 @@ struct TodayScreen: View {
                 // just beneath the feet (over the plain background, not
                 // over the model — the muscle detail made an overlaid
                 // caption unreadable).
-                VStack(spacing: Space.section) {
-                    bodyModelHero(
-                        height: bodyHeroHeight(),
-                        state: modelState
-                    )
-                    figureCaption
+                TodayBodySection(
+                    height: bodyHeroHeight(),
+                    state: modelState,
+                    warmth: appState.analytics.forgeWarmth,
+                    colorScheme: colorScheme,
+                    usesAccessibilityLayout: usesAccessibilityLayout
+                ) {
+                    showMuscleMapDetails = true
                 }
                 // Depth: the figure settles back into the stage as
                 // you scroll past it. Driven by .scrollTransition
@@ -158,20 +159,45 @@ struct TodayScreen: View {
                 }
                 .settleIn(0)
 
-                if upNext.isPresentable {
-                    upNextView(upNext, outlook: outlook).settleIn(1)
+                if let upNextSelection {
+                    TodayUpNextSection(
+                        presentation: upNextSelection.presentation,
+                        usesAccessibilityLayout: usesAccessibilityLayout
+                    ) {
+                        TemplateDetailScreen(
+                            template: upNextSelection.template,
+                            appState: appState
+                        )
+                    }
+                    .settleIn(1)
                 }
                 if let readiness {
-                    if upNext.isPresentable {
+                    if upNextSelection != nil {
                         SectionDivider().settleIn(2)
                     }
-                    readinessSection(load, line: readiness).settleIn(3)
+                    TodayReadinessSection(report: load, line: readiness) {
+                        showTrainingLoadDetails = true
+                    }
+                    .settleIn(3)
                 }
-                if latestSession != nil {
+                if let latestSession {
                     SectionDivider().settleIn(4)
-                    consistencySection.settleIn(5)
+                    TodayConsistencySection(
+                        workoutDates: workoutDates,
+                        prDates: prDates,
+                        streakText: streakText(appState.analytics.overview.streak)
+                    ) {
+                        ConsistencyScreen()
+                    }
+                    .settleIn(5)
                     SectionDivider().settleIn(6)
-                    lastWorkoutSection.settleIn(7)
+                    TodayLastWorkoutSection(
+                        metadata: lastWorkoutMeta(for: latestSession),
+                        durationMinutes: Int(latestSession.duration / 60),
+                        receiptStat: lastWorkoutReceiptStat(for: latestSession),
+                        totalSets: latestSession.totalSets
+                    )
+                    .settleIn(7)
                 }
             }
             .padding(.top, Space.xs)

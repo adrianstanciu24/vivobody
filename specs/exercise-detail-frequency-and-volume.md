@@ -193,10 +193,10 @@ Swift Testing, deterministic clocks (inject `now` everywhere):
 | `vivobody/Screens/Library/ExerciseWeeklyVolumeSection.swift` | New — `This week` section, rows, band bars, DEBUG preview |
 | `vivobody/Screens/Library/LockedProCover.swift` | New — shared frozen-blur Pro cover, hoisted from the rhythm section |
 | `vivobody/Screens/Library/ProgressionRhythmSection.swift` | Adopts the shared cover |
-| `vivobody/Screens/Library/ExerciseDetailSections.swift` | Hero card extracted (shrank; baseline lowered); `showsUnlockControl` covers the new card |
+| `vivobody/Models/Insights/ExerciseDetailReadModel*.swift` | Immutable archive-derived frequency, volume, record, and chart inputs |
 | `vivobody/Screens/Library/ExerciseDetailScreen.swift` | Section wiring; header comment updated (stale Last/Times reference removed) |
 | `vivobody/App/DebugSeedWeeklyVolume.swift` | New — `--ui-test-weekly-volume` deterministic fixture |
-| `vivobody/App/DebugSeed.swift`, `AppRoot.swift` | Seeder helpers shared; one dispatch line |
+| `vivobody/App/DebugSeed.swift`, `DebugSeedCoordinator.swift`, `DebugArchivedHistorySeeder.swift`, `AppRoot.swift` | Pure argument routing plus the focused deterministic weekly-volume dispatch |
 | `vivobodyTests/ExerciseVolumeContributionTests.swift` | New |
 | `vivobodyTests/ExerciseFrequencyTests.swift` | New |
 | `Scripts/verify_scenarios/exercise-detail-weekly-volume*.json` | Pro and locked semantic scenarios |

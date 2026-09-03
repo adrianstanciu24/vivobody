@@ -20,106 +20,6 @@ import VivoKit
 @MainActor
 @Observable
 final class SessionAnalytics {
-    /// Reports shared by Today, Me, Insights, and exercise-library
-    /// surfaces. Every stored value is safe to cross back from the
-    /// background worker.
-    nonisolated struct CoreReports {
-        let volume: [MuscleVolumeStat]
-        let groupVolume: [MuscleGroup: Double]
-        let development: MuscleDevelopment.State
-        let muscleMap: MuscleMapReport
-        let strength: StrengthOutlookBoard
-        let progress: [ExerciseProgress]
-        let load: TrainingLoadReport
-        let consistency: ConsistencyReport
-        let exerciseHistory: [String: ExerciseHistorySummary]
-        let overview: ArchiveOverview
-
-        nonisolated var lastInstances: [String: LastExerciseInstance] {
-            exerciseHistory.compactMapValues { $0.lastExerciseInstance }
-        }
-
-        nonisolated static func make(
-            from common: AnalyticsAccumulator,
-            now: Date
-        ) -> CoreReports {
-            let progress = common.progressByExercise
-            let volume = common.muscleVolume(now: now)
-            let development = MuscleDevelopment.simulate(
-                from: common,
-                now: now
-            )
-            let consistency = common.consistency(now: now)
-            return CoreReports(
-                volume: volume,
-                groupVolume: common.allTimeMuscleGroupVolume(now: now),
-                development: development,
-                muscleMap: MuscleMapReport.compute(
-                    accumulator: common,
-                    development: development,
-                    volume: volume,
-                    now: now
-                ),
-                strength: StrengthOutlookBoard.compute(
-                    progress: progress,
-                    now: now
-                ),
-                progress: progress,
-                load: common.trainingLoad(now: now),
-                consistency: consistency,
-                exerciseHistory: common.exerciseHistoryByExercise(),
-                overview: common.archiveOverview(progress: progress, now: now)
-            )
-        }
-    }
-
-    /// Reports whose only app consumer is Insights.
-    nonisolated struct DeepReports {
-        let dominance: ExerciseDominanceBoard
-        let intensity: IntensityMix
-        let intensityWeeks: [IntensityWeek]
-        let migration: RepRangeMigrationReport
-        let composition: CompositionSplit
-        let symmetry: AntagonistBoard
-        let consistency: ConsistencyReport
-
-        nonisolated static func make(
-            from common: AnalyticsAccumulator,
-            now: Date,
-            consistency: ConsistencyReport? = nil
-        ) -> DeepReports {
-            DeepReports(
-                dominance: common.exerciseDominance(now: now),
-                intensity: common.intensityMix(now: now),
-                intensityWeeks: common.weeklyIntensity(now: now),
-                migration: common.repRangeMigration(now: now),
-                composition: common.compoundIsolationSplit(now: now),
-                symmetry: common.antagonistBalance(now: now),
-                consistency: consistency ?? common.consistency(now: now)
-            )
-        }
-    }
-
-    /// One coherent Insights payload. Core and deep reports are
-    /// published together only after both were built from the same
-    /// fingerprint and accumulator.
-    nonisolated struct InsightsReports {
-        let core: CoreReports
-        let deep: DeepReports
-    }
-
-    /// Widget-only analytics derived beside the core tier from the
-    /// same accumulator. Keeping these Codable payloads here lets the
-    /// app-side writer reuse the central replay instead of traversing
-    /// the SwiftData archive and rebuilding consistency, signature,
-    /// strength, and progress independently.
-    nonisolated struct WidgetReports {
-        let consistency: ConsistencySnapshot
-        let signature: SignatureSnapshot
-        let strength: StrengthSnapshot
-        let load: TrainingLoadReport
-    }
-
     /// Stable `.task(id:)` identity. The explicit revision changes on
     /// same-count/same-date archived-history corrections.
     nonisolated struct RequestKey: Hashable {
@@ -227,7 +127,9 @@ final class SessionAnalytics {
         deepReports?.consistency ?? Self.emptyDeepReports.consistency
     }
 
-    @ObservationIgnored private let worker = AnalyticsWorker()
+    @ObservationIgnored private let working: AnalyticsWorking
+    @ObservationIgnored private let historyFetch:
+        (ModelContext) throws -> [WorkoutSession]
     @ObservationIgnored private var coreTask: Task<Void, Never>?
     @ObservationIgnored private var deepTask: Task<Void, Never>?
     @ObservationIgnored private var requestedKey: RequestKey?
@@ -242,7 +144,18 @@ final class SessionAnalytics {
     @ObservationIgnored private var deepTaskKey: RequestKey?
     @ObservationIgnored private var generation = 0
 
-    init() {
+    init(
+        working: AnalyticsWorking = .live(),
+        historyFetch: ((ModelContext) throws -> [WorkoutSession])? = nil
+    ) {
+        self.working = working
+        self.historyFetch = historyFetch ?? { context in
+            let descriptor = FetchDescriptor<WorkoutSession>(
+                predicate: #Predicate { $0.completedAt != nil },
+                sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+            )
+            return try context.fetch(descriptor)
+        }
         let empty = AnalyticsAccumulator.replay(
             AnalyticsSnapshot(sessions: [AnalyticsSessionSnapshot]())
         )
@@ -329,11 +242,7 @@ final class SessionAnalytics {
             return exerciseHistorySummaries
         }
 
-        let descriptor = FetchDescriptor<WorkoutSession>(
-            predicate: #Predicate { $0.completedAt != nil },
-            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
-        )
-        guard let sessions = try? context.fetch(descriptor) else {
+        guard let sessions = try? historyFetch(context) else {
             return nil
         }
         let history = AnalyticsAccumulator.history(
@@ -350,6 +259,16 @@ final class SessionAnalytics {
     func waitForPendingWork() async {
         await coreTask?.value
         await deepTask?.value
+    }
+
+    /// Capture the current task identities before a request supersedes them.
+    /// Concurrency tests await these handles to prove stale work reached the
+    /// coordinator's generation guard without relying on scheduler timing.
+    func pendingWorkTasks() -> (
+        core: Task<Void, Never>?,
+        deep: Task<Void, Never>?
+    ) {
+        (coreTask, deepTask)
     }
 
     /// Return widget analytics for the requested archive generation.
@@ -411,13 +330,10 @@ final class SessionAnalytics {
         isCoreLoading = true
         isDeepLoading = includesDeepReports
 
-        let worker = worker
+        let working = working
         coreTask = Task { [weak self] in
             do {
-                let build = try await worker.makeCore(
-                    from: input,
-                    now: now
-                )
+                let build = try await working.makeCore(input, now)
                 guard !Task.isCancelled, let self else { return }
                 guard
                     self.generation == requestGeneration,
@@ -478,13 +394,13 @@ final class SessionAnalytics {
         deepTaskKey = key
         isDeepLoading = true
 
-        let worker = worker
+        let working = working
         deepTask = Task { [weak self] in
             do {
-                let reports = try await worker.makeDeep(
-                    from: accumulator,
-                    now: now,
-                    consistency: core.consistency
+                let reports = try await working.makeDeep(
+                    accumulator,
+                    now,
+                    core.consistency
                 )
                 guard !Task.isCancelled, let self else { return }
                 guard
@@ -524,266 +440,6 @@ final class SessionAnalytics {
         )
         return DeepReports.make(from: empty, now: Date())
     }()
-
-    fileprivate nonisolated static func makeWidgetReports(
-        core: CoreReports
-    ) -> WidgetReports {
-        let consistency = core.consistency
-        let consistencySnapshot = ConsistencySnapshot(
-            weeks: consistency.weeks.map { column in
-                column.map {
-                    ConsistencyDaySnapshot(
-                        date: $0.date,
-                        level: $0.level,
-                        isInRange: $0.isInRange,
-                        isToday: $0.isToday
-                    )
-                }
-            },
-            sessionsPerWeek: consistency.sessionsPerWeek,
-            weekStreak: consistency.weekStreak,
-            averageRIR: consistency.averageRIR,
-            daysTrained: consistency.daysTrainedInWindow,
-            weeklyVolume: consistency.weeks.map { column in
-                column.filter(\.isInRange).reduce(0) { $0 + $1.sets }
-            }
-        )
-
-        let signature = TrainingSignature(
-            groupVolume: core.groupVolume,
-            cadence: core.overview.averageWorkoutsPerWeek
-        )
-        let signatureSnapshot: SignatureSnapshot = if signature.hasSignature {
-            SignatureSnapshot(
-                petals: signature.petals.map {
-                    SignaturePetalSnapshot(
-                        group: $0.group.displayName,
-                        volumeShare: $0.volumeShare
-                    )
-                },
-                cadence: signature.cadence,
-                balance: signature.balance,
-                dominantGroup: signature.dominantGroup?.displayName,
-                hasSignature: true,
-                verdictLine: signatureVerdict(signature)
-            )
-        } else {
-            .empty
-        }
-
-        return WidgetReports(
-            consistency: consistencySnapshot,
-            signature: signatureSnapshot,
-            strength: strengthSnapshot(
-                board: core.strength,
-                progress: core.progress
-            ),
-            load: core.load
-        )
-    }
-
-    private nonisolated static func strengthSnapshot(
-        board: StrengthOutlookBoard,
-        progress: [ExerciseProgress]
-    ) -> StrengthSnapshot {
-        guard let lead = board.stats.first else { return .empty }
-        let series = progress.first { $0.id == lead.historyKey }
-        var runningMax = -Double.infinity
-        var points: [StrengthPointSnapshot] = []
-        for point in series?.points ?? [] where point.estimated1RM > 0 {
-            let isPR = point.estimated1RM > runningMax
-            if isPR { runningMax = point.estimated1RM }
-            points.append(
-                StrengthPointSnapshot(
-                    date: point.date,
-                    e1RM: point.estimated1RM,
-                    isPR: isPR
-                )
-            )
-        }
-
-        return StrengthSnapshot(
-            exercise: lead.exercise,
-            points: Array(points.suffix(StrengthSnapshot.maxPoints)),
-            currentE1RM: lead.currentE1RM,
-            bestE1RM: lead.bestE1RM,
-            trendLabel: strengthTrendLabel(lead),
-            climbingCount: board.climbingCount,
-            stalledCount: board.plateauedCount,
-            slippingCount: board.slippingCount,
-            hasData: !points.isEmpty
-        )
-    }
-
-    private nonisolated static func strengthTrendLabel(
-        _ stat: StrengthOutlookStat
-    ) -> String {
-        switch stat.trend {
-        case .climbing:
-            if stat.isFreshPR { return "PR" }
-            if let days = stat.daysToPR {
-                return days <= 21
-                    ? "~\(days)d"
-                    : "~\(Int((Double(days) / 7).rounded()))w"
-            }
-            return "up"
-        case .plateaued:
-            if let weeks = stat.weeksSinceBest, weeks > 0 {
-                return "\(weeks)w flat"
-            }
-            return "flat"
-        case .slipping:
-            return "down"
-        }
-    }
-
-    private nonisolated static func signatureVerdict(
-        _ signature: TrainingSignature
-    ) -> String {
-        "\(signature.identityLine). \(InsightsFormat.perWeekLabel(signature.cadence))x/week all-time average."
-    }
-}
-
-/// The only executor that performs report construction. Its inputs and
-/// outputs are fully Sendable; no SwiftData object can reach this actor.
-private actor AnalyticsWorker {
-    nonisolated struct CoreBuild {
-        let accumulator: AnalyticsAccumulator
-        let reports: SessionAnalytics.CoreReports
-        let widgetReports: SessionAnalytics.WidgetReports
-    }
-
-    func makeCore(
-        from input: AnalyticsSnapshot,
-        now: Date
-    ) async throws -> CoreBuild {
-        let accumulator = AnalyticsAccumulator.replay(
-            input,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let progress = accumulator.progressByExercise(
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let volume = accumulator.muscleVolume(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let development = MuscleDevelopment.simulate(
-            from: accumulator,
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let muscleMap = MuscleMapReport.compute(
-            accumulator: accumulator,
-            development: development,
-            volume: volume,
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let strength = StrengthOutlookBoard.compute(
-            progress: progress,
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let load = accumulator.trainingLoad(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let consistency = accumulator.consistency(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let exerciseHistory = accumulator.exerciseHistoryByExercise(
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let overview = accumulator.archiveOverview(
-            progress: progress,
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let groupVolume = accumulator.allTimeMuscleGroupVolume(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let reports = SessionAnalytics.CoreReports(
-            volume: volume,
-            groupVolume: groupVolume,
-            development: development,
-            muscleMap: muscleMap,
-            strength: strength,
-            progress: progress,
-            load: load,
-            consistency: consistency,
-            exerciseHistory: exerciseHistory,
-            overview: overview
-        )
-        let widgetReports = SessionAnalytics.makeWidgetReports(
-            core: reports
-        )
-        return CoreBuild(
-            accumulator: accumulator,
-            reports: reports,
-            widgetReports: widgetReports
-        )
-    }
-
-    func makeDeep(
-        from accumulator: AnalyticsAccumulator,
-        now: Date,
-        consistency: ConsistencyReport
-    ) async throws -> SessionAnalytics.DeepReports {
-        try Task.checkCancellation()
-        let dominance = accumulator.exerciseDominance(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let intensity = accumulator.intensityMix(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let intensityWeeks = accumulator.weeklyIntensity(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let migration = accumulator.repRangeMigration(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let composition = accumulator.compoundIsolationSplit(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let symmetry = accumulator.antagonistBalance(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        return SessionAnalytics.DeepReports(
-            dominance: dominance,
-            intensity: intensity,
-            intensityWeeks: intensityWeeks,
-            migration: migration,
-            composition: composition,
-            symmetry: symmetry,
-            consistency: consistency
-        )
-    }
 }
 
 extension EnvironmentValues {
