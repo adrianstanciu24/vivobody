@@ -1,7 +1,8 @@
 # Spec: Simplify the muscle development model
 
-Status: implemented (2026-06-12); further simplified by
-`muscle-attention-simplification.md` (2026-08): the γ=0.5 concave map and the
+Status: Historical implementation record; implemented 2026-06-12, then further
+simplified by [muscle attention](muscle-attention-simplification.md) (2026-08):
+the γ=0.5 concave map and the
 per-muscle landmark table described here are gone (linear map against one
 shared landmark). With exercise semantics updated by
 `exercise-data-contract.md` (2026-07-19). Notes:

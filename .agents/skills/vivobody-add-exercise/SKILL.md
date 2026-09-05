@@ -24,7 +24,7 @@ Respect the requested action boundary. A request to research or review does not 
 
 ## Run the graph
 
-1. Read `AGENTS.md`, `specs/index.md`, `specs/catalog/README.md`, the multi-agent workflow in `specs/catalog/family-roadmap.md`, the closest family files and proposals, and relevant verification guidance. Inspect `git status --short` and preserve unrelated changes.
+1. Read `AGENTS.md`, `specs/index.md`, `specs/catalog/README.md`, the closest family files and relevant proposals, and verification guidance. Use [references/workflow.md](references/workflow.md) for the operating procedure, including batch coordination. The completed catalog roadmap is historical context only. Inspect `git status --short` and preserve unrelated changes.
 2. Search canonical family rosters and aliases before browsing. End as `no-op alias` when the candidate is already represented; explain the exact match and do not manufacture a second record.
 3. Form a closest-family hypothesis from authored mechanics, never from the exercise name alone.
 4. Tell the user when this skill is fanning out independent review lanes. Use the biomechanics, catalog-boundary, and product-semantics lanes proportionally: run all three for new families, shared semantics, or ambiguous fixtures; a routine exact fixture may combine evidence and product review while preserving an independent boundary review. Give each reviewer a bounded task and require the packet defined in the workflow reference.

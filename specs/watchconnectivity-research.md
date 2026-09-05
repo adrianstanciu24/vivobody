@@ -1,5 +1,8 @@
 # WatchConnectivity Research: iPhone-to-Apple Watch Sync
 
+Status: Research only; no watch target. Revalidate platform claims before
+implementation and start with an execution plan. See the [spec index](index.md).
+
 Research summary for adding a watchOS companion app to vivobody. Sources: Apple
 Developer documentation (WatchConnectivity, WCSession, WCSessionDelegate, sample
 code "Transferring data with Watch Connectivity"), WWDC21 session "There and back

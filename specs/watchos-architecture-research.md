@@ -1,5 +1,8 @@
 # watchOS App Architecture Research (2025-2026)
 
+Status: Research only; no watch target. Revalidate platform claims before
+implementation and start with an execution plan. See the [spec index](index.md).
+
 Research summary for building a watchOS app for a workout/fitness application.
 Sources: Apple Developer Documentation, WWDC 2023/2025/2026 sessions, TN3157,
 and expert practitioner write-ups. Current state: watchOS 26 shipped (Xcode 26),

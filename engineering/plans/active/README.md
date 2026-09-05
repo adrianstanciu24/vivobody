@@ -9,13 +9,17 @@ Start with this compact template:
 ```markdown
 # Outcome
 
-- Status: active
+- Status: proposed | active | blocked
 - Started: YYYY-MM-DD
 - Spec/decision: links
+- Authorized scope: request or approval, and any implementation still awaiting approval
+- Baseline revision: commit and relevant existing working-tree changes
 
 ## Goal and non-goals
 
 ## Invariants and risks
+
+## Rollback or recovery
 
 ## Milestones
 
@@ -24,6 +28,8 @@ Start with this compact template:
 ## Verification
 
 ## Progress and discoveries
+
+## Next action and handoff
 ```
 
 When complete, add the result and verification evidence, change the status,

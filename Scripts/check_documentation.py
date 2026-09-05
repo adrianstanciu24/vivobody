@@ -4,8 +4,8 @@
 #  vivobody
 #
 #  Keeps the repository knowledge map navigable. It verifies required entry
-#  points, local Markdown links, top-level spec indexing, and the rule that
-#  volatile schema-version claims do not accumulate in AGENTS.md.
+#  points, local Markdown links, top-level spec indexing, generated inventories,
+#  and the rule that volatile schema claims do not accumulate in AGENTS.md.
 #
 
 from __future__ import annotations
@@ -16,11 +16,15 @@ from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import unquote
 
+import documentation_inventory
 
 ROOT = Path(__file__).resolve().parents[1]
 
 REQUIRED_FILES = (
     "AGENTS.md",
+    "README.md",
+    "workout-app-principles.md",
+    "worklog.md",
     "ARCHITECTURE.md",
     "engineering/verification.md",
     "engineering/code-review.md",
@@ -31,6 +35,10 @@ REQUIRED_FILES = (
     "engineering/plans/active/README.md",
     "engineering/plans/completed/README.md",
     "specs/index.md",
+    "specs/catalog/inventory.md",
+    "Scripts/verify_scenarios/README.md",
+    "Scripts/verify_scenarios/index.md",
+    ".agents/skills/vivobody-add-exercise/SKILL.md",
 )
 
 MARKDOWN_LINK_PATTERN = re.compile(
@@ -57,10 +65,9 @@ class Violation:
 
 
 def map_documents(root: Path) -> list[Path]:
-    paths = [root / "AGENTS.md", root / "ARCHITECTURE.md", root / "specs/index.md"]
-    engineering = root / "engineering"
-    if engineering.exists():
-        paths.extend(engineering.rglob("*.md"))
+    paths = list(root.glob("*.md"))
+    for directory in ("engineering", "specs", "Scripts/verify_scenarios", ".agents", ".factory"):
+        paths.extend((root / directory).rglob("*.md"))
     return sorted({path for path in paths if path.is_file()})
 
 
@@ -145,12 +152,23 @@ def check_spec_index(root: Path) -> list[Violation]:
     return violations
 
 
+def check_inventories(root: Path) -> list[Violation]:
+    try:
+        return [
+            Violation(path, 1, "DOC005", "generated inventory is stale; run /usr/bin/python3 Scripts/documentation_inventory.py --write")
+            for path in documentation_inventory.stale_documents(root)
+        ]
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        return [Violation("Scripts/documentation_inventory.py", 1, "DOC005", f"cannot read inventory inputs: {error}")]
+
+
 def run(root: Path = ROOT) -> list[Violation]:
     return sorted(
         check_required_files(root)
         + check_links(root)
         + check_agents_volatility(root)
         + check_spec_index(root)
+        + check_inventories(root)
     )
 
 

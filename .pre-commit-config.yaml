@@ -81,7 +81,7 @@ repos:
         entry: /usr/bin/python3 Scripts/check_documentation.py
         language: system
         pass_filenames: false
-        files: '\.md$'
+        files: '(\.md$|^specs/catalog/.*\.json$|^Scripts/verify_scenarios/.*\.json$|^Scripts/(check_documentation|documentation_inventory)\.py$)'
 
       - id: check-catalog-parity
         name: Generated catalog parity

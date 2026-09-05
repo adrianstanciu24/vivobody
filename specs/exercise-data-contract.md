@@ -1,12 +1,14 @@
 # Exercise Data Contract
 
+Status: Active domain contract. Source-audit date: [spec index](index.md).
+
 This document defines the meaning of every biomechanics-sensitive field in the
 bundled exercise catalog. The reviewed contracts in `specs/catalog/families/`
 are the canonical exercise source. `Scripts/catalog.py` validates those
 contracts against the taxonomy, joint-action, evidence, and family-schema
 foundations, then deterministically projects them into
-`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 83
-active families and their 200 reviewed exercises; the synthetic fixture and
+`vivobody/Resources/catalog.json`. The [generated inventory](catalog/inventory.md)
+lists the current reviewed families and exercises; the synthetic fixture and
 supplemental `--family` inputs are never emitted.
 
 ## Identity and movement instructions
@@ -262,11 +264,12 @@ The bundled catalog must satisfy all of the following before shipping:
 
 - `python3 Scripts/catalog.py --check` validates every canonical source and
   proves the bundled runtime catalog is byte-for-byte compiler output.
-- The projection contains exactly 83 family IDs and 200 exercise records; it is
-  stable under family file discovery order and excludes the synthetic fixture
-  and supplemental `--family` validation inputs.
-- The evidence registry contains exactly 222 source identities, each referenced
-  by an active foundation, family, or exercise claim.
+- The projection contains the reviewed family and exercise roster in the
+  [generated inventory](catalog/inventory.md). It is stable under family file
+  discovery order and excludes the synthetic fixture and supplemental
+  `--family` validation inputs.
+- Every evidence-registry identity is referenced by an active foundation,
+  family, or exercise claim; its current count is generated in the inventory.
 - Every required raw enum decodes without fallback.
 - Stable IDs, canonical names, and normalized aliases are unique.
 - Every muscle and role is recognized; obsolete aggregate regions are absent.

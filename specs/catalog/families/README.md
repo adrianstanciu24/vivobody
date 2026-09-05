@@ -1,15 +1,23 @@
 # Catalog families
 
+- Status: Active family-authoring guidance with historical coverage notes
+
 This directory contains one reviewed JSON source file per movement family.
-Ninety-seven reviewed family files containing 231 exercises are currently
-active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
-hip-rotation, spine, anti-movement, and carry contracts listed in the family
-roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-248-source foundation. Each uses a coverage batch whose exercises
+The [generated inventory](../inventory.md) owns current family, exercise, and
+foundation counts. Read [current authorship rules](#current-authorship-rules)
+and the nearest JSON contract when editing; use the
+[catalog skill](../../../.agents/skills/vivobody-add-exercise/SKILL.md) for review
+and integration. Each family uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
 records are never assigned artificial endpoints merely to cover a range.
+
+## Historical coverage notes
+
+These notes explain the scope of past additions. They are not a current roster;
+the JSON files and generated inventory determine what is present now.
+
 Ordered phases are available to Power contracts and to source-exact Dynamic
 Strength fixtures that pair a controlled yielding phase with an active return;
 `nordic-curl` is the bounded Dynamic Strength use of that grammar.
@@ -148,6 +156,8 @@ GHD mechanics. Bodyweight and GHD fixtures without a meaningful resistance
 input remain non-comparable. Elevated push-ups disclose their cohort-average
 effective-bodyweight proxies, and all four barbell Power fixtures retain
 ordered phases and external-load logging.
+
+## Current authorship rules
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber

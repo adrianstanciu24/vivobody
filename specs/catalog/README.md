@@ -1,21 +1,28 @@
 # Exercise catalog foundation
 
+- Status: Active generated-data contract
+
 This directory is the canonical source for Vivobody's family-first exercise
 catalog. `Scripts/catalog.py` validates these foundations and reviewed families
 and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
 
+Use the [catalog skill](../../.agents/skills/vivobody-add-exercise/SKILL.md) for
+exercise authorship and review. The [generated inventory](inventory.md) lists
+current counts and family rosters; the [completed roadmap](family-roadmap.md)
+records past decisions. Do not maintain current totals in narrative guidance.
+
 ## Source files
 
-- `taxonomy.json` defines exactly 58 muscle regions, their coarse app group,
-  display names, and exactly 60 uniquely owned trainable `BodyModel.scn` mesh
+- `taxonomy.json` defines muscle regions, their coarse app group,
+  display names, and uniquely owned trainable `BodyModel.scn` mesh
   base names where the model has a truthful surface. The two posterior-serratus
   mesh bases are explicitly non-trainable rather than serving as lumbar-muscle
   proxies. An unvisualized muscle must carry an explicit reason.
-- `joint-actions.json` defines exactly 44 joint actions, their central
+- `joint-actions.json` defines joint actions, their central
   opposition map, and an independent anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
   them against another list written in the same family file.
-- `evidence.json` tracks exactly 255 primary musculoskeletal sources and
+- `evidence.json` tracks primary musculoskeletal sources and
   authoritative technical standards supporting capability profiles and exact
   fixtures. A citation supports a rule; it does not turn EMG, a model estimate,
   or coaching guidance into a universal numeric contribution.
@@ -46,7 +53,7 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
 The lower-body taxonomy intentionally creates more exact, sometimes clinical
 region labels such as `Vasti`, `Pectineus`, and `Fibularis Tertius`. The app
 must not flatten those back into false `Quads`, `Calves`, or `Hip Flexors`
-region identities. The runtime uses all 58 stable IDs, display names, groups,
+region identities. The runtime uses the authored stable IDs, display names, groups,
 and mesh owners together; the six existing groups remain the coarse glanceable
 roll-up. `MuscleMappingTests` pins that runtime mapping. Product copy may provide
 contextual descriptions, but it must not create a second anatomical taxonomy.
@@ -412,10 +419,17 @@ validation inputs only and can never enter the runtime projection.
 
 The validator/compiler uses only Python's standard library. It decodes the binary
 SceneKit property list directly and proves every declared mesh has both `_L`
-and `_R` nodes, all 60 trainable mesh-base owners are unique, the taxonomy
-contains exactly its 58 canonical muscle regions, the capability map contains
-exactly 44 joint actions, all muscles have evidence-backed action profiles,
+and `_R` nodes, all trainable mesh-base owners are unique, the taxonomy and
+capability map preserve their canonical region and action contracts,
+all muscles have evidence-backed action profiles,
 family prime actions have capable movers, and stability demands have capable
 assigned muscles. The two posterior-serratus mesh bases are explicitly pinned
 as non-trainable scene surfaces rather than lumbar proxies. The runtime
-projection is pinned to exactly 97 active families and 231 exercises.
+projection contains the reviewed family roster listed in the generated inventory.
+
+After changing catalog inputs, refresh the documentation counts as well:
+
+```bash
+/usr/bin/python3 Scripts/documentation_inventory.py --write
+/usr/bin/python3 Scripts/check_documentation.py
+```

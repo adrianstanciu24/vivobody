@@ -1,5 +1,8 @@
 # App Store Connect metadata — Vivobody 1.0
 
+Status: Release artifact; recheck copy, platform requirements, and submission
+values before use. Source-audit date: [spec index](index.md).
+
 Everything below is paste-ready for App Store Connect. Fields that ASC
 limits by character count are annotated; all drafts fit their limits.
 

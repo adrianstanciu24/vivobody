@@ -22,8 +22,8 @@ decisions; it is the product constitution rather than a component catalog.
 
 - Start with `ScreenKit`, `PanelKit`, `GlassStyle`, and existing input/display
   components before creating a new visual primitive.
-- Keep the app dark and use the existing surface and tint vocabulary rather
-  than raw material effects.
+- Support both light and dark appearances using the existing semantic surface
+  and tint vocabulary. Inspect contrast and hierarchy in both appearances.
 - Convert weight only at the UI boundary through `WeightFormatter`; store the
   canonical value.
 - Use `SettingsKey` instead of literal defaults keys.
@@ -147,7 +147,42 @@ every decorative view. Scenarios should locate actions semantically and derive
 coordinates from the accessibility frame; hardcoded screen coordinates are not
 an accepted contract.
 
-## Generated and shared contracts
+## Documentation maintenance
+
+Keep a single authoritative home for each rule. Use this routing when updating
+project knowledge:
+
+| Knowledge | Home |
+|---|---|
+| Shared product constraints | [Product principles](../workout-app-principles.md) |
+| Current feature behavior | Active spec linked by [specs/index.md](../specs/index.md) |
+| Dependency direction and ownership | [ARCHITECTURE.md](../ARCHITECTURE.md) |
+| Required evidence and commands | [verification.md](verification.md) |
+| Reusable agent procedure | Repository skill or script, linked from [AGENTS.md](../AGENTS.md) |
+| Rationale for a lasting choice | [Decision record](decisions/README.md) |
+| Current assignment and next action | [worklog.md](../worklog.md), using the [handoff format](plans/README.md#current-work-and-handoffs) |
+
+Specs should start with a `Status:` line consistent with the index: active
+contract, implemented design (including hidden surfaces), historical or
+superseded record, research only, or release artifact. A historical record must
+link its current successor when one exists. Do not treat unchecked items in old
+plans or explorations as an active assignment. Add new top-level specs to the
+index in the same change.
+
+The index's “Last checked” date records a source audit. Do not advance it merely
+for formatting, moving text, or adding metadata. For superseded decisions,
+update both the old document and the index so direct readers see the successor.
+Resolve contradictions in the affected authoritative documents; copying both
+versions into the task guide does not resolve them.
+
+Generate changing inventories instead of repeating counts in prose. Run
+`/usr/bin/python3 Scripts/documentation_inventory.py --write` after catalog or
+scenario changes. `Scripts/check_documentation.py` checks those inventories and
+local Markdown paths across root docs, engineering, specs, repository skills,
+and scenario guides. It does not prove semantic agreement or the validity of
+external research. Review those claims explicitly when changing them.
+
+## Generated and shared data
 
 - `specs/catalog/` is the reviewed catalog source; `Scripts/catalog.py` is the
   only writer of the bundled runtime JSON.

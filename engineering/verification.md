@@ -1,13 +1,13 @@
 # Verification
 
 This is the canonical guide for proving Vivobody changes. Match verification
-cost to risk, but always compile before declaring a code change done. Simulator
-processes stay headless: never open the Simulator app and never run XCTest UI
-tests as part of the agent workflow.
+cost to risk, but always compile before declaring an app code change done.
+Simulator processes stay headless: never open the Simulator app and never run
+XCTest UI tests as part of the agent workflow.
 
 ## Default validation
 
-Run from the repository root:
+For app, data, build, and runtime-contract changes, run from the repository root:
 
 ```bash
 Scripts/check.sh
@@ -18,7 +18,56 @@ checks, generated-catalog parity validation, and a complete simulator build.
 The full build log is written to `.verify/check-build.log`. Unexpected warnings
 fail the command; the known external AppIntents framework warning is filtered.
 
-For a fast structural loop before compiling:
+## Documentation and process tooling
+
+For prose-only changes to Markdown, instructions, plans, or proposal records:
+
+```bash
+/usr/bin/python3 Scripts/check_documentation.py
+git diff --check
+```
+
+Inspect the changed guidance for conflicting rules, stale statuses, valid
+commands, and useful task routing. The documentation checker verifies local link
+paths, required entry points, spec indexing, and generated inventory parity;
+it cannot prove that prose agrees with implemented behavior.
+
+Catalog guidance and proposal changes also run the catalog Python suite, which
+checks documented mechanics and roster references as well as authored data:
+
+```bash
+/usr/bin/python3 -m unittest discover -s Scripts/tests -p 'test_catalog.py'
+```
+
+For changes to the documentation checker, inventory generator, or their hook
+routing, also run the focused mutation suite:
+
+```bash
+/usr/bin/python3 -m unittest discover -s Scripts/tests -p 'test_check_documentation.py'
+```
+
+These documentation-only paths do not require Xcode, a simulator, or
+`Scripts/check.sh`. A specification edit describing a future behavior does not
+implement it; label proposed behavior explicitly and preserve the request boundary.
+If the change also affects app code, catalog JSON/schema, runtime resources,
+snapshot/persistence fixtures, scenario JSON or runner behavior, build settings,
+or other validation hooks/scripts, use the stronger applicable evidence below.
+
+The [catalog inventory](../specs/catalog/inventory.md) and
+[scenario directory](../Scripts/verify_scenarios/index.md) are generated Markdown.
+Refresh them after their JSON inputs change:
+
+```bash
+/usr/bin/python3 Scripts/documentation_inventory.py --write
+```
+
+Regeneration describes those inputs; it does not replace catalog validation,
+scenario execution, or screenshot inspection. Do not regenerate or alter
+unrelated inputs merely to hide a pre-existing verification failure.
+
+## Fast structural loop
+
+Before compiling:
 
 ```bash
 /usr/bin/python3 Scripts/check_architecture.py
@@ -49,9 +98,9 @@ The commit stage checks file hygiene, formats staged Swift files under
 (matching the `Scripts/check.sh` formatting boundary), and runs the
 architecture, source-size, complexity, documentation, and catalog-parity
 guardrails scoped to the files that can break them. The push stage runs the
-Python guardrail suites and the VivoKit snapshot contract tests. Hooks never
-replace `Scripts/check.sh`; they surface the same failures earlier. Run the
-full tree manually with `pre-commit run --all-files`, adding
+Python guardrail suites and the VivoKit snapshot contract tests. For changes
+requiring `Scripts/check.sh`, hooks surface failures earlier and do not replace
+it. Run the full tree manually with `pre-commit run --all-files`, adding
 `--hook-stage pre-push` for the push stage.
 
 ## Headless UI verification with Baguette
@@ -101,6 +150,11 @@ review screenshots for layout, hierarchy, clipping, and visual regressions.
 `baguette` is required and can be installed with `brew install baguette`.
 
 ## Semantic scenarios
+
+Start with the [feature/scenario map](../Scripts/verify_scenarios/README.md#choose-evidence-for-the-change)
+to select the smallest relevant flow and focused unit suite. The generated
+directory lists every scenario and its initial launch options. A normal-state
+pass is not evidence for a failure, locked, or accessibility state.
 
 Run a checked-in scenario with:
 
@@ -155,7 +209,9 @@ graphs. Follow `vivobodyTests/TrainingLoadTests.swift` for the prevailing style.
 
 | Change | Required evidence |
 |---|---|
-| Documentation only | Documentation checks and `Scripts/check.sh` |
+| Prose-only documentation or instructions | Documentation checker, diff hygiene, and manual guidance review; catalog Python suite when catalog guidance/proposals change; no build |
+| Documentation checker, inventory generator, or their hook routing | Prose checks plus `test_check_documentation.py`; no app build |
+| Scenario JSON or verification harness | Focused Python harness tests, `Scripts/check.sh`, and affected headless scenarios with inspected evidence |
 | Pure analytics or domain logic | Smallest relevant targeted unit suite, then `Scripts/check.sh` |
 | Pre-release persistence shape or container opening | Current-store reopen contract, then `Scripts/check.sh` |
 | Post-release persistence shape or migration | Every retained version fixture, then `Scripts/check.sh`; use a migration plan |
@@ -167,6 +223,12 @@ graphs. Follow `vivobodyTests/TrainingLoadTests.swift` for the prevailing style.
 Anything Baguette cannot observe remains a user-owned manual verification item;
 do not substitute an XCTest UI test or unrelated simulator test merely to
 produce a green result.
+
+Both appearances are supported. Inspect affected UI in light and dark plus
+relevant Dynamic Type, Reduce Motion, and color-differentiation states. Prefer
+existing scenario variants; if the chosen scenario does not declare those
+settings, capture them explicitly. A filename containing “accessibility” can
+test semantic grouping without exercising large text; read its launch and steps.
 
 ## Manual maintenance scan
 

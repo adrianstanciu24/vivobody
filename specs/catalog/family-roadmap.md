@@ -1,13 +1,17 @@
 # Family-first catalog roadmap
 
-Status: working roadmap for the clean-slate strength catalog. Candidate names
-are discovery handles, not guaranteed final family IDs.
+Status: Complete roadmap; retained as catalog history.
 
-## Current position
+This record explains completed discovery and activation decisions. Candidate
+names were discovery handles, not guaranteed family IDs. For current counts and
+rosters use the [generated inventory](inventory.md); for new work use the
+[catalog skill](../../.agents/skills/vivobody-add-exercise/SKILL.md).
 
-- 97 reviewed families are active, containing 231 exercises.
-- The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 255 registered evidence sources.
+## Completed roadmap outcomes
+
+The following outcomes record the completed expansion history. Current totals
+are generated from JSON in the inventory linked above.
+
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 initially resolved nine candidates into eight active families and one
@@ -85,108 +89,11 @@ family, or be retired. A family activates only when its own contract, roster,
 evidence, and tests are ready; one blocked candidate never blocks its clearer
 batch siblings.
 
-## Active families
+## Current family roster
 
-| Family | Exercises |
-|---|---:|
-| `horizontal-press` | 14 |
-| `incline-press` | 5 |
-| `decline-press` | 5 |
-| `vertical-press` | 12 |
-| `vertical-pull` | 13 |
-| `diagonal-pull` | 1 |
-| `shoulder-extension-row` | 12 |
-| `shoulder-horizontal-abduction-row` | 6 |
-| `shoulder-extension-isolation` | 4 |
-| `padded-machine-pullover` | 1 |
-| `chest-fly` | 4 |
-| `upper-arm-pad-chest-fly` | 1 |
-| `reverse-fly` | 4 |
-| `shoulder-flexion-raise` | 1 |
-| `shoulder-abduction-raise` | 3 |
-| `upper-arm-pad-shoulder-abduction` | 1 |
-| `shoulder-external-rotation` | 3 |
-| `shoulder-internal-rotation` | 2 |
-| `elbow-flexion` | 11 |
-| `elbow-extension` | 9 |
-| `externally-rotating-face-pull` | 1 |
-| `forearm-pronation` | 1 |
-| `forearm-supination` | 1 |
-| `wrist-flexion` | 1 |
-| `wrist-extension` | 1 |
-| `wrist-radial-deviation` | 1 |
-| `wrist-ulnar-deviation` | 1 |
-| `finger-flexion-grip` | 1 |
-| `scapular-protraction` | 1 |
-| `scapular-retraction` | 1 |
-| `scapular-elevation` | 4 |
-| `scapular-depression` | 1 |
-| `scapular-pull-up` | 1 |
-| `upright-row` | 1 |
-| `dip` | 3 |
-| `seated-dip-press` | 1 |
-| `push-press` | 1 |
-| `landmine-press` | 1 |
-| `knee-extension` | 3 |
-| `knee-flexion` | 4 |
-| `nordic-curl` | 1 |
-| `glute-ham-raise` | 1 |
-| `hip-extension` | 3 |
-| `roman-chair-hip-extension` | 1 |
-| `hip-flexion` | 1 |
-| `ankle-plantarflexion` | 5 |
-| `bilateral-squat` | 6 |
-| `inclined-leg-press` | 2 |
-| `horizontal-leg-press` | 1 |
-| `machine-hack-squat` | 1 |
-| `conventional-deadlift` | 1 |
-| `sumo-deadlift` | 1 |
-| `trap-bar-deadlift` | 2 |
-| `single-leg-deadlift` | 3 |
-| `hip-hinge` | 1 |
-| `romanian-deadlift` | 5 |
-| `hip-thrust-bridge` | 2 |
-| `bodyweight-glute-bridge` | 1 |
-| `split-stance-squat` | 4 |
-| `step-up` | 2 |
-| `dynamic-lunge` | 4 |
-| `walking-lunge` | 1 |
-| `lateral-lunge` | 1 |
-| `hip-abduction` | 2 |
-| `hip-adduction` | 2 |
-| `ankle-dorsiflexion` | 1 |
-| `hip-internal-rotation` | 1 |
-| `hip-external-rotation` | 1 |
-| `spine-flexion` | 2 |
-| `straight-leg-sit-up` | 1 |
-| `supine-pelvic-curl` | 1 |
-| `spine-extension` | 1 |
-| `spine-lateral-flexion` | 1 |
-| `spine-rotation` | 1 |
-| `anti-extension` | 1 |
-| `kneeling-ab-wheel-rollout` | 1 |
-| `anti-lateral-flexion` | 1 |
-| `anti-rotation` | 1 |
-| `farmer-carry` | 2 |
-| `suitcase-carry` | 1 |
-| `hanging-leg-raise` | 2 |
-| `power-clean` | 1 |
-| `hang-power-clean` | 1 |
-| `squat-clean` | 1 |
-| `full-snatch` | 1 |
-| `power-snatch` | 1 |
-| `mid-thigh-clean-pull` | 1 |
-| `kettlebell-swing` | 1 |
-| `hang-power-snatch` | 1 |
-| `split-jerk` | 1 |
-| `push-jerk` | 1 |
-| `clean-and-jerk` | 1 |
-| `thruster` | 1 |
-| `wall-sit` | 1 |
-| `hollow-hold` | 1 |
-| `passive-dead-hang` | 1 |
-| `active-dead-hang` | 1 |
-| **Total** | **231** |
+The [generated inventory](inventory.md#family-roster) replaces the manually
+maintained roster. Historical batch sizes below describe those batches, not
+current family or foundation totals.
 
 ## Foundation gates
 
@@ -628,28 +535,8 @@ family ID. Scapular depression is active; upward rotation is owner-resolved
 inside `scapular-elevation`; and downward rotation is intentionally
 non-standalone rather than deferred.
 
-## Multi-agent batch workflow
+## Current operating procedure
 
-Every batch uses parallel discovery and a controlled integration pass:
-
-1. Agent A reviews roughly half the candidates and their closest active-family
-   boundaries.
-2. Agent B reviews the other candidates and their evidence/roster surface.
-3. Agent C audits shared vocabulary, anatomy gaps, evidence identity, schema,
-   and the cross-family negative-fixture matrix.
-4. The primary agent integrates the results, owns edits to shared taxonomy,
-   evidence, schemas, READMEs, and central tests, and flags disagreements rather
-   than silently choosing the permissive interpretation.
-5. Unblocked families receive individual JSON contracts and exact rosters in
-   the same batch change. Blocked candidates remain proposal documents with a
-   concrete unlock.
-6. Per-family rule mutations and roster coverage remain mandatory, followed by
-   batch-level cross-family boundary tests and global identity/evidence checks.
-
-Only one agent writes each shared file during a batch. Reviewers swap contracts
-instead of approving their own work; parallelism comes from independent
-research/proposal surfaces, not competing edits to the same registry or test
-file.
-
-Register evidence only when an active capability profile, family, or exercise
-references it; the validator intentionally rejects unused sources.
+The reusable batch procedure now lives in the repository skill's
+[workflow reference](../../.agents/skills/vivobody-add-exercise/references/workflow.md#multi-exercise-batches).
+Keep operational changes there; this completed roadmap remains decision history.

@@ -1,6 +1,9 @@
 # Spec: Fix the muscle-development model issues
 
-Status: implemented (Tier 0 `c8eb164`, Tier 1 `970bfa6`, Tier 2 `64cfa08`, Tier 3 — this update)
+Status: Historical implementation record. Current contracts are routed through
+the [spec index](index.md); later simplification is recorded in
+[muscle attention](muscle-attention-simplification.md).
+Implementation history: Tier 0 `c8eb164`, Tier 1 `970bfa6`, Tier 2 `64cfa08`, Tier 3 — this update.
 Date: 2026-06-24
 Scope: `MuscleDevelopment`, `BodyModelScene`, `RotatableBodyModel`/`TodayScreen`,
 `MuscleColor` (read-only), tests (`MuscleDevelopmentTests`, `BodyModelSceneTests`,

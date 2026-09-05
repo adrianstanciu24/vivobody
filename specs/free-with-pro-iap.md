@@ -1,5 +1,7 @@
 # Free + Pro Lifetime Unlock — Design
 
+Status: Implemented product design. Source-audit date: [spec index](index.md).
+
 Make the app free on the App Store with a single one-time in-app purchase
 ("Vivobody Pro") that unlocks the depth layer. The recording experience —
 logging workouts — is free forever and never gated. There is no trial: the
@@ -9,7 +11,7 @@ shows exactly what Pro adds using their own data.
 
 ## Product philosophy (from workout-app-principles.md)
 
-- "No premium interruptions. Respect the user's effort."
+- Keep purchases away from active workouts and preserve free logging access.
 - Free tier is a **complete workout logger**, not a crippled demo.
 - The paywall never appears during a workout, at launch, or as a popup.
   It lives only where a locked feature is, plus one quiet row in Settings.

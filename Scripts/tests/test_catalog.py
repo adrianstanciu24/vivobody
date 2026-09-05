@@ -372,6 +372,9 @@ class CatalogFoundationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.foundation = catalog.validate_foundation()
+        cls.catalog_inventory = (catalog.SPEC_ROOT / "inventory.md").read_text(
+            encoding="utf-8"
+        )
         cls.valid_family = catalog.load_json(catalog.FAMILY_FIXTURE_PATH)
         cls.horizontal_press = catalog.load_json(
             catalog.FAMILIES_ROOT / "horizontal-press.json"
@@ -10417,7 +10420,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "both motions as nonstandardized",
             normalized_proposal,
         )
-        self.assertIn("| `hip-flexion` | 1 |", roadmap)
+        self.assertIn("| [hip-flexion](families/hip-flexion.json) | 1 |", self.catalog_inventory)
         self.assertIn(
             "held hip-flexion family later activated through an exact "
             "active-straight-leg-raise fixture",
@@ -11860,8 +11863,8 @@ class CatalogFoundationTests(unittest.TestCase):
             "walking or alternating lunges",
             normalized_lunge,
         )
-        self.assertIn("| `hip-hinge` | 1 |", roadmap)
-        self.assertIn("| `dynamic-lunge` | 4 |", roadmap)
+        self.assertIn("| [hip-hinge](families/hip-hinge.json) | 1 |", self.catalog_inventory)
+        self.assertIn("| [dynamic-lunge](families/dynamic-lunge.json) | 4 |", self.catalog_inventory)
         self.assertIn(
             "Later review activated both the good-morning hinge owner and the "
             "forward/reverse dynamic-lunge family",
@@ -17189,10 +17192,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         normalized_proposal = " ".join(proposal.split())
 
-        self.assertIn(
-            "97 reviewed families are active, containing 231 exercises",
-            roadmap,
-        )
+        self.assertIn("| Reviewed families | 97 |", self.catalog_inventory)
         self.assertIn(
             "Batch 7 now contains nine active families",
             roadmap,
@@ -17201,10 +17201,10 @@ class CatalogFoundationTests(unittest.TestCase):
             "The first commercial-machine wave added exact Life Fitness",
             roadmap,
         )
-        self.assertIn("| `farmer-carry` | 2 |", roadmap)
-        self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **231** |", roadmap)
-        self.assertIn("Ninety-seven reviewed family files", families_readme)
+        self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
+        self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 231 |", self.catalog_inventory)
+        self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
             "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
@@ -18692,8 +18692,8 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
-        self.assertIn("| `finger-flexion-grip` | 1 |", roadmap)
-        self.assertIn("| **Total** | **231** |", roadmap)
+        self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 231 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -21487,8 +21487,8 @@ class CatalogFoundationTests(unittest.TestCase):
             catalog.SPEC_ROOT / "proposals" / "diagonal-pull.md"
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
-        self.assertIn("| `diagonal-pull` | 1 |", roadmap)
-        self.assertIn("| **Total** | **231** |", roadmap)
+        self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 231 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)

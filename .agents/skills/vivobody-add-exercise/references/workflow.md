@@ -53,6 +53,22 @@ Return `no-op alias` when the proposed movement is already represented by the sa
 
 Each lane is read-only and returns a compact packet. Use all three lanes for a new family, ambiguous fixture, or shared semantic change. For a routine exact fixture, evidence and product semantics may be combined, but family-boundary review remains independent. Give subagents the exact candidate fixture, repository root, closest-family hypothesis, and a prohibition on editing files.
 
+### Multi-exercise batches
+
+For an authorized batch, divide candidates into independent family/evidence
+review slices and assign a separate cross-family audit of shared vocabulary,
+anatomy gaps, evidence identity, schema, and negative fixtures. The coordinator
+integrates findings and is the sole writer of shared taxonomy, evidence,
+schemas, documentation, central tests, family files, and generated output.
+
+Integrate each supported family only after its own contract, roster, and review
+are ready. Keep blocked candidates as proposals with concrete unlocks; they do
+not block unrelated supported candidates. Reviewers exchange contracts instead
+of approving their own work. Preserve per-family rule mutations and roster
+coverage, then run cross-family boundary and global identity/evidence checks.
+Agent count follows the independent work available; the completed roadmap is
+decision history, not an additional operating procedure.
+
 ### Biomechanics researcher
 
 Responsibilities:
@@ -183,19 +199,20 @@ When active catalog source changed, generate through the compiler and then re-ch
 ```bash
 python3 Scripts/catalog.py --emit-runtime
 python3 Scripts/catalog.py --check
+/usr/bin/python3 Scripts/documentation_inventory.py --write
 ```
 
 If a family contract changed after explicit approval, add or update per-family rule mutations, exact roster coverage, and cross-family negative fixtures before the global tests.
 
-Finish every repository change with:
+Finish active catalog or contract changes with:
 
 ```bash
 Scripts/check.sh
 ```
 
-An active exercise addition is user-visible. Run the smallest relevant semantic flow or `Scripts/verify.sh`, then inspect both screenshot and accessibility-tree evidence for Library discovery and exercise detail. A proposal-only result needs documentation checks and `Scripts/check.sh`, but no UI capture.
+An active exercise addition is user-visible. Use the [feature/scenario map](../../../../Scripts/verify_scenarios/README.md#choose-evidence-for-the-change) to choose the smallest relevant flow, then inspect screenshot and accessibility-tree evidence for Library discovery and exercise detail. Proposal-only Markdown changes follow the [prose-only checks](../../../../engineering/verification.md#documentation-and-process-tooling), with no build or UI capture. Changes to active catalog JSON, schema, or generated app inputs still require the full gates above.
 
-Do not run the full simulator test suite unless requested or required by another changed boundary.
+Follow the repository's headless, targeted-suite policy; do not run the full simulator suite as part of this workflow.
 
 ## Failure handling
 

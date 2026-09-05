@@ -11,13 +11,19 @@ row when implementation lands, the design is superseded, or its source links
 move. Expensive implementation work should also have an active plan under
 [engineering/plans/active/](../engineering/plans/active/).
 
+Each spec should expose the same status near its title so a direct reader does
+not need this index to discover that it is historical or research-only. Keep
+the audit date here; metadata-only edits do not advance it. Superseded records
+link their successor in both places. See the
+[documentation maintenance rules](../engineering/quality.md#documentation-maintenance).
+
 ## Active contracts and release artifacts
 
 | Specification | Status | Implementation or source of truth | Last checked |
 |---|---|---|---|
 | [Exercise Data Contract](exercise-data-contract.md) | Active domain contract | [catalog foundations](catalog/README.md), [catalog generator](../Scripts/catalog.py), [runtime catalog model](../vivobody/Models/Domain/ExerciseCatalog.swift) | 2026-08-31 |
 | [Exercise catalog foundation](catalog/README.md) | Active generated-data contract | [catalog sources](catalog/), [catalog generator](../Scripts/catalog.py), [generated runtime catalog](../vivobody/Resources/catalog.json) | 2026-08-31 |
-| [Family-first catalog roadmap](catalog/family-roadmap.md) | Complete roadmap; retained as catalog history | [reviewed families](catalog/families/), [proposal history](catalog/proposals/), [generated runtime catalog](../vivobody/Resources/catalog.json) | 2026-08-31 |
+| [Current catalog inventory](catalog/inventory.md) | Generated inventory; checked against authored JSON | [inventory generator](../Scripts/documentation_inventory.py), [family sources](catalog/families/) | Generated parity checked by the documentation gate |
 | [Free + Pro lifetime unlock](free-with-pro-iap.md) | Implemented product design | [entitlement owner](../vivobody/Store/ProStore.swift), [purchase surface](../vivobody/Store/PaywallSheet.swift), [app state](../vivobody/App/AppState.swift), [widget fallback](../vivobodyWidgets/WidgetChrome.swift) | 2026-08-14 |
 | [HealthKit Tier A](healthkit-tier-a.md) | Implemented integration design | [HealthKit boundary](../vivobody/HealthKit/HealthKitWorkoutService.swift), [session fan-out](../vivobody/App/SessionSideEffects.swift), [settings surface](../vivobody/Screens/Me/SettingsScreen.swift) | 2026-08-14 |
 | [App Store Connect metadata](appstore-metadata.md) | Release artifact; recheck before submission | [shared version](../Shared.xcconfig), [app metadata](../vivobody/Info.plist), [privacy manifest](../vivobody/PrivacyInfo.xcprivacy), [public website](https://vivobody.app) | 2026-08-14 |
@@ -35,6 +41,8 @@ contract and current implementation before applying their details.
 
 | Specification | Status | Current implementation or successor | Last checked |
 |---|---|---|---|
+| [Product design explorations](product-design-explorations.md) | Historical design ideas | [current product principles](../workout-app-principles.md) | 2026-09-05 |
+| [Family-first catalog roadmap](catalog/family-roadmap.md) | Complete roadmap; retained as catalog history | [current inventory](catalog/inventory.md), [catalog workflow](../.agents/skills/vivobody-add-exercise/SKILL.md), [proposal history](catalog/proposals/) | 2026-08-31 |
 | [Muscle map as training attention](muscle-attention-simplification.md) | Historical implementation record; persistence details superseded by the family-first model | [set stimulus](../vivobody/Models/Insights/SetStimulus.swift), [muscle development](../vivobody/Models/Insights/MuscleDevelopment.swift), [Exercise Data Contract](exercise-data-contract.md) | 2026-08-14 |
 | [Hard-set-equivalent currency](hard-set-currency.md) | Superseded | [Muscle map as training attention](muscle-attention-simplification.md), [current set stimulus](../vivobody/Models/Insights/SetStimulus.swift) | 2026-08-14 |
 | [Simplify the muscle development model](simplify-muscle-model.md) | Implemented, then further simplified | [Muscle map as training attention](muscle-attention-simplification.md), [current muscle development](../vivobody/Models/Insights/MuscleDevelopment.swift) | 2026-08-14 |

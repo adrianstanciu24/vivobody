@@ -23,5 +23,13 @@ timestamps exist.
 - The chart is omitted when the current workout has partial or unavailable
   comparable load, or before a comparable archived baseline exists.
 - History places the instrument below a separator inside the session hero.
+  Its footer moves from Top set directly to the comparison separator; the
+  density/hard-set intensity line is omitted from this History card only.
   The completed live receipt places it above the exercise list and remains
   vertically scrollable.
+
+## Product observation
+
+Normalized set progress is the current comparison contract. Its usefulness on
+real workout histories remains a product observation, not an active task or an
+instruction to change the chart.

@@ -1,5 +1,7 @@
 # HealthKit Tier A — Design
 
+Status: Implemented integration design. Source-audit date: [spec index](index.md).
+
 Write one `HKWorkout` to HealthKit each time a workout is archived, so the
 session appears in the Apple Health app's workout history and is available to the
 rest of the ecosystem. No calorie sample is written (see "Why no calories").

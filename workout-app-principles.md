@@ -1,103 +1,75 @@
-# Workout app, from first principles
+# Workout app principles
 
-- [ ] The user is the constraint, not the feature list.
-- [ ] They're sweating, breathing hard, possibly holding a barbell, looking at the screen from arm's length for 0.5 seconds between sets.
-- [ ] Every design decision flows from that reality.
+- Status: Active product principles
+- Product decisions confirmed: 2026-09-05 — light and dark appearances; five tabs maximum
 
-## The five non-negotiables
+These are the shared constraints for product work. Feature behavior is described
+in the active contracts linked from [specs/index.md](specs/index.md). The
+[early design explorations](specs/product-design-explorations.md) preserve
+specific motion, sound, and gesture ideas as history; they are not a feature
+backlog or a requirement to change an existing flow.
 
-### 1. One-handed, thumb-reachable, glanceable from 3 feet
-- [ ] Numerals are huge, monospaced, weight-bearing.
-- [ ] Labels are tiny.
-- [ ] The most likely next action is always the biggest target on screen.
+## Design for training
 
-### 2. Never lose state
-- [ ] If the app crashes mid-set, the user opens it and is exactly where they left off — set count, weight, timer mid-tick.
-- [ ] This is sacred.
-- [ ] Persist on every interaction, not on app lifecycle events.
+The user may be sweating, breathing hard, holding a barbell, and glancing at
+the screen between sets. Optimize for one-handed use and fast understanding.
 
-### 3. Rest is the product
-- [ ] Most of a workout is rest.
-- [ ] The rest timer screen is the home screen, not a modal.
-- [ ] It should be beautiful, calm, and tell you what's next without you asking.
+- Make the likely next action prominent and thumb-reachable, with at least a
+  44pt target.
+- Let large, stable numerals lead. Supporting labels must remain readable,
+  including at accessibility text sizes.
+- Keep workout start and resume easy to find. Detail can be disclosed after
+  the immediate action.
 
-### 4. Haptic > visual > audio
-- [ ] In that priority for confirmation.
-- [ ] The user shouldn't have to look to know they tapped the right thing.
+## Preserve the workout
 
-### 5. Working out is hard. The app must never be.
-- [ ] No onboarding wizard.
-- [ ] No "premium" interruptions.
-- [ ] No streak-shaming.
-- [ ] Respect the user's effort.
+Persist meaningful workout changes and restore the active session after an
+interruption. Closing or minimizing its presentation does not end the workout.
+Surface save failures and preserve a recoverable state. Follow the ownership
+boundaries in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-## Interaction model
+Rest is a core session state: keep the timer visible, understandable, and
+actionable, with a clear indication of what comes next.
 
-- [ ] Tap to complete a set. That's the primary verb. Not "log," not a form — one big tap, with a satisfying haptic thunk.
-- [ ] Drag to adjust. Vertical drag on the weight number scrubs it like an iOS picker, with rubber-band physics and a subtle tick haptic on each increment.
-- [ ] Same drag-to-adjust behavior for reps.
-- [ ] No keyboards mid-workout.
-- [ ] Long-press for the secondary action (swap exercise, add a drop set, edit the last entry).
-- [ ] Pull-down to skip rest.
-- [ ] Pull-up to extend rest 30s.
-- [ ] These are gestural, not buttons.
-- [ ] Swipe between exercises in the workout — like Stories, but with momentum and a peek of the next one.
+## Respect the user's effort
 
-## Motion design
+Workout logging and history remain free. Do not interrupt an active workout
+with purchases or unrelated prompts. Apply the
+[Free + Pro contract](specs/free-with-pro-iap.md) at the appropriate surfaces.
+Avoid long onboarding wizards, streak-shaming, and prescriptive claims that the
+recorded data cannot support.
 
-- [ ] Spring physics, everywhere. Stiffness ~300, damping ~28.
-- [ ] Never `ease-in-out` for anything the user interacts with. Linear easing is the smell of a bad workout app.
-- [ ] Numbers tick, they don't fade. When weight changes from 135 to 140, individual digits roll like a mechanical odometer.
-- [ ] Shared element transitions between the exercise list row and the active exercise screen. The card you tapped grows into the screen.
-- [ ] The rest timer breathes. A subtle radial pulse synced to ~12 BPM — slower than resting heart rate, which actually calms people down.
-- [ ] At T-10s on the rest timer, the pulse accelerates and the color warms.
-- [ ] Set completion is a moment. A small particle burst, a haptic crescendo (light → medium → success notification), the number locks in with a spring overshoot.
-- [ ] Not a confetti vomit. Earned, restrained, repeatable a hundred times without getting old.
+Use haptic and visual confirmation deliberately; sound is supporting feedback.
+Respect user feedback preferences, Reduce Motion, and accessibility semantics.
 
-## Sound design
+## Appearance and navigation
 
-- [ ] This is where 99% of fitness apps fail. They use synth beeps that sound like a microwave.
-- [ ] Sample real things.
-- [ ] A wood block for set complete.
-- [ ] A bell for rest end (think singing bowl, not boxing bell).
-- [ ] A starter pistol shape for the 3-2-1 countdown — not three identical beeps.
-- [ ] Tonal logic. Increment goes up a semitone, decrement goes down.
-- [ ] PR sound is in a major key.
-- [ ] Failure is a soft, non-judgmental low tone — never a buzzer.
-- [ ] Sound always co-occurs with haptic.
-- [ ] Sound without haptic feels cheap. Haptic without sound feels premium. Both together feels like a Rolex.
-- [ ] Mix-aware. Duck the user's music by 30%, don't pause it.
-- [ ] Use the iOS short-form sound category so timers ring over music without stopping it.
+Support **both light and dark appearances** across the app. Use the shared
+semantic surface, ink, and tint vocabulary so hierarchy and contrast work in
+both. Review the changed surface in each appearance; dark mode is not a reason
+to omit light-mode verification.
 
-## The taste layer
+Use **five top-level tabs at most**. The current tabs, in order, are Today,
+History, Library, Insights, and Me. Keep new detail within its relevant feature
+and apply the five-tab limit when changing navigation.
 
-- [ ] Dark mode first. Gyms are dim. Phones are bright. White backgrounds at 6am are violence.
-- [ ] One accent color for "in progress," one for "complete." That's it. The rest is grayscale and typography.
-- [ ] Type does the work. A great workout app has maybe 5 font sizes and looks like Swiss design, not a dashboard.
-- [ ] Reference: Things 3, Tot, Apple's Breathe, Streaks, the Arc browser.
-- [ ] No iconography for primary actions. A button that says "REST" beats a button with a clock icon.
-- [ ] Icons are for navigation, not verbs.
-- [ ] Numerals are first-class citizens. Use a font with proper tabular figures (SF Pro, Inter, JetBrains Mono).
-- [ ] 135 lb should never jitter when it becomes 145 lb.
+## Interaction and information
 
-## Information architecture
+Tap-to-complete sets, drag-to-adjust inputs, and exercise paging are established
+workout interactions. Preserve their behavior when making unrelated changes.
+Keep accessible actions available and reuse native controls and shared components.
 
-- [ ] Four tabs, max. Today / History / Library / Me.
-- [ ] "Today" is not a dashboard — it's the workout queued up, one tap away from starting.
-- [ ] If you have to scroll to start your workout, you've already lost.
+Let the completed summary read as a compact receipt. Present trends as descriptive
+information with clear units, timeframe, and data limitations. The muscle map
+estimates training attention; it does not measure physiology.
 
-## The delight moments that matter
+## Product boundaries
 
-- [ ] The first time you hit a PR, the screen does something unrepeatable — a single subtle thing you won't see again for weeks. Scarcity makes it precious.
-- [ ] After the last set, the app says nothing for 2 seconds. Just silence and the final number.
-- [ ] Then it transitions to a summary that feels like a receipt from a nice restaurant — sparse, considered, honest about what you did.
-- [ ] The streak isn't a number with a flame next to it. It's a quiet calendar with filled circles, and the empty ones don't shame you.
+Social feeds, coach chatbots, AI form analysis, and XP-style gamification are
+outside the current product. Keep the app focused on logging and understanding
+training. Research documents and early design ideas do not authorize adding
+these features.
 
-## What to cut
-
-- [ ] Social feeds.
-- [ ] Coach chatbots.
-- [ ] Onboarding videos.
-- [ ] AI form analysis (it's not good enough yet).
-- [ ] Gamification with XP and levels.
-- [ ] Anything that says "Crush your goals." A workout app that says "Crush" has already failed.
+The maintainability and evidence requirements live in
+[engineering/quality.md](engineering/quality.md) and
+[engineering/verification.md](engineering/verification.md).

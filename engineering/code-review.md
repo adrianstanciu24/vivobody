@@ -72,6 +72,9 @@ manual verification gap.
 
 ### Documentation and tests
 
+- Do current instructions agree, and are historical ideas marked as such?
+- Can a new contributor find the changed feature's contract, relevant scenario,
+  and actual verification result through the task guide and handoff?
 - Are changed source headers still accurate?
 - Does a durable architectural change update `ARCHITECTURE.md` and, when needed,
   an engineering decision?

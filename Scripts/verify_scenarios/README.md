@@ -12,6 +12,44 @@ Each JSON file declares an initial `launch`, ordered `steps`, and final
 and result JSON. Screenshots are evidence for review; the pass/fail decision is
 made from accessibility semantics and any declared diagnostic-log contracts.
 
+## Choose evidence for the change
+
+Use this map to pick a starting flow, then read its JSON before running it.
+Run the smallest relevant unit suite when logic changes. These are entry points,
+not a request to run every linked scenario or suite. The
+[complete generated directory](index.md) lists every scenario and its initial
+launch arguments, including fixture, entitlement, appearance, and text-size flags.
+
+| Feature | Starting flows | Additional states to consider | Focused logic suites |
+|---|---|---|---|
+| Today and start/resume | [today-actions](today-actions.json), [today-up-next](today-up-next.json) | Empty, scheduled, active, and restored states in `today-actions`; [journal semantic grouping](today-journal-accessibility.json) | [TodayUpNextPresentationTests](../../vivobodyTests/TodayUpNextPresentationTests.swift), [UpNextTests](../../vivobodyTests/UpNextTests.swift) |
+| Active sets and rest | [start-complete-rest](start-complete-rest.json), [superset completion](active-superset-completion.json) | [Restoration](active-completion-restoration.json), [zero-set recovery](active-zero-set-recovery.json), `active-*` tracking variants in the directory; save-failure paths are unit contracts | [ActiveSetCompletionTests](../../vivobodyTests/ActiveSetCompletionTests.swift), [WorkoutSessionArchiveFailureTests](../../vivobodyTests/WorkoutSessionArchiveFailureTests.swift) |
+| Active exercise replacement | [replacement](replace-active-exercise.json), [substitution sheet](exercise-substitution-sheet.json) | [Blocked replacement](replace-active-exercise-blocked.json) | [WorkoutExerciseReplacementTests](../../vivobodyTests/WorkoutExerciseReplacementTests.swift), [ExerciseSubstitutionTests](../../vivobodyTests/ExerciseSubstitutionTests.swift) |
+| Receipts and archive | [receipt parity](receipt-metric-parity.json), [archive-to-history](archive-to-history.json) | Live summary in [dark](receipt-live-summary.json), [light](receipt-live-summary-light.json), and [Accessibility XXXL](receipt-live-summary-accessibility.json) | [WorkoutReceiptMetricTests](../../vivobodyTests/WorkoutReceiptMetricTests.swift), [SessionInsightsTests](../../vivobodyTests/SessionInsightsTests.swift) |
+| Workout load comparison | [History placement](workout-load-comparison.json) | Live summary in [dark](workout-load-comparison-live.json), [light](workout-load-comparison-live-light.json), and [Accessibility XXXL](workout-load-comparison-live-accessibility.json); unavailable/partial load in model tests | [WorkoutLoadComparisonTests](../../vivobodyTests/WorkoutLoadComparisonTests.swift) |
+| Library, picker, and catalog edits | [Library filters](library-training-role-filters.json), [picker filters](exercise-picker-training-role-filters.json), [custom exercise](custom-exercise-type.json) | [Assistance editor](custom-exercise-assistance.json); choose the relevant `catalog-*` fixture from the directory | [ExerciseCatalogBrowserTests](../../vivobodyTests/ExerciseCatalogBrowserTests.swift), [CatalogMutationBoundaryTests](../../vivobodyTests/CatalogMutationBoundaryTests.swift); `test_catalog.py` for authored JSON |
+| Exercise detail | [hero](exercise-detail-hero.json), [weekly volume](exercise-detail-weekly-volume.json) | [Locked](exercise-detail-weekly-volume-locked.json), [dormant chart](exercise-detail-dormant-chart.json), [single session](exercise-detail-single-session-point.json); `exercise-execution-*` tracking variants | [ExerciseDetailReadModelTests](../../vivobodyTests/ExerciseDetailReadModelTests.swift), [ExerciseVolumeContributionTests](../../vivobodyTests/ExerciseVolumeContributionTests.swift), [ExerciseDetailChartPresentationTests](../../vivobodyTests/ExerciseDetailChartPresentationTests.swift) |
+| Exercise comparison | [comparison](exercise-comparison.json), [picker](exercise-comparison-picker-filters.json) | [Locked](exercise-comparison-locked.json), [hidden during workout](exercise-comparison-active-workout-hidden.json), picker [light](exercise-comparison-picker-filters-light.json) and [large text](exercise-comparison-picker-filters-accessibility.json) | [ExerciseComparisonTests](../../vivobodyTests/ExerciseComparisonTests.swift), [ExerciseSearchTests](../../vivobodyTests/ExerciseSearchTests.swift) |
+| Insights | [showcase](insights-showcase.json), [load drivers](insights-load-rep-drivers.json), [Shape details](insights-shape-drillouts.json) | [Empty](insights-empty.json), [locked](insights-locked.json), [hard-set fallback](insights-hard-sets.json), [large text](insights-accessibility.json) | [TrainingLoadTests](../../vivobodyTests/TrainingLoadTests.swift), [TrainingSignatureTests](../../vivobodyTests/TrainingSignatureTests.swift), [AntagonistBalanceTests](../../vivobodyTests/AntagonistBalanceTests.swift); choose the changed instrument's suite |
+| Routine builder (DEBUG only) | [build](strength-routine-builder.json), [review](strength-routine-builder-review.json) | [Public entry hidden](strength-routine-builder-hidden.json), [insufficient catalog](strength-routine-builder-insufficient-catalog.json), [template cap](strength-routine-builder-template-cap.json), [picker contract](strength-routine-picker-contract.json) | [StrengthRoutineBuilderTests](../../vivobodyTests/StrengthRoutineBuilderTests.swift), [StrengthRoutineSaveTests](../../vivobodyTests/StrengthRoutineSaveTests.swift) |
+| Me and settings | [Me showcase](me-showcase.json), [preferences](settings-preferences.json) | Device-only feedback, permissions, purchases, and system handoffs remain separate checks | [MePresentationTests](../../vivobodyTests/MePresentationTests.swift), [SettingsInteractionPolicyTests](../../vivobodyTests/SettingsInteractionPolicyTests.swift), [ProStatusTests](../../vivobodyTests/ProStatusTests.swift) |
+| External actions and widgets | [deep link](deep-link-insights.json), [widget start](widget-start-handoff.json) | Missing/old/malformed snapshot payloads in shared contract tests; real widget presentation on device when affected | [WidgetSnapshotCodecTests](../../VivoKit/Tests/VivoKitTests/WidgetSnapshotCodecTests.swift); `swift test --package-path VivoKit` |
+
+For changed UI, inspect light and dark appearances and relevant accessibility
+states even when there is no named variant in this table. Read the launch
+arguments and steps: a semantic accessibility test does not automatically test
+large text or VoiceOver behavior on a device. Use the launch options in
+[verification.md](../../engineering/verification.md#headless-ui-verification-with-baguette)
+for additional captures. Do not use a default Today capture as proof of an
+unrelated feature change.
+
+When adding or changing a scenario, regenerate `index.md` with
+`/usr/bin/python3 Scripts/documentation_inventory.py --write` from the root.
+Update this curated map when the recommended starting flow or evidence changes.
+The documentation checker rejects a stale generated directory.
+
+## Runtime log assertions
+
 Scenarios may also declare `requiredLogs` and `forbiddenLogs` as arrays of
 literal substrings. These assertions read the captured unified `runtime.log`
 and are reserved for stable privacy-safe `AppDiagnostics` events, not Apple
