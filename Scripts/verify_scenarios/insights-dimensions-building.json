@@ -1,0 +1,85 @@
+{
+  "name": "insights-dimensions-building",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-empty-instruments",
+      "--pro"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsMovementCoverageLink"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsMovementCoverageLink",
+            "labelContains": "No classified hard sets"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsStaminaLink"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsStaminaLink",
+            "labelContains": "Building"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsMuscleDirectnessLink"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsMuscleDirectnessLink",
+            "labelContains": "No secondary muscle work"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsMuscleDirectnessLink"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

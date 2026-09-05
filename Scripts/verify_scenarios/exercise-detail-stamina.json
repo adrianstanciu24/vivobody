@@ -1,0 +1,63 @@
+{
+  "name": "exercise-detail-stamina",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body",
+      "--pro"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exerciseStaminaSection"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exerciseStaminaTrace"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exerciseStaminaTrace",
+      "labelContains": "80 percent"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

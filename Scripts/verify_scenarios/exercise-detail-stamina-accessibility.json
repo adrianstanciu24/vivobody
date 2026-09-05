@@ -1,0 +1,83 @@
+{
+  "name": "exercise-detail-stamina-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body",
+      "--pro",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityXXXL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exerciseStaminaSection"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exerciseStaminaTrace"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exerciseStaminaTrace",
+            "labelContains": "80 percent"
+          }
+        ]
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 2
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exerciseStaminaTrend",
+      "labelContains": "All time"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

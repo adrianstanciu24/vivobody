@@ -177,6 +177,7 @@ nonisolated struct ExerciseDetailReadModel: Hashable {
     let effort: Effort?
     let cadence: Cadence?
     let weeklyVolume: WeeklyVolume?
+    let stamina: ExerciseStamina?
 
     var hasHistory: Bool {
         historyState != .empty
@@ -194,12 +195,14 @@ nonisolated struct ExerciseDetailReadModel: Hashable {
         effort: ExerciseEffortSummary?,
         volumeContribution: ExerciseVolumeContribution?,
         weeklyVolumeByMuscle: [Muscle: MuscleVolumeStat],
+        stamina: ExerciseStamina? = nil,
         unit: WeightUnit,
         now: Date,
         calendar: Calendar,
         plateauThreshold: Int = plateauThreshold
     ) {
         self.exercise = exercise
+        self.stamina = stamina
         self.now = now
         self.progress = progress
         latestHistoryInstance = history?.mostRecentInstance
@@ -331,6 +334,7 @@ extension ExerciseDetailReadModel {
                 currentRoles: currentRoles,
             ),
             weeklyVolumeByMuscle: cached.weeklyVolumeByMuscle,
+            stamina: cached.staminaByKey[historyKey],
             unit: unit,
             now: cached.generatedAt,
             calendar: calendar

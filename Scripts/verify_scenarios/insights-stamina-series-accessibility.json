@@ -1,0 +1,91 @@
+{
+  "name": "insights-stamina-series-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body",
+      "--pro",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityXXXL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsStaminaLink"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsStaminaLink"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "staminaPatterns"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "staminaExercise-bundled:barbell-bench-press"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "identifier": "staminaExercise-bundled:barbell-bench-press"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exerciseStaminaTrace"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exerciseStaminaTrace"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 2
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exerciseStaminaTrace",
+      "labelContains": "80 percent"
+    },
+    {
+      "identifier": "exerciseStaminaTrend",
+      "labelContains": "All time"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

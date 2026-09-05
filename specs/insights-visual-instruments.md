@@ -2,7 +2,7 @@
 
 - Status: Implemented
 - Product surface: Insights tab
-- Scope: view hierarchy, navigation, accessibility, and visual-verification fixtures
+- Scope: visual analytics, navigation, accessibility, and deterministic verification
 
 ## User job
 
@@ -24,6 +24,8 @@ labels.
 - Each section owns one primary decision and one dominant visual.
 - Shape may link to **Exercise mix** and **Rep mix** details. Those are
   drill-outs, not permanent chapters in the main scroll.
+- Movement Coverage follows the Shape previews; Set-series Stamina follows Load;
+  Direct vs. Indirect follows Balance. Full rosters and definitions stay in drill-outs.
 - Balance shows a focused set of comparisons first and links to the full
   comparison board when more qualified pairs exist.
 - Empty and loading states continue to replace the instrument panel as a whole.
@@ -54,6 +56,9 @@ the supported Dynamic Type sizes.
 | Rep mix | Low, moderate, and high-rep sets | Stacked bar height by week and fill category | Last 12 weeks |
 | Training load | Rolling seven-day volume load when comparable load exists, otherwise estimated hard sets, versus personal range | Line position, range band, endpoint | Up to last 12 weeks; current read is 7 days |
 | Training rhythm | Completed sets by day and week | Calendar-cell intensity and weekly area | Last 6 months |
+| Movement coverage | Fractional hard-set share by anatomical plane | Three intersecting plane arcs with explicit percentages | All time |
+| Set-series stamina | Last/first reps in equal-weight runs | Retention rails; per-exercise rep traces and matched history | All time |
+| Direct vs. indirect | Muscle hard sets split by primary/secondary role | Stacked beams on a common scale | All time |
 | Training balance | Pair-relative effective sets | Mirrored beam length around a fixed center | Last 4 weeks |
 
 Orange identifies the primary series, dominant category, or active control.
@@ -144,12 +149,72 @@ meaning that is absent from position, length, label, or accessibility value.
 - The deterministic populated fixture must render all four modes quickly and
   must not depend on an intermediate History-screen launch.
 
+## Training dimensions
+
+### Movement Coverage
+
+- Use all completed archived sessions up to now, with no lower date cutoff; exclude
+  future dates. Price exercises with SetStimulus, then split credit equally across
+  unique snapshotted planes. The classified denominator counts each exercise once.
+- Show the same three-plane glyph as Exercise Detail with arc length encoding share.
+  Whole percentages use largest-remainder rounding and sum to 100 when data exists.
+- Unclassified hard sets remain visible and outside the denominator. Family actions
+  are looked up from immutable generated metadata through the captured family ID;
+  unknown family credit is disclosed in the drill-out.
+- The drill-out lists unrecorded planes and joint actions with owning catalog families.
+  Action coverage is at joint-action level, unioning ordered phases; produced,
+  resisted, and yielding actions remain distinct. Conditions remain part of the
+  authored family contract, rather than separate coverage categories. Stabilizers
+  and forbidden actions never count as performed actions.
+- Only actions owned by strength families that can earn hard-set credit enter the
+  gap roster. Missing coverage is a diary observation, never a recommendation or
+  a claim that unclassified work did not train that action.
+
+### Direct vs. Indirect
+
+- Use the same all-time completed history and SetStimulus pricing. Primary snapshot
+  credit 1.0 enters direct work; secondary 0.5 enters indirect work; stabilizers
+  earn none. These are credited hard sets, not literal exercise-set counts.
+- The headline names the muscle with most indirect hard-set credit. Bars compare
+  direct and indirect work on one common scale; text labels carry both roles.
+- The roster covers every muscle, including a collapsed no-recorded-work list. Each
+  muscle detail shows its indirect exercise sources and up to three current bundled
+  exercises where it is authored primary, preferring family variety. Examples link
+  to Exercise Detail and do not prescribe exercise selection.
+
+### Set-Series Stamina
+
+- Use only archived dynamic-strength, rep-tracked exercises. Within one exercise
+  occurrence, consecutive completed positive-rep sets at exactly identical finite
+  nonnegative logged weight form a run. At least three sets are required. Invalid,
+  incomplete, or changed-weight sets break runs; sessions/exercises never merge.
+- Retention is last reps / first reps, without clamping values above 100%. Pattern
+  reads are arithmetic means of eligible run ratios across all completed history,
+  excluding future dates. The cards, drill-outs, and Exercise Detail share this scope.
+- A higher logged RIR than any earlier rated set marks that set held back. Preserve
+  the whole run for its rep trace but exclude it from the pattern average and trend.
+  Missing RIR stays unknown and is disclosed; it is never inferred as fatigue.
+- Matched trends compare the same history identity, load profile, logged weight,
+  relevant bodyweight, run length, first reps, first RIR, and full/partial effort
+  logging status. Non-comparable resistance and unknown required bodyweight cannot
+  establish a matched load. Pattern change compares the first and latest recorded
+  date for each key across all history. Multiple runs at either endpoint contribute
+  their mean retention; a key needs two distinct dates. Average the differences
+  across matched keys, excluding unmatched prescriptions. Label the change
+  “first → latest matched”; there is no rolling comparison window.
+- Exercise Detail receives indexed reports from the same core analytics generation.
+  It stays outside active-workout exercise picking. It shows the latest eligible
+  run and its full matched history; higher RIR sets have diamond marks. Dates
+  identify the year when history spans years. This derived section uses the existing Pro cover.
+  No qualifying run hides the exercise section; Insights retains its building state.
+- Retention is a descriptive rep signal; rest duration, fatigue, and physiological
+  recovery are not measured. No timer or logging behavior changes.
+
 ## Non-goals
 
-- No analytics formula, threshold, persistence, entitlement, or purchase-flow
-  change.
+- No change to existing analytics formulas, persistence, entitlement, or purchase flow.
 - No new user score or prescriptive training recommendation.
-- No change to per-exercise progress, widgets, or active-workout UI.
+- No change to existing per-exercise strength progress, widgets, or active-workout UI.
 
 ## Implementation
 

@@ -1,0 +1,71 @@
+{
+  "name": "insights-stamina-held-back",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body",
+      "--pro"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsStaminaLink"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsStaminaLink"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "staminaPatterns"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "staminaExercise-bundled:barbell-split-squat"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "identifier": "staminaExercise-bundled:barbell-split-squat"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exerciseStaminaTrace"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exerciseStaminaTrace",
+      "labelContains": "held back"
+    },
+    {
+      "label": "Held back"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "exerciseStaminaTrend"
+    }
+  ]
+}

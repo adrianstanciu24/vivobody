@@ -212,3 +212,14 @@ Swift Testing, deterministic clocks (inject `now` everywhere):
   of this muscle" callouts beyond the band context.
 - Changes to `SetStimulus` pricing, `VolumeLandmark` values, or the
   `MuscleVolume` aggregation — this feature consumes them read-only.
+
+## Set-series stamina
+
+Exercise Detail also shows the Pro stamina instrument after Effort and before
+Recent sessions when a qualifying run exists anywhere in completed history. It shows
+rep-by-set values, retained reps, held-back marks, logged weight and date, and
+same-load history when at least two matching runs exist. The exact eligibility,
+RIR, and matching contracts live in
+[Insights training dimensions](insights-visual-instruments.md#training-dimensions).
+The report is indexed by history key in `ExerciseDetailReports`, built from the
+shared immutable accumulator; rendering does not traverse the archive.

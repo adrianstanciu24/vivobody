@@ -1,0 +1,52 @@
+{
+  "name": "insights-stamina-light",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body",
+      "--pro",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsStaminaLink"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsStaminaLink",
+      "role": "AXButton",
+      "labelContains": "All time"
+    },
+    {
+      "identifier": "insightsStaminaLink",
+      "labelContains": "Push, 70 percent of first-set reps across 8 series"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

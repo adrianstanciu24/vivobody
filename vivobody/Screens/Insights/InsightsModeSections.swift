@@ -18,6 +18,7 @@ struct ShapeInsightsSection: View {
     let intensity: IntensityMix
     let intensityWeeks: [IntensityWeek]
     let migration: RepRangeMigrationReport
+    let coverage: MovementCoverage
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -32,6 +33,7 @@ struct ShapeInsightsSection: View {
                     weeks: intensityWeeks,
                     migration: migration
                 )
+                MovementCoverageSection(report: coverage)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

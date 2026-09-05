@@ -116,6 +116,8 @@ struct MovementClassificationCard: View {
 /// Active strokes draw last so crossings resolve in their favor.
 struct MovementPlanesGlyph: View {
     let activePlanes: Set<MovementPlane>
+    /// Coverage uses arc length on the same fixed plane geometry.
+    var shares: [MovementPlane: Double]? = nil
 
     /// Short-axis fraction for the edge-on ellipses. Wide enough to
     /// read as a plane rather than a line, narrow enough that the
@@ -150,10 +152,17 @@ struct MovementPlanesGlyph: View {
         let isActive = activePlanes.contains(plane)
         let stroke: Color = isActive ? Tint.primary : Ink.primary.opacity(Opacity.faint)
         return Ellipse()
-            .fill(isActive ? Tint.primary.opacity(0.08) : .clear)
+            .fill(shares == nil && isActive ? Tint.primary.opacity(0.08) : .clear)
             .overlay(
-                Ellipse().stroke(stroke, lineWidth: isActive ? 1.5 : 1)
+                Ellipse().stroke(shares == nil ? stroke : Ink.quaternary, lineWidth: shares == nil ? (isActive ? 1.5 : 1) : 1)
             )
+            .overlay {
+                if let shares {
+                    Ellipse()
+                        .trim(from: 0, to: min(1, max(0, shares[plane, default: 0])))
+                        .stroke(Tint.primary, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                }
+            }
             .frame(
                 width: plane == .sagittal ? side * Self.edgeOnRatio : side,
                 height: plane == .transverse ? side * Self.edgeOnRatio : side

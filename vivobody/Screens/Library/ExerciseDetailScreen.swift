@@ -248,6 +248,13 @@ struct ExerciseDetailScreen: View {
                     }
                 )
                 ExerciseDetailEffortSection(effort: readModel.effort)
+                if allowsComparison {
+                    ExerciseStaminaSection(
+                        report: readModel.stamina,
+                        isUnlocked: pro?.isUnlocked ?? true,
+                        onUnlock: { isPaywallPresented = true }
+                    )
+                }
                 if readModel.hasHistory {
                     ExerciseDetailRecentSessionsSection(
                         rows: readModel.recentSessions

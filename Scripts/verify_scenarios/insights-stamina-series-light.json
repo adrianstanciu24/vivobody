@@ -1,0 +1,74 @@
+{
+  "name": "insights-stamina-series-light",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body",
+      "--pro",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsStaminaLink"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsStaminaLink"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "staminaPatterns"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "staminaExercise-bundled:barbell-bench-press"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "identifier": "staminaExercise-bundled:barbell-bench-press"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exerciseStaminaTrace"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exerciseStaminaTrace",
+      "labelContains": "80 percent"
+    },
+    {
+      "identifier": "exerciseStaminaTrend",
+      "labelContains": "All time"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

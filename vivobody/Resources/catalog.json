@@ -1,6 +1,21 @@
 [
   {
     "familyID": "active-dead-hang",
+    "familyName": "Active Dead Hang",
+    "movementActions": [
+      {
+        "actionID": "hand.fingerExtension",
+        "name": "Finger extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "active-dead-hang",
     "name": "Active Dead Hang",
     "group": "back",
@@ -63,6 +78,15 @@
   },
   {
     "familyID": "ankle-dorsiflexion",
+    "familyName": "Ankle Dorsiflexion",
+    "movementActions": [
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-band-ankle-dorsiflexion",
     "name": "Seated Band Ankle Dorsiflexion",
     "group": "legs",
@@ -110,6 +134,15 @@
   },
   {
     "familyID": "ankle-plantarflexion",
+    "familyName": "Ankle Plantarflexion",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-unilateral-machine-calf-raise",
     "name": "Standing Unilateral Machine Calf Raise",
     "group": "legs",
@@ -160,6 +193,15 @@
   },
   {
     "familyID": "ankle-plantarflexion",
+    "familyName": "Ankle Plantarflexion",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-unilateral-machine-calf-raise",
     "name": "Seated Unilateral Machine Calf Raise",
     "group": "legs",
@@ -210,6 +252,15 @@
   },
   {
     "familyID": "ankle-plantarflexion",
+    "familyName": "Ankle Plantarflexion",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bilateral-standing-shoulder-pad-machine-calf-raise",
     "name": "Bilateral Standing Shoulder-Pad Machine Calf Raise",
     "group": "legs",
@@ -260,6 +311,15 @@
   },
   {
     "familyID": "ankle-plantarflexion",
+    "familyName": "Ankle Plantarflexion",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bilateral-seated-thigh-pad-machine-calf-raise",
     "name": "Bilateral Seated Thigh-Pad Machine Calf Raise",
     "group": "legs",
@@ -310,6 +370,15 @@
   },
   {
     "familyID": "ankle-plantarflexion",
+    "familyName": "Ankle Plantarflexion",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "wall-balanced-single-leg-bodyweight-heel-raise",
     "name": "Wall-Balanced Single-Leg Bodyweight Heel Raise",
     "group": "legs",
@@ -361,6 +430,15 @@
   },
   {
     "familyID": "anti-extension",
+    "familyName": "Anti-Extension",
+    "movementActions": [
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "plank",
     "name": "Stable Forearm Plank",
     "group": "core",
@@ -435,6 +513,15 @@
   },
   {
     "familyID": "anti-lateral-flexion",
+    "familyName": "Anti-Lateral Flexion",
+    "movementActions": [
+      {
+        "actionID": "spine.lateralFlexion",
+        "name": "Spinal lateral flexion",
+        "plane": "frontal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "side-plank",
     "name": "Side Plank",
     "group": "core",
@@ -513,6 +600,15 @@
   },
   {
     "familyID": "anti-rotation",
+    "familyName": "Anti-Rotation",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "feet-together-band-pallof-hold",
     "name": "Feet-Together Band Pallof Hold",
     "group": "core",
@@ -599,6 +695,27 @@
   },
   {
     "familyID": "bilateral-squat",
+    "familyName": "Bilateral Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-back-squat",
     "name": "Barbell Back Squat",
     "group": "legs",
@@ -697,6 +814,27 @@
   },
   {
     "familyID": "bilateral-squat",
+    "familyName": "Bilateral Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-front-squat",
     "name": "Barbell Front Squat",
     "group": "legs",
@@ -795,6 +933,27 @@
   },
   {
     "familyID": "bilateral-squat",
+    "familyName": "Bilateral Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "kettlebell-goblet-squat",
     "name": "Kettlebell Goblet Squat",
     "group": "legs",
@@ -892,6 +1051,27 @@
   },
   {
     "familyID": "bilateral-squat",
+    "familyName": "Bilateral Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-dumbbell-goblet-squat",
     "name": "Single-Dumbbell Goblet Squat",
     "group": "legs",
@@ -990,6 +1170,27 @@
   },
   {
     "familyID": "bilateral-squat",
+    "familyName": "Bilateral Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "smith-machine-upper-back-squat",
     "name": "Smith Machine Upper-Back Squat",
     "group": "legs",
@@ -1088,6 +1289,27 @@
   },
   {
     "familyID": "bilateral-squat",
+    "familyName": "Bilateral Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bodyweight-floor-squat-100-degrees",
     "name": "100° Two-Leg Bodyweight Floor Squat",
     "group": "legs",
@@ -1166,6 +1388,15 @@
   },
   {
     "familyID": "bodyweight-glute-bridge",
+    "familyName": "Bodyweight Glute Bridge",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bodyweight-supine-glute-bridge-90-degrees",
     "name": "90° Bodyweight Supine Glute Bridge",
     "group": "legs",
@@ -1236,6 +1467,15 @@
   },
   {
     "familyID": "chest-fly",
+    "familyName": "Chest Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "flat-dumbbell-fly",
     "name": "Flat Dumbbell Fly",
     "group": "chest",
@@ -1310,6 +1550,15 @@
   },
   {
     "familyID": "chest-fly",
+    "familyName": "Chest Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-band-fly",
     "name": "Standing Band Fly",
     "group": "chest",
@@ -1387,6 +1636,15 @@
   },
   {
     "familyID": "chest-fly",
+    "familyName": "Chest Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-dual-cable-crossover",
     "name": "Standing Dual-Cable Crossover",
     "group": "chest",
@@ -1473,6 +1731,15 @@
   },
   {
     "familyID": "chest-fly",
+    "familyName": "Chest Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-handled-lever-machine-chest-fly",
     "name": "Seated Handled Lever-Machine Chest Fly",
     "group": "chest",
@@ -1551,6 +1818,87 @@
   },
   {
     "familyID": "clean-and-jerk",
+    "familyName": "Clean and Jerk",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-clean-and-jerk",
     "name": "Barbell Clean and Jerk",
     "group": "legs",
@@ -1697,6 +2045,27 @@
   },
   {
     "familyID": "conventional-deadlift",
+    "familyName": "Conventional Deadlift",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "conventional-barbell-deadlift",
     "name": "Conventional Barbell Deadlift",
     "group": "legs",
@@ -1800,6 +2169,21 @@
   },
   {
     "familyID": "decline-press",
+    "familyName": "Decline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "decline-barbell-bench-press",
     "name": "Decline Barbell Bench Press",
     "group": "chest",
@@ -1865,6 +2249,21 @@
   },
   {
     "familyID": "decline-press",
+    "familyName": "Decline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "decline-dumbbell-bench-press",
     "name": "Decline Dumbbell Bench Press",
     "group": "chest",
@@ -1934,6 +2333,21 @@
   },
   {
     "familyID": "decline-press",
+    "familyName": "Decline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "decline-smith-machine-bench-press",
     "name": "Decline Smith Machine Bench Press",
     "group": "chest",
@@ -1999,6 +2413,21 @@
   },
   {
     "familyID": "decline-press",
+    "familyName": "Decline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "decline-machine-chest-press",
     "name": "Decline Machine Chest Press",
     "group": "chest",
@@ -2064,6 +2493,21 @@
   },
   {
     "familyID": "decline-press",
+    "familyName": "Decline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "hands-elevated-push-up-30-48-cm",
     "name": "30.48 cm Hands-Elevated Push-Up",
     "group": "chest",
@@ -2130,6 +2574,21 @@
   },
   {
     "familyID": "diagonal-pull",
+    "familyName": "Diagonal Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-45-degree-cable-pulldown",
     "name": "Seated 45-Degree Cable Pulldown",
     "group": "back",
@@ -2232,6 +2691,21 @@
   },
   {
     "familyID": "dip",
+    "familyName": "Dip",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bar-dip",
     "name": "Bar Dip",
     "group": "chest",
@@ -2317,6 +2791,21 @@
   },
   {
     "familyID": "dip",
+    "familyName": "Dip",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "ring-dip",
     "name": "Ring Dip",
     "group": "chest",
@@ -2409,6 +2898,21 @@
   },
   {
     "familyID": "dip",
+    "familyName": "Dip",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "life-fitness-pro2-assisted-dip-machine",
     "name": "Life Fitness Pro 2 Assisted Dip Machine",
     "group": "chest",
@@ -2495,6 +2999,27 @@
   },
   {
     "familyID": "dynamic-lunge",
+    "familyName": "Dynamic Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bodyweight-forward-lunge",
     "name": "Bodyweight Forward Lunge",
     "group": "legs",
@@ -2580,6 +3105,27 @@
   },
   {
     "familyID": "dynamic-lunge",
+    "familyName": "Dynamic Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bodyweight-reverse-lunge",
     "name": "Bodyweight Reverse Lunge",
     "group": "legs",
@@ -2665,6 +3211,27 @@
   },
   {
     "familyID": "dynamic-lunge",
+    "familyName": "Dynamic Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "two-dumbbell-forward-lunge",
     "name": "Two-Dumbbell Forward Lunge",
     "group": "legs",
@@ -2773,6 +3340,27 @@
   },
   {
     "familyID": "dynamic-lunge",
+    "familyName": "Dynamic Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "two-dumbbell-reverse-lunge",
     "name": "Two-Dumbbell Reverse Lunge",
     "group": "legs",
@@ -2880,6 +3468,15 @@
   },
   {
     "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-supinated-cable-triceps-pushdown",
     "name": "Single-Arm Supinated Cable Triceps Pushdown",
     "group": "arms",
@@ -2950,6 +3547,15 @@
   },
   {
     "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-pronated-cable-triceps-pushdown",
     "name": "Single-Arm Pronated Cable Triceps Pushdown",
     "group": "arms",
@@ -3024,6 +3630,15 @@
   },
   {
     "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-overhead-cable-triceps-extension",
     "name": "Single-Arm Overhead Cable Triceps Extension",
     "group": "arms",
@@ -3094,6 +3709,15 @@
   },
   {
     "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-single-arm-overhead-dumbbell-triceps-extension",
     "name": "Seated Single-Arm Overhead Dumbbell Triceps Extension",
     "group": "arms",
@@ -3164,6 +3788,15 @@
   },
   {
     "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-lying-dumbbell-triceps-extension",
     "name": "Single-Arm Lying Dumbbell Triceps Extension",
     "group": "arms",
@@ -3230,6 +3863,15 @@
   },
   {
     "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bilateral-barbell-lying-triceps-extension",
     "name": "Bilateral Barbell Lying Triceps Extension",
     "group": "arms",
@@ -3296,6 +3938,15 @@
   },
   {
     "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bilateral-straight-bar-cable-triceps-pushdown",
     "name": "Bilateral Straight-Bar Cable Triceps Pushdown",
     "group": "arms",
@@ -3370,6 +4021,15 @@
   },
   {
     "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bilateral-rope-cable-triceps-pushdown",
     "name": "Bilateral Rope Cable Triceps Pushdown",
     "group": "arms",
@@ -3445,6 +4105,15 @@
   },
   {
     "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "life-fitness-pro2-seated-triceps-extension",
     "name": "Life Fitness Pro 2 Seated Triceps Extension",
     "group": "arms",
@@ -3516,6 +4185,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "supinated-straight-bar-cable-curl",
     "name": "Supinated Straight-Bar Cable Curl",
     "group": "arms",
@@ -3590,6 +4268,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "neutral-rope-cable-curl",
     "name": "Neutral-Grip Rope Cable Curl",
     "group": "arms",
@@ -3664,6 +4351,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "pronated-straight-bar-cable-curl",
     "name": "Pronated Straight-Bar Cable Curl",
     "group": "arms",
@@ -3738,6 +4434,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-straight-bar-barbell-curl",
     "name": "Standing Straight-Bar Barbell Curl",
     "group": "arms",
@@ -3811,6 +4516,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-ez-bar-curl",
     "name": "Standing EZ-Bar Curl",
     "group": "arms",
@@ -3886,6 +4600,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-single-arm-supinated-dumbbell-curl",
     "name": "Standing Single-Arm Supinated Dumbbell Curl",
     "group": "arms",
@@ -3960,6 +4683,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-preacher-curl",
     "name": "Barbell Preacher Curl",
     "group": "arms",
@@ -4019,6 +4751,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bilateral-incline-dumbbell-curl",
     "name": "Bilateral Incline Dumbbell Curl",
     "group": "arms",
@@ -4078,6 +4819,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-bilateral-supinated-dumbbell-curl",
     "name": "Standing Bilateral Supinated Dumbbell Curl",
     "group": "arms",
@@ -4152,6 +4902,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bilateral-dumbbell-hammer-curl",
     "name": "Bilateral Dumbbell Hammer Curl",
     "group": "arms",
@@ -4227,6 +4986,15 @@
   },
   {
     "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "machine-preacher-curl",
     "name": "Machine Preacher Curl",
     "group": "arms",
@@ -4289,6 +5057,33 @@
   },
   {
     "familyID": "externally-rotating-face-pull",
+    "familyName": "Externally Rotating Face Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.externalRotation",
+        "name": "Shoulder external rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "high-pulley-rope-face-pull-with-external-rotation",
     "name": "High-Pulley Rope Face Pull with Deliberate External Rotation",
     "group": "shoulders",
@@ -4403,6 +5198,15 @@
   },
   {
     "familyID": "farmer-carry",
+    "familyName": "Farmer Carry",
+    "movementActions": [
+      {
+        "actionID": "hand.fingerExtension",
+        "name": "Finger extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "two-dumbbell-farmer-carry",
     "name": "Two-Dumbbell Farmer Carry",
     "group": "arms",
@@ -4490,6 +5294,15 @@
   },
   {
     "familyID": "farmer-carry",
+    "familyName": "Farmer Carry",
+    "movementActions": [
+      {
+        "actionID": "hand.fingerExtension",
+        "name": "Finger extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "high-handle-trap-bar-farmer-carry",
     "name": "High-Handle Trap-Bar Farmer Carry",
     "group": "arms",
@@ -4579,6 +5392,15 @@
   },
   {
     "familyID": "finger-flexion-grip",
+    "familyName": "Dynamic Crush Grip",
+    "movementActions": [
+      {
+        "actionID": "hand.fingerFlexion",
+        "name": "Finger flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "repetitive-grip-trainer-close",
     "name": "Repetitive Grip-Trainer Close",
     "group": "arms",
@@ -4628,6 +5450,15 @@
   },
   {
     "familyID": "forearm-pronation",
+    "familyName": "Forearm Pronation",
+    "movementActions": [
+      {
+        "actionID": "forearm.pronation",
+        "name": "Forearm pronation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-dumbbell-forearm-pronation",
     "name": "Seated Dumbbell Forearm Pronation",
     "group": "arms",
@@ -4691,6 +5522,15 @@
   },
   {
     "familyID": "forearm-supination",
+    "familyName": "Forearm Supination",
+    "movementActions": [
+      {
+        "actionID": "forearm.supination",
+        "name": "Forearm supination",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-dumbbell-forearm-supination",
     "name": "Seated Dumbbell Forearm Supination",
     "group": "arms",
@@ -4759,6 +5599,87 @@
   },
   {
     "familyID": "full-snatch",
+    "familyName": "Full Snatch",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-squat-snatch",
     "name": "Barbell Squat Snatch",
     "group": "legs",
@@ -4902,6 +5823,33 @@
   },
   {
     "familyID": "glute-ham-raise",
+    "familyName": "Glute-Ham Raise",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "ghd-glute-ham-raise",
     "name": "GHD Glute-Ham Raise",
     "group": "legs",
@@ -4969,6 +5917,57 @@
   },
   {
     "familyID": "hang-power-clean",
+    "familyName": "Hang Power Clean",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-hang-power-clean",
     "name": "Barbell Hang Power Clean",
     "group": "legs",
@@ -5088,6 +6087,87 @@
   },
   {
     "familyID": "hang-power-snatch",
+    "familyName": "Hang Power Snatch",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-hang-power-snatch",
     "name": "Barbell Hang Power Snatch",
     "group": "legs",
@@ -5231,6 +6311,21 @@
   },
   {
     "familyID": "hanging-leg-raise",
+    "familyName": "Hanging Leg Raise",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "hanging-knee-raise",
     "name": "Hanging Knee Raise",
     "group": "core",
@@ -5315,6 +6410,21 @@
   },
   {
     "familyID": "hanging-leg-raise",
+    "familyName": "Hanging Leg Raise",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "hanging-straight-leg-raise",
     "name": "Hanging Straight-Leg Raise",
     "group": "core",
@@ -5391,6 +6501,15 @@
   },
   {
     "familyID": "hip-abduction",
+    "familyName": "Hip Abduction",
+    "movementActions": [
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "pressure-biofeedback-side-lying-hip-abduction",
     "name": "Pressure-Biofeedback Side-Lying Hip Abduction",
     "group": "legs",
@@ -5442,6 +6561,15 @@
   },
   {
     "familyID": "hip-abduction",
+    "familyName": "Hip Abduction",
+    "movementActions": [
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "technogym-bilateral-seated-hip-abduction",
     "name": "Technogym Seated Hip Abduction Machine",
     "group": "legs",
@@ -5491,6 +6619,15 @@
   },
   {
     "familyID": "hip-adduction",
+    "familyName": "Hip Adduction",
+    "movementActions": [
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "supported-standing-band-hip-adduction",
     "name": "Supported Standing Band Hip Adduction",
     "group": "legs",
@@ -5553,6 +6690,15 @@
   },
   {
     "familyID": "hip-adduction",
+    "familyName": "Hip Adduction",
+    "movementActions": [
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "technogym-bilateral-seated-hip-adduction",
     "name": "Technogym Seated Hip Adduction Machine",
     "group": "legs",
@@ -5614,6 +6760,15 @@
   },
   {
     "familyID": "hip-extension",
+    "familyName": "Hip Extension Isolation",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "prone-table-bent-knee-hip-extension",
     "name": "Prone Table Bent-Knee Hip Extension",
     "group": "legs",
@@ -5671,6 +6826,15 @@
   },
   {
     "familyID": "hip-extension",
+    "familyName": "Hip Extension Isolation",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "supported-cable-ankle-cuff-hip-extension",
     "name": "Supported Cable Ankle-Cuff Hip Extension",
     "group": "legs",
@@ -5730,6 +6894,15 @@
   },
   {
     "familyID": "hip-extension",
+    "familyName": "Hip Extension Isolation",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "technogym-selection-machine-glute-kickback",
     "name": "Technogym Selection Machine Glute Kickback",
     "group": "legs",
@@ -5789,6 +6962,15 @@
   },
   {
     "familyID": "hip-external-rotation",
+    "familyName": "Hip External Rotation",
+    "movementActions": [
+      {
+        "actionID": "hip.externalRotation",
+        "name": "Hip external rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "therapist-held-supine-band-hip-external-rotation",
     "name": "Therapist-Held Supine Band Hip External Rotation",
     "group": "legs",
@@ -5854,6 +7036,15 @@
   },
   {
     "familyID": "hip-flexion",
+    "familyName": "Hip Flexion Isolation",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bodyweight-active-straight-leg-raise",
     "name": "Bodyweight Active Straight-Leg Raise",
     "group": "legs",
@@ -5911,6 +7102,21 @@
   },
   {
     "familyID": "hip-hinge",
+    "familyName": "Hip Hinge",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-good-morning-25-percent-body-mass",
     "name": "25% Body-Mass Barbell Good Morning",
     "group": "legs",
@@ -6008,6 +7214,15 @@
   },
   {
     "familyID": "hip-internal-rotation",
+    "familyName": "Hip Internal Rotation",
+    "movementActions": [
+      {
+        "actionID": "hip.internalRotation",
+        "name": "Hip internal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-flywheel-hip-internal-rotation",
     "name": "Seated Flywheel Hip Internal Rotation",
     "group": "legs",
@@ -6065,6 +7280,21 @@
   },
   {
     "familyID": "hip-thrust-bridge",
+    "familyName": "Hip Thrust and Bridge",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-hip-thrust",
     "name": "Barbell Hip Thrust",
     "group": "legs",
@@ -6131,6 +7361,21 @@
   },
   {
     "familyID": "hip-thrust-bridge",
+    "familyName": "Hip Thrust and Bridge",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-glute-bridge",
     "name": "Barbell Glute Bridge",
     "group": "legs",
@@ -6197,6 +7442,21 @@
   },
   {
     "familyID": "hollow-hold",
+    "familyName": "Hollow Hold",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "hollow-hold",
     "name": "Hollow Hold",
     "group": "core",
@@ -6269,6 +7529,21 @@
   },
   {
     "familyID": "horizontal-leg-press",
+    "familyName": "Horizontal Leg Press",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "horizontal-leg-press",
     "name": "Horizontal Leg Press",
     "group": "legs",
@@ -6330,6 +7605,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-bench-press",
     "name": "Barbell Bench Press",
     "group": "chest",
@@ -6395,6 +7685,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "dumbbell-bench-press",
     "name": "Dumbbell Bench Press",
     "group": "chest",
@@ -6464,6 +7769,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "neutral-grip-dumbbell-bench-press",
     "name": "Neutral-Grip Dumbbell Bench Press",
     "group": "chest",
@@ -6533,6 +7853,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "smith-machine-bench-press",
     "name": "Smith Machine Bench Press",
     "group": "chest",
@@ -6598,6 +7933,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "machine-chest-press",
     "name": "Machine Chest Press",
     "group": "chest",
@@ -6663,6 +8013,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-cable-chest-press",
     "name": "Standing Cable Chest Press",
     "group": "chest",
@@ -6728,6 +8093,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-cable-chest-press",
     "name": "Single-Arm Cable Chest Press",
     "group": "chest",
@@ -6794,6 +8174,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-dumbbell-bench-press",
     "name": "Single-Arm Dumbbell Bench Press",
     "group": "chest",
@@ -6868,6 +8263,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "push-up",
     "name": "Push-Up",
     "group": "chest",
@@ -6932,6 +8342,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "knee-push-up",
     "name": "Knee Push-Up",
     "group": "chest",
@@ -6996,6 +8421,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-floor-press",
     "name": "Barbell Floor Press",
     "group": "chest",
@@ -7061,6 +8501,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "dumbbell-floor-press",
     "name": "Dumbbell Floor Press",
     "group": "chest",
@@ -7129,6 +8584,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "close-grip-barbell-bench-press",
     "name": "Close-Grip Barbell Bench Press",
     "group": "chest",
@@ -7194,6 +8664,21 @@
   },
   {
     "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "hammer-strength-mtscp-single-arm-chest-press",
     "name": "Hammer Strength MTSCP Single-Arm Chest Press",
     "group": "chest",
@@ -7271,6 +8756,27 @@
   },
   {
     "familyID": "incline-press",
+    "familyName": "Incline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "incline-barbell-bench-press",
     "name": "Incline Barbell Bench Press",
     "group": "chest",
@@ -7338,6 +8844,27 @@
   },
   {
     "familyID": "incline-press",
+    "familyName": "Incline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "incline-dumbbell-bench-press",
     "name": "Incline Dumbbell Bench Press",
     "group": "chest",
@@ -7408,6 +8935,27 @@
   },
   {
     "familyID": "incline-press",
+    "familyName": "Incline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "incline-smith-machine-bench-press",
     "name": "Incline Smith Machine Bench Press",
     "group": "chest",
@@ -7474,6 +9022,27 @@
   },
   {
     "familyID": "incline-press",
+    "familyName": "Incline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "incline-machine-chest-press",
     "name": "Incline Machine Chest Press",
     "group": "chest",
@@ -7540,6 +9109,27 @@
   },
   {
     "familyID": "incline-press",
+    "familyName": "Incline Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "feet-elevated-push-up-30-48-cm",
     "name": "30.48 cm Feet-Elevated Push-Up",
     "group": "chest",
@@ -7607,6 +9197,21 @@
   },
   {
     "familyID": "inclined-leg-press",
+    "familyName": "Inclined Leg Press",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "45-degree-incline-leg-press",
     "name": "45° Incline Leg Press",
     "group": "legs",
@@ -7668,6 +9273,21 @@
   },
   {
     "familyID": "inclined-leg-press",
+    "familyName": "Inclined Leg Press",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "panatta-1fw090-single-leg-45-degree-leg-press",
     "name": "Panatta 1FW090 Single-Leg 45° Leg Press",
     "group": "legs",
@@ -7733,6 +9353,15 @@
   },
   {
     "familyID": "kettlebell-swing",
+    "familyName": "Kettlebell Swing",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "two-hand-kettlebell-swing",
     "name": "Two-Hand Kettlebell Swing",
     "group": "legs",
@@ -7830,6 +9459,15 @@
   },
   {
     "familyID": "knee-extension",
+    "familyName": "Knee Extension",
+    "movementActions": [
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "reclined-unilateral-machine-leg-extension",
     "name": "Reclined Unilateral Machine Leg Extension",
     "group": "legs",
@@ -7880,6 +9518,15 @@
   },
   {
     "familyID": "knee-extension",
+    "familyName": "Knee Extension",
+    "movementActions": [
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "upright-unilateral-machine-leg-extension",
     "name": "Upright Unilateral Machine Leg Extension",
     "group": "legs",
@@ -7930,6 +9577,15 @@
   },
   {
     "familyID": "knee-extension",
+    "familyName": "Knee Extension",
+    "movementActions": [
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "upright-bilateral-lever-machine-leg-extension",
     "name": "Upright Bilateral Lever-Machine Leg Extension",
     "group": "legs",
@@ -7981,6 +9637,15 @@
   },
   {
     "familyID": "knee-flexion",
+    "familyName": "Knee Flexion",
+    "movementActions": [
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-unilateral-machine-leg-curl",
     "name": "Seated Unilateral Machine Leg Curl",
     "group": "legs",
@@ -8039,6 +9704,15 @@
   },
   {
     "familyID": "knee-flexion",
+    "familyName": "Knee Flexion",
+    "movementActions": [
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "prone-unilateral-machine-leg-curl",
     "name": "Prone Unilateral Machine Leg Curl",
     "group": "legs",
@@ -8097,6 +9771,15 @@
   },
   {
     "familyID": "knee-flexion",
+    "familyName": "Knee Flexion",
+    "movementActions": [
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "johnson-sl160-bilateral-seated-leg-curl",
     "name": "Johnson SL160 Bilateral Seated Leg Curl",
     "group": "legs",
@@ -8154,6 +9837,15 @@
   },
   {
     "familyID": "knee-flexion",
+    "familyName": "Knee Flexion",
+    "movementActions": [
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "flex-fitness-bilateral-prone-leg-curl",
     "name": "Flex Fitness Bilateral Prone Leg Curl",
     "group": "legs",
@@ -8212,6 +9904,27 @@
   },
   {
     "familyID": "kneeling-ab-wheel-rollout",
+    "familyName": "Kneeling Ab-Wheel Rollout",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "kneeling-ab-wheel-rollout",
     "name": "Kneeling Ab-Wheel Rollout",
     "group": "core",
@@ -8300,6 +10013,21 @@
   },
   {
     "familyID": "landmine-press",
+    "familyName": "Landmine Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-single-arm-landmine-press-power-test",
     "name": "Standing Single-Arm Landmine Press Power Test",
     "group": "shoulders",
@@ -8410,6 +10138,57 @@
   },
   {
     "familyID": "lateral-lunge",
+    "familyName": "Lateral Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "bodyweight-lateral-lunge-60-percent-height",
     "name": "60%-Height Bodyweight Lateral Lunge",
     "group": "legs",
@@ -8494,6 +10273,21 @@
   },
   {
     "familyID": "machine-hack-squat",
+    "familyName": "Maxicam Hack Squat",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "machine-hack-squat",
     "name": "Maxicam Hack Squat",
     "group": "legs",
@@ -8555,6 +10349,33 @@
   },
   {
     "familyID": "mid-thigh-clean-pull",
+    "familyName": "Mid-Thigh Clean Pull",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-mid-thigh-clean-pull",
     "name": "Barbell Mid-Thigh Clean Pull",
     "group": "legs",
@@ -8653,6 +10474,21 @@
   },
   {
     "familyID": "nordic-curl",
+    "familyName": "Nordic Curl",
+    "movementActions": [
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "nordic-curl",
     "name": "Nordic Curl",
     "group": "legs",
@@ -8711,6 +10547,15 @@
   },
   {
     "familyID": "padded-machine-pullover",
+    "familyName": "Padded Machine Pullover",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "hammer-strength-pl-po-plate-loaded-pullover",
     "name": "Hammer Strength PL-PO Plate-Loaded Pullover",
     "group": "back",
@@ -8806,6 +10651,15 @@
   },
   {
     "familyID": "passive-dead-hang",
+    "familyName": "Passive Dead Hang",
+    "movementActions": [
+      {
+        "actionID": "hand.fingerExtension",
+        "name": "Finger extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "passive-dead-hang",
     "name": "Passive Dead Hang",
     "group": "arms",
@@ -8864,6 +10718,57 @@
   },
   {
     "familyID": "power-clean",
+    "familyName": "Power Clean",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-power-clean",
     "name": "Barbell Power Clean",
     "group": "legs",
@@ -8982,6 +10887,87 @@
   },
   {
     "familyID": "power-snatch",
+    "familyName": "Power Snatch",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-power-snatch-from-floor",
     "name": "Barbell Power Snatch from Floor",
     "group": "legs",
@@ -9125,6 +11111,75 @@
   },
   {
     "familyID": "push-jerk",
+    "familyName": "Push Jerk",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-push-jerk",
     "name": "Barbell Push Jerk",
     "group": "shoulders",
@@ -9256,6 +11311,57 @@
   },
   {
     "familyID": "push-press",
+    "familyName": "Push Press",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-push-press",
     "name": "Barbell Push Press",
     "group": "shoulders",
@@ -9375,6 +11481,15 @@
   },
   {
     "familyID": "reverse-fly",
+    "familyName": "Reverse Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "prone-dumbbell-reverse-fly",
     "name": "Prone Dumbbell Reverse Fly",
     "group": "shoulders",
@@ -9445,6 +11560,15 @@
   },
   {
     "familyID": "reverse-fly",
+    "familyName": "Reverse Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-band-reverse-fly",
     "name": "Standing Band Reverse Fly",
     "group": "shoulders",
@@ -9518,6 +11642,15 @@
   },
   {
     "familyID": "reverse-fly",
+    "familyName": "Reverse Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "neutral-grip-machine-reverse-fly",
     "name": "Neutral-Grip Machine Reverse Fly",
     "group": "shoulders",
@@ -9588,6 +11721,15 @@
   },
   {
     "familyID": "reverse-fly",
+    "familyName": "Reverse Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "pronated-grip-machine-reverse-fly",
     "name": "Pronated-Grip Machine Reverse Fly",
     "group": "shoulders",
@@ -9658,6 +11800,21 @@
   },
   {
     "familyID": "roman-chair-hip-extension",
+    "familyName": "Roman-Chair Hip Extension",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "45-degree-roman-chair-back-extension",
     "name": "45° Roman-Chair Back Extension",
     "group": "legs",
@@ -9716,6 +11873,21 @@
   },
   {
     "familyID": "romanian-deadlift",
+    "familyName": "Romanian and Stiff-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "barbell-romanian-deadlift",
     "name": "Floor-Touch Barbell Romanian Deadlift",
     "group": "legs",
@@ -9813,6 +11985,21 @@
   },
   {
     "familyID": "romanian-deadlift",
+    "familyName": "Romanian and Stiff-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "barbell-stiff-leg-deadlift",
     "name": "Barbell Stiff-Leg Deadlift",
     "group": "legs",
@@ -9911,6 +12098,21 @@
   },
   {
     "familyID": "romanian-deadlift",
+    "familyName": "Romanian and Stiff-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "barbell-romanian-deadlift-15-cm-step",
     "name": "15 cm Step Barbell Romanian Deadlift",
     "group": "legs",
@@ -10011,6 +12213,21 @@
   },
   {
     "familyID": "romanian-deadlift",
+    "familyName": "Romanian and Stiff-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "continuous-top-start-barbell-romanian-deadlift",
     "name": "Continuous Top-Start Barbell Romanian Deadlift",
     "group": "legs",
@@ -10110,6 +12327,21 @@
   },
   {
     "familyID": "romanian-deadlift",
+    "familyName": "Romanian and Stiff-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "two-dumbbell-continuous-romanian-deadlift",
     "name": "Two-Dumbbell Continuous Romanian Deadlift",
     "group": "legs",
@@ -10209,6 +12441,15 @@
   },
   {
     "familyID": "scapular-depression",
+    "familyName": "Scapular Depression",
+    "movementActions": [
+      {
+        "actionID": "scapula.depression",
+        "name": "Scapular depression",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-band-scapular-depression",
     "name": "Standing Band Scapular Depression",
     "group": "back",
@@ -10286,6 +12527,21 @@
   },
   {
     "familyID": "scapular-elevation",
+    "familyName": "Scapular Elevation",
+    "movementActions": [
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-dumbbell-shrug",
     "name": "Single-Arm Dumbbell Shrug",
     "group": "back",
@@ -10368,6 +12624,21 @@
   },
   {
     "familyID": "scapular-elevation",
+    "familyName": "Scapular Elevation",
+    "movementActions": [
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bilateral-dumbbell-shrug",
     "name": "Bilateral Dumbbell Shrug",
     "group": "back",
@@ -10451,6 +12722,21 @@
   },
   {
     "familyID": "scapular-elevation",
+    "familyName": "Scapular Elevation",
+    "movementActions": [
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bilateral-30-degree-stabilization-shrug",
     "name": "Bilateral 30-Degree Stabilization Shrug",
     "group": "back",
@@ -10536,6 +12822,21 @@
   },
   {
     "familyID": "scapular-elevation",
+    "familyName": "Scapular Elevation",
+    "movementActions": [
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-bilateral-barbell-shrug",
     "name": "Standing Bilateral Barbell Shrug",
     "group": "back",
@@ -10619,6 +12920,15 @@
   },
   {
     "familyID": "scapular-protraction",
+    "familyName": "Scapular Protraction",
+    "movementActions": [
+      {
+        "actionID": "scapula.protraction",
+        "name": "Scapular protraction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "supine-dumbbell-scapular-punch",
     "name": "Supine Dumbbell Scapular Punch",
     "group": "chest",
@@ -10685,6 +12995,27 @@
   },
   {
     "familyID": "scapular-pull-up",
+    "familyName": "Scapular Pull-Up",
+    "movementActions": [
+      {
+        "actionID": "scapula.depression",
+        "name": "Scapular depression",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hand.fingerExtension",
+        "name": "Finger extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "scapular-pull-up",
     "name": "Scapular Pull-Up",
     "group": "back",
@@ -10751,6 +13082,15 @@
   },
   {
     "familyID": "scapular-retraction",
+    "familyName": "Scapular Retraction",
+    "movementActions": [
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-band-scapular-retraction",
     "name": "Standing Band Scapular Retraction",
     "group": "back",
@@ -10837,6 +13177,21 @@
   },
   {
     "familyID": "seated-dip-press",
+    "familyName": "Seated Dip Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "ergo-fit-vector-seated-dip-press",
     "name": "ERGO-FIT VECTOR KRAFT Seated Dip Press",
     "group": "arms",
@@ -10920,6 +13275,27 @@
   },
   {
     "familyID": "shoulder-abduction-raise",
+    "familyName": "Lateral Raise",
+    "movementActions": [
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-dumbbell-lateral-raise",
     "name": "Single-Arm Dumbbell Lateral Raise",
     "group": "shoulders",
@@ -11010,6 +13386,27 @@
   },
   {
     "familyID": "shoulder-abduction-raise",
+    "familyName": "Lateral Raise",
+    "movementActions": [
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-cable-lateral-raise",
     "name": "Single-Arm Cable Lateral Raise",
     "group": "shoulders",
@@ -11100,6 +13497,27 @@
   },
   {
     "familyID": "shoulder-abduction-raise",
+    "familyName": "Lateral Raise",
+    "movementActions": [
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "simultaneous-bilateral-dumbbell-lateral-raise",
     "name": "Simultaneous Bilateral Dumbbell Lateral Raise",
     "group": "shoulders",
@@ -11191,6 +13609,15 @@
   },
   {
     "familyID": "shoulder-extension-isolation",
+    "familyName": "Shoulder Extension Isolation",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-pullover",
     "name": "Barbell Pullover",
     "group": "chest",
@@ -11265,6 +13692,15 @@
   },
   {
     "familyID": "shoulder-extension-isolation",
+    "familyName": "Shoulder Extension Isolation",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "shoulder-width-straight-arm-cable-pulldown",
     "name": "Shoulder-Width Straight-Arm Cable Pulldown",
     "group": "back",
@@ -11343,6 +13779,15 @@
   },
   {
     "familyID": "shoulder-extension-isolation",
+    "familyName": "Shoulder Extension Isolation",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "wide-grip-straight-arm-cable-pulldown",
     "name": "Wide-Grip Straight-Arm Cable Pulldown",
     "group": "back",
@@ -11421,6 +13866,15 @@
   },
   {
     "familyID": "shoulder-extension-isolation",
+    "familyName": "Shoulder Extension Isolation",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "two-hand-single-dumbbell-pullover",
     "name": "Two-Hand Single-Dumbbell Pullover",
     "group": "chest",
@@ -11500,6 +13954,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-bent-over-row",
     "name": "Barbell Bent-Over Row",
     "group": "back",
@@ -11594,6 +14069,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "underhand-barbell-row",
     "name": "Underhand Barbell Row",
     "group": "back",
@@ -11687,6 +14183,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "pendlay-row",
     "name": "Pendlay Row",
     "group": "back",
@@ -11779,6 +14296,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "dumbbell-bent-over-row",
     "name": "Dumbbell Bent-Over Row",
     "group": "back",
@@ -11872,6 +14410,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "one-arm-dumbbell-row",
     "name": "One-Arm Dumbbell Row",
     "group": "back",
@@ -11970,6 +14529,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "chest-supported-dumbbell-row",
     "name": "Chest-Supported Dumbbell Row",
     "group": "back",
@@ -12055,6 +14635,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-cable-row",
     "name": "Seated Cable Row",
     "group": "back",
@@ -12144,6 +14745,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-seated-cable-row",
     "name": "Single-Arm Seated Cable Row",
     "group": "back",
@@ -12234,6 +14856,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "chest-supported-machine-row",
     "name": "Chest-Supported Machine Row",
     "group": "back",
@@ -12319,6 +14962,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-chest-supported-machine-row",
     "name": "Single-Arm Chest-Supported Machine Row",
     "group": "back",
@@ -12409,6 +15073,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "smith-machine-bent-over-row",
     "name": "Smith Machine Bent-Over Row",
     "group": "back",
@@ -12502,6 +15187,27 @@
   },
   {
     "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "inverted-row",
     "name": "Inverted Row",
     "group": "back",
@@ -12598,6 +15304,15 @@
   },
   {
     "familyID": "shoulder-external-rotation",
+    "familyName": "Shoulder External Rotation",
+    "movementActions": [
+      {
+        "actionID": "shoulder.externalRotation",
+        "name": "Shoulder external rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-cable-shoulder-external-rotation",
     "name": "Standing Cable External Rotation",
     "group": "shoulders",
@@ -12657,6 +15372,15 @@
   },
   {
     "familyID": "shoulder-external-rotation",
+    "familyName": "Shoulder External Rotation",
+    "movementActions": [
+      {
+        "actionID": "shoulder.externalRotation",
+        "name": "Shoulder external rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-band-shoulder-external-rotation",
     "name": "Standing Band External Rotation",
     "group": "shoulders",
@@ -12714,6 +15438,15 @@
   },
   {
     "familyID": "shoulder-external-rotation",
+    "familyName": "Shoulder External Rotation",
+    "movementActions": [
+      {
+        "actionID": "shoulder.externalRotation",
+        "name": "Shoulder external rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "side-lying-dumbbell-shoulder-external-rotation",
     "name": "Side-Lying Dumbbell External Rotation",
     "group": "shoulders",
@@ -12772,6 +15505,27 @@
   },
   {
     "familyID": "shoulder-flexion-raise",
+    "familyName": "Front Raise",
+    "movementActions": [
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-dumbbell-front-raise",
     "name": "Single-Arm Dumbbell Front Raise",
     "group": "shoulders",
@@ -12862,6 +15616,27 @@
   },
   {
     "familyID": "shoulder-horizontal-abduction-row",
+    "familyName": "Shoulder-Height Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "wide-grip-barbell-rear-delt-row",
     "name": "Wide-Grip Barbell Rear-Delt Row",
     "group": "shoulders",
@@ -12952,6 +15727,27 @@
   },
   {
     "familyID": "shoulder-horizontal-abduction-row",
+    "familyName": "Shoulder-Height Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "chest-supported-dumbbell-rear-delt-row",
     "name": "Chest-Supported Dumbbell Rear-Delt Row",
     "group": "shoulders",
@@ -13034,6 +15830,27 @@
   },
   {
     "familyID": "shoulder-horizontal-abduction-row",
+    "familyName": "Shoulder-Height Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "wide-grip-seated-cable-rear-delt-row",
     "name": "Wide-Grip Seated Cable Rear-Delt Row",
     "group": "shoulders",
@@ -13120,6 +15937,27 @@
   },
   {
     "familyID": "shoulder-horizontal-abduction-row",
+    "familyName": "Shoulder-Height Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-seated-cable-rear-delt-row",
     "name": "Single-Arm Seated Cable Rear-Delt Row",
     "group": "shoulders",
@@ -13206,6 +16044,27 @@
   },
   {
     "familyID": "shoulder-horizontal-abduction-row",
+    "familyName": "Shoulder-Height Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "chest-supported-machine-rear-delt-row",
     "name": "Chest-Supported Machine Rear-Delt Row",
     "group": "shoulders",
@@ -13287,6 +16146,27 @@
   },
   {
     "familyID": "shoulder-horizontal-abduction-row",
+    "familyName": "Shoulder-Height Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-chest-supported-machine-rear-delt-row",
     "name": "Single-Arm Chest-Supported Machine Rear-Delt Row",
     "group": "shoulders",
@@ -13373,6 +16253,15 @@
   },
   {
     "familyID": "shoulder-internal-rotation",
+    "familyName": "Shoulder Internal Rotation",
+    "movementActions": [
+      {
+        "actionID": "shoulder.internalRotation",
+        "name": "Shoulder internal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-cable-shoulder-internal-rotation",
     "name": "Standing Cable Internal Rotation",
     "group": "shoulders",
@@ -13444,6 +16333,15 @@
   },
   {
     "familyID": "shoulder-internal-rotation",
+    "familyName": "Shoulder Internal Rotation",
+    "movementActions": [
+      {
+        "actionID": "shoulder.internalRotation",
+        "name": "Shoulder internal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-band-shoulder-internal-rotation",
     "name": "Standing Band Internal Rotation",
     "group": "shoulders",
@@ -13514,6 +16412,21 @@
   },
   {
     "familyID": "single-leg-deadlift",
+    "familyName": "Single-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "barbell-single-leg-deadlift",
     "name": "Barbell Single-Leg Deadlift",
     "group": "legs",
@@ -13614,6 +16527,21 @@
   },
   {
     "familyID": "single-leg-deadlift",
+    "familyName": "Single-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "dumbbell-single-leg-romanian-deadlift-ipsilateral-load",
     "name": "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift",
     "group": "legs",
@@ -13714,6 +16642,21 @@
   },
   {
     "familyID": "single-leg-deadlift",
+    "familyName": "Single-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "dumbbell-single-leg-romanian-deadlift-contralateral-load",
     "name": "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift",
     "group": "legs",
@@ -13814,6 +16757,15 @@
   },
   {
     "familyID": "spine-extension",
+    "familyName": "Spine Extension",
+    "movementActions": [
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "medx-isolated-lumbar-extension",
     "name": "MedX Isolated Lumbar Extension",
     "group": "back",
@@ -13860,6 +16812,15 @@
   },
   {
     "familyID": "spine-flexion",
+    "familyName": "Spine Flexion",
+    "movementActions": [
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "30-degree-curl-up",
     "name": "30-Degree Curl-Up",
     "group": "core",
@@ -13908,6 +16869,15 @@
   },
   {
     "familyID": "spine-flexion",
+    "familyName": "Spine Flexion",
+    "movementActions": [
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "kneeling-cable-crunch",
     "name": "Kneeling Cable Crunch",
     "group": "core",
@@ -13979,6 +16949,15 @@
   },
   {
     "familyID": "spine-lateral-flexion",
+    "familyName": "Spine Lateral Flexion",
+    "movementActions": [
+      {
+        "actionID": "spine.lateralFlexion",
+        "name": "Spinal lateral flexion",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "fixed-leg-side-lying-lateral-trunk-lift",
     "name": "Fixed-Leg Side-Lying Lateral Trunk Lift",
     "group": "core",
@@ -14037,6 +17016,15 @@
   },
   {
     "familyID": "spine-rotation",
+    "familyName": "Spine Rotation",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-machine-torso-twist",
     "name": "Seated Machine Torso Twist",
     "group": "core",
@@ -14082,6 +17070,75 @@
   },
   {
     "familyID": "split-jerk",
+    "familyName": "Split Jerk",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-split-jerk",
     "name": "Barbell Split Jerk",
     "group": "shoulders",
@@ -14213,6 +17270,27 @@
   },
   {
     "familyID": "split-stance-squat",
+    "familyName": "Stationary Split Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-split-squat",
     "name": "Barbell Split Squat",
     "group": "legs",
@@ -14319,6 +17397,27 @@
   },
   {
     "familyID": "split-stance-squat",
+    "familyName": "Stationary Split Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "two-dumbbell-stationary-split-squat",
     "name": "Two-Dumbbell Stationary Split Squat",
     "group": "legs",
@@ -14427,6 +17526,27 @@
   },
   {
     "familyID": "split-stance-squat",
+    "familyName": "Stationary Split Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barbell-rear-foot-elevated-split-squat",
     "name": "Barbell Rear-Foot-Elevated Split Squat",
     "group": "legs",
@@ -14534,6 +17654,27 @@
   },
   {
     "familyID": "split-stance-squat",
+    "familyName": "Stationary Split Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "two-dumbbell-rear-foot-elevated-split-squat",
     "name": "Two-Dumbbell Rear-Foot-Elevated Split Squat",
     "group": "legs",
@@ -14642,6 +17783,57 @@
   },
   {
     "familyID": "squat-clean",
+    "familyName": "Squat Clean",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.elevation",
+        "name": "Scapular elevation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-squat-clean",
     "name": "Barbell Squat Clean",
     "group": "legs",
@@ -14760,6 +17952,27 @@
   },
   {
     "familyID": "step-up",
+    "familyName": "Forward Step-Up",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bodyweight-forward-step-up-21cm",
     "name": "21 cm Bodyweight Forward Step-Up",
     "group": "legs",
@@ -14845,6 +18058,27 @@
   },
   {
     "familyID": "step-up",
+    "familyName": "Forward Step-Up",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "two-dumbbell-forward-step-up",
     "name": "Two-Dumbbell Forward Step-Up",
     "group": "legs",
@@ -14952,6 +18186,33 @@
   },
   {
     "familyID": "straight-leg-sit-up",
+    "familyName": "Straight-Leg Sit-Up",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "straight-leg-unanchored-sit-up",
     "name": "Straight-Leg Unanchored Sit-Up",
     "group": "core",
@@ -15014,6 +18275,21 @@
   },
   {
     "familyID": "suitcase-carry",
+    "familyName": "Suitcase Carry",
+    "movementActions": [
+      {
+        "actionID": "hand.fingerExtension",
+        "name": "Finger extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.lateralFlexion",
+        "name": "Spinal lateral flexion",
+        "plane": "frontal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "single-dumbbell-suitcase-carry",
     "name": "Single-Dumbbell Suitcase Carry",
     "group": "core",
@@ -15104,6 +18380,27 @@
   },
   {
     "familyID": "sumo-deadlift",
+    "familyName": "Sumo Deadlift",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "barefoot-dead-stop-sumo-barbell-deadlift",
     "name": "Barefoot Dead-Stop Sumo Barbell Deadlift",
     "group": "legs",
@@ -15220,6 +18517,21 @@
   },
   {
     "familyID": "supine-pelvic-curl",
+    "familyName": "Supine Pelvic Curl",
+    "movementActions": [
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "supine-reverse-crunch",
     "name": "Supine Reverse Crunch",
     "group": "core",
@@ -15278,6 +18590,75 @@
   },
   {
     "familyID": "thruster",
+    "familyName": "Thruster",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
     "catalogID": "barbell-thruster",
     "name": "Barbell Thruster",
     "group": "legs",
@@ -15410,6 +18791,27 @@
   },
   {
     "familyID": "trap-bar-deadlift",
+    "familyName": "Trap-Bar Deadlift",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "low-handle-trap-bar-deadlift",
     "name": "Low-Handle Trap-Bar Deadlift",
     "group": "legs",
@@ -15514,6 +18916,27 @@
   },
   {
     "familyID": "trap-bar-deadlift",
+    "familyName": "Trap-Bar Deadlift",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "high-handle-trap-bar-deadlift",
     "name": "High-Handle Trap-Bar Deadlift",
     "group": "legs",
@@ -15618,6 +19041,15 @@
   },
   {
     "familyID": "upper-arm-pad-chest-fly",
+    "familyName": "Upper-Arm-Pad Chest Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "life-fitness-pro2-upper-arm-pad-pec-fly",
     "name": "Life Fitness Pro 2 Upper-Arm-Pad Pec Fly",
     "group": "chest",
@@ -15697,6 +19129,27 @@
   },
   {
     "familyID": "upper-arm-pad-shoulder-abduction",
+    "familyName": "Upper-Arm-Pad Shoulder Abduction",
+    "movementActions": [
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-upper-arm-pad-machine-lateral-raise",
     "name": "Seated Upper-Arm-Pad Machine Lateral Raise",
     "group": "shoulders",
@@ -15771,6 +19224,39 @@
   },
   {
     "familyID": "upright-row",
+    "familyName": "Upright Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-low-cable-upright-row",
     "name": "Standing Low-Cable Upright Row",
     "group": "shoulders",
@@ -15886,6 +19372,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-barbell-overhead-press",
     "name": "Standing Barbell Overhead Press",
     "group": "shoulders",
@@ -15982,6 +19501,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-dumbbell-overhead-press",
     "name": "Standing Dumbbell Overhead Press",
     "group": "shoulders",
@@ -16077,6 +19629,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-standing-dumbbell-overhead-press",
     "name": "Single-Arm Standing Dumbbell Overhead Press",
     "group": "shoulders",
@@ -16175,6 +19760,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-dumbbell-overhead-press",
     "name": "Seated Dumbbell Overhead Press",
     "group": "shoulders",
@@ -16258,6 +19876,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-barbell-overhead-press",
     "name": "Seated Barbell Overhead Press",
     "group": "shoulders",
@@ -16341,6 +19992,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "unsupported-seated-dumbbell-overhead-press",
     "name": "Unsupported Seated Dumbbell Overhead Press",
     "group": "shoulders",
@@ -16436,6 +20120,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-seated-dumbbell-overhead-press",
     "name": "Single-Arm Seated Dumbbell Overhead Press",
     "group": "shoulders",
@@ -16533,6 +20250,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-standing-kettlebell-overhead-press",
     "name": "Single-Arm Standing Kettlebell Overhead Press",
     "group": "shoulders",
@@ -16630,6 +20380,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-smith-machine-overhead-press",
     "name": "Seated Smith Machine Overhead Press",
     "group": "shoulders",
@@ -16713,6 +20496,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "machine-shoulder-press",
     "name": "Machine Shoulder Press",
     "group": "shoulders",
@@ -16796,6 +20612,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "hammer-strength-mtssp-single-arm-shoulder-press",
     "name": "Hammer Strength MTSSP Single-Arm Shoulder Press",
     "group": "shoulders",
@@ -16894,6 +20743,39 @@
   },
   {
     "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "wall-supported-strict-handstand-push-up",
     "name": "Wall-Supported Strict Handstand Push-Up",
     "group": "shoulders",
@@ -17009,6 +20891,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "pull-up",
     "name": "Pull-Up",
     "group": "back",
@@ -17099,6 +21008,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "chin-up",
     "name": "Chin-Up",
     "group": "back",
@@ -17193,6 +21129,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "neutral-grip-pull-up",
     "name": "Neutral-Grip Pull-Up",
     "group": "back",
@@ -17282,6 +21245,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "wide-grip-pull-up",
     "name": "Wide-Grip Pull-Up",
     "group": "back",
@@ -17379,6 +21369,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "assisted-pull-up-machine",
     "name": "Assisted Pull-Up Machine",
     "group": "back",
@@ -17465,6 +21482,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "assisted-chin-up-machine",
     "name": "Assisted Chin-Up Machine",
     "group": "back",
@@ -17555,6 +21599,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "cable-lat-pulldown",
     "name": "Cable Lat Pulldown",
     "group": "back",
@@ -17646,6 +21717,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "close-grip-neutral-lat-pulldown",
     "name": "Close-Grip Neutral Lat Pulldown",
     "group": "back",
@@ -17736,6 +21834,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "underhand-lat-pulldown",
     "name": "Underhand Lat Pulldown",
     "group": "back",
@@ -17822,6 +21947,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "wide-grip-lat-pulldown",
     "name": "Wide-Grip Lat Pulldown",
     "group": "back",
@@ -17908,6 +22060,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-cable-lat-pulldown",
     "name": "Single-Arm Cable Lat Pulldown",
     "group": "back",
@@ -17999,6 +22178,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "machine-lat-pulldown",
     "name": "Machine Lat Pulldown",
     "group": "back",
@@ -18089,6 +22295,33 @@
   },
   {
     "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "single-arm-machine-lat-pulldown",
     "name": "Single-Arm Machine Lat Pulldown",
     "group": "back",
@@ -18180,6 +22413,27 @@
   },
   {
     "familyID": "walking-lunge",
+    "familyName": "Walking Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "two-dumbbell-continuous-walking-lunge",
     "name": "Two-Dumbbell Continuous Walking Lunge",
     "group": "legs",
@@ -18287,6 +22541,15 @@
   },
   {
     "familyID": "wall-sit",
+    "familyName": "Wall Sit",
+    "movementActions": [
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
     "catalogID": "wall-sit",
     "name": "Wall Sit",
     "group": "legs",
@@ -18355,6 +22618,15 @@
   },
   {
     "familyID": "wrist-extension",
+    "familyName": "Wrist Extension",
+    "movementActions": [
+      {
+        "actionID": "wrist.extension",
+        "name": "Wrist extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-barbell-reverse-wrist-curl",
     "name": "Seated Barbell Reverse Wrist Curl",
     "group": "arms",
@@ -18429,6 +22701,15 @@
   },
   {
     "familyID": "wrist-flexion",
+    "familyName": "Wrist Flexion",
+    "movementActions": [
+      {
+        "actionID": "wrist.flexion",
+        "name": "Wrist flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "seated-barbell-wrist-curl",
     "name": "Seated Barbell Wrist Curl",
     "group": "arms",
@@ -18503,6 +22784,15 @@
   },
   {
     "familyID": "wrist-radial-deviation",
+    "familyName": "Wrist Radial Deviation",
+    "movementActions": [
+      {
+        "actionID": "wrist.radialDeviation",
+        "name": "Wrist radial deviation",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-dumbbell-wrist-radial-deviation",
     "name": "Standing Dumbbell Radial Deviation",
     "group": "arms",
@@ -18575,6 +22865,15 @@
   },
   {
     "familyID": "wrist-ulnar-deviation",
+    "familyName": "Wrist Ulnar Deviation",
+    "movementActions": [
+      {
+        "actionID": "wrist.ulnarDeviation",
+        "name": "Wrist ulnar deviation",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "standing-dumbbell-wrist-ulnar-deviation",
     "name": "Standing Dumbbell Ulnar Deviation",
     "group": "arms",

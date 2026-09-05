@@ -14478,6 +14478,11 @@ class CatalogFoundationTests(unittest.TestCase):
             source = source_exercises[catalog_id]
             projected = {
                 "familyID": family_id,
+                "familyName": self.deadlift_expansion_families[family_id]["name"],
+                "movementActions": catalog.runtime_movement_actions(
+                    self.deadlift_expansion_families[family_id],
+                    {a["id"]: a for a in json.loads(catalog.JOINT_ACTIONS_PATH.read_text())["actions"]},
+                ),
                 "catalogID": catalog_id,
                 "name": name,
                 "group": "legs",
@@ -21714,7 +21719,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
 
         base_keys = {
-            "familyID", "catalogID", "name", "group", "defaultWeight",
+            "familyID", "familyName", "movementActions", "catalogID", "name", "group", "defaultWeight",
             "reps", "trackingMode", "equipment", "mechanic", "trainingRole", "pattern",
             "direction", "planes", "laterality", "aliases",
             "bodyweightFraction", "modality", "loadMode",

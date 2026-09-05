@@ -101,12 +101,16 @@ struct InsightsScreen: View {
                 composition: deep.composition,
                 intensity: deep.intensity,
                 intensityWeeks: deep.intensityWeeks,
-                migration: deep.migration
+                migration: deep.migration,
+                coverage: deep.movementCoverage
             )
 
             GroupSeparator(verticalPadding: Space.section)
 
             TrainingLoadSection(report: core.load)
+
+            StaminaSection(report: core.stamina)
+                .padding(.top, Space.xl)
 
             GroupSeparator(verticalPadding: Space.section)
 
@@ -115,6 +119,9 @@ struct InsightsScreen: View {
             GroupSeparator(verticalPadding: Space.section)
 
             BalanceInsightsSection(board: deep.symmetry)
+
+            MuscleDirectnessSection(report: deep.muscleDirectness)
+                .padding(.top, Space.xl)
         }
     }
 

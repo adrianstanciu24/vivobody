@@ -1,0 +1,42 @@
+{
+  "name": "insights-dimensions-locked",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsLockedPreview"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsUnlockButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsLockedPreview"
+    },
+    {
+      "identifier": "insightsUnlockButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsMovementCoverageLink"
+    },
+    {
+      "identifier": "insightsStaminaLink"
+    },
+    {
+      "identifier": "insightsMuscleDirectnessLink"
+    }
+  ]
+}

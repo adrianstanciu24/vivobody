@@ -1,0 +1,70 @@
+{
+  "name": "insights-muscle-primary",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body",
+      "--pro"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsMuscleDirectnessLink"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsMuscleDirectnessLink"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "muscleDirectnessRoster"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "muscleDirectness-bicepsBrachii"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "identifier": "muscleDirectness-bicepsBrachii"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "musclePrimaryExamples"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "musclePrimaryExamples"
+    },
+    {
+      "label": "Riding along on"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

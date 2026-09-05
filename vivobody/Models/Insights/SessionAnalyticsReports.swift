@@ -21,6 +21,7 @@ extension SessionAnalytics {
         let strength: StrengthOutlookBoard
         let progress: [ExerciseProgress]
         let load: TrainingLoadReport
+        let stamina: SetSeriesStamina
         let workoutLoadBaseline: WorkoutLoadBaseline
         let consistency: ConsistencyReport
         let exerciseHistory: [String: ExerciseHistorySummary]
@@ -97,12 +98,17 @@ extension SessionAnalytics {
                 isCancelled: isCancelled
             )
             try checkpoint()
+            let stamina = SetSeriesStamina.make(
+                series: common.staminaSeries(now: now, isCancelled: isCancelled), now: now
+            )
+            try checkpoint()
             let exerciseDetail = ExerciseDetailReports.make(
                 from: common,
                 history: history,
                 progress: progress,
                 strength: strength,
                 weeklyVolume: volume,
+                stamina: stamina.byExercise,
                 now: now,
                 isCancelled: isCancelled
             )
@@ -126,6 +132,7 @@ extension SessionAnalytics {
                 strength: strength,
                 progress: progress,
                 load: load,
+                stamina: stamina,
                 workoutLoadBaseline: workoutLoadBaseline,
                 consistency: consistency,
                 exerciseHistory: history,
@@ -142,6 +149,8 @@ extension SessionAnalytics {
         let intensityWeeks: [IntensityWeek]
         let migration: RepRangeMigrationReport
         let composition: CompositionSplit
+        let movementCoverage: MovementCoverage
+        let muscleDirectness: MuscleDirectness
         let symmetry: AntagonistBoard
         let consistency: ConsistencyReport
 
@@ -196,6 +205,10 @@ extension SessionAnalytics {
                 isCancelled: isCancelled
             )
             try checkpoint()
+            let movementCoverage = common.movementCoverage(now: now, isCancelled: isCancelled)
+            try checkpoint()
+            let muscleDirectness = common.muscleDirectness(now: now, isCancelled: isCancelled)
+            try checkpoint()
             let resolvedConsistency: ConsistencyReport
             if let consistency {
                 resolvedConsistency = consistency
@@ -212,6 +225,8 @@ extension SessionAnalytics {
                 intensityWeeks: intensityWeeks,
                 migration: migration,
                 composition: composition,
+                movementCoverage: movementCoverage,
+                muscleDirectness: muscleDirectness,
                 symmetry: symmetry,
                 consistency: resolvedConsistency
             )

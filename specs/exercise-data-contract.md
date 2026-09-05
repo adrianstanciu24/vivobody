@@ -280,3 +280,14 @@ The bundled catalog must satisfy all of the following before shipping:
 - Every bundled band exercise uses `nonComparable` load semantics.
 - Explicit regression fixtures cover corrected high-risk records and the
   independent glute-max/glute-med mappings.
+
+## Runtime family movement metadata
+
+The generated catalog carries `familyName` and `movementActions` alongside
+`familyID`. Each action includes its taxonomy identity, display name, plane, and
+produced/resisted/yielding kind. The compiler unions direct and ordered-phase
+actions at joint-action level without adding forbidden actions or stabilizers.
+`AnalyticsExerciseSnapshot.familyID` copies existing logged family identity;
+Movement Coverage uses it for the current catalog-family action projection.
+Unknown family identity remains unknown. This metadata does not add SwiftData
+fields or change the authored catalog family contracts.

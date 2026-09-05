@@ -1,0 +1,60 @@
+{
+  "name": "exercise-detail-stamina-locked",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Set-series stamina, locked"
+        },
+        "direction": "up",
+        "maxSwipes": 25
+      }
+    },
+    {
+      "wait": {
+        "label": "Set-series stamina, locked"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Set-series stamina, locked"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "exerciseStaminaTrace"
+    },
+    {
+      "identifier": "exerciseStaminaTrend"
+    }
+  ]
+}

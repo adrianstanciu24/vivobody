@@ -95,6 +95,7 @@ nonisolated struct AnalyticsSessionSnapshot {
 /// background work never consults the mutable catalog or model graph.
 nonisolated struct AnalyticsExerciseSnapshot {
     let catalogID: String?
+    let familyID: String?
     let catalogItemID: UUID?
     let name: String
     let group: MuscleGroup
@@ -136,6 +137,7 @@ nonisolated struct AnalyticsExerciseSnapshot {
     @MainActor
     init(_ exercise: Exercise, bodyweightAtSession: Double) {
         catalogID = exercise.catalogID
+        familyID = exercise.familyID
         catalogItemID = exercise.catalogItemID
         name = exercise.name
         group = exercise.group
@@ -158,6 +160,7 @@ nonisolated struct AnalyticsExerciseSnapshot {
 
     nonisolated init(
         catalogID: String?,
+        familyID: String? = nil,
         catalogItemID: UUID?,
         name: String,
         group: MuscleGroup,
@@ -171,6 +174,7 @@ nonisolated struct AnalyticsExerciseSnapshot {
         sets: [AnalyticsSetSnapshot]
     ) {
         self.catalogID = catalogID
+        self.familyID = familyID
         self.catalogItemID = catalogItemID
         self.name = name
         self.group = group

@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 87.
+Scenario files: 108.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -56,6 +56,10 @@ Scenario files: 87.
 | [exercise-detail-isolation-role](exercise-detail-isolation-role.json) | library | None declared |
 | [exercise-detail-movement](exercise-detail-movement.json) | library | None declared |
 | [exercise-detail-single-session-point](exercise-detail-single-session-point.json) | library | `--ui-test-single-exercise-history --pro` |
+| [exercise-detail-stamina-accessibility](exercise-detail-stamina-accessibility.json) | library | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [exercise-detail-stamina-light](exercise-detail-stamina-light.json) | library | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
+| [exercise-detail-stamina-locked](exercise-detail-stamina-locked.json) | library | `--ui-test-insights-dimensions --static-body` |
+| [exercise-detail-stamina](exercise-detail-stamina.json) | library | `--ui-test-insights-dimensions --static-body --pro` |
 | [exercise-detail-strength-building](exercise-detail-strength-building.json) | library | `--pro` |
 | [exercise-detail-strength-slots-partial](exercise-detail-strength-slots-partial.json) | library | `--ui-test-single-exercise-history --pro` |
 | [exercise-detail-weekly-volume-locked](exercise-detail-weekly-volume-locked.json) | library | `--ui-test-weekly-volume` |
@@ -71,13 +75,30 @@ Scenario files: 87.
 | [exercise-picker-training-role-filters](exercise-picker-training-role-filters.json) | library | None declared |
 | [exercise-substitution-sheet](exercise-substitution-sheet.json) | today | `--ui-test-active-replaceable` |
 | [insights-accessibility](insights-accessibility.json) | insights | `--ui-test-insights-showcase --pro -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [insights-dimensions-building](insights-dimensions-building.json) | insights | `--ui-test-insights-empty-instruments --pro` |
+| [insights-dimensions-locked](insights-dimensions-locked.json) | insights | `--ui-test-insights-dimensions --static-body` |
 | [insights-empty](insights-empty.json) | history | None declared |
 | [insights-hard-sets](insights-hard-sets.json) | insights | `--ui-test-insights-hard-sets --pro` |
 | [insights-load-rep-drivers](insights-load-rep-drivers.json) | insights | `--ui-test-insights-showcase --pro` |
 | [insights-locked](insights-locked.json) | insights | `--ui-test-insights-showcase` |
+| [insights-movement-coverage-accessibility](insights-movement-coverage-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [insights-movement-coverage-light](insights-movement-coverage-light.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
+| [insights-movement-coverage](insights-movement-coverage.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
+| [insights-movement-gaps](insights-movement-gaps.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
+| [insights-muscle-directness-accessibility](insights-muscle-directness-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [insights-muscle-directness-light](insights-muscle-directness-light.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
+| [insights-muscle-directness](insights-muscle-directness.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
+| [insights-muscle-primary](insights-muscle-primary.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
 | [insights-push-pull](insights-push-pull.json) | insights | `--ui-test-insights-showcase --pro` |
 | [insights-shape-drillouts](insights-shape-drillouts.json) | insights | `--ui-test-insights-showcase --pro` |
 | [insights-showcase](insights-showcase.json) | insights | `--ui-test-insights-showcase --pro` |
+| [insights-stamina-accessibility](insights-stamina-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [insights-stamina-held-back](insights-stamina-held-back.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
+| [insights-stamina-light](insights-stamina-light.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
+| [insights-stamina-series-accessibility](insights-stamina-series-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [insights-stamina-series-light](insights-stamina-series-light.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
+| [insights-stamina-series](insights-stamina-series.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
+| [insights-stamina](insights-stamina.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
 | [library-training-role-filters](library-training-role-filters.json) | library | None declared |
 | [me-showcase](me-showcase.json) | me | `--ui-test-me-showcase --pro --static-body -settings.weightUnit lb` |
 | [receipt-live-summary-accessibility](receipt-live-summary-accessibility.json) | today | `--ui-test-active-partial --ui-test-receipt-summary --ui-test-widget-start-request --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |

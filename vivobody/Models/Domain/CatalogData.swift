@@ -23,6 +23,8 @@ nonisolated struct CatalogRecord: Decodable {
     }
 
     let familyID: String
+    let familyName: String
+    let movementActions: [CatalogMovementAction]
     let catalogID: String
     let name: String
     let group: MuscleGroup
@@ -201,6 +203,7 @@ nonisolated enum CatalogData {
 
     static func validate(_ records: [CatalogRecord]) throws {
         guard !records.isEmpty else { throw ValidationError.emptyCatalog }
+        try CatalogMovementFamily.validate(records)
 
         var catalogIDs: Set<String> = []
         var names: Set<String> = []

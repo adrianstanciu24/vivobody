@@ -1,0 +1,50 @@
+{
+  "name": "insights-muscle-directness-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body",
+      "--pro",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityXXXL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsMuscleDirectnessLink"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 3
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsMuscleDirectnessLink",
+      "role": "AXButton",
+      "labelContains": "All time"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

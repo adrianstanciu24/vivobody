@@ -2581,6 +2581,33 @@ def canonical_foundation_digest(foundation: Foundation) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def runtime_movement_actions(
+    family: dict[str, Any], actions: dict[str, dict[str, Any]]
+) -> list[dict[str, str]]:
+    """Keep produced, resisted, and yielding actions distinct; omit stabilizers."""
+    signature = family["movementSignature"]
+    sources = [signature, *signature.get("movementPhases", [])]
+    result = []
+    for field, kind in (
+        ("primeActions", "produced"),
+        ("resistedActions", "resisted"),
+        ("yieldingActions", "yielding"),
+    ):
+        action_ids = {
+            a if isinstance(a, str) else a["action"]
+            for source in sources for a in source.get(field, [])
+        }
+        for action_id in sorted(action_ids):
+            action = actions[action_id]
+            result.append({
+                "actionID": action_id,
+                "name": action["displayName"],
+                "plane": action["plane"],
+                "kind": kind,
+            })
+    return result
+
+
 def compile_runtime_catalog(families: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
     """Project validated family sources into the app's runtime catalog shape.
 
@@ -2588,13 +2615,20 @@ def compile_runtime_catalog(families: Iterable[dict[str, Any]]) -> list[dict[str
     Family file order is deterministic and exercise order remains authored.
     """
     records: list[dict[str, Any]] = []
+    actions = {
+        action["id"]: action
+        for action in json.loads(JOINT_ACTIONS_PATH.read_text(encoding="utf-8"))["actions"]
+    }
     canonical_planes = ("sagittal", "frontal", "transverse")
     for family in sorted(families, key=lambda value: value["id"]):
         fixed = family["fixed"]
         group_default = family["groupPolicy"]["default"]
+        movement_actions = runtime_movement_actions(family, actions)
         for exercise in family["exercises"]:
             record: dict[str, Any] = {
                 "familyID": family["id"],
+                "familyName": family["name"],
+                "movementActions": movement_actions,
                 "catalogID": exercise["catalogID"],
                 "name": exercise["name"],
                 "group": exercise.get("groupOverride", group_default),

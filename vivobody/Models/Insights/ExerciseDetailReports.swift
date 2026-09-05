@@ -18,6 +18,7 @@ nonisolated struct ExerciseDetailReports {
     let effortByKey: [String: ExerciseEffortSummary]
     let rawVolumeByKey: [String: ExerciseVolumeContribution.RawContribution]
     let weeklyVolumeByMuscle: [Muscle: MuscleVolumeStat]
+    let staminaByKey: [String: ExerciseStamina]
 
     static let empty = ExerciseDetailReports.empty(
         generatedAt: Date(timeIntervalSince1970: 0)
@@ -31,7 +32,8 @@ nonisolated struct ExerciseDetailReports {
             strengthByKey: [:],
             effortByKey: [:],
             rawVolumeByKey: [:],
-            weeklyVolumeByMuscle: [:]
+            weeklyVolumeByMuscle: [:],
+            staminaByKey: [:]
         )
     }
 
@@ -43,6 +45,7 @@ nonisolated struct ExerciseDetailReports {
         progress: [ExerciseProgress],
         strength: StrengthOutlookBoard,
         weeklyVolume: [MuscleVolumeStat],
+        stamina: [String: ExerciseStamina] = [:],
         now: Date,
         isCancelled: @Sendable () -> Bool = { false }
     ) -> ExerciseDetailReports {
@@ -66,7 +69,8 @@ nonisolated struct ExerciseDetailReports {
             strengthByKey: index(strength.stats, by: \.historyKey),
             effortByKey: effort,
             rawVolumeByKey: rawVolume,
-            weeklyVolumeByMuscle: index(weeklyVolume, by: \.muscle)
+            weeklyVolumeByMuscle: index(weeklyVolume, by: \.muscle),
+            staminaByKey: stamina
         )
     }
 

@@ -513,6 +513,8 @@ struct BiomechanicsDomainTests {
     ) -> CatalogRecord {
         CatalogRecord(
             familyID: familyID,
+            familyName: "Fixture Family",
+            movementActions: [.init(actionID: "shoulder.horizontalAdduction", name: "Shoulder horizontal adduction", plane: .transverse, kind: .produced)],
             catalogID: catalogID,
             name: name,
             group: .chest,

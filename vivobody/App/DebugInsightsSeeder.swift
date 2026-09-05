@@ -22,6 +22,8 @@ import SwiftData
                 seedEmptyInstruments(in: context)
             case .insightsShowcase:
                 InsightsShowcaseSeed.seed(in: context)
+            case .insightsDimensions:
+                InsightsDimensionsSeed.seed(in: context)
             case .insightsHardSets:
                 InsightsShowcaseSeed.seedHardSetFallback(in: context)
             case .meShowcase:
