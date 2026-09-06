@@ -3,8 +3,8 @@
 //  vivobody
 //
 //  Focused section compositions for the Insights screen. Shape keeps the
-//  lifetime bloom dominant and previews recent exercise/rep distributions as
-//  compact visual drill-outs; Balance keeps only the priority tug-of-war
+//  lifetime bloom dominant, with compact name/share previews linking to recent
+//  exercise and rep distributions. Balance keeps only the priority tug-of-war
 //  beams in the main scroll and moves the qualified roster one level deeper.
 //
 
@@ -27,12 +27,14 @@ struct ShapeInsightsSection: View {
             GroupSeparator(verticalPadding: Space.section)
 
             VStack(spacing: Space.lg) {
-                ExerciseMixLink(board: dominance, split: composition)
-                RepMixLink(
-                    mix: intensity,
-                    weeks: intensityWeeks,
-                    migration: migration
-                )
+                VStack(spacing: Space.sm) {
+                    ExerciseMixLink(board: dominance, split: composition)
+                    RepMixLink(
+                        mix: intensity,
+                        weeks: intensityWeeks,
+                        migration: migration
+                    )
+                }
                 MovementCoverageSection(report: coverage)
             }
         }
@@ -75,38 +77,37 @@ private struct ExerciseMixLink: View {
     let board: ExerciseDominanceBoard
     let split: CompositionSplit
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
         NavigationLink {
             InsightsDrilloutScreen(title: "Exercise mix") {
                 ExerciseDominanceSection(board: board, split: split)
             }
         } label: {
-            VStack(alignment: .leading, spacing: Space.lg) {
-                drilloutHeader(title: "Exercise mix", scope: "last 4 weeks")
+            VStack(alignment: .leading, spacing: Space.sm) {
+                drilloutHeader(
+                    title: "Exercise mix",
+                    scope: "last 4 weeks",
+                    stacked: dynamicTypeSize.isAccessibilitySize
+                )
 
                 if let top = board.top {
-                    HStack(alignment: .firstTextBaseline, spacing: Space.md) {
-                        Text(top.name)
-                            .font(Typography.title)
-                            .foregroundStyle(Ink.primary)
-                            .lineLimit(2)
-                        Spacer(minLength: Space.sm)
-                        Text(percent(top.share))
-                            .font(Typography.statValue)
-                            .foregroundStyle(Tint.primaryText)
-                            .monospacedDigit()
-                    }
-
-                    mixShareBar(
-                        leadingShare: top.share,
-                        leadingLabel: "Top exercise",
-                        remainderLabel: "Other exercises"
+                    mixSummary(
+                        name: top.name,
+                        share: top.share,
+                        stacked: dynamicTypeSize.isAccessibilitySize
                     )
+                    mixShareBar(leadingShare: top.share)
                 } else {
-                    dormantRail(label: "No recent strength sets")
+                    Text("No recent strength sets")
+                        .font(Typography.body)
+                        .foregroundStyle(Ink.secondary)
                 }
             }
-            .padding(Space.xl)
+            .fixedSize(horizontal: false, vertical: true)
+            .multilineTextAlignment(.leading)
+            .padding(Space.lg)
             .contentCard()
         }
         .buttonStyle(.plain)
@@ -130,37 +131,37 @@ private struct RepMixLink: View {
     let weeks: [IntensityWeek]
     let migration: RepRangeMigrationReport
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
         NavigationLink {
             InsightsDrilloutScreen(title: "Rep mix") {
                 IntensityMixSection(mix: mix, weeks: weeks, migration: migration)
             }
         } label: {
-            VStack(alignment: .leading, spacing: Space.lg) {
-                drilloutHeader(title: "Rep mix", scope: "last 4 weeks")
+            VStack(alignment: .leading, spacing: Space.sm) {
+                drilloutHeader(
+                    title: "Rep mix",
+                    scope: "last 4 weeks",
+                    stacked: dynamicTypeSize.isAccessibilitySize
+                )
 
                 if let dominant = mix.dominant {
-                    HStack(alignment: .firstTextBaseline, spacing: Space.md) {
-                        Text(dominant.label)
-                            .font(Typography.title)
-                            .foregroundStyle(Ink.primary)
-                        Spacer(minLength: Space.sm)
-                        Text(percent(mix.share(dominant)))
-                            .font(Typography.statValue)
-                            .foregroundStyle(Tint.primaryText)
-                            .monospacedDigit()
-                    }
-
-                    mixShareBar(
-                        leadingShare: mix.share(dominant),
-                        leadingLabel: "Top rep range",
-                        remainderLabel: "Other rep ranges"
+                    mixSummary(
+                        name: dominant.label,
+                        share: mix.share(dominant),
+                        stacked: dynamicTypeSize.isAccessibilitySize
                     )
+                    mixShareBar(leadingShare: mix.share(dominant))
                 } else {
-                    dormantRail(label: "No recent rep-tracked sets")
+                    Text("No recent rep-tracked sets")
+                        .font(Typography.body)
+                        .foregroundStyle(Ink.secondary)
                 }
             }
-            .padding(Space.xl)
+            .fixedSize(horizontal: false, vertical: true)
+            .multilineTextAlignment(.leading)
+            .padding(Space.lg)
             .contentCard()
         }
         .buttonStyle(.plain)
@@ -210,76 +211,72 @@ private struct InsightsDrilloutRow: View {
     }
 }
 
-private func drilloutHeader(title: String, scope: String) -> some View {
-    HStack(alignment: .firstTextBaseline, spacing: Space.md) {
-        Text(title)
-            .font(Typography.sectionHeading)
-            .foregroundStyle(Ink.secondary)
-        Spacer(minLength: Space.sm)
-        Text(scope)
-            .panelLegend()
-        Image(systemName: "chevron.right")
-            .font(Typography.caption)
-            .foregroundStyle(Ink.tertiary)
-            .accessibilityHidden(true)
+private func drilloutHeader(title: String, scope: String, stacked: Bool) -> some View {
+    let layout = stacked
+        ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
+        : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.md))
+
+    return layout {
+        HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
+            Text(title)
+                .font(Typography.sectionHeading)
+                .foregroundStyle(Ink.secondary)
+            if stacked {
+                Spacer(minLength: Space.sm)
+                drilloutChevron
+            }
+        }
+        if !stacked { Spacer(minLength: Space.sm) }
+        Text(scope).panelLegend()
+        if !stacked { drilloutChevron }
     }
 }
 
-private func dormantRail(label: String) -> some View {
-    VStack(alignment: .leading, spacing: Space.sm) {
-        Capsule()
-            .fill(Surface.cardTintBright)
-            .frame(height: 28)
-        Text(label)
-            .font(Typography.caption)
-            .foregroundStyle(Ink.secondary)
+private var drilloutChevron: some View {
+    Image(systemName: "chevron.right")
+        .font(Typography.caption)
+        .foregroundStyle(Ink.tertiary)
+        .accessibilityHidden(true)
+}
+
+private func mixSummary(name: String, share: Double, stacked: Bool) -> some View {
+    let layout = stacked
+        ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
+        : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.md))
+
+    return layout {
+        Text(name)
+            .font(Typography.title)
+            .foregroundStyle(Ink.primary)
+            .fixedSize(horizontal: false, vertical: true)
+        if !stacked { Spacer(minLength: Space.sm) }
+        Text(percent(share))
+            .font(Typography.statValue)
+            .foregroundStyle(Tint.primaryText)
+            .monospacedDigit()
+            .fixedSize()
     }
 }
 
-private func mixShareBar(
-    leadingShare: Double,
-    leadingLabel: String,
-    remainderLabel: String
-) -> some View {
+private func mixShareBar(leadingShare: Double) -> some View {
     let leadingShare = min(1, max(0, leadingShare))
     let hasRemainder = leadingShare < 1
     let gap = hasRemainder ? Space.xs : 0
-    var legendItems = [
-        InsightChartLegend.Item(
-            label: leadingLabel,
-            color: Tint.primary,
-            swatch: .fill
-        ),
-    ]
-    if hasRemainder {
-        legendItems.append(
-            InsightChartLegend.Item(
-                label: remainderLabel,
-                color: Ink.quaternary,
-                swatch: .fill
-            )
-        )
-    }
+    return GeometryReader { proxy in
+        let availableWidth = max(0, proxy.size.width - gap)
+        HStack(spacing: gap) {
+            RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
+                .fill(Tint.primary)
+                .frame(width: availableWidth * leadingShare)
 
-    return VStack(alignment: .leading, spacing: Space.sm) {
-        GeometryReader { proxy in
-            let availableWidth = max(0, proxy.size.width - gap)
-            HStack(spacing: gap) {
+            if hasRemainder {
                 RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
-                    .fill(Tint.primary)
-                    .frame(width: availableWidth * leadingShare)
-
-                if hasRemainder {
-                    RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
-                        .fill(Ink.quaternary)
-                        .frame(width: availableWidth * (1 - leadingShare))
-                }
+                    .fill(Ink.quaternary)
+                    .frame(width: availableWidth * (1 - leadingShare))
             }
         }
-        .frame(height: 36)
-
-        InsightChartLegend(items: legendItems)
     }
+    .frame(height: Space.sm)
     .accessibilityHidden(true)
 }
 

@@ -76,12 +76,19 @@ meaning that is absent from position, length, label, or accessibility value.
 - The equal-share reference may use one micro legend. Do not show an
   explanatory paragraph.
 - Exercise mix and Rep mix appear as compact visual navigation cards. Their
-  full charts live on dedicated detail screens.
+  full charts live on dedicated detail screens. Keep the two previews grouped
+  closely, with less padding and visual weight than the main instruments.
+  Each preview names its leading category and percentage above a slim share
+  bar; keep the last-four-weeks scope visible. Names and values retain their
+  readable type sizes, wrap freely, and stack at accessibility text sizes.
+  When recent data is absent, use a short factual label without an empty chart.
 - Rep mix uses readable fixed-width weekly stacks and enough trailing plot
   inset to keep the newest date label fully visible beside the Y axis.
-- Each preview uses two independently rounded segments: orange for the top
-  category and neutral gray for the combined remainder. A single compact
-  legend labels both roles without requiring color interpretation.
+- Each preview uses two independently rounded segments: the leading segment
+  repeats the named category's percentage, and the neutral segment is the
+  combined remainder. The name, number, and filled length carry the summary;
+  repeated Top/Other legends stay off the preview. Full category legends live
+  in the drill-outs; accessibility labels retain both shares and their scope.
 - The Exercise mix drill-out preserves every named exercise and exercise-type
   share as its own rounded segment with visible separation. Its adjacent
   legends repeat the exact category names and percentages, so color is never
