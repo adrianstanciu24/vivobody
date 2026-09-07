@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "bilateral-squat",
   "name": "Bilateral Squat",
-  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures; NASM's single-dumbbell goblet fixture descending to approximately thigh parallel or deeper as mobility allows; and one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion. Those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply only to loaded branches. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and otherwise unbounded full-depth variants remain outside this contract.",
+  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures; NASM's single-dumbbell goblet fixture descending to approximately thigh parallel or deeper as mobility allows; and one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion. Those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply only to loaded branches. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and otherwise unbounded full-depth variants remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the free bilateral squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "armstrong-2022-squat-movement-dynamics",
@@ -18,7 +18,9 @@
     "nasm-2026-goblet-squat-exercise-library",
     "collins-2021-goblet-landmine-squat",
     "lee-2017-smith-squat-human-machine",
-    "escamilla-2025-bodyweight-floor-squat"
+    "escamilla-2025-bodyweight-floor-squat",
+    "deforest-2014-single-double-leg-squat",
+    "wu-2020-loading-devices-squat-lunge"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -195,7 +197,8 @@
         "brachialis",
         "abs",
         "obliques",
-        "lumbarExtensors"
+        "lumbarExtensors",
+        "tibialisAnterior"
       ]
     }
   },
@@ -683,6 +686,24 @@
       "requirePresent": ["variant.footOrientation", "variant.supportSurface", "variant.cadenceProtocol"],
       "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"],
       "requireAdditionalStabilityDemands": []
+    },
+    {
+      "id": "free-fixture-requires-tibialis-control",
+      "description": "Require reviewed tibialis-anterior ankle control on the free fixture; machine records retain their existing muscle roster.",
+      "when": {
+        "field": "variant.fixedPath",
+        "operator": "equals",
+        "value": false
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
+      ]
     }
   ],
   "exercises": [
@@ -717,7 +738,11 @@
         { "muscle": "brachialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -749,7 +774,9 @@
         "mccormick-2023-front-back-squat-bracing",
         "purzel-2026-powerlifting-squat-joint-moments",
         "sinclair-2022-back-squat-foot-angle",
-        "yavuz-2015-front-back-squat-emg"
+        "yavuz-2015-front-back-squat-emg",
+        "deforest-2014-single-double-leg-squat",
+        "wu-2020-loading-devices-squat-lunge"
       ],
       "execution": {
         "startingPosition": "Stand with your heels about hip-width apart and a straight barbell resting securely across your upper back. Hold the bar with both hands in an overhand grip.",
@@ -796,7 +823,11 @@
         { "muscle": "brachialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -825,7 +856,9 @@
         "armstrong-2022-squat-movement-dynamics",
         "gorsic-2024-squat-load-placement",
         "mccormick-2023-front-back-squat-bracing",
-        "yavuz-2015-front-back-squat-emg"
+        "yavuz-2015-front-back-squat-emg",
+        "deforest-2014-single-double-leg-squat",
+        "wu-2020-loading-devices-squat-lunge"
       ],
       "execution": {
         "startingPosition": "Stand with your heels about hip-width apart and support a straight barbell across the front of your shoulders and collarbones in a clean grip.",
@@ -862,7 +895,11 @@
         {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
         {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"},
         {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral",
@@ -874,7 +911,7 @@
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
-      "evidenceRefs": ["nasm-2026-goblet-squat", "collins-2021-goblet-landmine-squat", "arnold-2010-lower-limb"],
+      "evidenceRefs": ["nasm-2026-goblet-squat", "collins-2021-goblet-landmine-squat", "arnold-2010-lower-limb", "deforest-2014-single-double-leg-squat", "wu-2020-loading-devices-squat-lunge"],
       "execution": {
         "startingPosition": "Stand with both feet about shoulder-width apart and hold one kettlebell vertically at your chest by its horns.",
         "movement": "Sit the hips down and back while bending both knees and keeping the kettlebell close to the chest.",
@@ -906,7 +943,11 @@
         {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
         {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"},
         {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral",
@@ -918,7 +959,7 @@
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
-      "evidenceRefs": ["nasm-2026-goblet-squat-exercise-library", "collins-2021-goblet-landmine-squat", "arnold-2010-lower-limb"],
+      "evidenceRefs": ["nasm-2026-goblet-squat-exercise-library", "collins-2021-goblet-landmine-squat", "arnold-2010-lower-limb", "deforest-2014-single-double-leg-squat", "wu-2020-loading-devices-squat-lunge"],
       "execution": {
         "startingPosition": "Stand with both feet about hip-width apart. Cup the top head of one dumbbell with both hands and hold it vertically at chest height. Log the complete dumbbell once.",
         "movement": "Brace, keep the chest upright, and bend both hips and knees while keeping the dumbbell secure at the chest.",
@@ -995,7 +1036,11 @@
         {"muscle": "medialHamstrings", "role": "stabilizer"},
         {"muscle": "abs", "role": "stabilizer"},
         {"muscle": "obliques", "role": "stabilizer"},
-        {"muscle": "lumbarExtensors", "role": "stabilizer"}
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -1023,7 +1068,7 @@
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
-      "evidenceRefs": ["arnold-2010-lower-limb", "escamilla-2025-bodyweight-floor-squat"],
+      "evidenceRefs": ["arnold-2010-lower-limb", "escamilla-2025-bodyweight-floor-squat", "deforest-2014-single-double-leg-squat", "wu-2020-loading-devices-squat-lunge"],
       "execution": {
         "startingPosition": "Stand on a stable floor with both feet slightly wider than hip width and use a comfortable self-selected outward foot angle.",
         "movement": "Bend the hips and knees at a controlled pace while keeping both feet planted and the trunk braced.",

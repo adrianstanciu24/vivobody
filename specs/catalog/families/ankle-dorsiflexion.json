@@ -3,10 +3,11 @@
   "schemaVersion": 1,
   "id": "ankle-dorsiflexion",
   "name": "Ankle Dorsiflexion",
-  "definition": "A strict unilateral open-chain ankle isolation in which a seated athlete lifts the foot toward the shin against an elastic band affixed to a foot board, reaches an individualized comfortable dorsiflexion stop, and returns until the sole contacts the board. The initial roster contains only the directly reviewed non-occluded training condition. Tibialis anterior is the sole authored primary because it was the explicitly trained and measured muscle; fibularis tertius and the long toe extensors remain unassigned despite their anatomy-level dorsiflexion capability because the exercise study did not measure them. Inversion, eversion, and deliberate toe extension are excluded as prime actions rather than inferred from those muscles' coupled capabilities. Blood-flow-restricted, bilateral, standing heel-supported tibialis raises, wall-supported raises, cable, machine, plate-loaded, manual-resistance, isometric, walking, balance, frontal-plane ankle, and deliberate toe-extension variants remain outside this contract.",
+  "definition": "A strict ankle-dorsiflexion isolation: either seated unilateral open-chain lifting against a band affixed to a foot board, or bilateral wall-supported lifting of the forefeet with both heels planted on the floor. The band fixture retains its individualized physical dorsiflexion stop and sole-to-board return. The wall fixture holds the back against the wall and the knees extended while the feet pivot about their grounded heels. Tibialis anterior is primary; the grouped long toe extensors are secondary dorsiflexion synergists. Their role transfers categorically from existing anatomical capabilities and resisted isometric dorsiflexion evidence to these dynamic fixtures; it is not a measured recruitment ranking or hypertrophy claim. This supersedes the initial exclusion based solely on the band study not measuring the toe extensors. Fibularis tertius remains outside this focused role expansion. Inversion, eversion, and deliberate toe extension are excluded as prime actions. Blood-flow-restricted, bilateral band, unsupported standing, unilateral wall, cable, machine, plate-loaded, manual-resistance, isometric, walking, balance, frontal-plane ankle, and deliberate toe-extension variants remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
-    "kjeldsen-2019-dorsiflexor-training"
+    "kjeldsen-2019-dorsiflexor-training",
+    "ruiz-munoz-2017-dorsiflexor-emg"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -25,7 +26,8 @@
   },
   "allowed": {
     "equipment": [
-      "band"
+      "band",
+      "bodyweight"
     ],
     "modalities": [
       "dynamicStrength"
@@ -37,7 +39,8 @@
       "nonComparable"
     ],
     "lateralities": [
-      "unilateral"
+      "unilateral",
+      "bilateral"
     ]
   },
   "movementSignature": {
@@ -104,13 +107,21 @@
           "tibialisAnterior"
         ],
         "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "toeExtensors"
+        ],
+        "minimumRole": "secondary"
       }
     ],
     "allowedByRole": {
       "primary": [
         "tibialisAnterior"
       ],
-      "secondary": [],
+      "secondary": [
+        "toeExtensors"
+      ],
       "stabilizer": []
     }
   },
@@ -119,24 +130,26 @@
       "id": "kineticChain",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the moving foot is free rather than fixed to the environment throughout the repetition.",
+      "description": "Whether the whole foot moves freely against a band (open) or the forefoot moves while the heel stays grounded (heelSupported). Heel support is explicit rather than mislabeled as a freely moving foot.",
       "allowedValues": [
-        "open"
+        "open",
+        "heelSupported"
       ]
     },
     {
       "id": "bodyPosition",
       "valueType": "enum",
       "required": true,
-      "description": "The directly reviewed whole-body posture.",
+      "description": "The whole-body posture of the reviewed fixture.",
       "allowedValues": [
-        "seated"
+        "seated",
+        "standing"
       ]
     },
     {
       "id": "pelvisSupport",
       "valueType": "enum",
-      "required": true,
+      "required": false,
       "description": "The seat supporting the athlete while the foot moves against the band.",
       "allowedValues": [
         "seat"
@@ -155,9 +168,10 @@
       "id": "kneePosture",
       "valueType": "enum",
       "required": true,
-      "description": "The self-selected held knee posture; no canonical degree value is invented from an unreported cohort result.",
+      "description": "The held knee posture: self-selected for the band fixture, extended for the wall-supported heel pivot.",
       "allowedValues": [
-        "selfSelected"
+        "selfSelected",
+        "extended"
       ]
     },
     {
@@ -173,18 +187,20 @@
       "id": "ankleStartPosition",
       "valueType": "enum",
       "required": true,
-      "description": "The individualized resting position on the board; the study reported a cohort mean ankle angle of 130 plus or minus 7 degrees without making that mean a universal prescription.",
+      "description": "The bottom position: individual resting sole-to-board contact for the band, or sole-on-floor for the wall raise.",
       "allowedValues": [
-        "selfSelectedRestingPosition"
+        "selfSelectedRestingPosition",
+        "soleOnFloor"
       ]
     },
     {
       "id": "rangeOfMotion",
       "valueType": "enum",
       "required": true,
-      "description": "The individualized endpoint established with a physical stop before training.",
+      "description": "The band uses an individualized physical stop; the wall raise ends at comfortable dorsiflexion without lifting the heels.",
       "allowedValues": [
-        "toComfortableDorsiflexionStop"
+        "toComfortableDorsiflexionStop",
+        "comfortableDorsiflexion"
       ]
     },
     {
@@ -199,7 +215,7 @@
     {
       "id": "footBoardContact",
       "valueType": "enum",
-      "required": true,
+      "required": false,
       "description": "The study-defined bottom condition: the foot returns until the sole contacts the board before the next concentric phase.",
       "allowedValues": [
         "soleAtBottom"
@@ -209,18 +225,20 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "The reported relationship between the foot and elastic resistance without inventing a more precise band landmark.",
+      "description": "The resistance interface: foot beneath the band, or grounded heels during the supported bodyweight pivot; no numerical bodyweight fraction is inferred.",
       "allowedValues": [
-        "footUnderBand"
+        "footUnderBand",
+        "bodyweightThroughHeels"
       ]
     },
     {
       "id": "resistanceGeometry",
       "valueType": "enum",
       "required": true,
-      "description": "How the directly reviewed elastic resistance is anchored.",
+      "description": "Band anchored to the foot board, or both heels grounded ahead of a wall-supported torso.",
       "allowedValues": [
-        "bandAffixedToFootBoard"
+        "bandAffixedToFootBoard",
+        "wallSupportedHeelPivot"
       ]
     },
     {
@@ -238,9 +256,140 @@
       "allowedValues": [
         "isolatedJointMotion"
       ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": false,
+      "description": "Posterior torso support required by the wall-raise fixture.",
+      "allowedValues": [
+        "wall"
+      ]
+    },
+    {
+      "id": "heelContact",
+      "valueType": "enum",
+      "required": false,
+      "description": "Both heels stay on the floor through the entire wall-supported repetition.",
+      "allowedValues": [
+        "floorThroughout"
+      ]
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "band-pins-seated-board-fixture",
+      "description": "Keep Seated Band Ankle Dorsiflexion geometry and support distinct from the other dorsiflexion fixture.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "band"
+      },
+      "then": [
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.pelvisSupport",
+          "value": "seat"
+        },
+        {
+          "field": "variant.kneePosture",
+          "value": "selfSelected"
+        },
+        {
+          "field": "variant.ankleStartPosition",
+          "value": "selfSelectedRestingPosition"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "toComfortableDorsiflexionStop"
+        },
+        {
+          "field": "variant.footBoardContact",
+          "value": "soleAtBottom"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "footUnderBand"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "bandAffixedToFootBoard"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.torsoSupport",
+        "variant.heelContact"
+      ]
+    },
+    {
+      "id": "bodyweight-pins-wall-heel-fixture",
+      "description": "Keep Wall-Supported Tibialis Raise geometry and support distinct from the other dorsiflexion fixture.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "heelSupported"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.kneePosture",
+          "value": "extended"
+        },
+        {
+          "field": "variant.ankleStartPosition",
+          "value": "soleOnFloor"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "comfortableDorsiflexion"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "bodyweightThroughHeels"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "wallSupportedHeelPivot"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "wall"
+        },
+        {
+          "field": "variant.heelContact",
+          "value": "floorThroughout"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.pelvisSupport",
+        "variant.footBoardContact"
+      ]
+    }
+  ],
   "recommended": {
     "defaultReps": {
       "minimum": 15,
@@ -269,6 +418,10 @@
         {
           "muscle": "tibialisAnterior",
           "role": "primary"
+        },
+        {
+          "muscle": "toeExtensors",
+          "role": "secondary"
         }
       ],
       "variant": {
@@ -290,7 +443,8 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
-        "kjeldsen-2019-dorsiflexor-training"
+        "kjeldsen-2019-dorsiflexor-training",
+        "ruiz-munoz-2017-dorsiflexor-emg"
       ],
       "execution": {
         "startingPosition": "Sit comfortably with the working foot resting on a board beneath an elastic band affixed to that board. Set a physical stop where the working foot reaches its comfortable lifted position. Begin from the self-selected resting position with the sole on the board.",
@@ -305,6 +459,69 @@
           "Lifting through the toes alone turns the ankle lift into a toe raise."
         ],
         "sideOrDirection": "Complete every repetition before changing sides, then repeat with the other foot."
+      }
+    },
+    {
+      "catalogID": "wall-supported-tibialis-raise",
+      "name": "Wall-Supported Tibialis Raise",
+      "aliases": [
+        "Wall Tibialis Raise",
+        "Wall-Supported Ankle Dorsiflexion",
+        "Wall Tib Raise"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 15,
+      "searchPriority": 76,
+      "involvement": [
+        {
+          "muscle": "tibialisAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "toeExtensors",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "heelSupported",
+        "bodyPosition": "standing",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "extended",
+        "ankleMotion": "dorsiflexes",
+        "ankleStartPosition": "soleOnFloor",
+        "rangeOfMotion": "comfortableDorsiflexion",
+        "movingSegment": "foot",
+        "loadInterface": "bodyweightThroughHeels",
+        "resistanceGeometry": "wallSupportedHeelPivot",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedJointMotion",
+        "torsoSupport": "wall",
+        "heelContact": "floorThroughout"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "ruiz-munoz-2017-dorsiflexor-emg"
+      ],
+      "execution": {
+        "startingPosition": "Stand with your back against a wall and both feet flat on the floor ahead of you. Keep your knees straight and choose a foot position that lets you lift both forefeet while your heels stay planted.",
+        "movement": "Lift the fronts of both feet toward your shins, pivoting about your heels. Keep the feet pointing forward rather than turning inward or outward.",
+        "endpoint": "Stop at your comfortable lifted position while both heels remain on the floor.",
+        "returnPhase": "Lower both forefeet under control until the soles rest on the floor.",
+        "controlledJoints": "Hold the knees straight and move at the ankles; avoid lifting only the toes.",
+        "supportAndPosture": "Keep your back against the wall and both heels planted throughout the set.",
+        "disqualifyingCompensations": [
+          "Lifting the heels changes the movement into a calf raise.",
+          "Bending the knees or bouncing the body replaces the controlled ankle lift.",
+          "Extending only the toes without lifting the forefeet changes the movement into toe extension."
+        ]
       }
     }
   ]

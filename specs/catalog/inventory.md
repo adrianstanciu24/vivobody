@@ -13,18 +13,18 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | Measure | Count |
 |---|---:|
 | Reviewed families | 97 |
-| Exercises | 231 |
+| Exercises | 232 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 255 |
+| Evidence sources | 259 |
 
 ## Family roster
 
 | Family source | Exercises |
 |---|---:|
 | [active-dead-hang](families/active-dead-hang.json) | 1 |
-| [ankle-dorsiflexion](families/ankle-dorsiflexion.json) | 1 |
+| [ankle-dorsiflexion](families/ankle-dorsiflexion.json) | 2 |
 | [ankle-plantarflexion](families/ankle-plantarflexion.json) | 5 |
 | [anti-extension](families/anti-extension.json) | 1 |
 | [anti-lateral-flexion](families/anti-lateral-flexion.json) | 1 |

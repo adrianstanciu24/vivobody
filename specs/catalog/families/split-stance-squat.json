@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "split-stance-squat",
   "name": "Stationary Split Squat",
-  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns floor-supported barbell and paired-dumbbell split squats using an approximately leg-length stance, lead thigh-parallel endpoint, erect torso, full lead-foot contact, and rear-forefoot floor support. It also owns two source-exact rear-foot-elevated fixtures: a high-bar setup with the rear foot fixed at patella height and a two-dumbbell setup with the top of the rear foot supported on a bench of unreported height. Each keeps its contacts fixed and returns through lead-side hip extension, knee extension, and ankle plantarflexion. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, kettlebell, bodyweight, and deficit branches remain outside this contract.",
+  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns floor-supported barbell and paired-dumbbell split squats using an approximately leg-length stance, lead thigh-parallel endpoint, erect torso, full lead-foot contact, and rear-forefoot floor support. It also owns two source-exact rear-foot-elevated fixtures: a high-bar setup with the rear foot fixed at patella height and a two-dumbbell setup with the top of the rear foot supported on a bench of unreported height. Each keeps its contacts fixed and returns through lead-side hip extension, knee extension, and ankle plantarflexion. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, kettlebell, bodyweight, and deficit branches remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the stationary and rear-foot-elevated split-squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "song-2023-split-squat-step-length",
@@ -11,7 +11,8 @@
     "usmc-2017-dumbbell-split-squat",
     "nsca-2024-tsac-report-74-dumbbell-split-squat",
     "mackey-2021-bulgarian-split-squat",
-    "nsca-2016-division-i-basketball-injury-screening"
+    "nsca-2016-division-i-basketball-injury-screening",
+    "deforest-2014-single-double-leg-squat"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -210,6 +211,12 @@
           "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "tibialisAnterior"
+        ],
+        "minimumRole": "stabilizer"
       }
     ],
     "allowedByRole": {
@@ -234,7 +241,8 @@
         "triceps",
         "abs",
         "obliques",
-        "lumbarExtensors"
+        "lumbarExtensors",
+        "tibialisAnterior"
       ]
     }
   },
@@ -624,7 +632,11 @@
         { "muscle": "brachialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -655,7 +667,8 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
-        "song-2023-split-squat-step-length"
+        "song-2023-split-squat-step-length",
+        "deforest-2014-single-double-leg-squat"
       ],
       "execution": {
         "startingPosition": "Place a barbell securely across your upper back and hold it with both palms facing forward. Take a split stance about as long as the distance from the outside of your hip to the outside of your ankle, with your front foot flat and the ball of your rear foot on the floor.",
@@ -692,7 +705,11 @@
         {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
         {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
         {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "splitSagittal",
@@ -705,7 +722,7 @@
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
-      "evidenceRefs": ["song-2023-split-squat-step-length", "usmc-2017-dumbbell-split-squat", "stastny-2015-split-squat-dumbbell-position", "nsca-2024-tsac-report-74-dumbbell-split-squat"],
+      "evidenceRefs": ["song-2023-split-squat-step-length", "usmc-2017-dumbbell-split-squat", "stastny-2015-split-squat-dumbbell-position", "nsca-2024-tsac-report-74-dumbbell-split-squat", "deforest-2014-single-double-leg-squat"],
       "execution": {
         "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side and take a fixed split stance about as long as the distance from the outside of your hip to the outside of your ankle. Keep the lead foot flat and the rear forefoot on the floor.",
         "movement": "Keep both foot contacts fixed and lower with an erect torso until the lead thigh is approximately parallel to the floor.",
@@ -737,7 +754,11 @@
         {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
         {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
         {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "splitSagittal",
@@ -752,7 +773,7 @@
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
-      "evidenceRefs": ["arnold-2010-lower-limb", "mackey-2021-bulgarian-split-squat"],
+      "evidenceRefs": ["arnold-2010-lower-limb", "mackey-2021-bulgarian-split-squat", "deforest-2014-single-double-leg-squat"],
       "execution": {
         "startingPosition": "Set a stable rear box to the bottom-of-kneecap height, secure the rear foot against its posterior stop, place the lead leg in line with that hip, and hold the bar high on the upper back.",
         "movement": "Lower with both contacts fixed until the lead knee reaches approximately ninety degrees and the kneecap is aligned over the lead toe.",
@@ -784,7 +805,11 @@
         {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
         {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
         {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}
+        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "splitSagittal",
@@ -797,7 +822,7 @@
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
-      "evidenceRefs": ["mackey-2021-bulgarian-split-squat", "nsca-2016-division-i-basketball-injury-screening"],
+      "evidenceRefs": ["mackey-2021-bulgarian-split-squat", "nsca-2016-division-i-basketball-injury-screening", "deforest-2014-single-double-leg-squat"],
       "execution": {
         "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side, place the lead foot fully on the floor, and rest the top of the rear foot on a stable bench. The source did not report a bench height or numeric stance length.",
         "movement": "Lower with both foot contacts fixed until the lead thigh is approximately parallel to the floor.",

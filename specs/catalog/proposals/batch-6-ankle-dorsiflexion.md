@@ -1,7 +1,9 @@
 # Batch 6 ankle dorsiflexion activation
 
-Status: **activation-ready after shared evidence registration and integration
-tests**. The family contract is authored with one directly reviewed exercise.
+Status: **Historical activation record; expanded in September 2026.**
+The [anterior-shin coverage decision](anterior-shin-coverage-2026-09.md)
+supersedes the single-fixture roster and toe-extensor exclusion below.
+The original band setup remains active.
 
 ## Outcome
 

@@ -129,6 +129,69 @@
       {
         "muscle": "tibialisAnterior",
         "role": "primary"
+      },
+      {
+        "muscle": "toeExtensors",
+        "role": "secondary"
+      }
+    ]
+  },
+  {
+    "familyID": "ankle-dorsiflexion",
+    "familyName": "Ankle Dorsiflexion",
+    "movementActions": [
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "wall-supported-tibialis-raise",
+    "name": "Wall-Supported Tibialis Raise",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 15,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Wall Tibialis Raise",
+      "Wall-Supported Ankle Dorsiflexion",
+      "Wall Tib Raise"
+    ],
+    "searchPriority": 76,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand with your back against a wall and both feet flat on the floor ahead of you. Keep your knees straight and choose a foot position that lets you lift both forefeet while your heels stay planted.",
+      "movement": "Lift the fronts of both feet toward your shins, pivoting about your heels. Keep the feet pointing forward rather than turning inward or outward.",
+      "endpoint": "Stop at your comfortable lifted position while both heels remain on the floor.",
+      "returnPhase": "Lower both forefeet under control until the soles rest on the floor.",
+      "controlledJoints": "Hold the knees straight and move at the ankles; avoid lifting only the toes.",
+      "supportAndPosture": "Keep your back against the wall and both heels planted throughout the set.",
+      "disqualifyingCompensations": [
+        "Lifting the heels changes the movement into a calf raise.",
+        "Bending the knees or bouncing the body replaces the controlled ankle lift.",
+        "Extending only the toes without lifting the forefeet changes the movement into toe extension."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "tibialisAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "toeExtensors",
+        "role": "secondary"
       }
     ]
   },
@@ -425,6 +488,10 @@
       {
         "muscle": "soleus",
         "role": "primary"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
       }
     ]
   },
@@ -809,6 +876,10 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
       }
     ]
   },
@@ -928,6 +999,10 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
       }
     ]
   },
@@ -1045,6 +1120,10 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
         "role": "stabilizer"
       }
     ]
@@ -1164,6 +1243,10 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
         "role": "stabilizer"
       }
     ]
@@ -1382,6 +1465,10 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
         "role": "stabilizer"
       }
     ]
@@ -2163,6 +2250,10 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
         "role": "stabilizer"
       }
     ]
@@ -3100,6 +3191,10 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
       }
     ]
   },
@@ -3205,6 +3300,10 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
         "role": "stabilizer"
       }
     ]
@@ -3335,6 +3434,10 @@
       {
         "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
       }
     ]
   },
@@ -3462,6 +3565,10 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
         "role": "stabilizer"
       }
     ]
@@ -17392,6 +17499,10 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
       }
     ]
   },
@@ -17521,6 +17632,10 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
       }
     ]
   },
@@ -17648,6 +17763,10 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
         "role": "stabilizer"
       }
     ]
@@ -17777,6 +17896,10 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
         "role": "stabilizer"
       }
     ]

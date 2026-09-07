@@ -3,12 +3,13 @@
   "schemaVersion": 1,
   "id": "dynamic-lunge",
   "name": "Dynamic Lunge",
-  "definition": "A unilateral-emphasis compound repetition that begins in upright bilateral standing, steps into an asymmetric sagittal lunge, and returns to the same bilateral start. The roster owns Comfort et al.'s exact bodyweight forward and reverse fixtures, Riemann et al.'s externally loaded forward fixture, and Gao et al.'s paired-dumbbell reverse fixture. The loaded records use a 70%-leg-length step and side-held equal implements but preserve their different source depth, cadence, foot-contact, and implement contracts. The product records one dumbbell rather than the pair total; no study load becomes a universal prescription. The studies measure lower-limb mechanics and selected muscle activity without establishing a universal cross-muscle ranking, so every record retains a conservative regional role envelope. Stationary split squats, walking or alternating lunges, lateral or crossover paths, jumps, and continuous locomotion remain outside this contract.",
+  "definition": "A unilateral-emphasis compound repetition that begins in upright bilateral standing, steps into an asymmetric sagittal lunge, and returns to the same bilateral start. The roster owns Comfort et al.'s exact bodyweight forward and reverse fixtures, Riemann et al.'s externally loaded forward fixture, and Gao et al.'s paired-dumbbell reverse fixture. The loaded records use a 70%-leg-length step and side-held equal implements but preserve their different source depth, cadence, foot-contact, and implement contracts. The product records one dumbbell rather than the pair total; no study load becomes a universal prescription. The studies measure lower-limb mechanics and selected muscle activity without establishing a universal cross-muscle ranking, so every record retains a conservative regional role envelope. Stationary split squats, walking or alternating lunges, lateral or crossover paths, jumps, and continuous locomotion remain outside this contract. Tibialis anterior receives ankle/foot stabilizer credit across these four discrete forward/reverse step-and-return fixtures. Gao directly recorded it in the paired-dumbbell reverse fixture; transfer to the bodyweight reverse and forward fixtures is a categorical anatomy-and-mechanics inference, supported by Wu's measured participation during loaded and unloaded lunges. Wu's accessible protocol does not establish exact step direction or geometry, so the original fixture sources continue to own those details. This control role is not a prime-action, muscle-force, or hypertrophy ranking and does not extend to walking or lateral lunges.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "comfort-2015-forward-reverse-lunge-kinetics",
     "riemann-2012-anterior-lunge-external-load",
-    "gao-2025-dumbbell-reverse-lunge"
+    "gao-2025-dumbbell-reverse-lunge",
+    "wu-2020-loading-devices-squat-lunge"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -172,6 +173,12 @@
           "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "tibialisAnterior"
+        ],
+        "minimumRole": "stabilizer"
       }
     ],
     "allowedByRole": {
@@ -195,7 +202,8 @@
         "trapeziusUpper",
         "triceps",
         "fingerFlexors",
-        "extensorCarpiRadialis"
+        "extensorCarpiRadialis",
+        "tibialisAnterior"
       ]
     }
   },
@@ -743,7 +751,11 @@
         { "muscle": "gluteMed", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closedDuringLoadedPhase",
@@ -779,7 +791,8 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
-        "comfort-2015-forward-reverse-lunge-kinetics"
+        "comfort-2015-forward-reverse-lunge-kinetics",
+        "wu-2020-loading-devices-squat-lunge"
       ],
       "execution": {
         "startingPosition": "Stand upright with both feet supporting you and cross your arms over your upper body.",
@@ -822,7 +835,11 @@
         { "muscle": "gluteMed", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closedDuringLoadedPhase",
@@ -858,7 +875,8 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
-        "comfort-2015-forward-reverse-lunge-kinetics"
+        "comfort-2015-forward-reverse-lunge-kinetics",
+        "gao-2025-dumbbell-reverse-lunge"
       ],
       "execution": {
         "startingPosition": "Stand upright with both feet supporting you and cross your arms over your upper body.",
@@ -909,7 +927,11 @@
         { "muscle": "trapeziusUpper", "role": "stabilizer" },
         { "muscle": "triceps", "role": "stabilizer" },
         { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" }
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closedDuringLoadedPhase",
@@ -951,7 +973,8 @@
         "hand"
       ],
       "evidenceRefs": [
-        "riemann-2012-anterior-lunge-external-load"
+        "riemann-2012-anterior-lunge-external-load",
+        "wu-2020-loading-devices-squat-lunge"
       ],
       "execution": {
         "startingPosition": "Stand upright with one dumbbell in each hand at your sides, palms facing inward. Enter the weight of one dumbbell, not the pair.",
@@ -988,7 +1011,11 @@
         {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
         {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
         {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"},
-        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}
+        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closedDuringLoadedPhase", "bodyPosition": "standing", "torsoSupport": "none", "trunkOrientation": "upright",

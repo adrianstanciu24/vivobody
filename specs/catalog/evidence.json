@@ -2453,7 +2453,7 @@
       "pmid": "40497251",
       "pmcid": "PMC12148905",
       "url": "https://doi.org/10.3389/fbioe.2025.1597209",
-      "scope": "Thirty experienced male lifters performed three barefoot sumo-deadlift repetitions at 85 percent of an adjusted one-repetition maximum with the free bar beginning on the floor, a self-selected wide and externally rotated stance, both hands inside the knees, a double-overhand grip of individualized width, and maximal intended concentric speed. Successful repetitions ended upright with hips and knees extended, the torso straight, and the shoulders retracted; short inter-repetition rests created a dead-stop floor pull, but their duration was not quantified. Three-dimensional lower-limb kinematics and kinetics plus surface EMG directly support dynamic hip and knee extension, a vastus-lateralis training emphasis, and materially greater frontal- and transverse-plane control demands than the compared conventional style. The source does not prescribe numeric stance, toe, or grip widths; analyze or standardize the descent; measure spinal kinematics; or authorize shod, mixed-grip, hook-grip, strapped, touch-and-go, other sumo, or non-barbell fixtures. Its adjusted one-repetition maximum used preferred versus non-preferred techniques across different halves of the sample, so 85 percent is not treated as a universal variation-specific prescription."
+      "scope": "Thirty experienced male lifters performed three barefoot sumo-deadlift repetitions at 85 percent of an adjusted one-repetition maximum with the free bar beginning on the floor, a self-selected wide and externally rotated stance, both hands inside the knees, a double-overhand grip of individualized width, and maximal intended concentric speed. Successful repetitions ended upright with hips and knees extended, the torso straight, and the shoulders retracted; short inter-repetition rests created a dead-stop floor pull, but their duration was not quantified. Three-dimensional lower-limb kinematics and kinetics plus surface EMG directly support dynamic hip and knee extension, a vastus-lateralis training emphasis, and materially greater frontal- and transverse-plane control demands than the compared conventional style. The source does not prescribe numeric stance, toe, or grip widths; analyze or standardize the descent; measure spinal kinematics; or authorize shod, mixed-grip, hook-grip, strapped, touch-and-go, other sumo, or non-barbell fixtures. Its adjusted one-repetition maximum used preferred versus non-preferred techniques across different halves of the sample, so 85 percent is not treated as a universal variation-specific prescription. The conventional comparison also recorded tibialis-anterior surface EMG during narrow-stance floor pulls. Together with existing ankle-control anatomy, this supports categorical stabilizer authorship on the current Lee conventional fixture; it does not transfer Hanen's barefoot, adjusted-load, maximal-speed, or dead-stop geometry to that separate record, or establish a muscle-force or training-stimulus ranking."
     },
     {
       "id": "lake-2017-low-handle-hex-bar-deadlift",
@@ -3959,6 +3959,70 @@
       "doi": "10.1519/SSC.0000000000000327",
       "url": "https://doi.org/10.1519/SSC.0000000000000327",
       "scope": "The peer-reviewed NSCA technique article defines a farmer walk using the high handles of a conventional closed dual-height hexagonal frame. It reports approximately 0.64-meter parallel handle spacing and approximately 0.10-meter high-to-low handle separation, equal loading on both sleeves, a closed grip, a high-handle deadlift pickup, extended arms beside the body, upright head and chest, controlled forward walking without load swing or overstriding, and a controlled return to the floor. It directly supports only this high-handle closed-frame fixture. It does not authorize low or arbitrary handles, open frames, a universal frame mass, product duration tracking, load-accounting vocabulary, no-straps-or-hooks assistance semantics, a universally level support surface, or muscle ranking."
+    },
+    {
+      "id": "ruiz-munoz-2017-dorsiflexor-emg",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Muscular activity and torque of the foot dorsiflexor muscles during decremental isometric test: A cross-sectional study",
+      "authors": [
+        "Maria Ruiz-Muñoz",
+        "Manuel González-Sánchez",
+        "Jaime Martín-Martín",
+        "Antonio I. Cuesta-Vargas"
+      ],
+      "year": 2017,
+      "doi": "10.1016/j.foot.2016.11.001",
+      "pmid": "28324821",
+      "url": "https://doi.org/10.1016/j.foot.2016.11.001",
+      "scope": "Forty-one subjects performed resisted isometric ankle dorsiflexion at four relative intensities with hip and knee flexed 90 degrees and ankle neutral. EMG measured tibialis anterior, extensor digitorum longus, and extensor hallucis longus. This supports shared dorsiflexor participation; secondary toe-extensor authorship on dynamic seated-band and owner-specified wall-supported heel-pivot raises is an anatomy-and-mechanics inference, not a directly measured dynamic or wall-raise result, relative muscle-force ranking, or hypertrophy claim."
+    },
+    {
+      "id": "deforest-2014-single-double-leg-squat",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Muscle Activity in Single- vs. Double-Leg Squats",
+      "authors": [
+        "Bradley A. DeForest",
+        "Gregory S. Cantrell",
+        "Brian K. Schilling"
+      ],
+      "year": 2014,
+      "doi": "10.70252/MXVZ7653",
+      "pmid": "27182408",
+      "pmcid": "PMC4831851",
+      "url": "https://doi.org/10.70252/MXVZ7653",
+      "scope": "Nine resistance-trained men performed high-bar back squats, stationary split squats, and rear-leg-elevated split squats with lead-leg tibialis-anterior surface EMG. The squat used shoulder-width stance and the lowest attainable depth; split variants used an 85-percent-leg-length stance and rear-knee ground contact, with a 40-centimeter rear support for the elevated variation. These differ from current catalog geometry. Measured activation supports a categorical ankle-control assignment together with existing anatomy and fixture-specific sources; it does not establish individual force contribution, hypertrophy, exact role magnitudes, or direct measurement in dumbbell variants."
+    },
+    {
+      "id": "wu-2020-loading-devices-squat-lunge",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Effect of Loading Devices on Muscle Activation in Squat and Lunge",
+      "authors": [
+        "Hong-Wen Wu",
+        "Cheng-Feng Tsai",
+        "Kai-Han Liang",
+        "Yi-Wen Chang"
+      ],
+      "year": 2020,
+      "doi": "10.1123/jsr.2018-0182",
+      "pmid": "30676181",
+      "url": "https://doi.org/10.1123/jsr.2018-0182",
+      "scope": "Nineteen healthy recreationally active men performed unloaded, barbell, dumbbell, weighted-vest, and kettlebell squats while tibialis-anterior and other lower-limb EMG was measured. The accessible abstract supports activation across free squat loading conditions but does not establish the catalog's exact front-rack or goblet grip, stance, or depth. Together with established ankle-control capability and existing fixture geometry evidence, it supports categorical stabilizer involvement, not a primary target, ranked stimulus, or measured equivalence among variants. The same participants also performed unloaded, barbell, dumbbell, and weighted-vest lunges with tibialis-anterior EMG recorded. The accessible abstract does not specify stepping direction, cadence, contact sequence, or exact stance and depth, so it corroborates participation rather than owning the catalog's forward/reverse geometry. Lunge stabilizer roles combine these observations with existing anatomical control capability and the exact Comfort, Riemann, and Gao fixture sources."
+    },
+    {
+      "id": "sara-2021-single-leg-heel-raise",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "The single-leg heel raise does not predict maximal plantar flexion strength in healthy males and females",
+      "authors": [
+        "Lauren K. Sara",
+        "Savannah B. Gutsch",
+        "Sandra K. Hunter"
+      ],
+      "year": 2021,
+      "doi": "10.1371/journal.pone.0253276",
+      "pmid": "34415915",
+      "pmcid": "PMC8378718",
+      "url": "https://doi.org/10.1371/journal.pone.0253276",
+      "scope": "Twenty-eight healthy young adults were analyzed during repeated upright single-leg heel raises with light fingertip balance support while tibialis-anterior and plantarflexor EMG was recorded. A custom device provided an individualized maximum-height target; the task used a metronome-paced raise, lower, and rest sequence to failure. The catalog's wall balance contact and minimum five-centimeter endpoint remain anchored by Manago 2021 rather than this protocol. Measured tibialis-anterior activity and retained whole-body balance demands support categorical ankle-control credit, without treating the antagonist as a plantarflexion prime or inferring hypertrophy."
     }
   ]
 }

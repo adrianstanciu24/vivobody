@@ -3,14 +3,15 @@
   "schemaVersion": 1,
   "id": "ankle-plantarflexion",
   "name": "Ankle Plantarflexion",
-  "definition": "A strict closed-chain calf raise in which one heel or both heels rise through ankle plantarflexion while the forefoot remains supported and the knee, hip, pelvis, and spine remain held. The roster contains unilateral and simultaneous bilateral machine fixtures plus one exact single-leg bodyweight fixture with an extended knee, light wall contact for balance only, and at least five centimeters of heel rise. Soleus is primary in both postures; gastrocnemius is primary with the knee extended and secondary with the knee flexed. Loaded free-weight, Smith, leg-press, donkey, wall-unloaded, jumping, partial-range, and toe-flexion variants remain outside this family.",
+  "definition": "A strict closed-chain calf raise in which one heel or both heels rise through ankle plantarflexion while the forefoot remains supported and the knee, hip, pelvis, and spine remain held. The roster contains unilateral and simultaneous bilateral machine fixtures plus one exact single-leg bodyweight fixture with an extended knee, light wall contact for balance only, and at least five centimeters of heel rise. Soleus is primary in both postures; gastrocnemius is primary with the knee extended and secondary with the knee flexed. Loaded free-weight, Smith, leg-press, donkey, wall-unloaded, jumping, partial-range, and toe-flexion variants remain outside this family. Tibialis anterior is authored as an ankle/foot stabilizer on the wall-balanced single-leg bodyweight heel raise. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "cybex-2008-plate-loaded-manual",
     "hammer-strength-2025-select-manual",
     "kinoshita-2023-standing-seated-calf-raise",
     "flanagan-2005-heel-raise-biomechanics",
-    "manago-2021-single-leg-heel-raise"
+    "manago-2021-single-leg-heel-raise",
+    "sara-2021-single-leg-heel-raise"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -128,7 +129,7 @@
       "secondary": [
         "gastrocnemius"
       ],
-      "stabilizer": []
+      "stabilizer": ["tibialisAnterior"]
     }
   },
   "variantAxes": [
@@ -570,6 +571,24 @@
       "then": [{"field": "equipment", "value": "bodyweight"}],
       "requirePresent": ["variant.balanceAssistance", "variant.minimumHeelRiseCm"],
       "requireAbsent": ["variant.machineType"]
+    },
+    {
+      "id": "free-fixture-requires-tibialis-control",
+      "description": "Require reviewed tibialis-anterior ankle control on the free fixture; machine records retain their existing muscle roster.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
+      ]
     }
   ],
   "recommended": {
@@ -872,7 +891,11 @@
       "searchPriority": 98,
       "involvement": [
         {"muscle": "gastrocnemius", "role": "primary"},
-        {"muscle": "soleus", "role": "primary"}
+        {"muscle": "soleus", "role": "primary"},
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -901,7 +924,7 @@
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
-      "evidenceRefs": ["flanagan-2005-heel-raise-biomechanics", "manago-2021-single-leg-heel-raise"],
+      "evidenceRefs": ["flanagan-2005-heel-raise-biomechanics", "manago-2021-single-leg-heel-raise", "sara-2021-single-leg-heel-raise"],
       "execution": {
         "startingPosition": "Stand on one leg with that knee straight, suspend the other foot, and touch the wall lightly at shoulder height with the hands for balance only.",
         "movement": "Raise the working heel at least five centimeters without bending the knee or pushing into the wall.",
