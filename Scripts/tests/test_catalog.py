@@ -11740,6 +11740,20 @@ class CatalogFoundationTests(unittest.TestCase):
         expected["two-dumbbell-forward-step-up"] = expected[
             "bodyweight-forward-step-up-21cm"
         ]
+        for exercise_id in (
+            "barbell-back-squat",
+            "barbell-front-squat",
+            "kettlebell-goblet-squat",
+            "bodyweight-floor-squat-100-degrees",
+            "barbell-split-squat",
+            "barbell-rear-foot-elevated-split-squat",
+            "two-dumbbell-rear-foot-elevated-split-squat",
+        ):
+            expected[exercise_id] = {
+                region: providers | {"tibialisAnterior"}
+                if region in {"ankle", "foot"} else providers
+                for region, providers in expected[exercise_id].items()
+            }
         for family in self.batch5_families.values():
             for exercise in family["exercises"]:
                 if exercise["catalogID"] in DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS:
