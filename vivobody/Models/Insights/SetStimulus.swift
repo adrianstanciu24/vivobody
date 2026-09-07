@@ -7,11 +7,9 @@
 //
 //      role credit × effort(RIR)
 //
-//  A completed working set is worth exactly 1.0. The only discount is
-//  the user's own logged proximity-to-failure: RIR 0–2 counts whole
-//  (the "within a few reps of failure" band the volume landmarks
-//  assume) and each rep further in reserve costs 20%. An unlogged RIR
-//  is not a reading and stays neutral — non-raters are never punished.
+//  Logged RIR 0/1/2/3/4/5+ credits 1.0/0.9/0.8/0.7/0.6/0.4.
+//  These are product effort weights, not measured muscle-growth ratios.
+//  Legacy sets without a logged rating retain neutral credit.
 //  Only completed dynamic-strength reps and completed
 //  isometric-strength holds enter this currency; power earns none.
 //
@@ -37,25 +35,20 @@ import Foundation
 nonisolated enum SetStimulus {
     // MARK: - Tunable parameters
 
-    /// The one knob of per-set crediting, kept in a struct so tests
-    /// can sweep it and callers can thread a calibration through the
-    /// shared replay without touching the math.
+    /// Shared effort policy threaded through the analytics replay.
     struct Parameters {
-        /// Multiplicative penalty per RIR step beyond 2. RIR 0–2 all
-        /// count as full hard sets; each rep further in reserve costs
-        /// 20%.
-        var effortDecayPerRIR: Double = 0.8
+        let effortCredits: [Double] = [1.0, 0.9, 0.8, 0.7, 0.6, 0.4]
 
         static let `default` = Parameters()
     }
 
     // MARK: - Effort curve (pure)
 
-    /// Proximity-to-failure multiplier. Neutral 1.0 when the RIR was
-    /// never actually rated (`rirLogged == false`).
+    /// Selected RIR maps to a bounded score; all values of 5 or more
+    /// share the last bucket. Legacy unrated sets retain neutral credit.
     static func effortFactor(rir: Int, logged: Bool, parameters: Parameters = .default) -> Double {
         guard logged else { return 1 }
-        return pow(parameters.effortDecayPerRIR, Double(max(0, rir - 2)))
+        return parameters.effortCredits[min(max(rir, 0), 5)]
     }
 
     // MARK: - Exercise pricing
@@ -68,9 +61,8 @@ nonisolated enum SetStimulus {
         let byMuscle: [Muscle: Double]
     }
 
-    /// Price one exercise's completed sets. Stabilizers remain
-    /// available to body visualization, but intentionally earn no
-    /// hypertrophy-volume credit (`volumeCredits` omits them).
+    /// Price one exercise's completed sets using primary, secondary,
+    /// and stabilizer weights from the shared role policy.
     static func price(
         for exercise: AnalyticsExerciseSnapshot,
         parameters: Parameters = .default

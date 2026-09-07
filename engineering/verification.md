@@ -119,8 +119,19 @@ RESET_STATE=0 Scripts/verify.sh
 SIMULATOR_NAME='iPhone 16e' Scripts/verify.sh
 SIMULATOR_OS=26.2 Scripts/verify.sh
 LAUNCH_ARGS='--seed-history' Scripts/verify.sh
+RESET_STATE=0 LAUNCH_ARGS='-debug' TAB=library Scripts/verify.sh
 SCENARIO=active-restoration Scripts/verify.sh
 ```
+
+`-debug` (Debug builds only) adds Lower A (Monday), Upper Push (Tuesday),
+Lower B (Thursday), and Upper Pull (Friday), each with five exercises (including one core exercise) and
+three sets per exercise. It adds completed workouts on those weekdays from
+six calendar months ago through yesterday, with varied reps, logged RIR of 1/0/0 across each exercise’s three sets, and
+gradual load progression. Stable fixture IDs prevent duplicates on relaunch;
+existing data is preserved and newly elapsed training days are filled in.
+Existing dummy templates and sessions receive the core exercise and updated
+RIR on the next `-debug` launch; unrelated workouts are unchanged.
+The flag takes precedence over the other manual `--seed-*` fixtures.
 
 For an interactive visual view, use Baguette's local interface and open
 `http://127.0.0.1:8421` in a browser:

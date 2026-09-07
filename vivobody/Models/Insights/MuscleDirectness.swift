@@ -4,7 +4,7 @@
 //
 //  Splits all-time muscle hard-set equivalents by the role captured when an
 //  exercise was logged. Primary work earns full credit; secondary work earns
-//  half credit; stabilizers earn none. Examples use current authored primaries.
+//  half credit; stabilizers earn one tenth as indirect work. Examples use current authored primaries.
 //
 
 import Foundation
@@ -46,7 +46,7 @@ nonisolated struct MuscleDirectness {
         rows.filter { $0.total > 0 }
     }
 
-    /// Largest amount of credited secondary work; percentages alone would
+    /// Largest amount of credited supporting work; percentages alone would
     /// overstate a tiny incidental exposure. Stable ties follow muscle identity.
     var passengers: [Row] {
         rows.filter { $0.indirect > 0 }.sorted {
@@ -89,7 +89,7 @@ nonisolated extension AnalyticsAccumulator {
                 for (muscle, role) in replay.exercise.volumeCredits {
                     if role == 1 {
                         direct[muscle, default: 0] += replay.setEquivalent
-                    } else if role == 0.5 {
+                    } else if role > 0, role < 1 {
                         let credit = replay.setEquivalent * role
                         indirect[muscle, default: 0] += credit
                         let key = replay.exercise.historyKey

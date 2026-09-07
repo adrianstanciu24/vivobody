@@ -8,7 +8,7 @@
 //  tested on a virtual clock with no simulator.
 //
 //  Covered:
-//    • Role credit — primary 1.0, secondary 0.5, stabilizer absent.
+//    • Role credit — primary 1.0, secondary 0.5, stabilizer 0.1.
 //    • RIR discount — logged RIR beyond 2 discounts; unlogged stays
 //      neutral.
 //    • Window — exactly 7 days back counts; older and future-dated
@@ -90,7 +90,7 @@ struct ExerciseVolumeContributionTests {
 
     // MARK: - Role credit
 
-    @Test func rolesCreditPrimarySecondaryAndNotStabilizer() {
+    @Test func rolesCreditPrimarySecondaryAndStabilizer() {
         let workout = session(at: day(-1))
         let catalogItem = item()
         let contribution = ExerciseVolumeContribution.compute(
@@ -109,8 +109,8 @@ struct ExerciseVolumeContributionTests {
         #expect(pureContribution == contribution)
         #expect(share(.pectoralisMajorSternocostal, in: contribution)?.sets == 3)
         #expect(share(.triceps, in: contribution)?.sets == 1.5)
-        #expect(share(.serratus, in: contribution) == nil)
-        #expect(contribution?.totalSets == 4.5)
+        #expect(abs((share(.serratus, in: contribution)?.sets ?? 0) - 0.3) < 1e-9)
+        #expect(abs((contribution?.totalSets ?? 0) - 4.8) < 1e-9)
     }
 
     @Test func sharesSortPrimaryFirstThenSetsDescending() {
@@ -127,14 +127,14 @@ struct ExerciseVolumeContributionTests {
 
     // MARK: - RIR discount
 
-    @Test func loggedRIRBeyondTwoDiscounts() {
-        // RIR 4 → 0.8² = 0.64 per set; 3 sets → 1.92 primary credit.
+    @Test func loggedRIRDiscounts() {
+        // RIR 4 → 0.6 per set; 3 sets → 1.8 primary credit.
         let contribution = ExerciseVolumeContribution.compute(
             sessions: [session(at: day(-1), rir: 4, rirLogged: true)],
             item: item(),
             now: day(0)
         )
-        #expect(abs((share(.pectoralisMajorSternocostal, in: contribution)?.sets ?? 0) - 1.92) < 0.0001)
+        #expect(abs((share(.pectoralisMajorSternocostal, in: contribution)?.sets ?? 0) - 1.8) < 0.0001)
     }
 
     @Test func unloggedRIRStaysNeutral() {

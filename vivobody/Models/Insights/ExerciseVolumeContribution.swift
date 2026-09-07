@@ -11,8 +11,8 @@
 //  The computation reuses the shared SetStimulus currency directly, so
 //  the card can never disagree with the Insights volume bars about what
 //  "a set of work" is worth: only completed dynamic-strength reps and
-//  completed isometric holds earn credit, RIR beyond 2 discounts, an
-//  unlogged RIR stays neutral, and stabilizers earn nothing. The pure
+//  completed isometric holds earn credit, selected RIR uses effort weights, an
+//  unlogged RIR stays neutral, and stabilizers earn one tenth. The pure
 //  accumulator overload reuses already-priced snapshot work; the model
 //  adapter only owns snapshot construction. Output is value-only and
 //  driven by an injected clock.

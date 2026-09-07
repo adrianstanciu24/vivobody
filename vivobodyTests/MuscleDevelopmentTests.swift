@@ -32,12 +32,13 @@ import Testing
 
 @MainActor
 struct MuscleDevelopmentTests {
-
     // MARK: - Virtual clock
 
     /// Fixed epoch so every test is reproducible.
     private static let origin = Date(timeIntervalSince1970: 1_700_000_000)
-    private func day(_ n: Double) -> Date { Self.origin.addingTimeInterval(n * 86_400) }
+    private func day(_ n: Double) -> Date {
+        Self.origin.addingTimeInterval(n * 86400)
+    }
 
     // MARK: - Build: colour accrues over time
 
@@ -47,8 +48,8 @@ struct MuscleDevelopmentTests {
         let s = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
         let state = MuscleDevelopment.simulate(from: [s], now: day(0))
         let chest = state.adaptation(.pectoralisMajorSternocostal)
-        #expect(chest > 0.01)        // it did register
-        #expect(chest < 0.1)         // but nowhere near full
+        #expect(chest > 0.01) // it did register
+        #expect(chest < 0.1) // but nowhere near full
     }
 
     /// Under a steady training cadence, development rises at every
@@ -63,8 +64,8 @@ struct MuscleDevelopmentTests {
         #expect(a1 < a4)
         #expect(a4 < a8)
         #expect(a8 < a14)
-        #expect(a1 < 0.3)            // early on, far from full
-        #expect(a14 > 2.5 * a1)      // meaningful accrued growth
+        #expect(a1 < 0.3) // early on, far from full
+        #expect(a14 > 2.5 * a1) // meaningful accrued growth
     }
 
     /// Development scales with set volume: the same cadence at higher
@@ -84,12 +85,12 @@ struct MuscleDevelopmentTests {
 
     /// Trained hard, then neglected: colour barely moves inside the
     /// first week, then fades, and fades further the longer the layoff.
-    @Test func detrainingHoldsThenFades() {
+    @Test func detrainingHoldsThenFades() throws {
         let program = benchProgram(sessions: 12, everyDays: 3.5)
-        let last = program.last!.completedAt!
+        let last = try #require(program.last?.completedAt)
 
         func chest(daysAfterLast d: Double) -> Double {
-            MuscleDevelopment.simulate(from: program, now: last.addingTimeInterval(d * 86_400))
+            MuscleDevelopment.simulate(from: program, now: last.addingTimeInterval(d * 86400))
                 .adaptation(.pectoralisMajorSternocostal)
         }
 
@@ -128,7 +129,7 @@ struct MuscleDevelopmentTests {
     /// clamp.
     @Test func consistentOptimalVolumeConvergesTowardFull() {
         let weeklySets = Int(VolumeLandmark.default.optimalHigh)
-        let program = (0..<52).map { i in
+        let program = (0 ..< 52).map { i in
             session(at: day(Double(i) * 7),
                     [lift("Barbell Bench Press", .chest, sets: weeklySets, reps: 8, weight: 135)])
         }
@@ -143,16 +144,16 @@ struct MuscleDevelopmentTests {
     @Test func optimalTrainingDevelopsWithinMonths() {
         let weekly = Int(VolumeLandmark.default.optimalHigh)
         func chest(afterWeeks weeks: Int) -> Double {
-            let program = (0..<weeks).map { i in
+            let program = (0 ..< weeks).map { i in
                 session(at: day(Double(i) * 7),
                         [lift("Barbell Bench Press", .chest, sets: weekly, reps: 8, weight: 135)])
             }
             return MuscleDevelopment.simulate(from: program, now: program.last!.completedAt!)
                 .adaptation(.pectoralisMajorSternocostal)
         }
-        #expect(chest(afterWeeks: 6) > 0.45)   // ~0.50
-        #expect(chest(afterWeeks: 13) > 0.75)  // ~0.79 by 3 months
-        #expect(chest(afterWeeks: 26) > 0.95)  // ~0.99 by 6 months
+        #expect(chest(afterWeeks: 6) > 0.45) // ~0.50
+        #expect(chest(afterWeeks: 13) > 0.75) // ~0.79 by 3 months
+        #expect(chest(afterWeeks: 26) > 0.95) // ~0.99 by 6 months
     }
 
     // MARK: - Frequency invariance
@@ -166,7 +167,7 @@ struct MuscleDevelopmentTests {
         func program(timesPerWeek: Double, setsPerSession: Int) -> [WorkoutSession] {
             let gap = 7.0 / timesPerWeek
             let count = Int(16 * timesPerWeek)
-            return (0..<count).map { i in
+            return (0 ..< count).map { i in
                 session(at: day(Double(i) * gap),
                         [lift("Barbell Bench Press", .chest, sets: setsPerSession, reps: 8, weight: 135)])
             }
@@ -182,13 +183,13 @@ struct MuscleDevelopmentTests {
         let a1 = chest(once), a2 = chest(twice), a3 = chest(thrice)
 
         #expect(max(a1, a2, a3) - min(a1, a2, a3) < 0.04)
-        #expect(a1 > 0.3)   // a real mid-ramp value, not a degenerate match at 0
+        #expect(a1 > 0.3) // a real mid-ramp value, not a degenerate match at 0
     }
 
     // MARK: - Currency
 
     /// Primary and secondary roles earn the same explicit credit used
-    /// by weekly volume; stabilizers remain visual-only.
+    /// by weekly volume; stabilizers receive one tenth.
     @Test func roleInvolvementScalesSessionStimulus() {
         let involvement = Muscle.Involvement(contributions: [
             .init(muscle: .pectoralisMajorSternocostal, role: .primary),
@@ -208,7 +209,7 @@ struct MuscleDevelopmentTests {
         let stim = MuscleDevelopment.sessionStimulus(s)
         #expect(stim[.pectoralisMajorSternocostal] == 3)
         #expect(stim[.triceps] == 1.5)
-        #expect(stim[.serratus] == nil)
+        #expect(abs((stim[.serratus] ?? 0) - 0.3) < 1e-9)
     }
 
     /// The development model and the volume bars share ONE work
@@ -231,7 +232,7 @@ struct MuscleDevelopmentTests {
     /// Closed-form decay is a semigroup: advancing 0→90 days in one
     /// step equals advancing through intermediate stops. This is what
     /// makes the model independent of how often the app is opened.
-    @Test func decayIsOrderIndependent() {
+    @Test func decayIsOrderIndependent() throws {
         let s = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
         let base = MuscleDevelopment.simulate(from: [s], now: day(0))
 
@@ -243,15 +244,15 @@ struct MuscleDevelopmentTests {
             MuscleDevelopment.advance(&manySteps, to: day(d))
         }
 
-        let a = oneStep.fibers[.pectoralisMajorSternocostal]!.weeklyVolume
-        let b = manySteps.fibers[.pectoralisMajorSternocostal]!.weeklyVolume
+        let a = try #require(oneStep.fibers[.pectoralisMajorSternocostal]?.weeklyVolume)
+        let b = try #require(manySteps.fibers[.pectoralisMajorSternocostal]?.weeklyVolume)
         #expect(abs(a - b) < 1e-9)
     }
 
     /// Same history in, same channels out.
     @Test func simulationIsDeterministic() {
         let program = benchProgram(sessions: 10, everyDays: 3.5)
-        let now = program.last!.completedAt!.addingTimeInterval(10 * 86_400)
+        let now = program.last!.completedAt!.addingTimeInterval(10 * 86400)
         let a = MuscleDevelopment.simulate(from: program, now: now)
         let b = MuscleDevelopment.simulate(from: program, now: now)
         for muscle in Set(a.fibers.keys).union(b.fibers.keys) {
@@ -261,9 +262,9 @@ struct MuscleDevelopmentTests {
 
     /// Session order in the input array doesn't matter — they're
     /// sorted by completion time.
-    @Test func sessionOrderDoesNotMatter() {
+    @Test func sessionOrderDoesNotMatter() throws {
         let program = benchProgram(sessions: 8, everyDays: 3.5)
-        let now = program.last!.completedAt!
+        let now = try #require(program.last?.completedAt)
         let forward = MuscleDevelopment.simulate(from: program, now: now).adaptation(.pectoralisMajorSternocostal)
         let shuffled = MuscleDevelopment.simulate(from: program.reversed(), now: now).adaptation(.pectoralisMajorSternocostal)
         #expect(abs(forward - shuffled) < 1e-9)
@@ -332,7 +333,7 @@ struct MuscleDevelopmentTests {
         #expect(raiseNodes["Pectoralis_Major_Sternocostal_R"] == nil)
     }
 
-    @Test func scapularMechanicsCreditMoversWithoutPromotingStabilizers() {
+    @Test func scapularMechanicsCreditMoversWithReducedStabilizerCredit() {
         let retraction = session(
             at: day(0),
             [lift("Standing Band Scapular Retraction", .back, sets: 4, reps: 5, weight: 0)]
@@ -346,8 +347,8 @@ struct MuscleDevelopmentTests {
         #expect(middleTrap > 0)
         #expect(lowerTrap > 0)
         #expect(lowerTrap < middleTrap)
-        #expect(retractionNodes["Trapezius_Upper_L"] == nil)
-        #expect(retractionNodes["Serratus_Anterior_L"] == nil)
+        #expect((retractionNodes["Trapezius_Upper_L"] ?? 0) > 0)
+        #expect((retractionNodes["Serratus_Anterior_L"] ?? 0) > 0)
         #expect(retractionNodes["Rhomboideus_Major_L"] == nil)
 
         let depression = session(
@@ -359,7 +360,7 @@ struct MuscleDevelopmentTests {
             now: day(0)
         )
         #expect((depressionNodes["Trapezius_Lower_L"] ?? 0) > 0)
-        #expect(depressionNodes["Serratus_Anterior_L"] == nil)
+        #expect((depressionNodes["Serratus_Anterior_L"] ?? 0) > 0)
         #expect(depressionNodes["Pectoralis_Minor_L"] == nil)
 
         let uprightRow = session(
@@ -377,7 +378,7 @@ struct MuscleDevelopmentTests {
         #expect(anteriorDeltoid < lateralDeltoid)
         #expect((uprightNodes["Trapezius_Upper_L"] ?? 0) > 0)
         #expect((uprightNodes["Trapezius_Lower_L"] ?? 0) > 0)
-        #expect(uprightNodes["Trapezius_Middle_L"] == nil)
+        #expect((uprightNodes["Trapezius_Middle_L"] ?? 0) > 0)
 
         let landmine = session(
             at: day(0),
@@ -396,8 +397,8 @@ struct MuscleDevelopmentTests {
         let handstandNodes = MuscleDevelopment.nodeIntensities(from: [handstand], now: day(0))
         #expect((handstandNodes["Deltoid_Anterior_L"] ?? 0) > 0)
         #expect((handstandNodes["Triceps_L"] ?? 0) > 0)
-        #expect(handstandNodes["Flexor_Digitorum_Superficialis_L"] == nil)
-        #expect(handstandNodes["Gluteus_Maximus_L"] == nil)
+        #expect((handstandNodes["Flexor_Digitorum_Superficialis_L"] ?? 0) > 0)
+        #expect((handstandNodes["Gluteus_Maximus_L"] ?? 0) > 0)
     }
 
     @Test func gluteMaxGluteMedAndTFLPaintOnlyWhenVolumeIsCredited() {
@@ -408,8 +409,8 @@ struct MuscleDevelopmentTests {
         let extensionNodes = MuscleDevelopment.nodeIntensities(from: [extensionSession], now: day(0))
         #expect((extensionNodes["Gluteus_Maximus_L"] ?? 0) > 0)
         // Glute med is a stabilizer in the reviewed hip-thrust contract,
-        // so it receives no volume or persistent development credit.
-        #expect(extensionNodes["Gluteus_Medius_L"] == nil)
+        // so it receives one tenth of primary development credit.
+        #expect(abs((extensionNodes["Gluteus_Medius_L"] ?? 0) / (extensionNodes["Gluteus_Maximus_L"] ?? 1) - 0.1) < 1e-9)
         #expect(extensionNodes["Tensor_Fascia_Latae_L"] == nil)
 
         let abductionSession = session(
@@ -445,7 +446,7 @@ struct MuscleDevelopmentTests {
         let lateralState = MuscleDevelopment.simulate(from: [lateral], now: day(0))
         let lateralNodes = MuscleDevelopment.nodeIntensities(from: [lateral], now: day(0))
         #expect(lateralState.adaptation(.quadratusLumborum) > 0)
-        #expect(lateralState.adaptation(.lumbarExtensors) == 0)
+        #expect(lateralState.adaptation(.lumbarExtensors) > 0)
         #expect((lateralNodes["Quadratus_Lumborum_L"] ?? 0) > 0)
         #expect(lateralNodes["Serratus_Posterior_Inferior_L"] == nil)
         #expect(lateralNodes["Serratus_Posterior_Superior_L"] == nil)
@@ -463,7 +464,7 @@ struct MuscleDevelopmentTests {
         #expect(internalState.adaptation(.gluteMin) > 0)
         #expect(internalState.adaptation(.gluteMed) == internalState.adaptation(.tensorFasciaeLatae))
         #expect(internalState.adaptation(.gluteMin) < internalState.adaptation(.gluteMed))
-        #expect(internalState.adaptation(.obliques) == 0)
+        #expect(internalState.adaptation(.obliques) > 0)
         #expect((internalNodes["Gluteus_Medius_L"] ?? 0) > 0)
         #expect((internalNodes["Tensor_Fascia_Latae_L"] ?? 0) > 0)
 
@@ -478,12 +479,12 @@ struct MuscleDevelopmentTests {
         #expect(externalState.adaptation(.piriformis) > 0)
         #expect(externalState.adaptation(.quadratusFemoris) > 0)
         #expect(externalState.adaptation(.obturatorExternus) < externalState.adaptation(.obturatorInternusGemelli))
-        #expect(externalState.adaptation(.obliques) == 0)
-        #expect(externalState.adaptation(.medialHamstrings) == 0)
-        #expect(externalNodes.isEmpty)
+        #expect(externalState.adaptation(.obliques) > 0)
+        #expect(externalState.adaptation(.medialHamstrings) > 0)
+        #expect((externalNodes["External_Oblique_L"] ?? 0) > 0)
     }
 
-    @Test func hipAndHingeBoundariesCreditMoversWithoutPromotingStabilizers() {
+    @Test func hipAndHingeBoundariesCreditMoversWithReducedStabilizerCredit() {
         let hipFlexion = session(
             at: day(0),
             [lift("Bodyweight Active Straight-Leg Raise", .legs, sets: 4, reps: 10, weight: 0)]
@@ -493,8 +494,8 @@ struct MuscleDevelopmentTests {
         #expect(flexionState.adaptation(.iliopsoas) > 0)
         #expect(flexionState.adaptation(.rectusFemoris) > 0)
         #expect(flexionState.adaptation(.rectusFemoris) < flexionState.adaptation(.iliopsoas))
-        #expect(flexionState.adaptation(.abs) == 0)
-        #expect(flexionState.adaptation(.obliques) == 0)
+        #expect(flexionState.adaptation(.abs) > 0)
+        #expect(flexionState.adaptation(.obliques) > 0)
         #expect((flexionNodes["Psoas_Major_L"] ?? 0) > 0)
         #expect((flexionNodes["Iliacus_L"] ?? 0) > 0)
 
@@ -507,10 +508,10 @@ struct MuscleDevelopmentTests {
         #expect(hingeState.adaptation(.medialHamstrings) > 0)
         #expect(hingeState.adaptation(.gluteMax) > 0)
         #expect(hingeState.adaptation(.lumbarExtensors) > 0)
-        #expect(hingeState.adaptation(.bicepsFemoris) == 0)
+        #expect(hingeState.adaptation(.bicepsFemoris) > 0)
         #expect((hingeNodes["Semitendinosus_L"] ?? 0) > 0)
         #expect((hingeNodes["Gluteus_Maximus_L"] ?? 0) > 0)
-        #expect(hingeNodes["Biceps_femoris_L"] == nil)
+        #expect((hingeNodes["Biceps_femoris_L"] ?? 0) > 0)
         #expect(hingeNodes["Quadratus_Lumborum_L"] == nil)
 
         for name in ["Bodyweight Forward Lunge", "Bodyweight Reverse Lunge"] {
@@ -525,10 +526,10 @@ struct MuscleDevelopmentTests {
             #expect(state.adaptation(.rectusFemoris) > 0)
             #expect(state.adaptation(.gastrocnemius) > 0)
             #expect(state.adaptation(.soleus) > 0)
-            #expect(state.adaptation(.medialHamstrings) == 0)
+            #expect(state.adaptation(.medialHamstrings) > 0)
             #expect((nodes["Vastus_Lateralis_L"] ?? 0) > 0)
             #expect((nodes["Gluteus_Maximus_L"] ?? 0) > 0)
-            #expect(nodes["Semitendinosus_L"] == nil)
+            #expect((nodes["Semitendinosus_L"] ?? 0) > 0)
         }
     }
 
@@ -631,19 +632,19 @@ struct MuscleDevelopmentTests {
 
     private func primaryMuscle(for group: MuscleGroup) -> Muscle {
         switch group {
-        case .chest: return .pectoralisMajorSternocostal
-        case .back: return .lats
-        case .shoulders: return .deltoidAnterior
-        case .legs: return .vasti
-        case .arms: return .bicepsBrachii
-        case .core: return .abs
+        case .chest: .pectoralisMajorSternocostal
+        case .back: .lats
+        case .shoulders: .deltoidAnterior
+        case .legs: .vasti
+        case .arms: .bicepsBrachii
+        case .core: .abs
         }
     }
 
     /// A bench-press program: `sessions` workouts spaced `everyDays`
     /// apart at a steady per-session set count.
     private func benchProgram(sessions n: Int, everyDays: Double, sets: Int = 3) -> [WorkoutSession] {
-        (0..<n).map { i in
+        (0 ..< n).map { i in
             session(
                 at: day(Double(i) * everyDays),
                 [lift("Barbell Bench Press", .chest, sets: sets, reps: 8, weight: 135)]

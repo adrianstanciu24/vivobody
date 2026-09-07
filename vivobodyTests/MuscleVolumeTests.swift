@@ -8,7 +8,7 @@
 //  on a virtual clock with no simulator.
 //
 //  Covered:
-//    • Role credit — primary gets 1.0, secondary 0.5, stabilizer 0.
+//    • Role credit — primary gets 1.0, secondary 0.5, stabilizer 0.1.
 //    • Completion gate — only completed sets count.
 //    • Rolling window — work outside the 7-day window stops counting
 //      toward volume but still updates recency.
@@ -23,11 +23,12 @@ import Testing
 
 @MainActor
 struct MuscleVolumeTests {
-
     // MARK: - Virtual clock
 
     private static let origin = Date(timeIntervalSince1970: 1_700_000_000)
-    private func day(_ n: Double) -> Date { Self.origin.addingTimeInterval(n * 86_400) }
+    private func day(_ n: Double) -> Date {
+        Self.origin.addingTimeInterval(n * 86400)
+    }
 
     // MARK: - Helpers
 
@@ -69,12 +70,12 @@ struct MuscleVolumeTests {
 
     private func primaryMuscle(for group: MuscleGroup) -> Muscle {
         switch group {
-        case .chest: return .pectoralisMajorSternocostal
-        case .back: return .lats
-        case .shoulders: return .deltoidAnterior
-        case .legs: return .vasti
-        case .arms: return .bicepsBrachii
-        case .core: return .abs
+        case .chest: .pectoralisMajorSternocostal
+        case .back: .lats
+        case .shoulders: .deltoidAnterior
+        case .legs: .vasti
+        case .arms: .bicepsBrachii
+        case .core: .abs
         }
     }
 
@@ -84,7 +85,7 @@ struct MuscleVolumeTests {
 
     // MARK: - Role credit
 
-    @Test func rolesCreditPrimarySecondaryAndNotStabilizer() {
+    @Test func rolesCreditPrimarySecondaryAndStabilizer() {
         let involvement = Muscle.Involvement(contributions: [
             .init(muscle: .pectoralisMajorSternocostal, role: .primary),
             .init(muscle: .triceps, role: .secondary),
@@ -97,8 +98,8 @@ struct MuscleVolumeTests {
 
         #expect(stat(.pectoralisMajorSternocostal, in: stats).effectiveSets == 3)
         #expect(stat(.triceps, in: stats).effectiveSets == 1.5)
-        #expect(stat(.serratus, in: stats).effectiveSets == 0)
-        #expect(stat(.serratus, in: stats).daysSinceLastTrained == nil)
+        #expect(abs(stat(.serratus, in: stats).effectiveSets - 0.3) < 1e-9)
+        #expect(stat(.serratus, in: stats).daysSinceLastTrained == 0)
     }
 
     @Test func dipsCreditBothPectoralRegionsWhileNeutralStartFlexionDoesNot() {
@@ -210,14 +211,14 @@ struct MuscleVolumeTests {
     // MARK: - Zones
 
     @Test func zonesTrackLandmarks() {
-        // Shared landmark: mev 8, optimalHigh 18.
+        /// Shared landmark: mev 8, optimalHigh 18.
         func chestZone(sets: Int) -> VolumeZone {
             let s = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: sets)])
             return stat(.pectoralisMajorSternocostal, in: [s].muscleVolume(now: day(0))).zone
         }
-        #expect(chestZone(sets: 6) == .under)      // below MEV
-        #expect(chestZone(sets: 12) == .optimal)   // inside the band
-        #expect(chestZone(sets: 25) == .high)      // past the top
+        #expect(chestZone(sets: 6) == .under) // below MEV
+        #expect(chestZone(sets: 12) == .optimal) // inside the band
+        #expect(chestZone(sets: 25) == .high) // past the top
     }
 
     // MARK: - Summary

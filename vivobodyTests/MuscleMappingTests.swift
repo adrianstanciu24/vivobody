@@ -160,7 +160,7 @@ struct MuscleMappingTests {
         #expect(MuscleRole.secondary.snapshotValue == 0.5)
         #expect(MuscleRole.secondary.volumeCredit == 0.5)
         #expect(MuscleRole.stabilizer.snapshotValue == 0.2)
-        #expect(MuscleRole.stabilizer.volumeCredit == 0)
+        #expect(MuscleRole.stabilizer.volumeCredit == 0.1)
     }
 
     @Test func canonicalBenchRolesAndAnatomyProjectionStaySeparated() {
@@ -173,7 +173,7 @@ struct MuscleMappingTests {
         #expect(bench.anatomyNodeChannels["Pectoralis_Major_Sternocostal_L"]?.intensity == 1)
         #expect(bench.anatomyNodeChannels["Pectoralis_Major_Clavicular_L"]?.intensity == 0.5)
         #expect(bench.anatomyNodeChannels["Trapezius_Middle_L"]?.intensity == 0.2)
-        #expect(bench.volumeCredit(for: .trapeziusMiddle) == 0)
+        #expect(bench.volumeCredit(for: .trapeziusMiddle) == 0.1)
     }
 
     @Test func canonicalDipsPaintAndCreditBothPectoralRegions() {
@@ -213,7 +213,7 @@ struct MuscleMappingTests {
         #expect(lateral.anatomyNodeChannels["Quadratus_Lumborum_L"]?.intensity == 0.5)
         #expect(lateral.anatomyNodeChannels["Quadratus_Lumborum_R"]?.intensity == 0.5)
         #expect(lateral.volumeCredit(for: .quadratusLumborum) == 0.5)
-        #expect(lateral.volumeCredit(for: .lumbarExtensors) == 0)
+        #expect(lateral.volumeCredit(for: .lumbarExtensors) == 0.1)
         #expect(Muscle.allCases.flatMap(\.nodeNames).contains("Serratus_Posterior_Inferior_L") == false)
         #expect(Muscle.allCases.flatMap(\.nodeNames).contains("Serratus_Posterior_Superior_L") == false)
     }
@@ -227,7 +227,7 @@ struct MuscleMappingTests {
         #expect(internalRotation.role(for: .gluteMin) == .secondary)
         #expect(internalRotation.role(for: .obliques) == .stabilizer)
         #expect(internalRotation.volumeCredit(for: .gluteMin) == 0.5)
-        #expect(internalRotation.volumeCredit(for: .obliques) == 0)
+        #expect(internalRotation.volumeCredit(for: .obliques) == 0.1)
         #expect(internalRotation.anatomyNodeChannels["Gluteus_Medius_L"]?.intensity == 1)
         #expect(internalRotation.anatomyNodeChannels["Tensor_Fascia_Latae_L"]?.intensity == 1)
 
@@ -242,8 +242,8 @@ struct MuscleMappingTests {
         #expect(externalRotation.role(for: .medialHamstrings) == .stabilizer)
         #expect(externalRotation.volumeCredit(for: .obturatorInternusGemelli) == 1)
         #expect(externalRotation.volumeCredit(for: .obturatorExternus) == 0.5)
-        #expect(externalRotation.volumeCredit(for: .obliques) == 0)
-        #expect(externalRotation.volumeCredit(for: .medialHamstrings) == 0)
+        #expect(externalRotation.volumeCredit(for: .obliques) == 0.1)
+        #expect(externalRotation.volumeCredit(for: .medialHamstrings) == 0.1)
         #expect(externalRotation.anatomyNodeChannels["Obturator_Internus_L"] == nil)
         #expect(externalRotation.anatomyNodeChannels["Piriformis_L"] == nil)
         #expect(externalRotation.anatomyNodeChannels["Semitendinosus_L"]?.intensity == 0.2)

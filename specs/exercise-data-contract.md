@@ -46,8 +46,8 @@ Each listed muscle has one categorical role:
 - `primary`: intended target or principal force-producing region.
 - `secondary`: meaningfully loaded synergist that may receive partial training
   stimulus.
-- `stabilizer`: contributes to position or joint control but receives no
-  hard-set-volume credit.
+- `stabilizer`: contributes to position or joint control and receives 0.1
+  effort-weighted set credit.
 
 Roles are encoded in the SwiftData snapshot shape, projected onto Exercise
 Anatomy, and projected into training credit separately:
@@ -56,7 +56,7 @@ Anatomy, and projected into training credit separately:
 |---|---:|---:|---:|
 | Primary | 1.0 | 1.0 | 1.0 |
 | Secondary | 0.5 | 0.5 | 0.5 |
-| Stabilizer | 0.2 | 0.2 | 0.0 |
+| Stabilizer | 0.2 | 0.2 | 0.1 |
 
 The snapshot values distinguish categorical roles in the existing
 `[String: Double]` persistence schema. Stabilizer `0.2` also gives it faint
@@ -73,7 +73,7 @@ Today's chronic Training Development map or earn hypertrophy hard-set credit.
 The two 3D modes are intentionally distinct:
 
 - **Training Development (Today):** chronic, decayed hard-set estimate;
-  primary 1.0, secondary 0.5, stabilizer 0.0.
+  primary 1.0, secondary 0.5, stabilizer 0.1.
 - **Exercise Anatomy (Exercise Detail):** temporary movement-role overlay;
   primary 1.0, secondary 0.5, stabilizer 0.2, for every modality. It describes
   involvement only and never feeds Training Development calculations.
@@ -146,6 +146,13 @@ RIR is valid only for an explicitly rated (`rirLogged`) completed
 require positive repetitions. The stored default RIR value is not a reading,
 and isometric, power, and mismatched modality/tracking records never enter RIR
 averages, hard-set counts, or progression guidance.
+
+Effort-weighted set credit uses the selected RIR: 0 = 1.0, 1 = 0.9,
+2 = 0.8, 3 = 0.7, 4 = 0.6, and 5+ = 0.4. These are product scoring
+weights, not measured muscle-growth ratios. The shared `SetStimulus` policy
+feeds muscle volume, body-map development, and Training Load hard-set credit;
+actual set counts and comparable volume load do not change. Legacy records
+without an explicitly logged RIR retain neutral credit.
 
 Each workout and per-set template row also stores an explicit set intent:
 `working` or `warmUp`. Warm-ups remain visible in history and completion

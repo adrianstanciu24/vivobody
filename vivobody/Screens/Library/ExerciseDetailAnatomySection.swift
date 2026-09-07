@@ -32,7 +32,7 @@ struct ExerciseDetailAnatomySection: View {
                     )
                     .frame(height: 240)
                     .accessibilityElement()
-                    .accessibilityLabel("Muscles used by \(exerciseName). Primary muscles are most vivid, secondary muscles are medium, and stabilizers are faint. Stabilizer color shows involvement, not development credit.")
+                    .accessibilityLabel("Muscles used by \(exerciseName). Primary muscles are most vivid, secondary muscles are medium, and stabilizers are faint. Anatomy colors show roles; training credit uses separate role and effort weights.")
                 }
 
                 VStack(alignment: .leading, spacing: Space.sm) {

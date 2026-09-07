@@ -177,8 +177,7 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
 ### Direct vs. Indirect
 
 - Use the same all-time completed history and SetStimulus pricing. Primary snapshot
-  credit 1.0 enters direct work; secondary 0.5 enters indirect work; stabilizers
-  earn none. These are credited hard sets, not literal exercise-set counts.
+  credit 1.0 enters direct work; secondary 0.5 and stabilizer 0.1 enter indirect work. These are credited hard sets, not literal exercise-set counts.
 - The headline names the muscle with most indirect hard-set credit. Bars compare
   direct and indirect work on one common scale; text labels carry both roles.
 - The roster covers every muscle, including a collapsed no-recorded-work list. Each

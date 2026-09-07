@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Direct/indirect beams expose the role behind muscle volume. The headline
-//  names the largest secondary-work recipient; full rosters, sources, and
+//  names the largest indirect-work recipient; full rosters, sources, and
 //  authored primary-target examples are one navigation level away.
 //
 
@@ -58,14 +58,14 @@ struct MuscleDirectnessSection: View {
         .accessibilityAddTraits(.isButton)
         .accessibilityIdentifier("insightsMuscleDirectnessLink")
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint("Opens every muscle, its secondary sources, and primary-target exercise examples")
+        .accessibilityHint("Opens every muscle, its indirect sources, and primary-target exercise examples")
     }
 
     private var accessibilityLabel: String {
         let rows = report.passengers.prefix(dynamicTypeSize.isAccessibilitySize ? 1 : 3).map { row in
             "\(row.muscle.displayName): \(InsightsFormat.setsLabel(row.direct)) direct, \(InsightsFormat.setsLabel(row.indirect)) indirect hard sets, \(Int((row.indirectShare * 100).rounded())) percent indirect."
         }.joined(separator: " ")
-        return "Direct versus indirect. All time. \(rows.isEmpty ? "No secondary muscle work recorded." : rows)"
+        return "Direct versus indirect. All time. \(rows.isEmpty ? "No indirect muscle work recorded." : rows)"
     }
 }
 
@@ -101,7 +101,7 @@ private struct MuscleDirectnessList: View {
                 }
                 .font(Typography.body).frame(minHeight: 44)
                 DisclosureGroup("How roles earn credit") {
-                    Text("A primary muscle receives full hard-set credit; a secondary muscle receives half. Logged effort adjusts both. Stabilizers receive none. These are credited hard sets, not a count of sets performed just for that muscle.")
+                    Text("A primary muscle receives full hard-set credit; a secondary muscle receives half; a stabilizer receives one tenth. Logged effort adjusts all three. These are credited hard sets, not a count of sets performed just for that muscle.")
                         .font(Typography.body).foregroundStyle(Ink.secondary)
                         .padding(.top, Space.sm)
                 }

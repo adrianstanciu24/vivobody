@@ -17,14 +17,13 @@ import Testing
 
 @MainActor
 struct SetStimulusTests {
-
     // MARK: - Fixtures
 
     /// One completed set described in full.
     private struct SetSpec {
         var weight: Double
         var reps: Int
-        var rir: Int? = nil        // nil = never rated (rirLogged false)
+        var rir: Int? = nil // nil = never rated (rirLogged false)
         var duration: TimeInterval = 0
         var isCompleted = true
     }
@@ -111,7 +110,7 @@ struct SetStimulusTests {
 
     // MARK: - Role credit
 
-    @Test func muscleRolesCreditPrimarySecondaryAndNotStabilizer() {
+    @Test func muscleRolesCreditPrimarySecondaryAndStabilizer() {
         let involvement = Muscle.Involvement(contributions: [
             .init(muscle: .pectoralisMajorSternocostal, role: .primary),
             .init(muscle: .triceps, role: .secondary),
@@ -130,7 +129,7 @@ struct SetStimulusTests {
         let credit = SetStimulus.credit(for: ex)
         #expect(credit[.pectoralisMajorSternocostal] == 1)
         #expect(credit[.triceps] == 0.5)
-        #expect(credit[.serratus] == nil)
+        #expect(credit[.serratus] == 0.1)
     }
 
     // MARK: - Modality gates
@@ -196,11 +195,10 @@ struct SetStimulusTests {
 
     // MARK: - Effort curve (the one discount)
 
-    /// RIR 0–2 all count as full hard sets — the landmark band.
-    @Test func nearFailureRIRKeepsFullCredit() {
-        for rir in 0...2 {
+    @Test func selectedRIRUsesEffortWeights() {
+        for (rir, expected) in [1.0, 0.9, 0.8, 0.7, 0.6, 0.4].enumerated() {
             let ex = lift("Bench Press", .chest, sets: [SetSpec(weight: 135, reps: 8, rir: rir)])
-            #expect(abs(SetStimulus.setEquivalentCredit(for: ex) - 1.0) < 1e-9)
+            #expect(abs(SetStimulus.setEquivalentCredit(for: ex) - expected) < 1e-9)
         }
     }
 
@@ -208,14 +206,14 @@ struct SetStimulusTests {
     /// even a stored 5 prices neutral when `rirLogged` is false.
     @Test func unloggedRIRIsNeutral() {
         let ex = lift("Bench Press", .chest, sets: [SetSpec(weight: 135, reps: 8)])
-        ex.orderedSets[0].repsInReserve = 5   // stored but never rated
+        ex.orderedSets[0].repsInReserve = 5 // stored but never rated
         #expect(abs(SetStimulus.setEquivalentCredit(for: ex) - 1.0) < 1e-9)
     }
 
-    @Test func effortDecaysBeyondRIR2() {
-        #expect(SetStimulus.effortFactor(rir: 2, logged: true) == 1.0)
-        #expect(abs(SetStimulus.effortFactor(rir: 3, logged: true) - 0.8) < 1e-9)
-        #expect(abs(SetStimulus.effortFactor(rir: 5, logged: true) - 0.512) < 1e-9)
+    @Test func effortBucketsClampAtBothEnds() {
+        #expect(SetStimulus.effortFactor(rir: -1, logged: true) == 1.0)
+        #expect(SetStimulus.effortFactor(rir: 6, logged: true) == 0.4)
+        #expect(SetStimulus.effortFactor(rir: Int.max, logged: true) == 0.4)
         #expect(SetStimulus.effortFactor(rir: 5, logged: false) == 1.0)
     }
 
@@ -225,7 +223,7 @@ struct SetStimulusTests {
             SetSpec(weight: 135, reps: 8, rir: 1),
             SetSpec(weight: 135, reps: 8, rir: 5),
         ])
-        #expect(abs(SetStimulus.setEquivalentCredit(for: ex) - 1.512) < 1e-9)
+        #expect(abs(SetStimulus.setEquivalentCredit(for: ex) - 1.3) < 1e-9)
     }
 
     // MARK: - Currency agreement across surfaces
@@ -243,7 +241,7 @@ struct SetStimulusTests {
             session(at: origin, [lift("Bench Press", .chest, sets: [
                 SetSpec(weight: 135, reps: 8), SetSpec(weight: 185, reps: 6, rir: 1),
             ])]),
-            session(at: origin.addingTimeInterval(3 * 86_400), [lift("Bench Press", .chest, sets: [
+            session(at: origin.addingTimeInterval(3 * 86400), [lift("Bench Press", .chest, sets: [
                 SetSpec(weight: 95, reps: 10), SetSpec(weight: 185, reps: 6, rir: 4),
             ])]),
         ]
@@ -255,7 +253,7 @@ struct SetStimulusTests {
             }
         }
 
-        let stats = history.muscleVolume(now: origin.addingTimeInterval(3 * 86_400))
+        let stats = history.muscleVolume(now: origin.addingTimeInterval(3 * 86400))
         for stat in stats {
             #expect(abs(stat.effectiveSets - (replayed[stat.muscle] ?? 0)) < 1e-9)
         }

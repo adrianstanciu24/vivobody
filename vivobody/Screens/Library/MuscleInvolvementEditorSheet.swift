@@ -4,7 +4,7 @@
 //
 //  Focused editor for the categorical muscle roles stored on a
 //  catalog exercise. Primary and secondary roles drive hard-set
-//  analytics; stabilizers remain visible anatomy context only. Changes apply
+//  analytics; stabilizers earn one tenth of primary credit. Changes apply
 //  only when Done is tapped.
 //
 
@@ -38,7 +38,7 @@ struct MuscleInvolvementEditorSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: Space.section) {
-                    Text("Choose each muscle's role. Primary and secondary muscles shape training volume; stabilizers remain visible without earning hard-set credit.")
+                    Text("Choose each muscle's role. Primary muscles receive full training credit, secondary muscles half, and stabilizers one tenth.")
                         .font(Typography.body)
                         .foregroundStyle(Ink.tertiary)
                         .fixedSize(horizontal: false, vertical: true)

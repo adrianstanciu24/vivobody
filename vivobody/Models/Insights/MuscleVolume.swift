@@ -10,8 +10,8 @@
 //
 //  Two ideas make the count honest. First, the role-based involvement
 //  map (`Muscle.involvement`): primary muscles receive one set,
-//  secondary muscles receive half a set, and stabilizers receive no
-//  hypertrophy-volume credit. Stabilizers remain available to the body
+//  secondary muscles receive half a set, and stabilizers receive one tenth
+//  of a set. Stabilizers remain available to the body
 //  visualization without inflating training volume. Second, the shared
 //  `SetStimulus` currency: each completed set counts 1.0, discounted
 //  only when the user's own logged RIR says it was stopped far from

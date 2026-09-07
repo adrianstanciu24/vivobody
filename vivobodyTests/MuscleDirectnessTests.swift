@@ -25,14 +25,14 @@ struct MuscleDirectnessTests {
         #expect(biceps.sources.first?.sets == 2)
     }
 
-    @Test func discountedSecondaryDoesNotBecomeDirectAndStabilizersEarnNothing() throws {
-        let exercise = F.exercise([F.set(rir: 4)], roles: [.bicepsBrachii: 0.5, .triceps: 0])
+    @Test func discountedSecondaryDoesNotBecomeDirectAndStabilizersEarnIndirectCredit() throws {
+        let exercise = F.exercise([F.set(rir: 4)], roles: [.bicepsBrachii: 0.5, .triceps: 0.1])
         let report = F.replay([F.session([exercise])]).muscleDirectness(now: F.now)
         let biceps = try #require(report.passengers.first)
         #expect(biceps.direct == 0)
-        #expect(abs(biceps.indirect - 0.32) < 0.000001)
+        #expect(abs(biceps.indirect - 0.3) < 0.000001)
         #expect(biceps.indirectShare == 1)
-        #expect(report.rows.first { $0.muscle == .triceps }?.total == 0)
+        #expect(abs((report.rows.first { $0.muscle == .triceps }?.indirect ?? 0) - 0.06) < 1e-9)
     }
 
     @Test func includesAllHistoryAndExcludesFutureLiveAndPowerWork() {

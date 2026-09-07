@@ -373,12 +373,12 @@ nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable {
     }
 
     /// Fractional hard-set credit used by muscle-volume analytics.
-    /// Stabilization alone stays listed but earns no hypertrophy volume.
+    /// Stabilization earns a small effort-weighted contribution.
     nonisolated var volumeCredit: Double {
         switch self {
         case .primary: 1
         case .secondary: 0.5
-        case .stabilizer: 0
+        case .stabilizer: 0.1
         }
     }
 
@@ -475,7 +475,7 @@ nonisolated extension Muscle {
 
         /// Temporary Exercise Anatomy colours keyed by exact SceneKit
         /// mesh name. Stabilizers remain faintly visible here while
-        /// retaining zero hard-set credit in volume analytics.
+        /// receiving separate 0.1 credit in volume analytics.
         var anatomyNodeChannels: [String: MuscleMapChannels] {
             var result: [String: MuscleMapChannels] = [:]
             for contribution in contributions {

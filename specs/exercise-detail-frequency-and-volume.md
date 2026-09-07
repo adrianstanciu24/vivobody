@@ -121,8 +121,7 @@ disagrees, it moves into `CoreReports` beside `volume`.
 
 All `SetStimulus` semantics are inherited unchanged: only completed
 dynamic-strength reps and completed isometric holds earn credit; RIR
-beyond 2 discounts; unlogged RIR stays neutral; stabilizers earn no
-volume credit and therefore never appear as rows.
+0/1/2/3/4/5+ credits 1.0/0.9/0.8/0.7/0.6/0.4; unlogged RIR stays neutral; stabilizers earn 0.1 role credit and appear as supporting rows.
 
 ### Access
 
@@ -158,7 +157,7 @@ The card is fully visible whenever qualifying data exists, with no purchase gate
 Swift Testing, deterministic clocks (inject `now` everywhere):
 
 - `ExerciseVolumeContributionTests`: role weighting (primary 1.0 /
-  secondary 0.5 / stabilizer none), RIR discount and unlogged-neutral,
+  secondary 0.5 / stabilizer 0.1), RIR discount and unlogged-neutral,
   window boundary (a session at exactly `now − 7d` counts, one second
   earlier does not), future-dated sessions excluded, modality gating,
   multi-session accumulation, custom exercise without anatomy → empty.
