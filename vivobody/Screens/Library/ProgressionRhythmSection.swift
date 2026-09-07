@@ -4,7 +4,7 @@
 //
 //  Focused Exercise Detail load-cadence instrument. It renders the immutable
 //  cadence presentation prepared by ExerciseDetailReadModel and owns only the
-//  staircase motion and Pro cover.
+//  staircase motion.
 //
 
 import SwiftUI
@@ -13,18 +13,10 @@ import VivoKit
 struct ExerciseDetailRhythmSection: View {
     let cadence: ExerciseDetailReadModel.Cadence?
     let now: Date
-    let isUnlocked: Bool
-    let onUnlock: () -> Void
 
     var body: some View {
         if let cadence {
-            if isUnlocked {
-                content(cadence)
-            } else {
-                LockedProCover(title: "Load cadence", action: onUnlock) {
-                    content(cadence)
-                }
-            }
+            content(cadence)
         }
     }
 
@@ -415,21 +407,11 @@ private struct StaircaseArea: Shape {
             VStack(spacing: Space.xxl) {
                 ExerciseDetailRhythmSection(
                     cadence: cadencePresentation,
-                    now: now,
-                    isUnlocked: true,
-                    onUnlock: {}
+                    now: now
                 )
                 ExerciseDetailRhythmSection(
                     cadence: midCyclePresentation,
-                    now: now,
-                    isUnlocked: true,
-                    onUnlock: {}
-                )
-                ExerciseDetailRhythmSection(
-                    cadence: cadencePresentation,
-                    now: now,
-                    isUnlocked: false,
-                    onUnlock: {}
+                    now: now
                 )
             }
             .padding(Space.gutter)

@@ -3,9 +3,7 @@
   "launch": {
     "reset": true,
     "tab": "library",
-    "arguments": [
-      "--pro"
-    ]
+    "arguments": []
   },
   "steps": [
     {

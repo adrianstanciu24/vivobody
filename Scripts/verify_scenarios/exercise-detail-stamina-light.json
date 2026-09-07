@@ -6,7 +6,6 @@
     "arguments": [
       "--ui-test-insights-dimensions",
       "--static-body",
-      "--pro",
       "-settings.appearance",
       "light"
     ]
@@ -66,6 +65,9 @@
   "forbidden": [
     {
       "identifier": "insightsEmptyState"
+    },
+    {
+      "labelContains": "Unlock Vivobody Pro"
     }
   ]
 }

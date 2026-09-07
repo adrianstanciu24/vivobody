@@ -8,9 +8,9 @@ Two additions to `ExerciseDetailScreen` drawn from data the app already
 collects at log time. Both answer questions the screen currently cannot:
 
 1. **How often do I actually do this exercise?** — a frequency footer
-   inside the Best-set hero card (free).
+   inside the Best-set hero card.
 2. **What is this exercise doing for my muscles right now?** — a weekly
-   hard-set contribution card (Pro).
+   hard-set contribution card.
 
 Neither introduces new logging, new persistence, or new user input. Both
 are read-only projections of the archived session history the screen
@@ -18,15 +18,11 @@ already queries.
 
 ## Product fit
 
-From `workout-app-principles.md`: surfaces should respect effort and turn
-the user's own diary into meaning without interruption. From
-`free-with-pro-iap.md`: raw numeric stats (totals, last performed) stay
-free; derived "what it all means" analytics are Pro. The two features map
-cleanly onto that split — the frequency footer is raw stats, the volume
-contribution card is derived analytics built on the same hard-set
-landmark model that is the Insights tab's core value.
+The frequency footer describes recorded activity; the volume card explains
+its contribution through the existing hard-set landmark model. Both are
+included in the [upfront app price](paid-app.md).
 
-## Feature 1 — Frequency footer (free)
+## Feature 1 — Frequency footer
 
 ### Placement and form
 
@@ -72,7 +68,7 @@ re-adding their bulk.
   color, or "you should" copy — the Effort section owns progression
   advice.
 
-## Feature 2 — Weekly volume contribution card (Pro)
+## Feature 2 — Weekly volume contribution card
 
 ### Placement and form
 
@@ -128,15 +124,9 @@ dynamic-strength reps and completed isometric holds earn credit; RIR
 beyond 2 discounts; unlogged RIR stays neutral; stabilizers earn no
 volume credit and therefore never appear as rows.
 
-### Gating
+### Access
 
-Pro, using the existing `LockedRhythmCover` frozen-blur pattern (real
-card beneath a blur, whole area opens the screen's local paywall sheet).
-The card joins `showsUnlockControl` so the floating unlock pill appears
-whenever it is frozen. Rationale: the landmark band and per-muscle weekly
-totals are the Insights volume model — the "what it means" layer the IAP
-spec reserves for Pro. Raw per-session set counts remain visible for free
-in Recent sessions.
+The card is fully visible whenever qualifying data exists, with no purchase gate.
 
 ### Edge cases
 
@@ -163,10 +153,6 @@ in Recent sessions.
   "Chest, primary. 4.5 hard sets from this exercise this week. 12.5 total
   this week, inside the 8 to 18 productive band." Bars are
   `.accessibilityHidden(true)` like the rhythm staircase.
-- Locked state mirrors `LockedRhythmCover`: content hidden from
-  VoiceOver, single button "This week, locked — unlocks with Vivobody
-  Pro."
-
 ## Testing
 
 Swift Testing, deterministic clocks (inject `now` everywhere):
@@ -179,8 +165,8 @@ Swift Testing, deterministic clocks (inject `now` everywhere):
 - Frequency: per-week rate for <8-week and ≥8-week histories, single
   session → `—`, span <7 days → `—`, formatting (`2.1×` vs `3×`).
 - `Scripts/verify.sh` semantic scenarios: footer visible with history /
-  hidden without; volume card visible (Pro), frozen (free), hidden
-  (no work this week).
+  hidden without; volume card visible with qualifying work, hidden
+  without work this week.
 
 ## Files
 
@@ -191,15 +177,14 @@ Swift Testing, deterministic clocks (inject `now` everywhere):
 | `vivobody/Models/Insights/ExerciseFrequency.swift` | New — pure per-week rate |
 | `vivobody/Screens/Library/ExerciseBestHeroCard.swift` | New — hero card moved out of the ratcheted sections file, gaining the frequency footer |
 | `vivobody/Screens/Library/ExerciseWeeklyVolumeSection.swift` | New — `This week` section, rows, band bars, DEBUG preview |
-| `vivobody/Screens/Library/LockedProCover.swift` | New — shared frozen-blur Pro cover, hoisted from the rhythm section |
-| `vivobody/Screens/Library/ProgressionRhythmSection.swift` | Adopts the shared cover |
+| `vivobody/Screens/Library/ProgressionRhythmSection.swift` | Renders load cadence directly |
 | `vivobody/Models/Insights/ExerciseDetailReadModel*.swift` | Immutable archive-derived frequency, volume, record, and chart inputs |
 | `vivobody/Screens/Library/ExerciseDetailScreen.swift` | Section wiring; header comment updated (stale Last/Times reference removed) |
 | `vivobody/App/DebugSeedWeeklyVolume.swift` | New — `--ui-test-weekly-volume` deterministic fixture |
 | `vivobody/App/DebugSeed.swift`, `DebugSeedCoordinator.swift`, `DebugArchivedHistorySeeder.swift`, `AppRoot.swift` | Pure argument routing plus the focused deterministic weekly-volume dispatch |
 | `vivobodyTests/ExerciseVolumeContributionTests.swift` | New |
 | `vivobodyTests/ExerciseFrequencyTests.swift` | New |
-| `Scripts/verify_scenarios/exercise-detail-weekly-volume*.json` | Pro and locked semantic scenarios |
+| `Scripts/verify_scenarios/exercise-detail-weekly-volume*.json` | Unrestricted weekly-volume semantic scenarios |
 
 ## Out of scope
 
@@ -215,7 +200,7 @@ Swift Testing, deterministic clocks (inject `now` everywhere):
 
 ## Set-series stamina
 
-Exercise Detail also shows the Pro stamina instrument after Effort and before
+Exercise Detail also shows the stamina instrument after Effort and before
 Recent sessions when a qualifying run exists anywhere in completed history. It shows
 rep-by-set values, retained reps, held-back marks, logged weight and date, and
 same-load history when at least two matching runs exist. The exact eligibility,

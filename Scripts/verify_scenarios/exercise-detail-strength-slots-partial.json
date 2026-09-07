@@ -4,8 +4,7 @@
     "reset": true,
     "tab": "library",
     "arguments": [
-      "--ui-test-single-exercise-history",
-      "--pro"
+      "--ui-test-single-exercise-history"
     ]
   },
   "steps": [

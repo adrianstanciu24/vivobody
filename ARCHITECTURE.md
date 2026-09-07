@@ -38,7 +38,7 @@ sides moves into `VivoKit`; app-only behavior stays in the app.
 | `Models/Domain/` | SwiftData entities and domain value types | System-framework integration |
 | `Models/Insights/` | Pure analytics over session data through `SessionAnalytics` | Per-render store queries or writes |
 | `App/` | App shell, persistence bootstrap, session orchestration, entry points, and app-side adapters | Feature screens |
-| `HealthKit/` and `Store/` | Narrow system-framework boundaries | General UI or session ownership |
+| `HealthKit/` | Narrow system-framework boundaries | General UI or session ownership |
 
 For unfamiliar work, begin with `vivobody/Models/Domain/WorkoutSession.swift`,
 `vivobody/Models/Domain/WorkoutTemplate.swift`, `vivobody/App/AppRoot.swift`,
@@ -132,7 +132,7 @@ The authoritative import and call-site allowlists live in
 | Concern | Boundary |
 |---|---|
 | HealthKit archive mirror | `vivobody/HealthKit/HealthKitWorkoutService.swift` |
-| StoreKit entitlement and purchases | `vivobody/Store/ProStore.swift` |
+| StoreKit app-review requests | `vivobody/App/ReviewRequestController.swift` |
 | App review prompting | `vivobody/App/ReviewRequestController.swift` |
 | Notifications | `vivobody/App/RestNotificationController.swift` |
 | Live Activity app control | `vivobody/App/WorkoutLiveActivityController.swift` |

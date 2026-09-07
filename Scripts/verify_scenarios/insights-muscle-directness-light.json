@@ -6,7 +6,6 @@
     "arguments": [
       "--ui-test-insights-dimensions",
       "--static-body",
-      "--pro",
       "-settings.appearance",
       "light"
     ]

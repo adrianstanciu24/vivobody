@@ -22,6 +22,21 @@ Current task instructions set the authorized scope. Active specs define feature 
 
 A review or investigation is read-only unless fixes are requested. A plan request authorizes planning, including a plan file when useful, and ends before implementation. An implementation request authorizes completing that scope and its verification; do not ask again for already-authorized steps. Follow [workflow and handoff guidance](engineering/plans/README.md) for active work and durable decisions.
 
+## Codex workflow recording
+
+For delegated work, follow the [recording procedure](engineering/codex-observability.md):
+save readable instructions and success criteria with the task helper before each
+handoff; workers read and acknowledge the exact assignment revision, then submit
+their result and affected files. The assigning agent records the appropriate
+checks and an acceptance or correction with a reason. Corrections use a new
+assignment revision. This records delegation when it is otherwise appropriate;
+it does not authorize extra workers or replace the request's scope.
+
+Hook events and reports live in Git-ignored `.verify/codex-observe/`. Keep task
+records distinct from `worklog.md`, which remains the current-task handoff.
+If recording is unavailable, disclose the gap and continue authorized work;
+never invent a receipt or treat a missing event as proof of inactivity.
+
 ## Project Structure & Module Organization
 
 `vivobody/` contains `App/`, `Models/`, `Screens/`, `Components/`, `Assets.xcassets/`, and `Resources/`. `vivobodyWidgets/` owns widget surfaces; `VivoKit/` shares app/widget contracts. Tests live in `vivobodyTests/` and `VivoKit/Tests/`. Author exercises in `specs/catalog/families/`; generate `vivobody/Resources/catalog.json` with `Scripts/catalog.py`.

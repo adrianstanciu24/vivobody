@@ -67,7 +67,6 @@ struct AppRoot: View {
 
     var body: some View {
         @Bindable var workout = appState.workout
-        @Bindable var pro = appState.pro
 
         tabView
             // The one complete-archive query in the app. It keeps the
@@ -256,17 +255,10 @@ struct AppRoot: View {
                 }
                 .presentationDragIndicator(.visible)
             }
-            .sheet(
-                isPresented: $pro.isPaywallPresented,
-                onDismiss: { appState.pro.paywallContext = .general }
-            ) {
-                PaywallSheet(pro: appState.pro)
-            }
             .fullScreenCover(isPresented: showOnboarding) {
                 OnboardingScreen(onStart: { onboardingCompleted = true })
             }
             .environment(\.sessionAnalytics, appState.analytics)
-            .environment(appState.pro)
     }
 
     /// The session the accessory pill should render, if any. Today owns

@@ -3,7 +3,7 @@
   "launch": {
     "reset": true,
     "tab": "library",
-    "arguments": ["--pro"]
+    "arguments": []
   },
   "steps": [
     {
@@ -33,7 +33,7 @@
       "relaunch": {
         "reset": true,
         "tab": "library",
-        "arguments": ["--pro", "--seed-templates"]
+        "arguments": ["--seed-templates"]
       }
     },
     {

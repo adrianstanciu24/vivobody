@@ -6,8 +6,8 @@
 //  model store; they read small Codable snapshots written into the App
 //  Group whenever workout, schedule, or preference state changes.
 //  Full snapshot publishes carry a persisted input fingerprint, so a
-//  foreground transition only rebuilds when data, day, unit, Pro
-//  state, or snapshot schema is stale. Archive analytics are resolved
+//  foreground transition only rebuilds when data, day, weight unit,
+//  or snapshot schema is stale. Archive analytics are resolved
 //  through SessionAnalytics' actor-backed pipeline.
 //
 
@@ -233,14 +233,10 @@ enum WidgetSnapshotWriter {
     ) -> String {
         let day = Calendar.current.startOfDay(for: now)
             .timeIntervalSinceReferenceDate
-        let proUnlocked = UserDefaults.standard.bool(
-            forKey: SettingsKey.proUnlockedCache
-        )
         return [
             String(revision),
             String(day),
             WeightUnit.current.rawValue,
-            proUnlocked ? "1" : "0",
             String(WidgetSnapshotVersion.current),
         ].joined(separator: "|")
     }
@@ -515,13 +511,5 @@ enum WidgetSnapshotWriter {
     private static func mirrorPreferences(unit: WeightUnit) {
         let defaults = UserDefaults(suiteName: WidgetShared.appGroup)
         defaults?.set(unit.rawValue, forKey: WidgetShared.weightUnitKey)
-        // Keep the widget-side Pro flag in step with the app-side
-        // entitlement cache on every snapshot write. ProStore writes
-        // the same key on entitlement changes; this covers writes
-        // that happen before its async resolution lands.
-        defaults?.set(
-            UserDefaults.standard.bool(forKey: SettingsKey.proUnlockedCache),
-            forKey: WidgetShared.proUnlockedKey
-        )
     }
 }

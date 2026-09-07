@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 108.
+Scenario files: 105.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -45,25 +45,24 @@ Scenario files: 108.
 | [custom-exercise-assistance](custom-exercise-assistance.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
 | [custom-exercise-type](custom-exercise-type.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
 | [deep-link-insights](deep-link-insights.json) | today | None declared |
-| [exercise-comparison-active-workout-hidden](exercise-comparison-active-workout-hidden.json) | today | `--ui-test-active-partial --no-iap --static-body` |
-| [exercise-comparison-locked](exercise-comparison-locked.json) | library | `--no-iap --static-body` |
-| [exercise-comparison-picker-filters-accessibility](exercise-comparison-picker-filters-accessibility.json) | library | `--pro -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
-| [exercise-comparison-picker-filters-light](exercise-comparison-picker-filters-light.json) | library | `--pro -settings.appearance light` |
-| [exercise-comparison-picker-filters](exercise-comparison-picker-filters.json) | library | `--pro` |
-| [exercise-comparison](exercise-comparison.json) | library | `--pro --static-body` |
-| [exercise-detail-dormant-chart](exercise-detail-dormant-chart.json) | library | `--pro` |
+| [exercise-comparison-active-workout-hidden](exercise-comparison-active-workout-hidden.json) | today | `--ui-test-active-partial --static-body` |
+| [exercise-comparison-picker-filters-accessibility](exercise-comparison-picker-filters-accessibility.json) | library | `-UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [exercise-comparison-picker-filters-light](exercise-comparison-picker-filters-light.json) | library | `-settings.appearance light` |
+| [exercise-comparison-picker-filters](exercise-comparison-picker-filters.json) | library | None declared |
+| [exercise-comparison-unrestricted](exercise-comparison-unrestricted.json) | library | `--static-body` |
+| [exercise-comparison](exercise-comparison.json) | library | `--static-body` |
+| [exercise-detail-dormant-chart](exercise-detail-dormant-chart.json) | library | None declared |
 | [exercise-detail-hero](exercise-detail-hero.json) | library | None declared |
 | [exercise-detail-isolation-role](exercise-detail-isolation-role.json) | library | None declared |
 | [exercise-detail-movement](exercise-detail-movement.json) | library | None declared |
-| [exercise-detail-single-session-point](exercise-detail-single-session-point.json) | library | `--ui-test-single-exercise-history --pro` |
-| [exercise-detail-stamina-accessibility](exercise-detail-stamina-accessibility.json) | library | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
-| [exercise-detail-stamina-light](exercise-detail-stamina-light.json) | library | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
+| [exercise-detail-single-session-point](exercise-detail-single-session-point.json) | library | `--ui-test-single-exercise-history` |
+| [exercise-detail-stamina-accessibility](exercise-detail-stamina-accessibility.json) | library | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [exercise-detail-stamina-light](exercise-detail-stamina-light.json) | library | `--ui-test-insights-dimensions --static-body -settings.appearance light` |
 | [exercise-detail-stamina-locked](exercise-detail-stamina-locked.json) | library | `--ui-test-insights-dimensions --static-body` |
-| [exercise-detail-stamina](exercise-detail-stamina.json) | library | `--ui-test-insights-dimensions --static-body --pro` |
-| [exercise-detail-strength-building](exercise-detail-strength-building.json) | library | `--pro` |
-| [exercise-detail-strength-slots-partial](exercise-detail-strength-slots-partial.json) | library | `--ui-test-single-exercise-history --pro` |
-| [exercise-detail-weekly-volume-locked](exercise-detail-weekly-volume-locked.json) | library | `--ui-test-weekly-volume` |
-| [exercise-detail-weekly-volume](exercise-detail-weekly-volume.json) | library | `--ui-test-weekly-volume --pro` |
+| [exercise-detail-stamina](exercise-detail-stamina.json) | library | `--ui-test-insights-dimensions --static-body` |
+| [exercise-detail-strength-building](exercise-detail-strength-building.json) | library | None declared |
+| [exercise-detail-strength-slots-partial](exercise-detail-strength-slots-partial.json) | library | `--ui-test-single-exercise-history` |
+| [exercise-detail-weekly-volume](exercise-detail-weekly-volume.json) | library | `--ui-test-weekly-volume --static-body` |
 | [exercise-execution-bilateral-reps](exercise-execution-bilateral-reps.json) | library | None declared |
 | [exercise-execution-conventional-deadlift](exercise-execution-conventional-deadlift.json) | library | `--static-body -settings.appearance dark` |
 | [exercise-execution-floor-touch-rdl](exercise-execution-floor-touch-rdl.json) | library | `--static-body` |
@@ -74,47 +73,45 @@ Scenario files: 108.
 | [exercise-execution-unilateral-reps](exercise-execution-unilateral-reps.json) | library | None declared |
 | [exercise-picker-training-role-filters](exercise-picker-training-role-filters.json) | library | None declared |
 | [exercise-substitution-sheet](exercise-substitution-sheet.json) | today | `--ui-test-active-replaceable` |
-| [insights-accessibility](insights-accessibility.json) | insights | `--ui-test-insights-showcase --pro -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
-| [insights-dimensions-building](insights-dimensions-building.json) | insights | `--ui-test-insights-empty-instruments --pro` |
-| [insights-dimensions-locked](insights-dimensions-locked.json) | insights | `--ui-test-insights-dimensions --static-body` |
+| [insights-accessibility](insights-accessibility.json) | insights | `--ui-test-insights-showcase -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [insights-dimensions-building](insights-dimensions-building.json) | insights | `--ui-test-insights-empty-instruments` |
 | [insights-empty](insights-empty.json) | history | None declared |
-| [insights-hard-sets](insights-hard-sets.json) | insights | `--ui-test-insights-hard-sets --pro` |
-| [insights-load-rep-drivers](insights-load-rep-drivers.json) | insights | `--ui-test-insights-showcase --pro` |
-| [insights-locked](insights-locked.json) | insights | `--ui-test-insights-showcase` |
-| [insights-movement-coverage-accessibility](insights-movement-coverage-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
-| [insights-movement-coverage-light](insights-movement-coverage-light.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
-| [insights-movement-coverage](insights-movement-coverage.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
-| [insights-movement-gaps](insights-movement-gaps.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
-| [insights-muscle-directness-accessibility](insights-muscle-directness-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
-| [insights-muscle-directness-light](insights-muscle-directness-light.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
-| [insights-muscle-directness](insights-muscle-directness.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
-| [insights-muscle-primary](insights-muscle-primary.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
-| [insights-push-pull](insights-push-pull.json) | insights | `--ui-test-insights-showcase --pro` |
-| [insights-shape-drillouts](insights-shape-drillouts.json) | insights | `--ui-test-insights-showcase --pro` |
-| [insights-showcase](insights-showcase.json) | insights | `--ui-test-insights-showcase --pro` |
-| [insights-stamina-accessibility](insights-stamina-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
-| [insights-stamina-held-back](insights-stamina-held-back.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
-| [insights-stamina-light](insights-stamina-light.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
-| [insights-stamina-series-accessibility](insights-stamina-series-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
-| [insights-stamina-series-light](insights-stamina-series-light.json) | insights | `--ui-test-insights-dimensions --static-body --pro -settings.appearance light` |
-| [insights-stamina-series](insights-stamina-series.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
-| [insights-stamina](insights-stamina.json) | insights | `--ui-test-insights-dimensions --static-body --pro` |
+| [insights-hard-sets](insights-hard-sets.json) | insights | `--ui-test-insights-hard-sets` |
+| [insights-load-rep-drivers](insights-load-rep-drivers.json) | insights | `--ui-test-insights-showcase` |
+| [insights-movement-coverage-accessibility](insights-movement-coverage-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [insights-movement-coverage-light](insights-movement-coverage-light.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light` |
+| [insights-movement-coverage](insights-movement-coverage.json) | insights | `--ui-test-insights-dimensions --static-body` |
+| [insights-movement-gaps](insights-movement-gaps.json) | insights | `--ui-test-insights-dimensions --static-body` |
+| [insights-muscle-directness-accessibility](insights-muscle-directness-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [insights-muscle-directness-light](insights-muscle-directness-light.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light` |
+| [insights-muscle-directness](insights-muscle-directness.json) | insights | `--ui-test-insights-dimensions --static-body` |
+| [insights-muscle-primary](insights-muscle-primary.json) | insights | `--ui-test-insights-dimensions --static-body` |
+| [insights-push-pull](insights-push-pull.json) | insights | `--ui-test-insights-showcase` |
+| [insights-shape-drillouts](insights-shape-drillouts.json) | insights | `--ui-test-insights-showcase` |
+| [insights-showcase](insights-showcase.json) | insights | `--ui-test-insights-showcase` |
+| [insights-stamina-accessibility](insights-stamina-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [insights-stamina-held-back](insights-stamina-held-back.json) | insights | `--ui-test-insights-dimensions --static-body` |
+| [insights-stamina-light](insights-stamina-light.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light` |
+| [insights-stamina-series-accessibility](insights-stamina-series-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [insights-stamina-series-light](insights-stamina-series-light.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light` |
+| [insights-stamina-series](insights-stamina-series.json) | insights | `--ui-test-insights-dimensions --static-body` |
+| [insights-stamina](insights-stamina.json) | insights | `--ui-test-insights-dimensions --static-body` |
 | [library-training-role-filters](library-training-role-filters.json) | library | None declared |
-| [me-showcase](me-showcase.json) | me | `--ui-test-me-showcase --pro --static-body -settings.weightUnit lb` |
+| [me-showcase](me-showcase.json) | me | `--ui-test-me-showcase --static-body -settings.weightUnit lb` |
 | [receipt-live-summary-accessibility](receipt-live-summary-accessibility.json) | today | `--ui-test-active-partial --ui-test-receipt-summary --ui-test-widget-start-request --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [receipt-live-summary-light](receipt-live-summary-light.json) | today | `--ui-test-active-partial --ui-test-receipt-summary --ui-test-widget-start-request --static-body -settings.weightUnit lb -settings.appearance light` |
 | [receipt-live-summary](receipt-live-summary.json) | today | `--ui-test-active-partial --ui-test-receipt-summary --ui-test-widget-start-request --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [receipt-metric-parity](receipt-metric-parity.json) | today | `--ui-test-active-partial --ui-test-receipt-summary --ui-test-widget-start-request --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [replace-active-exercise-blocked](replace-active-exercise-blocked.json) | today | `--ui-test-active-partial` |
 | [replace-active-exercise](replace-active-exercise.json) | today | `--ui-test-active-replaceable` |
-| [settings-preferences](settings-preferences.json) | me | `--static-body --no-iap -settings.hapticsEnabled YES -settings.soundsEnabled YES` |
+| [settings-preferences](settings-preferences.json) | me | `--static-body -settings.hapticsEnabled YES -settings.soundsEnabled YES` |
 | [start-complete-rest](start-complete-rest.json) | today | `--ui-test-scheduled-template` |
-| [strength-routine-builder-hidden](strength-routine-builder-hidden.json) | library | `--pro` |
-| [strength-routine-builder-insufficient-catalog](strength-routine-builder-insufficient-catalog.json) | library | `--pro --ui-test-strength-routine-builder` |
-| [strength-routine-builder-review](strength-routine-builder-review.json) | library | `--pro --ui-test-strength-routine-builder` |
-| [strength-routine-builder-template-cap](strength-routine-builder-template-cap.json) | library | `--seed-templates --no-iap --ui-test-strength-routine-builder` |
-| [strength-routine-builder](strength-routine-builder.json) | library | `--pro --ui-test-strength-routine-builder` |
-| [strength-routine-picker-contract](strength-routine-picker-contract.json) | library | `--pro --ui-test-strength-routine-builder` |
+| [strength-routine-builder-hidden](strength-routine-builder-hidden.json) | library | None declared |
+| [strength-routine-builder-insufficient-catalog](strength-routine-builder-insufficient-catalog.json) | library | `--ui-test-strength-routine-builder` |
+| [strength-routine-builder-review](strength-routine-builder-review.json) | library | `--ui-test-strength-routine-builder` |
+| [strength-routine-builder-unlimited-templates](strength-routine-builder-unlimited-templates.json) | library | `--seed-templates --ui-test-strength-routine-builder` |
+| [strength-routine-builder](strength-routine-builder.json) | library | `--ui-test-strength-routine-builder` |
+| [strength-routine-picker-contract](strength-routine-picker-contract.json) | library | `--ui-test-strength-routine-builder` |
 | [today-actions](today-actions.json) | today | `--static-body` |
 | [today-journal-accessibility](today-journal-accessibility.json) | today | `--seed-history --static-body` |
 | [today-up-next](today-up-next.json) | today | `--ui-test-scheduled-template --static-body` |

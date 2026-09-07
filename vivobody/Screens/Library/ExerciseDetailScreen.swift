@@ -10,12 +10,9 @@
 //  here offers the same actions, with "Duplicate as Custom" limited
 //  to bundled exercises (a custom entry is already fully editable).
 //  Comparison is entered through the "Compare with another exercise"
-//  row beside the how-to drill-out (or the toolbar menu) and is
-//  Pro-gated at that entry: free users get the local paywall, Pro
-//  users get a "Compare With" picker that chains into the
-//  ExerciseComparisonScreen sheet. The active-workout add host
-//  suppresses that entry entirely so logging never opens comparison
-//  or a premium interruption mid-session.
+//  row beside the how-to drill-out (or the toolbar menu) and
+//  opens a "Compare With" picker, then a comparison sheet. The active-workout
+//  add host suppresses comparison so logging stays focused.
 //
 //  Surfaces (when data exists):
 //    • Hero    — orange modality eyebrow + exercise name, plus a
@@ -39,9 +36,9 @@
 //                only). Estimated strength belongs to the trend curve;
 //                this row stays an explicit user-entered measurement.
 //    • Week    — per-muscle hard-set contribution over the trailing 7
-//                days against each muscle's weekly band (Pro)
+//                days against each muscle's weekly band
 //    • Rhythm  — median time between load increases + rhythm strip
-//                (Pro, comparable-load lifts with ≥2 increases)
+//                (comparable-load lifts with ≥2 increases)
 //    • Chart   — a bold estimated-strength trend instrument (including
 //                its four-workout build-up state), plus Load / Volume
 //                history modes, range chips, PR dots, and endpoint values
@@ -49,8 +46,6 @@
 //                only, gated on having ≥3 logged RIR readings)
 //    • Recents — Last 5 sessions, top set + date + PR flag
 //    • CTA     — "+ Add to Workout" pinned to the bottom safe area
-//    • Unlock  — Insights-style floating Pro pill in the bottom bar
-//                while any Pro-gated section above is frozen
 //
 //  Empty-state behavior: when the user has never logged this
 //  exercise, the stats row shows em-dashes while an eligible strength
@@ -70,8 +65,7 @@ struct ExerciseDetailScreen: View {
     let item: ExerciseCatalogItem
 
     /// False only when this detail is hosted by the active-workout
-    /// add flow. Comparison is long-form catalog exploration and can
-    /// surface a Pro gate, so it stays outside the live session.
+    /// add flow. Long-form catalog comparison stays outside the live session.
     let allowsComparison: Bool
 
     /// Bundles the picker's `onPick(item)` + its own `dismiss()` into
@@ -83,11 +77,6 @@ struct ExerciseDetailScreen: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.sessionAnalytics) var sessionAnalytics
-
-    /// Pro entitlement, injected by AppRoot. Optional so previews
-    /// (which don't inject it) still build — nil renders unlocked.
-    /// Gates the progress chart; the numeric stats stay free.
-    @Environment(ProStore.self) var pro: ProStore?
 
     /// All archived sessions — drives progress chart + last-used +
     /// total-count + recent table. Same filter as the picker; live
@@ -148,10 +137,6 @@ struct ExerciseDetailScreen: View {
     @State private var isPickingComparison: Bool = false
     @State private var pendingComparisonTarget: ExerciseCatalogItem? = nil
     @State private var comparisonTarget: ExerciseCatalogItem? = nil
-    /// Local paywall presentation — this screen can live inside other
-    /// sheets (Spotlight detail, exercise picker), where the app-root
-    /// paywall sheet can't present on top.
-    @State var isPaywallPresented: Bool = false
     @State var isEditingOneRepMax: Bool = false
     @State var range: ExerciseDetailChartRange = .all
     @State var chartMetric: ExerciseDetailChartMetric = .e1rm
@@ -173,14 +158,6 @@ struct ExerciseDetailScreen: View {
             unit: unit,
             currentBodyweight: currentBodyweight
         )
-        let showsUnlock = pro.map {
-            !$0.isUnlocked && (
-                readModel.hasHistory
-                    || readModel.cadence != nil
-                    || readModel.weeklyVolume != nil
-            )
-        } ?? false
-
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: Space.xxl) {
                 ExerciseHeroHeader(
@@ -223,36 +200,22 @@ struct ExerciseDetailScreen: View {
                     )
                 }
                 ExerciseDetailWeeklyVolumeSection(
-                    volume: readModel.weeklyVolume,
-                    isUnlocked: pro?.isUnlocked == true,
-                    onUnlock: {
-                        Haptics.soft()
-                        isPaywallPresented = true
-                    }
+                    volume: readModel.weeklyVolume
                 )
                 ExerciseDetailProgressSection(
                     readModel: readModel,
                     unit: unit,
                     selectedMetric: $chartMetric,
-                    selectedRange: $range,
-                    isUnlocked: pro?.isUnlocked ?? true,
-                    onUnlock: { isPaywallPresented = true }
+                    selectedRange: $range
                 )
                 ExerciseDetailRhythmSection(
                     cadence: readModel.cadence,
-                    now: readModel.now,
-                    isUnlocked: pro?.isUnlocked == true,
-                    onUnlock: {
-                        Haptics.soft()
-                        isPaywallPresented = true
-                    }
+                    now: readModel.now
                 )
                 ExerciseDetailEffortSection(effort: readModel.effort)
                 if allowsComparison {
                     ExerciseStaminaSection(
-                        report: readModel.stamina,
-                        isUnlocked: pro?.isUnlocked ?? true,
-                        onUnlock: { isPaywallPresented = true }
+                        report: readModel.stamina
                     )
                 }
                 if readModel.hasHistory {
@@ -345,12 +308,6 @@ struct ExerciseDetailScreen: View {
         }
         .safeAreaBar(edge: .bottom) {
             ExerciseDetailBottomBar(
-                showsUnlock: showsUnlock,
-                price: pro?.displayPrice,
-                onUnlock: {
-                    Haptics.soft()
-                    isPaywallPresented = true
-                },
                 onAddToWorkout: onPickAndDismiss.map { action in
                     {
                         Haptics.thunk()
@@ -378,11 +335,6 @@ struct ExerciseDetailScreen: View {
                 ExerciseComparisonScreen(anchor: item, other: other)
             }
             .presentationDragIndicator(.visible)
-        }
-        .sheet(isPresented: $isPaywallPresented) {
-            if let pro {
-                PaywallSheet(pro: pro)
-            }
         }
         .sheet(isPresented: $isEditingOneRepMax) {
             OneRepMaxEditorSheet(
@@ -417,20 +369,11 @@ struct ExerciseDetailScreen: View {
 
     // MARK: - Mutations
 
-    /// Entry to the Pro comparison flow. Free users get this screen's
-    /// local paywall sheet (the app-root sheet can't present over the
-    /// picker/Spotlight sheets this screen can live inside); Pro users
-    /// go straight to the "Compare With" picker. Called from both the
-    /// toolbar menu and the `compareLink` row (which lives in
-    /// ExerciseComparisonScreen.swift), so it stays internal.
+    /// Both comparison entry points open the picker outside a live workout.
     func startComparison() {
         guard allowsComparison else { return }
         Haptics.soft()
-        if pro?.isUnlocked ?? true {
-            isPickingComparison = true
-        } else {
-            isPaywallPresented = true
-        }
+        isPickingComparison = true
     }
 
     /// The picker dismissed: a picked row chains into the comparison

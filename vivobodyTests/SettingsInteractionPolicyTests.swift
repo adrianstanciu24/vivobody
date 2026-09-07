@@ -2,7 +2,7 @@
 //  SettingsInteractionPolicyTests.swift
 //  vivobodyTests
 //
-//  Guards Settings defaults, visible option order, entitlement rows, and
+//  Guards Settings defaults, visible option order, HealthKit availability, and
 //  ordered preference/HealthKit commands without invoking system services.
 //
 
@@ -75,28 +75,9 @@ struct SettingsInteractionPolicyTests {
         #expect(!sounds.contains(.playSoftHaptic(playsSound: true)))
     }
 
-    @Test func proPresentationMatchesEntitlement() {
-        #expect(SettingsInteractionPolicy.proPresentation(isUnlocked: false) == .locked)
-        #expect(SettingsInteractionPolicy.proPresentation(isUnlocked: true) == .unlocked)
-    }
-
-    @Test func healthKitPresentationCoversAvailabilityAndEntitlement() {
-        #expect(SettingsInteractionPolicy.healthKitPresentation(
-            isAvailable: false,
-            isPro: false
-        ) == .unavailable)
-        #expect(SettingsInteractionPolicy.healthKitPresentation(
-            isAvailable: false,
-            isPro: true
-        ) == .unavailable)
-        #expect(SettingsInteractionPolicy.healthKitPresentation(
-            isAvailable: true,
-            isPro: false
-        ) == .locked)
-        #expect(SettingsInteractionPolicy.healthKitPresentation(
-            isAvailable: true,
-            isPro: true
-        ) == .unlocked)
+    @Test func healthKitPresentationDependsOnlyOnDeviceAvailability() {
+        #expect(SettingsInteractionPolicy.healthKitPresentation(isAvailable: false) == .unavailable)
+        #expect(SettingsInteractionPolicy.healthKitPresentation(isAvailable: true) == .available)
     }
 
     @Test func disablingHealthKitDoesNotRequestAuthorization() {

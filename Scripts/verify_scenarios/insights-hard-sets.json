@@ -3,7 +3,7 @@
   "launch": {
     "reset": true,
     "tab": "insights",
-    "arguments": ["--ui-test-insights-hard-sets", "--pro"]
+    "arguments": ["--ui-test-insights-hard-sets"]
   },
   "steps": [
     {

@@ -4,8 +4,7 @@
     "reset": true,
     "tab": "insights",
     "arguments": [
-      "--ui-test-insights-empty-instruments",
-      "--pro"
+      "--ui-test-insights-empty-instruments"
     ]
   },
   "steps": [

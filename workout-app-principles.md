@@ -33,9 +33,9 @@ actionable, with a clear indication of what comes next.
 
 ## Respect the user's effort
 
-Workout logging and history remain free. Do not interrupt an active workout
-with purchases or unrelated prompts. Apply the
-[Free + Pro contract](specs/free-with-pro-iap.md) at the appropriate surfaces.
+All features are included in the upfront app price, with no in-app purchases
+or feature paywalls. Follow the [paid-app contract](specs/paid-app.md).
+Do not interrupt an active workout with unrelated prompts.
 Avoid long onboarding wizards, streak-shaming, and prescriptive claims that the
 recorded data cannot support.
 

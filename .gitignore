@@ -3,7 +3,7 @@ build/
 DerivedData/
 VivoKit/.build/
 
-# Verification artifacts (Scripts/verify.sh output)
+# Verification artifacts and local Codex recordings
 .verify/
 
 # Python bytecode cache (Scripts/)

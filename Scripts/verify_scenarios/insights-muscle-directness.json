@@ -5,8 +5,7 @@
     "tab": "insights",
     "arguments": [
       "--ui-test-insights-dimensions",
-      "--static-body",
-      "--pro"
+      "--static-body"
     ]
   },
   "steps": [

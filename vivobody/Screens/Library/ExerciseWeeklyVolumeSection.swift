@@ -4,7 +4,7 @@
 //
 //  Focused Exercise Detail "This week" presentation. Immutable read-model
 //  rows carry the exercise contribution, weekly total, landmark, and spoken
-//  meaning; this leaf owns only the visual instrument and Pro cover.
+//  meaning; this leaf owns only the visual instrument.
 //
 
 import SwiftUI
@@ -12,18 +12,10 @@ import VivoKit
 
 struct ExerciseDetailWeeklyVolumeSection: View {
     let volume: ExerciseDetailReadModel.WeeklyVolume?
-    let isUnlocked: Bool
-    let onUnlock: () -> Void
 
     var body: some View {
         if let volume {
-            if isUnlocked {
-                content(volume)
-            } else {
-                LockedProCover(title: "This week", action: onUnlock) {
-                    content(volume)
-                }
-            }
+            content(volume)
         }
     }
 
@@ -193,14 +185,7 @@ private struct WeeklyVolumeRow: View {
         ScrollView {
             VStack(spacing: Space.xxl) {
                 ExerciseDetailWeeklyVolumeSection(
-                    volume: volume,
-                    isUnlocked: true,
-                    onUnlock: {}
-                )
-                ExerciseDetailWeeklyVolumeSection(
-                    volume: volume,
-                    isUnlocked: false,
-                    onUnlock: {}
+                    volume: volume
                 )
             }
             .padding(Space.gutter)

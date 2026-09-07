@@ -4,7 +4,7 @@
 //
 //  Pure Settings presentation branches and ordered interaction plans.
 //  SettingsScreen applies each command so UserDefaults, haptic/audio,
-//  StoreKit, HealthKit, and sheet effects retain one integration owner.
+//  HealthKit, and sheet effects retain one integration owner.
 //
 
 import Foundation
@@ -19,15 +19,9 @@ nonisolated struct SettingsPreferenceDefaults: Equatable {
     let healthKitEnabled: Bool
 }
 
-nonisolated enum SettingsProPresentation: Equatable {
-    case locked
-    case unlocked
-}
-
 nonisolated enum SettingsHealthKitPresentation: Equatable {
     case unavailable
-    case locked
-    case unlocked
+    case available
 }
 
 nonisolated enum SettingsInteractionCommand: Equatable {
@@ -41,7 +35,6 @@ nonisolated enum SettingsInteractionCommand: Equatable {
     case setHapticsEnabled(Bool)
     case setSoundsEnabled(Bool)
     case setHealthKitEnabled(Bool)
-    case requestProUnlock
     case showCatalogResetConfirmation
     case showHealthKitPriming(Bool)
     case requestHealthKitAuthorization
@@ -63,16 +56,8 @@ nonisolated enum SettingsInteractionPolicy {
         )
     }
 
-    static func proPresentation(isUnlocked: Bool) -> SettingsProPresentation {
-        isUnlocked ? .unlocked : .locked
-    }
-
-    static func healthKitPresentation(
-        isAvailable: Bool,
-        isPro: Bool
-    ) -> SettingsHealthKitPresentation {
-        guard isAvailable else { return .unavailable }
-        return isPro ? .unlocked : .locked
+    static func healthKitPresentation(isAvailable: Bool) -> SettingsHealthKitPresentation {
+        isAvailable ? .available : .unavailable
     }
 
     static func selectAppearance(_ appearance: AppAppearance) -> [SettingsInteractionCommand] {
@@ -105,10 +90,6 @@ nonisolated enum SettingsInteractionPolicy {
             commands.append(.playButtonSound)
         }
         return commands
-    }
-
-    static func requestProUnlock() -> [SettingsInteractionCommand] {
-        [.requestProUnlock]
     }
 
     static func requestCatalogReset() -> [SettingsInteractionCommand] {

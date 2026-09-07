@@ -3,7 +3,7 @@
   "launch": {
     "reset": true,
     "tab": "today",
-    "arguments": ["--ui-test-active-partial", "--no-iap", "--static-body"]
+    "arguments": ["--ui-test-active-partial", "--static-body"]
   },
   "steps": [
     {

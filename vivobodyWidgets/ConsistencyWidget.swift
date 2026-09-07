@@ -33,22 +33,10 @@ struct ConsistencyWidget: Widget {
 struct ConsistencyWidgetView: View {
     let snapshot: ConsistencySnapshot
 
-    /// Pro-gated: the app mirrors the entitlement into the App Group;
-    /// free renders the locked placeholder deep-linking to the paywall.
-    private var isPro: Bool {
-        WidgetEntitlement.isPro
-    }
-
     var body: some View {
-        Group {
-            if !isPro {
-                WidgetProLock(title: "Consistency")
-            } else {
-                graph.padding()
-            }
-        }
-        .widgetURL(URL(string: isPro ? "vivobody://insights/consistency" : "vivobody://pro"))
-        .containerBackground(.black, for: .widget)
+        graph.padding()
+            .widgetURL(URL(string: "vivobody://insights/consistency"))
+            .containerBackground(.black, for: .widget)
     }
 
     private var graph: some View {

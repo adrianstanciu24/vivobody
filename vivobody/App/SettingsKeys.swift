@@ -57,11 +57,6 @@ nonisolated enum SettingsKey {
     /// [String] — bundled catalog IDs the user explicitly removed. Launch
     /// reconciliation respects these until Reset Exercise Catalog clears them.
     static let hiddenBundledCatalogIDs = "settings.hiddenBundledCatalogIDs"
-    /// Bool — last known Pro entitlement, mirrored by ProStore so the
-    /// UI doesn't flash locked on a cold offline launch while StoreKit
-    /// resolves. A render hint only — `Transaction.currentEntitlements`
-    /// remains the source of truth and overwrites this on every launch.
-    static let proUnlockedCache = "settings.proUnlockedCache"
     /// Stores `BodyDriftSpeed.rawValue`. Read via @AppStorage inside
     /// `RotatableBodyModel`, so changing it retargets the idle
     /// turntable everywhere the figure is on screen.
@@ -89,7 +84,6 @@ nonisolated enum SettingsDefaults {
     static let healthKitEnabled = false
     static let onboardingCompleted = false
     static let hasScrubbedNumber = false
-    static let proUnlockedCache = false
     static let bodyDriftSpeed = BodyDriftSpeed.low.rawValue
 }
 

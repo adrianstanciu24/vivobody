@@ -16,7 +16,7 @@ enum ExercisePickerPurpose: Equatable {
     case explore
 
     /// Opens the same add-detail flow from an in-progress workout while
-    /// suppressing long-form comparison and its Pro prompt.
+    /// suppressing long-form comparison.
     case addToActiveWorkout
 
     /// Adds a row directly to the template draft before configuration.

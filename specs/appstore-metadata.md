@@ -17,7 +17,7 @@ limits by character count are annotated; all drafts fit their limits.
 | Primary language | English (U.S.) |
 | Primary category | Health & Fitness |
 | Secondary category | (none, or Lifestyle) |
-| Price | Free (Pro is a $24.99 in-app purchase) |
+| Price | Paid upfront; exact price to be selected |
 | Privacy policy URL | https://vivobody.app/privacy/ |
 | Support URL | https://vivobody.app/support/ |
 | Marketing URL (optional) | https://vivobody.app/ |
@@ -54,7 +54,7 @@ App Store URL.
 > - Weekly volume per muscle group, tracked against your own baseline
 > - Personal records celebrated the moment they happen
 >
-> UNDERSTAND YOUR TRAINING (PRO)
+> UNDERSTAND YOUR TRAINING
 > - Training load and readiness based on your acute and chronic workload
 > - Strength outlook and rep-range trends per exercise
 > - Consistency, intensity mix, and symmetry reports
@@ -67,7 +67,7 @@ App Store URL.
 > - Start a workout from Control Center
 > - Widgets for your next workout and weekly consistency
 >
-> Vivobody Pro is a single lifetime purchase. No subscription.
+> All features included in the app price. No subscription or in-app purchases.
 
 ## Keywords (100 chars max)
 
@@ -93,22 +93,10 @@ Gambling and contests: No. Result should be 4+.
   the user's request and never leaves the device, which does not count
   as collection by the developer.
 
-## In-app purchase
+## Pricing
 
-| Field | Value |
-|---|---|
-| Type | Non-Consumable |
-| Product ID | astanciu.vivobody.app.pro.lifetime |
-| Reference name | Vivobody Pro Lifetime |
-| Price | $24.99 (Tier: pick closest to 24.99 USD) |
-| Family Sharing | Off (matches Products.storekit) |
-| Display name (30 chars max) | Vivobody Pro |
-| Description (45 chars max) | Insights, unlimited templates, Health sync. |
-
-IAP review screenshot: any screenshot of the paywall sheet (run the app
-with `--seed-showcase`, open Settings > Unlock Vivobody Pro, capture at
-6.9"). Attach the IAP to the 1.0 version submission so both are
-reviewed together.
+Set an upfront app price in App Store Connect. No in-app purchase product or
+purchase review screenshot is needed. The exact price is not yet selected.
 
 ## App Review notes (paste into "Notes" for the reviewer)
 
@@ -116,14 +104,10 @@ reviewed together.
 > credentials are needed.
 >
 > HealthKit: the app requests WRITE-ONLY authorization, and only when
-> the user enables "Apple Health" in Settings (part of the Pro
-> purchase). It saves finished workouts as HKWorkout samples. It never
+> the user enables "Apple Health" in Settings. It saves finished workouts as HKWorkout samples. It never
 > reads Health data.
 >
-> In-app purchase: Vivobody Pro (non-consumable lifetime unlock). To
-> reach the paywall: Settings (gear icon on the Me tab) > "Unlock
-> Vivobody Pro", or create a 6th workout template in Library >
-> Templates. "Restore Purchases" is on the paywall sheet.
+> All functionality is included in the app price. There are no in-app purchases.
 >
 > Live Activity: starting a workout shows a Live Activity with the
 > rest timer in the Dynamic Island.
@@ -131,19 +115,18 @@ reviewed together.
 ## Submission checklist (ASC side, in order)
 
 1. Agreements, Tax, and Banking: sign the Paid Applications agreement,
-   complete banking + tax forms (required before the IAP can be sold).
+   complete banking + tax forms (required for the paid app).
 2. Certificates/profiles: handled by Xcode automatic signing at upload.
 3. Create the app record (bundle ID astanciu.vivobody.app must already
    exist in the Developer portal; Xcode's automatic signing created it).
-4. Create the in-app purchase (table above) + its review screenshot.
-5. Fill App Information, Pricing (Free), App Privacy (Data Not
+4. Select the upfront app price; do not attach an in-app purchase.
+5. Fill App Information, Pricing (paid upfront), App Privacy (Data Not
    Collected), Age Rating.
 6. Verify `https://vivobody.app/`, `/privacy/`, and `/support/` all
    resolve before submitting.
 7. Upload the build: Xcode > Product > Archive > Distribute App >
    App Store Connect (or `xcodebuild -exportArchive`).
 8. Add screenshots (6.9" required; candidates in .verify/ or shoot via
-   `SIMULATOR_NAME='iPhone 17 Pro Max' LAUNCH_ARGS='--seed-showcase --pro' Scripts/verify.sh`).
-9. Attach the IAP to the version, paste description/keywords/promo
-   text, paste the review notes, submit.
+   `SIMULATOR_NAME='iPhone 17 Pro Max' LAUNCH_ARGS='--seed-showcase' Scripts/verify.sh`).
+9. Paste description/keywords/promo text and the review notes, then submit.
 10. Recommended: TestFlight the build on your own device first.

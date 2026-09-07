@@ -5,7 +5,6 @@
     "tab": "insights",
     "arguments": [
       "--ui-test-insights-showcase",
-      "--pro",
       "-UIPreferredContentSizeCategoryName",
       "UICTContentSizeCategoryAccessibilityL"
     ]

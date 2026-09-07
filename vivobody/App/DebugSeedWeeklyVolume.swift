@@ -7,7 +7,7 @@
 //  history with two sessions inside the 7-day volume window and two
 //  older ones, so the card shows exact hard-set shares (6.0 primary /
 //  3.0 per secondary) and the footer a known count (4 sessions) and
-//  weekly rate (1.6×). The pure launch router selects this idempotent fixture;
+//  weekly rate (about 1.6–1.7×, depending on the current time of day). The pure launch router selects this idempotent fixture;
 //  its sessions use fixed evening timestamps and durations.
 //
 

@@ -5,7 +5,7 @@
     "tab": "library",
     "arguments": [
       "--ui-test-weekly-volume",
-      "--pro"
+      "--static-body"
     ]
   },
   "steps": [
@@ -18,14 +18,14 @@
     {
       "scrollTo": {
         "selector": {
-          "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+          "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
         },
         "direction": "up"
       }
     },
     {
       "tap": {
-        "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+        "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
       }
     },
     {
@@ -66,12 +66,15 @@
       "labelContains": "4 sessions"
     },
     {
-      "labelContains": "1.6 per week"
+      "labelRegex": "1\\.[67] per week"
     }
   ],
   "forbidden": [
     {
       "labelContains": "This week, locked"
+    },
+    {
+      "labelContains": "Unlock Vivobody Pro"
     }
   ]
 }

@@ -1,6 +1,8 @@
 # Free + Pro Lifetime Unlock — Design
 
-Status: Implemented product design. Source-audit date: [spec index](index.md).
+Status: Superseded on 2026-09-07 by the [paid-upfront app contract](paid-app.md).
+Retained as historical design rationale; the purchase implementation and gates
+have been removed. The details below do not describe current behavior.
 
 Make the app free on the App Store with a single one-time in-app purchase
 ("Vivobody Pro") that unlocks the depth layer. The recording experience —

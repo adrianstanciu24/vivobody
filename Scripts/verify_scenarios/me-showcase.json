@@ -5,7 +5,6 @@
     "tab": "me",
     "arguments": [
       "--ui-test-me-showcase",
-      "--pro",
       "--static-body",
       "-settings.weightUnit",
       "lb"
@@ -63,7 +62,6 @@
         "tab": "me",
         "arguments": [
           "--ui-test-me-showcase",
-          "--pro",
           "--static-body",
           "-settings.weightUnit",
           "lb"
@@ -94,7 +92,7 @@
             "role": "AXHeading"
           },
           {
-            "labelRegex": "^177[.,]6, lb, -1[.,]2 lb since last entry, Body weight trend$",
+            "labelRegex": "^177[.]6, lb, -1[.]2 lb since last entry, Body weight trend$",
             "role": "AXButton"
           }
         ]

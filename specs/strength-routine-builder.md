@@ -38,7 +38,7 @@ claim **optimal**, **personal trainer**, or equivalent certainty.
    and their existing child entities in one transaction. Cancel discards the
    transient draft.
 
-The builder is never launched, suggested, or paywalled from an active-workout
+The builder is never launched or suggested from an active-workout
 surface. It does not read or mutate the active session.
 
 ## Input contract
@@ -206,7 +206,7 @@ report section. A generated sentence is never the source of truth.
 
 Gaps are also typed and severity-bearing. Blocking gaps include an impossible
 include, no eligible exercise for a required slot, an empty day, stale catalog
-identity, or insufficient template capacity. Reviewable warnings include a
+identity. Reviewable warnings include a
 missing preferred direction or emphasis after every feasible higher-priority
 requirement is satisfied. Warnings remain visible before save and VoiceOver
 announces their affected scope; blockers disable save.
@@ -259,7 +259,7 @@ the safe area.
 - Dark, light, Accessibility Extra Large, Reduce Motion, and Differentiate
   Without Color are required review states.
 
-## Persistence, entitlement, and failure paths
+## Persistence and failure paths
 
 V1 adds no persistent `Routine` model and does not change the SwiftData schema.
 Saving materializes only existing `WorkoutTemplate` and uniform
@@ -268,10 +268,8 @@ Saving materializes only existing `WorkoutTemplate` and uniform
 carry one exact selected weekday each, and preserve catalog snapshots through
 the existing draft-to-template bridge.
 
-The hidden DEBUG route may open regardless of entitlement so the complete flow
-remains verifiable. At save, the entire requested batch must fit the current
-free-template allowance. An insufficient allowance presents the existing
-template-limit unlock path; it never creates a partial routine.
+The hidden DEBUG route keeps the complete flow verifiable. There is no
+purchase-related template limit; the entire valid batch can be saved.
 
 Save inserts the entire batch, then calls `saveOrRollback()` exactly once. On
 failure, the context rolls back all inserted models, the draft remains on the
@@ -320,9 +318,8 @@ Recommended semantic scenarios:
   relaunch, and prove all three scheduled templates exist.
 - `strength-routine-builder-insufficient-catalog`: a bodyweight-only draft
   exposes truthful missing-pattern blockers and no saved template.
-- `strength-routine-builder-template-cap`: a free-tier fixture cannot create a
-  batch beyond remaining capacity and reaches the existing unlock path without
-  inserting models.
+- `strength-routine-builder-unlimited-templates`: saves a complete routine above
+  the former template cap and confirms persistence after relaunch.
 
 Inspect settled review screenshots and accessibility trees in dark and light
 appearance at standard size, plus Accessibility Extra Large. The five-second

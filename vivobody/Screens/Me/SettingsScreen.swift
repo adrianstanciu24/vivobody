@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Settings orchestration pushed from Me. This root owns UserDefaults,
-//  StoreKit and HealthKit routing, catalog reset, alerts, sheets, URL/mail
+//  HealthKit routing, catalog reset, alerts, sheets, URL/mail
 //  presentation, and the footer. Focused sections receive only immutable
 //  presentation, bindings, and actions.
 //
@@ -14,7 +14,6 @@ import VivoKit
 
 struct SettingsScreen: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(ProStore.self) private var pro: ProStore?
     @Environment(\.openURL) private var openURL
 
     @AppStorage(SettingsKey.hapticsEnabled)
@@ -44,10 +43,6 @@ struct SettingsScreen: View {
     @State private var activePage: WebPage?
     @State private var isComposingSupportMail: Bool = false
 
-    private var isPro: Bool {
-        pro?.isUnlocked == true
-    }
-
     private var appearance: AppAppearance {
         AppAppearance(rawValue: appearanceRaw) ?? .system
     }
@@ -63,12 +58,6 @@ struct SettingsScreen: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                SettingsProSection(
-                    presentation: SettingsInteractionPolicy.proPresentation(isUnlocked: isPro),
-                    onUnlock: requestProUnlock
-                )
-                .settleIn(0)
-
                 SettingsPreferencesSection(
                     appearance: appearanceBinding,
                     bodyDriftSpeed: bodyDriftSpeedBinding,
@@ -79,26 +68,23 @@ struct SettingsScreen: View {
                     healthKitEnabled: healthKitBinding,
                     restOptions: SettingsInteractionPolicy.restOptions,
                     healthKitPresentation: SettingsInteractionPolicy.healthKitPresentation(
-                        isAvailable: HealthKitWorkoutService.isAvailable,
-                        isPro: isPro
+                        isAvailable: HealthKitWorkoutService.isAvailable
                     ),
                     bundledExerciseCount: CatalogData.records.count,
-                    onRequestUnlock: requestProUnlock,
                     onRequestCatalogReset: requestCatalogReset
                 )
-                .padding(.top, Space.section)
-                .settleIn(1)
+                .settleIn(0)
 
                 SettingsAboutSection(
                     onOpenPrivacyPolicy: { open(PublicLinks.privacyPolicy) },
                     onComposeSupportMail: composeSupportMail
                 )
                 .padding(.top, Space.section)
-                .settleIn(2)
+                .settleIn(1)
 
                 footer
                     .padding(.top, Space.xxl)
-                    .settleIn(3)
+                    .settleIn(2)
             }
             .padding(.top, Space.sm)
             .padding(.bottom, Space.section + Space.md)
@@ -206,10 +192,6 @@ struct SettingsScreen: View {
         )
     }
 
-    private func requestProUnlock() {
-        perform(SettingsInteractionPolicy.requestProUnlock())
-    }
-
     private func requestCatalogReset() {
         perform(SettingsInteractionPolicy.requestCatalogReset())
     }
@@ -265,8 +247,6 @@ struct SettingsScreen: View {
 
     private func applyOrchestration(_ command: SettingsInteractionCommand) {
         switch command {
-        case .requestProUnlock:
-            pro?.requestUnlock()
         case .showCatalogResetConfirmation:
             isConfirmingCatalogReset = true
         case let .showHealthKitPriming(isPresented):

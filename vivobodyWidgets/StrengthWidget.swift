@@ -39,22 +39,10 @@ struct StrengthWidgetView: View {
     @Environment(\.widgetRenderingMode) private var renderingMode
     let snapshot: StrengthSnapshot
 
-    /// Pro-gated: the app mirrors the entitlement into the App Group;
-    /// free renders the locked placeholder deep-linking to the paywall.
-    private var isPro: Bool {
-        WidgetEntitlement.isPro
-    }
-
     var body: some View {
-        Group {
-            if !isPro {
-                WidgetProLock(title: "Strength")
-            } else {
-                large.padding()
-            }
-        }
-        .widgetURL(URL(string: isPro ? "vivobody://library" : "vivobody://pro"))
-        .containerBackground(.black, for: .widget)
+        large.padding()
+            .widgetURL(URL(string: "vivobody://library"))
+            .containerBackground(.black, for: .widget)
     }
 
     @ViewBuilder

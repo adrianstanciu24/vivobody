@@ -131,13 +131,10 @@ meaning that is absent from position, length, label, or accessibility value.
 - Qualification progress is shown only while no meaningful comparison exists,
   or as a compact building indicator after the focused rows.
 
-## Locked, empty, and failure states
+## Access, empty, and failure states
 
-- Free users see the full ordered real-data preview visually obscured and
-  removed from accessibility; the unlock action is the only exposed data-area
-  target.
-- The persistent purchase control remains available without replacing the
-  real instrument geometry.
+All reports are interactive and included in the [upfront app price](paid-app.md).
+
 - No archived workouts shows the existing whole-screen first-use state.
 - Archived history without qualifying signals shows factual next-action
   guidance. Dormant per-instrument visuals never fabricate data.
@@ -212,14 +209,14 @@ meaning that is absent from position, length, label, or accessibility value.
 - Exercise Detail receives indexed reports from the same core analytics generation.
   It stays outside active-workout exercise picking. It shows the latest eligible
   run and its full matched history; higher RIR sets have diamond marks. Dates
-  identify the year when history spans years. This derived section uses the existing Pro cover.
+  identify the year when history spans years. This derived section is available whenever qualifying data exists.
   No qualifying run hides the exercise section; Insights retains its building state.
 - Retention is a descriptive rep signal; rest duration, fatigue, and physiological
   recovery are not measured. No timer or logging behavior changes.
 
 ## Non-goals
 
-- No change to existing analytics formulas, persistence, entitlement, or purchase flow.
+- No change to existing analytics formulas or persistence.
 - No new user score or prescriptive training recommendation.
 - No change to existing per-exercise strength progress, widgets, or active-workout UI.
 

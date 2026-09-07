@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Binding-driven Exercise Detail progress leaf. It renders immutable chart
-//  presentation without owning archive queries, analytics, or paywall state.
+//  presentation without owning archive queries or analytics.
 //
 
 import Charts
@@ -15,16 +15,10 @@ struct ExerciseDetailProgressSection: View {
     let unit: WeightUnit
     @Binding var selectedMetric: ExerciseDetailChartMetric
     @Binding var selectedRange: ExerciseDetailChartRange
-    let isUnlocked: Bool
-    let onUnlock: () -> Void
 
     var body: some View {
         if readModel.hasHistory || readModel.exercise.supportsEstimatedOneRepMax {
-            if isUnlocked {
-                progressSection
-            } else {
-                lockedProgressSection
-            }
+            progressSection
         }
     }
 
@@ -229,22 +223,5 @@ struct ExerciseDetailProgressSection: View {
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
         .accessibilityValue(isSelected ? "Selected" : "Not selected")
-    }
-
-    private var lockedProgressSection: some View {
-        Button {
-            Haptics.soft()
-            onUnlock()
-        } label: {
-            progressSection
-                .blur(radius: 12)
-                .allowsHitTesting(false)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
-        .accessibilityAddTraits(.isButton)
-        .accessibilityLabel("Progress chart, locked")
-        .accessibilityHint("Unlocks with Vivobody Pro")
     }
 }

@@ -32,22 +32,10 @@ struct SignatureWidget: Widget {
 struct SignatureWidgetView: View {
     let snapshot: SignatureSnapshot
 
-    /// Pro-gated: the app mirrors the entitlement into the App Group;
-    /// free renders the locked placeholder deep-linking to the paywall.
-    private var isPro: Bool {
-        WidgetEntitlement.isPro
-    }
-
     var body: some View {
-        Group {
-            if !isPro {
-                WidgetProLock(title: "Your Signature")
-            } else {
-                small.padding()
-            }
-        }
-        .widgetURL(URL(string: isPro ? "vivobody://insights" : "vivobody://pro"))
-        .containerBackground(.black, for: .widget)
+        small.padding()
+            .widgetURL(URL(string: "vivobody://insights"))
+            .containerBackground(.black, for: .widget)
     }
 
     private var small: some View {

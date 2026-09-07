@@ -3,7 +3,7 @@
   "launch": {
     "reset": true,
     "tab": "library",
-    "arguments": ["--pro", "--ui-test-strength-routine-builder"]
+    "arguments": ["--ui-test-strength-routine-builder"]
   },
   "steps": [
     {
@@ -127,7 +127,7 @@
       "relaunch": {
         "reset": false,
         "tab": "library",
-        "arguments": ["--pro"]
+        "arguments": []
       }
     },
     {

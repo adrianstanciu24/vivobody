@@ -3,7 +3,9 @@
   "launch": {
     "reset": true,
     "tab": "insights",
-    "arguments": ["--ui-test-insights-showcase", "--pro"]
+    "arguments": [
+      "--ui-test-insights-showcase"
+    ]
   },
   "steps": [
     {
@@ -16,19 +18,13 @@
       "assert": {
         "required": [
           {
-            "label": "Training signature. All-time volume split: Chest 13 percent, Back 21 percent, Shoulders 17 percent, Legs 22 percent, Arms 26 percent. Balance 88 percent, with 5 of 6 regions represented. Arms-led · 5 regions. Dashed outlines show an even six-way split.",
+            "label": "Training signature. All-time volume split: Chest 13 percent, Back 21 percent, Shoulders 17 percent, Legs 22 percent, Arms 26 percent. Balance 88 percent, with 5 of 6 regions represented. Arms-led \u00b7 5 regions. Dashed outlines show an even six-way split.",
             "role": "AXGenericElement"
           },
           {
             "identifier": "insightsExerciseMixLink",
             "labelContains": "Other exercises",
             "role": "AXButton"
-          },
-          {
-            "identifier": "insightsRepMixLink",
-            "labelContains": "Other rep ranges",
-            "role": "AXButton",
-            "visible": false
           }
         ],
         "forbidden": [
@@ -37,6 +33,25 @@
           },
           {
             "identifier": "insightsEmptyState"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsRepMixLink"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsRepMixLink",
+            "labelContains": "Other rep ranges",
+            "role": "AXButton"
           }
         ]
       }
@@ -102,6 +117,12 @@
     },
     {
       "identifier": "insightsEmptyState"
+    },
+    {
+      "identifier": "insightsLockedPreview"
+    },
+    {
+      "identifier": "insightsUnlockButton"
     }
   ]
 }

@@ -30,6 +30,11 @@ echo "▸ Testing documentation guardrails..."
   -s Scripts/tests \
   -p 'test_check_documentation.py'
 
+echo "▸ Testing Codex workflow recording..."
+/usr/bin/python3 -m unittest discover \
+  -s Scripts/tests \
+  -p 'test_codex_observe.py'
+
 echo "▸ Testing semantic scenario harness..."
 /usr/bin/python3 -m unittest discover \
   -s Scripts/tests \

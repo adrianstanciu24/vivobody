@@ -5,8 +5,7 @@
     "tab": "library",
     "arguments": [
       "--ui-test-insights-dimensions",
-      "--static-body",
-      "--pro"
+      "--static-body"
     ]
   },
   "steps": [
@@ -58,6 +57,9 @@
   "forbidden": [
     {
       "identifier": "insightsEmptyState"
+    },
+    {
+      "labelContains": "Unlock Vivobody Pro"
     }
   ]
 }

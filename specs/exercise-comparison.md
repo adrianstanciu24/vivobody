@@ -2,7 +2,7 @@
 
 Status: **Implemented.**
 
-A Pro-only side-by-side comparison of two catalog exercises, entered from
+A side-by-side comparison of two catalog exercises, entered from
 the exercise detail screen. It answers the questions a lifter has while
 deciding whether a movement deserves a slot:
 
@@ -24,14 +24,13 @@ model under `Models/Domain/`, not an insight.
 1. `ExerciseDetailScreen` gains a "Compare with another exercise" row beside
    the how-to-perform drill-out, plus a toolbar-menu twin for parity with
    the other row actions.
-2. Free users are attempt-gated at that entry into the screen's local
-   paywall sheet (the template-creation pattern). Pro users get
+2. All users get
    `ExercisePickerSheet` retitled "Compare With" in direct-pick mode, with
    the anchor exercise excluded from every list and the same catalog filter
    set as Library Exercises, including Core when an eligible core exercise
    exists.
    The active-workout add picker uses a separate purpose that hides both
-   comparison entries, preserving the no-premium-interruption workout rule.
+   comparison entries, preserving the focused-workout rule.
 3. The pick chains through the sheet's `onDismiss` into
    `ExerciseComparisonScreen`, presented as a sheet with its own
    `NavigationStack` so it works from every detail-screen host (picker,
@@ -86,13 +85,10 @@ selected controls use a separate `ExerciseComparisonPalette` whose light/dark
 label pairings clear WCAG AA and whose selected-control pairings clear 7:1;
 mesh-oriented colors are never reused as text colors.
 
-## Gating
+## Access
 
-Pro, at the entry point, per `free-with-pro-iap.md`'s split: raw catalog
-facts stay free on the detail screen; the synthesized "what it means for
-your choices" layer is Pro. The paywall feature list names the feature.
-The comparison screen itself carries no gate UI because the picker is the
-only path to it.
+Comparison is included in the [upfront app price](paid-app.md). The picker is
+the entry to comparison; active-workout hosts continue to hide that entry.
 
 ## Edge cases
 
@@ -135,11 +131,9 @@ only path to it.
   power and mismatched-tracking exclusions, overlap/emphasis,
   separate anatomy scopes, authored direction, delta classification,
   movement/tracking facts, progression notes, and tint-ramp regressions.
-- Semantic scenarios: `exercise-comparison` (Pro flow through the picker
-  into the comparison sheet), `exercise-comparison-locked` (free flow opens
-  the paywall; no picker, no comparison), and
-  `exercise-comparison-active-workout-hidden` (the live-session add flow has
-  no comparison or comparison paywall entry).
+- Semantic scenarios: `exercise-comparison` covers picker-to-comparison flow;
+  `exercise-comparison-unrestricted` proves direct access on a fresh install.
+  `exercise-comparison-active-workout-hidden` preserves the live-session boundary.
   `exercise-comparison-picker-filters` and its light/Accessibility variants
   verify the Compare With picker keeps Library Exercises' All, Favorites,
   Push, Pull, and Core shortcuts without compromising the filter-strip layout.
@@ -155,12 +149,11 @@ only path to it.
 | `vivobody/Screens/Library/ExerciseComparisonScreen.swift` | New — comparison sheet and the detail-screen entry row |
 | `vivobody/Screens/Library/ExerciseComparisonMusclePanel.swift` | Mirrored muscle beams and scoped anatomy instrument |
 | `vivobody/Screens/Library/ExerciseComparisonSections.swift` | Movement, tracking, and technique instruments |
-| `vivobody/Screens/Library/ExerciseDetailScreen.swift` | Compare entry (row + menu), picker sheet, chained comparison sheet, Pro gate |
+| `vivobody/Screens/Library/ExerciseDetailScreen.swift` | Compare entry (row + menu), picker sheet, chained comparison sheet |
 | `vivobody/Screens/Library/ExercisePickerPurpose.swift` | Typed caller contract, including active-workout suppression and comparison behavior |
 | `vivobody/Screens/Library/ExercisePickerSheet.swift` | Typed `ExercisePickerPurpose.compare(anchorID:anchorName:)`, anchor exclusion, compare affordance and hint |
-| `vivobody/Store/PaywallSheet.swift` | Feature list names exercise comparison |
 | `vivobodyTests/ExerciseComparisonTests.swift` | New |
-| `Scripts/verify_scenarios/exercise-comparison*.json` | Pro and locked semantic scenarios |
+| `Scripts/verify_scenarios/exercise-comparison*.json` | Unrestricted comparison semantic scenarios |
 
 ## Out of scope
 

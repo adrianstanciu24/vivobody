@@ -148,7 +148,7 @@ xcrun simctl status_bar "$UDID" override \
 xcrun simctl spawn "$UDID" defaults write "$BUNDLE_ID" 'settings.weightUnit' -string lb
 
 echo "Recording START"
-launch_app --ui-test-reset --seed-showcase --pro
+launch_app --ui-test-reset --seed-showcase
 wait_for_label "Start Workout"
 sleep 0.8
 start_recording "$RAW_DIR/start.mov"
@@ -160,7 +160,7 @@ sleep 2.4
 stop_recording
 
 echo "Recording LOG"
-launch_app --ui-test-reset --ui-test-active-partial --pro
+launch_app --ui-test-reset --ui-test-active-partial
 wait_for_label "Resume Workout"
 tap_until_label 201 751 "Barbell Bench Press"
 tap_until_label 126 349 "Set 3"
@@ -174,7 +174,7 @@ sleep 2.4
 stop_recording
 
 echo "Recording REST"
-launch_app --ui-test-reset --ui-test-active-partial --pro
+launch_app --ui-test-reset --ui-test-active-partial
 wait_for_label "Resume Workout"
 tap_until_label 201 751 "Barbell Bench Press"
 tap_until_label 126 349 "Set 3"
@@ -186,7 +186,7 @@ sleep 4.2
 stop_recording
 
 echo "Recording SEE"
-launch_app --ui-test-reset --seed-showcase --verify-tab insights --pro
+launch_app --ui-test-reset --seed-showcase --verify-tab insights
 wait_for_label "Insights"
 sleep 0.8
 start_recording "$RAW_DIR/see.mov"

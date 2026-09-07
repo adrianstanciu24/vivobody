@@ -135,8 +135,6 @@ import VivoKit
                 "--ui-test-strength-routine-builder",
                 "--ui-test-custom-exercise-editor",
                 "--static-body",
-                "--pro",
-                "--no-iap",
             ])
             #expect(route.opensStrengthRoutineBuilder)
             #expect(route.opensCustomExerciseEditor)

@@ -181,11 +181,6 @@ struct LibraryScreen: View {
     private func presentNewTemplate() {
         let descriptor = FetchDescriptor<WorkoutTemplate>()
         let count = (try? modelContext.fetchCount(descriptor)) ?? 0
-        // Manual creation keeps the existing one-template gate.
-        guard ProGate.canCreateTemplate(existingCount: count, status: appState.pro.status) else {
-            appState.pro.requestUnlock(context: .templateLimit)
-            return
-        }
         templateEditorTarget = .new(sortOrder: count)
         Haptics.soft()
     }

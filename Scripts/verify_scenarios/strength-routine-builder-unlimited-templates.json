@@ -1,11 +1,10 @@
 {
-  "name": "strength-routine-builder-template-cap",
+  "name": "strength-routine-builder-unlimited-templates",
   "launch": {
     "reset": true,
     "tab": "library",
     "arguments": [
       "--seed-templates",
-      "--no-iap",
       "--ui-test-strength-routine-builder"
     ]
   },
@@ -60,30 +59,82 @@
     },
     {
       "wait": {
-        "labelContains": "Unlock Vivobody Pro forever"
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Full Body A"
+        },
+        "direction": "up"
       }
     },
     {
       "relaunch": {
         "reset": false,
         "tab": "library",
-        "arguments": ["--no-iap"]
+        "arguments": []
+      }
+    },
+    {
+      "wait": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
       }
     },
     {
       "wait": {
         "labelContains": "Lower Day B"
       }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Full Body A"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Full Body C"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Full Body C"
+          }
+        ]
+      }
     }
   ],
   "required": [
     {
-      "labelContains": "Lower Day B"
+      "labelContains": "Full Body C"
     }
   ],
   "forbidden": [
     {
-      "labelContains": "Full Body A"
+      "labelContains": "Unlock Vivobody Pro"
     }
   ],
   "forbiddenLogs": [

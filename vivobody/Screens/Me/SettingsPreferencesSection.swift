@@ -21,7 +21,6 @@ struct SettingsPreferencesSection: View {
     let restOptions: [Int]
     let healthKitPresentation: SettingsHealthKitPresentation
     let bundledExerciseCount: Int
-    let onRequestUnlock: () -> Void
     let onRequestCatalogReset: () -> Void
 
     var body: some View {
@@ -273,33 +272,7 @@ struct SettingsPreferencesSection: View {
         case .unavailable:
             EmptyView()
 
-        case .locked:
-            Button(action: onRequestUnlock) {
-                HStack {
-                    VStack(alignment: .leading, spacing: Space.xs) {
-                        Text("Apple Health")
-                            .font(Typography.sectionHeading)
-                            .foregroundStyle(Ink.primary)
-                        Text("Save finished workouts to the Health app · Pro")
-                            .font(Typography.caption)
-                            .foregroundStyle(Ink.tertiary)
-                    }
-                    Spacer()
-                    Image(systemName: "lock.fill")
-                        .font(Typography.sectionLabel)
-                        .foregroundStyle(Ink.tertiary)
-                        .accessibilityHidden(true)
-                }
-                .padding(.horizontal, Space.lg)
-                .padding(.vertical, Space.md)
-                .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Apple Health, part of Vivobody Pro")
-            .accessibilityHint("Opens the Vivobody Pro purchase sheet")
-
-        case .unlocked:
+        case .available:
             HStack {
                 VStack(alignment: .leading, spacing: Space.xs) {
                     Text("Apple Health")

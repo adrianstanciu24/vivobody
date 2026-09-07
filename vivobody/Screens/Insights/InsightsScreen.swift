@@ -6,10 +6,6 @@
 //  Balance. Each instrument keeps its own scope and dominant visual while
 //  secondary distributions and the full balance roster live in drill-outs.
 //
-//  Free users see the same real-data instrument geometries frozen beneath a
-//  shared blur, while one persistent bottom action carries the purchase request.
-//
-
 import SwiftUI
 import VivoKit
 
@@ -26,10 +22,7 @@ struct InsightsScreen: View {
                 if !hasQualifyingData(reports) {
                     emptyState(hasArchivedWorkout: true)
                 } else {
-                    instrumentShell(
-                        reports: reports,
-                        locked: !appState.pro.isUnlocked
-                    )
+                    instrumentShell(reports: reports)
                 }
             } else {
                 loadingState
@@ -41,48 +34,17 @@ struct InsightsScreen: View {
     // MARK: - Instrument shell
 
     private func instrumentShell(
-        reports: SessionAnalytics.InsightsReports,
-        locked: Bool
+        reports: SessionAnalytics.InsightsReports
     ) -> some View {
         ScrollView(.vertical) {
-            instrument(
-                reports: reports,
-                locked: locked
-            )
-            .padding(.top, Space.lg)
-            .padding(.bottom, Space.xxl)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            reportContent(reports)
+                .padding(.top, Space.lg)
+                .padding(.bottom, Space.xxl)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if locked {
-                InsightsUnlockButton(
-                    price: appState.pro.displayPrice,
-                    action: requestUnlock
-                )
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Space.sm)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func instrument(
-        reports: SessionAnalytics.InsightsReports,
-        locked: Bool
-    ) -> some View {
-        if locked {
-            InsightsLockedPreview(
-                title: "Insights",
-                action: requestUnlock
-            ) {
-                reportContent(reports)
-            }
-        } else {
-            reportContent(reports)
-        }
     }
 
     private func reportContent(
@@ -123,10 +85,6 @@ struct InsightsScreen: View {
             MuscleDirectnessSection(report: deep.muscleDirectness)
                 .padding(.top, Space.xl)
         }
-    }
-
-    private func requestUnlock() {
-        appState.pro.requestUnlock()
     }
 
     // MARK: - Qualification and first use

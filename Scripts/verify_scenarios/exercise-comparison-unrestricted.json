@@ -1,0 +1,103 @@
+{
+  "name": "exercise-comparison-unrestricted",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-compare"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-compare"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercisePickerFilterCore"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercisePickerFilterAll",
+            "value": "Selected"
+          },
+          {
+            "identifier": "exercisePickerFilterCore"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Unlock Vivobody Pro"
+          },
+          {
+            "label": "Restore Purchases"
+          },
+          {
+            "label": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Standing Band Fly, Band"
+      }
+    },
+    {
+      "wait": {
+        "label": "Comparing Barbell Bench Press with Standing Band Fly"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Comparing Barbell Bench Press with Standing Band Fly"
+    },
+    {
+      "identifier": "comparison-panel-muscles",
+      "value": "Selected"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Unlock Vivobody Pro"
+    },
+    {
+      "label": "Restore Purchases"
+    },
+    {
+      "label": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+    }
+  ]
+}

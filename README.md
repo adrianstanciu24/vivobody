@@ -19,8 +19,7 @@ The product is pre-1.0 and maintained by one developer.
   training load, consistency, symmetry, and exercise dominance.
 - Home Screen widgets, a Live Activity, and a Control Center start control in
   `vivobodyWidgets/`, fed by versioned App Group snapshots.
-- HealthKit workout mirroring and a StoreKit lifetime Pro unlock, each behind a
-  narrow boundary.
+- Opt-in HealthKit workout mirroring behind a narrow integration boundary.
 
 The public marketing site lives in a separate repository, `vivobody.web`.
 
@@ -44,9 +43,8 @@ supported across the app.
 | Volume load | Accumulated comparable load × reps. Training Load uses it when available in its current/baseline span, with hard sets as fallback. [Measure decision](engineering/decisions/2026-09-03-training-load-measures-volume-load.md) |
 | Workout load comparison | One workout versus the average comparable archived workout across normalized set progress. This differs from the rolling Training Load report. [Receipt contract](specs/workout-load-comparison.md) |
 
-Workout logging and history remain free; Pro unlocks analysis and selected
-integrations. Read the [entitlement contract](specs/free-with-pro-iap.md) before
-changing access. The [routine builder](specs/strength-routine-builder.md) is
+All features are included in the upfront app price; see the
+[paid-app contract](specs/paid-app.md). The [routine builder](specs/strength-routine-builder.md) is
 implemented but intentionally hidden behind a DEBUG route. Watch documents
 are research, not an existing watch app. There is no server or account layer.
 Use the [spec index](specs/index.md) to distinguish active behavior from history
