@@ -2,7 +2,7 @@
 //  TodayUpNextPresentation.swift
 //  vivobody
 //
-//  Immutable presentation for Today's scheduled-workout preview. A narrow
+//  Immutable presentation for Today's scheduled or repeat-workout preview. A narrow
 //  MainActor adapter snapshots SwiftData templates and strength outlook into
 //  primitive values; all formatting, preview limits, and accessibility copy
 //  are then derived without store, environment, or UserDefaults access.
@@ -85,6 +85,7 @@ nonisolated struct TodayUpNextPresentation: Equatable {
         let accessibilityLabel: String
     }
 
+    let lastTime: TodayLastTimePresentation?
     let templateName: String
     let scheduleText: String
     let metadata: String
@@ -97,8 +98,10 @@ nonisolated struct TodayUpNextPresentation: Equatable {
     init(
         source: Source,
         unit: WeightUnit,
-        defaultRestSeconds: Int
+        defaultRestSeconds: Int,
+        lastTime: TodayLastTimePresentation? = nil
     ) {
+        self.lastTime = lastTime
         templateName = source.templateName
         scheduleText = Self.scheduleText(daysUntil: source.daysUntil)
         durationEstimate = Self.durationEstimate(
@@ -142,6 +145,7 @@ nonisolated struct TodayUpNextPresentation: Equatable {
 
     static func scheduleText(daysUntil: Int) -> String {
         switch daysUntil {
+        case -1: "Repeat option"
         case 0: "Today"
         case 1: "Tomorrow"
         default: "in \(daysUntil) days"

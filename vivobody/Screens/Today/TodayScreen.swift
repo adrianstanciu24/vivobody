@@ -85,7 +85,6 @@ struct TodayScreen: View {
     /// Whether the single start-workout chooser is presented.
     @State var showStartSheet = false
     @State var showMuscleMapDetails = false
-    @State var showTrainingLoadDetails = false
 
     /// The start action chosen in the sheet, deferred until the sheet
     /// fully dismisses. Running it in the sheet's onDismiss avoids
@@ -108,8 +107,6 @@ struct TodayScreen: View {
             load: appState.analytics.load
         )
         let outlook = appState.analytics.strength
-        let load = appState.analytics.load
-        let readiness = latestSessions.readiness(load: load)
         let upNextSelection = makeUpNextSelection(
             upNext,
             outlook: outlook,
@@ -118,7 +115,7 @@ struct TodayScreen: View {
         ScrollView {
             // The body leads — your trained figure is the hero
             // and the readout's subject. Up Next then names the
-            // scheduled plan before its training-load context;
+            // scheduled plan with its last logged reference;
             // the pinned primary action remains the biggest,
             // first-thing-you-reach target. Completed-workout
             // history follows only when there is history to show.
@@ -170,15 +167,6 @@ struct TodayScreen: View {
                         )
                     }
                     .settleIn(1)
-                }
-                if let readiness {
-                    if upNextSelection != nil {
-                        SectionDivider().settleIn(2)
-                    }
-                    TodayReadinessSection(report: load, line: readiness) {
-                        showTrainingLoadDetails = true
-                    }
-                    .settleIn(3)
                 }
                 if let latestSession {
                     SectionDivider().settleIn(4)
@@ -252,9 +240,6 @@ struct TodayScreen: View {
         }
         .sheet(isPresented: $showMuscleMapDetails) {
             MuscleMapDetailsSheet(report: appState.analytics.muscleMap)
-        }
-        .sheet(isPresented: $showTrainingLoadDetails) {
-            TrainingLoadDetailsSheet(report: appState.analytics.load)
         }
     }
 

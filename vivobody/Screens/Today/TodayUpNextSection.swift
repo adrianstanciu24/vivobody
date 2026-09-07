@@ -2,7 +2,7 @@
 //  TodayUpNextSection.swift
 //  vivobody
 //
-//  Today's navigable scheduled-workout preview. It renders an immutable
+//  Today's navigable scheduled or repeat-workout preview. It renders an immutable
 //  TodayUpNextPresentation while the root supplies the navigation destination.
 //
 
@@ -35,11 +35,8 @@ struct TodayUpNextSection<Destination: View>: View {
                 VStack(alignment: .leading, spacing: Space.lg) {
                     heading
                     exercisePreview(preview)
-                    if let prProximityText = presentation.prProximityText {
-                        prProximity(prProximityText)
-                    }
-                    if let guidance = presentation.loadGuidance {
-                        loadGuidance(guidance)
+                    if let lastTime = presentation.lastTime {
+                        lastTimeReference(lastTime)
                     }
                 }
                 .padding(Space.lg)
@@ -47,6 +44,7 @@ struct TodayUpNextSection<Destination: View>: View {
             }
             .buttonStyle(.plain)
             .accessibilityHint("Opens this workout template")
+            .accessibilityIdentifier("todayUpNextPreview")
         }
     }
 
@@ -103,31 +101,23 @@ struct TodayUpNextSection<Destination: View>: View {
         }
     }
 
-    private func prProximity(_ text: String) -> some View {
-        HStack(spacing: Space.sm) {
-            Image(systemName: "trophy.fill")
+    private func lastTimeReference(_ reference: TodayLastTimePresentation) -> some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Divider()
+            Text("Last time · \(reference.dateText)")
                 .font(Typography.caption)
-                .foregroundStyle(Tint.primary)
-            Text(text)
-                .font(Typography.caption)
-                .foregroundStyle(Tint.primary.opacity(0.9))
+                .foregroundStyle(Ink.tertiary)
+            Text(reference.exerciseName)
+                .font(Typography.headline)
+                .foregroundStyle(Ink.primary)
+            Text(reference.setsText)
+                .font(Typography.metricInline)
+                .foregroundStyle(Ink.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .accessibilityLabel(text)
-    }
-
-    private func loadGuidance(_ guidance: TodayUpNextPresentation.LoadGuidance) -> some View {
-        HStack(spacing: Space.sm) {
-            Image(systemName: "gauge.with.dots.needle.67percent")
-                .font(Typography.caption)
-                .foregroundStyle(Tint.primary)
-                .accessibilityHidden(true)
-            Text(guidance.text)
-                .font(Typography.caption)
-                .foregroundStyle(Tint.primary.opacity(0.9))
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .accessibilityLabel(guidance.accessibilityLabel)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(reference.accessibilityLabel)
     }
 }
 

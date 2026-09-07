@@ -59,6 +59,7 @@ extension TodayScreen {
         outlook: StrengthOutlookBoard,
         defaultRestSeconds: Int
     ) -> (template: WorkoutTemplate, presentation: TodayUpNextPresentation)? {
+        guard barSession == nil else { return nil }
         let template: WorkoutTemplate
         let daysUntil: Int
         let more: Int
@@ -77,7 +78,13 @@ extension TodayScreen {
             more = otherCount
             shouldEaseOff = false
         case .unscheduled:
-            return nil
+            guard let recent = sortedTemplates.first(where: { $0.lastUsedAt != nil && !$0.orderedExercises.isEmpty }) else {
+                return nil
+            }
+            template = recent
+            daysUntil = -1
+            more = 0
+            shouldEaseOff = false
         }
 
         let source = TodayUpNextPresentation.Source(
@@ -92,7 +99,12 @@ extension TodayScreen {
             TodayUpNextPresentation(
                 source: source,
                 unit: unit,
-                defaultRestSeconds: defaultRestSeconds
+                defaultRestSeconds: defaultRestSeconds,
+                lastTime: TodayLastTimePresentation.make(
+                    template: template,
+                    history: appState.analytics.exerciseHistorySummaries,
+                    unit: unit
+                )
             )
         )
     }

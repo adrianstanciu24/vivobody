@@ -12,26 +12,76 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Scheduled Test, 1 exercise  ·  ~(?:5|10) min, Chest · 2 sets, Barbell Bench Press, 2 × 8 (?:135 lb|61\\.2 kg)$",
+          "labelRegex": "^Scheduled Test, 1 exercise  \u00b7  ~(?:5|10) min, Chest \u00b7 2 sets, Barbell Bench Press, 2 \u00d7 8 (?:135 lb|61\\.2 kg)$",
           "role": "AXButton"
         },
         "direction": "up",
         "maxSwipes": 4
       }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Up next",
+            "role": "AXHeading"
+          },
+          {
+            "label": "TODAY",
+            "role": "AXStaticText"
+          },
+          {
+            "labelRegex": "^Scheduled Test, 1 exercise  \u00b7  ~(?:5|10) min, Chest \u00b7 2 sets, Barbell Bench Press, 2 \u00d7 8 (?:135 lb|61\\.2 kg)$",
+            "role": "AXButton"
+          },
+          {
+            "identifier": "todayStartWorkoutButton",
+            "label": "Start Workout",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "scheduledWorkoutStartButton"
+          },
+          {
+            "identifier": "activeWorkoutResumeBar"
+          },
+          {
+            "label": "Training load",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": true,
+        "tab": "today",
+        "arguments": [
+          "--ui-test-scheduled-template",
+          "--seed-history",
+          "--static-body"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayUpNextPreview",
+        "labelContains": "Last time"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
     }
   ],
   "required": [
     {
-      "label": "Up next",
-      "role": "AXHeading"
-    },
-    {
-      "label": "TODAY",
-      "role": "AXStaticText"
-    },
-    {
-      "labelRegex": "^Scheduled Test, 1 exercise  ·  ~(?:5|10) min, Chest · 2 sets, Barbell Bench Press, 2 × 8 (?:135 lb|61\\.2 kg)$",
-      "role": "AXButton"
+      "identifier": "todayUpNextPreview",
+      "labelContains": "Last time"
     },
     {
       "identifier": "todayStartWorkoutButton",
@@ -45,6 +95,10 @@
     },
     {
       "identifier": "activeWorkoutResumeBar"
+    },
+    {
+      "label": "Training load",
+      "visible": false
     }
   ]
 }
