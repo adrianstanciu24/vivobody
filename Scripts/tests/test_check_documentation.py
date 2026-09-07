@@ -92,7 +92,7 @@ class DocumentationCheckerTests(unittest.TestCase):
             self.assertIn("DOC004", self.rules(root))
 
     def test_links_in_onboarding_specs_skills_and_scenarios_are_checked(self) -> None:
-        for relative in ("README.md", "worklog.md", "specs/catalog/README.md",
+        for relative in ("README.md", "specs/catalog/README.md",
                          ".agents/skills/vivobody-add-exercise/SKILL.md",
                          "Scripts/verify_scenarios/README.md"):
             with self.subTest(path=relative), tempfile.TemporaryDirectory() as directory:

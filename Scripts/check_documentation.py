@@ -24,7 +24,6 @@ REQUIRED_FILES = (
     "AGENTS.md",
     "README.md",
     "workout-app-principles.md",
-    "worklog.md",
     "ARCHITECTURE.md",
     "engineering/verification.md",
     "engineering/code-review.md",

@@ -160,7 +160,6 @@ project knowledge:
 | Required evidence and commands | [verification.md](verification.md) |
 | Reusable agent procedure | Repository skill or script, linked from [AGENTS.md](../AGENTS.md) |
 | Rationale for a lasting choice | [Decision record](decisions/README.md) |
-| Current assignment and next action | [worklog.md](../worklog.md), using the [handoff format](plans/README.md#current-work-and-handoffs) |
 
 Specs should start with a `Status:` line consistent with the index: active
 contract, implemented design (including hidden surfaces), historical or

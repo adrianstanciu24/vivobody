@@ -46,12 +46,6 @@ routing, also run the focused mutation suite:
 /usr/bin/python3 -m unittest discover -s Scripts/tests -p 'test_check_documentation.py'
 ```
 
-For the [Codex recording tools](codex-observability.md), also run
-`/usr/bin/python3 -m unittest discover -s Scripts/tests -p 'test_codex_observe.py'`.
-Hook or session-routing changes need a small interactive session with a second
-turn and delegated work; inspect task receipts and the generated report. The
-recording suite is also included in `Scripts/check.sh`.
-
 These documentation-only paths do not require Xcode, a simulator, or
 `Scripts/check.sh`. A specification edit describing a future behavior does not
 implement it; label proposed behavior explicitly and preserve the request boundary.
