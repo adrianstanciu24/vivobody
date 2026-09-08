@@ -49,6 +49,7 @@ $(SRCROOT)/specs/catalog/families/knee-extension.json
 $(SRCROOT)/specs/catalog/families/knee-flexion.json
 $(SRCROOT)/specs/catalog/families/kneeling-ab-wheel-rollout.json
 $(SRCROOT)/specs/catalog/families/landmine-press.json
+$(SRCROOT)/specs/catalog/families/lateral-band-walk.json
 $(SRCROOT)/specs/catalog/families/lateral-lunge.json
 $(SRCROOT)/specs/catalog/families/machine-hack-squat.json
 $(SRCROOT)/specs/catalog/families/mid-thigh-clean-pull.json

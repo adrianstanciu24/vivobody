@@ -4023,6 +4023,62 @@
       "pmcid": "PMC8378718",
       "url": "https://doi.org/10.1371/journal.pone.0253276",
       "scope": "Twenty-eight healthy young adults were analyzed during repeated upright single-leg heel raises with light fingertip balance support while tibialis-anterior and plantarflexor EMG was recorded. A custom device provided an individualized maximum-height target; the task used a metronome-paced raise, lower, and rest sequence to failure. The catalog's wall balance contact and minimum five-centimeter endpoint remain anchored by Manago 2021 rather than this protocol. Measured tibialis-anterior activity and retained whole-body balance demands support categorical ankle-control credit, without treating the antagonist as a plantarflexion prime or inferring hypertrophy."
+    },
+    {
+      "id": "yamane-2019-straight-leg-raise",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Understanding the Muscle Activity Pattern of the Hip Flexors during Straight Leg Raising in Healthy Subjects",
+      "authors": [
+        "Masahiro Yamane",
+        "Mitsuhiro Aoki",
+        "Yuji Sasaki",
+        "Hayato Kawaji"
+      ],
+      "year": 2019,
+      "doi": "10.2490/prm.20190007",
+      "pmid": "32789254",
+      "pmcid": "PMC7365227",
+      "url": "https://doi.org/10.2490/prm.20190007",
+      "scope": "Ten healthy men performed held straight-leg-raise tasks at 30, 45, and 60 degrees of hip flexion with additional abduction and rotation conditions. Fine-wire psoas-major and iliacus recordings and surface recordings of rectus femoris, sartorius, adductor longus, and tensor fasciae latae establish participation. Transfer of TFL secondary credit to the dynamic supine raise and supported standing cable raise is a categorical anatomy-and-mechanics inference, not an exact-protocol measurement, muscle ranking, or hypertrophy estimate."
+    },
+    {
+      "id": "ace-2026-side-lying-hip-abduction",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Side Lying Hip Abduction",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/38/side-lying-hip-abduction/",
+      "scope": "Official unloaded floor/mat fixture: both legs straight and stacked, neutral feet and hip rotation, lower arm supporting the head and upper hand on the hip. The upper leg rises until further elevation would tilt the pelvis, then lowers under control. Used for setup and a qualitative control-limited endpoint only; no universal 45-degree anatomical limit or muscle ranking is adopted. Undated page reviewed 8 September 2026; registry year is access year."
+    },
+    {
+      "id": "speediance-2026-standing-cable-hip-flexion",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Standing Single Cable Hip Flexion",
+      "authors": [
+        "Speediance"
+      ],
+      "year": 2026,
+      "url": "https://www.speediance.com/pages/standing-single-cable-hip-flexion",
+      "scope": "Manufacturer technical instructions specify an ankle strap attached to a low pulley behind the standing athlete, an upright torso, optional stable hand support, a straight working knee, and a forward lift until the thigh is horizontal or an earlier flexibility/form limit. The admitted fixture selects continuous hand support and controlled return without stack contact. This anchors conventional cable geometry only; muscle roles transfer from primary anatomical and SLR evidence, not manufacturer physiological claims. Undated page reviewed 8 September 2026; registry year is access year."
+    },
+    {
+      "id": "berry-2015-resisted-side-stepping",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Resisted Side Stepping: The Effect of Posture on Hip Abductor Muscle Activation",
+      "authors": [
+        "Justin W. Berry",
+        "Theresa S. Lee",
+        "Hanna D. Foley",
+        "Cara L. Lewis"
+      ],
+      "year": 2015,
+      "doi": "10.2519/jospt.2015.5888",
+      "pmid": "26161629",
+      "pmcid": "PMC4951090",
+      "url": "https://doi.org/10.2519/jospt.2015.5888",
+      "scope": "Twenty-four healthy adults performed resisted side stepping with the band just above the ankles in upright and self-selected squat postures. Gluteus medius, gluteus maximus, and TFL surface EMG and hip/knee kinematics were measured in moving and stance limbs. The admitted squat branch retains approximately 30 cm foot spacing, a roughly 30 cm lead step, and a trailing step restoring the starting gap. No universal squat angle, torque, strength gain, or cross-muscle rank is inferred. Leading hip abduction and band-controlled trailing hip adduction are categorical mechanical interpretations; postural roles are anatomical inferences."
     }
   ]
 }

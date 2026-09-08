@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 97 |
-| Exercises | 232 |
+| Reviewed families | 98 |
+| Exercises | 235 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 259 |
+| Evidence sources | 263 |
 
 ## Family roster
 
@@ -50,11 +50,11 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hang-power-clean](families/hang-power-clean.json) | 1 |
 | [hang-power-snatch](families/hang-power-snatch.json) | 1 |
 | [hanging-leg-raise](families/hanging-leg-raise.json) | 2 |
-| [hip-abduction](families/hip-abduction.json) | 2 |
+| [hip-abduction](families/hip-abduction.json) | 3 |
 | [hip-adduction](families/hip-adduction.json) | 2 |
 | [hip-extension](families/hip-extension.json) | 3 |
 | [hip-external-rotation](families/hip-external-rotation.json) | 1 |
-| [hip-flexion](families/hip-flexion.json) | 1 |
+| [hip-flexion](families/hip-flexion.json) | 2 |
 | [hip-hinge](families/hip-hinge.json) | 1 |
 | [hip-internal-rotation](families/hip-internal-rotation.json) | 1 |
 | [hip-thrust-bridge](families/hip-thrust-bridge.json) | 2 |
@@ -68,6 +68,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [knee-flexion](families/knee-flexion.json) | 4 |
 | [kneeling-ab-wheel-rollout](families/kneeling-ab-wheel-rollout.json) | 1 |
 | [landmine-press](families/landmine-press.json) | 1 |
+| [lateral-band-walk](families/lateral-band-walk.json) | 1 |
 | [lateral-lunge](families/lateral-lunge.json) | 1 |
 | [machine-hack-squat](families/machine-hack-squat.json) | 1 |
 | [mid-thigh-clean-pull](families/mid-thigh-clean-pull.json) | 1 |

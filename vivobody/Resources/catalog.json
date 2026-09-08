@@ -6725,6 +6725,65 @@
     ]
   },
   {
+    "familyID": "hip-abduction",
+    "familyName": "Hip Abduction",
+    "movementActions": [
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "bodyweight-side-lying-hip-abduction",
+    "name": "Bodyweight Side-Lying Hip Abduction",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Side-Lying Hip Abduction",
+      "Side-Lying Leg Raise"
+    ],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your side on a mat with both legs straight and stacked. Rest your head on the lower arm and your upper hand on your hip.",
+      "movement": "Raise the top leg out to the side without turning the kneecap upward or rolling your hips.",
+      "endpoint": "Stop before lifting farther would tilt your pelvis or pull your lower back out of position.",
+      "returnPhase": "Lower the leg slowly until it meets the lower leg.",
+      "controlledJoints": "Keep your hips stacked, working knee straight, and foot in a neutral position.",
+      "supportAndPosture": "Keep your torso and lower leg supported by the floor. Let the hip move while your waist stays still.",
+      "disqualifyingCompensations": [
+        "Rolling backward and turning the toes upward changes the side lift into a forward leg raise.",
+        "Bending the top knee changes the straight-leg fixture.",
+        "Hiking the pelvis adds a waist-driven lift."
+      ],
+      "sideOrDirection": "Complete the set, roll onto the other side, and repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMed",
+        "role": "primary"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
+      }
+    ]
+  },
+  {
     "familyID": "hip-adduction",
     "familyName": "Hip Adduction",
     "movementActions": [
@@ -7198,11 +7257,92 @@
         "role": "secondary"
       },
       {
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
+      },
+      {
         "muscle": "abs",
         "role": "stabilizer"
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "hip-flexion",
+    "familyName": "Hip Flexion Isolation",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "supported-standing-cable-hip-flexion",
+    "name": "Supported Standing Cable Hip Flexion",
+    "group": "legs",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Standing Cable Hip Flexion",
+      "Straight-Leg Cable Hip Flexion",
+      "Cable Hip Flexor Raise"
+    ],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Fasten an ankle cuff to a low pulley. Face away from the machine, stand upright, and hold a stable support lightly. Keep the cable behind the working leg. Compare the entered load only on the same machine and setup.",
+      "movement": "Lift the straight working leg forward and upward while keeping your trunk steady.",
+      "endpoint": "Stop when the thigh is horizontal, or earlier if you cannot keep the knee straight and the pelvis steady. Pause briefly.",
+      "returnPhase": "Lower the leg slowly to the starting position without letting the weight stack settle between repetitions.",
+      "controlledJoints": "Keep the working knee straight and the standing leg steady. Avoid leaning back, arching the lower back, or turning the pelvis.",
+      "supportAndPosture": "Maintain light hand support and an upright torso throughout the set.",
+      "disqualifyingCompensations": [
+        "Bending the working knee changes the straight-leg lift into a knee drive.",
+        "Leaning back or swinging the pelvis adds trunk-driven momentum.",
+        "Moving the pulley in front of you changes the resisted direction."
+      ],
+      "sideOrDirection": "Complete the set with one leg, then repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "iliopsoas",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
         "role": "stabilizer"
       }
     ]
@@ -10235,6 +10375,92 @@
       },
       {
         "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "lateral-band-walk",
+    "familyName": "Lateral Band Walk",
+    "movementActions": [
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "yielding"
+      }
+    ],
+    "catalogID": "ankle-band-lateral-walk",
+    "name": "Ankle-Band Lateral Walk",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Lateral Band Walk",
+      "Banded Side Steps",
+      "Resisted Side Stepping"
+    ],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Place a loop band just above your ankles. Point your feet forward about 30 cm apart and settle into a comfortable squat.",
+      "movement": "Step one foot about 30 cm sideways while keeping the same squat depth.",
+      "endpoint": "Plant the leading foot with the band stretched and your trunk controlled.",
+      "returnPhase": "Step the trailing foot slowly toward the leading foot until the original gap between your feet is restored. Count that complete step pair as one repetition.",
+      "controlledJoints": "Keep your knees aligned with your feet and avoid bouncing up and down or swaying your trunk.",
+      "supportAndPosture": "Shift support from one leg to the other while keeping tension in the band and maintaining your squat.",
+      "disqualifyingCompensations": [
+        "Stepping diagonally changes the lateral walk into a monster walk.",
+        "Standing up between steps changes the maintained-squat fixture.",
+        "Moving the band above the knees or around the feet changes its resistance geometry."
+      ],
+      "sideOrDirection": "Complete the logged repetitions in one direction, then repeat the same number in the opposite direction."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMed",
+        "role": "primary"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
         "role": "stabilizer"
       },
       {

@@ -1,5 +1,10 @@
 # Batch 6 — hip abduction and adduction activation
 
+Current amendment: [TFL and hip-flexor coverage](tfl-hip-flexor-coverage.md)
+extends the active roster and supersedes the affected role and fixture
+exclusions below. This document retains the original discovery decisions.
+
+
 Status: activation-ready after shared evidence registration and integration
 tests. Each family begins with one condition-matched exercise rather than a
 machine, standing, side-lying, cable, and band Cartesian product.

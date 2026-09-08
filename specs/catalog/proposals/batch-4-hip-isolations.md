@@ -1,5 +1,10 @@
 # Batch 4 — hip isolation review
 
+Current amendment: [TFL and hip-flexor coverage](tfl-hip-flexor-coverage.md)
+extends the active roster and supersedes the affected role and fixture
+exclusions below. This document retains the original discovery decisions.
+
+
 Status: resolved. `hip-extension` and `hip-flexion` are active after the
 reviewed 52-region lower-body taxonomy migration. The hip-flexion decision
 does not revive the earlier position-held-pelvis proposal. It activates the

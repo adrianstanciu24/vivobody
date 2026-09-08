@@ -3,10 +3,12 @@
   "schemaVersion": 1,
   "id": "hip-flexion",
   "name": "Hip Flexion Isolation",
-  "definition": "A narrow unilateral open-chain bodyweight task in which a straight working leg rises from a supine, table-supported start to the athlete's active hip-flexion end range and then returns under control. The reviewed protocol directly measured psoas major, rectus femoris, rectus abdominis, external oblique, and the combined internal-oblique/transversus-abdominis site across the concentric, end-range, and eccentric phases. Iliopsoas is primary and rectus femoris secondary; the visible iliopsoas region necessarily combines the directly measured psoas major with an unseparated iliacus mesh. Abs and obliques receive conservative trunk-and-pelvis stability credit. The study does not establish one numeric hip endpoint, a standardized cadence or hold duration, or a zero-motion pelvis or spine, so those details are not invented. Tensor fasciae latae, sartorius, and the adductors receive no role merely from general hip-flexor capability. Loaded raises, standing marches, hanging or captain-chair raises, knee raises, sit-ups, V-ups, machine or cable flexion, and any movement that deliberately adds spinal, pelvic, or knee motion remain outside this contract.",
+  "definition": "Unilateral open-chain hip-flexion isolation with the working knee held straight. The supine table-supported bodyweight branch retains its active end range and nonstandardized pelvic/spinal motion from Okubo. The standing cable branch selects the supported straight-leg fixture in Speediance's technical instructions: low pulley behind, ankle cuff, upright controlled trunk and pelvis, and a thigh-horizontal or earlier form-limited endpoint. Iliopsoas is primary; rectus femoris and tensor fasciae latae are secondary. Yamane measured TFL during held supine straight-leg raises; transfer to these dynamic fixtures is an explicit categorical anatomy-and-mechanics inference, not exact-protocol EMG or a recruitment ranking. The iliopsoas region combines psoas major and iliacus. Abs and obliques control the trunk/pelvis; gluteus medius receives standing-branch pelvic-control credit. Sartorius and adductors remain outside this focused role expansion. Bent-knee marches, hanging or captain-chair raises, sit-ups, V-ups, bands, machines, unsupported cable raises, and deliberately spinal or pelvic driven lifts remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
-    "okubo-2021-end-range-active-straight-leg-raise"
+    "okubo-2021-end-range-active-straight-leg-raise",
+    "yamane-2019-straight-leg-raise",
+    "speediance-2026-standing-cable-hip-flexion"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -25,7 +27,8 @@
   },
   "allowed": {
     "equipment": [
-      "bodyweight"
+      "bodyweight",
+      "cable"
     ],
     "modalities": [
       "dynamicStrength"
@@ -34,7 +37,8 @@
       "reps"
     ],
     "loadModes": [
-      "nonComparable"
+      "nonComparable",
+      "external"
     ],
     "lateralities": [
       "unilateral"
@@ -115,6 +119,12 @@
       },
       {
         "anyOf": [
+          "tensorFasciaeLatae"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
           "abs"
         ],
         "minimumRole": "stabilizer"
@@ -131,11 +141,13 @@
         "iliopsoas"
       ],
       "secondary": [
-        "rectusFemoris"
+        "rectusFemoris",
+        "tensorFasciaeLatae"
       ],
       "stabilizer": [
         "abs",
-        "obliques"
+        "obliques",
+        "gluteMed"
       ]
     }
   },
@@ -153,45 +165,50 @@
       "id": "bodyPosition",
       "valueType": "enum",
       "required": true,
-      "description": "The directly reviewed whole-body posture.",
+      "description": "The fixture-specific body position; branch rules preserve the supine and supported cable setups.",
       "allowedValues": [
-        "supine"
+        "supine",
+        "standing"
       ]
     },
     {
       "id": "torsoSupport",
       "valueType": "enum",
       "required": true,
-      "description": "The table supporting the torso during the reviewed active straight-leg raise.",
+      "description": "The fixture-specific torso support; branch rules preserve the supine and supported cable setups.",
       "allowedValues": [
-        "table"
+        "table",
+        "none"
       ]
     },
     {
       "id": "pelvisSupport",
       "valueType": "enum",
       "required": true,
-      "description": "The table supporting the pelvis; support does not establish that pelvic motion was eliminated.",
+      "description": "The fixture-specific pelvis support; branch rules preserve the supine and supported cable setups.",
       "allowedValues": [
-        "table"
+        "table",
+        "unsupportedStanding"
       ]
     },
     {
       "id": "pelvisMotion",
       "valueType": "enum",
       "required": true,
-      "description": "Pelvic motion during the reviewed active straight-leg raise was not standardized as absent or numerically bounded.",
+      "description": "The fixture-specific pelvis motion; branch rules preserve the supine and supported cable setups.",
       "allowedValues": [
-        "nonstandardized"
+        "nonstandardized",
+        "positionHeld"
       ]
     },
     {
       "id": "spineMotion",
       "valueType": "enum",
       "required": true,
-      "description": "Spinal motion during the reviewed active straight-leg raise was not standardized as absent or numerically bounded.",
+      "description": "The fixture-specific spine motion; branch rules preserve the supine and supported cable setups.",
       "allowedValues": [
-        "nonstandardized"
+        "nonstandardized",
+        "positionHeld"
       ]
     },
     {
@@ -207,9 +224,10 @@
       "id": "rangeOfMotion",
       "valueType": "enum",
       "required": true,
-      "description": "The participant-specific active end range used by the reviewed protocol; no universal degree endpoint is inferred.",
+      "description": "The fixture-specific range of motion; branch rules preserve the supine and supported cable setups.",
       "allowedValues": [
-        "activeEndRange"
+        "activeEndRange",
+        "thighHorizontalOrEarlierControlLimit"
       ]
     },
     {
@@ -243,18 +261,20 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "Where an external resistance implement contacts the athlete; this bodyweight fixture has no external interface.",
+      "description": "The fixture-specific load interface; branch rules preserve the supine and supported cable setups.",
       "allowedValues": [
-        "none"
+        "none",
+        "ankleCuff"
       ]
     },
     {
       "id": "resistanceGeometry",
       "valueType": "enum",
       "required": true,
-      "description": "How resistance is created in the reviewed fixture.",
+      "description": "The fixture-specific resistance geometry; branch rules preserve the supine and supported cable setups.",
       "allowedValues": [
-        "limbSegmentGravity"
+        "limbSegmentGravity",
+        "lowPulleyBehind"
       ]
     },
     {
@@ -272,6 +292,16 @@
       "allowedValues": [
         "isolatedJointMotion"
       ]
+    },
+    {
+      "id": "handSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the standing athlete uses continuous light hand support; no active pulling contributes to the repetition.",
+      "allowedValues": [
+        "none",
+        "stableExternalSupport"
+      ]
     }
   ],
   "recommended": {
@@ -280,7 +310,53 @@
       "maximum": 15
     }
   },
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "supine-flexion-pins-bodyweight-fixture",
+      "description": "Pin the reviewed fixture and exclude mixed support or resistance setups.",
+      "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "supine"},
+      "then": [
+        {"field": "equipment", "value": "bodyweight"},
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "variant.torsoSupport", "value": "table"},
+        {"field": "variant.pelvisSupport", "value": "table"},
+        {"field": "variant.pelvisMotion", "value": "nonstandardized"},
+        {"field": "variant.spineMotion", "value": "nonstandardized"},
+        {"field": "variant.rangeOfMotion", "value": "activeEndRange"},
+        {"field": "variant.loadInterface", "value": "none"},
+        {"field": "variant.resistanceGeometry", "value": "limbSegmentGravity"},
+        {"field": "variant.handSupport", "value": "none"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireAdditionalPrimeActions": [],
+      "requireAdditionalStabilityDemands": []
+    },
+    {
+      "id": "standing-flexion-pins-supported-cable-fixture",
+      "description": "Pin the reviewed fixture and exclude mixed support or resistance setups.",
+      "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "standing"},
+      "then": [
+        {"field": "equipment", "value": "cable"},
+        {"field": "loadMode", "value": "external"},
+        {"field": "variant.torsoSupport", "value": "none"},
+        {"field": "variant.pelvisSupport", "value": "unsupportedStanding"},
+        {"field": "variant.pelvisMotion", "value": "positionHeld"},
+        {"field": "variant.spineMotion", "value": "positionHeld"},
+        {"field": "variant.rangeOfMotion", "value": "thighHorizontalOrEarlierControlLimit"},
+        {"field": "variant.loadInterface", "value": "ankleCuff"},
+        {"field": "variant.resistanceGeometry", "value": "lowPulleyBehind"},
+        {"field": "variant.handSupport", "value": "stableExternalSupport"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireAdditionalPrimeActions": [],
+      "requireAdditionalStabilityDemands": [],
+      "requireInvolvement": [
+        {"muscle": "gluteMed", "role": "stabilizer"}
+      ]
+    }
+  ],
   "exercises": [
     {
       "catalogID": "bodyweight-active-straight-leg-raise",
@@ -308,6 +384,10 @@
           "role": "secondary"
         },
         {
+          "muscle": "tensorFasciaeLatae",
+          "role": "secondary"
+        },
+        {
           "muscle": "abs",
           "role": "stabilizer"
         },
@@ -331,13 +411,15 @@
         "loadInterface": "none",
         "resistanceGeometry": "limbSegmentGravity",
         "fixedPath": false,
-        "lowerBodyContribution": "isolatedJointMotion"
+        "lowerBodyContribution": "isolatedJointMotion",
+        "handSupport": "none"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
         "arnold-2010-lower-limb",
-        "okubo-2021-end-range-active-straight-leg-raise"
+        "okubo-2021-end-range-active-straight-leg-raise",
+        "yamane-2019-straight-leg-raise"
       ],
       "execution": {
         "startingPosition": "Lie on your back with your torso and pelvis supported on a table and both legs straight.",
@@ -352,6 +434,90 @@
         ],
         "sideOrDirection": "Finish the set with one leg, then repeat with the other leg."
       }
+    },
+    {
+      "catalogID": "supported-standing-cable-hip-flexion",
+      "name": "Supported Standing Cable Hip Flexion",
+      "aliases": [
+        "Standing Cable Hip Flexion",
+        "Straight-Leg Cable Hip Flexion",
+        "Cable Hip Flexor Raise"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "reps": 10,
+      "searchPriority": 90,
+      "involvement": [
+        {
+          "muscle": "iliopsoas",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "pelvisSupport": "unsupportedStanding",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "flexes",
+        "rangeOfMotion": "thighHorizontalOrEarlierControlLimit",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "extended",
+        "movingSegment": "thigh",
+        "loadInterface": "ankleCuff",
+        "resistanceGeometry": "lowPulleyBehind",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedJointMotion",
+        "handSupport": "stableExternalSupport"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "yamane-2019-straight-leg-raise",
+        "speediance-2026-standing-cable-hip-flexion"
+      ],
+      "execution": {
+        "startingPosition": "Fasten an ankle cuff to a low pulley. Face away from the machine, stand upright, and hold a stable support lightly. Keep the cable behind the working leg. Compare the entered load only on the same machine and setup.",
+        "movement": "Lift the straight working leg forward and upward while keeping your trunk steady.",
+        "endpoint": "Stop when the thigh is horizontal, or earlier if you cannot keep the knee straight and the pelvis steady. Pause briefly.",
+        "returnPhase": "Lower the leg slowly to the starting position without letting the weight stack settle between repetitions.",
+        "controlledJoints": "Keep the working knee straight and the standing leg steady. Avoid leaning back, arching the lower back, or turning the pelvis.",
+        "supportAndPosture": "Maintain light hand support and an upright torso throughout the set.",
+        "disqualifyingCompensations": [
+          "Bending the working knee changes the straight-leg lift into a knee drive.",
+          "Leaning back or swinging the pelvis adds trunk-driven momentum.",
+          "Moving the pulley in front of you changes the resisted direction."
+        ],
+        "sideOrDirection": "Complete the set with one leg, then repeat with the other leg."
+      },
+      "defaultWeightKg": 5
     }
   ]
 }

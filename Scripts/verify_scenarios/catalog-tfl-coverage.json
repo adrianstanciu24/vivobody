@@ -1,0 +1,22 @@
+{
+  "name": "catalog-tfl-coverage",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Bodyweight Active Straight-Leg Raise,"}, "direction": "up", "maxSwipes": 50}},
+    {"tap": {"labelRegex": "^Bodyweight Active Straight-Leg Raise,"}},
+    {"wait": {"label": "STRENGTH · REPS"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Secondary, (?=.*TFL)(?=.*Rectus Femoris)"}, "direction": "up", "maxSwipes": 8}}
+  ],
+  "required": [
+    {"label": "Primary, Iliopsoas"},
+    {"labelRegex": "^Secondary, (?=.*TFL)(?=.*Rectus Femoris)"}
+  ],
+  "forbidden": [
+    {"labelRegex": "^Primary, .*TFL"}
+  ]
+}

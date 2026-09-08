@@ -3,11 +3,12 @@
   "schemaVersion": 1,
   "id": "hip-abduction",
   "name": "Hip Abduction",
-  "definition": "A strict open-chain hip-abduction isolation. The roster owns the original pressure-biofeedback side-lying cuff-weight fixture and one exact bilateral Technogym seated isotonic-machine fixture at eighty degrees of hip flexion. Their support, endpoint, knee posture, load interface, path constraint, and cadence remain branch-specific. Gluteus medius is primary and tensor fasciae latae is secondary. Other machines, standing, band, cable, bodyweight-only, rotated, clamshell, lateral-walk, closed-chain, and multi-joint variants remain outside this contract.",
+  "definition": "Strict open-chain hip-abduction isolation with three bounded fixtures: the pressure-biofeedback side-lying cuff-weight task, bilateral Technogym seated isotonic machine at eighty degrees of hip flexion, and ordinary unloaded floor side-lying abduction. Support, endpoint, knee posture, load interface, path constraint, and cadence remain branch-specific. Gluteus medius is primary and tensor fasciae latae secondary. ACE anchors the floor geometry; the roles transfer categorically from existing anatomy and McBeth's loaded side-lying EMG, not an exact unloaded measurement or muscle ranking. The floor endpoint is limited by pelvic control rather than an invented universal angle. Other machines, standing, band, cable, rotated, clamshell, lateral-walk, closed-chain, and multi-joint variants remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "mcbeth-2012-side-lying-hip-abduction",
-    "brandt-2013-machine-hip-abduction-adduction"
+    "brandt-2013-machine-hip-abduction-adduction",
+    "ace-2026-side-lying-hip-abduction"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -27,7 +28,8 @@
   "allowed": {
     "equipment": [
       "other",
-      "machine"
+      "machine",
+      "bodyweight"
     ],
     "modalities": [
       "dynamicStrength"
@@ -36,7 +38,8 @@
       "reps"
     ],
     "loadModes": [
-      "external"
+      "external",
+      "nonComparable"
     ],
     "lateralities": [
       "unilateral",
@@ -150,30 +153,33 @@
       "id": "torsoSupport",
       "valueType": "enum",
       "required": true,
-      "description": "The table or machine surface supporting the torso in the reviewed fixture.",
+      "description": "The fixture-specific torso support pinned separately for cuff, machine, and bodyweight floor setups.",
       "allowedValues": [
         "table",
-        "machineBackPad"
+        "machineBackPad",
+        "floor"
       ]
     },
     {
       "id": "pelvisSupport",
       "valueType": "enum",
       "required": true,
-      "description": "The table or machine seat-and-back relationship supporting the pelvis while its position is held.",
+      "description": "The fixture-specific pelvis support pinned separately for cuff, machine, and bodyweight floor setups.",
       "allowedValues": [
         "table",
-        "machineSeatAndBackPad"
+        "machineSeatAndBackPad",
+        "floor"
       ]
     },
     {
       "id": "supportLegPosture",
       "valueType": "enum",
       "required": true,
-      "description": "The support-leg posture for the side-lying fixture or its explicit non-applicability on the bilateral machine.",
+      "description": "The fixture-specific support leg posture pinned separately for cuff, machine, and bodyweight floor setups.",
       "allowedValues": [
         "flexedForStability",
-        "notApplicableBilateralMachine"
+        "notApplicableBilateralMachine",
+        "extendedStacked"
       ]
     },
     {
@@ -224,8 +230,8 @@
     {
       "id": "hipEndAbductionDegrees",
       "valueType": "number",
-      "required": true,
-      "description": "The reviewed frontal-plane abduction endpoint standardized by a contact reference.",
+      "required": false,
+      "description": "Numeric endpoint for the cuff and machine branches only; deliberately absent for the control-limited floor raise.",
       "minimum": 35,
       "maximum": 45
     },
@@ -243,20 +249,22 @@
       "id": "trunkPositionFeedback",
       "valueType": "enum",
       "required": true,
-      "description": "The pressure-feedback setup used by the side-lying fixture or its explicit absence from the machine report.",
+      "description": "The fixture-specific trunk position feedback pinned separately for cuff, machine, and bodyweight floor setups.",
       "allowedValues": [
         "pressureBiofeedback35To45MmHg",
-        "noneReported"
+        "noneReported",
+        "none"
       ]
     },
     {
       "id": "abductionEndpointReference",
       "valueType": "enum",
       "required": true,
-      "description": "The physical or machine endpoint reference used by the reviewed fixture.",
+      "description": "The fixture-specific abduction endpoint reference pinned separately for cuff, machine, and bodyweight floor setups.",
       "allowedValues": [
         "horizontalContactBand",
-        "machineApproximate45DegreeLimit"
+        "machineApproximate45DegreeLimit",
+        "pelvisControlLimit"
       ]
     },
     {
@@ -291,20 +299,22 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "The fixture-specific cuff or thigh-pad load interface.",
+      "description": "The fixture-specific load interface pinned separately for cuff, machine, and bodyweight floor setups.",
       "allowedValues": [
         "cuffJustAboveAnkle",
-        "lateralThighPads"
+        "lateralThighPads",
+        "none"
       ]
     },
     {
       "id": "resistanceGeometry",
       "valueType": "enum",
       "required": true,
-      "description": "The gravity-loaded cuff or selectorized machine resistance geometry.",
+      "description": "The fixture-specific resistance geometry pinned separately for cuff, machine, and bodyweight floor setups.",
       "allowedValues": [
         "gravityLoadedAnkleCuff",
-        "selectorizedIsotonicLever"
+        "selectorizedIsotonicLever",
+        "limbSegmentGravity"
       ]
     },
     {
@@ -312,21 +322,30 @@
       "valueType": "enum",
       "required": true,
       "description": "The direct hand support used by each fixture.",
-      "allowedValues": ["none", "machineHandles"]
+      "allowedValues": [
+        "none",
+        "machineHandles"
+      ]
     },
     {
       "id": "machineFixture",
       "valueType": "enum",
       "required": true,
       "description": "The exact reviewed machine or a marker that no machine is used.",
-      "allowedValues": ["notApplicable", "technogymSeatedAbductorModelUnreported"]
+      "allowedValues": [
+        "notApplicable",
+        "technogymSeatedAbductorModelUnreported"
+      ]
     },
     {
       "id": "cadence",
       "valueType": "enum",
       "required": true,
       "description": "The reported repetition cadence.",
-      "allowedValues": ["unreported", "oneSecondConcentricOneSecondEccentric"]
+      "allowedValues": [
+        "unreported",
+        "oneSecondConcentricOneSecondEccentric"
+      ]
     },
     {
       "id": "fixedPath",
@@ -348,36 +367,88 @@
     {
       "id": "side-lying-abduction-pins-cuff-fixture",
       "description": "The side-lying record preserves its pressure-feedback cuff-weight setup.",
-      "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "sideLying"},
+      "when": {"field": "equipment", "operator": "equals", "value": "other"},
       "then": [
-        {"field": "equipment", "value": "other"}, {"field": "laterality", "value": "unilateral"},
-        {"field": "variant.torsoSupport", "value": "table"}, {"field": "variant.pelvisSupport", "value": "table"},
-        {"field": "variant.supportLegPosture", "value": "flexedForStability"}, {"field": "variant.hipSagittalPosture", "value": "neutral"},
-        {"field": "variant.hipEndAbductionDegrees", "value": 35}, {"field": "variant.hipRotation", "value": "neutral"},
-        {"field": "variant.trunkPositionFeedback", "value": "pressureBiofeedback35To45MmHg"}, {"field": "variant.abductionEndpointReference", "value": "horizontalContactBand"},
-        {"field": "variant.kneePosture", "value": "extended"}, {"field": "variant.loadInterface", "value": "cuffJustAboveAnkle"},
-        {"field": "variant.resistanceGeometry", "value": "gravityLoadedAnkleCuff"}, {"field": "variant.handSupport", "value": "none"},
-        {"field": "variant.machineFixture", "value": "notApplicable"}, {"field": "variant.cadence", "value": "unreported"},
-        {"field": "variant.fixedPath", "value": false}
+        {"field": "variant.bodyPosition", "value": "sideLying"},
+        {"field": "laterality", "value": "unilateral"},
+        {"field": "variant.torsoSupport", "value": "table"},
+        {"field": "variant.pelvisSupport", "value": "table"},
+        {"field": "variant.supportLegPosture", "value": "flexedForStability"},
+        {"field": "variant.hipSagittalPosture", "value": "neutral"},
+        {"field": "variant.hipEndAbductionDegrees", "value": 35},
+        {"field": "variant.hipRotation", "value": "neutral"},
+        {"field": "variant.trunkPositionFeedback", "value": "pressureBiofeedback35To45MmHg"},
+        {"field": "variant.abductionEndpointReference", "value": "horizontalContactBand"},
+        {"field": "variant.kneePosture", "value": "extended"},
+        {"field": "variant.loadInterface", "value": "cuffJustAboveAnkle"},
+        {"field": "variant.resistanceGeometry", "value": "gravityLoadedAnkleCuff"},
+        {"field": "variant.handSupport", "value": "none"},
+        {"field": "variant.machineFixture", "value": "notApplicable"},
+        {"field": "variant.cadence", "value": "unreported"},
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "loadMode", "value": "external"}
       ],
-      "requirePresent": [], "requireAbsent": []
+      "requirePresent": [
+        "variant.hipEndAbductionDegrees"
+      ],
+      "requireAbsent": []
     },
     {
       "id": "seated-abduction-pins-technogym-fixture",
       "description": "The seated branch is the exact bilateral Technogym machine condition.",
-      "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "seated"},
+      "when": {"field": "equipment", "operator": "equals", "value": "machine"},
       "then": [
-        {"field": "equipment", "value": "machine"}, {"field": "laterality", "value": "bilateral"},
-        {"field": "variant.torsoSupport", "value": "machineBackPad"}, {"field": "variant.pelvisSupport", "value": "machineSeatAndBackPad"},
-        {"field": "variant.supportLegPosture", "value": "notApplicableBilateralMachine"}, {"field": "variant.hipSagittalPosture", "value": "flexed80Degrees"},
-        {"field": "variant.hipEndAbductionDegrees", "value": 45}, {"field": "variant.hipRotation", "value": "unreported"},
-        {"field": "variant.trunkPositionFeedback", "value": "noneReported"}, {"field": "variant.abductionEndpointReference", "value": "machineApproximate45DegreeLimit"},
-        {"field": "variant.kneePosture", "value": "flexedApproximately90Degrees"}, {"field": "variant.loadInterface", "value": "lateralThighPads"},
-        {"field": "variant.resistanceGeometry", "value": "selectorizedIsotonicLever"}, {"field": "variant.handSupport", "value": "machineHandles"},
-        {"field": "variant.machineFixture", "value": "technogymSeatedAbductorModelUnreported"}, {"field": "variant.cadence", "value": "oneSecondConcentricOneSecondEccentric"},
-        {"field": "variant.fixedPath", "value": true}
+        {"field": "variant.bodyPosition", "value": "seated"},
+        {"field": "laterality", "value": "bilateral"},
+        {"field": "variant.torsoSupport", "value": "machineBackPad"},
+        {"field": "variant.pelvisSupport", "value": "machineSeatAndBackPad"},
+        {"field": "variant.supportLegPosture", "value": "notApplicableBilateralMachine"},
+        {"field": "variant.hipSagittalPosture", "value": "flexed80Degrees"},
+        {"field": "variant.hipEndAbductionDegrees", "value": 45},
+        {"field": "variant.hipRotation", "value": "unreported"},
+        {"field": "variant.trunkPositionFeedback", "value": "noneReported"},
+        {"field": "variant.abductionEndpointReference", "value": "machineApproximate45DegreeLimit"},
+        {"field": "variant.kneePosture", "value": "flexedApproximately90Degrees"},
+        {"field": "variant.loadInterface", "value": "lateralThighPads"},
+        {"field": "variant.resistanceGeometry", "value": "selectorizedIsotonicLever"},
+        {"field": "variant.handSupport", "value": "machineHandles"},
+        {"field": "variant.machineFixture", "value": "technogymSeatedAbductorModelUnreported"},
+        {"field": "variant.cadence", "value": "oneSecondConcentricOneSecondEccentric"},
+        {"field": "variant.fixedPath", "value": true},
+        {"field": "loadMode", "value": "external"}
       ],
-      "requirePresent": [], "requireAbsent": []
+      "requirePresent": [
+        "variant.hipEndAbductionDegrees"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-abduction-pins-floor-fixture",
+      "description": "Pin the reviewed fixture and exclude mixed support or resistance setups.",
+      "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
+      "then": [
+        {"field": "laterality", "value": "unilateral"},
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "variant.bodyPosition", "value": "sideLying"},
+        {"field": "variant.torsoSupport", "value": "floor"},
+        {"field": "variant.pelvisSupport", "value": "floor"},
+        {"field": "variant.supportLegPosture", "value": "extendedStacked"},
+        {"field": "variant.hipSagittalPosture", "value": "neutral"},
+        {"field": "variant.hipRotation", "value": "neutral"},
+        {"field": "variant.trunkPositionFeedback", "value": "none"},
+        {"field": "variant.abductionEndpointReference", "value": "pelvisControlLimit"},
+        {"field": "variant.kneePosture", "value": "extended"},
+        {"field": "variant.loadInterface", "value": "none"},
+        {"field": "variant.resistanceGeometry", "value": "limbSegmentGravity"},
+        {"field": "variant.handSupport", "value": "none"},
+        {"field": "variant.machineFixture", "value": "notApplicable"},
+        {"field": "variant.cadence", "value": "unreported"},
+        {"field": "variant.fixedPath", "value": false}
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.hipEndAbductionDegrees"
+      ]
     }
   ],
   "recommended": {
@@ -486,6 +557,79 @@
         "controlledJoints": "Keep the pelvis, spine, and knees still and move both thighs symmetrically.",
         "supportAndPosture": "Remain upright against the back support with both hands on the handles.",
         "disqualifyingCompensations": ["Rocking the trunk or pelvis changes the isolated machine movement.", "Bouncing, moving the knees, or allowing asymmetric travel changes the reviewed two-leg fixture."]
+      }
+    },
+    {
+      "catalogID": "bodyweight-side-lying-hip-abduction",
+      "name": "Bodyweight Side-Lying Hip Abduction",
+      "aliases": [
+        "Side-Lying Hip Abduction",
+        "Side-Lying Leg Raise"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 12,
+      "searchPriority": 90,
+      "involvement": [
+        {
+          "muscle": "gluteMed",
+          "role": "primary"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "sideLying",
+        "torsoSupport": "floor",
+        "pelvisSupport": "floor",
+        "supportLegPosture": "extendedStacked",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "abducts",
+        "hipSagittalPosture": "neutral",
+        "hipStartAbductionDegrees": 0,
+        "hipRotation": "neutral",
+        "trunkPositionFeedback": "none",
+        "abductionEndpointReference": "pelvisControlLimit",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "extended",
+        "movingSegment": "thigh",
+        "loadInterface": "none",
+        "resistanceGeometry": "limbSegmentGravity",
+        "handSupport": "none",
+        "machineFixture": "notApplicable",
+        "cadence": "unreported",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "mcbeth-2012-side-lying-hip-abduction",
+        "ace-2026-side-lying-hip-abduction"
+      ],
+      "execution": {
+        "startingPosition": "Lie on your side on a mat with both legs straight and stacked. Rest your head on the lower arm and your upper hand on your hip.",
+        "movement": "Raise the top leg out to the side without turning the kneecap upward or rolling your hips.",
+        "endpoint": "Stop before lifting farther would tilt your pelvis or pull your lower back out of position.",
+        "returnPhase": "Lower the leg slowly until it meets the lower leg.",
+        "controlledJoints": "Keep your hips stacked, working knee straight, and foot in a neutral position.",
+        "supportAndPosture": "Keep your torso and lower leg supported by the floor. Let the hip move while your waist stays still.",
+        "disqualifyingCompensations": [
+          "Rolling backward and turning the toes upward changes the side lift into a forward leg raise.",
+          "Bending the top knee changes the straight-leg fixture.",
+          "Hiking the pelvis adds a waist-driven lift."
+        ],
+        "sideOrDirection": "Complete the set, roll onto the other side, and repeat with the other leg."
       }
     }
   ]

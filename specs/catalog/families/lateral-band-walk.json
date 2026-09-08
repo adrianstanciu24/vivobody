@@ -1,0 +1,369 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "lateral-band-walk",
+  "name": "Lateral Band Walk",
+  "definition": "Resisted lateral stepping with a loop immediately above the ankles, a self-selected squat posture, and approximately thirty-centimeter initial foot spacing and lead steps. A repetition consists of a leading step followed by a trailing step restoring that gap; repeat equally in the opposite direction. The lead hip abducts against the loop and the trailing hip adducts under band tension with eccentric abductor control. Berry directly recorded gluteus medius, gluteus maximus and TFL in moving and stance limbs; primary gluteus medius and secondary TFL are categorical emphasis judgments, not EMG rankings. Gluteus maximus, vasti, abs, obliques and soleus receive conservative postural control roles for the maintained squat, trunk and stance. No deliberate hip rotation or concentric adductor role is inferred. Upright walking, bands above the knees or around the feet, diagonal monster walks, crossover steps, squatting on every step, and unsupported open-chain abduction remain outside this family. Isolation describes the defining resisted hip motion; the held squat and foot-clearance adjustments are nondefining. Both moving and stance hip abductors contribute as support shifts and the pelvis travels.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "berry-2015-resisted-side-stepping"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.abduction"
+    ],
+    "primeActions": [],
+    "movementPhases": [
+      {
+        "id": "leading-step",
+        "name": "Leading Step",
+        "primeActions": [
+          "hip.abduction"
+        ]
+      },
+      {
+        "id": "trailing-step",
+        "name": "Trailing Step",
+        "primeActions": [],
+        "yieldingActions": [
+          "hip.adduction"
+        ]
+      }
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension",
+      "hip.adduction",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "tensorFasciaeLatae"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMed"
+      ],
+      "secondary": [
+        "tensorFasciaeLatae"
+      ],
+      "stabilizer": [
+        "gluteMax",
+        "vasti",
+        "abs",
+        "obliques",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each step alternates a planted support limb and a moving limb.",
+      "allowedValues": [
+        "alternatingStanceAndSwing"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Retain a comfortable squat depth throughout; no numeric hip or knee angle is prescribed.",
+      "allowedValues": [
+        "selfSelectedSquatMaintained"
+      ]
+    },
+    {
+      "id": "travelDirection",
+      "valueType": "enum",
+      "required": true,
+      "description": "Steps travel sideways, not forward or diagonally.",
+      "allowedValues": [
+        "lateral"
+      ]
+    },
+    {
+      "id": "bandPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "The loop contacts both lower legs immediately above the ankle bones.",
+      "allowedValues": [
+        "justAboveAnkles"
+      ]
+    },
+    {
+      "id": "footSpacing",
+      "valueType": "enum",
+      "required": true,
+      "description": "Restore roughly thirty centimeters between the feet after each complete step pair.",
+      "allowedValues": [
+        "approximatelyThirtyCentimeters"
+      ]
+    },
+    {
+      "id": "stepLength",
+      "valueType": "enum",
+      "required": true,
+      "description": "The leading foot moves roughly thirty centimeters sideways.",
+      "allowedValues": [
+        "approximatelyThirtyCentimeters"
+      ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Keep feet pointing forward rather than deliberately rotating the hips.",
+      "allowedValues": [
+        "forward"
+      ]
+    },
+    {
+      "id": "trunkStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "Keep the chosen squat inclination controlled without deliberate side bending or rotation.",
+      "allowedValues": [
+        "controlledSquatInclination"
+      ]
+    },
+    {
+      "id": "repetitionUnit",
+      "valueType": "enum",
+      "required": true,
+      "description": "One repetition includes the leading-foot step and the following-foot step restoring the starting gap.",
+      "allowedValues": [
+        "leadStepThenTrailingStep"
+      ]
+    },
+    {
+      "id": "bandTension",
+      "valueType": "enum",
+      "required": true,
+      "description": "Retain loop tension rather than bringing the feet together.",
+      "allowedValues": [
+        "maintainedBetweenSteps"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "No machine guides the stepping path.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "ankle-band-lateral-walk",
+      "name": "Ankle-Band Lateral Walk",
+      "aliases": [
+        "Lateral Band Walk",
+        "Banded Side Steps",
+        "Resisted Side Stepping"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 92,
+      "involvement": [
+        {
+          "muscle": "gluteMed",
+          "role": "primary"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "alternatingStanceAndSwing",
+        "bodyPosition": "selfSelectedSquatMaintained",
+        "travelDirection": "lateral",
+        "bandPlacement": "justAboveAnkles",
+        "footSpacing": "approximatelyThirtyCentimeters",
+        "stepLength": "approximatelyThirtyCentimeters",
+        "footOrientation": "forward",
+        "trunkStrategy": "controlledSquatInclination",
+        "repetitionUnit": "leadStepThenTrailingStep",
+        "bandTension": "maintainedBetweenSteps",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "berry-2015-resisted-side-stepping"
+      ],
+      "execution": {
+        "startingPosition": "Place a loop band just above your ankles. Point your feet forward about 30 cm apart and settle into a comfortable squat.",
+        "movement": "Step one foot about 30 cm sideways while keeping the same squat depth.",
+        "endpoint": "Plant the leading foot with the band stretched and your trunk controlled.",
+        "returnPhase": "Step the trailing foot slowly toward the leading foot until the original gap between your feet is restored. Count that complete step pair as one repetition.",
+        "controlledJoints": "Keep your knees aligned with your feet and avoid bouncing up and down or swaying your trunk.",
+        "supportAndPosture": "Shift support from one leg to the other while keeping tension in the band and maintaining your squat.",
+        "disqualifyingCompensations": [
+          "Stepping diagonally changes the lateral walk into a monster walk.",
+          "Standing up between steps changes the maintained-squat fixture.",
+          "Moving the band above the knees or around the feet changes its resistance geometry."
+        ],
+        "sideOrDirection": "Complete the logged repetitions in one direction, then repeat the same number in the opposite direction."
+      }
+    }
+  ]
+}

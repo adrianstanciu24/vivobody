@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 105.
+Scenario files: 106.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -42,6 +42,7 @@ Scenario files: 105.
 | [catalog-machine-second-wave](catalog-machine-second-wave.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-must-have-expansion](catalog-must-have-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
+| [catalog-tfl-coverage](catalog-tfl-coverage.json) | library | `--static-body -settings.appearance dark` |
 | [custom-exercise-assistance](custom-exercise-assistance.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
 | [custom-exercise-type](custom-exercise-type.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
 | [deep-link-insights](deep-link-insights.json) | today | None declared |

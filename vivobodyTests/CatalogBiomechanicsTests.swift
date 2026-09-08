@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 96 reviewed families compile to 225 exercises with stable
+//  product: reviewed families compile to exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 231)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 97)
+        #expect(CatalogData.records.count == 235)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 98)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -895,7 +895,7 @@ struct CatalogBiomechanicsTests {
         #expect(hipFlexion.loadMode == .nonComparable)
         #expect(hipFlexion.muscleInvolvement.role(for: .iliopsoas) == .primary)
         #expect(hipFlexion.muscleInvolvement.role(for: .rectusFemoris) == .secondary)
-        #expect(hipFlexion.muscleInvolvement.role(for: .tensorFasciaeLatae) == nil)
+        #expect(hipFlexion.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
         #expect(hipFlexion.muscleInvolvement.role(for: .sartorius) == nil)
 
         let goodMorning = try #require(
