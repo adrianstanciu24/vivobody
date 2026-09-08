@@ -1,5 +1,9 @@
 # Batch 6 — hip abduction and adduction activation
 
+Current adductor amendment: [Adductor coverage](adductor-coverage.md) activates
+additional secondary roles and cable/Copenhagen fixtures. The exclusions below
+record the original decisions, not the current roster.
+
 Current amendment: [TFL and hip-flexor coverage](tfl-hip-flexor-coverage.md)
 extends the active roster and supersedes the affected role and fixture
 exclusions below. This document retains the original discovery decisions.

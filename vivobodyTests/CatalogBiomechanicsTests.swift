@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 235)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 98)
+        #expect(CatalogData.records.count == 237)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 99)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -594,7 +594,7 @@ struct CatalogBiomechanicsTests {
         #expect(sumo.muscleInvolvement.role(for: .gastrocnemius) == .secondary)
         #expect(sumo.muscleInvolvement.role(for: .soleus) == .secondary)
         #expect(sumo.muscleInvolvement.role(for: .medialHamstrings) == .stabilizer)
-        #expect(sumo.muscleInvolvement.role(for: .adductorMagnus) == .stabilizer)
+        #expect(sumo.muscleInvolvement.role(for: .adductorMagnus) == .secondary)
 
         let item = ExerciseCatalogItem(record: sumo, createdAt: Date(timeIntervalSince1970: 0))
         let aliasMatch = ExerciseSearch.rank(items: [item], query: "Sumo Deadlift")

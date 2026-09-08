@@ -113,8 +113,10 @@ anatomically capable
 adductor compartment is a dynamic contributor across the active parallel
 range. Vivobody's visible adductor-magnus profile deliberately omits sagittal
 actions because its unsplit compartments have different moment directions;
-the family therefore does not fabricate an adductor role merely from a group-
-level hypertrophy result.
+the original family therefore did not assign an adductor role merely from a
+group-level hypertrophy result. The [adductor amendment](adductor-coverage.md)
+now separately permits reviewed secondary participation by the extensor portion
+on the exact barbell back-squat fixture.
 
 ### Ankle plantarflexion is an authored action
 
@@ -195,10 +197,12 @@ without claiming net hip-extension work. Biceps-femoris EMG in Joseph and
 McCormick remains disclosed evidence, not permission to override the taxonomy
 gate.
 
-`adductorMagnus` is also deliberately absent. The current scene region combines
-compartments with different sagittal moment directions and advertises only hip
-adduction. An exercise-specific adductor EMG or hypertrophy result cannot make
-that whole visible region capable of unrestricted hip extension.
+`adductorMagnus` was originally absent because the scene combines compartments
+with different sagittal moment directions. Its shared profile still advertises
+only hip adduction. The [adductor amendment](adductor-coverage.md) adds an
+explicit, centrally restricted secondary role for participation by its extensor
+portion on the barbell back squat. The other family fixtures remain excluded;
+no whole-region unrestricted hip-extension capability is granted.
 
 ## Variant vocabulary
 

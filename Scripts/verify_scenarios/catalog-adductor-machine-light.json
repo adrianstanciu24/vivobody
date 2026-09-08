@@ -1,0 +1,61 @@
+{
+  "name": "catalog-adductor-machine-light",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Technogym Seated Hip Adduction Machine,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Technogym Seated Hip Adduction Machine,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Secondary, (?=.*Adductor Magnus)(?=.*Pectineus)(?=.*Gracilis)"
+        },
+        "direction": "up",
+        "maxSwipes": 8
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Primary, Adductor Longus / Brevis"
+    },
+    {
+      "labelRegex": "^Secondary, (?=.*Adductor Magnus)(?=.*Pectineus)(?=.*Gracilis)"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelRegex": "^Primary, .*Pectineus"
+    }
+  ]
+}

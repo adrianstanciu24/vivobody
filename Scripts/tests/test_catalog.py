@@ -6538,6 +6538,7 @@ class CatalogFoundationTests(unittest.TestCase):
             *MACHINE_SECOND_WAVE_FAMILY_IDS,
             *DEFAULT_CATALOG_GAP_FAMILY_IDS,
             *DEFAULT_CANDIDATE_FOLLOW_UP_FAMILY_IDS,
+            "copenhagen-adduction",
         }
         self.assertEqual(
             {family["id"] for family in self.real_families},
@@ -6545,7 +6546,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            235,
+            237,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -7432,6 +7433,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         expected_family_ids = {
+            "copenhagen-adduction",
             "lateral-band-walk",
             "diagonal-pull",
             "forearm-pronation",
@@ -10512,6 +10514,8 @@ class CatalogFoundationTests(unittest.TestCase):
                     "escamilla-2025-bodyweight-floor-squat",
                     "deforest-2014-single-double-leg-squat",
                     "wu-2020-loading-devices-squat-lunge",
+                    "benn-2018-adductor-magnus-regional-emg",
+                    "collings-2026-hip-adductor-muscle-forces",
                 ],
                 "roster": [
                     "barbell-back-squat",
@@ -10685,6 +10689,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "abs": "stabilizer", "obliques": "stabilizer",
                     "lumbarExtensors": "stabilizer",
                     "tibialisAnterior": "stabilizer",
+                    "adductorMagnus": "secondary",
                 },
                 "evidence": [
                     "armstrong-2022-squat-movement-dynamics",
@@ -10696,6 +10701,8 @@ class CatalogFoundationTests(unittest.TestCase):
                     "yavuz-2015-front-back-squat-emg",
                     "deforest-2014-single-double-leg-squat",
                     "wu-2020-loading-devices-squat-lunge",
+                    "benn-2018-adductor-magnus-regional-emg",
+                    "collings-2026-hip-adductor-muscle-forces",
                 ],
             },
             "barbell-front-squat": {
@@ -11763,6 +11770,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 if region in {"ankle", "foot"} else providers
                 for region, providers in expected[exercise_id].items()
             }
+        expected["barbell-back-squat"] = {
+            region: providers | ({"adductorMagnus"} if region in {"hip", "pelvis"} else set())
+            for region, providers in expected["barbell-back-squat"].items()
+        }
         for family in self.batch5_families.values():
             for exercise in family["exercises"]:
                 if exercise["catalogID"] in DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS:
@@ -12648,6 +12659,8 @@ class CatalogFoundationTests(unittest.TestCase):
                     "lyons-2026-conventional-romanian-deadlift",
                     "schellenberg-2013-deadlift-goodmorning-kinematics",
                     "hanen-2025-conventional-sumo-deadlift",
+                    "benn-2018-adductor-magnus-regional-emg",
+                    "collings-2026-hip-adductor-muscle-forces",
                 ),
                 "roster": ("conventional-barbell-deadlift",),
             },
@@ -12777,11 +12790,14 @@ class CatalogFoundationTests(unittest.TestCase):
                     "obliques": "stabilizer",
                     "lumbarExtensors": "stabilizer",
                     "tibialisAnterior": "stabilizer",
+                    "adductorMagnus": "secondary",
                 },
                 "evidence": (
                     "lee-2018-conventional-romanian-deadlift",
                     "lyons-2026-conventional-romanian-deadlift",
                     "hanen-2025-conventional-sumo-deadlift",
+                    "benn-2018-adductor-magnus-regional-emg",
+                    "collings-2026-hip-adductor-muscle-forces",
                 ),
             },
             "barbell-romanian-deadlift": {
@@ -13233,6 +13249,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 ("obliques", "stabilizer"),
                 ("lumbarExtensors", "stabilizer"),
                 ("tibialisAnterior", "stabilizer"),
+                ("adductorMagnus", "secondary"),
             ),
             "romanian-deadlift": (
                 ("medialHamstrings", "primary"),
@@ -13328,8 +13345,8 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "demoted deadlift role",
                             )
                     demotion_count += 1
-        self.assertEqual(removal_count, 86)
-        self.assertEqual(demotion_count, 20)
+        self.assertEqual(removal_count, 87)
+        self.assertEqual(demotion_count, 21)
 
     def test_deadlift_followup_evidence_scopes_preserve_limitations(self) -> None:
         sources = {
@@ -13438,6 +13455,8 @@ class CatalogFoundationTests(unittest.TestCase):
                     "arnold-2010-lower-limb",
                     "christophy-2012-lumbar-spine",
                     "hanen-2025-conventional-sumo-deadlift",
+                    "benn-2018-adductor-magnus-regional-emg",
+                    "collings-2026-hip-adductor-muscle-forces",
                 ),
                 "roster": ("barefoot-dead-stop-sumo-barbell-deadlift",),
             },
@@ -13553,7 +13572,11 @@ class CatalogFoundationTests(unittest.TestCase):
                     "barbell", "bilateral", "dynamicStrength", "reps",
                     "external", 0, 45, 20, 3, 100,
                 ),
-                "evidence": ("hanen-2025-conventional-sumo-deadlift",),
+                "evidence": (
+                    "hanen-2025-conventional-sumo-deadlift",
+                    "benn-2018-adductor-magnus-regional-emg",
+                    "collings-2026-hip-adductor-muscle-forces",
+                ),
             },
             "low-handle-trap-bar-deadlift": {
                 "name": "Low-Handle Trap-Bar Deadlift",
@@ -14326,7 +14349,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 ("medialHamstrings", "stabilizer"),
                 ("bicepsFemoris", "stabilizer"),
                 ("gluteMed", "stabilizer"),
-                ("adductorMagnus", "stabilizer"),
+                ("adductorMagnus", "secondary"),
                 ("tibialisAnterior", "stabilizer"),
                 ("fingerFlexors", "stabilizer"),
                 ("extensorCarpiRadialis", "stabilizer"),
@@ -14454,7 +14477,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             )
                     demotion_count += 1
         self.assertEqual(removal_count, 90)
-        self.assertEqual(demotion_count, 24)
+        self.assertEqual(demotion_count, 25)
 
     def test_deadlift_expansion_evidence_scopes_preserve_limits(self) -> None:
         sources = {
@@ -14873,6 +14896,105 @@ class CatalogFoundationTests(unittest.TestCase):
                     self.assertNotIn("tibialisAnterior", roles)
         self.assertEqual(actual, expected)
 
+    def test_adductor_credit_stays_with_reviewed_adduction_fixtures(self) -> None:
+        expected_pectineus = {
+            "supported-standing-band-hip-adduction",
+            "technogym-bilateral-seated-hip-adduction",
+            "supported-standing-cable-hip-adduction",
+            "bodyweight-lateral-lunge-60-percent-height",
+            "partner-supported-copenhagen-adduction",
+        }
+        actual = set()
+        for family in self.real_families:
+            for exercise in family["exercises"]:
+                roles = {item["muscle"]: item["role"] for item in exercise["involvement"]}
+                if "pectineus" not in roles:
+                    continue
+                actual.add(exercise["catalogID"])
+                for muscle in ("pectineus", "adductorMagnus", "gracilis"):
+                    self.assertEqual(roles[muscle], "secondary")
+        self.assertEqual(actual, expected_pectineus)
+        self.assertEqual(
+            self.foundation.profile_by_muscle["adductorMagnus"]["produces"],
+            ["hip.adduction"],
+        )
+
+    def test_magnus_extension_is_limited_to_reviewed_secondary_fixtures(self) -> None:
+        for catalog_id, family_id in catalog.MAGNUS_EXTENSION_FIXTURES.items():
+            original = next(f for f in self.real_families if f["id"] == family_id)
+            index = next(i for i, e in enumerate(original["exercises"])
+                         if e["catalogID"] == catalog_id)
+            for mutation in ("unreviewedID", "missingEvidence", "primary"):
+                family = copy.deepcopy(original)
+                exercise = family["exercises"][index]
+                if mutation == "unreviewedID":
+                    exercise["catalogID"] += "-unreviewed"
+                    message = "adductorMagnus cannot produce"
+                elif mutation == "missingEvidence":
+                    exercise["evidenceRefs"].remove(
+                        "benn-2018-adductor-magnus-regional-emg")
+                    message = "requires portion evidence"
+                else:
+                    for item in exercise["involvement"]:
+                        if item["muscle"] == "adductorMagnus":
+                            item["role"] = "primary"
+                    family["musclePolicy"]["allowedByRole"]["primary"].append(
+                        "adductorMagnus")
+                    message = "requires secondary credit"
+                with self.subTest(exercise=catalog_id, mutation=mutation):
+                    self.assert_batch6_family_fails(family, message)
+
+    def test_magnus_extension_rejects_front_geometry_under_back_squat_id(self) -> None:
+        family = copy.deepcopy(next(f for f in self.real_families
+                                    if f["id"] == "bilateral-squat"))
+        back = next(e for e in family["exercises"]
+                    if e["catalogID"] == "barbell-back-squat")
+        front = next(e for e in family["exercises"]
+                     if e["catalogID"] == "barbell-front-squat")
+        back["variant"] = copy.deepcopy(front["variant"])
+        self.assert_batch6_family_fails(family, "requires back-squat geometry")
+
+    def test_adduction_equipment_cannot_bypass_posture_rules(self) -> None:
+        original = next(f for f in self.real_families if f["id"] == "hip-adduction")
+        for index, exercise in enumerate(original["exercises"]):
+            for equipment in {"band", "machine", "cable"} - {exercise["equipment"]}:
+                family = copy.deepcopy(original)
+                family["exercises"][index]["equipment"] = equipment
+                with self.subTest(exercise=exercise["catalogID"], equipment=equipment):
+                    self.assert_batch6_family_fails(
+                        family,
+                        "band resistance must remain nonComparable"
+                        if equipment == "band" else "violates exercise rule",
+                    )
+
+    def test_copenhagen_rejects_neighboring_support_and_tracking_fixtures(self) -> None:
+        original = next(f for f in self.real_families if f["id"] == "copenhagen-adduction")
+        self.assertEqual(
+            [e["catalogID"] for e in original["exercises"]],
+            ["partner-supported-copenhagen-adduction"],
+        )
+        exercise = original["exercises"][0]
+        self.assertEqual(exercise["variant"]["lowerBodySupport"], "partnerUnderAnkleAndKnee")
+        self.assertEqual(exercise["variant"]["lowerFootContact"], "touchesFloorWithoutSupport")
+        self.assertEqual(exercise["loadMode"], "nonComparable")
+        self.assertEqual(exercise["bodyweightFraction"], 0)
+        mutations = [
+            ("lowerBodySupport", "ankleOnlyOnBench"),
+            ("lowerBodySupport", "partnerUnderKneeOnly"),
+            ("lowerFootContact", "weightBearingOnFloor"),
+            ("kneePosture", "bothFlexed"),
+            ("hipMotion", "positionHeld"),
+        ]
+        for axis, value in mutations:
+            family = copy.deepcopy(original)
+            family["exercises"][0]["variant"][axis] = value
+            with self.subTest(axis=axis, value=value):
+                self.assert_batch6_family_fails(family, "has disallowed value")
+        family = copy.deepcopy(original)
+        family["exercises"][0]["modality"] = "isometricStrength"
+        family["exercises"][0]["trackingMode"] = "duration"
+        self.assert_batch6_family_fails(family, "selects disallowed")
+
     def test_batch6_hip_contracts_and_rosters_are_exact(self) -> None:
         expected_families = {
             "hip-abduction": {
@@ -14925,51 +15047,42 @@ class CatalogFoundationTests(unittest.TestCase):
                     "bodyweight-abduction-pins-floor-fixture",
                 ],
             },
-            "hip-adduction": {
-                "name": "Hip Adduction",
-                "plane": "frontal",
-                "action": "hip.adduction",
-                "demands": ["hip", "pelvis", "knee", "spine"],
-                "policy": {
-                    "requirements": [
-                        {
-                            "anyOf": ["adductorLongusBrevis"],
-                            "minimumRole": "primary",
-                        },
-                        {"anyOf": ["gracilis"], "minimumRole": "secondary"},
-                        {"anyOf": ["abs"], "minimumRole": "stabilizer"},
-                        {"anyOf": ["obliques"], "minimumRole": "stabilizer"},
-                        {"anyOf": ["gluteMed"], "minimumRole": "stabilizer"},
-                    ],
-                    "allowedByRole": {
-                        "primary": ["adductorLongusBrevis"],
-                        "secondary": ["gracilis"],
-                        "stabilizer": ["abs", "obliques", "gluteMed"],
-                    },
-                },
-                "allowed": {
-                    "equipment": ["band", "machine"],
-                    "modalities": ["dynamicStrength"],
-                    "trackingModes": ["reps"],
-                    "loadModes": ["nonComparable", "external"],
-                    "lateralities": ["unilateral", "bilateral"],
-                },
-                "reps": {"minimum": 8, "maximum": 15},
-                "evidence": [
-                    "arnold-2010-lower-limb",
-                    "serner-2014-hip-adduction-exercises",
-                    "jensen-2014-elastic-hip-adduction-training",
-                    "brandt-2013-machine-hip-abduction-adduction",
-                ],
-                "roster": [
-                    "supported-standing-band-hip-adduction",
-                    "technogym-bilateral-seated-hip-adduction",
-                ],
-                "rules": [
-                    "standing-adduction-pins-band-fixture",
-                    "seated-adduction-pins-technogym-fixture",
-                ],
-            },
+            "hip-adduction": {'name': 'Hip Adduction',
+                              'plane': 'frontal',
+                              'action': 'hip.adduction',
+                              'demands': ['hip', 'pelvis', 'knee', 'spine'],
+                              'policy': {'requirements': [{'anyOf': ['adductorMagnus'],
+                                                           'minimumRole': 'secondary'},
+                                                          {'anyOf': ['pectineus'], 'minimumRole': 'secondary'},
+                                                          {'anyOf': ['adductorLongusBrevis'],
+                                                           'minimumRole': 'primary'},
+                                                          {'anyOf': ['gracilis'], 'minimumRole': 'secondary'},
+                                                          {'anyOf': ['abs'], 'minimumRole': 'stabilizer'},
+                                                          {'anyOf': ['obliques'], 'minimumRole': 'stabilizer'},
+                                                          {'anyOf': ['gluteMed'], 'minimumRole': 'stabilizer'}],
+                                         'allowedByRole': {'primary': ['adductorLongusBrevis'],
+                                                           'secondary': ['gracilis',
+                                                                         'adductorMagnus',
+                                                                         'pectineus'],
+                                                           'stabilizer': ['abs', 'obliques', 'gluteMed']}},
+                              'allowed': {'equipment': ['band', 'machine', 'cable'],
+                                          'modalities': ['dynamicStrength'],
+                                          'trackingModes': ['reps'],
+                                          'loadModes': ['nonComparable', 'external'],
+                                          'lateralities': ['unilateral', 'bilateral']},
+                              'reps': {'minimum': 8, 'maximum': 15},
+                              'evidence': ['arnold-2010-lower-limb',
+                                           'serner-2014-hip-adduction-exercises',
+                                           'jensen-2014-elastic-hip-adduction-training',
+                                           'brandt-2013-machine-hip-abduction-adduction',
+                                           'lovell-2012-hip-adductor-tests',
+                                           'life-fitness-2008-cable-motion-dap'],
+                              'roster': ['supported-standing-band-hip-adduction',
+                                         'technogym-bilateral-seated-hip-adduction',
+                                         'supported-standing-cable-hip-adduction'],
+                              'rules': ['standing-adduction-pins-band-fixture',
+                                        'seated-adduction-pins-technogym-fixture',
+                                        'standing-adduction-pins-cable-fixture']},
             "hip-internal-rotation": {
                 "name": "Hip Internal Rotation",
                 "plane": "transverse",
@@ -15209,6 +15322,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "roles": {
                     "adductorLongusBrevis": "primary",
                     "gracilis": "secondary",
+                    "adductorMagnus": "secondary",
+                    "pectineus": "secondary",
                     "abs": "stabilizer",
                     "obliques": "stabilizer",
                     "gluteMed": "stabilizer",
@@ -15216,6 +15331,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "evidence": [
                     "serner-2014-hip-adduction-exercises",
                     "jensen-2014-elastic-hip-adduction-training",
+                    "arnold-2010-lower-limb",
+                    "lovell-2012-hip-adductor-tests",
                 ],
             },
         )
@@ -15448,7 +15565,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "bodyPosition": enum("standing", "seated"),
                 "torsoSupport": enum("none", "machineBackPad"),
                 "handSupport": enum(
-                    "bothHandsOnStableExternalSupport", "machineHandles"
+                    "bothHandsOnStableExternalSupport", "machineHandles", "ipsilateralHandOnUpright"
                 ),
                 "pelvisSupport": enum(
                     "unsupportedStanding", "machineSeatAndBackPad"
@@ -15457,13 +15574,13 @@ class CatalogFoundationTests(unittest.TestCase):
                 "spineMotion": enum("positionHeld"),
                 "hipMotion": enum("adducts"),
                 "hipStartPosition": enum(
-                    "maximalComfortableAbduction", "fortyFiveDegreesAbduction"
+                    "maximalComfortableAbduction", "fortyFiveDegreesAbduction", "comfortableAbductionUnderCableTension"
                 ),
                 "frontalEndDistance": enum(
-                    "oneFootWidthFromStanceFoot", "anatomicalNeutralZeroDegrees"
+                    "oneFootWidthFromStanceFoot", "anatomicalNeutralZeroDegrees", "directlyInFrontOfStanceFoot"
                 ),
                 "hipSagittalPosture": enum(
-                    "slightExtensionHeld", "flexed80Degrees"
+                    "slightExtensionHeld", "flexed80Degrees", "slightFlexionHeld"
                 ),
                 "hipRotation": enum("neutral", "unreported"),
                 "kneeMotion": enum("positionHeld"),
@@ -15471,16 +15588,16 @@ class CatalogFoundationTests(unittest.TestCase):
                     "extended", "flexedApproximately90Degrees"
                 ),
                 "movingSegment": enum("thigh"),
-                "loadInterface": enum("bandCuffAtAnkle", "medialThighPads"),
+                "loadInterface": enum("bandCuffAtAnkle", "medialThighPads", "cableCuffAtAnkle"),
                 "resistanceGeometry": enum(
-                    "lateralBandAnchor", "selectorizedIsotonicLever"
+                    "lateralBandAnchor", "selectorizedIsotonicLever", "lateralLowPulley"
                 ),
                 "machineFixture": enum(
                     "notApplicable",
                     "technogymSeatedAdductorModelUnreported",
                 ),
                 "cadence": enum(
-                    "unreported", "oneSecondConcentricOneSecondEccentric"
+                    "unreported", "oneSecondConcentricOneSecondEccentric", "controlledWithBriefEndpointPause"
                 ),
                 "fixedPath": ("boolean", (False, True)),
                 "lowerBodyContribution": enum("isolatedJointMotion"),
@@ -15787,8 +15904,8 @@ class CatalogFoundationTests(unittest.TestCase):
                         f"fails muscle requirement {requirement_index}",
                     )
                 demotion_count += 1
-        self.assertEqual(removal_count, 19)
-        self.assertEqual(demotion_count, 13)
+        self.assertEqual(removal_count, 21)
+        self.assertEqual(demotion_count, 15)
 
     def test_batch6_stability_demands_have_exact_role_agnostic_providers(
         self,
@@ -15800,9 +15917,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 "knee": {"tensorFasciaeLatae"},
             },
             "supported-standing-band-hip-adduction": {
-                "hip": {"adductorLongusBrevis", "gracilis", "gluteMed"},
+                "hip": {"adductorLongusBrevis", "gracilis", "gluteMed", "adductorMagnus", "pectineus"},
                 "pelvis": {
-                    "adductorLongusBrevis", "gracilis", "abs", "obliques",
+                    "adductorLongusBrevis", "gracilis", "abs", "obliques", "adductorMagnus", "pectineus",
                     "gluteMed",
                 },
                 "knee": {"gracilis"},
@@ -15881,14 +15998,14 @@ class CatalogFoundationTests(unittest.TestCase):
             ]
         }
         self.assertTrue(
-            {"adductorMagnus", "pectineus"}.isdisjoint(adduction_muscles)
+            {"adductorMagnus", "pectineus"}.issubset(adduction_muscles)
         )
 
     def test_batch6_evidence_scopes_preserve_material_limitations(self) -> None:
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 263)
+        self.assertEqual(len(source_by_id), 268)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -16041,8 +16158,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             10,
         )
-        self.assertEqual(len(self.real_families), 98)
-        self.assertEqual(len(self.foundation.evidence_ids), 263)
+        self.assertEqual(len(self.real_families), 99)
+        self.assertEqual(len(self.foundation.evidence_ids), 268)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -17433,7 +17550,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         normalized_proposal = " ".join(proposal.split())
 
-        self.assertIn("| Reviewed families | 98 |", self.catalog_inventory)
+        self.assertIn("| Reviewed families | 99 |", self.catalog_inventory)
         self.assertIn(
             "Batch 7 now contains nine active families",
             roadmap,
@@ -17444,7 +17561,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 235 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 237 |", self.catalog_inventory)
         self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
@@ -18586,9 +18703,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 98)
-        self.assertEqual(len(records), 235)
-        self.assertEqual(len(self.foundation.evidence_ids), 263)
+        self.assertEqual(len(self.real_families), 99)
+        self.assertEqual(len(records), 237)
+        self.assertEqual(len(self.foundation.evidence_ids), 268)
         self.assertEqual(
             {
                 key: upright[key]
@@ -18934,7 +19051,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 235 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 237 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -19855,70 +19972,74 @@ class CatalogFoundationTests(unittest.TestCase):
                     "absent": ("variant.hipEndAbductionDegrees",),
                 },
             },
-            "hip-adduction": {
-                "standing-adduction-pins-band-fixture": {
-                    "when": ("variant.bodyPosition", "equals", "standing"),
-                    "then": {
-                        "equipment": "band",
-                        "loadMode": "nonComparable",
-                        "laterality": "unilateral",
-                        "variant.torsoSupport": "none",
-                        "variant.handSupport": (
-                            "bothHandsOnStableExternalSupport"
-                        ),
-                        "variant.pelvisSupport": "unsupportedStanding",
-                        "variant.hipStartPosition": (
-                            "maximalComfortableAbduction"
-                        ),
-                        "variant.frontalEndDistance": (
-                            "oneFootWidthFromStanceFoot"
-                        ),
-                        "variant.hipSagittalPosture": "slightExtensionHeld",
-                        "variant.hipRotation": "neutral",
-                        "variant.kneePosture": "extended",
-                        "variant.loadInterface": "bandCuffAtAnkle",
-                        "variant.resistanceGeometry": "lateralBandAnchor",
-                        "variant.machineFixture": "notApplicable",
-                        "variant.cadence": "unreported",
-                        "variant.fixedPath": False,
-                    },
-                    "present": (),
-                    "absent": (),
-                },
-                "seated-adduction-pins-technogym-fixture": {
-                    "when": ("variant.bodyPosition", "equals", "seated"),
-                    "then": {
-                        "equipment": "machine",
-                        "loadMode": "external",
-                        "laterality": "bilateral",
-                        "variant.torsoSupport": "machineBackPad",
-                        "variant.handSupport": "machineHandles",
-                        "variant.pelvisSupport": "machineSeatAndBackPad",
-                        "variant.hipStartPosition": (
-                            "fortyFiveDegreesAbduction"
-                        ),
-                        "variant.frontalEndDistance": (
-                            "anatomicalNeutralZeroDegrees"
-                        ),
-                        "variant.hipSagittalPosture": "flexed80Degrees",
-                        "variant.hipRotation": "unreported",
-                        "variant.kneePosture": "flexedApproximately90Degrees",
-                        "variant.loadInterface": "medialThighPads",
-                        "variant.resistanceGeometry": (
-                            "selectorizedIsotonicLever"
-                        ),
-                        "variant.machineFixture": (
-                            "technogymSeatedAdductorModelUnreported"
-                        ),
-                        "variant.cadence": (
-                            "oneSecondConcentricOneSecondEccentric"
-                        ),
-                        "variant.fixedPath": True,
-                    },
-                    "present": (),
-                    "absent": (),
-                },
-            },
+            "hip-adduction": {'standing-adduction-pins-band-fixture': {'when': ('equipment', 'equals', 'band'),
+                                                                       'then': {'equipment': 'band',
+                                                                                'loadMode': 'nonComparable',
+                                                                                'laterality': 'unilateral',
+                                                                                'variant.torsoSupport': 'none',
+                                                                                'variant.handSupport': 'bothHandsOnStableExternalSupport',
+                                                                                'variant.pelvisSupport': 'unsupportedStanding',
+                                                                                'variant.hipStartPosition': 'maximalComfortableAbduction',
+                                                                                'variant.frontalEndDistance': 'oneFootWidthFromStanceFoot',
+                                                                                'variant.hipSagittalPosture': 'slightExtensionHeld',
+                                                                                'variant.hipRotation': 'neutral',
+                                                                                'variant.kneePosture': 'extended',
+                                                                                'variant.loadInterface': 'bandCuffAtAnkle',
+                                                                                'variant.resistanceGeometry': 'lateralBandAnchor',
+                                                                                'variant.machineFixture': 'notApplicable',
+                                                                                'variant.cadence': 'unreported',
+                                                                                'variant.fixedPath': False,
+                                                                                'variant.bodyPosition': 'standing'},
+                                                                       'present': (),
+                                                                       'absent': ()},
+                              'seated-adduction-pins-technogym-fixture': {'when': ('equipment',
+                                                                                   'equals',
+                                                                                   'machine'),
+                                                                          'then': {'equipment': 'machine',
+                                                                                   'loadMode': 'external',
+                                                                                   'laterality': 'bilateral',
+                                                                                   'variant.torsoSupport': 'machineBackPad',
+                                                                                   'variant.handSupport': 'machineHandles',
+                                                                                   'variant.pelvisSupport': 'machineSeatAndBackPad',
+                                                                                   'variant.hipStartPosition': 'fortyFiveDegreesAbduction',
+                                                                                   'variant.frontalEndDistance': 'anatomicalNeutralZeroDegrees',
+                                                                                   'variant.hipSagittalPosture': 'flexed80Degrees',
+                                                                                   'variant.hipRotation': 'unreported',
+                                                                                   'variant.kneePosture': 'flexedApproximately90Degrees',
+                                                                                   'variant.loadInterface': 'medialThighPads',
+                                                                                   'variant.resistanceGeometry': 'selectorizedIsotonicLever',
+                                                                                   'variant.machineFixture': 'technogymSeatedAdductorModelUnreported',
+                                                                                   'variant.cadence': 'oneSecondConcentricOneSecondEccentric',
+                                                                                   'variant.fixedPath': True,
+                                                                                   'variant.bodyPosition': 'seated'},
+                                                                          'present': (),
+                                                                          'absent': ()},
+                              'standing-adduction-pins-cable-fixture': {'when': ('equipment', 'equals', 'cable'),
+                                                                        'then': {'loadMode': 'external',
+                                                                                 'laterality': 'unilateral',
+                                                                                 'variant.kineticChain': 'open',
+                                                                                 'variant.bodyPosition': 'standing',
+                                                                                 'variant.torsoSupport': 'none',
+                                                                                 'variant.handSupport': 'ipsilateralHandOnUpright',
+                                                                                 'variant.pelvisSupport': 'unsupportedStanding',
+                                                                                 'variant.pelvisMotion': 'positionHeld',
+                                                                                 'variant.spineMotion': 'positionHeld',
+                                                                                 'variant.hipMotion': 'adducts',
+                                                                                 'variant.hipStartPosition': 'comfortableAbductionUnderCableTension',
+                                                                                 'variant.frontalEndDistance': 'directlyInFrontOfStanceFoot',
+                                                                                 'variant.hipSagittalPosture': 'slightFlexionHeld',
+                                                                                 'variant.hipRotation': 'neutral',
+                                                                                 'variant.kneeMotion': 'positionHeld',
+                                                                                 'variant.kneePosture': 'extended',
+                                                                                 'variant.movingSegment': 'thigh',
+                                                                                 'variant.loadInterface': 'cableCuffAtAnkle',
+                                                                                 'variant.resistanceGeometry': 'lateralLowPulley',
+                                                                                 'variant.machineFixture': 'notApplicable',
+                                                                                 'variant.cadence': 'controlledWithBriefEndpointPause',
+                                                                                 'variant.fixedPath': False,
+                                                                                 'variant.lowerBodyContribution': 'isolatedJointMotion'},
+                                                                        'present': (),
+                                                                        'absent': ()}},
         }
         actual = {}
         for family_id in expected:
@@ -19985,6 +20106,7 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "hip-adduction": {
                 "standing-adduction-pins-band-fixture",
+                "standing-adduction-pins-cable-fixture",
                 "seated-adduction-pins-technogym-fixture",
             },
         }
@@ -20013,6 +20135,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 )
 
                 for assertion in rule["then"]:
+                    if assertion["field"] == rule["when"]["field"]:
+                        # Equipment switches are covered by the full-family test.
+                        continue
                     rejected = (
                         {assertion["value"]}
                         if "value" in assertion
@@ -21744,21 +21869,21 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 235 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 237 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_98_families_and_235_exercises(
+    def test_runtime_projection_is_exactly_99_families_and_237_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 235)
+        self.assertEqual(len(records), 237)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 98)
+        self.assertEqual(len({record["familyID"] for record in records}), 99)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -21912,7 +22037,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "bilateral-squat", "conventional-deadlift", "dynamic-lunge",
                 "single-leg-deadlift", "sumo-deadlift", "trap-bar-deadlift",
                 "hip-abduction", "lateral-band-walk",
-                "hip-adduction", "hip-extension", "hip-external-rotation",
+                "copenhagen-adduction", "hip-adduction", "hip-extension", "hip-external-rotation",
                 "hip-flexion", "hip-hinge", "hip-internal-rotation",
                 "hip-thrust-bridge", "knee-extension", "knee-flexion",
                 "romanian-deadlift", "split-stance-squat", "step-up",
@@ -22130,7 +22255,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 235)
+            self.assertEqual(len(emitted), 237)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -22382,7 +22507,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_ids), 263)
+        self.assertEqual(len(source_ids), 268)
         self.assertTrue(COMPREHENSIVE_EXPANSION_EVIDENCE_IDS <= source_ids)
 
     def test_must_have_expansion_is_source_exact_and_runtime_visible(self) -> None:
@@ -22775,9 +22900,9 @@ class CatalogFoundationTests(unittest.TestCase):
 
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
-        self.assertEqual(len(self.real_families), 98)
-        self.assertEqual(len(runtime), 235)
-        self.assertEqual(len(self.foundation.evidence_ids), 263)
+        self.assertEqual(len(self.real_families), 99)
+        self.assertEqual(len(runtime), 237)
+        self.assertEqual(len(self.foundation.evidence_ids), 268)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids
@@ -23056,7 +23181,9 @@ class CatalogFoundationTests(unittest.TestCase):
         lateral_roles = roles("bodyweight-lateral-lunge-60-percent-height")
         self.assertEqual(lateral_roles["gluteMed"], "secondary")
         self.assertEqual(lateral_roles["adductorLongusBrevis"], "secondary")
-        self.assertNotIn("gracilis", lateral_roles)
+        self.assertEqual(lateral_roles["gracilis"], "secondary")
+        self.assertEqual(lateral_roles["adductorMagnus"], "secondary")
+        self.assertEqual(lateral_roles["pectineus"], "secondary")
 
         reverse_roles = roles("supine-reverse-crunch")
         self.assertEqual(reverse_roles["iliopsoas"], "stabilizer")

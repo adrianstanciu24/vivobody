@@ -21,7 +21,7 @@ link their successor in both places. See the
 
 | Specification | Status | Implementation or source of truth | Last checked |
 |---|---|---|---|
-| [Exercise Data Contract](exercise-data-contract.md) | Active domain contract | [catalog foundations](catalog/README.md), [catalog generator](../Scripts/catalog.py), [runtime catalog model](../vivobody/Models/Domain/ExerciseCatalog.swift) | 2026-08-31 |
+| [Exercise Data Contract](exercise-data-contract.md) | Active domain contract | [catalog foundations](catalog/README.md), [catalog generator](../Scripts/catalog.py), [runtime catalog model](../vivobody/Models/Domain/ExerciseCatalog.swift) | 2026-09-08 |
 | [Exercise catalog foundation](catalog/README.md) | Active generated-data contract | [catalog sources](catalog/), [catalog generator](../Scripts/catalog.py), [generated runtime catalog](../vivobody/Resources/catalog.json) | 2026-08-31 |
 | [Current catalog inventory](catalog/inventory.md) | Generated inventory; checked against authored JSON | [inventory generator](../Scripts/documentation_inventory.py), [family sources](catalog/families/) | Generated parity checked by the documentation gate |
 | [Paid-upfront app](paid-app.md) | Active product contract | [Insights](../vivobody/Screens/Insights/InsightsScreen.swift), [Exercise Detail](../vivobody/Screens/Library/ExerciseDetailScreen.swift), [Settings](../vivobody/Screens/Me/SettingsScreen.swift) | 2026-09-07 |

@@ -1,0 +1,433 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "copenhagen-adduction",
+  "name": "Copenhagen Adduction",
+  "definition": "Dynamic partner-supported Copenhagen adduction with the upper straight leg supported under both ankle and knee at partner hip height and one forearm on the floor. Hip adduction raises the body and brings the lower leg to the upper leg; trunk alignment is controlled rather than a separate prime action. Longus/brevis is primary; gracilis, magnus and pectineus are categorical secondaries through shared adduction capability and resisted-adduction evidence, not direct Copenhagen measurements of every region or a recruitment ranking. Abs, obliques and gluteus medius use Serner Copenhagen measurements; lateral deltoid, serratus and triceps support the forearm-bearing shoulder/scapula/elbow through explicit anatomy-and-mechanics inference. No whole-magnus hip-extension credit is claimed. Unilateral describes the support-side setup, not exclusive one-leg activation; both legs participate. Ankle-only bench support, short-lever, timed holds, eccentric-only and externally loaded variations remain outside this family.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "holzbaur-2005-upper-extremity",
+    "ackland-2008-shoulder-moment-arms",
+    "seth-2019-shoulder-work",
+    "serner-2014-hip-adduction-exercises",
+    "lovell-2012-hip-adductor-tests",
+    "haroy-2017-copenhagen-fifa11"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.adduction"
+    ],
+    "primeActions": [
+      "hip.adduction"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "adductorLongusBrevis"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gracilis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "adductorMagnus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "pectineus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "deltoidLateral"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "adductorLongusBrevis"
+      ],
+      "secondary": [
+        "gracilis",
+        "adductorMagnus",
+        "pectineus"
+      ],
+      "stabilizer": [
+        "abs",
+        "obliques",
+        "gluteMed",
+        "deltoidLateral",
+        "serratus",
+        "triceps"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Upper leg is partner-supported while the lower leg moves freely.",
+      "allowedValues": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Side-on body supported on one forearm and by the partner.",
+      "allowedValues": [
+        "sideBridge"
+      ]
+    },
+    {
+      "id": "upperBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The supporting forearm and elbow rest on the floor.",
+      "allowedValues": [
+        "oneForearmOnFloor"
+      ]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Partner supports both the ankle and knee of the upper straight leg.",
+      "allowedValues": [
+        "partnerUnderAnkleAndKnee"
+      ]
+    },
+    {
+      "id": "supportHeight",
+      "valueType": "enum",
+      "required": true,
+      "description": "The upper leg is supported at approximately the partner hip height.",
+      "allowedValues": [
+        "partnerHipHeight"
+      ]
+    },
+    {
+      "id": "freeArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The free arm stays alongside the torso.",
+      "allowedValues": [
+        "alongsideBody"
+      ]
+    },
+    {
+      "id": "kneePosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both knees remain straight during the movement.",
+      "allowedValues": [
+        "bothExtended"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Relative upper-hip adduction raises the body while the lower leg adducts to meet it.",
+      "allowedValues": [
+        "adductsToRaiseBodyAndLowerLeg"
+      ]
+    },
+    {
+      "id": "endpoint",
+      "valueType": "enum",
+      "required": true,
+      "description": "Feet meet with the body straight at the top.",
+      "allowedValues": [
+        "feetTogetherBodyStraight"
+      ]
+    },
+    {
+      "id": "returnEndpoint",
+      "valueType": "enum",
+      "required": true,
+      "description": "Lower the body halfway toward the floor under control.",
+      "allowedValues": [
+        "bodyHalfwayToFloor"
+      ]
+    },
+    {
+      "id": "lowerFootContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower foot touches the floor at the bottom without bearing weight.",
+      "allowedValues": [
+        "touchesFloorWithoutSupport"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The trunk stays aligned without deliberate lateral flexion or rotation.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "cadence",
+      "valueType": "enum",
+      "required": true,
+      "description": "Controlled repetitions without a source-specified numeric cadence.",
+      "allowedValues": [
+        "controlledSourceCadenceUnspecified"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "One support-side configuration per set; repeat on the other side. Both legs participate.",
+      "allowedValues": [
+        "bothSupportSides"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The partner provides support without a rail or lever defining the path.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 6,
+      "maximum": 12
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "partner-supported-copenhagen-adduction",
+      "name": "Partner-Supported Copenhagen Adduction",
+      "aliases": [
+        "Partner Copenhagen Adduction",
+        "Dynamic Partner Copenhagen"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 6,
+      "searchPriority": 90,
+      "involvement": [
+        {
+          "muscle": "adductorLongusBrevis",
+          "role": "primary"
+        },
+        {
+          "muscle": "gracilis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "adductorMagnus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectineus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "mixed",
+        "bodyPosition": "sideBridge",
+        "upperBodySupport": "oneForearmOnFloor",
+        "lowerBodySupport": "partnerUnderAnkleAndKnee",
+        "supportHeight": "partnerHipHeight",
+        "freeArmPosition": "alongsideBody",
+        "kneePosture": "bothExtended",
+        "hipMotion": "adductsToRaiseBodyAndLowerLeg",
+        "endpoint": "feetTogetherBodyStraight",
+        "returnEndpoint": "bodyHalfwayToFloor",
+        "lowerFootContact": "touchesFloorWithoutSupport",
+        "spineMotion": "positionHeld",
+        "cadence": "controlledSourceCadenceUnspecified",
+        "trainingSidePrescription": "bothSupportSides",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "serner-2014-hip-adduction-exercises",
+        "lovell-2012-hip-adductor-tests",
+        "haroy-2017-copenhagen-fifa11"
+      ],
+      "execution": {
+        "startingPosition": "Lie on one side with the supporting forearm on the floor and the free arm alongside your body. Have a partner support the upper straight leg under both the ankle and knee at about their hip height.",
+        "movement": "Lift your body through the supported upper hip while bringing the straight lower leg up toward the upper leg.",
+        "endpoint": "Bring your feet together with the body in a straight line.",
+        "returnPhase": "Lower your body halfway toward the floor under control. Let the lower foot touch the floor without taking weight.",
+        "controlledJoints": "Keep both knees straight and the trunk aligned without twisting or deliberately bending sideways.",
+        "supportAndPosture": "Keep the forearm grounded and have the partner maintain both ankle and knee support throughout.",
+        "disqualifyingCompensations": [
+          "Resting bodyweight on the lower foot removes the reviewed support demand.",
+          "Supporting only the ankle on a bench changes the partner-supported fixture.",
+          "Bending the knees, holding still for time or dropping through the lowering phase changes the movement."
+        ],
+        "sideOrDirection": "Complete the repetitions with one side uppermost, then change sides. Both legs work during each repetition."
+      }
+    }
+  ]
+}

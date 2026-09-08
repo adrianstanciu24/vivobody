@@ -3,14 +3,16 @@
   "schemaVersion": 1,
   "id": "conventional-deadlift",
   "name": "Conventional Deadlift",
-  "definition": "A strict bilateral conventional straight-bar deadlift in which a free bar is held with both hands outside a symmetric medium stance, contacts the floor at the bottom, and travels to an upright standing endpoint through combined hip extension, knee extension, and ankle plantarflexion. Lee et al. directly tested experienced lifters with a stance equal to 100 percent of pelvis width, a double-overhand grip, self-selected speed, and the same absolute load equal to 70 percent of each participant's Romanian-deadlift one-repetition maximum. Their measured trials began upright, touched the floor during the descent, and returned upright; the catalog presents those same measured phases in the familiar floor-to-standing-to-floor order as an explicit product reordering and does not claim a dead-stop pause or complete unloading between repetitions. Lee measured rectus-femoris, biceps-femoris, and gluteus-maximus EMG plus three-dimensional lower-extremity kinematics and kinetics. Lyons et al. separately measured greater vastus-lateralis excitation in the conventional than Romanian condition, but used each participant's typical uncoached technique. Gluteus maximus and the combined vasti region are non-ranked co-primary training emphases; rectus femoris and the plantarflexors are secondary, while medial hamstrings and the unsplit biceps-femoris region receive conservative hip, pelvis, and knee-control credit. The five-repetition, 45-pound, and 20-kilogram defaults are product initialization rather than a claim that either source prescribed those universal values. Lee did not report spinal kinematics, foot orientation, or a dead-stop reset, so none is invented. Schellenberg et al.'s shoulder-width, slight-toe-out, mixed-grip deadlift is boundary context only and supplies no fixture detail to this record. Sumo, trap-bar, Romanian, stiff-leg, deficit, block, rack, explicit dead-stop, paused, touch-and-go-as-a-distinct-technique, mixed-grip, hook-grip, straps, snatch-grip, unilateral, staggered, dumbbell, kettlebell, cable, Smith, and machine variants remain outside this contract. Tibialis anterior receives ankle/foot stabilizer credit supported by its measured activity in Hanen et al.'s conventional comparison and existing anatomical control capability. This is a categorical transfer to the current Lee fixture, not an exact-fixture muscle-force or training-stimulus measurement. Hanen's barefoot stance, adjusted relative load, maximal-speed intent, and dead-stop protocol are not imported into this record.",
+  "definition": "A strict bilateral conventional straight-bar deadlift in which a free bar is held with both hands outside a symmetric medium stance, contacts the floor at the bottom, and travels to an upright standing endpoint through combined hip extension, knee extension, and ankle plantarflexion. Lee et al. directly tested experienced lifters with a stance equal to 100 percent of pelvis width, a double-overhand grip, self-selected speed, and the same absolute load equal to 70 percent of each participant's Romanian-deadlift one-repetition maximum. Their measured trials began upright, touched the floor during the descent, and returned upright; the catalog presents those same measured phases in the familiar floor-to-standing-to-floor order as an explicit product reordering and does not claim a dead-stop pause or complete unloading between repetitions. Lee measured rectus-femoris, biceps-femoris, and gluteus-maximus EMG plus three-dimensional lower-extremity kinematics and kinetics. Lyons et al. separately measured greater vastus-lateralis excitation in the conventional than Romanian condition, but used each participant's typical uncoached technique. Gluteus maximus and the combined vasti region are non-ranked co-primary training emphases; rectus femoris and the plantarflexors are secondary, while medial hamstrings and the unsplit biceps-femoris region receive conservative hip, pelvis, and knee-control credit. The five-repetition, 45-pound, and 20-kilogram defaults are product initialization rather than a claim that either source prescribed those universal values. Lee did not report spinal kinematics, foot orientation, or a dead-stop reset, so none is invented. Schellenberg et al.'s shoulder-width, slight-toe-out, mixed-grip deadlift is boundary context only and supplies no fixture detail to this record. Sumo, trap-bar, Romanian, stiff-leg, deficit, block, rack, explicit dead-stop, paused, touch-and-go-as-a-distinct-technique, mixed-grip, hook-grip, straps, snatch-grip, unilateral, staggered, dumbbell, kettlebell, cable, Smith, and machine variants remain outside this contract. Tibialis anterior receives ankle/foot stabilizer credit supported by its measured activity in Hanen et al.'s conventional comparison and existing anatomical control capability. This is a categorical transfer to the current Lee fixture, not an exact-fixture muscle-force or training-stimulus measurement. Hanen's barefoot stance, adjusted relative load, maximal-speed intent, and dead-stop protocol are not imported into this record. Adductor magnus receives secondary credit only on the reviewed conventional-barbell-deadlift fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
     "lee-2018-conventional-romanian-deadlift",
     "lyons-2026-conventional-romanian-deadlift",
     "schellenberg-2013-deadlift-goodmorning-kinematics",
-    "hanen-2025-conventional-sumo-deadlift"
+    "hanen-2025-conventional-sumo-deadlift",
+    "benn-2018-adductor-magnus-regional-emg",
+    "collings-2026-hip-adductor-muscle-forces"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -213,6 +215,12 @@
           "tibialisAnterior"
         ],
         "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "adductorMagnus"
+        ],
+        "minimumRole": "secondary"
       }
     ],
     "allowedByRole": {
@@ -223,7 +231,8 @@
       "secondary": [
         "rectusFemoris",
         "gastrocnemius",
-        "soleus"
+        "soleus",
+        "adductorMagnus"
       ],
       "stabilizer": [
         "medialHamstrings",
@@ -512,6 +521,10 @@
         {
           "muscle": "tibialisAnterior",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "adductorMagnus",
+          "role": "secondary"
         }
       ],
       "variant": {
@@ -542,7 +555,9 @@
       "evidenceRefs": [
         "lee-2018-conventional-romanian-deadlift",
         "lyons-2026-conventional-romanian-deadlift",
-        "hanen-2025-conventional-sumo-deadlift"
+        "hanen-2025-conventional-sumo-deadlift",
+        "benn-2018-adductor-magnus-regional-emg",
+        "collings-2026-hip-adductor-muscle-forces"
       ],
       "execution": {
         "startingPosition": "Place a free straight barbell on the floor. Stand in a symmetric medium stance about one pelvis-width apart with a comfortable foot angle. Take a double-overhand grip with both arms outside your thighs and keep both feet planted.",

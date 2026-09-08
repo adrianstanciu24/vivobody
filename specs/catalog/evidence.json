@@ -1258,7 +1258,11 @@
       "id": "haugstvedt-2001-forearm-rotation-moment-forces",
       "sourceType": "cadavericMomentArmStudy",
       "title": "A mechanical study of the moment-forces of the supinators and pronators of the forearm",
-      "authors": ["Jan-Ragnar Haugstvedt", "Richard A. Berger", "Lawrence J. Berglund"],
+      "authors": [
+        "Jan-Ragnar Haugstvedt",
+        "Richard A. Berger",
+        "Lawrence J. Berglund"
+      ],
       "year": 2001,
       "doi": "10.1080/000164701317269076",
       "pmid": "11817880",
@@ -1269,7 +1273,12 @@
       "id": "szymanski-2004-wrist-forearm-training",
       "sourceType": "experimentalTrainingStudy",
       "title": "Effect of 12 Weeks of Wrist and Forearm Training on High School Baseball Players",
-      "authors": ["David J. Szymanski", "Jessica M. Szymanski", "Joseph M. Molloy", "David D. Pascoe"],
+      "authors": [
+        "David J. Szymanski",
+        "Jessica M. Szymanski",
+        "Joseph M. Molloy",
+        "David D. Pascoe"
+      ],
       "year": 2004,
       "doi": "10.1519/13703.1",
       "pmid": "15320673",
@@ -1280,7 +1289,16 @@
       "id": "fukunaga-2023-flexor-pronator-exercises",
       "sourceType": "experimentalEMGStudy",
       "title": "Flexor-Pronator Mass Training Exercises Selectively Activate Forearm Musculature",
-      "authors": ["Takumi Fukunaga", "Connor Fedge", "Timothy Tyler", "Michael Mullaney", "Brandon Schmitt", "Karl Orishimo", "Malachy McHugh", "Stephen Nicholas"],
+      "authors": [
+        "Takumi Fukunaga",
+        "Connor Fedge",
+        "Timothy Tyler",
+        "Michael Mullaney",
+        "Brandon Schmitt",
+        "Karl Orishimo",
+        "Malachy McHugh",
+        "Stephen Nicholas"
+      ],
       "year": 2023,
       "doi": "10.26603/001c.68073",
       "pmid": "36793573",
@@ -1291,7 +1309,15 @@
       "id": "forman-2020-dynamic-wrist-flexion-extension",
       "sourceType": "experimentalKinematicsEMGStudy",
       "title": "Characterizing forearm muscle activity in young adults during dynamic wrist flexion-extension movement using a wrist robot",
-      "authors": ["Davis A. Forman", "Garrick N. Forman", "Edwin J. Avila-Mireles", "Maddalena Mugnosso", "Jacopo Zenzeri", "Bernadette Murphy", "Michael W. R. Holmes"],
+      "authors": [
+        "Davis A. Forman",
+        "Garrick N. Forman",
+        "Edwin J. Avila-Mireles",
+        "Maddalena Mugnosso",
+        "Jacopo Zenzeri",
+        "Bernadette Murphy",
+        "Michael W. R. Holmes"
+      ],
       "year": 2020,
       "doi": "10.1016/j.jbiomech.2020.109908",
       "pmid": "32636014",
@@ -1302,7 +1328,15 @@
       "id": "forman-2020-dynamic-wrist-deviation",
       "sourceType": "experimentalKinematicsEMGStudy",
       "title": "Characterizing forearm muscle activity in university-aged males during dynamic radial-ulnar deviation of the wrist using a wrist robot",
-      "authors": ["Davis A. Forman", "Garrick N. Forman", "Edwin J. Avila-Mireles", "Maddalena Mugnosso", "Jacopo Zenzeri", "Bernadette Murphy", "Michael W. R. Holmes"],
+      "authors": [
+        "Davis A. Forman",
+        "Garrick N. Forman",
+        "Edwin J. Avila-Mireles",
+        "Maddalena Mugnosso",
+        "Jacopo Zenzeri",
+        "Bernadette Murphy",
+        "Michael W. R. Holmes"
+      ],
       "year": 2020,
       "doi": "10.1016/j.jbiomech.2020.109897",
       "pmid": "32636008",
@@ -1313,7 +1347,15 @@
       "id": "coratella-2023-curl-handgrips",
       "sourceType": "experimentalKineticsEMGStudy",
       "title": "Biceps Brachii and Brachioradialis Excitation in Biceps Curl Exercise: Different Handgrips, Different Synergy",
-      "authors": ["Giuseppe Coratella", "Gianpaolo Tornatore", "Stefano Longo", "Nicholas Toninelli", "Riccardo Padovan", "Fabio Esposito", "Emiliano Ce"],
+      "authors": [
+        "Giuseppe Coratella",
+        "Gianpaolo Tornatore",
+        "Stefano Longo",
+        "Nicholas Toninelli",
+        "Riccardo Padovan",
+        "Fabio Esposito",
+        "Emiliano Ce"
+      ],
       "year": 2023,
       "doi": "10.3390/sports11030064",
       "pmid": "36976950",
@@ -1324,7 +1366,11 @@
       "id": "kleiber-2015-elbow-flexion-hand-position",
       "sourceType": "experimentalKinematicsEMGStudy",
       "title": "Muscular coordination of biceps brachii and brachioradialis in elbow flexion with respect to hand position",
-      "authors": ["Tim Kleiber", "Leo Kunz", "Catherine Disselhorst-Klug"],
+      "authors": [
+        "Tim Kleiber",
+        "Leo Kunz",
+        "Catherine Disselhorst-Klug"
+      ],
       "year": 2015,
       "doi": "10.3389/fphys.2015.00215",
       "pmid": "26300781",
@@ -1335,7 +1381,11 @@
       "id": "alves-2018-triceps-shoulder-position",
       "sourceType": "experimentalKineticsEMGStudy",
       "title": "Effect of shoulder position on triceps brachii heads activity in dumbbell elbow extension exercises",
-      "authors": ["Daniel Alves", "Thiago Matta", "Liliam Oliveira"],
+      "authors": [
+        "Daniel Alves",
+        "Thiago Matta",
+        "Liliam Oliveira"
+      ],
       "year": 2018,
       "doi": "10.23736/S0022-4707.17.06849-9",
       "pmid": "28677940",
@@ -1346,7 +1396,16 @@
       "id": "maeo-2023-overhead-neutral-elbow-extension",
       "sourceType": "experimentalTrainingStudy",
       "title": "Triceps brachii hypertrophy is substantially greater after elbow extension training performed in the overhead versus neutral arm position",
-      "authors": ["Sumiaki Maeo", "Yuhang Wu", "Meng Huang", "Hikaru Sakurai", "Yuki Kusagawa", "Takashi Sugiyama", "Hiroaki Kanehisa", "Tadao Isaka"],
+      "authors": [
+        "Sumiaki Maeo",
+        "Yuhang Wu",
+        "Meng Huang",
+        "Hikaru Sakurai",
+        "Yuki Kusagawa",
+        "Takashi Sugiyama",
+        "Hiroaki Kanehisa",
+        "Tadao Isaka"
+      ],
       "year": 2023,
       "doi": "10.1080/17461391.2022.2100279",
       "pmid": "35819335",
@@ -1357,7 +1416,12 @@
       "id": "villalba-2024-pushdown-forearm-position",
       "sourceType": "experimentalKineticsEMGStudy",
       "title": "Forearm Position Influences Triceps Brachii Activation During Triceps Push-Down Exercise",
-      "authors": ["Marina Mello Villalba", "Rafael Akira Fujita", "Claudinei Iossi Junior", "Matheus Machado Gomes"],
+      "authors": [
+        "Marina Mello Villalba",
+        "Rafael Akira Fujita",
+        "Claudinei Iossi Junior",
+        "Matheus Machado Gomes"
+      ],
       "year": 2024,
       "doi": "10.47206/ijsc.v4i1.250",
       "url": "https://doi.org/10.47206/ijsc.v4i1.250",
@@ -1367,7 +1431,12 @@
       "id": "castelein-2016-serratus-pectoralis-minor-protraction",
       "sourceType": "intramuscularEMGStudy",
       "title": "Serratus anterior or pectoralis minor: Which muscle has the upper hand during protraction exercises?",
-      "authors": ["Birgit Castelein", "Barbara Cagnie", "Thierry Parlevliet", "Ann Cools"],
+      "authors": [
+        "Birgit Castelein",
+        "Barbara Cagnie",
+        "Thierry Parlevliet",
+        "Ann Cools"
+      ],
       "year": 2016,
       "doi": "10.1016/j.math.2015.12.002",
       "pmid": "26749459",
@@ -1378,7 +1447,14 @@
       "id": "intelangelo-2022-supine-scapular-punch",
       "sourceType": "experimentalEMGStudy",
       "title": "Supine scapular punch: An exercise for early phases of shoulder rehabilitation?",
-      "authors": ["Leonardo Intelangelo", "Lassaga Ignacio", "Cristian Mendoza", "Diego Bordachar", "Daniel Jerez-Mayorga", "Alexandre Carvalho Barbosa"],
+      "authors": [
+        "Leonardo Intelangelo",
+        "Lassaga Ignacio",
+        "Cristian Mendoza",
+        "Diego Bordachar",
+        "Daniel Jerez-Mayorga",
+        "Alexandre Carvalho Barbosa"
+      ],
       "year": 2022,
       "doi": "10.1016/j.clinbiomech.2022.105583",
       "pmid": "35124534",
@@ -1389,7 +1465,12 @@
       "id": "castelein-2016-scapular-muscles-shrug",
       "sourceType": "intramuscularEMGStudy",
       "title": "Modifying the shoulder joint position during shrugging and retraction exercises alters the activation of the medial scapular muscles",
-      "authors": ["Birgit Castelein", "Ann Cools", "Thierry Parlevliet", "Barbara Cagnie"],
+      "authors": [
+        "Birgit Castelein",
+        "Ann Cools",
+        "Thierry Parlevliet",
+        "Barbara Cagnie"
+      ],
       "year": 2016,
       "doi": "10.1016/j.math.2015.09.005",
       "pmid": "26409441",
@@ -1400,7 +1481,13 @@
       "id": "mckenzie-2022-dip-variations",
       "sourceType": "experimentalKinematicsEMGStudy",
       "title": "Bench, Bar, and Ring Dips: Do Kinematics and Muscle Activity Differ?",
-      "authors": ["Alec McKenzie", "Zachary Crowley-McHattan", "Rudi Meir", "John Whitting", "Wynand Volschenk"],
+      "authors": [
+        "Alec McKenzie",
+        "Zachary Crowley-McHattan",
+        "Rudi Meir",
+        "John Whitting",
+        "Wynand Volschenk"
+      ],
       "year": 2022,
       "doi": "10.3390/ijerph192013211",
       "pmid": "36293792",
@@ -1411,7 +1498,13 @@
       "id": "mckenzie-2022-bar-dip-fatigue",
       "sourceType": "experimentalKinematicsEMGStudy",
       "title": "Fatigue Increases Muscle Activations but Does Not Change Maximal Joint Angles during the Bar Dip",
-      "authors": ["Alec McKenzie", "Zachary Crowley-McHattan", "Rudi Meir", "John Whitting", "Wynand Volschenk"],
+      "authors": [
+        "Alec McKenzie",
+        "Zachary Crowley-McHattan",
+        "Rudi Meir",
+        "John Whitting",
+        "Wynand Volschenk"
+      ],
       "year": 2022,
       "doi": "10.3390/ijerph192114390",
       "pmid": "36361276",
@@ -1454,7 +1547,10 @@
       "id": "chiu-2006-push-press-joint-kinetics",
       "sourceType": "experimentalKineticsStudy",
       "title": "Comparison of Joint Kinetics during Free Weight and Flywheel Resistance Exercise",
-      "authors": ["Loren Z. F. Chiu", "George J. Salem"],
+      "authors": [
+        "Loren Z. F. Chiu",
+        "George J. Salem"
+      ],
       "year": 2006,
       "doi": "10.1519/R-18245.1",
       "pmid": "16937968",
@@ -1465,7 +1561,11 @@
       "id": "lake-2014-push-press-power",
       "sourceType": "experimentalKineticsStudy",
       "title": "Power and Impulse Applied During Push Press Exercise",
-      "authors": ["Jason P. Lake", "Peter D. Mundy", "Paul Comfort"],
+      "authors": [
+        "Jason P. Lake",
+        "Peter D. Mundy",
+        "Paul Comfort"
+      ],
       "year": 2014,
       "doi": "10.1519/JSC.0000000000000438",
       "pmid": "24584046",
@@ -1476,7 +1576,15 @@
       "id": "soriano-2024-push-press-jerk",
       "sourceType": "experimentalKineticsStudy",
       "title": "Kinetics and Kinematics of the Push Press, Push Jerk, and Split Jerk",
-      "authors": ["Marcos A. Soriano", "Ester Jiménez-Ormeño", "Jason P. Lake", "John J. McMahon", "César Gallo-Salazar", "Peter Mundy", "Paul Comfort"],
+      "authors": [
+        "Marcos A. Soriano",
+        "Ester Jiménez-Ormeño",
+        "Jason P. Lake",
+        "John J. McMahon",
+        "César Gallo-Salazar",
+        "Peter Mundy",
+        "Paul Comfort"
+      ],
       "year": 2024,
       "doi": "10.1519/JSC.0000000000004810",
       "pmid": "39072653",
@@ -1487,7 +1595,16 @@
       "id": "larsen-2025-leg-extension-hip-flexion",
       "sourceType": "experimentalTrainingStudy",
       "title": "The effects of hip flexion angle on quadriceps femoris muscle hypertrophy in the leg extension exercise",
-      "authors": ["Stian Larsen", "Benjamin Sandvik Kristiansen", "Paul Alan Swinton", "Milo Wolf", "Andrea Bao Fredriksen", "Hallvard Nygaard Falch", "Roland van den Tillaar", "Nordis Østerås Sandberg"],
+      "authors": [
+        "Stian Larsen",
+        "Benjamin Sandvik Kristiansen",
+        "Paul Alan Swinton",
+        "Milo Wolf",
+        "Andrea Bao Fredriksen",
+        "Hallvard Nygaard Falch",
+        "Roland van den Tillaar",
+        "Nordis Østerås Sandberg"
+      ],
       "year": 2025,
       "doi": "10.1080/02640414.2024.2444713",
       "pmid": "39699974",
@@ -1498,7 +1615,12 @@
       "id": "mitsuya-2023-leg-extension-hip-flexion",
       "sourceType": "experimentalImagingStudy",
       "title": "Hip flexion angle affects longitudinal muscle activity of the rectus femoris in leg extension exercise",
-      "authors": ["Hiroku Mitsuya", "Koichi Nakazato", "Takayoshi Hakkaku", "Takashi Okada"],
+      "authors": [
+        "Hiroku Mitsuya",
+        "Koichi Nakazato",
+        "Takayoshi Hakkaku",
+        "Takashi Okada"
+      ],
       "year": 2023,
       "doi": "10.1007/s00421-023-05156-w",
       "pmid": "36795130",
@@ -1509,7 +1631,16 @@
       "id": "maeo-2021-seated-prone-leg-curl",
       "sourceType": "experimentalTrainingStudy",
       "title": "Greater Hamstrings Muscle Hypertrophy but Similar Damage Protection after Training at Long versus Short Muscle Lengths",
-      "authors": ["Sumiaki Maeo", "Meng Huang", "Yuhang Wu", "Hikaru Sakurai", "Yuki Kusagawa", "Takashi Sugiyama", "Hiroaki Kanehisa", "Tadao Isaka"],
+      "authors": [
+        "Sumiaki Maeo",
+        "Meng Huang",
+        "Yuhang Wu",
+        "Hikaru Sakurai",
+        "Yuki Kusagawa",
+        "Takashi Sugiyama",
+        "Hiroaki Kanehisa",
+        "Tadao Isaka"
+      ],
       "year": 2021,
       "doi": "10.1249/MSS.0000000000002523",
       "pmid": "33009197",
@@ -1520,7 +1651,10 @@
       "id": "gallucci-2002-gastrocnemius-leg-curl",
       "sourceType": "biomechanicalModelStudy",
       "title": "Examining the Role of the Gastrocnemius during the Leg Curl Exercise",
-      "authors": ["Jason G. Gallucci", "John H. Challis"],
+      "authors": [
+        "Jason G. Gallucci",
+        "John H. Challis"
+      ],
       "year": 2002,
       "doi": "10.1123/jab.18.1.15",
       "url": "https://doi.org/10.1123/jab.18.1.15",
@@ -1530,7 +1664,17 @@
       "id": "kinoshita-2023-standing-seated-calf-raise",
       "sourceType": "experimentalTrainingStudy",
       "title": "Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training",
-      "authors": ["Momoka Kinoshita", "Sumiaki Maeo", "Yuuto Kobayashi", "Yuuri Eihara", "Munetaka Ono", "Mauto Sato", "Takashi Sugiyama", "Hiroaki Kanehisa", "Tadao Isaka"],
+      "authors": [
+        "Momoka Kinoshita",
+        "Sumiaki Maeo",
+        "Yuuto Kobayashi",
+        "Yuuri Eihara",
+        "Munetaka Ono",
+        "Mauto Sato",
+        "Takashi Sugiyama",
+        "Hiroaki Kanehisa",
+        "Tadao Isaka"
+      ],
       "year": 2023,
       "doi": "10.3389/fphys.2023.1272106",
       "pmid": "38156065",
@@ -1541,7 +1685,12 @@
       "id": "jeon-2016-prone-table-hip-extension",
       "sourceType": "experimentalKinematicsEMGStudy",
       "title": "Comparison of gluteus maximus and hamstring electromyographic activity and lumbopelvic motion during three different prone hip extension exercises in healthy volunteers",
-      "authors": ["In-Cheol Jeon", "Ui-Jae Hwang", "Sung-Hoon Jung", "Oh-Yun Kwon"],
+      "authors": [
+        "In-Cheol Jeon",
+        "Ui-Jae Hwang",
+        "Sung-Hoon Jung",
+        "Oh-Yun Kwon"
+      ],
       "year": 2016,
       "doi": "10.1016/j.ptsp.2016.03.004",
       "pmid": "27583647",
@@ -1849,7 +1998,7 @@
       "doi": "10.1136/bjsports-2012-091746",
       "pmid": "23511698",
       "url": "https://doi.org/10.1136/bjsports-2012-091746",
-      "scope": "Forty healthy elite male soccer players performed eight hip-adduction exercises while bilateral adductor-longus plus gluteus-medius, rectus-abdominis, and external-oblique surface EMG were recorded. The reviewed elastic-band condition was a supported upright standing exercise with the band cuffed at the ankle, a straight working knee, toes forward, a maximal-abduction start, and the reported foot-relative medial endpoint. Gluteus medius reached 18 percent MVC on both measured sides in this condition and supports categorical hip-and-pelvis stabilization credit. The sagittal coordinate of the abducted start and the three-dimensional path were not reported; the posterior endpoint neither establishes a separate hip-extension prime action nor directly supports the catalog's mechanics-derived held-posterior adaptation. The source supports the topology, adductor-longus role, gluteus-medius stabilization, and rectus-abdominis/external-oblique trunk control, not internal-oblique measurement, gracilis ranking, comparable band load, or another support, posture, or resistance topology."
+      "scope": "Forty healthy elite male soccer players performed eight hip-adduction exercises while bilateral adductor-longus plus gluteus-medius, rectus-abdominis, and external-oblique surface EMG were recorded. The reviewed elastic-band condition was a supported upright standing exercise with the band cuffed at the ankle, a straight working knee, toes forward, a maximal-abduction start, and the reported foot-relative medial endpoint. Gluteus medius reached 18 percent MVC on both measured sides in this condition and supports categorical hip-and-pelvis stabilization credit. The sagittal coordinate of the abducted start and the three-dimensional path were not reported; the posterior endpoint neither establishes a separate hip-extension prime action nor directly supports the catalog's mechanics-derived held-posterior adaptation. The source supports the topology, adductor-longus role, gluteus-medius stabilization, and rectus-abdominis/external-oblique trunk control, not internal-oblique measurement, gracilis ranking, comparable band load, or another support, posture, or resistance topology. The same study also measured the partner-supported dynamic Copenhagen condition with adductor-longus, abdominal and gluteus-medius recordings. Copenhagen setup is pinned to Haroy's published video description. Brevis, magnus, gracilis, pectineus and individual shoulder-support muscles were not directly measured in this condition."
     },
     {
       "id": "jensen-2014-elastic-hip-adduction-training",
@@ -3067,7 +3216,13 @@
       "id": "narouei-2018-nordic-hamstring",
       "sourceType": "experimentalEMGStudy",
       "title": "Hip and trunk muscles activity during nordic hamstring exercise",
-      "authors": ["Shideh Narouei", "Atsushi Imai", "Hiroshi Akuzawa", "Kiyotaka Hasebe", "Koji Kaneoka"],
+      "authors": [
+        "Shideh Narouei",
+        "Atsushi Imai",
+        "Hiroshi Akuzawa",
+        "Kiyotaka Hasebe",
+        "Koji Kaneoka"
+      ],
       "year": 2018,
       "doi": "10.12965/jer.1835200.600",
       "pmid": "29740557",
@@ -3079,7 +3234,12 @@
       "id": "sarabon-2019-nordic-variations",
       "sourceType": "experimentalKinematicsEMGStudy",
       "title": "Kinematic and electromyographic analysis of variations in Nordic hamstring exercise",
-      "authors": ["Nejc Šarabon", "Jan Marušič", "Goran Marković", "Žiga Kozinc"],
+      "authors": [
+        "Nejc Šarabon",
+        "Jan Marušič",
+        "Goran Marković",
+        "Žiga Kozinc"
+      ],
       "year": 2019,
       "doi": "10.1371/journal.pone.0223437",
       "pmid": "31644582",
@@ -3091,7 +3251,18 @@
       "id": "nunes-2020-barbell-preacher-curl",
       "sourceType": "experimentalTrainingStudy",
       "title": "Placing Greater Torque at Shorter or Longer Muscle Lengths? Effects of Cable vs. Barbell Preacher Curl Training on Muscular Strength and Hypertrophy in Young Adults",
-      "authors": ["João Pedro Nunes", "Jeferson L. Jacinto", "Alex S. Ribeiro", "Jerry L. Mayhew", "Masatoshi Nakamura", "Danila M. G. Capel", "Leidiane R. Santos", "Leandro Santos", "Edilson S. Cyrino", "Andreo F. Aguiar"],
+      "authors": [
+        "João Pedro Nunes",
+        "Jeferson L. Jacinto",
+        "Alex S. Ribeiro",
+        "Jerry L. Mayhew",
+        "Masatoshi Nakamura",
+        "Danila M. G. Capel",
+        "Leidiane R. Santos",
+        "Leandro Santos",
+        "Edilson S. Cyrino",
+        "Andreo F. Aguiar"
+      ],
       "year": 2020,
       "doi": "10.3390/ijerph17165859",
       "pmid": "32823490",
@@ -3103,7 +3274,14 @@
       "id": "zabaleta-korta-2023-incline-dumbbell-curl",
       "sourceType": "experimentalTrainingStudy",
       "title": "Regional Hypertrophy: The Effect of Exercises at Long and Short Muscle Lengths in Recreationally Trained Women",
-      "authors": ["Aitor Zabaleta-Korta", "Eneko Fernández-Peña", "Jon Torres-Unda", "Maider Francés", "Asier Zubillaga", "Jordan Santos-Concejero"],
+      "authors": [
+        "Aitor Zabaleta-Korta",
+        "Eneko Fernández-Peña",
+        "Jon Torres-Unda",
+        "Maider Francés",
+        "Asier Zubillaga",
+        "Jordan Santos-Concejero"
+      ],
       "year": 2023,
       "doi": "10.5114/jhk/163561",
       "pmid": "37559762",
@@ -3115,7 +3293,11 @@
       "id": "comfort-2015-mid-thigh-clean-pull",
       "sourceType": "experimentalKinematicsKineticsStudy",
       "title": "The effect of load and sex on kinematic and kinetic variables during the mid-thigh clean pull",
-      "authors": ["Paul Comfort", "Paul A. Jones", "Rebecca Udall"],
+      "authors": [
+        "Paul Comfort",
+        "Paul A. Jones",
+        "Rebecca Udall"
+      ],
       "year": 2015,
       "doi": "10.1080/14763141.2015.1025237",
       "pmid": "25896197",
@@ -3126,7 +3308,16 @@
       "id": "kawamori-2006-mid-thigh-clean-pull",
       "sourceType": "experimentalKineticsStudy",
       "title": "Peak Force and Rate of Force Development During Isometric and Dynamic Mid-Thigh Clean Pulls Performed at Various Intensities",
-      "authors": ["Naoki Kawamori", "Steven J. Rossi", "Blake D. Justice", "Erin E. Haff", "Emido E. Pistilli", "Harold S. O'Bryant", "Michael H. Stone", "G. Gregory Haff"],
+      "authors": [
+        "Naoki Kawamori",
+        "Steven J. Rossi",
+        "Blake D. Justice",
+        "Erin E. Haff",
+        "Emido E. Pistilli",
+        "Harold S. O'Bryant",
+        "Michael H. Stone",
+        "G. Gregory Haff"
+      ],
       "year": 2006,
       "doi": "10.1519/18025.1",
       "pmid": "16937959",
@@ -3137,7 +3328,20 @@
       "id": "nsca-2023-weightlifting-position",
       "sourceType": "professionalPositionStatement",
       "title": "National Strength and Conditioning Association Position Statement on Weightlifting for Sports Performance",
-      "authors": ["Paul Comfort", "G. Gregory Haff", "Timothy J. Suchomel", "Marcos A. Soriano", "Kyle C. Pierce", "W. Guy Hornsby", "Erin E. Haff", "Lesley M. Sommerfield", "Shyam Chavda", "Stephanie J. Morris", "Andrew C. Fry", "Michael H. Stone"],
+      "authors": [
+        "Paul Comfort",
+        "G. Gregory Haff",
+        "Timothy J. Suchomel",
+        "Marcos A. Soriano",
+        "Kyle C. Pierce",
+        "W. Guy Hornsby",
+        "Erin E. Haff",
+        "Lesley M. Sommerfield",
+        "Shyam Chavda",
+        "Stephanie J. Morris",
+        "Andrew C. Fry",
+        "Michael H. Stone"
+      ],
       "year": 2023,
       "doi": "10.1519/JSC.0000000000004476",
       "pmid": "36952649",
@@ -3148,7 +3352,17 @@
       "id": "khuyagbaatar-2024-snatch-clean-kinematics",
       "sourceType": "experimentalKinematicsStudy",
       "title": "Kinematic Comparison of Snatch and Clean Lifts in Weightlifters Using Wearable Inertial Measurement Unit Sensors",
-      "authors": ["Batbayar Khuyagbaatar", "Munkhbat Tumurbaatar", "Khosbayar Tsenkherjav", "Tserenchimed Purevsuren", "Tsooj Shambaljamts", "Kyungsoo Kim", "Tsolmonbaatar Danjkhuu", "Ganbat Danaa", "Yoon Hyuk Kim"],
+      "authors": [
+        "Batbayar Khuyagbaatar",
+        "Munkhbat Tumurbaatar",
+        "Khosbayar Tsenkherjav",
+        "Tserenchimed Purevsuren",
+        "Tsooj Shambaljamts",
+        "Kyungsoo Kim",
+        "Tsolmonbaatar Danjkhuu",
+        "Ganbat Danaa",
+        "Yoon Hyuk Kim"
+      ],
       "year": 2024,
       "doi": "10.5334/paah.306",
       "url": "https://doi.org/10.5334/paah.306",
@@ -3158,7 +3372,12 @@
       "id": "arauz-2026-snatch-clean-biomechanics",
       "sourceType": "experimentalKinematicsKineticsEMGStudy",
       "title": "Biomechanical and neuromuscular differences between the snatch and clean in elite weightlifters",
-      "authors": ["Paul G. Arauz", "Gabriela Garcia", "Jose Llerena", "Imin Kao"],
+      "authors": [
+        "Paul G. Arauz",
+        "Gabriela Garcia",
+        "Jose Llerena",
+        "Imin Kao"
+      ],
       "year": 2026,
       "doi": "10.1016/j.jbiomech.2025.113106",
       "pmid": "41352184",
@@ -3574,7 +3793,9 @@
       "id": "ergo-fit-2020-vector-strength-manual",
       "sourceType": "officialTechnicalStandard",
       "title": "VECTOR KRAFT Owner's Manual",
-      "authors": ["ERGO-FIT GmbH & Co. KG"],
+      "authors": [
+        "ERGO-FIT GmbH & Co. KG"
+      ],
       "year": 2020,
       "url": "https://www.ergo-fit.de/fileadmin/user_upload/service/downloads/ergo-fit/vector/ERGO-FIT_Manual-en-VECTOR-Kraft.pdf",
       "scope": "The manufacturer manual, version VECTOR-KRAFT 20201101, defines the exact selectorized VECTOR SEATED DIP fixture. It prescribes a seated bilateral setup with the back fully against the backrest, parallel legs, palms inward on the outer handles, elbows near ninety degrees, and the arms around shoulder height; the athlete presses against resistance until the forearms are extended and returns under control to shoulder height. The paired technical figures support a disclosed categorical inference that the upper arms travel downward with shoulder extension while elbow extension is direct from the prose. The source does not quantify shoulder range, measure joint kinematics or muscle activity, establish a universal stack mass, rank muscles, or transfer to other VECTOR generations or seated-dip products. Entered load is therefore comparable only on this exact fixture and configuration."
@@ -3583,7 +3804,9 @@
       "id": "life-fitness-2026-hammer-plate-loaded-manual",
       "sourceType": "officialTechnicalStandard",
       "title": "Hammer Strength Plate Loaded Owner's Manual",
-      "authors": ["Life Fitness"],
+      "authors": [
+        "Life Fitness"
+      ],
       "year": 2026,
       "url": "https://kb.cybexintl.com/Owners_Manuals/Strength/Hammer_Strength_Plate_Loaded_Owners_Manual_1000420-0001.pdf",
       "scope": "The manufacturer manual, document 1000420-0001 revision AJ, defines the exact PL-PO pullover fixture. It prescribes a seated and belted bilateral setup with both elbows on the elbow pads and both hands grasping the overhead movement arm, a controlled downward pull, and a controlled return while body position is held. The manual reports eighteen pounds of starting resistance per work arm; the product page additionally identifies a thirty-degree seat, belt drive, precision cam, reduced shoulder-extension path, and four storage horns. Shoulder extension with the elbow angle held is a disclosed categorical inference from the combined pad-and-handle lever geometry and figures, not measured kinematics. Symmetric loading of the two movement-arm loading rods and logging their total added plate mass while excluding starting resistance and storage horns are catalog-authored comparison conventions, not manufacturer-prescribed logging semantics. The source does not establish exact range, zero elbow or scapular motion, machine-specific muscle ranking, or cross-fixture load equivalence."
@@ -3592,7 +3815,9 @@
       "id": "panatta-2026-general-catalogue",
       "sourceType": "officialTechnicalStandard",
       "title": "Panatta General Catalogue",
-      "authors": ["Panatta"],
+      "authors": [
+        "Panatta"
+      ],
       "year": 2026,
       "url": "https://panattasport.com/download/panatta-general-catalogue.pdf",
       "scope": "The current manufacturer catalogue is registered with retrieval year 2026, not a claimed publication year. It defines the exact 1FW090 Single-Leg 45 Degree Leg Press as a forty-five-degree dual system with two independent forty-by-sixty-centimeter platforms, a reciprocal footboard-coupling lock, independent safety levers and stops, three backrest positions, and fifty-plus-fifty-kilogram starting resistance. It anchors fixture identity, independent unilateral topology with the reciprocal coupling disengaged, supported position, track angle, and side-specific carriage history. It does not prescribe stance, foot rotation, cadence, one universal depth, muscle ranking, or equivalence between the two carriages or with other machines."
@@ -3601,7 +3826,9 @@
       "id": "life-fitness-2026-mts-chest-press",
       "sourceType": "officialTechnicalStandard",
       "title": "Hammer Strength MTS Iso-Lateral Chest Press",
-      "authors": ["Life Fitness"],
+      "authors": [
+        "Life Fitness"
+      ],
       "year": 2026,
       "url": "https://www.lifefitness.com/en-eu/catalog/strength-training/selectorized/hammer-strength-mts-iso-lateral-chest-press",
       "scope": "This current manufacturer page is registered with retrieval year 2026, not a claimed publication year. It defines the exact MTSCP selectorized chest-press fixture with separate one-hundred-fifty-pound or seventy-five-kilogram stacks, independent converging and diverging arms, counterbalanced pressing arms, an adjustable seat, and belt-and-pulley resistance. It anchors fixture identity, independent unilateral topology, posterior support, and a working-side stack history. It does not prescribe grip orientation, numeric press inclination, exact joint range, unilateral sequencing cadence, muscle ranking, or equivalence between sides, stacks, or other machines."
@@ -3610,7 +3837,9 @@
       "id": "life-fitness-2026-mts-shoulder-press",
       "sourceType": "officialTechnicalStandard",
       "title": "Hammer Strength MTS Iso-Lateral Shoulder Press",
-      "authors": ["Life Fitness"],
+      "authors": [
+        "Life Fitness"
+      ],
       "year": 2026,
       "url": "https://www.lifefitness.com/en-eu/catalog/strength-training/selectorized/mts-iso-lateral-shoulder-press",
       "scope": "This current manufacturer page is registered with retrieval year 2026, not a claimed publication year. It defines the exact MTSSP selectorized shoulder-press fixture with separate one-hundred-fifty-pound or seventy-five-kilogram stacks, independent converging and diverging counterbalanced arms, pivot-away grips, an adjustable seat, and belt-and-pulley resistance. It anchors fixture identity, independent unilateral topology, posterior support, and a working-side stack history. It does not prescribe grip orientation, exact press inclination or joint range, unilateral sequencing cadence, muscle ranking, or equivalence between sides, stacks, or other machines."
@@ -4079,6 +4308,90 @@
       "pmcid": "PMC4951090",
       "url": "https://doi.org/10.2519/jospt.2015.5888",
       "scope": "Twenty-four healthy adults performed resisted side stepping with the band just above the ankles in upright and self-selected squat postures. Gluteus medius, gluteus maximus, and TFL surface EMG and hip/knee kinematics were measured in moving and stance limbs. The admitted squat branch retains approximately 30 cm foot spacing, a roughly 30 cm lead step, and a trailing step restoring the starting gap. No universal squat angle, torque, strength gain, or cross-muscle rank is inferred. Leading hip abduction and band-controlled trailing hip adduction are categorical mechanical interpretations; postural roles are anatomical inferences."
+    },
+    {
+      "id": "lovell-2012-hip-adductor-tests",
+      "sourceType": "experimentalEMGStudy",
+      "title": "EMG of the hip adductor muscles in six clinical examination tests",
+      "authors": [
+        "Gregory A Lovell",
+        "Peter D Blanch",
+        "Christopher J Barnes"
+      ],
+      "year": 2012,
+      "doi": "10.1016/j.ptsp.2011.08.004",
+      "pmid": "22814446",
+      "url": "https://doi.org/10.1016/j.ptsp.2011.08.004",
+      "scope": "Twenty-one male athletes performed resisted isometric hip-adduction tests at different hip positions. Surface EMG recorded adductor magnus, adductor longus, gracilis, and pectineus, with additional unilateral fine-wire pectineus recording. This supports active magnus and pectineus participation in resisted adduction; transfer to the catalog dynamic band, seated-machine, cable, lateral-lunge return and Copenhagen fixtures is a categorical anatomy-and-mechanics inference, not an exact-fixture measurement, a muscle ranking, or a hypertrophy prediction. Fine-wire signal decline may reflect wire movement. The study does not establish adductor-brevis-specific recruitment or whole-magnus hip-extension capability."
+    },
+    {
+      "id": "life-fitness-2008-cable-motion-dap",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Cable Motion Dual Adjustable Pulley",
+      "authors": [
+        "Life Fitness"
+      ],
+      "year": 2008,
+      "url": "https://www.lifefitness.com.au/wp-content/uploads/2015/02/CMDAP_Poster_2_56_1404177305.pdf",
+      "scope": "The manufacturer exercise poster, copyright 2008, depicts standing hip adduction using the low pulley, nearer ankle cuff, nearer hand on the upright, upright torso and extended working knee. It supports that setup, not measured muscle recruitment, standardized ankle force, a prescribed hip angle or a pause duration. The catalog holds slight hip flexion for clearance and selects an endpoint directly in front of the stance foot as explicit geometry clarifications."
+    },
+    {
+      "id": "haroy-2017-copenhagen-fifa11",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Including the Copenhagen Adduction Exercise in the FIFA 11+ Provides Missing Eccentric Hip Adduction Strength Effect in Male Soccer Players: A Randomized Controlled Trial",
+      "authors": [
+        "Joar Harøy",
+        "Kristian Thorborg",
+        "Andreas Serner",
+        "André Bjørkheim",
+        "Linn E. Rolstad",
+        "Per Hölmich",
+        "Roald Bahr",
+        "Thor Einar Andersen"
+      ],
+      "year": 2017,
+      "doi": "10.1177/0363546517720194",
+      "pmid": "28806100",
+      "url": "https://doi.org/10.1177/0363546517720194",
+      "scope": "The video supplement specifies dynamic Copenhagen adduction on one forearm with the free arm alongside the body. A partner supports the upper straight leg under both ankle and knee at partner hip height. Raise the body and adduct the lower leg until the feet meet and the body is straight; lower the body halfway toward the ground while the lower foot touches without taking support. This establishes the partner-supported dynamic fixture, not an ankle-only bench, short-lever, hold-only or loaded variation. It does not measure pectineus or establish a numeric cadence, individual muscle force or bodyweight fraction."
+    },
+    {
+      "id": "benn-2018-adductor-magnus-regional-emg",
+      "sourceType": "intramuscularEMGStudy",
+      "title": "Adductor magnus: An EMG investigation into proximal and distal portions and direction specific action",
+      "authors": [
+        "Matthew L. Benn",
+        "Tania Pizzari",
+        "Leanne Rath",
+        "Kylie Tucker",
+        "Adam I. Semciw"
+      ],
+      "year": 2018,
+      "doi": "10.1002/ca.23068",
+      "pmid": "29520841",
+      "url": "https://doi.org/10.1002/ca.23068",
+      "scope": "Fine-wire EMG sampled proximal and distal adductor-magnus regions in twelve healthy young adults during resisted isometric hip actions. Both sampled regions were active during extension. This supports an extension contribution within magnus, not uniform action across every anatomical compartment or a quantitative training ranking. The reported zero-, forty-five- and ninety-degree hip positions concern adduction tests; they do not establish a universal extension-angle threshold. Transfer to squat and deadlift fixtures is categorical, not direct exercise-specific fine-wire EMG."
+    },
+    {
+      "id": "collings-2026-hip-adductor-muscle-forces",
+      "sourceType": "musculoskeletalModel",
+      "title": "Hip Adductor Muscle Forces during Strength Training and Rehabilitation Exercises",
+      "authors": [
+        "Tyler J. Collings",
+        "Annelinde Horsman",
+        "Andrea H. Hams",
+        "Andrew McGill",
+        "David Watts",
+        "Matthew J. Hambly",
+        "Rod S. Barrett",
+        "Laura E. Diamond",
+        "Matthew N. Bourne"
+      ],
+      "year": 2026,
+      "doi": "10.1249/MSS.0000000000004002",
+      "pmid": "41931009",
+      "url": "https://doi.org/10.1249/MSS.0000000000004002",
+      "scope": "Fifteen injury-free participants performed eight hip-adductor exercises. Three-dimensional kinematics, ground reaction forces and surface EMG informed a neuromusculoskeletal model that estimated individual adductor forces, separating pubofemoral and ischiocondylar magnus. Squat, conventional deadlift and sumo deadlift generated substantial modeled ischiocondylar-magnus forces. These are model estimates, not direct muscle-force measurements, and do not establish uniform whole-magnus recruitment or catalog primary rankings. Exact existing catalog geometry remains governed by each fixture original sources."
     }
   ]
 }

@@ -49,6 +49,13 @@ Each listed muscle has one categorical role:
 - `stabilizer`: contributes to position or joint control and receives 0.1
   effort-weighted set credit.
 
+A highlighted region indicates participation, not equal loading of every
+fiber. Adductor magnus has one reviewed exception to the shared-action
+aggregate policy: its hip-extending portion receives secondary credit on the
+three exact squat/deadlift fixtures listed in the [catalog foundation](catalog/README.md#lower-body-region-boundaries).
+Exercise Detail provides a collapsed “About adductor magnus” explanation when
+magnus is secondary. Existing identities and saved snapshots are retained.
+
 Roles are encoded in the SwiftData snapshot shape, projected onto Exercise
 Anatomy, and projected into training credit separately:
 

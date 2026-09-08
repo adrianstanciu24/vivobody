@@ -3,11 +3,13 @@
   "schemaVersion": 1,
   "id": "sumo-deadlift",
   "name": "Sumo Deadlift",
-  "definition": "A strict bilateral barefoot sumo barbell deadlift in which a free bar begins at rest on the floor, both hands take a double-overhand grip inside a self-selected wide toe-out stance, and the bar travels to an upright standing endpoint through hip extension, knee extension, and ankle plantarflexion. Hanen et al. directly tested thirty experienced male lifters performing three repetitions at 85 percent of an adjusted one-repetition maximum, with maximal concentric-speed intent, a short unquantified pause between repetitions, and a dead stop that removed elastic carryover. The adjusted maximum was estimated with either the participant's preferred or non-preferred deadlift technique according to cohort assignment, so the load is not represented as a sumo-specific or universally equal relative intensity. The source did not quantify stance width, toe-out angle, grip width, or pause duration. Its three-dimensional analysis directly measured frontal- and transverse-plane hip, knee, and ankle behavior, including hip movement toward adduction and greater external rotation during the ascent, but those excursions are recorded as nondefining control demands rather than fabricated training primes: the study did not identify their muscle contributors, and its adductor-magnus EMG does not establish that muscle as a primary force generator. Gluteus maximus and the combined vasti region are non-ranked co-primary emphases supported by measured hip and knee extension mechanics plus surface EMG; rectus femoris and the plantarflexors are conservative secondary anatomy assignments, while measured adductor magnus, gluteus medius, biceps femoris, tibialis anterior, and lumbar erector activity receive only control credit. The study analyzed the ascent from lift-off to lockout, not the descent; the catalog's controlled return to the floor is an explicit product adaptation needed to repeat the documented dead-stop fixture, and no source-derived eccentric cadence is claimed. The 45-pound and 20-kilogram defaults are product initialization rather than a claim that either equals 85 percent of an athlete's maximum. Shod, narrow-stance, arms-outside-the-thighs, mixed-grip, hook-grip, strap-assisted, touch-and-go, bounced, conventional, Romanian, stiff-leg, deficit, block, rack, paused-at-height, trap-bar, dumbbell, kettlebell, cable, Smith, machine, unilateral, and staggered variants remain outside this contract.",
+  "definition": "A strict bilateral barefoot sumo barbell deadlift in which a free bar begins at rest on the floor, both hands take a double-overhand grip inside a self-selected wide toe-out stance, and the bar travels to an upright standing endpoint through hip extension, knee extension, and ankle plantarflexion. Hanen et al. directly tested thirty experienced male lifters performing three repetitions at 85 percent of an adjusted one-repetition maximum, with maximal concentric-speed intent, a short unquantified pause between repetitions, and a dead stop that removed elastic carryover. The adjusted maximum was estimated with either the participant's preferred or non-preferred deadlift technique according to cohort assignment, so the load is not represented as a sumo-specific or universally equal relative intensity. The source did not quantify stance width, toe-out angle, grip width, or pause duration. Its three-dimensional analysis directly measured frontal- and transverse-plane hip, knee, and ankle behavior, including hip movement toward adduction and greater external rotation during the ascent, but those excursions are recorded as nondefining control demands rather than fabricated training primes: the study did not identify their muscle contributors, and its adductor-magnus EMG does not establish that muscle as a primary force generator. Gluteus maximus and the combined vasti region are non-ranked co-primary emphases supported by measured hip and knee extension mechanics plus surface EMG; rectus femoris and the plantarflexors are conservative secondary anatomy assignments, while measured gluteus medius, biceps femoris, tibialis anterior, and lumbar erector activity receive only control credit. The study analyzed the ascent from lift-off to lockout, not the descent; the catalog's controlled return to the floor is an explicit product adaptation needed to repeat the documented dead-stop fixture, and no source-derived eccentric cadence is claimed. The 45-pound and 20-kilogram defaults are product initialization rather than a claim that either equals 85 percent of an athlete's maximum. Shod, narrow-stance, arms-outside-the-thighs, mixed-grip, hook-grip, strap-assisted, touch-and-go, bounced, conventional, Romanian, stiff-leg, deficit, block, rack, paused-at-height, trap-bar, dumbbell, kettlebell, cable, Smith, machine, unilateral, and staggered variants remain outside this contract. Adductor magnus receives secondary credit only on the reviewed barefoot-dead-stop-sumo-barbell-deadlift fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
-    "hanen-2025-conventional-sumo-deadlift"
+    "hanen-2025-conventional-sumo-deadlift",
+    "benn-2018-adductor-magnus-regional-emg",
+    "collings-2026-hip-adductor-muscle-forces"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -161,7 +163,7 @@
         "anyOf": [
           "adductorMagnus"
         ],
-        "minimumRole": "stabilizer"
+        "minimumRole": "secondary"
       },
       {
         "anyOf": [
@@ -226,13 +228,13 @@
       "secondary": [
         "rectusFemoris",
         "gastrocnemius",
-        "soleus"
+        "soleus",
+        "adductorMagnus"
       ],
       "stabilizer": [
         "medialHamstrings",
         "bicepsFemoris",
         "gluteMed",
-        "adductorMagnus",
         "tibialisAnterior",
         "fingerFlexors",
         "extensorCarpiRadialis",
@@ -570,7 +572,7 @@
         },
         {
           "muscle": "adductorMagnus",
-          "role": "stabilizer"
+          "role": "secondary"
         },
         {
           "muscle": "tibialisAnterior",
@@ -644,7 +646,9 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
-        "hanen-2025-conventional-sumo-deadlift"
+        "hanen-2025-conventional-sumo-deadlift",
+        "benn-2018-adductor-magnus-regional-emg",
+        "collings-2026-hip-adductor-muscle-forces"
       ],
       "execution": {
         "startingPosition": "Place a free barbell at rest on the floor. Stand barefoot in a symmetric stance wider than your natural narrow stance, turn both toes outward by a comfortable self-selected amount, and take a double-overhand grip inside your knees at a self-selected width.",

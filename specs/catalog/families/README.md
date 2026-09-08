@@ -476,8 +476,12 @@ Gluteus minimus has an explicitly unvisualized taxonomy region but no
 body-model surface. The abduction record still omits it because capability
 alone does not establish exercise involvement; no visible region is assigned
 as a proxy.
-The adduction record does not infer adductor-magnus or pectineus volume from
-capability alone. Gracilis is secondary because it can produce the named hip
+The reviewed adduction records now assign adductor magnus and pectineus as
+secondary contributors through shared hip-adduction anatomy plus Lovell's
+resisted-adduction measurements. Transfer to the dynamic band, machine, and
+cable fixtures is a categorical inference, not exact-fixture measurement or
+a recruitment ranking. The cable branch pins near-side hand support, a low
+pulley and a held slight-flexion posture for foot clearance. Gracilis is secondary because it can produce the named hip
 action while controlling the held knee. Gluteus medius receives stabilizer
 credit from its directly measured 18-percent-MVC bilateral excitation and its
 hip/pelvis control capability. Serner measured external oblique only, so
@@ -563,3 +567,14 @@ propulsion remains
 `lowerBodyContribution: walkingPropulsion` rather than becoming a set of
 training-defining hip, knee, or ankle prime actions; gait-related spinal motion
 is honestly `nonstandardized`, not fabricated as absent.
+
+## Adductor coverage amendment
+
+[The adductor review](../proposals/adductor-coverage.md) records the current
+role and fixture decisions. The lateral-lunge return credits magnus, gracilis
+and pectineus as secondaries for hip adduction, without granting hip-extension
+capability. `copenhagen-adduction` owns one dynamic partner-supported fixture:
+both ankle and knee support, a grounded forearm, and no weight on the lower
+foot. Its bodyweight load is noncomparable; a set identifies the upper support
+side while both legs participate. Bench-only, short-lever and held versions
+remain outside that contract.

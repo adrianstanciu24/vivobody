@@ -239,8 +239,17 @@ unseparated long head during hip-extension exercises.
 Several other visible regions are deliberately conservative. The single
 gluteus-medius mesh retains the fiber regions' shared hip-abduction capability
 but not the opposing internal/external-rotation capabilities of its modeled
-paths. The single adductor-magnus mesh retains hip adduction but not the
-different sagittal-plane directions of its subdivisions. The combined
+paths. The single adductor-magnus mesh retains only hip adduction in its
+shared profile. A reviewed magnus-only participation exception permits its
+hip-extending portion to receive secondary credit on `barbell-back-squat`,
+`conventional-barbell-deadlift`, and
+`barefoot-dead-stop-sumo-barbell-deadlift`. The compiler restricts this extra
+capability by fixture ID, family, role, back-squat geometry, and required
+portion evidence; no
+other fixture or aggregate inherits it. Exercise Detail explains that the
+back portion contributes during hip extension and highlighting does not
+mean equal loading throughout the muscle. This is participation by part of
+a visible region, not a claim that all subdivisions extend the hip. The combined
 adductor-longus/brevis region and pectineus also retain only hip adduction:
 their modeled sagittal moment direction changes or approaches zero as hip
 flexion deepens, and the current action vocabulary has no reviewed

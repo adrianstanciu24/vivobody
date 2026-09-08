@@ -40,6 +40,20 @@ struct ExerciseDetailAnatomySection: View {
                     anatomyRoleRow(role: .secondary, muscles: involvement.secondary)
                     anatomyRoleRow(role: .stabilizer, muscles: involvement.stabilizers)
 
+                    if involvement.secondary.contains(.adductorMagnus) {
+                        DisclosureGroup {
+                            Text("Highlighting shows participation, not equal loading throughout adductor magnus. For example, its back portion contributes during hip extension.")
+                                .font(Typography.caption)
+                                .foregroundStyle(Ink.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        } label: {
+                            Text("About adductor magnus")
+                                .foregroundStyle(Ink.primary)
+                                .frame(minHeight: 44)
+                        }
+                        .font(Typography.caption)
+                    }
+
                     if !unvisualizedMuscles.isEmpty {
                         Text(
                             "3D view unavailable for "

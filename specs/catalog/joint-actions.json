@@ -1257,9 +1257,11 @@
         "hip"
       ],
       "evidenceRefs": [
-        "arnold-2010-lower-limb"
+        "arnold-2010-lower-limb",
+        "benn-2018-adductor-magnus-regional-emg",
+        "collings-2026-hip-adductor-muscle-forces"
       ],
-      "notes": "The scene has one adductor-magnus mesh while its modeled subdivisions have different sagittal-plane moment directions. The aggregate retains their shared adduction capability and does not advertise hip flexion or extension."
+      "notes": "The scene has one adductor-magnus mesh while its modeled subdivisions have different sagittal-plane moment directions. The aggregate retains their shared adduction capability and does not advertise hip flexion or extension. Reviewed portion-qualified hip-extension participation is separately restricted in Scripts/catalog.py to secondary credit on three exact squat/deadlift fixtures. It does not grant a shared whole-region extension capability. Exercise Detail explains that the back portion contributes and highlighting does not imply equal loading."
     },
     {
       "muscleID": "adductorLongusBrevis",

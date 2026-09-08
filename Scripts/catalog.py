@@ -42,6 +42,25 @@ CANONICAL_RUNTIME_CATALOG_PATH = (
 RUNTIME_CATALOG_PATH = CANONICAL_RUNTIME_CATALOG_PATH
 XCODE_INPUT_FILE_LIST_PATH = ROOT / "Scripts" / "catalog-inputs.xcfilelist"
 
+# Portion-qualified participation; these are not whole-region action grants.
+MAGNUS_EXTENSION_FIXTURES = {
+    "barbell-back-squat": "bilateral-squat",
+    "conventional-barbell-deadlift": "conventional-deadlift",
+    "barefoot-dead-stop-sumo-barbell-deadlift": "sumo-deadlift",
+}
+MAGNUS_BACK_SQUAT_GEOMETRY = {
+    "loadPlacement": "upperBackBarbell",
+    "implementConfiguration": "straightBarbell",
+    "gripOrientation": "pronated",
+    "stanceWidth": "hipWidth",
+    "rangeOfMotion": "thighParallel",
+    "fixedPath": False,
+}
+MAGNUS_EXTENSION_EVIDENCE = {
+    "benn-2018-adductor-magnus-regional-emg",
+    "collings-2026-hip-adductor-muscle-forces",
+}
+
 SCHEMA_VERSION = 1
 EXPECTED_GROUPS = ("chest", "back", "shoulders", "arms", "core", "legs")
 EXPECTED_MESH_BASE_COUNT = 60
@@ -1958,6 +1977,31 @@ def validate_exercise(
     resisted_actions = family_resisted_actions
     yielding_actions = family_yielding_actions
 
+    # The shared magnus profile remains adduction-only. An exact reviewed
+    # fixture may credit its extensor portion, with one secondary role and
+    # one mesh; no other aggregate inherits a union of constituent actions.
+    capabilities_by_muscle = dict(foundation.capabilities_by_muscle)
+    if MAGNUS_EXTENSION_FIXTURES.get(catalog_id) == family["id"]:
+        if catalog_id == "barbell-back-squat":
+            require(
+                exercise["equipment"] == "barbell"
+                and all(exercise["variant"].get(key) == value
+                        for key, value in MAGNUS_BACK_SQUAT_GEOMETRY.items()),
+                f"{context} reviewed magnus extension requires back-squat geometry",
+            )
+        require(
+            role_by_muscle.get("adductorMagnus") == "secondary",
+            f"{context} reviewed magnus extension requires secondary credit",
+        )
+        require(
+            MAGNUS_EXTENSION_EVIDENCE.issubset(exercise["evidenceRefs"]),
+            f"{context} reviewed magnus extension requires portion evidence",
+        )
+        capabilities_by_muscle["adductorMagnus"] = (
+            foundation.capabilities_by_muscle["adductorMagnus"]
+            | {("hip.extension", None)}
+        )
+
     movers = {
         muscle_id
         for muscle_id, role in role_by_muscle.items()
@@ -1969,7 +2013,7 @@ def validate_exercise(
             for muscle_id in movers
             if any(
                 capability_satisfies(capability, action_requirement)
-                for capability in foundation.capabilities_by_muscle[muscle_id]
+                for capability in capabilities_by_muscle[muscle_id]
             )
         ]
         require(
@@ -1989,7 +2033,7 @@ def validate_exercise(
                     resisted_requirement,
                     foundation.opposing_action_by_action,
                 )
-                for capability in foundation.capabilities_by_muscle[muscle_id]
+                for capability in capabilities_by_muscle[muscle_id]
             )
         ]
         resisted_action, _ = resisted_requirement
@@ -2013,7 +2057,7 @@ def validate_exercise(
                     yielding_requirement,
                     foundation.opposing_action_by_action,
                 )
-                for capability in foundation.capabilities_by_muscle[muscle_id]
+                for capability in capabilities_by_muscle[muscle_id]
             )
         ]
         yielding_action, _ = yielding_requirement
@@ -2028,7 +2072,7 @@ def validate_exercise(
     for muscle_id, role in role_by_muscle.items():
         if role not in {"primary", "secondary"}:
             continue
-        capabilities = foundation.capabilities_by_muscle[muscle_id]
+        capabilities = capabilities_by_muscle[muscle_id]
         require(
             any(
                 capability_satisfies(capability, action_requirement)

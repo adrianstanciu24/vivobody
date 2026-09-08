@@ -1,0 +1,71 @@
+{
+  "name": "catalog-magnus-extension",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Barbell Back Squat,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Barbell Back Squat,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "About adductor magnus"
+        },
+        "direction": "up",
+        "maxSwipes": 8
+      }
+    },
+    {
+      "tap": {
+        "label": "About adductor magnus"
+      }
+    },
+    {
+      "wait": {
+        "labelRegex": "^Highlighting shows participation,"
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelRegex": "^Secondary, .*Adductor Magnus"
+    },
+    {
+      "labelRegex": "^Highlighting shows participation,"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelRegex": "^Primary, .*Adductor Magnus"
+    }
+  ]
+}

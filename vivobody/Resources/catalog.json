@@ -842,6 +842,10 @@
         "role": "secondary"
       },
       {
+        "muscle": "adductorMagnus",
+        "role": "secondary"
+      },
+      {
         "muscle": "soleus",
         "role": "secondary"
       },
@@ -2254,6 +2258,101 @@
       },
       {
         "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "adductorMagnus",
+        "role": "secondary"
+      }
+    ]
+  },
+  {
+    "familyID": "copenhagen-adduction",
+    "familyName": "Copenhagen Adduction",
+    "movementActions": [
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "partner-supported-copenhagen-adduction",
+    "name": "Partner-Supported Copenhagen Adduction",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Partner Copenhagen Adduction",
+      "Dynamic Partner Copenhagen"
+    ],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on one side with the supporting forearm on the floor and the free arm alongside your body. Have a partner support the upper straight leg under both the ankle and knee at about their hip height.",
+      "movement": "Lift your body through the supported upper hip while bringing the straight lower leg up toward the upper leg.",
+      "endpoint": "Bring your feet together with the body in a straight line.",
+      "returnPhase": "Lower your body halfway toward the floor under control. Let the lower foot touch the floor without taking weight.",
+      "controlledJoints": "Keep both knees straight and the trunk aligned without twisting or deliberately bending sideways.",
+      "supportAndPosture": "Keep the forearm grounded and have the partner maintain both ankle and knee support throughout.",
+      "disqualifyingCompensations": [
+        "Resting bodyweight on the lower foot removes the reviewed support demand.",
+        "Supporting only the ankle on a bench changes the partner-supported fixture.",
+        "Bending the knees, holding still for time or dropping through the lowering phase changes the movement."
+      ],
+      "sideOrDirection": "Complete the repetitions with one side uppermost, then change sides. Both legs work during each repetition."
+    },
+    "involvement": [
+      {
+        "muscle": "adductorLongusBrevis",
+        "role": "primary"
+      },
+      {
+        "muscle": "gracilis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorMagnus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectineus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
         "role": "stabilizer"
       }
     ]
@@ -6841,6 +6940,14 @@
         "role": "secondary"
       },
       {
+        "muscle": "adductorMagnus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectineus",
+        "role": "secondary"
+      },
+      {
         "muscle": "abs",
         "role": "stabilizer"
       },
@@ -6908,6 +7015,94 @@
       },
       {
         "muscle": "gracilis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorMagnus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectineus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "hip-adduction",
+    "familyName": "Hip Adduction",
+    "movementActions": [
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "supported-standing-cable-hip-adduction",
+    "name": "Supported Standing Cable Hip Adduction",
+    "group": "legs",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Standing Cable Hip Adduction",
+      "Cable Hip Adduction"
+    ],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand side-on to a low pulley with the cuff just above the nearer ankle. Hold the upright with the nearer hand, soften the stance knee, and place the straight working leg out to the side under cable tension, slightly forward for foot clearance.",
+      "movement": "Pull the straight working leg inward along the same side-to-side path.",
+      "endpoint": "Stop with the working foot directly in front of the stance foot and pause briefly.",
+      "returnPhase": "Return slowly to the starting position out to the side while keeping cable tension.",
+      "controlledJoints": "Keep the working knee straight, toes forward, and the pelvis and trunk still. Hold the small forward hip position throughout.",
+      "supportAndPosture": "Keep the nearer hand on the upright and the stance foot planted.",
+      "disqualifyingCompensations": [
+        "Swinging forward or backward adds hip flexion or extension.",
+        "Bending the working knee or stepping across changes the isolated movement.",
+        "Leaning sideways or twisting substitutes trunk motion."
+      ],
+      "sideOrDirection": "Finish the repetitions on one side, then turn around and repeat on the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "adductorLongusBrevis",
+        "role": "primary"
+      },
+      {
+        "muscle": "gracilis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorMagnus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectineus",
         "role": "secondary"
       },
       {
@@ -10572,6 +10767,18 @@
       },
       {
         "muscle": "adductorLongusBrevis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorMagnus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gracilis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectineus",
         "role": "secondary"
       },
       {
@@ -18824,7 +19031,7 @@
       },
       {
         "muscle": "adductorMagnus",
-        "role": "stabilizer"
+        "role": "secondary"
       },
       {
         "muscle": "tibialisAnterior",

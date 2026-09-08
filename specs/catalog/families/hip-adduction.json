@@ -3,12 +3,14 @@
   "schemaVersion": 1,
   "id": "hip-adduction",
   "name": "Hip Adduction",
-  "definition": "A strict open-chain hip-adduction isolation. The roster owns the original unilateral supported standing band fixture and one exact bilateral Technogym seated isotonic-machine fixture at eighty degrees of hip flexion. Their support, start and endpoint, knee posture, resistance, path constraint, and cadence remain branch-specific. The visible adductor-longus and brevis region is primary, gracilis is secondary, and the trunk and pelvis roles remain categorical stabilizers. Other machines, cable, Copenhagen, squeeze, rotated, closed-chain, and multi-joint variants remain outside this contract.",
+  "definition": "A strict open-chain hip-adduction isolation. The roster owns the original unilateral supported standing band fixture, one exact bilateral Technogym seated isotonic-machine fixture at eighty degrees of hip flexion, and a hand-supported standing low-cable fixture. Their support, start and endpoint, knee posture, resistance, path constraint, and cadence remain branch-specific. The visible adductor-longus and brevis region is primary, gracilis, adductor magnus, and pectineus are secondary, and the trunk and pelvis roles remain categorical stabilizers. Magnus and pectineus credit is a categorical transfer from their shared adduction capability and Lovell's resisted isometric-adduction measurements to these dynamic fixtures, not exact-fixture EMG or a recruitment ranking. The cable fixture follows the Life Fitness poster; holding slight hip flexion for foot clearance and choosing the front-of-stance-foot endpoint are disclosed catalog clarifications, not measured joint angles. Cable role transfer is categorical anatomy and mechanics, not direct cable EMG. Other machines, unsupported cables, Copenhagen, squeeze, rotated, closed-chain, and multi-joint variants remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "serner-2014-hip-adduction-exercises",
     "jensen-2014-elastic-hip-adduction-training",
-    "brandt-2013-machine-hip-abduction-adduction"
+    "brandt-2013-machine-hip-abduction-adduction",
+    "lovell-2012-hip-adductor-tests",
+    "life-fitness-2008-cable-motion-dap"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -28,7 +30,8 @@
   "allowed": {
     "equipment": [
       "band",
-      "machine"
+      "machine",
+      "cable"
     ],
     "modalities": [
       "dynamicStrength"
@@ -108,6 +111,18 @@
     "requirements": [
       {
         "anyOf": [
+          "adductorMagnus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "pectineus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
           "adductorLongusBrevis"
         ],
         "minimumRole": "primary"
@@ -142,7 +157,9 @@
         "adductorLongusBrevis"
       ],
       "secondary": [
-        "gracilis"
+        "gracilis",
+        "adductorMagnus",
+        "pectineus"
       ],
       "stabilizer": [
         "abs",
@@ -185,10 +202,11 @@
       "id": "handSupport",
       "valueType": "enum",
       "required": true,
-      "description": "The bilateral stable hand support used by the reviewed training fixture; the EMG source reports stable support without specifying hand laterality.",
+      "description": "Both-hand support for the band, machine handles for seated adduction, or the near-side hand on the cable upright.",
       "allowedValues": [
         "bothHandsOnStableExternalSupport",
-        "machineHandles"
+        "machineHandles",
+        "ipsilateralHandOnUpright"
       ]
     },
     {
@@ -196,7 +214,10 @@
       "valueType": "enum",
       "required": true,
       "description": "The direct pelvic support used by each fixture.",
-      "allowedValues": ["unsupportedStanding", "machineSeatAndBackPad"]
+      "allowedValues": [
+        "unsupportedStanding",
+        "machineSeatAndBackPad"
+      ]
     },
     {
       "id": "pelvisMotion",
@@ -232,7 +253,8 @@
       "description": "The participant-specific start used by the reviewed full-range band exercise.",
       "allowedValues": [
         "maximalComfortableAbduction",
-        "fortyFiveDegreesAbduction"
+        "fortyFiveDegreesAbduction",
+        "comfortableAbductionUnderCableTension"
       ]
     },
     {
@@ -242,17 +264,19 @@
       "description": "The reviewed medial endpoint relative to the stance foot in the frontal plane.",
       "allowedValues": [
         "oneFootWidthFromStanceFoot",
-        "anatomicalNeutralZeroDegrees"
+        "anatomicalNeutralZeroDegrees",
+        "directlyInFrontOfStanceFoot"
       ]
     },
     {
       "id": "hipSagittalPosture",
       "valueType": "enum",
       "required": true,
-      "description": "The fixture-specific slight-extension or eighty-degree-flexed sagittal hip posture held without admitting dynamic hip extension.",
+      "description": "The branch-specific sagittal posture held during frontal adduction; slight flexion on cable provides foot clearance without a dynamic sagittal action.",
       "allowedValues": [
         "slightExtensionHeld",
-        "flexed80Degrees"
+        "flexed80Degrees",
+        "slightFlexionHeld"
       ]
     },
     {
@@ -297,20 +321,22 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "The fixture-specific ankle-band or medial-thigh-pad load interface.",
+      "description": "The branch-specific ankle cuff or medial-thigh-pad resistance interface.",
       "allowedValues": [
         "bandCuffAtAnkle",
-        "medialThighPads"
+        "medialThighPads",
+        "cableCuffAtAnkle"
       ]
     },
     {
       "id": "resistanceGeometry",
       "valueType": "enum",
       "required": true,
-      "description": "The lateral band or selectorized machine resistance geometry opposing adduction.",
+      "description": "The branch-specific lateral band, low pulley, or selectorized lever opposing adduction.",
       "allowedValues": [
         "lateralBandAnchor",
-        "selectorizedIsotonicLever"
+        "selectorizedIsotonicLever",
+        "lateralLowPulley"
       ]
     },
     {
@@ -318,14 +344,21 @@
       "valueType": "enum",
       "required": true,
       "description": "The exact reviewed machine or a marker that no machine is used.",
-      "allowedValues": ["notApplicable", "technogymSeatedAdductorModelUnreported"]
+      "allowedValues": [
+        "notApplicable",
+        "technogymSeatedAdductorModelUnreported"
+      ]
     },
     {
       "id": "cadence",
       "valueType": "enum",
       "required": true,
       "description": "The reported repetition cadence.",
-      "allowedValues": ["unreported", "oneSecondConcentricOneSecondEccentric"]
+      "allowedValues": [
+        "unreported",
+        "oneSecondConcentricOneSecondEccentric",
+        "controlledWithBriefEndpointPause"
+      ]
     },
     {
       "id": "fixedPath",
@@ -347,34 +380,269 @@
     {
       "id": "standing-adduction-pins-band-fixture",
       "description": "The standing branch preserves the unilateral supported band setup.",
-      "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "standing"},
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "band"
+      },
       "then": [
-        {"field": "equipment", "value": "band"}, {"field": "loadMode", "value": "nonComparable"}, {"field": "laterality", "value": "unilateral"},
-        {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.handSupport", "value": "bothHandsOnStableExternalSupport"},
-        {"field": "variant.pelvisSupport", "value": "unsupportedStanding"}, {"field": "variant.hipStartPosition", "value": "maximalComfortableAbduction"},
-        {"field": "variant.frontalEndDistance", "value": "oneFootWidthFromStanceFoot"}, {"field": "variant.hipSagittalPosture", "value": "slightExtensionHeld"},
-        {"field": "variant.hipRotation", "value": "neutral"}, {"field": "variant.kneePosture", "value": "extended"},
-        {"field": "variant.loadInterface", "value": "bandCuffAtAnkle"}, {"field": "variant.resistanceGeometry", "value": "lateralBandAnchor"},
-        {"field": "variant.machineFixture", "value": "notApplicable"}, {"field": "variant.cadence", "value": "unreported"},
-        {"field": "variant.fixedPath", "value": false}
+        {
+          "field": "equipment",
+          "value": "band"
+        },
+        {
+          "field": "loadMode",
+          "value": "nonComparable"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.handSupport",
+          "value": "bothHandsOnStableExternalSupport"
+        },
+        {
+          "field": "variant.pelvisSupport",
+          "value": "unsupportedStanding"
+        },
+        {
+          "field": "variant.hipStartPosition",
+          "value": "maximalComfortableAbduction"
+        },
+        {
+          "field": "variant.frontalEndDistance",
+          "value": "oneFootWidthFromStanceFoot"
+        },
+        {
+          "field": "variant.hipSagittalPosture",
+          "value": "slightExtensionHeld"
+        },
+        {
+          "field": "variant.hipRotation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.kneePosture",
+          "value": "extended"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "bandCuffAtAnkle"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "lateralBandAnchor"
+        },
+        {
+          "field": "variant.machineFixture",
+          "value": "notApplicable"
+        },
+        {
+          "field": "variant.cadence",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        }
       ],
-      "requirePresent": [], "requireAbsent": []
+      "requirePresent": [],
+      "requireAbsent": []
     },
     {
       "id": "seated-adduction-pins-technogym-fixture",
       "description": "The seated branch is the exact bilateral Technogym machine condition.",
-      "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "seated"},
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
       "then": [
-        {"field": "equipment", "value": "machine"}, {"field": "loadMode", "value": "external"}, {"field": "laterality", "value": "bilateral"},
-        {"field": "variant.torsoSupport", "value": "machineBackPad"}, {"field": "variant.handSupport", "value": "machineHandles"},
-        {"field": "variant.pelvisSupport", "value": "machineSeatAndBackPad"}, {"field": "variant.hipStartPosition", "value": "fortyFiveDegreesAbduction"},
-        {"field": "variant.frontalEndDistance", "value": "anatomicalNeutralZeroDegrees"}, {"field": "variant.hipSagittalPosture", "value": "flexed80Degrees"},
-        {"field": "variant.hipRotation", "value": "unreported"}, {"field": "variant.kneePosture", "value": "flexedApproximately90Degrees"},
-        {"field": "variant.loadInterface", "value": "medialThighPads"}, {"field": "variant.resistanceGeometry", "value": "selectorizedIsotonicLever"},
-        {"field": "variant.machineFixture", "value": "technogymSeatedAdductorModelUnreported"}, {"field": "variant.cadence", "value": "oneSecondConcentricOneSecondEccentric"},
-        {"field": "variant.fixedPath", "value": true}
+        {
+          "field": "equipment",
+          "value": "machine"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "machineBackPad"
+        },
+        {
+          "field": "variant.handSupport",
+          "value": "machineHandles"
+        },
+        {
+          "field": "variant.pelvisSupport",
+          "value": "machineSeatAndBackPad"
+        },
+        {
+          "field": "variant.hipStartPosition",
+          "value": "fortyFiveDegreesAbduction"
+        },
+        {
+          "field": "variant.frontalEndDistance",
+          "value": "anatomicalNeutralZeroDegrees"
+        },
+        {
+          "field": "variant.hipSagittalPosture",
+          "value": "flexed80Degrees"
+        },
+        {
+          "field": "variant.hipRotation",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.kneePosture",
+          "value": "flexedApproximately90Degrees"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "medialThighPads"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "selectorizedIsotonicLever"
+        },
+        {
+          "field": "variant.machineFixture",
+          "value": "technogymSeatedAdductorModelUnreported"
+        },
+        {
+          "field": "variant.cadence",
+          "value": "oneSecondConcentricOneSecondEccentric"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        }
       ],
-      "requirePresent": [], "requireAbsent": []
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "standing-adduction-pins-cable-fixture",
+      "description": "The cable branch pins near-side hand support and a held slight-flexion foot-clearance posture.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.handSupport",
+          "value": "ipsilateralHandOnUpright"
+        },
+        {
+          "field": "variant.pelvisSupport",
+          "value": "unsupportedStanding"
+        },
+        {
+          "field": "variant.pelvisMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.hipMotion",
+          "value": "adducts"
+        },
+        {
+          "field": "variant.hipStartPosition",
+          "value": "comfortableAbductionUnderCableTension"
+        },
+        {
+          "field": "variant.frontalEndDistance",
+          "value": "directlyInFrontOfStanceFoot"
+        },
+        {
+          "field": "variant.hipSagittalPosture",
+          "value": "slightFlexionHeld"
+        },
+        {
+          "field": "variant.hipRotation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.kneeMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.kneePosture",
+          "value": "extended"
+        },
+        {
+          "field": "variant.movingSegment",
+          "value": "thigh"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "cableCuffAtAnkle"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "lateralLowPulley"
+        },
+        {
+          "field": "variant.machineFixture",
+          "value": "notApplicable"
+        },
+        {
+          "field": "variant.cadence",
+          "value": "controlledWithBriefEndpointPause"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "isolatedJointMotion"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "recommended": {
@@ -407,6 +675,14 @@
         },
         {
           "muscle": "gracilis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "adductorMagnus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectineus",
           "role": "secondary"
         },
         {
@@ -449,7 +725,9 @@
       "additionalStabilityDemands": [],
       "evidenceRefs": [
         "serner-2014-hip-adduction-exercises",
-        "jensen-2014-elastic-hip-adduction-training"
+        "jensen-2014-elastic-hip-adduction-training",
+        "arnold-2010-lower-limb",
+        "lovell-2012-hip-adductor-tests"
       ],
       "execution": {
         "startingPosition": "Stand upright on the support leg, hold a stable external support with both hands, and secure an elastic band around the working ankle from the side. Move the straight working leg as far out to the side as is comfortable, keeping tension in the band and the leg slightly behind you.",
@@ -469,23 +747,80 @@
     {
       "catalogID": "technogym-bilateral-seated-hip-adduction",
       "name": "Technogym Seated Hip Adduction Machine",
-      "aliases": ["Seated Hip Adduction Machine", "Hip Adductor Machine"],
-      "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
-      "bodyweightFraction": 0, "defaultWeight": 40, "defaultWeightKg": 20, "reps": 12, "searchPriority": 90,
+      "aliases": [
+        "Seated Hip Adduction Machine",
+        "Hip Adductor Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 40,
+      "defaultWeightKg": 20,
+      "reps": 12,
+      "searchPriority": 90,
       "involvement": [
-        {"muscle": "adductorLongusBrevis", "role": "primary"}, {"muscle": "gracilis", "role": "secondary"},
-        {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}
+        {
+          "muscle": "adductorLongusBrevis",
+          "role": "primary"
+        },
+        {
+          "muscle": "gracilis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "adductorMagnus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectineus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
-        "kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "machineBackPad", "handSupport": "machineHandles",
-        "pelvisSupport": "machineSeatAndBackPad", "pelvisMotion": "positionHeld", "spineMotion": "positionHeld", "hipMotion": "adducts",
-        "hipStartPosition": "fortyFiveDegreesAbduction", "frontalEndDistance": "anatomicalNeutralZeroDegrees", "hipSagittalPosture": "flexed80Degrees",
-        "hipRotation": "unreported", "kneeMotion": "positionHeld", "kneePosture": "flexedApproximately90Degrees", "movingSegment": "thigh",
-        "loadInterface": "medialThighPads", "resistanceGeometry": "selectorizedIsotonicLever", "machineFixture": "technogymSeatedAdductorModelUnreported",
-        "cadence": "oneSecondConcentricOneSecondEccentric", "fixedPath": true, "lowerBodyContribution": "isolatedJointMotion"
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "machineBackPad",
+        "handSupport": "machineHandles",
+        "pelvisSupport": "machineSeatAndBackPad",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "adducts",
+        "hipStartPosition": "fortyFiveDegreesAbduction",
+        "frontalEndDistance": "anatomicalNeutralZeroDegrees",
+        "hipSagittalPosture": "flexed80Degrees",
+        "hipRotation": "unreported",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "flexedApproximately90Degrees",
+        "movingSegment": "thigh",
+        "loadInterface": "medialThighPads",
+        "resistanceGeometry": "selectorizedIsotonicLever",
+        "machineFixture": "technogymSeatedAdductorModelUnreported",
+        "cadence": "oneSecondConcentricOneSecondEccentric",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
       },
-      "additionalPrimeActions": [], "additionalStabilityDemands": [],
-      "evidenceRefs": ["arnold-2010-lower-limb", "brandt-2013-machine-hip-abduction-adduction"],
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "brandt-2013-machine-hip-abduction-adduction",
+        "lovell-2012-hip-adductor-tests"
+      ],
       "execution": {
         "startingPosition": "Sit upright against the Technogym support at about eighty degrees of hip flexion with the knees near ninety degrees, hips opened about forty-five degrees, inner thighs against the pads, and hands on the handles.",
         "movement": "Move both thighs together over approximately one second toward the neutral position.",
@@ -493,8 +828,103 @@
         "returnPhase": "Open both thighs back to approximately forty-five degrees over one second while controlling the lever.",
         "controlledJoints": "Keep the pelvis, spine, and knees still and move both thighs symmetrically.",
         "supportAndPosture": "Remain upright against the back support with both hands on the handles.",
-        "disqualifyingCompensations": ["Rocking the trunk or pelvis changes the isolated machine movement.", "Bouncing, moving the knees, or allowing asymmetric travel changes the reviewed two-leg fixture."]
+        "disqualifyingCompensations": [
+          "Rocking the trunk or pelvis changes the isolated machine movement.",
+          "Bouncing, moving the knees, or allowing asymmetric travel changes the reviewed two-leg fixture."
+        ]
       }
+    },
+    {
+      "catalogID": "supported-standing-cable-hip-adduction",
+      "name": "Supported Standing Cable Hip Adduction",
+      "aliases": [
+        "Standing Cable Hip Adduction",
+        "Cable Hip Adduction"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "reps": 10,
+      "searchPriority": 92,
+      "involvement": [
+        {
+          "muscle": "adductorLongusBrevis",
+          "role": "primary"
+        },
+        {
+          "muscle": "gracilis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "adductorMagnus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectineus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "handSupport": "ipsilateralHandOnUpright",
+        "pelvisSupport": "unsupportedStanding",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "adducts",
+        "hipStartPosition": "comfortableAbductionUnderCableTension",
+        "frontalEndDistance": "directlyInFrontOfStanceFoot",
+        "hipSagittalPosture": "slightFlexionHeld",
+        "hipRotation": "neutral",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "extended",
+        "movingSegment": "thigh",
+        "loadInterface": "cableCuffAtAnkle",
+        "resistanceGeometry": "lateralLowPulley",
+        "machineFixture": "notApplicable",
+        "cadence": "controlledWithBriefEndpointPause",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "life-fitness-2008-cable-motion-dap",
+        "arnold-2010-lower-limb",
+        "lovell-2012-hip-adductor-tests"
+      ],
+      "execution": {
+        "startingPosition": "Stand side-on to a low pulley with the cuff just above the nearer ankle. Hold the upright with the nearer hand, soften the stance knee, and place the straight working leg out to the side under cable tension, slightly forward for foot clearance.",
+        "movement": "Pull the straight working leg inward along the same side-to-side path.",
+        "endpoint": "Stop with the working foot directly in front of the stance foot and pause briefly.",
+        "returnPhase": "Return slowly to the starting position out to the side while keeping cable tension.",
+        "controlledJoints": "Keep the working knee straight, toes forward, and the pelvis and trunk still. Hold the small forward hip position throughout.",
+        "supportAndPosture": "Keep the nearer hand on the upright and the stance foot planted.",
+        "disqualifyingCompensations": [
+          "Swinging forward or backward adds hip flexion or extension.",
+          "Bending the working knee or stepping across changes the isolated movement.",
+          "Leaning sideways or twisting substitutes trunk motion."
+        ],
+        "sideOrDirection": "Finish the repetitions on one side, then turn around and repeat on the other side."
+      },
+      "defaultWeightKg": 5
     }
   ]
 }

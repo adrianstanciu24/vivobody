@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 106.
+Scenario files: 109.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -27,6 +27,8 @@ Scenario files: 106.
 | [archive-to-history](archive-to-history.json) | today | `--ui-test-active-partial` |
 | [catalog-ab-wheel-expansion](catalog-ab-wheel-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-active-dead-hang](catalog-active-dead-hang.json) | library | `--static-body` |
+| [catalog-adductor-coverage](catalog-adductor-coverage.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-adductor-machine-light](catalog-adductor-machine-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-cable-expansion](catalog-cable-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-comprehensive-expansion](catalog-comprehensive-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-default-candidate-follow-up](catalog-default-candidate-follow-up.json) | library | `--static-body -settings.appearance dark` |
@@ -40,6 +42,7 @@ Scenario files: 106.
 | [catalog-machine-first-wave-pec-fly](catalog-machine-first-wave-pec-fly.json) | library | `--static-body -settings.appearance light` |
 | [catalog-machine-preacher-curl](catalog-machine-preacher-curl.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-second-wave](catalog-machine-second-wave.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-magnus-extension](catalog-magnus-extension.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-must-have-expansion](catalog-must-have-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
 | [catalog-tfl-coverage](catalog-tfl-coverage.json) | library | `--static-body -settings.appearance dark` |

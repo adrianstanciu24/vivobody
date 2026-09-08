@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 98 |
-| Exercises | 235 |
+| Reviewed families | 99 |
+| Exercises | 237 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 263 |
+| Evidence sources | 268 |
 
 ## Family roster
 
@@ -34,6 +34,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [chest-fly](families/chest-fly.json) | 4 |
 | [clean-and-jerk](families/clean-and-jerk.json) | 1 |
 | [conventional-deadlift](families/conventional-deadlift.json) | 1 |
+| [copenhagen-adduction](families/copenhagen-adduction.json) | 1 |
 | [decline-press](families/decline-press.json) | 5 |
 | [diagonal-pull](families/diagonal-pull.json) | 1 |
 | [dip](families/dip.json) | 3 |
@@ -51,7 +52,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hang-power-snatch](families/hang-power-snatch.json) | 1 |
 | [hanging-leg-raise](families/hanging-leg-raise.json) | 2 |
 | [hip-abduction](families/hip-abduction.json) | 3 |
-| [hip-adduction](families/hip-adduction.json) | 2 |
+| [hip-adduction](families/hip-adduction.json) | 3 |
 | [hip-extension](families/hip-extension.json) | 3 |
 | [hip-external-rotation](families/hip-external-rotation.json) | 1 |
 | [hip-flexion](families/hip-flexion.json) | 2 |
