@@ -17,7 +17,7 @@
     {
       "scrollTo": {
         "selector": {
-          "identifier": "insightsMovementCoverageLink"
+          "identifier": "insightsMovementCoverageCard"
         },
         "direction": "up",
         "maxSwipes": 40
@@ -32,14 +32,17 @@
   ],
   "required": [
     {
-      "identifier": "insightsMovementCoverageLink",
-      "role": "AXButton",
+      "identifier": "insightsMovementCoverageCard",
       "labelContains": "All time"
     }
   ],
   "forbidden": [
     {
       "identifier": "insightsEmptyState"
+    },
+    {
+      "identifier": "insightsMovementCoverageCard",
+      "role": "AXButton"
     }
   ]
 }

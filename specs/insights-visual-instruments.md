@@ -25,7 +25,8 @@ labels.
 - Shape may link to **Exercise mix** and **Rep mix** details. Those are
   drill-outs, not permanent chapters in the main scroll.
 - Movement Coverage follows the Shape previews; Set-series Stamina follows Load;
-  Direct vs. Indirect follows Balance. Full rosters and definitions stay in drill-outs.
+  Direct vs. Indirect follows Balance. Movement Coverage is a standalone card;
+  other full rosters and definitions stay in drill-outs.
 - Balance shows a focused set of comparisons first and links to the full
   comparison board when more qualified pairs exist.
 - Empty and loading states continue to replace the instrument panel as a whole.
@@ -56,7 +57,7 @@ the supported Dynamic Type sizes.
 | Rep mix | Low, moderate, and high-rep sets | Stacked bar height by week and fill category | Last 12 weeks |
 | Training load | Rolling seven-day volume load when comparable load exists, otherwise estimated hard sets, versus personal range | Line position, range band, endpoint | Up to last 12 weeks; current read is 7 days |
 | Training rhythm | Completed sets by day and week | Calendar-cell intensity and weekly area | Last 6 months |
-| Movement coverage | Fractional hard-set share by anatomical plane | Three intersecting plane arcs with explicit percentages | All time |
+| Movement coverage | Fractional hard-set share by anatomical plane | Illustrated plane rows with share bars on a common 0–100% scale | All time |
 | Set-series stamina | Last/first reps in equal-weight runs | Retention rails; per-exercise rep traces and matched history | All time |
 | Direct vs. indirect | Muscle hard sets split by primary/secondary role | Stacked beams on a common scale | All time |
 | Training balance | Pair-relative effective sets | Mirrored beam length around a fixed center | Last 4 weeks |
@@ -160,19 +161,16 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
 - Use all completed archived sessions up to now, with no lower date cutoff; exclude
   future dates. Price exercises with SetStimulus, then split credit equally across
   unique snapshotted planes. The classified denominator counts each exercise once.
-- Show the same three-plane glyph as Exercise Detail with arc length encoding share.
-  Whole percentages use largest-remainder rounding and sum to 100 when data exists.
-- Unclassified hard sets remain visible and outside the denominator. Family actions
-  are looked up from immutable generated metadata through the captured family ID;
-  unknown family credit is disclosed in the drill-out.
-- The drill-out lists unrecorded planes and joint actions with owning catalog families.
-  Action coverage is at joint-action level, unioning ordered phases; produced,
-  resisted, and yielding actions remain distinct. Conditions remain part of the
-  authored family contract, rather than separate coverage categories. Stabilizers
-  and forbidden actions never count as performed actions.
-- Only actions owned by strength families that can earn hard-set credit enter the
-  gap roster. Missing coverage is a diary observation, never a recommendation or
-  a claim that unclassified work did not train that action.
+- Show three rows, each pairing a body-and-plane illustration with its anatomical
+  name, plain-language direction, whole percentage, and horizontal share bar.
+  All bars use the same 0–100% scale. Whole percentages use largest-remainder
+  rounding and sum to 100 when data exists; these are shares, not completion targets.
+- Keep the all-time hard-set scope visible. Unclassified hard sets remain visible
+  and outside the denominator.
+- The card has no navigation action, chevron, or detail screen. Unrecorded plane,
+  joint-action, and family rosters are not presented.
+- VoiceOver exposes each plane's direction, percentage, currency, and scope.
+  Labels and values stack at accessibility text sizes.
 
 ### Direct vs. Indirect
 

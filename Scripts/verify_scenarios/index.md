@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 109.
+Scenario files: 108.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -85,7 +85,6 @@ Scenario files: 109.
 | [insights-movement-coverage-accessibility](insights-movement-coverage-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [insights-movement-coverage-light](insights-movement-coverage-light.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light` |
 | [insights-movement-coverage](insights-movement-coverage.json) | insights | `--ui-test-insights-dimensions --static-body` |
-| [insights-movement-gaps](insights-movement-gaps.json) | insights | `--ui-test-insights-dimensions --static-body` |
 | [insights-muscle-directness-accessibility](insights-muscle-directness-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [insights-muscle-directness-light](insights-muscle-directness-light.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light` |
 | [insights-muscle-directness](insights-muscle-directness.json) | insights | `--ui-test-insights-dimensions --static-body` |

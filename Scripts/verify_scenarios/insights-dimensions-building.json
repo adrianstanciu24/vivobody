@@ -16,7 +16,7 @@
     {
       "scrollTo": {
         "selector": {
-          "identifier": "insightsMovementCoverageLink"
+          "identifier": "insightsMovementCoverageCard"
         },
         "direction": "up",
         "maxSwipes": 30
@@ -26,7 +26,7 @@
       "assert": {
         "required": [
           {
-            "identifier": "insightsMovementCoverageLink",
+            "identifier": "insightsMovementCoverageCard",
             "labelContains": "No classified hard sets"
           }
         ]

@@ -2,8 +2,9 @@
 //  TrainingDimensionsGallery.swift
 //  vivobody
 //
-//  DEBUG gallery for the shared plane glyph and rep-series instrument, including
-//  a held-back set. The live semantic fixtures verify the integrated screens.
+//  DEBUG gallery for the shared plane glyph, the coverage plane illustrations,
+//  and the rep-series instrument, including a held-back set. The live semantic
+//  fixtures verify the integrated screens.
 //
 
 import SwiftUI
@@ -21,6 +22,17 @@ import VivoKit
                         shares: [.sagittal: 0.91, .frontal: 0.06, .transverse: 0.03]
                     )
                     .frame(height: 180)
+                    ForEach([1.0, 2.0], id: \.self) { scale in
+                        HStack(spacing: Space.xxl) {
+                            ForEach(MovementPlane.allCases, id: \.self) { plane in
+                                MovementPlaneIllustration(plane: plane)
+                                    .frame(
+                                        width: MovementPlaneIllustration.designSize.width * scale,
+                                        height: MovementPlaneIllustration.designSize.height * scale
+                                    )
+                            }
+                        }
+                    }
                     Toggle("Higher RIR on last set", isOn: $heldBack)
                     ExerciseStaminaInstrument(report: ExerciseStamina(series: [run]))
                 }
