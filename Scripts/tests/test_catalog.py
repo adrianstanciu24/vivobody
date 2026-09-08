@@ -7432,6 +7432,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         expected_family_ids = {
+            "lateral-band-walk",
             "diagonal-pull",
             "forearm-pronation",
             "forearm-supination",
