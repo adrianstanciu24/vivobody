@@ -94,7 +94,13 @@ flexion with accessibility text sizing. Screenshots and accessibility trees
 were inspected under `.verify/scenarios/catalog-tfl-coverage/` and
 `.verify/tfl-review/`. Catalog generation and its family validation passed.
 The cable title and muscle roles remain readable at accessibility text sizing;
-the shared Movement panel wraps its narrow field labels awkwardly at that size.
-That existing layout is outside this catalog change.
+the review also found awkward wrapping in the shared Movement panel's narrow
+field labels. A subsequent UI fix stacks the diagram and full-width label/value
+pairs at accessibility sizes, following the
+[Movement presentation contract](../../exercise-data-contract.md#movement-panel-presentation).
+The focused `catalog-tfl-coverage` Baguette scenario passed after the fix.
+Movement screenshots and full-summary accessibility assertions for the supine
+raise are recorded under `.verify/movement-wrap/`, including standard dark
+and light appearances and Accessibility Large.
 The user runs the remaining catalog Python suite and broader validation;
 authored regression tests are not a claim that they ran.

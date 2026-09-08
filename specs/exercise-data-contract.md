@@ -39,6 +39,14 @@ supplemental `--family` inputs are never emitted.
 - Aliases are search synonyms only. Canonical names and aliases are unique after
   case-folding and whitespace normalization.
 
+## Movement panel presentation
+
+Exercise Detail keeps the plane diagram beside compact classification rows at
+standard text sizes. At accessibility Dynamic Type sizes, the diagram sits
+above full-width fields, with each label above its value. Labels and values
+retain their text size without narrow-column word splitting. VoiceOver reads
+the panel as one Movement summary with the authored classification.
+
 ## Muscle roles
 
 Each listed muscle has one categorical role:

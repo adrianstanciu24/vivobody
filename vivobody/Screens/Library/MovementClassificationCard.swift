@@ -6,7 +6,8 @@
 //  moves, rendered as a diagram instead of a sentence. A cardinal-plane glyph
 //  (sagittal / frontal / transverse drawn as three intersecting
 //  ellipses, active planes lit) sits beside rows for pattern,
-//  mechanic, and laterality. The glyph absorbs multiplane
+//  mechanic, and laterality. Accessibility sizes stack the glyph and
+//  full-width label/value pairs vertically. The glyph absorbs multiplane
 //  combinations that read awkwardly as text ("Sagittal + Frontal +
 //  Transverse"), and its presence lets the hero meta line slim down
 //  to equipment alone.
@@ -22,6 +23,8 @@ import SwiftUI
 import VivoKit
 
 struct MovementClassificationCard: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     let mechanic: Mechanic
     /// Pattern with direction folded in ("Horizontal push"). Nil for
     /// isolation work because MovementPattern is compound-specific.
@@ -35,12 +38,12 @@ struct MovementClassificationCard: View {
             Text("Movement")
                 .sectionLabelStyle(Opacity.medium)
 
-            HStack(alignment: .center, spacing: Space.xl) {
+            classificationLayout {
                 MovementPlanesGlyph(activePlanes: Set(planes))
                     .frame(width: 92, height: 92)
                     .accessibilityHidden(true)
 
-                VStack(alignment: .leading, spacing: Space.sm) {
+                VStack(alignment: .leading, spacing: dynamicTypeSize.isAccessibilitySize ? Space.md : Space.sm) {
                     if let movementLabel {
                         classificationRow(label: "Pattern", value: movementLabel)
                     } else if mechanic == .isolation, let trainingRole {
@@ -65,16 +68,22 @@ struct MovementClassificationCard: View {
         .accessibilityValue(accessibilitySummary)
     }
 
-    /// One keyed row in the same vocabulary as the anatomy legend
-    /// directly above: soft section label in a fixed column, value in
-    /// section-heading type. Keeping the two cards rhythm-aligned
-    /// makes the screen read as one anatomy-and-movement unit.
+    private var classificationLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.lg))
+            : AnyLayout(HStackLayout(alignment: .center, spacing: Space.xl))
+    }
+
+    /// Accessibility sizes give each label and value the full card width.
     private func classificationRow(label: String, value: String) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
+            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.md))
+        return layout {
             Text(label)
                 .sectionLabelStyle(Opacity.soft)
-                .minimumScaleFactor(0.7)
-                .frame(width: 76, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 76, alignment: .leading)
             Text(value)
                 .font(Typography.sectionHeading)
                 .foregroundStyle(Ink.secondary)
