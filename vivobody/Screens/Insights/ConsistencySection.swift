@@ -17,6 +17,8 @@ import VivoKit
 
 struct ConsistencySection: View {
     let report: ConsistencyReport
+    let allTimeSessionsPerWeek: Double
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private let settledRhythmWorkouts = 4
 
@@ -67,13 +69,29 @@ struct ConsistencySection: View {
 
     private var calendarCard: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            MetricView(
-                label: "Workouts / week",
-                value: InsightsFormat.perWeekLabel(report.sessionsPerWeek),
-                valueFont: Typography.metricLg,
-                accent: true,
-                accentColor: Tint.primaryText
-            )
+            Text("Workouts / week").panelLegend()
+            let cadenceLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.lg))
+                : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.xl))
+            cadenceLayout {
+                MetricView(
+                    label: "Last 4 weeks",
+                    value: InsightsFormat.perWeekLabel(report.sessionsPerWeek),
+                    valueFont: Typography.metricLg,
+                    accent: true,
+                    accentColor: Tint.primaryText
+                )
+                .accessibilityLabel("\(InsightsFormat.perWeekLabel(report.sessionsPerWeek)) workouts per week, last 4 weeks")
+                .accessibilityIdentifier("insightsRecentCadence")
+                MetricView(
+                    label: "All time",
+                    value: InsightsFormat.perWeekLabel(allTimeSessionsPerWeek),
+                    valueFont: .system(size: 26, weight: .bold, design: .monospaced)
+                )
+                .accessibilityLabel("\(InsightsFormat.perWeekLabel(allTimeSessionsPerWeek)) workouts per week, all time")
+                .accessibilityIdentifier("insightsLifetimeCadence")
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             ConsistencyHeatmap(
                 weeks: report.weeks,

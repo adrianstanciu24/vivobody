@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  First-to-last rep retention by movement pattern, with a common 100% rail.
-//  Matched changes and individual exercise series live in the drill-out.
+//  The drill-out compares movement patterns; exercise history lives in Exercise Detail.
 //
 
 import SwiftUI
@@ -30,12 +30,13 @@ struct StaminaSection: View {
                     Text("Three completed sets at the same weight reveal how reps hold up.")
                         .font(Typography.body).foregroundStyle(Ink.secondary)
                 } else {
+                    Text("Reps retained compared with your first set.")
+                        .font(Typography.caption).foregroundStyle(Ink.secondary)
                     VStack(alignment: .leading, spacing: Space.xl) {
                         ForEach(Array(report.patterns.prefix(3))) { pattern in
                             StaminaPatternBeam(pattern: pattern, scale: scale)
                         }
                     }
-                    Text("100% = first-set reps").font(Typography.caption).foregroundStyle(Ink.secondary)
                 }
             }
             .padding(Space.xl).contentCard()
@@ -45,7 +46,7 @@ struct StaminaSection: View {
         .accessibilityAddTraits(.isButton)
         .accessibilityIdentifier("insightsStaminaLink")
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint("Opens all patterns, matched trends, and individual set series")
+        .accessibilityHint("Opens all movement patterns and comparable changes")
     }
 
     private var scale: Double {
@@ -102,51 +103,22 @@ private struct StaminaDetail: View {
                     VStack(alignment: .leading, spacing: Space.lg) {
                         StaminaPatternBeam(pattern: pattern, scale: max(1, report.patterns.map(\.retention).max() ?? 1))
                         if let change = pattern.change {
-                            Text("\(change >= 0 ? "+" : "")\(Int((change * 100).rounded())) pts · first → latest matched")
+                            let points = Int((change * 100).rounded())
+                            Text(points == 0
+                                ? "No change across comparable series"
+                                : "\(abs(points)) percentage \(abs(points) == 1 ? "point" : "points") \(points > 0 ? "increase" : "decrease") across comparable series")
                                 .font(Typography.caption).foregroundStyle(Ink.secondary)
                         }
-                        Text("\(pattern.series.count) series · all time")
+                        Text("Based on \(pattern.series.count) set series · all time")
                             .font(Typography.caption).foregroundStyle(Ink.secondary)
                     }
                     .padding(Space.xl).contentCard()
                 }
-                Text("Exercise series · all time").font(Typography.title).accessibilityAddTraits(.isHeader)
-                ForEach(exercises, id: \.0) { key, exercise in
-                    NavigationLink {
-                        InsightsDrilloutScreen(title: exercise.latest?.name ?? "Exercise series") {
-                            ExerciseStaminaInstrument(report: exercise)
-                        }
-                    } label: {
-                        HStack(alignment: .firstTextBaseline, spacing: Space.md) {
-                            Text(exercise.latest?.name ?? "Exercise").font(Typography.headline)
-                                .foregroundStyle(Ink.primary)
-                            Spacer(minLength: 0)
-                            Image(systemName: "chevron.right").foregroundStyle(Ink.tertiary)
-                        }
-                        .frame(minHeight: 44).padding(Space.lg).contentCard()
-                    }
-                    .buttonStyle(.plain).accessibilityIdentifier("staminaExercise-\(key)")
-                }
-                if exercises.isEmpty {
-                    Text("Complete at least three sets at identical weight within an exercise.")
+                if report.patterns.isEmpty {
+                    Text("Complete at least three sets at identical weight within a compound exercise.")
                         .font(Typography.body).foregroundStyle(Ink.secondary)
                 }
-                DisclosureGroup("What counts") {
-                    VStack(alignment: .leading, spacing: Space.md) {
-                        Text("Only completed rep-based strength runs with three or more consecutive sets at identical logged weight count. The read is last-set reps divided by first-set reps; values above 100% mean reps increased.")
-                        Text("A later set with higher logged RIR is marked held back and its series stays out of the pattern average. Unlogged RIR remains unknown. This describes reps, not measured fatigue or recovery.")
-                        Text("Trends compare the first and latest matching series across your history. They match exercise, load, series length, first-set reps and effort logging. Different loads do not create an improvement signal.")
-                        Text("All time: \(report.heldBackCount) held-back series excluded; \(report.unratedCount) included series with unrated effort; \(report.unclassifiedCount) without a compound pattern.")
-                    }
-                    .font(Typography.body).foregroundStyle(Ink.secondary).padding(.top, Space.sm)
-                }
-                .font(Typography.body).frame(minHeight: 44)
             }
         }
-    }
-
-    private var exercises: [(String, ExerciseStamina)] {
-        report.byExercise.sorted { ($0.value.latest?.name ?? "") < ($1.value.latest?.name ?? "") }
-            .map { ($0.key, $0.value) }
     }
 }

@@ -43,10 +43,10 @@
     {
       "scrollTo": {
         "selector": {
-          "identifier": "exerciseStaminaTrace"
+          "identifier": "exerciseStaminaTrend"
         },
         "direction": "up",
-        "maxSwipes": 10
+        "maxSwipes": 15
       }
     },
     {
@@ -58,8 +58,12 @@
   ],
   "required": [
     {
-      "identifier": "exerciseStaminaTrace",
-      "labelContains": "80 percent"
+      "identifier": "exerciseStaminaTrend",
+      "labelContains": "Set-series history. All time."
+    },
+    {
+      "identifier": "exerciseStaminaOverall",
+      "labelContains": "70 percent"
     }
   ],
   "forbidden": [
@@ -68,6 +72,12 @@
     },
     {
       "labelContains": "Unlock Vivobody Pro"
+    },
+    {
+      "identifier": "exerciseStaminaTrace"
+    },
+    {
+      "label": "What counts"
     }
   ]
 }

@@ -72,7 +72,7 @@
   "required": [
     {
       "identifier": "insightsBalance-isolation-push-pull",
-      "labelContains": "Isolation Push"
+      "labelContains": "all time"
     }
   ],
   "forbidden": []

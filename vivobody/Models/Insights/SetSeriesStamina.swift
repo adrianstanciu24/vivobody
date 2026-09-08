@@ -65,6 +65,17 @@ nonisolated struct ExerciseStamina: Hashable {
         series.last
     }
 
+    /// Equal weight per series, matching the movement summary's retention currency.
+    var includedSeries: [StaminaSeries] {
+        series.filter { !$0.isHeldBack }
+    }
+
+    var overallRetention: Double? {
+        let included = includedSeries
+        guard !included.isEmpty else { return nil }
+        return included.reduce(0) { $0 + $1.retention } / Double(included.count)
+    }
+
     /// Show the latest run's matched history; never silently switch loads.
     var trend: [StaminaSeries] {
         guard let key = latest?.comparisonKey else { return [] }

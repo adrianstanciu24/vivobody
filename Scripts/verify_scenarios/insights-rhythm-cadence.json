@@ -1,5 +1,5 @@
 {
-  "name": "insights-muscle-directness",
+  "name": "insights-rhythm-cadence",
   "launch": {
     "reset": true,
     "tab": "insights",
@@ -17,29 +17,27 @@
     {
       "scrollTo": {
         "selector": {
-          "identifier": "insightsMuscleDirectnessLink"
+          "identifier": "insightsRhythmInstrument"
         },
         "direction": "up",
-        "maxSwipes": 40
+        "maxSwipes": 30
       }
     },
     {
       "swipe": {
         "direction": "up",
-        "count": 2
+        "count": 1
       }
     }
   ],
   "required": [
     {
-      "identifier": "insightsMuscleDirectnessLink",
-      "role": "AXButton",
-      "labelContains": "Supporting work only"
-    }
-  ],
-  "forbidden": [
+      "identifier": "insightsRecentCadence",
+      "labelContains": "workouts per week, last 4 weeks"
+    },
     {
-      "identifier": "insightsEmptyState"
+      "identifier": "insightsLifetimeCadence",
+      "labelContains": "workouts per week, all time"
     }
   ]
 }

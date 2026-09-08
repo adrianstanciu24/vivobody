@@ -1,5 +1,5 @@
 {
-  "name": "exercise-detail-stamina",
+  "name": "exercise-detail-stamina-series",
   "launch": {
     "reset": true,
     "tab": "library",
@@ -41,41 +41,37 @@
     {
       "scrollTo": {
         "selector": {
-          "identifier": "exerciseStaminaTrend"
+          "identifier": "exerciseStaminaSeriesLink"
         },
         "direction": "up",
         "maxSwipes": 15
       }
     },
     {
-      "swipe": {
-        "direction": "up",
-        "count": 1
+      "tap": {
+        "identifier": "exerciseStaminaSeriesLink"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exerciseStaminaLatestSeries"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exerciseStaminaTrace"
       }
     }
   ],
   "required": [
     {
-      "identifier": "exerciseStaminaTrend",
-      "labelContains": "Set-series history. All time."
-    },
-    {
-      "identifier": "exerciseStaminaOverall",
-      "labelContains": "70 percent"
+      "identifier": "exerciseStaminaTrace",
+      "labelContains": "80 percent"
     }
   ],
   "forbidden": [
     {
-      "identifier": "insightsEmptyState"
-    },
-    {
-      "labelContains": "Unlock Vivobody Pro"
-    },
-    {
-      "identifier": "exerciseStaminaTrace"
-    },
-    {
-      "label": "What counts"
+      "identifier": "exerciseStaminaTrend"
     }
   ]
 }

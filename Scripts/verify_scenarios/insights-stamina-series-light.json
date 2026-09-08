@@ -34,40 +34,28 @@
       "wait": {
         "identifier": "staminaPatterns"
       }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "identifier": "staminaExercise-bundled:barbell-bench-press"
-        },
-        "direction": "up",
-        "maxSwipes": 40
-      }
-    },
-    {
-      "tap": {
-        "identifier": "staminaExercise-bundled:barbell-bench-press"
-      }
-    },
-    {
-      "wait": {
-        "identifier": "exerciseStaminaTrace"
-      }
     }
   ],
   "required": [
     {
-      "identifier": "exerciseStaminaTrace",
-      "labelContains": "80 percent"
+      "identifier": "staminaPatterns"
     },
     {
-      "identifier": "exerciseStaminaTrend",
-      "labelContains": "All time"
+      "label": "Based on 8 set series · all time"
     }
   ],
   "forbidden": [
     {
-      "identifier": "insightsEmptyState"
+      "identifier": "exerciseStaminaTrend"
+    },
+    {
+      "label": "Exercise series · all time"
+    },
+    {
+      "identifier": "staminaExercise-bundled:barbell-bench-press"
+    },
+    {
+      "label": "What counts"
     }
   ]
 }

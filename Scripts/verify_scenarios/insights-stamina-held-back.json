@@ -22,44 +22,12 @@
         "direction": "up",
         "maxSwipes": 40
       }
-    },
-    {
-      "tap": {
-        "identifier": "insightsStaminaLink"
-      }
-    },
-    {
-      "wait": {
-        "identifier": "staminaPatterns"
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "identifier": "staminaExercise-bundled:barbell-split-squat"
-        },
-        "direction": "up",
-        "maxSwipes": 40
-      }
-    },
-    {
-      "tap": {
-        "identifier": "staminaExercise-bundled:barbell-split-squat"
-      }
-    },
-    {
-      "wait": {
-        "identifier": "exerciseStaminaTrace"
-      }
     }
   ],
   "required": [
     {
-      "identifier": "exerciseStaminaTrace",
-      "labelContains": "held back"
-    },
-    {
-      "label": "Held back"
+      "identifier": "insightsStaminaLink",
+      "labelContains": "1 held-back series excluded"
     }
   ],
   "forbidden": [

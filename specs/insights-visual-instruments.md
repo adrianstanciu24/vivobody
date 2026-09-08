@@ -25,7 +25,7 @@ labels.
 - Shape may link to **Exercise mix** and **Rep mix** details. Those are
   drill-outs, not permanent chapters in the main scroll.
 - Movement Coverage follows the Shape previews; Set-series Stamina follows Load;
-  Direct vs. Indirect follows Balance. Movement Coverage is a standalone card;
+  How muscles are trained follows Balance. Movement Coverage is a standalone card;
   other full rosters and definitions stay in drill-outs.
 - Balance shows a focused set of comparisons first and links to the full
   comparison board when more qualified pairs exist.
@@ -58,9 +58,9 @@ the supported Dynamic Type sizes.
 | Training load | Rolling seven-day volume load when comparable load exists, otherwise estimated hard sets, versus personal range | Line position, range band, endpoint | Up to last 12 weeks; current read is 7 days |
 | Training rhythm | Completed sets by day and week | Calendar-cell intensity and weekly area | Last 6 months |
 | Movement coverage | Fractional hard-set share by anatomical plane | Illustrated plane rows with share bars on a common 0–100% scale | All time |
-| Set-series stamina | Last/first reps in equal-weight runs | Retention rails; per-exercise rep traces and matched history | All time |
-| Direct vs. indirect | Muscle hard sets split by primary/secondary role | Stacked beams on a common scale | All time |
-| Training balance | Pair-relative effective sets | Mirrored beam length around a fixed center | Last 4 weeks |
+| Set-series stamina | Last/first reps in equal-weight runs | Movement retention rails and comparable changes | All time |
+| How muscles are trained | Within-muscle targeted/supporting credit shares | Two-color 24pt proportional capsules | All time |
+| Training balance | Pair-relative effective sets | Two-color proportional capsule segments | All time |
 
 Orange identifies the primary series, dominant category, or active control.
 Secondary series step down through neutral `Ink` tokens. Color never carries a
@@ -79,7 +79,7 @@ meaning that is absent from position, length, label, or accessibility value.
 - Exercise mix and Rep mix appear as compact visual navigation cards. Their
   full charts live on dedicated detail screens. Keep the two previews grouped
   closely, with less padding and visual weight than the main instruments.
-  Each preview names its leading category and percentage above a slim share
+  Each preview names its leading category and percentage above a 24pt share
   bar; keep the last-four-weeks scope visible. Names and values retain their
   readable type sizes, wrap freely, and stack at accessibility text sizes.
   When recent data is absent, use a short factual label without an empty chart.
@@ -115,7 +115,12 @@ meaning that is absent from position, length, label, or accessibility value.
 
 ### Rhythm
 
-- Lead with weekly cadence and the six-month training calendar.
+- Lead with recent versus lifetime weekly cadence and the six-month training calendar.
+  Share a “Workouts / week” heading: orange “Last 4 weeks” uses the trailing
+  28-day session count divided by four; neutral-primary “All time” uses the
+  existing lifetime average, including inactive weeks (minimum seven-day span).
+  Keep the values close together, aligned on their numeric baseline; the lifetime
+  value is smaller (26pt versus 40pt). Stack them at accessibility text sizes.
 - Weekly-set direction is a compact companion visual inside the same card,
   separated from the daily heatmap by a quiet hairline.
 - Days trained and average RIR are supporting reads. Rep-range distribution
@@ -123,8 +128,20 @@ meaning that is absent from position, length, label, or accessibility value.
 
 ### Balance
 
-- Lead with the highest-priority qualified balance comparisons as mirrored
-  tug-of-war beams.
+- Aggregate all recorded workout history through the report date, excluding
+  future-dated sessions, in both the preview and full comparison list.
+
+- Preview qualified Horizontal Push/Pull, Vertical Push/Pull, then Compound
+  Push/Pull in that fixed order; other pairs live in All comparisons. The
+  Horizontal Push label includes diagonal pushing work.
+- Render qualified comparisons as two rounded capsule
+  segments, 24pt tall, separated by a small gap, with 32pt between comparison
+  rows. Orange represents the left named side and
+  neutral gray the right; segment widths reflect their shares of the pair total.
+  Names share one line above the bar in headline type; the complementary
+  whole percentages sit beneath them in compact metric type, anchored to the
+  bar's leading and trailing ends. At accessibility sizes each side stacks as
+  its own name-and-number line. Omit set totals, center markers, and empty tracks.
 - Do not permanently show threshold explanations, comparison counts, or all
   qualified rows above the fold.
 - Distribution-only pairs remain explicitly descriptive and never imply that
@@ -172,19 +189,30 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
 - VoiceOver exposes each plane's direction, percentage, currency, and scope.
   Labels and values stack at accessibility text sizes.
 
-### Direct vs. Indirect
+### How muscles are trained
 
 - Use the same all-time completed history and SetStimulus pricing. Primary snapshot
   credit 1.0 enters direct work; secondary 0.5 and stabilizer 0.1 enter indirect work. These are credited hard sets, not literal exercise-set counts.
-- The headline names the muscle with most indirect hard-set credit. Bars compare
-  direct and indirect work on one common scale; text labels carry both roles.
-- The roster covers every muscle, including a collapsed no-recorded-work list. Each
+- Preview the muscles with most supporting credit. Label primary work “targeted”
+  and secondary/stabilizing work “supporting”; show complementary whole percentages
+  instead of weighted set totals. Pure-role rows say “Supporting work only” or
+  “Targeted work only.”
+- Each muscle has a full-width 24pt two-color capsule bar: orange targeted and gray
+  supporting, separated by 3pt when both exist, with no unused track. Preview rows
+  have 32pt spacing. Zero-work rows show no percentage or bar.
+- Keep “All time” visible. Source exercises show their share of supporting work.
+- The roster includes only muscles with recorded work, without footer disclosures. Each
   muscle detail shows its indirect exercise sources and up to three current bundled
   exercises where it is authored primary, preferring family variety. Examples link
   to Exercise Detail and do not prescribe exercise selection.
 
 ### Set-Series Stamina
 
+- The preview explains “Reps retained compared with your first set.” below
+  “Reps held · all time” and above the pattern rows, applying to the whole card.
+- Pattern details describe rounded retention changes across comparable series
+  in percentage points, using “No change across comparable series” for zero.
+  Their sample count reads “Based on N set series · all time”.
 - Use only archived dynamic-strength, rep-tracked exercises. Within one exercise
   occurrence, consecutive completed positive-rep sets at exactly identical finite
   nonnegative logged weight form a run. At least three sets are required. Invalid,
@@ -202,12 +230,17 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
   date for each key across all history. Multiple runs at either endpoint contribute
   their mean retention; a key needs two distinct dates. Average the differences
   across matched keys, excluding unmatched prescriptions. Label the change
-  “first → latest matched”; there is no rolling comparison window.
+  in percentage points across comparable series; there is no rolling comparison window.
+- Insights stamina detail contains movement patterns only: retention, comparable
+  change, and series counts. No “What counts” disclosure, exercise roster, or
+  exercise-level graph appears there.
 - Exercise Detail receives indexed reports from the same core analytics generation.
-  It stays outside active-workout exercise picking. It shows the latest eligible
-  run and its full matched history; higher RIR sets have diamond marks. Dates
-  identify the year when history spans years. This derived section is available whenever qualifying data exists.
-  No qualifying run hides the exercise section; Insights retains its building state.
+  It stays outside active-workout exercise picking. Its overall average and history
+  include every non-held-back series across all time, even when loads or set counts
+  differ or resistance is unquantified. Each series receives equal weight. Individual
+  runs, including held-back traces with diamond marks, are available on demand.
+  Dates identify the year when history spans years. No qualifying run hides the
+  exercise section; held-back-only history shows an empty average with series access.
 - Retention is a descriptive rep signal; rest duration, fatigue, and physiological
   recovery are not measured. No timer or logging behavior changes.
 

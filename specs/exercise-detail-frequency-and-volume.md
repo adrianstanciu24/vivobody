@@ -201,8 +201,16 @@ Swift Testing, deterministic clocks (inject `now` everywhere):
 
 Exercise Detail also shows the stamina instrument after Effort and before
 Recent sessions when a qualifying run exists anywhere in completed history. It shows
-rep-by-set values, retained reps, held-back marks, logged weight and date, and
-same-load history when at least two matching runs exist. The exact eligibility,
+overall reps retained (the arithmetic mean of included series ratios), an all-time
+history chart with one point per included series, and the included series count.
+Loads and set counts may vary; this is descriptive history, not an improvement
+claim. Held-back series stay out of the average and chart. Unquantified resistance
+can still contribute rep retention. A held-back-only history shows a factual empty
+average state. Selecting a date offers its nearest series; “View set series” lists
+every run, including multiple runs on the same date and held-back runs. Each
+series is a distinct card row with a trailing chevron; the whole row opens details. Individual
+series open rep-by-set traces, load, date, and effort details on demand.
+The stamina card has no “What counts” disclosure. The exact eligibility,
 RIR, and matching contracts live in
 [Insights training dimensions](insights-visual-instruments.md#training-dimensions).
 The report is indexed by history key in `ExerciseDetailReports`, built from the

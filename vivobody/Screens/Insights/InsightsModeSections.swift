@@ -49,7 +49,9 @@ struct BalanceInsightsSection: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SymmetrySection(board: board, presentation: .focus)
 
-            if qualifiedCount > SymmetryPresentation.focusLimit {
+            if board.pairs.contains(where: {
+                $0.hasMeaningfulWork && !SymmetryPresentation.focusIDs.contains($0.id)
+            }) {
                 NavigationLink {
                     InsightsDrilloutScreen(title: "All comparisons") {
                         SymmetrySection(board: board, presentation: .full)
@@ -276,7 +278,7 @@ private func mixShareBar(leadingShare: Double) -> some View {
             }
         }
     }
-    .frame(height: Space.sm)
+    .frame(height: 24)
     .accessibilityHidden(true)
 }
 

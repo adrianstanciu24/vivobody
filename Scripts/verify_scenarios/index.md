@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 108.
+Scenario files: 111.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -63,6 +63,7 @@ Scenario files: 108.
 | [exercise-detail-stamina-accessibility](exercise-detail-stamina-accessibility.json) | library | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [exercise-detail-stamina-light](exercise-detail-stamina-light.json) | library | `--ui-test-insights-dimensions --static-body -settings.appearance light` |
 | [exercise-detail-stamina-locked](exercise-detail-stamina-locked.json) | library | `--ui-test-insights-dimensions --static-body` |
+| [exercise-detail-stamina-series](exercise-detail-stamina-series.json) | library | `--ui-test-insights-dimensions --static-body` |
 | [exercise-detail-stamina](exercise-detail-stamina.json) | library | `--ui-test-insights-dimensions --static-body` |
 | [exercise-detail-strength-building](exercise-detail-strength-building.json) | library | None declared |
 | [exercise-detail-strength-slots-partial](exercise-detail-strength-slots-partial.json) | library | `--ui-test-single-exercise-history` |
@@ -78,6 +79,7 @@ Scenario files: 108.
 | [exercise-picker-training-role-filters](exercise-picker-training-role-filters.json) | library | None declared |
 | [exercise-substitution-sheet](exercise-substitution-sheet.json) | today | `--ui-test-active-replaceable` |
 | [insights-accessibility](insights-accessibility.json) | insights | `--ui-test-insights-showcase -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [insights-balance-shares](insights-balance-shares.json) | insights | `--ui-test-insights-showcase --static-body` |
 | [insights-dimensions-building](insights-dimensions-building.json) | insights | `--ui-test-insights-empty-instruments` |
 | [insights-empty](insights-empty.json) | history | None declared |
 | [insights-hard-sets](insights-hard-sets.json) | insights | `--ui-test-insights-hard-sets` |
@@ -90,6 +92,7 @@ Scenario files: 108.
 | [insights-muscle-directness](insights-muscle-directness.json) | insights | `--ui-test-insights-dimensions --static-body` |
 | [insights-muscle-primary](insights-muscle-primary.json) | insights | `--ui-test-insights-dimensions --static-body` |
 | [insights-push-pull](insights-push-pull.json) | insights | `--ui-test-insights-showcase` |
+| [insights-rhythm-cadence](insights-rhythm-cadence.json) | insights | `--ui-test-insights-dimensions --static-body` |
 | [insights-shape-drillouts](insights-shape-drillouts.json) | insights | `--ui-test-insights-showcase` |
 | [insights-showcase](insights-showcase.json) | insights | `--ui-test-insights-showcase` |
 | [insights-stamina-accessibility](insights-stamina-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |

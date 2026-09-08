@@ -76,7 +76,10 @@ struct InsightsScreen: View {
 
             GroupSeparator(verticalPadding: Space.section)
 
-            ConsistencySection(report: deep.consistency)
+            ConsistencySection(
+                report: deep.consistency,
+                allTimeSessionsPerWeek: core.overview.averageWorkoutsPerWeek
+            )
 
             GroupSeparator(verticalPadding: Space.section)
 

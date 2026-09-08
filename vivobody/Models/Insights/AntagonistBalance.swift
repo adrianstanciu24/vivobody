@@ -8,7 +8,7 @@
 //  squat/hinge, biceps/triceps, and bilateral/unilateral work.
 //
 //  All comparisons share the `SetStimulus` hard-set currency
-//  over a 4-week window. Muscle comparisons retain role-based
+//  across all recorded history. Muscle comparisons retain role-based
 //  involvement credit; movement comparisons count each exercise's
 //  whole stimulus once.
 //
@@ -192,8 +192,6 @@ nonisolated struct AntagonistPair: Identifiable, Hashable {
 // MARK: - Board
 
 nonisolated struct AntagonistBoard {
-    /// Window over which both sides accumulate work.
-    static let windowDays = 28
     /// Within ±this share of 50/50 reads as balanced.
     static let tolerance = 0.10
     /// A pair needs at least this much combined work to be judged.
@@ -231,8 +229,8 @@ nonisolated struct AntagonistBoard {
 
 @MainActor
 extension [WorkoutSession] {
-    /// Effective-set split for each antagonist pair over the trailing
-    /// 4 weeks as of `now`.
+    /// Effective-set split for each antagonist pair across all history
+    /// through `now`.
     func antagonistBalance(now: Date = Date()) -> AntagonistBoard {
         AnalyticsAccumulator.replay(self).antagonistBalance(now: now)
     }
@@ -245,9 +243,6 @@ nonisolated extension AnalyticsAccumulator {
         now: Date = Date(),
         isCancelled: @Sendable () -> Bool = { false }
     ) -> AntagonistBoard {
-        let cutoff = now.addingTimeInterval(
-            -Double(AntagonistBoard.windowDays) * 86400
-        )
         var muscleSets: [SymmetryMuscleBucket: Double] = [:]
         var movementSets: [SymmetryMovementBucket: Double] = [:]
         var muscleSessions: [SymmetryMuscleBucket: Set<UUID>] = [:]
@@ -260,7 +255,7 @@ nonisolated extension AnalyticsAccumulator {
             for exercise in session.exercises {
                 guard !isCancelled() else { break sessionLoop }
                 let stimulus = exercise.setEquivalent
-                guard session.date >= cutoff, stimulus > 0 else { continue }
+                guard stimulus > 0 else { continue }
 
                 var strongestCreditByBucket: [SymmetryMuscleBucket: Double] = [:]
                 for (muscle, credit) in exercise.byMuscle {
@@ -357,7 +352,7 @@ nonisolated extension AnalyticsAccumulator {
             ),
             movementPair(
                 "horizontal-push-pull",
-                "Horizontal + Diagonal Push", .horizontalPush,
+                "Horizontal Push", .horizontalPush,
                 "Horizontal Pull", .horizontalPull
             ),
             movementPair(

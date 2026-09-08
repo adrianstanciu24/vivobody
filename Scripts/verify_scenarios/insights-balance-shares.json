@@ -1,0 +1,52 @@
+{
+  "name": "insights-balance-shares",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-showcase",
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceInstrument"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsBalance-horizontal-push-pull",
+      "labelContains": "all time"
+    },
+    {
+      "identifier": "insightsBalance-vertical-push-pull",
+      "labelContains": "all time"
+    },
+    {
+      "identifier": "insightsBalance-compound-push-pull",
+      "labelContains": "all time"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsBalance-quad-ham"
+    }
+  ]
+}

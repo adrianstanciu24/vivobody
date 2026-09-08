@@ -6,7 +6,7 @@
 //  role-based muscle comparisons, whole-exercise movement comparisons,
 //  mechanic-separated and directional push/pull, squat/hinge filtering,
 //  laterality counting,
-//  chronological hard-set pricing, and the 28-day/future boundaries
+//  chronological hard-set pricing, and all-time inclusion and future boundaries
 //  on a virtual clock.
 //
 
@@ -324,7 +324,7 @@ struct AntagonistBalanceTests {
         expectEqual(board.pair("compound-push-pull")?.leftSets, 7)
         let directional = board.pair("horizontal-push-pull")
         expectEqual(directional?.leftSets, 7)
-        #expect(directional?.leftLabel == "Horizontal + Diagonal Push")
+        #expect(directional?.leftLabel == "Horizontal Push")
         expectEqual(board.pair("vertical-push-pull")?.leftSets, 0)
     }
 
@@ -481,7 +481,7 @@ struct AntagonistBalanceTests {
         expectEqual(second, 4)
     }
 
-    @Test func respectsWindowAndExcludesFutureSessions() {
+    @Test func includesOldHistoryAndExcludesFutureSessions() {
         let old = session(
             at: day(0),
             [lift("Barbell Bench Press", .chest, sets: 2, weight: 300)]
@@ -498,7 +498,7 @@ struct AntagonistBalanceTests {
 
         let horizontal = board.pair("horizontal-push-pull")
         #expect(horizontal != nil)
-        expectEqual(horizontal?.leftSets, 4)
+        expectEqual(horizontal?.leftSets, 6)
         #expect(horizontal?.rightSets == 0)
         #expect(board.pair("vertical-push-pull")?.verdict == .noData)
     }

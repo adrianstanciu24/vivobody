@@ -2,9 +2,8 @@
 //  ExerciseStaminaSection.swift
 //  vivobody
 //
-//  Reuses one immutable stamina instrument in Exercise Detail and Insights.
-//  A rep-by-set trace and matched-load history expose both shape and scope;
-//  held-back sets have diamond marks and equivalent accessibility semantics.
+//  All-time exercise retention and individual series history.
+//  Movement comparisons belong to Insights; rep traces are available on demand.
 //
 
 import Charts
@@ -24,50 +23,108 @@ struct ExerciseStaminaSection: View {
 struct ExerciseStaminaInstrument: View {
     let report: ExerciseStamina
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var selectedDate: Date?
     @AppStorage(SettingsKey.weightUnit) private var unitRaw: String = SettingsDefaults.weightUnit
     private var unit: WeightUnit {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
     var body: some View {
-        if let latest = report.latest {
-            VStack(alignment: .leading, spacing: Space.lg) {
-                Text("Set-series stamina").font(Typography.title)
-                    .accessibilityIdentifier("exerciseStaminaSection").accessibilityAddTraits(.isHeader)
-                VStack(alignment: .leading, spacing: Space.xl) {
+        VStack(alignment: .leading, spacing: Space.lg) {
+            Text("Set-series stamina").font(Typography.title)
+                .accessibilityIdentifier("exerciseStaminaSection").accessibilityAddTraits(.isHeader)
+            VStack(alignment: .leading, spacing: Space.xl) {
+                if let retention = report.overallRetention {
                     VStack(alignment: .leading, spacing: Space.sm) {
-                        let layout = dynamicTypeSize.isAccessibilitySize
-                            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
-                            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.md))
-                        layout {
-                            Text(latest.isHeldBack ? "Held back" : "\(Int((latest.retention * 100).rounded()))%")
-                                .font(Typography.statValue).foregroundStyle(Tint.primaryText)
-                                .fixedSize(horizontal: false, vertical: true)
-                            if !latest.isHeldBack {
-                                Text("reps held").font(Typography.headline).foregroundStyle(Ink.secondary)
+                        Text("Overall · all time").panelLegend()
+                        Text("\(Int((retention * 100).rounded()))%")
+                            .font(Typography.statValue).foregroundStyle(Tint.primaryText)
+                            .accessibilityLabel("Overall reps retained, \(Int((retention * 100).rounded())) percent, all time")
+                            .accessibilityIdentifier("exerciseStaminaOverall")
+                        Text("Reps retained compared with your first set.")
+                            .font(Typography.caption).foregroundStyle(Ink.secondary)
+                        Text("Based on \(report.includedSeries.count) set series · all time")
+                            .font(Typography.caption).foregroundStyle(Ink.secondary)
+                    }
+                    trendChart
+                    Text("Each point is one set series. Weight and set count may vary.")
+                        .font(Typography.caption).foregroundStyle(Ink.secondary)
+                    if let selectedSeries {
+                        seriesLink(selectedSeries)
+                    }
+                } else {
+                    Text("Held-back series only").font(Typography.headline).foregroundStyle(Ink.primary)
+                    Text("No series available for the overall average yet.")
+                        .font(Typography.caption).foregroundStyle(Ink.secondary)
+                }
+                NavigationLink {
+                    InsightsDrilloutScreen(title: "Set series") {
+                        LazyVStack(alignment: .leading, spacing: Space.lg) {
+                            ForEach(report.series.reversed()) { series in
+                                seriesLink(series)
                             }
                         }
-                        Text("\(loadLabel(latest)) · \(latest.reps.count) sets")
-                            .font(Typography.headline).foregroundStyle(Ink.secondary)
-                        Text(latest.date, format: .dateTime.month(.abbreviated).day().year())
-                            .font(Typography.caption).foregroundStyle(Ink.tertiary)
                     }
-                    repsChart(latest)
-                    if latest.isHeldBack {
-                        Text("◆ Held back · higher logged RIR")
-                            .font(Typography.caption).foregroundStyle(Ink.secondary)
-                    } else if latest.hasUnratedSets {
-                        Text("Effort not fully logged").font(Typography.caption).foregroundStyle(Ink.secondary)
+                } label: {
+                    HStack {
+                        Text("View set series")
+                        Spacer()
+                        Image(systemName: "chevron.right")
                     }
-                    if report.trend.count >= 2 {
-                        Rectangle().fill(Surface.edge).frame(height: 0.5)
-                        Text("Same-load history").font(Typography.headline).foregroundStyle(Ink.secondary)
-                        trendChart
+                    .font(Typography.body).frame(minHeight: 44)
+                }
+                .accessibilityIdentifier("exerciseStaminaSeriesLink")
+            }
+            .padding(Space.xl).contentCard()
+        }
+    }
+
+    private var selectedSeries: StaminaSeries? {
+        guard let selectedDate else { return nil }
+        return report.includedSeries.min {
+            abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
+        }
+    }
+
+    private func seriesLink(_ series: StaminaSeries) -> some View {
+        NavigationLink {
+            InsightsDrilloutScreen(title: "Set series") {
+                VStack(alignment: .leading, spacing: Space.lg) {
+                    Text(series.date, format: .dateTime.month(.abbreviated).day().year())
+                        .font(Typography.title)
+                    Text("\(loadLabel(series)) · \(series.reps.count) sets")
+                        .font(Typography.headline)
+                    Text(series.isHeldBack ? "Held back" : "\(Int((series.retention * 100).rounded()))% reps retained")
+                        .font(Typography.headline).foregroundStyle(Tint.primaryText)
+                    repsChart(series)
+                    if series.isHeldBack {
+                        Text("◆ Held back · higher logged RIR. Excluded from the overall average.")
+                    } else if series.hasUnratedSets {
+                        Text("Effort not fully logged")
                     }
                 }
-                .padding(Space.xl).contentCard()
+                .font(Typography.body)
             }
+        } label: {
+            HStack(spacing: Space.lg) {
+                VStack(alignment: .leading, spacing: Space.xs) {
+                    Text(series.date, format: .dateTime.month(.abbreviated).day().year())
+                        .font(Typography.headline).foregroundStyle(Ink.primary)
+                    Text("\(loadLabel(series)) · \(series.reps.count) sets · \(series.isHeldBack ? "Held back" : "\(Int((series.retention * 100).rounded()))% retained")")
+                        .font(Typography.caption).foregroundStyle(Ink.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(Typography.caption).foregroundStyle(Ink.secondary)
+                    .accessibilityHidden(true)
+            }
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+            .padding(Space.lg).contentCard()
+            .contentShape(Rectangle())
         }
+        .accessibilityLabel(seriesAccessibility(series))
+        .accessibilityIdentifier(series.id == report.latest?.id ? "exerciseStaminaLatestSeries" : "exerciseStaminaSeries-\(series.id)")
     }
 
     private func loadLabel(_ series: StaminaSeries) -> String {
@@ -121,19 +178,18 @@ struct ExerciseStaminaInstrument: View {
         Chart {
             RuleMark(y: .value("First-set reps", 100)).foregroundStyle(Ink.quaternary)
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
-            ForEach(report.trend) { series in
-                LineMark(x: .value("Date", series.date), y: .value("Held", series.retention * 100))
-                    .foregroundStyle(Tint.primary).lineStyle(StrokeStyle(lineWidth: 2.5))
+            ForEach(report.includedSeries) { series in
                 PointMark(x: .value("Date", series.date), y: .value("Held", series.retention * 100))
-                    .foregroundStyle(Tint.primary).symbolSize(28)
+                    .foregroundStyle(Tint.primary).symbolSize(45)
             }
         }
-        .chartYScale(domain: 0 ... max(110, (report.trend.map(\.retention).max() ?? 1) * 110))
+        .chartYScale(domain: 0 ... max(110, (report.includedSeries.map(\.retention).max() ?? 1) * 110))
+        .chartXSelection(value: $selectedDate)
         .chartXScale(range: .plotDimension(startPadding: 12, endPadding: 24))
         .chartXAxis {
-            AxisMarks(values: [report.trend.first?.date, report.trend.last?.date].compactMap(\.self)) { value in
+            AxisMarks(values: Array(Set([report.includedSeries.first?.date, report.includedSeries.last?.date].compactMap(\.self))).sorted()) { value in
                 AxisGridLine().foregroundStyle(Surface.edge)
-                AxisValueLabel(anchor: value.as(Date.self) == report.trend.first?.date ? .topLeading : .topTrailing) {
+                AxisValueLabel(anchor: value.as(Date.self) == report.includedSeries.first?.date ? .topLeading : .topTrailing) {
                     if let date = value.as(Date.self) {
                         VStack(spacing: 0) {
                             Text(date, format: .dateTime.month(.abbreviated).day())
@@ -152,13 +208,13 @@ struct ExerciseStaminaInstrument: View {
         .frame(height: InsightChartCanvas.hero)
         .accessibilityElement(children: .ignore)
         .accessibilityIdentifier("exerciseStaminaTrend")
-        .accessibilityLabel("Same-load history. All time. " + report.trend.map {
+        .accessibilityLabel("Set-series history. All time. Each point is one series. " + report.includedSeries.map {
             "\($0.date.formatted(date: .abbreviated, time: .omitted)), \(Int(($0.retention * 100).rounded())) percent of first-set reps"
         }.joined(separator: ". "))
     }
 
     private var trendSpansYears: Bool {
-        guard let first = report.trend.first, let last = report.trend.last else { return false }
+        guard let first = report.includedSeries.first, let last = report.includedSeries.last else { return false }
         return Calendar.current.component(.year, from: first.date) != Calendar.current.component(.year, from: last.date)
     }
 
