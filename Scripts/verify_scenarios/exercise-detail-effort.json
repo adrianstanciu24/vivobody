@@ -1,0 +1,67 @@
+{
+  "name": "exercise-detail-effort",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+        },
+        "direction": "up",
+        "maxSwipes": 20
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Effort. Average RIR"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelContains": "Effort. Average RIR"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Grinding"
+    },
+    {
+      "labelContains": "hold or deload"
+    },
+    {
+      "labelContains": "Ready \u00b7"
+    },
+    {
+      "labelContains": "Push \u00b7"
+    }
+  ]
+}

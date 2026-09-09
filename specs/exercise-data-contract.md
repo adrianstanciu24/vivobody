@@ -41,8 +41,9 @@ supplemental `--family` inputs are never emitted.
 
 ## Movement panel presentation
 
-Exercise Detail keeps the plane diagram beside compact classification rows at
-standard text sizes. At accessibility Dynamic Type sizes, the diagram sits
+Exercise Detail reuses the Insights body-and-plane illustrations, one for each
+authored plane, beside compact classification rows at standard text sizes.
+At accessibility Dynamic Type sizes, the illustrations sit
 above full-width fields, with each label above its value. Labels and values
 retain their text size without narrow-column word splitting. VoiceOver reads
 the panel as one Movement summary with the authored classification.

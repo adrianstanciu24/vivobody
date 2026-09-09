@@ -31,14 +31,14 @@
     {
       "scrollTo": {
         "selector": {
-          "labelContains": "hard sets from this exercise"
+          "labelContains": "weighted sets from this exercise"
         },
         "direction": "up"
       }
     },
     {
       "wait": {
-        "labelContains": "hard sets from this exercise"
+        "labelContains": "weighted sets from this exercise"
       }
     },
     {
@@ -57,10 +57,10 @@
   ],
   "required": [
     {
-      "labelContains": "6.0 hard sets from this exercise this week"
+      "labelContains": "6.0 weighted sets from this exercise in the last 7 days"
     },
     {
-      "labelContains": "total this week, below the 8 to 18 productive band"
+      "labelContains": "weighted sets across all exercises"
     },
     {
       "labelContains": "4 sessions"

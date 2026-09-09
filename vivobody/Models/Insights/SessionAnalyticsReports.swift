@@ -66,10 +66,19 @@ extension SessionAnalytics {
                 isCancelled: isCancelled
             )
             try checkpoint()
+            // The map details sheet shows a two-week work rate: the
+            // seven-day count swings wildly for muscles trained once a
+            // week, which is most of them. Weekly `volume` stays 7-day
+            // for the hypertrophy-landmark surfaces.
+            let mapVolume = common.muscleVolume(
+                window: 14 * 86400,
+                now: now,
+                isCancelled: isCancelled
+            )
             let muscleMap = MuscleMapReport.compute(
                 accumulator: common,
                 development: development,
-                volume: volume,
+                volume: mapVolume,
                 now: now,
                 isCancelled: isCancelled
             )

@@ -28,7 +28,9 @@ nonisolated struct MuscleMapEntry: Identifiable {
     let muscle: Muscle
     let channels: MuscleMapChannels
     let band: MuscleDevelopmentBand
-    let effectiveSets7d: Double
+    /// Effective sets over the caller-selected volume window
+    /// (SessionAnalytics passes a 14-day window).
+    let effectiveSets14d: Double
     let daysSinceLastTrained: Int?
     let topExercises: [String]
     let confidence: MuscleEstimateConfidence?
@@ -110,13 +112,13 @@ nonisolated struct MuscleMapReport {
                     confidence = .limited
                 }
             }
-            let weekly = volumeByMuscle[muscle]
+            let stat = volumeByMuscle[muscle]
             entries.append(MuscleMapEntry(
                 muscle: muscle,
                 channels: channels,
                 band: MuscleDevelopmentBand.resolve(channels),
-                effectiveSets7d: weekly?.effectiveSets ?? 0,
-                daysSinceLastTrained: weekly?.daysSinceLastTrained,
+                effectiveSets14d: stat?.effectiveSets ?? 0,
+                daysSinceLastTrained: stat?.daysSinceLastTrained,
                 topExercises: top,
                 confidence: confidence
             ))

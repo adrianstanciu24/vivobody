@@ -43,11 +43,17 @@ struct TodayBodySection: View {
 
     private var developmentLegend: some View {
         Button(action: onShowDetails) {
-            VStack(spacing: Space.sm) {
-                developmentLegendBands
-                Text("Current training development · tap for details")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.secondary)
+            VStack(alignment: .leading, spacing: Space.md) {
+                HStack(spacing: Space.sm) {
+                    Text("Training development")
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(Ink.primary)
+                    Spacer(minLength: Space.sm)
+                    Image(systemName: "chevron.right")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.quaternary)
+                }
+                developmentScale
             }
             .padding(.horizontal, Space.md)
             .padding(.vertical, Space.md)
@@ -64,57 +70,90 @@ struct TodayBodySection: View {
         .accessibilityHint("Opens muscle details")
     }
 
-    @ViewBuilder
-    private var developmentLegendBands: some View {
-        if usesAccessibilityLayout {
+    /// The neutral no-history swatch shares the ramp's shape but sits
+    /// apart from it: a separate state, not the bottom of the scale.
+    private var developmentScale: some View {
+        HStack(alignment: .top, spacing: Space.md) {
             VStack(spacing: Space.xs) {
-                HStack(spacing: 4) {
-                    legendBands
-                }
-                HStack(alignment: .firstTextBaseline) {
-                    Text("No history")
-                    Spacer(minLength: Space.md)
-                    Text("High")
-                }
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
+                Capsule()
+                    .fill(color(for: .noData))
+                    .frame(width: noHistorySwatchWidth, height: legendBarHeight)
+                Text(MuscleDevelopmentBand.noData.displayName)
+                    .lineLimit(1)
             }
-            .accessibilityHidden(true)
-        } else {
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 54), spacing: Space.xs)],
-                spacing: Space.sm
-            ) {
-                ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
-                    VStack(spacing: 4) {
-                        Circle()
-                            .fill(legendColor(for: band))
-                            .frame(width: 14, height: 14)
-                            .accessibilityHidden(true)
-                        Text(band.displayName)
-                            .font(Typography.micro)
-                            .foregroundStyle(Ink.tertiary)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity)
+            .fixedSize()
+
+            VStack(spacing: Space.xs) {
+                developmentRamp
+                rampLabels
+            }
+        }
+        .font(Typography.micro)
+        .foregroundStyle(Ink.tertiary)
+    }
+
+    /// One continuous sweep of the actual render ramp, with hairline
+    /// ticks at the band boundaries the labels describe.
+    private var developmentRamp: some View {
+        Capsule()
+            .fill(rampGradient)
+            .frame(height: legendBarHeight)
+            .overlay {
+                HStack(spacing: 0) {
+                    ForEach(trainedBands.indices, id: \.self) { index in
+                        Color.clear
+                        if index < trainedBands.count - 1 {
+                            Rectangle()
+                                .fill(Surface.background.opacity(0.7))
+                                .frame(width: 1)
+                        }
                     }
                 }
             }
+            .overlay {
+                Capsule().strokeBorder(Surface.edge, lineWidth: 0.5)
+            }
+            .clipShape(Capsule())
+    }
+
+    @ViewBuilder
+    private var rampLabels: some View {
+        if usesAccessibilityLayout {
+            HStack {
+                Text(MuscleDevelopmentBand.low.displayName)
+                Spacer(minLength: Space.md)
+                Text(MuscleDevelopmentBand.high.displayName)
+            }
+        } else {
+            HStack(spacing: 0) {
+                ForEach(trainedBands, id: \.rawValue) { band in
+                    Text(band.displayName)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .frame(maxWidth: .infinity)
+                }
+            }
         }
     }
 
-    private var legendBands: some View {
-        ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
-            RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
-                .fill(legendColor(for: band))
-                .frame(maxWidth: .infinity)
-                .frame(height: 8)
-        }
+    private let legendBarHeight: CGFloat = 10
+    private let noHistorySwatchWidth: CGFloat = 28
+
+    private var trainedBands: [MuscleDevelopmentBand] {
+        MuscleDevelopmentBand.allCases.filter { $0 != .noData }
     }
 
-    private func legendColor(for band: MuscleDevelopmentBand) -> Color {
-        let channels = band == .noData
-            ? MuscleMapChannels.noData
-            : MuscleMapChannels(intensity: band.representativeIntensity)
+    private var rampGradient: LinearGradient {
+        let stops = stride(from: 0.0, through: 1.0, by: 0.125).map { intensity in
+            Gradient.Stop(
+                color: color(for: MuscleMapChannels(intensity: intensity)),
+                location: intensity
+            )
+        }
+        return LinearGradient(stops: stops, startPoint: .leading, endPoint: .trailing)
+    }
+
+    private func color(for channels: MuscleMapChannels) -> Color {
         let rgb = MuscleColor.rgb(
             for: channels,
             theme: colorScheme == .dark ? .dark : .light

@@ -19,7 +19,7 @@ already queries.
 ## Product fit
 
 The frequency footer describes recorded activity; the volume card explains
-its contribution through the existing hard-set landmark model. Both are
+its share of each muscle’s recorded weighted sets. Both are
 included in the [upfront app price](paid-app.md).
 
 ## Feature 1 — Frequency footer
@@ -72,32 +72,19 @@ re-adding their bulk.
 
 ### Placement and form
 
-A new section titled **This week**, placed after `performanceRows`
-(effective load / 1RM) and before the chart section — inside the screen's
-"current standing" cluster, ahead of the trend instruments.
+The **Last 7 days** section shows up to four credited muscles, with primaries
+first, then secondaries, ordered by contribution within each role.
 
-One row per volume-bearing muscle (primaries then secondaries, each group
-sorted by contribution descending, capped at 4 rows):
+Each row contains the muscle name and role, an orange weighted-set value labeled
+**From this exercise**, and a total labeled **All exercises**. The total includes
+this exercise. The bar fills its width with the muscle's total: orange represents
+this exercise's fraction and gray represents other exercises. Bars compare
+contribution shares, not absolute volume between muscles. There are no target
+marks, productive-band claims, or plus signs suggesting improvement.
 
-```
-Chest · primary                              +4.5
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░  12.5
-```
-
-- Muscle name in `Typography.sectionHeading` at `Ink.secondary`, with a
-  `· primary` / `· secondary` role qualifier at `Ink.quaternary`.
-- Contribution value: `Typography.metricInline` monospaced in
-  `Tint.primary` — the one colored numeral, matching the screen's
-  PR-accent vocabulary.
-- Slim bar (4 pt, `Radius.pill`): the muscle's **full weekly effective
-  sets** on a 0–20 scale, track `Surface.cardTint`, fill `Ink.primary` at
-  zone-appropriate opacity, with this exercise's contribution rendered as
-  the trailing `Tint.primary` segment. Hairline ticks mark the landmark
-  band edges (8 / 18).
-- Bar value: the muscle's weekly total in `Typography.metricMicro` at
-  `Ink.tertiary`.
-- Card caption: "Hard sets from this exercise in the last 7 days. Bars
-  show each muscle's full week against its 8–18 productive band."
+At accessibility text sizes the two metrics stack vertically. The footer reads:
+“Orange: this exercise. Gray: other exercises. Weighted sets account for effort
+and muscle role.”
 
 ### Computation
 
@@ -110,8 +97,7 @@ New pure value type `ExerciseVolumeContribution` in
    it with the existing `SetStimulus.credit(for:)` and accumulate
    `[Muscle: Double]`.
 3. Join each involved muscle against the already-cached
-   `sessionAnalytics.volume` (`[MuscleVolumeStat]`) for its weekly total,
-   zone, and landmark.
+   `sessionAnalytics.volume` (`[MuscleVolumeStat]`) for its weekly total.
 
 Because `SetStimulus` pricing is a pure per-set function with no
 cross-session state, this needs no chronological replay and no
@@ -148,10 +134,10 @@ The card is fully visible whenever qualifying data exists, with no purchase gate
   `.accessibilityElement(children: .combine)`; the label becomes
   "Best set, 225 lb × 5, Aug 12. 24 sessions, 2.1 per week, last 3 days
   ago."
-- Volume card: one accessibility element per muscle row —
-  "Chest, primary. 4.5 hard sets from this exercise this week. 12.5 total
-  this week, inside the 8 to 18 productive band." Bars are
-  `.accessibilityHidden(true)` like the rhythm staircase.
+- Volume card: one accessibility element per muscle row states the muscle,
+  role, weighted sets from this exercise in the last 7 days, and weighted sets
+  across all exercises. It explains orange as this exercise and gray as other
+  exercises. Decorative bars are hidden from accessibility.
 ## Testing
 
 Swift Testing, deterministic clocks (inject `now` everywhere):
@@ -215,3 +201,9 @@ RIR, and matching contracts live in
 [Insights training dimensions](insights-visual-instruments.md#training-dimensions).
 The report is indexed by history key in `ExerciseDetailReports`, built from the
 shared immutable accumulator; rendering does not traverse the archive.
+
+## Effort presentation
+
+Exercise Detail shows the last rated session’s average RIR and set count.
+The card and its VoiceOver summary contain no progression verdict or instruction
+to increase load, hold, or deload.

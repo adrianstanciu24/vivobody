@@ -109,7 +109,6 @@ nonisolated struct ExerciseDetailReadModel: Hashable {
         let lastSessionText: String
         let lifetimeLoggedSetCount: Int
         let verdict: ProgressionVerdict
-        let headline: String?
         let accessibilityLabel: String
     }
 
@@ -139,8 +138,6 @@ nonisolated struct ExerciseDetailReadModel: Hashable {
         let role: MuscleRole?
         let contributionSets: Double
         let totalSets: Double
-        let landmark: VolumeLandmark
-        let zone: VolumeZone?
         let contributionText: String
         let totalText: String
         let accessibilityLabel: String
@@ -148,7 +145,6 @@ nonisolated struct ExerciseDetailReadModel: Hashable {
 
     struct WeeklyVolume: Hashable {
         let rows: [WeeklyVolumeRow]
-        let bandText: String
         let caption: String
     }
 

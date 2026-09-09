@@ -498,14 +498,12 @@ struct ExerciseDetailReadModelTests {
 
         #expect(model.effort?.averageText == "RIR 2.2")
         #expect(model.effort?.lastSessionText == "Last · 3 sets")
-        #expect(model.effort?.headline == "Ready · reduce assistance")
+        #expect(model.effort?.accessibilityLabel.contains("reduce assistance") == false)
         #expect(model.effort?.accessibilityLabel.contains("8 logged RIR readings") == true)
         let row = try #require(model.weeklyVolume?.rows.first)
-        #expect(row.contributionText == "+4.5")
+        #expect(row.contributionText == "4.5")
         #expect(row.totalText == "12.5")
-        #expect(row.zone == .optimal)
-        #expect(row.accessibilityLabel.contains("inside the 8 to 18 productive band"))
-        #expect(model.weeklyVolume?.bandText == "8–18")
+        #expect(row.accessibilityLabel.contains("weighted sets across all exercises"))
     }
 
     @Test func measuredOneRepMaxAlwaysWinsTheEditorSeed() {

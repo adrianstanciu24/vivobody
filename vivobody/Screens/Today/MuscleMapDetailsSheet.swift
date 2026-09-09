@@ -2,11 +2,11 @@
 //  MuscleMapDetailsSheet.swift
 //  vivobody
 //
-//  Evidence behind Today's chronic 3D development colours. Bands are
-//  intentionally coarse, while weekly work and confidence stay visible
-//  as separate metadata rather than being encoded into the body colour.
-//  Regions without a scene surface remain visible as text instead of
-//  borrowing another anatomical mesh.
+//  Evidence behind Today's chronic 3D development colours. Muscles are
+//  grouped by their coarse band, most developed first, with weekly
+//  work and confidence kept as row metadata rather than encoded into
+//  the body colour. Regions without a scene surface remain visible as
+//  text instead of borrowing another anatomical mesh.
 //
 
 import SwiftUI
@@ -27,30 +27,33 @@ struct MuscleMapDetailsSheet: View {
             }
     }
 
+    /// Bands that hold at least one muscle, most developed first.
+    private var sections: [(band: MuscleDevelopmentBand, entries: [MuscleMapEntry])] {
+        let grouped = Dictionary(grouping: entries, by: \.band)
+        return MuscleDevelopmentBand.allCases.reversed().compactMap { band in
+            grouped[band].map { (band: band, entries: $0) }
+        }
+    }
+
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("A current estimate from completed strength sets, muscle roles, effort, and recency. Colour builds with repeated work and fades as training recedes. Power work does not add development credit.")
-                        .font(Typography.body)
-                        .foregroundStyle(Ink.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    Text("Regions without a matching body-model surface remain listed and are marked 3D unavailable.")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.top, Space.sm)
-                        .padding(.bottom, Space.lg)
-
-                    ForEach(entries) { entry in
-                        row(entry)
-                        SectionDivider()
+            ScrollView(.vertical) {
+                VStack(alignment: .leading, spacing: Space.section) {
+                    distributionCard
+                    ForEach(sections, id: \.band.rawValue) { section in
+                        bandSection(section.band, entries: section.entries)
                     }
                 }
                 .padding(.horizontal, Space.gutter)
-                .padding(.vertical, Space.lg)
+                .padding(.top, Space.lg)
+                .padding(.bottom, Space.section)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                // Load-bearing: pins the scroll content to the viewport
+                // width. Without it the content measures wider than the
+                // sheet and the vertical-only ScrollView pans sideways.
+                .containerRelativeFrame(.horizontal)
             }
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .screenBackground()
             .navigationTitle("Current development")
             .navigationBarTitleDisplayMode(.inline)
@@ -61,67 +64,195 @@ struct MuscleMapDetailsSheet: View {
             }
         }
         .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+    }
+
+    // MARK: - Distribution
+
+    private static let barHeight: CGFloat = 12
+    private static let barGap: CGFloat = 2
+
+    /// How the whole body splits across bands, in the same left-to-right
+    /// order as Today's legend so the two surfaces read as one scale.
+    private var distributionCard: some View {
+        let counts = bandCounts
+        let total = max(1, entries.count)
+        return VStack(alignment: .leading, spacing: Space.md) {
+            GeometryReader { proxy in
+                let gaps = Self.barGap * CGFloat(max(0, counts.count - 1))
+                let available = max(0, proxy.size.width - gaps)
+                HStack(spacing: Self.barGap) {
+                    ForEach(counts, id: \.band.rawValue) { item in
+                        Rectangle()
+                            .fill(color(for: item.band))
+                            .frame(width: available * CGFloat(item.count) / CGFloat(total))
+                    }
+                }
+                .clipShape(Capsule())
+            }
+            .frame(height: Self.barHeight)
+
+            distributionLegend
+                .font(Typography.caption)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(Space.xl)
+        .contentCard(bright: true)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(distributionAccessibilityLabel)
+    }
+
+    /// One wrapping line naming every segment, counts emphasised.
+    private var distributionLegend: Text {
+        bandCounts.enumerated().reduce(Text("")) { line, item in
+            let (index, entry) = item
+            let separator = index == 0 ? "" : "  ·  "
+            return line
+                + Text(separator).foregroundStyle(Ink.quaternary)
+                + Text("\(entry.count) ").foregroundStyle(Ink.secondary).monospacedDigit()
+                + Text(entry.band.displayName).foregroundStyle(Ink.tertiary)
+        }
+    }
+
+    private var bandCounts: [(band: MuscleDevelopmentBand, count: Int)] {
+        let grouped = Dictionary(grouping: entries, by: \.band)
+        return MuscleDevelopmentBand.allCases.compactMap { band in
+            grouped[band].map { (band: band, count: $0.count) }
+        }
+    }
+
+    private var distributionAccessibilityLabel: String {
+        let parts = bandCounts.map { "\($0.count) \($0.band.displayName.lowercased())" }
+        return "Development across \(entries.count) muscles: " + parts.joined(separator: ", ")
+    }
+
+    // MARK: - Band sections
+
+    private func bandSection(_ band: MuscleDevelopmentBand, entries: [MuscleMapEntry]) -> some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(
+                title: band.displayName,
+                trailing: entries.count == 1 ? "1 muscle" : "\(entries.count) muscles"
+            )
+
+            VStack(spacing: 0) {
+                ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
+                    row(entry)
+                    if index < entries.count - 1 {
+                        rowDivider
+                    }
+                }
+            }
+            .padding(.horizontal, Space.lg)
+            .contentCard()
+        }
+    }
+
+    private var rowDivider: some View {
+        Rectangle()
+            .fill(Surface.edge)
+            .frame(height: 0.5)
     }
 
     private func row(_ entry: MuscleMapEntry) -> some View {
-        HStack(alignment: .top, spacing: Space.md) {
-            if entry.muscle.isVisualized {
-                Circle()
-                    .fill(color(for: entry.channels))
-                    .frame(width: 16, height: 16)
-                    .padding(.top, 4)
-            } else {
-                Circle()
-                    .strokeBorder(Ink.quaternary, lineWidth: 1)
-                    .frame(width: 16, height: 16)
-                    .padding(.top, 4)
-            }
+        HStack(alignment: .center, spacing: Space.md) {
+            swatch(entry)
 
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text(entry.muscle.displayName)
-                        .font(Typography.body)
-                        .foregroundStyle(Ink.primary)
-                    Spacer()
-                    Text(entry.band.displayName)
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.secondary)
-                }
-
+            VStack(alignment: .leading, spacing: 2) {
+                Text(entry.muscle.displayName)
+                    .font(Typography.headline)
+                    .foregroundStyle(Ink.primary)
                 Text(detail(entry))
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .fixedSize(horizontal: false, vertical: true)
-
-                if !entry.muscle.isVisualized {
-                    Text("3D view unavailable")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.quaternary)
-                }
-
                 if !entry.topExercises.isEmpty {
                     Text(entry.topExercises.joined(separator: " · "))
-                        .font(Typography.caption)
+                        .font(Typography.micro)
                         .foregroundStyle(Ink.quaternary)
+                        .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
+
+            Spacer(minLength: Space.sm)
+
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(entry.band == .noData ? "—" : format(entry.effectiveSets14d))
+                    .font(Typography.metricInline)
+                    .foregroundStyle(entry.band == .noData ? Ink.quaternary : Ink.primary)
+                    .monospacedDigit()
+                Text("sets · 14d")
+                    .panelLegend()
+            }
+            .fixedSize()
         }
         .frame(minHeight: Space.rowMin)
         .padding(.vertical, Space.sm)
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel(entry))
+    }
+
+    /// Solid colour for muscles the body renders; a hollow outline for
+    /// regions with no scene surface, so the list still shows them.
+    @ViewBuilder
+    private func swatch(_ entry: MuscleMapEntry) -> some View {
+        if entry.muscle.isVisualized {
+            Capsule()
+                .fill(color(for: entry.channels))
+                .frame(width: 5, height: 28)
+        } else {
+            Capsule()
+                .strokeBorder(Ink.quaternary, lineWidth: 1)
+                .frame(width: 5, height: 28)
+        }
     }
 
     private func detail(_ entry: MuscleMapEntry) -> String {
-        guard entry.band != .noData else { return "No qualifying working-set history" }
-        let sets = String(format: "%.1f effective sets · 7 days", entry.effectiveSets7d)
-        let recency = entry.daysSinceLastTrained.map { "last trained \($0)d ago" } ?? "last trained unknown"
-        let confidence = switch entry.confidence {
+        var parts: [String] = []
+        if entry.band == .noData {
+            parts.append("No working-set history")
+        } else {
+            parts.append(entry.daysSinceLastTrained.map { "Trained \($0)d ago" } ?? "Last training unknown")
+            parts.append(confidenceLabel(entry))
+        }
+        if !entry.muscle.isVisualized {
+            parts.append("Not on 3D model")
+        }
+        return parts.joined(separator: " · ")
+    }
+
+    private func confidenceLabel(_ entry: MuscleMapEntry) -> String {
+        switch entry.confidence {
         case .limited, nil: "Limited data"
         case .moderate: "Moderate confidence"
         case .high: "High confidence"
         }
-        return "\(sets) · \(recency) · \(confidence)"
+    }
+
+    private func accessibilityLabel(_ entry: MuscleMapEntry) -> String {
+        var parts = ["\(entry.muscle.displayName), \(entry.band.displayName)"]
+        if entry.band != .noData {
+            parts.append("\(format(entry.effectiveSets14d)) effective sets in 14 days")
+        }
+        parts.append(detail(entry))
+        if !entry.topExercises.isEmpty {
+            parts.append(entry.topExercises.joined(separator: ", "))
+        }
+        return parts.joined(separator: ". ")
+    }
+
+    private func format(_ value: Double) -> String {
+        value.formatted(.number.precision(.fractionLength(1)))
+    }
+
+    // MARK: - Colour
+
+    private func color(for band: MuscleDevelopmentBand) -> Color {
+        let channels = band == .noData
+            ? MuscleMapChannels.noData
+            : MuscleMapChannels(intensity: band.representativeIntensity)
+        return color(for: channels)
     }
 
     private func color(for channels: MuscleMapChannels) -> Color {

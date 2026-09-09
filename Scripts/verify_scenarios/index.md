@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 111.
+Scenario files: 112.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -56,6 +56,7 @@ Scenario files: 111.
 | [exercise-comparison-unrestricted](exercise-comparison-unrestricted.json) | library | `--static-body` |
 | [exercise-comparison](exercise-comparison.json) | library | `--static-body` |
 | [exercise-detail-dormant-chart](exercise-detail-dormant-chart.json) | library | None declared |
+| [exercise-detail-effort](exercise-detail-effort.json) | library | `--ui-test-insights-dimensions --static-body` |
 | [exercise-detail-hero](exercise-detail-hero.json) | library | None declared |
 | [exercise-detail-isolation-role](exercise-detail-isolation-role.json) | library | None declared |
 | [exercise-detail-movement](exercise-detail-movement.json) | library | None declared |

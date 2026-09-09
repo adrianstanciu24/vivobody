@@ -2,8 +2,8 @@
 //  ExerciseWeeklyVolumeSection.swift
 //  vivobody
 //
-//  Focused Exercise Detail "This week" presentation. Immutable read-model
-//  rows carry the exercise contribution, weekly total, landmark, and spoken
+//  Focused Exercise Detail "Last 7 days" presentation. Immutable read-model
+//  rows carry the exercise contribution, weekly total, and spoken
 //  meaning; this leaf owns only the visual instrument.
 //
 
@@ -23,7 +23,7 @@ struct ExerciseDetailWeeklyVolumeSection: View {
         _ volume: ExerciseDetailReadModel.WeeklyVolume
     ) -> some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            Text("This week")
+            Text("Last 7 days")
                 .sectionLabelStyle(Opacity.medium)
 
             VStack(alignment: .leading, spacing: 0) {
@@ -57,106 +57,66 @@ struct ExerciseDetailWeeklyVolumeSection: View {
 
 // MARK: - Row
 
-/// One muscle's row: name + role, the exercise's orange contribution
-/// numeral, and a slim bar of the muscle's full weekly effective sets
-/// against its landmark band with this exercise's share as the
-/// trailing accent segment.
+/// Each bar shows this exercise's share of the muscle's last seven days.
 private struct WeeklyVolumeRow: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let row: ExerciseDetailReadModel.WeeklyVolumeRow
-
-    private var landmark: VolumeLandmark {
-        row.landmark
-    }
-
-    /// The muscle's full weekly total. Without a published stat the
-    /// contribution itself is the honest lower bound.
-    private var total: Double {
-        row.totalSets
-    }
-
-    /// Bar scale: the band top with headroom, extended when a muscle
-    /// over-trains past it so the fill never pins at 100%.
-    private var scale: Double {
-        max(landmark.optimalHigh + 2, total)
-    }
-
-    /// The base fill dims while a muscle sits under its minimum
-    /// effective volume; inside or above the band it reads full.
-    private var fillTint: Color {
-        switch row.zone {
-        case .under, .untrained: Ink.primary.opacity(0.42)
-        case .optimal, .high, nil: Ink.primary.opacity(Opacity.strong)
-        }
-    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text(row.muscle.displayName)
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.secondary)
-                if let role = row.role {
-                    Text("· \(role.displayName.lowercased())")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.quaternary)
-                }
-                Spacer(minLength: Space.sm)
-                Text(row.contributionText)
-                    .font(Typography.metricInline)
-                    .foregroundStyle(Tint.primary)
-                    .monospacedDigit()
-            }
-
-            HStack(alignment: .center, spacing: Space.md) {
-                GeometryReader { geo in
-                    let width = geo.size.width
-                    ZStack(alignment: .leading) {
-                        Capsule()
-                            .fill(Color.white.opacity(0.08))
-                        Capsule()
-                            .fill(fillTint)
-                            .frame(width: width * min(total / scale, 1))
-                        Capsule()
-                            .fill(Tint.primary)
-                            .frame(width: width * min(row.contributionSets / scale, 1))
-                            .offset(
-                                x: width * max(
-                                    min((total - row.contributionSets) / scale, 1),
-                                    0
-                                )
-                            )
-                            .shadow(color: Tint.primary.opacity(0.35), radius: 3)
-                        bandTick(at: landmark.mev, width: width)
-                        bandTick(at: landmark.optimalHigh, width: width)
-                    }
-                }
-                .frame(height: 10)
-                .accessibilityHidden(true)
-
-                Text(row.totalText)
-                    .font(Typography.metricMicro)
+            Text(row.muscle.displayName)
+                .font(Typography.sectionHeading)
+                .foregroundStyle(Ink.secondary)
+            if let role = row.role {
+                Text(role.displayName)
+                    .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
-                    .monospacedDigit()
-                    .frame(minWidth: 28, alignment: .trailing)
             }
+
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.md))
+                : AnyLayout(HStackLayout(alignment: .top, spacing: Space.md))
+            layout {
+                metric(row.contributionText, label: "From this exercise", tint: Tint.primary)
+                metric(row.totalText, label: "All exercises", tint: Ink.secondary)
+            }
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(Ink.primary.opacity(0.22))
+                    Capsule()
+                        .fill(Tint.primary)
+                        .frame(width: geo.size.width * (row.totalSets > 0
+                                ? min(max(row.contributionSets / row.totalSets, 0), 1) : 0))
+                }
+            }
+            .frame(height: 10)
+            .accessibilityHidden(true)
         }
         .padding(.vertical, 12)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(row.accessibilityLabel)
     }
 
-    private func bandTick(at value: Double, width: CGFloat) -> some View {
-        Rectangle()
-            .fill(Color.white.opacity(0.25))
-            .frame(width: 1, height: 10)
-            .offset(x: width * min(value / scale, 1))
+    private func metric(_ value: String, label: String, tint: Color) -> some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text(value)
+                .font(Typography.metricInline)
+                .foregroundStyle(tint)
+                .monospacedDigit()
+            Text(label)
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
 // MARK: - Preview
 
 #if DEBUG
-    #Preview("This week") {
+    #Preview("Last 7 days") {
         let contribution = ExerciseVolumeContribution(
             shares: [
                 .init(muscle: .pectoralisMajorSternocostal, role: .primary, sets: 6),

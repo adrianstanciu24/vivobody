@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Focused Exercise Detail effort presentation. It renders one immutable
-//  RIR read and progression verdict without querying workout history or
+//  RIR read without querying workout history or
 //  reaching into the screen's persistence and navigation state.
 //
 
@@ -31,27 +31,13 @@ struct ExerciseDetailEffortSection: View {
                     }
 
                     Spacer(minLength: 8)
-
-                    if let headline = effort.headline {
-                        Text(headline)
-                            .font(Typography.sectionLabel)
-                            .foregroundStyle(verdictColor(effort.verdict))
-                            .multilineTextAlignment(.trailing)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
                 }
                 .padding(Space.lg)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentCard()
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(effort.accessibilityLabel)
             }
-        }
-    }
-
-    private func verdictColor(_ verdict: ProgressionVerdict) -> Color {
-        switch verdict {
-        case .ready: Tint.complete
-        case .grind: Tint.danger
-        case .push, .none: Ink.tertiary
         }
     }
 }

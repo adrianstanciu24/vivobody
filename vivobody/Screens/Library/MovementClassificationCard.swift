@@ -2,15 +2,9 @@
 //  MovementClassificationCard.swift
 //  vivobody
 //
-//  Stateless "Movement" section for Exercise Detail: how the lift
-//  moves, rendered as a diagram instead of a sentence. A cardinal-plane glyph
-//  (sagittal / frontal / transverse drawn as three intersecting
-//  ellipses, active planes lit) sits beside rows for pattern,
-//  mechanic, and laterality. Accessibility sizes stack the glyph and
-//  full-width label/value pairs vertically. The glyph absorbs multiplane
-//  combinations that read awkwardly as text ("Sagittal + Frontal +
-//  Transverse"), and its presence lets the hero meta line slim down
-//  to equipment alone.
+//  Stateless Movement section for Exercise Detail. The shared Insights body
+//  illustrations show each authored plane beside compact classification rows.
+//  Accessibility sizes stack the illustrations above full-width fields.
 //
 //  Every catalog item can render this — mechanic and planes are
 //  non-optional, custom exercises included. Rows with nothing to say
@@ -39,9 +33,13 @@ struct MovementClassificationCard: View {
                 .sectionLabelStyle(Opacity.medium)
 
             classificationLayout {
-                MovementPlanesGlyph(activePlanes: Set(planes))
-                    .frame(width: 92, height: 92)
-                    .accessibilityHidden(true)
+                VStack(spacing: Space.xs) {
+                    ForEach(MovementPlane.canonicalized(planes), id: \.self) { plane in
+                        MovementPlaneIllustration(plane: plane)
+                            .frame(width: 80, height: 90)
+                    }
+                }
+                .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: dynamicTypeSize.isAccessibilitySize ? Space.md : Space.sm) {
                     if let movementLabel {

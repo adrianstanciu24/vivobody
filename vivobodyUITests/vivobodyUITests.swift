@@ -27,7 +27,7 @@ final class VivobodyUITests: XCTestCase {
                 "Consistent",
                 "Low",
                 "No history",
-                "Current training development · tap for details",
+                "Training development",
             ],
             knownOCRFalsePositiveCount: 3
         )

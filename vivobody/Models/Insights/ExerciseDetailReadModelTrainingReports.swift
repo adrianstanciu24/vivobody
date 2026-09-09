@@ -34,10 +34,6 @@ extension ExerciseDetailReadModel {
         let average = String(format: "RIR %.1f", summary.avgRIR)
         let setNoun = summary.lastSessionSetCount == 1 ? "set" : "sets"
         let last = "Last · \(summary.lastSessionSetCount) \(setNoun)"
-        let headline = summary.verdict.headline(for: exercise.loadMode)
-        let verdictText = headline.map {
-            ". \($0.replacingOccurrences(of: " · ", with: ", "))"
-        } ?? ""
         return Effort(
             averageRIR: summary.avgRIR,
             averageText: average,
@@ -45,8 +41,7 @@ extension ExerciseDetailReadModel {
             lastSessionText: last,
             lifetimeLoggedSetCount: summary.loggedSetCount,
             verdict: summary.verdict,
-            headline: headline,
-            accessibilityLabel: "Effort. Average RIR \(oneDecimal(summary.avgRIR)) across \(summary.lastSessionSetCount) \(setNoun) in the last rated session\(verdictText). Based on \(summary.loggedSetCount) logged RIR readings."
+            accessibilityLabel: "Effort. Average RIR \(oneDecimal(summary.avgRIR)) across \(summary.lastSessionSetCount) \(setNoun) in the last rated session. Based on \(summary.loggedSetCount) logged RIR readings."
         )
     }
 
@@ -128,43 +123,23 @@ extension ExerciseDetailReadModel {
         guard let contribution else { return nil }
         let rows = contribution.shares.prefix(weeklyVolumeRowLimit).map { share in
             let stat = statsByMuscle[share.muscle]
-            let landmark = stat?.landmark ?? .default
             let total = max(stat?.effectiveSets ?? share.sets, share.sets)
             let role = share.role.map { ", \($0.displayName.lowercased())" } ?? ""
-            let contributionText = "\(setsLabel(share.sets)) hard sets from this exercise this week"
-            let accessibility: String
-            if let stat {
-                let band = "\(Int(landmark.mev)) to \(Int(landmark.optimalHigh))"
-                let zone = switch stat.zone {
-                case .untrained: "with no other work this week"
-                case .under: "below the \(band) productive band"
-                case .optimal: "inside the \(band) productive band"
-                case .high: "above the \(band) productive band"
-                }
-                accessibility = "\(share.muscle.displayName)\(role). \(contributionText). \(setsLabel(stat.effectiveSets)) total this week, \(zone)."
-            } else {
-                accessibility = "\(share.muscle.displayName)\(role). \(contributionText)."
-            }
+            let accessibility = "\(share.muscle.displayName)\(role). \(setsLabel(share.sets)) weighted sets from this exercise in the last 7 days. \(setsLabel(total)) weighted sets across all exercises. Orange shows this exercise; gray shows other exercises."
             return WeeklyVolumeRow(
                 muscle: share.muscle,
                 role: share.role,
                 contributionSets: share.sets,
                 totalSets: total,
-                landmark: landmark,
-                zone: stat?.zone,
-                contributionText: "+\(setsLabel(share.sets))",
+                contributionText: setsLabel(share.sets),
                 totalText: setsLabel(total),
                 accessibilityLabel: accessibility
             )
         }
         guard !rows.isEmpty else { return nil }
-        let landmark = contribution.shares.compactMap { statsByMuscle[$0.muscle] }
-            .first?.landmark ?? .default
-        let band = "\(Int(landmark.mev))–\(Int(landmark.optimalHigh))"
         return WeeklyVolume(
             rows: rows,
-            bandText: band,
-            caption: "Hard sets from this exercise in the last 7 days. Bars show each muscle's full week against its \(band) productive band."
+            caption: "Orange: this exercise. Gray: other exercises. Weighted sets account for effort and muscle role."
         )
     }
 

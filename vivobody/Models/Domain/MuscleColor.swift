@@ -112,6 +112,7 @@ nonisolated enum MuscleDevelopmentBand: String, CaseIterable {
         }
     }
 
+    /// Midpoint of the band, for surfaces that need one swatch per band.
     var representativeIntensity: Double {
         switch self {
         case .noData: 0
