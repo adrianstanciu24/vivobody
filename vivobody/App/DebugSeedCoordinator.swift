@@ -34,6 +34,8 @@ import VivoKit
             in context: ModelContext
         ) {
             switch fixture {
+            case .years:
+                DebugYearsSeeder.seed(in: context)
             case .training:
                 DebugTrainingSeeder.seed(in: context)
             case .history:

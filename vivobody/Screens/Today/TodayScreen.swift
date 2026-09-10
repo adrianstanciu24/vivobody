@@ -154,7 +154,6 @@ struct TodayScreen: View {
                         )
                         .opacity(shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.30)
                 }
-                .settleIn(0)
 
                 if let upNextSelection {
                     TodayUpNextSection(
@@ -166,10 +165,9 @@ struct TodayScreen: View {
                             appState: appState
                         )
                     }
-                    .settleIn(1)
                 }
                 if let latestSession {
-                    SectionDivider().settleIn(4)
+                    SectionDivider()
                     TodayConsistencySection(
                         workoutDates: workoutDates,
                         prDates: prDates,
@@ -177,15 +175,13 @@ struct TodayScreen: View {
                     ) {
                         ConsistencyScreen()
                     }
-                    .settleIn(5)
-                    SectionDivider().settleIn(6)
+                    SectionDivider()
                     TodayLastWorkoutSection(
                         metadata: lastWorkoutMeta(for: latestSession),
                         durationMinutes: Int(latestSession.duration / 60),
                         receiptStat: lastWorkoutReceiptStat(for: latestSession),
                         totalSets: latestSession.totalSets
                     )
-                    .settleIn(7)
                 }
             }
             .padding(.top, Space.xs)

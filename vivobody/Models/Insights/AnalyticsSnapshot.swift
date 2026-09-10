@@ -22,6 +22,24 @@ nonisolated struct AnalyticsSnapshot {
         self.sessions = sessions
     }
 
+    /// Keep archive preparation cooperative so Today can render its bounded
+    /// recent-history queries and respond to input while the full report loads.
+    /// Models stay on MainActor; only completed value snapshots leave it.
+    @MainActor
+    static func preparing(sessions: [WorkoutSession]) async throws -> Self {
+        var snapshots: [AnalyticsSessionSnapshot] = []
+        snapshots.reserveCapacity(sessions.count)
+        for (index, session) in sessions.enumerated() {
+            if index.isMultiple(of: 4) {
+                await Task.yield()
+            }
+            try Task.checkCancellation()
+            snapshots.append(AnalyticsSessionSnapshot(session))
+        }
+        try Task.checkCancellation()
+        return Self(sessions: snapshots)
+    }
+
     /// Copy every analytics-relevant value while SwiftData models are
     /// still confined to the main actor. Relationship ordering is made
     /// explicit because SwiftData arrays do not guarantee it.

@@ -64,6 +64,7 @@ import Foundation
         case personalRecord
         case templates
         case training
+        case years
     }
 
     /// Converts launch arguments into immutable intent only. Callers decide
@@ -185,6 +186,7 @@ import Foundation
 
         private static func manualFixture(in arguments: Set<String>) -> DebugManualFixture? {
             let requests: [(String, DebugManualFixture)] = [
+                ("-years", .years),
                 ("-debug", .training),
                 ("--seed-history", .history),
                 ("--seed-showcase", .showcase),

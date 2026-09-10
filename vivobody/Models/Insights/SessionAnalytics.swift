@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Observable two-tier coordinator for session-derived analytics.
-//  SwiftData models are copied into AnalyticsSnapshot on MainActor;
+//  SwiftData models are copied cooperatively into AnalyticsSnapshot on MainActor;
 //  an AnalyticsWorker actor then sorts and prices that immutable input
 //  once, builds the core reports, and reuses the retained accumulator
 //  only when Insights requests its deep tier. Superseded generations
@@ -319,7 +319,6 @@ final class SessionAnalytics {
             return
         }
 
-        let input = AnalyticsSnapshot(sessions: sessions)
         generation &+= 1
         let requestGeneration = generation
 
@@ -337,6 +336,7 @@ final class SessionAnalytics {
         let working = working
         coreTask = Task { [weak self] in
             do {
+                let input = try await AnalyticsSnapshot.preparing(sessions: sessions)
                 let build = try await working.makeCore(input, now)
                 guard !Task.isCancelled, let self else { return }
                 guard

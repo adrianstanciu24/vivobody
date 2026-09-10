@@ -30,6 +30,20 @@ Training Load and its detailed range comparison belong in Insights and are not
 rendered on Today. The underlying analytics remain available to their existing
 consumers.
 
+## Initial content
+
+The pinned start/resume action, Up next template preview, recent consistency
+strip, and Last workout render without staggered entrance delays or waiting
+for the full analytics report. Today queries only a 45-day recent window,
+one latest archived workout, and saved templates for this initial content.
+All-time streak, PR annotations, and the compatible Last time reference enrich
+the existing content when the shared analytics cache becomes available; they
+must not be recomputed from a truncated history and presented as all-time facts.
+Full-archive snapshot preparation yields between small batches so it does not
+hold the UI thread for the entire archive. The static Training development legend appears without an entrance delay.
+Only the 3D visualization uses the body entrance animation; its full-history
+calculation remains unchanged.
+
 ## Evidence
 
 Use the focused [Today scenario](../Scripts/verify_scenarios/today-up-next.json)

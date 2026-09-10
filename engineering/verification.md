@@ -133,6 +133,21 @@ Existing dummy templates and sessions receive the core exercise and updated
 RIR on the next `-debug` launch; unrelated workouts are unchanged.
 The flag takes precedence over the other manual `--seed-*` fixtures.
 
+`-years` (Debug builds only) adds completed history from two calendar years
+ago through yesterday. Full Monday–Sunday weeks follow a repeatable mix of
+3, 4, and 5 workouts; boundary weeks can be partial. Each workout contains
+4–6 catalog exercises with three completed sets, varied reps, logged RIR,
+load cycles, and occasional deloads. The weekly mix covers upper and lower
+body, pushing, pulling, squatting, hinging, core, and all three movement planes.
+This history-only fixture uses its own stable date IDs, preserves existing data,
+and fills newly elapsed training days without duplicating its sessions.
+It takes precedence over `-debug` and the manual `--seed-*` flags. Previously
+seeded history remains additive if switching between fixtures.
+
+```bash
+RESET_STATE=0 LAUNCH_ARGS='-years' TAB=history READY_TIMEOUT=120 Scripts/verify.sh
+```
+
 For an interactive visual view, use Baguette's local interface and open
 `http://127.0.0.1:8421` in a browser:
 

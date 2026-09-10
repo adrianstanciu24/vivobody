@@ -25,6 +25,7 @@ struct TodayBodySection: View {
                 channels: state.nodeChannels,
                 warmth: warmth
             )
+            .settleIn(0)
             .padding(.horizontal, -Space.gutter)
             .accessibilityElement()
             .accessibilityLabel("Current training development body model")
