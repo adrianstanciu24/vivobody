@@ -56,6 +56,13 @@ struct RotatableBodyModel: UIViewRepresentable {
     static let sensitivity: Float = 0.008
     private static let viewTag = 999
 
+    /// How long a re-tint takes to cross-fade in. Development for a
+    /// large history resolves after the figure is already on screen,
+    /// so the colour blooms into the muscles rather than snapping on.
+    /// Slow enough to read as deliberate, short enough that the
+    /// figure never looks stale.
+    static let tintTransition: TimeInterval = 1.2
+
     /// Self-motion tuning — the fixed numbers that shape how the
     /// figure moves on its own. The idle speed itself is not here:
     /// it comes from the user's `BodyDriftSpeed` preference.
@@ -188,14 +195,19 @@ struct RotatableBodyModel: UIViewRepresentable {
 
         // Re-tint in place when the development map changes (e.g. a
         // workout was just archived) or the resolved colour scheme
-        // flips, rather than rebuilding the heavy scene.
+        // flips, rather than rebuilding the heavy scene. Both fade:
+        // a data arrival blooms colour into the muscles, and a scheme
+        // flip tracks the system's own appearance cross-fade.
         let theme = Self.theme(for: context)
         if let scnView = uiView.viewWithTag(Self.viewTag) as? SCNView {
             if context.coordinator.appliedChannels != channels
                 || context.coordinator.appliedTheme != theme,
                 let scene = scnView.scene
             {
-                BodyModelScene.apply(channels: channels, theme: theme, to: scene)
+                BodyModelScene.apply(
+                    channels: channels, theme: theme, to: scene,
+                    transition: Self.tintTransition
+                )
                 context.coordinator.appliedChannels = channels
                 context.coordinator.appliedTheme = theme
             }

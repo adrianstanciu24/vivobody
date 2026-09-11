@@ -57,17 +57,26 @@ enum BodyModelScene {
     /// Re-tint an already-built scene's muscles + light rig for new
     /// training data or a colour-scheme flip, without reloading the
     /// 26 MB archive. Used by the SwiftUI wrapper when the development
-    /// map or the resolved appearance changes.
+    /// map or the resolved appearance changes. A non-zero `transition`
+    /// cross-fades each muscle from its current tone to the new one
+    /// instead of snapping — the first data-driven tint typically lands
+    /// well after the figure is on screen, and an instant flush reads
+    /// as a glitch.
     static func apply(
         channels: [String: MuscleMapChannels],
         theme: BodyModelTheme,
-        to scene: SCNScene
+        to scene: SCNScene,
+        transition: TimeInterval = 0
     ) {
         let interval = GraphicsPerformanceSignposts.begin("BodyModelScene.apply")
         defer { GraphicsPerformanceSignposts.end("BodyModelScene.apply", interval) }
 
         if let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) {
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = transition
+            SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             applyMaterials(pivot: pivot, channels: channels, theme: theme)
+            SCNTransaction.commit()
         }
         configureLighting(scene: scene, theme: theme)
     }
@@ -173,51 +182,55 @@ enum BodyModelScene {
 
     // MARK: - Materials
 
-    private static func makeTierMaterial(red: CGFloat, green: CGFloat, blue: CGFloat, rough: CGFloat) -> SCNMaterial {
-        let mat = SCNMaterial()
-        mat.diffuse.contents = UIColor(red: red, green: green, blue: blue, alpha: 1.0)
-        mat.roughness.contents = rough
-        mat.metalness.contents = 0.12
-        mat.lightingModel = .physicallyBased
-        return mat
+    /// The per-mesh surface description: everything about a material
+    /// that varies by part, theme, or training data. Metalness and the
+    /// PBR lighting model are constant across the figure.
+    private struct Tone {
+        var color: UIColor
+        var roughness: CGFloat
+
+        init(red: CGFloat, green: CGFloat, blue: CGFloat, roughness: CGFloat) {
+            color = UIColor(red: red, green: green, blue: blue, alpha: 1)
+            self.roughness = roughness
+        }
     }
+
+    /// Marks materials this type installed. The archive ships its own
+    /// materials, possibly shared between meshes, so those are always
+    /// replaced rather than mutated — tinting one in place would tint
+    /// every mesh that shares it.
+    private static let managedMaterialName = "vivobody.bodyModel"
 
     /// Channels for a muscle without data or anatomy context.
     private static let untrainedChannels = MuscleMapChannels.noData
 
-    /// Builds a muscle's material from its channels via the
-    /// `MuscleColor` map: intensity sets the diffuse (trained base →
-    /// vivid orange on the theme's ramp). Higher intensity reads
-    /// a touch glossier. A fresh material per mesh (≈240) is cheap to
-    /// rebuild on each re-tint.
-    private static func muscleMaterial(
+    /// A muscle's tone from its channels via the `MuscleColor` map:
+    /// intensity sets the diffuse (trained base → vivid orange on the
+    /// theme's ramp). Higher intensity reads a touch glossier.
+    private static func muscleTone(
         for channels: MuscleMapChannels,
         theme: BodyModelTheme
-    ) -> SCNMaterial {
+    ) -> Tone {
         let c = MuscleColor.rgb(for: channels, theme: theme)
-        let color = UIColor(red: CGFloat(c.red), green: CGFloat(c.green), blue: CGFloat(c.blue), alpha: 1)
-
-        let mat = SCNMaterial()
-        mat.diffuse.contents = color
-        mat.roughness.contents = 0.70 - 0.25 * CGFloat(max(0, min(1, channels.adaptation)))
-        mat.metalness.contents = 0.12
-        mat.lightingModel = .physicallyBased
-        return mat
+        return Tone(
+            red: CGFloat(c.red), green: CGFloat(c.green), blue: CGFloat(c.blue),
+            roughness: 0.70 - 0.25 * CGFloat(max(0, min(1, channels.adaptation)))
+        )
     }
 
     /// Fixed anatomical tones, one step darker on the light page so
     /// bone and tendon stay below the page's luminance — at the dark
     /// values' brightness they'd vanish into near-white.
-    private static func tissueMaterial(for theme: BodyModelTheme) -> SCNMaterial {
+    private static func tissueTone(for theme: BodyModelTheme) -> Tone {
         theme == .dark
-            ? makeTierMaterial(red: 0.70, green: 0.70, blue: 0.70, rough: 0.6)
-            : makeTierMaterial(red: 0.56, green: 0.56, blue: 0.56, rough: 0.6)
+            ? Tone(red: 0.70, green: 0.70, blue: 0.70, roughness: 0.6)
+            : Tone(red: 0.56, green: 0.56, blue: 0.56, roughness: 0.6)
     }
 
-    private static func boneMaterial(for theme: BodyModelTheme) -> SCNMaterial {
+    private static func boneTone(for theme: BodyModelTheme) -> Tone {
         theme == .dark
-            ? makeTierMaterial(red: 0.85, green: 0.82, blue: 0.75, rough: 0.8)
-            : makeTierMaterial(red: 0.72, green: 0.68, blue: 0.61, rough: 0.8)
+            ? Tone(red: 0.85, green: 0.82, blue: 0.75, roughness: 0.8)
+            : Tone(red: 0.72, green: 0.68, blue: 0.61, roughness: 0.8)
     }
 
     private static let connectiveTissue: Set<String> = [
@@ -232,38 +245,54 @@ enum BodyModelScene {
         let interval = GraphicsPerformanceSignposts.begin("BodyModelScene.applyMaterials")
         defer { GraphicsPerformanceSignposts.end("BodyModelScene.applyMaterials", interval) }
 
-        let bone = boneMaterial(for: theme)
-        let tissue = tissueMaterial(for: theme)
+        let bone = boneTone(for: theme)
+        let tissue = tissueTone(for: theme)
         // Tint per mesh, keyed off each mesh's own name, so the figure
         // colours correctly no matter how the archive nests its nodes.
         // Group nodes (no geometry) are skipped, so a grouping node can
         // never propagate its material over the muscles beneath it.
         pivot.enumerateChildNodes { node, _ in
-            guard node.geometry != nil, let name = node.name else { return }
+            guard let geometry = node.geometry, let name = node.name else { return }
             node.opacity = 1
-            node.geometry?.materials = [
-                materialFor(
-                    name: name, channels: channels, theme: theme,
-                    bone: bone, tissue: tissue
-                )
-            ]
+            let tone = toneFor(name: name, channels: channels, theme: theme, bone: bone, tissue: tissue)
+            // Once a mesh carries our material, re-tints mutate it in
+            // place so the diffuse rides the enclosing SCNTransaction
+            // and cross-fades; swapping in a new material would snap.
+            if geometry.materials.count == 1,
+               let material = geometry.materials.first,
+               material.name == managedMaterialName
+            {
+                set(tone, on: material)
+            } else {
+                let material = SCNMaterial()
+                material.name = managedMaterialName
+                material.metalness.contents = 0.12
+                material.lightingModel = .physicallyBased
+                set(tone, on: material)
+                geometry.materials = [material]
+            }
         }
     }
 
-    private static func materialFor(
+    private static func set(_ tone: Tone, on material: SCNMaterial) {
+        material.diffuse.contents = tone.color
+        material.roughness.contents = tone.roughness
+    }
+
+    private static func toneFor(
         name: String,
         channels: [String: MuscleMapChannels],
         theme: BodyModelTheme,
-        bone: SCNMaterial,
-        tissue: SCNMaterial
-    ) -> SCNMaterial {
+        bone: Tone,
+        tissue: Tone
+    ) -> Tone {
         if name == "Skeleton" { return bone }
         if connectiveTissue.contains(name) { return tissue }
         // Every muscle — including untrained ones and the display-only
         // face/hand meshes that no exercise targets — rides the same
         // map, so the body reads uniformly until training data lights
         // specific muscles up.
-        return muscleMaterial(
+        return muscleTone(
             for: channels[name] ?? untrainedChannels,
             theme: theme
         )
