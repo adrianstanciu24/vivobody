@@ -138,20 +138,26 @@ enum WidgetSnapshotWriter {
         let active = fetchActiveSession(in: context)
         let bodyweight = fetchCurrentBodyweight(in: context)
         let unit = WeightUnit.current
-        guard
-            let analytics,
-            let snapshotStore,
-            let prepared = try? await snapshotStore.prepare(),
-            let reports = await analytics.resolvedWidgetReports(
-                for: prepared.snapshot,
-                archiveRevision: prepared.archiveRevision,
-                now: now
-            ),
-            !Task.isCancelled
-        else { return }
+        guard let analytics else { return }
+        let reports: SessionAnalytics.WidgetReports
+        if let current = analytics.resolvedWidgetReportsIfCurrent(now: now) {
+            reports = current
+        } else {
+            guard
+                let snapshotStore,
+                let prepared = try? await snapshotStore.prepare(),
+                let current = await analytics.resolvedWidgetReports(
+                    for: prepared.snapshot,
+                    archiveRevision: prepared.archiveRevision,
+                    now: now
+                )
+            else { return }
+            reports = current
+        }
+        guard !Task.isCancelled else { return }
 
-        let latestCompletedAt = prepared.snapshot.sessions.first?.completedAt
-        let trainedToday = prepared.containsSession(on: now)
+        let latestCompletedAt = fetchLatestCompletedSession(in: context)?.completedAt
+        let trainedToday = hasCompletedSession(on: now, in: context)
 
         mirrorPreferences(unit: unit)
         let snapshots: [(key: String, data: Data?)] = [
@@ -268,6 +274,37 @@ enum WidgetSnapshotWriter {
         )
         descriptor.fetchLimit = 1
         return (try? context.fetch(descriptor))?.first
+    }
+
+    private static func fetchLatestCompletedSession(
+        in context: ModelContext
+    ) -> WorkoutSession? {
+        var descriptor = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil },
+            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+        )
+        descriptor.fetchLimit = 1
+        return (try? context.fetch(descriptor))?.first
+    }
+
+    private static func hasCompletedSession(
+        on date: Date,
+        in context: ModelContext,
+        calendar: Calendar = .current
+    ) -> Bool {
+        guard let interval = calendar.dateInterval(of: .day, for: date)
+        else { return false }
+        let start = interval.start
+        let end = interval.end
+        var descriptor = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate {
+                $0.completedAt != nil
+                    && $0.completedAt! >= start
+                    && $0.completedAt! < end
+            }
+        )
+        descriptor.fetchLimit = 1
+        return !((try? context.fetch(descriptor)) ?? []).isEmpty
     }
 
     private static func fetchCurrentBodyweight(in context: ModelContext) -> Double? {

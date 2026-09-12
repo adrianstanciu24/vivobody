@@ -53,6 +53,22 @@ final class SessionAnalytics {
         exerciseHistoryFingerprint != nil
     }
 
+    /// Reuse the widget projection only while it still represents the current
+    /// archive invalidation and calendar day. Callers that receive nil must
+    /// join or request the canonical snapshot generation instead of treating
+    /// the retained last-good reports as current.
+    func resolvedWidgetReportsIfCurrent(
+        now: Date = Date()
+    ) -> WidgetReports? {
+        guard let widgetFingerprint,
+              widgetFingerprint.revision == invalidationRevision,
+              widgetFingerprint.day == Calendar.current
+              .startOfDay(for: now)
+              .timeIntervalSince1970
+        else { return nil }
+        return widgetReports
+    }
+
     /// Compatibility accessors keep non-Insights screens focused on the
     /// report they consume. Deep access never starts computation; before
     /// the first requested result it returns a lightweight empty value.

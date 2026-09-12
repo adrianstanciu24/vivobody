@@ -730,6 +730,14 @@ struct SessionAnalyticsConcurrencyTests {
         #expect(await control.coreCallCount == 1)
         #expect(reports.load == analytics.coreReports.load)
         #expect(reports.consistency.daysTrained == 1)
+        let cached = try #require(
+            analytics.resolvedWidgetReportsIfCurrent(now: now)
+        )
+        #expect(cached.load == reports.load)
+        #expect(cached.consistency.daysTrained == reports.consistency.daysTrained)
+
+        analytics.invalidate()
+        #expect(analytics.resolvedWidgetReportsIfCurrent(now: now) == nil)
     }
 
     @Test func widgetCallerCancellationReturnsNilWithoutCancelingSharedCore() async {

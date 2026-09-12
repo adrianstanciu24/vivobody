@@ -54,6 +54,13 @@ struct ExerciseSubstitutionSheet: View {
     @State private var becameBlocked = false
     @State private var familiarityByHistoryKey:
         [String: ExerciseSubstitution.Familiarity] = [:]
+    @State private var rankedRecommendations:
+        [ExerciseSubstitution.Recommendation] = []
+    @State private var filteredRecommendations:
+        [ExerciseSubstitution.Recommendation] = []
+    @State private var recommendationByCandidateID:
+        [UUID: ExerciseSubstitution.Recommendation] = [:]
+    @State private var rankedEquipmentOptions: [Equipment] = []
     @State private var issue: ReplacementIssue?
     @State private var saveError: SaveErrorBox?
 
@@ -185,7 +192,7 @@ struct ExerciseSubstitutionSheet: View {
         return Button {
             Haptics.selection()
             selectedEquipment = equipment
-            selectedCandidateID = nil
+            applyEquipmentFilter()
         } label: {
             Text(label)
                 .font(Typography.sectionLabel)
@@ -256,28 +263,11 @@ struct ExerciseSubstitutionSheet: View {
     }
 
     private var equipmentOptions: [Equipment] {
-        let represented = Set(unfilteredRecommendations.map(\.candidate.equipment))
-        return Equipment.allCases.filter(represented.contains)
-    }
-
-    private var unfilteredRecommendations: [ExerciseSubstitution.Recommendation] {
-        ExerciseSubstitution.rank(
-            anchor: target.subject,
-            candidates: catalogItems,
-            familiarityByHistoryKey: familiarityByHistoryKey,
-            limit: catalogItems.count
-        )
+        rankedEquipmentOptions
     }
 
     private var allRecommendations: [ExerciseSubstitution.Recommendation] {
-        guard let selectedEquipment else { return unfilteredRecommendations }
-        return ExerciseSubstitution.rank(
-            anchor: target.subject,
-            candidates: catalogItems,
-            availableEquipment: [selectedEquipment],
-            familiarityByHistoryKey: familiarityByHistoryKey,
-            limit: catalogItems.count
-        )
+        filteredRecommendations
     }
 
     private var visibleRecommendations: [ExerciseSubstitution.Recommendation] {
@@ -287,12 +277,8 @@ struct ExerciseSubstitutionSheet: View {
     }
 
     private var selectedRecommendation: ExerciseSubstitution.Recommendation? {
-        if let selectedCandidateID,
-           let selected = allRecommendations.first(where: {
-               $0.candidate.id == selectedCandidateID
-           })
-        {
-            return selected
+        if let selectedCandidateID {
+            return recommendationByCandidateID[selectedCandidateID]
         }
         return allRecommendations.first
     }
@@ -382,15 +368,44 @@ struct ExerciseSubstitutionSheet: View {
     }
 
     private func loadFamiliarity() {
-        guard let history = sessionAnalytics?.resolvedExerciseHistory(
+        if let history = sessionAnalytics?.resolvedExerciseHistory(
             in: modelContext
-        ) else { return }
-        familiarityByHistoryKey = history.mapValues { summary in
-            ExerciseSubstitution.Familiarity(
-                sessionCount: summary.sessionCount,
-                lastPerformedAt: summary.latestPerformanceDate
-            )
+        ) {
+            familiarityByHistoryKey = history.mapValues { summary in
+                ExerciseSubstitution.Familiarity(
+                    sessionCount: summary.sessionCount,
+                    lastPerformedAt: summary.latestPerformanceDate
+                )
+            }
         }
+        rebuildRanking()
+    }
+
+    private func rebuildRanking() {
+        let ranked = ExerciseSubstitution.rank(
+            anchor: target.subject,
+            candidates: catalogItems,
+            familiarityByHistoryKey: familiarityByHistoryKey,
+            limit: catalogItems.count
+        )
+        rankedRecommendations = ranked
+        recommendationByCandidateID = Dictionary(
+            uniqueKeysWithValues: ranked.map { ($0.candidate.id, $0) }
+        )
+        let represented = Set(ranked.map(\.candidate.equipment))
+        rankedEquipmentOptions = Equipment.allCases.filter(represented.contains)
+        applyEquipmentFilter()
+    }
+
+    private func applyEquipmentFilter() {
+        if let selectedEquipment {
+            filteredRecommendations = rankedRecommendations.filter {
+                $0.candidate.equipment == selectedEquipment
+            }
+        } else {
+            filteredRecommendations = rankedRecommendations
+        }
+        selectedCandidateID = nil
     }
 
     private func recommendationAccessibilityLabel(

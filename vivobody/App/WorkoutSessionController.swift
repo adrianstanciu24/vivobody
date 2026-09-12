@@ -540,15 +540,21 @@ final class WorkoutSessionController {
                 return
             }
             let templates = (try? context.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
-            let sessions = (try? context.fetch(FetchDescriptor<WorkoutSession>(
-                predicate: #Predicate { $0.completedAt != nil },
-                sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
-            ))) ?? []
-            switch UpNext.compute(templates: templates, sessions: sessions).kind {
+            switch UpNext.compute(
+                templates: templates,
+                sessions: [],
+                load: appState?.analytics.load
+            ).kind {
             case let .scheduled(template, _, _):
                 startWorkoutFromTemplate(template)
             default:
-                startTodaysWorkout(basedOn: sessions.first)
+                var latest = FetchDescriptor<WorkoutSession>(
+                    predicate: #Predicate { $0.completedAt != nil },
+                    sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+                )
+                latest.fetchLimit = 1
+                let session = try? context.fetch(latest).first
+                startTodaysWorkout(basedOn: session)
             }
 
         case let .startTemplate(uuid):
