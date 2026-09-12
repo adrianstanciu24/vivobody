@@ -16,54 +16,31 @@
 //  anywhere in the run, the way the system calendar does.
 //
 
-import SwiftData
 import SwiftUI
 import VivoKit
 
 struct ConsistencyScreen: View {
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil }
-    )
-    private var completedSessions: [WorkoutSession]
-
+    @Environment(\.sessionAnalytics) private var sessionAnalytics
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private var workoutDates: Set<Date> {
-        let cal = Calendar.current
-        return Set(completedSessions.compactMap { session in
-            session.completedAt.map { cal.startOfDay(for: $0) }
-        })
-    }
-
-    private var streak: WorkoutStreak {
-        completedSessions.workoutStreak
-    }
-
-    /// Month starts from the current month back to the month holding
-    /// the first recorded session — the record stops where the record
-    /// starts. No padding months: a run of empty grids below your
-    /// first workout is filler you have to scroll past, and it reads
-    /// as absence rather than history.
-    private var months: [Date] {
-        let cal = Calendar.current
-        let thisMonth = cal.dateInterval(of: .month, for: Date())?.start ?? Date()
-        let firstMonth = workoutDates.min()
-            .flatMap { cal.dateInterval(of: .month, for: $0)?.start } ?? thisMonth
-        let span = max(cal.dateComponents([.month], from: firstMonth, to: thisMonth).month ?? 0, 0)
-        return (0 ... span).compactMap {
-            cal.date(byAdding: .month, value: -$0, to: thisMonth)
-        }
-    }
-
     var body: some View {
+        let history = sessionAnalytics?.consistencyHistory
+            ?? ConsistencyHistory.make(
+                dates: [],
+                now: Date(),
+                calendar: .current
+            )
+        let streak = sessionAnalytics?.overview.streak
+            ?? WorkoutStreak(current: 0, longest: 0)
+
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: Space.section) {
-                    streakStrip
+                    streakStrip(streak)
 
-                    ForEach(Array(months.enumerated()), id: \.element) { index, month in
+                    ForEach(Array(history.monthStartsNewestFirst.enumerated()), id: \.element) { index, month in
                         if index > 0 { SectionDivider() }
-                        monthBlock(month)
+                        monthBlock(month, history: history)
                     }
                 }
                 .padding(.top, Space.lg)
@@ -76,7 +53,7 @@ struct ConsistencyScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    todayButton(proxy)
+                    todayButton(proxy, months: history.monthStartsNewestFirst)
                 }
             }
         }
@@ -85,16 +62,26 @@ struct ConsistencyScreen: View {
     /// One month of the run. Centred rather than leading-aligned so
     /// the seven-column grid sits square under its own title on every
     /// device width.
-    private func monthBlock(_ month: Date) -> some View {
+    private func monthBlock(
+        _ month: Date,
+        history: ConsistencyHistory
+    ) -> some View {
         HStack {
             Spacer(minLength: 0)
-            StreakCalendar(workoutDates: workoutDates, month: month)
+            StreakCalendar(
+                workoutDays: history.workoutDays,
+                monthWorkoutCount: history.workoutDayCountByMonth[month] ?? 0,
+                month: month
+            )
             Spacer(minLength: 0)
         }
         .id(month)
     }
 
-    private func todayButton(_ proxy: ScrollViewProxy) -> some View {
+    private func todayButton(
+        _ proxy: ScrollViewProxy,
+        months: [Date]
+    ) -> some View {
         Button("Today") {
             guard let current = months.first else { return }
             Haptics.soft()
@@ -110,7 +97,7 @@ struct ConsistencyScreen: View {
         .accessibilityHint("Scrolls back to the current month")
     }
 
-    private var streakStrip: some View {
+    private func streakStrip(_ streak: WorkoutStreak) -> some View {
         StatStrip(stats: [
             Stat(
                 value: "\(streak.current)",

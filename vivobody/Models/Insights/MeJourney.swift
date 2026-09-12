@@ -163,7 +163,7 @@ extension [WorkoutSession] {
     /// Per-exercise progress ordered by the recency of its standing
     /// record — freshest achievements first. Reuses `progressByExercise`
     /// (≥2 data points), the same source as the lifetime PR count.
-    var personalRecords: [ExerciseProgress] {
+    var personalRecords: [StandingRecord] {
         progressByExercise.standingRecords
     }
 
@@ -225,15 +225,33 @@ extension [WorkoutSession] {
 
 // MARK: - Standing records
 
+/// Compact standing-record value retained by the analytics worker. Screens
+/// receive the already-selected winning point instead of searching an
+/// exercise's lifetime progress series while rendering each row.
+nonisolated struct StandingRecord: Identifiable, Hashable {
+    let id: String
+    let name: String
+    let group: MuscleGroup
+    let point: ExerciseProgressPoint
+
+    var date: Date {
+        point.date
+    }
+
+    init?(_ progress: ExerciseProgress) {
+        guard let point = progress.recordPoint else { return nil }
+        id = progress.id
+        name = progress.name
+        group = progress.group
+        self.point = point
+    }
+}
+
 nonisolated extension [ExerciseProgress] {
-    /// Progress series ordered by the recency of their standing
-    /// record — freshest achievements first. Works over any cached
-    /// progress list (e.g. `SessionAnalytics.progress`) so screens
-    /// don't have to re-walk the archive.
-    var standingRecords: [ExerciseProgress] {
-        filter { $0.recordDate != nil }.sorted {
-            ($0.recordDate ?? .distantPast) > ($1.recordDate ?? .distantPast)
-        }
+    /// Standing records ordered by achievement recency, with the winning
+    /// point selected once on the analytics worker.
+    var standingRecords: [StandingRecord] {
+        compactMap(StandingRecord.init).sorted { $0.date > $1.date }
     }
 }
 

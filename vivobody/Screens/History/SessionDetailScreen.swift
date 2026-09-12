@@ -25,7 +25,6 @@
 //      workout's cumulative comparable volume against the archive average.
 //
 
-import SwiftData
 import SwiftUI
 import VivoKit
 
@@ -41,25 +40,15 @@ struct SessionDetailScreen: View {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
-    /// Every completed session that landed before (or up to and
-    /// including) this one, in chronological order. Used to walk the
-    /// PR history forward and decide which exercises in *this*
-    /// session were all-time top weights at the moment they were
-    /// logged. Limiting by `completedAt <= session.completedAt` keeps
-    /// the work small and avoids future sessions invalidating past
-    /// PR labels.
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: [SortDescriptor(\.completedAt, order: .forward)]
-    )
-    private var allCompletedSessions: [WorkoutSession]
-
     var body: some View {
+        let prExerciseIDs = sessionAnalytics?.prExerciseIDs(for: session.id) ?? []
+        let sessionHasPR = !prExerciseIDs.isEmpty
+
         ScrollView {
             VStack(alignment: .leading, spacing: Space.section) {
-                heroCard
+                heroCard(sessionHasPR: sessionHasPR)
                     .settleIn(0)
-                exercisesSection
+                exercisesSection(prExerciseIDs: prExerciseIDs)
                     .settleIn(1)
             }
             .padding(.top, Space.xs)
@@ -79,10 +68,10 @@ struct SessionDetailScreen: View {
     /// The session as one physical object, mirroring History's week
     /// hero: identity on top, the lead numeral next, counts as a
     /// strip, the standout set as the footer note.
-    private var heroCard: some View {
+    private func heroCard(sessionHasPR: Bool) -> some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            header
-            heroMetric
+            header(sessionHasPR: sessionHasPR)
+            heroMetric(sessionHasPR: sessionHasPR)
             StatStrip(
                 stats: [
                     Stat(value: "\(durationMinutes)", unit: "min", label: "Duration"),
@@ -94,7 +83,7 @@ struct SessionDetailScreen: View {
             )
             .padding(.top, Space.xs)
 
-            topSetDetail
+            topSetDetail(sessionHasPR: sessionHasPR)
 
             if let loadComparison {
                 Rectangle()
@@ -112,7 +101,7 @@ struct SessionDetailScreen: View {
         .contentCard()
     }
 
-    private var header: some View {
+    private func header(sessionHasPR: Bool) -> some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(dateLine)
                 .panelLegendType()
@@ -128,7 +117,7 @@ struct SessionDetailScreen: View {
         }
     }
 
-    private var heroMetric: some View {
+    private func heroMetric(sessionHasPR: Bool) -> some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text(receiptMetric.value + (receiptMetric.qualifier ?? ""))
@@ -143,7 +132,7 @@ struct SessionDetailScreen: View {
                         .foregroundStyle(Ink.tertiary)
                 }
             }
-            Text(receiptMetricLabel)
+            Text(receiptMetricLabel(sessionHasPR: sessionHasPR))
                 .panelLegendType()
                 .foregroundStyle(sessionHasPR ? Tint.complete : Ink.tertiary)
         }
@@ -163,14 +152,14 @@ struct SessionDetailScreen: View {
         )
     }
 
-    private var receiptMetricLabel: String {
+    private func receiptMetricLabel(sessionHasPR: Bool) -> String {
         if sessionHasPR, case .volume(.complete) = receiptMetric.kind {
             return "\(receiptMetric.label) · personal record"
         }
         return receiptMetric.label
     }
 
-    private var topSetDetail: some View {
+    private func topSetDetail(sessionHasPR: Bool) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: Space.md) {
             Text("Top set")
                 .panelLegend()
@@ -188,7 +177,7 @@ struct SessionDetailScreen: View {
 
     // MARK: - Exercises
 
-    private var exercisesSection: some View {
+    private func exercisesSection(prExerciseIDs: Set<UUID>) -> some View {
         let breakdown = session.receiptContributions()
         return VStack(alignment: .leading, spacing: Space.sm) {
             SectionHeader(title: "Exercises", trailing: exercisesSubtitle)
@@ -282,38 +271,6 @@ struct SessionDetailScreen: View {
             return "—"
         }
         return exercise.setLabel(set, unit: unit)
-    }
-
-    /// Walks all completed sessions in chronological order up to and
-    /// including this one, tracking the running record per stable
-    /// exercise identity. Reps exercises compare effective load then
-    /// reps at equal load; loaded holds rank load then duration, while
-    /// duration-only holds rank time. Same semantics as the PR
-    /// detection on the History list, scoped to one session.
-    private var prExerciseIDs: Set<UUID> {
-        var bestByExercise: [String: StrengthPerformance] = [:]
-        var result: Set<UUID> = []
-
-        let cutoff = session.completedAt ?? session.startedAt
-        for s in allCompletedSessions {
-            let sTime = s.completedAt ?? s.startedAt
-            if sTime > cutoff { break }
-            for exercise in s.orderedExercises {
-                guard let performance = exercise.bestStrengthPerformance else { continue }
-                let key = exercise.historyKey
-                if bestByExercise[key] == nil || performance.beats(bestByExercise[key]!) {
-                    bestByExercise[key] = performance
-                    if s.id == session.id {
-                        result.insert(exercise.id)
-                    }
-                }
-            }
-        }
-        return result
-    }
-
-    private var sessionHasPR: Bool {
-        !prExerciseIDs.isEmpty
     }
 }
 

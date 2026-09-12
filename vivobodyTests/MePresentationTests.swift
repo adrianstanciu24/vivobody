@@ -54,8 +54,14 @@ struct MePresentationTests {
                 current: longestStreak,
                 longest: longestStreak
             ),
+            consistencyHistory: ConsistencyHistory.make(
+                dates: trainingSince.map { [$0] } ?? [],
+                now: now,
+                calendar: calendar
+            ),
             monthlyRecap: recap,
             prSessionIDs: [],
+            prExerciseIDsBySession: [:],
             forgeWarmth: ForgeWarmth.idle
         )
     }
@@ -112,7 +118,7 @@ struct MePresentationTests {
             hasHistory: hasHistory,
             hasCoreReports: hasCoreReports,
             overview: overview ?? self.overview(),
-            standingRecords: records,
+            standingRecords: records.standingRecords,
             bodyWeightSamplesNewestFirst: bodyWeights,
             unit: unit,
             now: now,

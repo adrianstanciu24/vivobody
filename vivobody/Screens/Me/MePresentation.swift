@@ -159,7 +159,7 @@ extension MePresentation {
         hasHistory: Bool,
         hasCoreReports: Bool,
         overview: ArchiveOverview,
-        standingRecords: [ExerciseProgress],
+        standingRecords: [StandingRecord],
         bodyWeightSamplesNewestFirst: [BodyWeightSample],
         unit: WeightUnit,
         now: Date = Date(),
@@ -308,7 +308,7 @@ extension MePresentation {
 
     @MainActor
     private static func makeRecords(
-        _ standingRecords: [ExerciseProgress],
+        _ standingRecords: [StandingRecord],
         unit: WeightUnit,
         now: Date,
         calendar: Calendar
@@ -323,69 +323,61 @@ extension MePresentation {
 
     @MainActor
     private static func makeRecord(
-        _ record: ExerciseProgress,
+        _ record: StandingRecord,
         unit: WeightUnit,
         now: Date,
         calendar: Calendar
     ) -> Record {
-        let point = record.recordPoint
+        let point = record.point
         let headlineValue: String
         let qualifierValue: String?
         let valueAccessibilityLabel: String
 
-        if let point {
-            switch record.trackingMode {
-            case .reps:
-                headlineValue = point.loadMode.loggedLoadLabel(
+        switch point.trackingMode {
+        case .reps:
+            headlineValue = point.loadMode.loggedLoadLabel(
+                point.topWeight,
+                unit: unit,
+                includeUnit: false
+            ) ?? "—"
+            qualifierValue = "× \(point.topReps)"
+            let load = point.loadMode.loggedLoadLabel(
+                point.topWeight,
+                unit: unit,
+                includeUnit: true
+            )
+            valueAccessibilityLabel = load.map { "\($0) × \(point.topReps)" }
+                ?? "\(point.topReps) reps"
+        case .duration:
+            let loadWithoutUnit = point.performanceSemanticKind.comparesLoad
+                ? point.loadMode.loggedLoadLabel(
                     point.topWeight,
                     unit: unit,
                     includeUnit: false
-                ) ?? "—"
-                qualifierValue = "× \(point.topReps)"
-                let load = point.loadMode.loggedLoadLabel(
+                )
+                : nil
+            headlineValue = loadWithoutUnit
+                ?? DurationFormatter.string(point.topDuration)
+            qualifierValue = loadWithoutUnit == nil
+                ? nil
+                : "× \(DurationFormatter.string(point.topDuration))"
+            let time = DurationFormatter.string(point.topDuration)
+            let load = point.performanceSemanticKind.comparesLoad
+                ? point.loadMode.loggedLoadLabel(
                     point.topWeight,
                     unit: unit,
                     includeUnit: true
                 )
-                valueAccessibilityLabel = load.map { "\($0) × \(point.topReps)" }
-                    ?? "\(point.topReps) reps"
-            case .duration:
-                let loadWithoutUnit = point.performanceSemanticKind.comparesLoad
-                    ? point.loadMode.loggedLoadLabel(
-                        point.topWeight,
-                        unit: unit,
-                        includeUnit: false
-                    )
-                    : nil
-                headlineValue = loadWithoutUnit
-                    ?? DurationFormatter.string(point.topDuration)
-                qualifierValue = loadWithoutUnit == nil
-                    ? nil
-                    : "× \(DurationFormatter.string(point.topDuration))"
-                let time = DurationFormatter.string(point.topDuration)
-                let load = point.performanceSemanticKind.comparesLoad
-                    ? point.loadMode.loggedLoadLabel(
-                        point.topWeight,
-                        unit: unit,
-                        includeUnit: true
-                    )
-                    : nil
-                valueAccessibilityLabel = load.map { "\($0) × \(time)" } ?? time
-            }
-        } else {
-            headlineValue = "—"
-            qualifierValue = nil
-            valueAccessibilityLabel = "—"
+                : nil
+            valueAccessibilityLabel = load.map { "\($0) × \(time)" } ?? time
         }
 
         var subtitleParts = [record.group.displayName]
-        if let date = record.recordDate {
-            subtitleParts.append(RelativeDate.short(
-                date,
-                now: now,
-                calendar: calendar
-            ))
-        }
+        subtitleParts.append(RelativeDate.short(
+            record.date,
+            now: now,
+            calendar: calendar
+        ))
         let cutoff = calendar.date(
             byAdding: .day,
             value: -30,
@@ -398,7 +390,7 @@ extension MePresentation {
             headlineValue: headlineValue,
             qualifierValue: qualifierValue,
             valueAccessibilityLabel: valueAccessibilityLabel,
-            isRecent: record.recordDate.map { $0 >= cutoff } ?? false
+            isRecent: record.date >= cutoff
         )
     }
 

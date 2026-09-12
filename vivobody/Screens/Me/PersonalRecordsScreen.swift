@@ -9,15 +9,11 @@
 //  Records set in the last 30 days wear the accent.
 //
 
-import SwiftData
 import SwiftUI
 import VivoKit
 
 struct PersonalRecordsScreen: View {
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil }
-    )
-    private var completedSessions: [WorkoutSession]
+    @Environment(\.sessionAnalytics) private var sessionAnalytics
 
     @AppStorage(SettingsKey.weightUnit)
     private var weightUnitRaw: String = SettingsDefaults.weightUnit
@@ -26,11 +22,9 @@ struct PersonalRecordsScreen: View {
         WeightUnit(rawValue: weightUnitRaw) ?? .lb
     }
 
-    private var records: [ExerciseProgress] {
-        completedSessions.personalRecords
-    }
-
     var body: some View {
+        let records = sessionAnalytics?.standingRecords ?? []
+
         ScrollView {
             if records.isEmpty {
                 ContentUnavailableView(
@@ -61,12 +55,11 @@ struct PersonalRecordsScreen: View {
 /// record on the right. Shared shape between the wall and the Me-tab
 /// preview so a record reads identically in both places.
 struct PRRow: View {
-    let record: ExerciseProgress
+    let record: StandingRecord
     let unit: WeightUnit
 
     private var isRecent: Bool {
-        guard let date = record.recordDate else { return false }
-        return date >= Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? .distantFuture
+        record.date >= Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? .distantFuture
     }
 
     var body: some View {
@@ -107,8 +100,8 @@ struct PRRow: View {
     /// The big numeral: the record's weight, or the hold time when
     /// the exercise is an unloaded timed hold.
     private var headlineValue: String {
-        guard let point = record.recordPoint else { return "—" }
-        switch record.trackingMode {
+        let point = record.point
+        switch point.trackingMode {
         case .reps:
             return point.loadMode.loggedLoadLabel(
                 point.topWeight,
@@ -132,8 +125,8 @@ struct PRRow: View {
     /// The small dim qualifier ("× 12", "× 0:45"); nil when the
     /// headline already says everything (bare hold, no record).
     private var qualifierValue: String? {
-        guard let point = record.recordPoint else { return nil }
-        switch record.trackingMode {
+        let point = record.point
+        switch point.trackingMode {
         case .reps:
             return "× \(point.topReps)"
         case .duration:
@@ -148,18 +141,15 @@ struct PRRow: View {
     }
 
     private var subtitle: String {
-        var parts = [record.group.displayName]
-        if let date = record.recordDate {
-            parts.append(RelativeDate.short(date))
-        }
+        let parts = [record.group.displayName, RelativeDate.short(record.date)]
         return parts.joined(separator: " · ")
     }
 
     /// Mode-aware standing record: "145 × 8" for reps, "1:30" for a
     /// hold (or "25 × 0:45" when the hold is loaded).
-    static func recordValue(_ record: ExerciseProgress, unit: WeightUnit) -> String {
-        guard let point = record.recordPoint else { return "—" }
-        switch record.trackingMode {
+    static func recordValue(_ record: StandingRecord, unit: WeightUnit) -> String {
+        let point = record.point
+        switch point.trackingMode {
         case .reps:
             let load = point.loadMode.loggedLoadLabel(
                 point.topWeight,

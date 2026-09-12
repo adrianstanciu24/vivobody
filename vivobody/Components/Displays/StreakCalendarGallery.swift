@@ -46,7 +46,14 @@
                 HStack {
                     Spacer(minLength: 0)
                     StreakCalendar(
-                        workoutDates: Self.workoutDates,
+                        workoutDays: Self.workoutDates,
+                        monthWorkoutCount: Self.workoutDates.count(where: {
+                            Calendar.current.isDate(
+                                $0,
+                                equalTo: displayedMonth,
+                                toGranularity: .month
+                            )
+                        }),
                         month: displayedMonth
                     )
                     Spacer(minLength: 0)
@@ -140,7 +147,11 @@
 
     #Preview("Empty month") {
         VStack {
-            StreakCalendar(workoutDates: [], month: Date())
+            StreakCalendar(
+                workoutDays: [],
+                monthWorkoutCount: 0,
+                month: Date()
+            )
         }
         .padding(Space.section)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -154,7 +165,11 @@
         let dates = (0 ..< 31).compactMap { cal.date(byAdding: .day, value: $0, to: monthStart) }
 
         return VStack {
-            StreakCalendar(workoutDates: Set(dates), month: Date())
+            StreakCalendar(
+                workoutDays: Set(dates),
+                monthWorkoutCount: dates.count,
+                month: Date()
+            )
         }
         .padding(Space.section)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

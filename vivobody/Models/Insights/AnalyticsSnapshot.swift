@@ -112,6 +112,9 @@ nonisolated struct AnalyticsSessionSnapshot {
 /// Resolved identity, anatomy, and classification are captured here so
 /// background work never consults the mutable catalog or model graph.
 nonisolated struct AnalyticsExerciseSnapshot {
+    /// Persistent exercise-instance identity, used to join archive reports
+    /// back to the exercise rows in a selected completed session.
+    let id: UUID
     let catalogID: String?
     let familyID: String?
     let catalogItemID: UUID?
@@ -154,6 +157,7 @@ nonisolated struct AnalyticsExerciseSnapshot {
 
     @MainActor
     init(_ exercise: Exercise, bodyweightAtSession: Double) {
+        id = exercise.id
         catalogID = exercise.catalogID
         familyID = exercise.familyID
         catalogItemID = exercise.catalogItemID
@@ -177,6 +181,7 @@ nonisolated struct AnalyticsExerciseSnapshot {
     }
 
     nonisolated init(
+        id: UUID,
         catalogID: String?,
         familyID: String? = nil,
         catalogItemID: UUID?,
@@ -191,6 +196,7 @@ nonisolated struct AnalyticsExerciseSnapshot {
         volumeCredits: [Muscle: Double],
         sets: [AnalyticsSetSnapshot]
     ) {
+        self.id = id
         self.catalogID = catalogID
         self.familyID = familyID
         self.catalogItemID = catalogItemID

@@ -74,6 +74,12 @@ final class SessionAnalytics {
         coreReports.progress
     }
 
+    /// Standing records ordered by when they were achieved, cached once by
+    /// the analytics worker for Me and the full Personal Records screen.
+    var standingRecords: [StandingRecord] {
+        coreReports.standingRecords
+    }
+
     var load: TrainingLoadReport {
         coreReports.load
     }
@@ -92,10 +98,22 @@ final class SessionAnalytics {
         coreReports.overview
     }
 
+    /// Calendar-ready lifetime history for the full Consistency screen.
+    var consistencyHistory: ConsistencyHistory {
+        coreReports.overview.consistencyHistory
+    }
+
     /// IDs of sessions that set a strength PR when logged — badge
     /// membership for History rows and Today's calendar/last-workout.
     var prSessionIDs: Set<UUID> {
         coreReports.overview.prSessionIDs
+    }
+
+    /// Exercise-instance IDs that set a strength PR in one archived session.
+    /// Session Detail reads this cached worker result instead of replaying the
+    /// complete SwiftData archive on every body evaluation.
+    func prExerciseIDs(for sessionID: UUID) -> Set<UUID> {
+        coreReports.overview.prExerciseIDsBySession[sessionID] ?? []
     }
 
     /// Cached ambient-forge temperature shared by every tab backdrop.

@@ -20,6 +20,7 @@ extension SessionAnalytics {
         let muscleMap: MuscleMapReport
         let strength: StrengthOutlookBoard
         let progress: [ExerciseProgress]
+        let standingRecords: [StandingRecord]
         let load: TrainingLoadReport
         let stamina: SetSeriesStamina
         let workoutLoadBaseline: WorkoutLoadBaseline
@@ -54,6 +55,7 @@ extension SessionAnalytics {
             let progress = common.progressByExercise(
                 isCancelled: isCancelled
             )
+            let standingRecords = progress.standingRecords
             try checkpoint()
             let volume = common.muscleVolume(
                 now: now,
@@ -140,6 +142,7 @@ extension SessionAnalytics {
                 muscleMap: muscleMap,
                 strength: strength,
                 progress: progress,
+                standingRecords: standingRecords,
                 load: load,
                 stamina: stamina,
                 workoutLoadBaseline: workoutLoadBaseline,

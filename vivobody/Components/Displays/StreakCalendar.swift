@@ -8,15 +8,17 @@
 //  just the truth of the record.
 //
 //  Use:
-//      StreakCalendar(workoutDates: dates)              // current month
-//      StreakCalendar(workoutDates: dates, month: date) // any month
+//      StreakCalendar(workoutDays: dates, monthWorkoutCount: count)
 //
 
 import SwiftUI
 import VivoKit
 
 struct StreakCalendar: View {
-    let workoutDates: Set<Date>
+    /// Dates are already normalized to calendar-day boundaries by the
+    /// analytics worker, so every grid cell performs one set lookup.
+    let workoutDays: Set<Date>
+    let monthWorkoutCount: Int
     var prDates: Set<Date> = []
     var month: Date = .init()
     var fillColor: Color = Tint.primary
@@ -39,16 +41,8 @@ struct StreakCalendar: View {
         calendar.dateInterval(of: .month, for: month)?.end ?? month
     }
 
-    private var workoutDays: Set<Date> {
-        Set(workoutDates.map { calendar.startOfDay(for: $0) })
-    }
-
     private var prDays: Set<Date> {
         Set(prDates.map { calendar.startOfDay(for: $0) })
-    }
-
-    private var monthSessionCount: Int {
-        workoutDays.count(where: { $0 >= monthStart && $0 < monthEnd })
     }
 
     private var monthLabel: String {
@@ -121,11 +115,11 @@ struct StreakCalendar: View {
     private var metadata: some View {
         HStack(spacing: 4) {
             DigitTicker(
-                value: Double(monthSessionCount),
+                value: Double(monthWorkoutCount),
                 font: Typography.sectionLabel,
                 color: Ink.secondary
             )
-            Text(monthSessionCount == 1 ? "session" : "sessions")
+            Text(monthWorkoutCount == 1 ? "session" : "sessions")
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.secondary)
         }

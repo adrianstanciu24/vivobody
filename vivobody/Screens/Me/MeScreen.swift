@@ -57,7 +57,7 @@ struct MeScreen: View {
             hasHistory: hasHistory,
             hasCoreReports: appState.analytics.hasCoreReports,
             overview: appState.analytics.overview,
-            standingRecords: appState.analytics.progress.standingRecords,
+            standingRecords: appState.analytics.standingRecords,
             bodyWeightSamplesNewestFirst: bodyWeightEntries.map {
                 MePresentation.BodyWeightSample(
                     date: $0.date,
