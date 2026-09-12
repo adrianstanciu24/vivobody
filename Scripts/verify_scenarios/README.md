@@ -70,6 +70,9 @@ framework chatter or user-owned values.
 - `wait`: poll until at least one visible element matches a selector.
 - `waitAbsent`: poll until no visible element matches a selector.
 - `tap`: require one visible match and tap its on-screen midpoint.
+- `tapAt`: tap a normalized application coordinate. Reserve this for native
+  system chrome that the Baguette accessibility snapshot omits; resume semantic
+  selectors immediately after the tap.
 - `scrollTo`: swipe in the declared direction until its semantic `selector`
   becomes visible; coordinates are derived from the application frame.
 - `swipe`: perform `count` blind swipes in the declared `direction` with no

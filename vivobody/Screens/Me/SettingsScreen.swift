@@ -81,10 +81,6 @@ struct SettingsScreen: View {
                 )
                 .padding(.top, Space.section)
                 .settleIn(1)
-
-                footer
-                    .padding(.top, Space.xxl)
-                    .settleIn(2)
             }
             .padding(.top, Space.sm)
             .padding(.bottom, Space.section + Space.md)
@@ -272,16 +268,6 @@ struct SettingsScreen: View {
         } else if let url = SupportMail.mailtoURL {
             openURL(url)
         }
-    }
-
-    private var footer: some View {
-        VStack(spacing: Space.sm) {
-            Text("vivobody")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.top, Space.sm)
     }
 }
 

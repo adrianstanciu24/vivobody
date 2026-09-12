@@ -33,9 +33,13 @@ struct SettingsPreferencesSection: View {
                 bodyDriftSpeedRow
                 rowDivider
                 weightUnitRow
-                rowDivider
-                restRow
-                rowDivider
+            }
+            .contentCard()
+
+            restRow
+                .contentCard()
+
+            VStack(alignment: .leading, spacing: 0) {
                 hapticsRow
                 rowDivider
                 soundsRow
@@ -43,10 +47,11 @@ struct SettingsPreferencesSection: View {
                     rowDivider
                     healthKitRow
                 }
-                rowDivider
-                resetCatalogRow
             }
             .contentCard()
+
+            resetCatalogRow
+                .contentCard()
         }
     }
 
@@ -294,20 +299,20 @@ struct SettingsPreferencesSection: View {
     }
 
     private var resetCatalogRow: some View {
-        Button(action: onRequestCatalogReset) {
+        Button(role: .destructive, action: onRequestCatalogReset) {
             HStack {
                 VStack(alignment: .leading, spacing: Space.xs) {
                     Text("Reset Exercise Catalog")
                         .font(Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                    Text("Restore \(bundledExerciseCount) bundled exercises")
+                        .foregroundStyle(Tint.danger)
+                    Text("Removes custom exercises and edits; restores \(bundledExerciseCount) bundled exercises")
                         .font(Typography.caption)
                         .foregroundStyle(Ink.tertiary)
                 }
                 Spacer()
                 Image(systemName: "arrow.counterclockwise")
                     .font(Typography.sectionLabel)
-                    .foregroundStyle(Ink.tertiary)
+                    .foregroundStyle(Tint.danger)
                     .accessibilityHidden(true)
             }
             .padding(.horizontal, Space.lg)

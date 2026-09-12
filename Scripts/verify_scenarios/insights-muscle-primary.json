@@ -36,7 +36,7 @@
     {
       "scrollTo": {
         "selector": {
-          "identifier": "muscleDirectness-bicepsBrachii"
+          "identifier": "muscleDirectness-gluteMax"
         },
         "direction": "up",
         "maxSwipes": 40
@@ -44,7 +44,7 @@
     },
     {
       "tap": {
-        "identifier": "muscleDirectness-bicepsBrachii"
+        "identifier": "muscleDirectness-gluteMax"
       }
     },
     {
@@ -58,7 +58,16 @@
       "identifier": "musclePrimaryExamples"
     },
     {
+      "label": "Targeted exercises"
+    },
+    {
       "label": "Supporting exercises"
+    },
+    {
+      "labelContains": "percent of targeted work"
+    },
+    {
+      "labelContains": "percent of supporting work"
     }
   ],
   "forbidden": [

@@ -196,7 +196,7 @@ private struct InsightsDrilloutRow: View {
             Spacer(minLength: Space.sm)
             Text(value)
                 .font(Typography.statValueCompact)
-                .foregroundStyle(Tint.primaryText)
+                .foregroundStyle(Tint.primary)
                 .monospacedDigit()
             Image(systemName: "chevron.right")
                 .font(Typography.sectionHeading)
@@ -254,7 +254,7 @@ private func mixSummary(name: String, share: Double, stacked: Bool) -> some View
         if !stacked { Spacer(minLength: Space.sm) }
         Text(percent(share))
             .font(Typography.statValue)
-            .foregroundStyle(Tint.primaryText)
+            .foregroundStyle(Tint.primary)
             .monospacedDigit()
             .fixedSize()
     }
@@ -267,18 +267,18 @@ private func mixShareBar(leadingShare: Double) -> some View {
     return GeometryReader { proxy in
         let availableWidth = max(0, proxy.size.width - gap)
         HStack(spacing: gap) {
-            RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
+            Capsule()
                 .fill(Tint.primary)
                 .frame(width: availableWidth * leadingShare)
 
             if hasRemainder {
-                RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
+                Capsule()
                     .fill(Ink.quaternary)
                     .frame(width: availableWidth * (1 - leadingShare))
             }
         }
     }
-    .frame(height: 24)
+    .frame(height: InstrumentBarHeight.standard)
     .accessibilityHidden(true)
 }
 

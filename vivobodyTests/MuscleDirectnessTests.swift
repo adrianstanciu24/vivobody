@@ -21,14 +21,16 @@ struct MuscleDirectnessTests {
         #expect(biceps.indirect == 2)
         #expect(biceps.total == 4)
         #expect(biceps.indirectShare == 0.5)
-        #expect(biceps.sources.first?.name == "row")
-        #expect(biceps.sources.first?.sets == 2)
+        #expect(biceps.targetedSources.first?.name == "bench")
+        #expect(biceps.targetedSources.first?.sets == 2)
+        #expect(biceps.supportingSources.first?.name == "row")
+        #expect(biceps.supportingSources.first?.sets == 2)
     }
 
     @Test func discountedSecondaryDoesNotBecomeDirectAndStabilizersEarnIndirectCredit() throws {
         let exercise = F.exercise([F.set(rir: 4)], roles: [.bicepsBrachii: 0.5, .triceps: 0.1])
         let report = F.replay([F.session([exercise])]).muscleDirectness(now: F.now)
-        let biceps = try #require(report.passengers.first)
+        let biceps = try #require(report.supportingOnly.first)
         #expect(biceps.direct == 0)
         #expect(abs(biceps.indirect - 0.3) < 0.000001)
         #expect(biceps.indirectShare == 1)
@@ -42,14 +44,30 @@ struct MuscleDirectnessTests {
                        F.session([row], daysAgo: -1), F.session([row], completed: false),
                        F.session([F.exercise([F.set()], modality: .power)])]
         let report = F.replay(archive).muscleDirectness(now: F.now)
-        #expect(report.passengers.first?.indirect == 1.5)
+        #expect(report.supportingOnly.first?.indirect == 1.5)
     }
 
-    @Test func namesLargestPassengerByVolumeNotTinyPercentage() {
+    @Test func sortsSupportingOnlyMusclesByCreditedVolume() {
         let big = F.exercise(Array(repeating: F.set(), count: 8), roles: [.bicepsBrachii: 0.5])
         let tiny = F.exercise([F.set()], key: "tiny", roles: [.deltoidPosterior: 0.5])
         let report = F.replay([F.session([big, tiny])]).muscleDirectness(now: F.now)
-        #expect(report.passengers.first?.muscle == .bicepsBrachii)
+        #expect(report.supportingOnly.first?.muscle == .bicepsBrachii)
+    }
+
+    @Test func targetedMusclesLeadSupportingOnlyMusclesByCreditedVolume() {
+        let largeTarget = F.exercise(
+            [F.set(), F.set(), F.set()], roles: [.deltoidPosterior: 1, .triceps: 0.5]
+        )
+        let smallTarget = F.exercise([F.set()], key: "small", roles: [.bicepsBrachii: 1])
+        let largeSupport = F.exercise(
+            Array(repeating: F.set(), count: 10), key: "support", roles: [.obliques: 0.5]
+        )
+        let report = F.replay([F.session([largeTarget, smallTarget, largeSupport])])
+            .muscleDirectness(now: F.now)
+
+        #expect(report.ranked.map(\.muscle).prefix(3) == [
+            .deltoidPosterior, .bicepsBrachii, .obliques,
+        ])
     }
 
     @Test func examplesAreUniqueCurrentPrimaryExercisesOnly() {

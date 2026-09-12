@@ -99,7 +99,7 @@ struct TrainingLoadSection: View {
             unit: currentMetricUnit,
             valueFont: Typography.metricLg,
             accent: true,
-            accentColor: Tint.primaryText
+            accentColor: Tint.primary
         )
     }
 
@@ -343,7 +343,7 @@ struct TrainingLoadSection: View {
 
     private var verdictTextColor: Color {
         switch report.verdict {
-        case .productive: Tint.primaryText
+        case .productive: Tint.primary
         case .high: Ink.primary
         case .low: Ink.secondary
         case .insufficient: Ink.primary

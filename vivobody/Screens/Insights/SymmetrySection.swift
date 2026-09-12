@@ -4,7 +4,8 @@
 //
 //  Training-balance instrument for opposing groups and movement patterns
 //  across all history. The main Insights mode shows three fixed push/pull
-//  proportional two-color capsule bars; a drill-out keeps the full qualified board.
+//  proportional two-color capsule bars; a drill-out splits the full qualified
+//  board into category cards.
 //  Unfinished comparisons collapse into one building rail instead of a wall
 //  of empty rows. Distribution-only pairs never imply a universal 50/50 target.
 //
@@ -75,12 +76,13 @@ struct SymmetrySection: View {
     }
 
     private var fullBoardCard: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: Space.lg) {
             ForEach(groups) { group in
                 VStack(alignment: .leading, spacing: Space.lg) {
                     Text(group.title)
                         .panelLegend()
                         .accessibilityAddTraits(.isHeader)
+                        .accessibilityIdentifier("insightsBalanceGroup-\(group.id)")
 
                     VStack(spacing: Space.section) {
                         ForEach(group.pairs) { pair in
@@ -88,21 +90,15 @@ struct SymmetrySection: View {
                         }
                     }
                 }
-
-                if group.id != groups.last?.id {
-                    SectionDivider()
-                        .padding(.vertical, Space.xl)
-                }
+                .padding(Space.xl)
+                .contentCard()
             }
 
             if buildingCount > 0 {
-                SectionDivider()
-                    .padding(.vertical, Space.lg)
                 buildingRail
+                    .padding(.horizontal, Space.xl)
             }
         }
-        .padding(Space.xl)
-        .contentCard()
     }
 
     private var buildingCard: some View {
@@ -124,7 +120,7 @@ struct SymmetrySection: View {
             if let leadingBuildingPair {
                 Text("Closest signal · \(leadingBuildingPair.leftLabel) / \(leadingBuildingPair.rightLabel)")
                     .panelLegendType()
-                    .foregroundStyle(Tint.primaryText)
+                    .foregroundStyle(Tint.primary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
@@ -319,7 +315,7 @@ private struct BalanceShareRow: View {
                     }
                 }
             }
-            .frame(height: 24)
+            .frame(height: InstrumentBarHeight.standard)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityIdentifier("insightsBalance-\(pair.id)")
@@ -346,7 +342,7 @@ private struct BalanceShareRow: View {
     private func percentText(_ percent: Int, isLeft: Bool) -> some View {
         Text("\(percent)%")
             .font(Typography.statValueCompact)
-            .foregroundStyle(isLeft ? Tint.primaryText : Ink.secondary)
+            .foregroundStyle(isLeft ? Tint.primary : Ink.secondary)
             .monospacedDigit()
             .lineLimit(1)
     }

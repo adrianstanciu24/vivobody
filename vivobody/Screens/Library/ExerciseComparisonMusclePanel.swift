@@ -110,8 +110,10 @@ extension ExerciseComparisonScreen {
                             scope: muscleScope,
                             anchorName: anchor.name,
                             otherName: other.name,
-                            anchorColor: comparisonLabelColor(.accent),
-                            otherColor: comparisonLabelColor(.compare)
+                            anchorLabelColor: Tint.primaryText,
+                            otherLabelColor: Ink.secondary,
+                            anchorBeamColor: Tint.primary,
+                            otherBeamColor: Ink.secondary
                         )
                     }
                 }
@@ -432,10 +434,12 @@ private struct MuscleComparisonGauge: View {
     let scope: ExerciseComparison.AnatomyScope
     let anchorName: String
     let otherName: String
-    let anchorColor: Color
-    let otherColor: Color
+    let anchorLabelColor: Color
+    let otherLabelColor: Color
+    let anchorBeamColor: Color
+    let otherBeamColor: Color
 
-    private let barHeight: CGFloat = 20
+    private let barHeight = InstrumentBarHeight.standard
     private let centerGap: CGFloat = 4
 
     var body: some View {
@@ -447,11 +451,11 @@ private struct MuscleComparisonGauge: View {
 
             HStack(spacing: Space.md) {
                 Text(roleLabel(role: delta.anchorRole, strength: anchorStrength))
-                    .foregroundStyle(anchorColor)
+                    .foregroundStyle(anchorLabelColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 Text(roleLabel(role: delta.otherRole, strength: otherStrength))
-                    .foregroundStyle(otherColor)
+                    .foregroundStyle(otherLabelColor)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .font(Typography.metricUnit)
@@ -470,12 +474,12 @@ private struct MuscleComparisonGauge: View {
                 HStack(spacing: centerGap) {
                     beamHalf(
                         width: halfWidth * anchorStrength,
-                        color: anchorColor,
+                        color: anchorBeamColor,
                         alignment: .trailing
                     )
                     beamHalf(
                         width: halfWidth * otherStrength,
-                        color: otherColor,
+                        color: otherBeamColor,
                         alignment: .leading
                     )
                 }
@@ -495,9 +499,9 @@ private struct MuscleComparisonGauge: View {
         alignment: Alignment
     ) -> some View {
         ZStack(alignment: alignment) {
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
+            Capsule()
                 .fill(Surface.cardTintBright)
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
+            Capsule()
                 .fill(color)
                 .frame(width: width)
         }

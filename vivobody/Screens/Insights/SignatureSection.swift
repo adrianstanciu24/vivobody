@@ -41,7 +41,7 @@ struct SignatureSection: View {
             } else {
                 Text(focusLabel)
                     .font(Typography.display)
-                    .foregroundStyle(Tint.primaryText)
+                    .foregroundStyle(Tint.primary)
                     .frame(maxWidth: .infinity)
                     .multilineTextAlignment(.center)
 

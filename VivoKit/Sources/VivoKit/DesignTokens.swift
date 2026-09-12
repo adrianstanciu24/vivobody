@@ -141,6 +141,11 @@
         public static let pill: CGFloat = 999
     }
 
+    public enum InstrumentBarHeight {
+        public static let standard: CGFloat = 24
+        public static let micro: CGFloat = 8
+    }
+
     public enum Space {
         public static let xs: CGFloat = 4
         public static let sm: CGFloat = 8

@@ -11,30 +11,6 @@
 import SwiftUI
 import VivoKit
 
-// MARK: - Detail screen entry
-
-extension ExerciseDetailScreen {
-    /// Detail-screen entry beside the existing instructions drill-out.
-    var compareLink: some View {
-        Button {
-            startComparison()
-        } label: {
-            KitRow(
-                title: "Compare with another exercise",
-                leading: Image(systemName: "arrow.left.arrow.right")
-            ) {
-                Image(systemName: "chevron.right")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.tertiary)
-                    .accessibilityHidden(true)
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityHint("Opens exercise comparison")
-        .accessibilityIdentifier("exercise-compare")
-    }
-}
-
 enum ExerciseComparisonPanel: String, CaseIterable, Hashable {
     case muscles
     case movement

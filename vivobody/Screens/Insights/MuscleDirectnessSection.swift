@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Targeted/supporting shares explain how each muscle was trained. The preview
-//  shows the largest supporting-work recipients; full rosters, sources, and
+//  leads with intentional work; full rosters, sources, and
 //  authored primary-target examples are one navigation level away.
 //
 
@@ -27,7 +27,7 @@ struct MuscleDirectnessSection: View {
                 }
                 .foregroundStyle(Ink.primary)
                 Text("All time").font(Typography.caption).foregroundStyle(Ink.secondary)
-                let rows = Array(report.passengers.prefix(dynamicTypeSize.isAccessibilitySize ? 1 : 3))
+                let rows = Array(report.ranked.prefix(dynamicTypeSize.isAccessibilitySize ? 1 : 3))
                 if !rows.isEmpty {
                     VStack(alignment: .leading, spacing: Space.section) {
                         ForEach(rows) { row in
@@ -35,7 +35,7 @@ struct MuscleDirectnessSection: View {
                         }
                     }
                 } else {
-                    Text(report.trained.isEmpty ? "No muscle work recorded" : "Targeted work only")
+                    Text("No muscle work recorded")
                         .font(Typography.body).foregroundStyle(Ink.secondary)
                 }
             }
@@ -46,14 +46,14 @@ struct MuscleDirectnessSection: View {
         .accessibilityAddTraits(.isButton)
         .accessibilityIdentifier("insightsMuscleDirectnessLink")
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint("Opens every muscle, supporting exercises, and targeted exercise examples")
+        .accessibilityHint("Opens every muscle, contributing exercises, and targeted exercise examples")
     }
 
     private var accessibilityLabel: String {
-        let rows = report.passengers.prefix(dynamicTypeSize.isAccessibilitySize ? 1 : 3).map { row in
+        let rows = report.ranked.prefix(dynamicTypeSize.isAccessibilitySize ? 1 : 3).map { row in
             "\(row.muscle.displayName): \(roleSummary(row))."
         }.joined(separator: " ")
-        return "How muscles are trained. All time. \(rows.isEmpty ? (report.trained.isEmpty ? "No muscle work recorded." : "Targeted work only.") : rows)"
+        return "How muscles are trained. All time. \(rows.isEmpty ? "No muscle work recorded." : rows)"
     }
 }
 
@@ -66,18 +66,33 @@ private struct MuscleDirectnessList: View {
                 Text("All time").panelLegend()
                 Text("Muscle work").font(Typography.title)
                     .accessibilityIdentifier("muscleDirectnessRoster").accessibilityAddTraits(.isHeader)
-                ForEach(report.trained.sorted { $0.indirectShare > $1.indirectShare }) { row in
-                    NavigationLink {
-                        MuscleDirectnessDetail(row: row)
-                    } label: {
-                        MuscleRoleBeam(row: row)
-                            .padding(Space.lg).contentCard()
+                if !report.targeted.isEmpty {
+                    Text("Targeted work").font(Typography.headline)
+                        .accessibilityAddTraits(.isHeader)
+                    ForEach(report.targeted) { row in
+                        rowLink(row)
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("muscleDirectness-\(row.muscle.rawValue)")
+                }
+                if !report.supportingOnly.isEmpty {
+                    Text("Supporting work only").font(Typography.headline)
+                        .accessibilityAddTraits(.isHeader)
+                    ForEach(report.supportingOnly) { row in
+                        rowLink(row)
+                    }
                 }
             }
         }
+    }
+
+    private func rowLink(_ row: MuscleDirectness.Row) -> some View {
+        NavigationLink {
+            MuscleDirectnessDetail(row: row)
+        } label: {
+            MuscleRoleBeam(row: row)
+                .padding(Space.lg).contentCard()
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("muscleDirectness-\(row.muscle.rawValue)")
     }
 }
 
@@ -92,23 +107,28 @@ private struct MuscleDirectnessDetail: View {
                     MuscleRoleBeam(row: row)
                 }
                 .padding(Space.xl).contentCard()
-                if !row.sources.isEmpty {
-                    VStack(alignment: .leading, spacing: Space.lg) {
-                        Text("Supporting exercises").font(Typography.title).accessibilityAddTraits(.isHeader)
-                        ForEach(row.sources) { source in
-                            HStack(alignment: .firstTextBaseline) {
-                                Text(source.name).font(Typography.body).foregroundStyle(Ink.secondary)
-                                Spacer(minLength: Space.md)
-                                Text("\(Int((source.sets / row.indirect * 100).rounded()))%")
-                                    .font(Typography.metricInline).monospacedDigit()
-                            }
-                            .accessibilityElement(children: .ignore)
-                            .accessibilityLabel("\(source.name), \(Int((source.sets / row.indirect * 100).rounded())) percent of supporting work")
-                        }
-                    }
+                if !row.targetedSources.isEmpty {
+                    ExerciseSourceBreakdown(
+                        title: "Targeted exercises",
+                        caption: "Breakdown of \(targetedPercentage)% targeted work",
+                        sources: row.targetedSources,
+                        total: row.direct,
+                        tint: Tint.primary,
+                        roleLabel: "targeted work"
+                    )
+                }
+                if !row.supportingSources.isEmpty {
+                    ExerciseSourceBreakdown(
+                        title: "Supporting exercises",
+                        caption: "Breakdown of \(supportingPercentage)% supporting work",
+                        sources: row.supportingSources,
+                        total: row.indirect,
+                        tint: Ink.secondary,
+                        roleLabel: "supporting work"
+                    )
                 }
                 VStack(alignment: .leading, spacing: Space.md) {
-                    Text("Exercises that target this muscle").font(Typography.title)
+                    Text("Targeted exercise examples").font(Typography.title)
                         .accessibilityIdentifier("musclePrimaryExamples").accessibilityAddTraits(.isHeader)
                     if row.examples.isEmpty {
                         Text("No primary-target example in the catalog.")
@@ -134,6 +154,87 @@ private struct MuscleDirectnessDetail: View {
             }
         }
     }
+
+    private var supportingPercentage: Int {
+        Int((row.indirectShare * 100).rounded())
+    }
+
+    private var targetedPercentage: Int {
+        100 - supportingPercentage
+    }
+}
+
+private struct ExerciseSourceBreakdown: View {
+    let title: String
+    let caption: String
+    let sources: [MuscleDirectness.Source]
+    let total: Double
+    let tint: Color
+    let roleLabel: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.lg) {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text(title).font(Typography.title).accessibilityAddTraits(.isHeader)
+                Text(caption).font(Typography.caption).foregroundStyle(Ink.secondary)
+            }
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(sources) { source in
+                    ExerciseSourceShareRow(
+                        source: source, total: total, tint: tint, roleLabel: roleLabel
+                    )
+                    if source.id != sources.last?.id {
+                        SectionDivider().padding(.vertical, Space.lg)
+                    }
+                }
+            }
+            .padding(Space.xl).contentCard()
+        }
+    }
+}
+
+private struct ExerciseSourceShareRow: View {
+    let source: MuscleDirectness.Source
+    let total: Double
+    let tint: Color
+    let roleLabel: String
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var share: Double {
+        total > 0 ? min(1, max(0, source.sets / total)) : 0
+    }
+
+    private var percentage: Int {
+        Int((share * 100).rounded())
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
+                : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.md))
+            layout {
+                Text(source.name)
+                    .font(Typography.headline).foregroundStyle(Ink.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+                if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
+                Text("\(percentage)%")
+                    .font(Typography.statValueCompact).foregroundStyle(tint)
+                    .monospacedDigit().fixedSize()
+            }
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(Surface.edge)
+                    Capsule().fill(tint.gradient)
+                        .frame(width: proxy.size.width * share)
+                }
+            }
+            .frame(height: InstrumentBarHeight.micro)
+            .accessibilityHidden(true)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(source.name), \(percentage) percent of \(roleLabel)")
+    }
 }
 
 private func roleSummary(_ row: MuscleDirectness.Row) -> String {
@@ -157,14 +258,14 @@ private struct MuscleRoleBeam: View {
                 if row.direct == 0 || row.indirect == 0 {
                     Text(roleSummary(row))
                         .font(Typography.headline)
-                        .foregroundStyle(row.direct == 0 ? Ink.secondary : Tint.primaryText)
+                        .foregroundStyle(row.direct == 0 ? Ink.secondary : Tint.primary)
                 } else {
                     let supporting = Int((row.indirectShare * 100).rounded())
                     let layout = dynamicTypeSize.isAccessibilitySize
                         ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
                         : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.sm))
                     layout {
-                        Text("\(100 - supporting)% targeted").foregroundStyle(Tint.primaryText)
+                        Text("\(100 - supporting)% targeted").foregroundStyle(Tint.primary)
                         if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
                         Text("\(supporting)% supporting").foregroundStyle(Ink.secondary)
                     }
@@ -186,7 +287,7 @@ private struct MuscleRoleBeam: View {
                         }
                     }
                 }
-                .frame(height: 24)
+                .frame(height: InstrumentBarHeight.standard)
             } else {
                 Text("No recorded work").font(Typography.caption).foregroundStyle(Ink.secondary)
             }

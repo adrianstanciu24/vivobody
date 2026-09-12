@@ -24,17 +24,25 @@
       }
     },
     {
-      "swipe": {
-        "direction": "up",
-        "count": 2
+      "tap": {
+        "identifier": "insightsMuscleDirectnessLink"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "muscleDirectnessRoster"
       }
     }
   ],
   "required": [
     {
-      "identifier": "insightsMuscleDirectnessLink",
-      "role": "AXButton",
-      "labelContains": "Supporting work only"
+      "identifier": "muscleDirectnessRoster",
+      "role": "AXHeading",
+      "label": "Muscle work"
+    },
+    {
+      "label": "Targeted work",
+      "role": "AXHeading"
     }
   ],
   "forbidden": [

@@ -28,16 +28,21 @@
       }
     },
     {
-      "scrollTo": {
-        "selector": {
-          "identifier": "exercise-compare"
-        },
-        "direction": "up"
+      "tapAt": {
+        "xFraction": 0.89,
+        "yFraction": 0.11
+      }
+    },
+    {
+      "wait": {
+        "label": "Compare with Another Exercise",
+        "role": "AXButton"
       }
     },
     {
       "tap": {
-        "identifier": "exercise-compare"
+        "label": "Compare with Another Exercise",
+        "role": "AXButton"
       }
     },
     {

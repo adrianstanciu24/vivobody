@@ -233,7 +233,7 @@ struct SignatureEmblemRenderer {
             let name = Text(petal.group.displayName.uppercased())
                 .font(Typography.micro)
                 .fontWeight(isDominant ? .bold : .medium)
-                .foregroundStyle(isDominant ? Tint.primaryText : Ink.tertiary)
+                .foregroundStyle(isDominant ? Tint.primary : Ink.tertiary)
             context.draw(
                 name,
                 at: CGPoint(x: labelPoint.x, y: labelPoint.y - 7),
@@ -243,7 +243,7 @@ struct SignatureEmblemRenderer {
             guard petal.volumeShare > 0 else { continue }
             let numeral = Text(signatureShareLabel(petal.volumeShare))
                 .font(Typography.micro.monospacedDigit())
-                .foregroundStyle(isDominant ? Tint.primaryText : Ink.secondary)
+                .foregroundStyle(isDominant ? Tint.primary : Ink.secondary)
             context.draw(
                 numeral,
                 at: CGPoint(x: labelPoint.x, y: labelPoint.y + 7),

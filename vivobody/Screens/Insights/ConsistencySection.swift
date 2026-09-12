@@ -79,7 +79,7 @@ struct ConsistencySection: View {
                     value: InsightsFormat.perWeekLabel(report.sessionsPerWeek),
                     valueFont: Typography.metricLg,
                     accent: true,
-                    accentColor: Tint.primaryText
+                    accentColor: Tint.primary
                 )
                 .accessibilityLabel("\(InsightsFormat.perWeekLabel(report.sessionsPerWeek)) workouts per week, last 4 weeks")
                 .accessibilityIdentifier("insightsRecentCadence")

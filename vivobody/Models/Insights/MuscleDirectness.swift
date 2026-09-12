@@ -4,7 +4,8 @@
 //
 //  Splits all-time muscle hard-set equivalents by the role captured when an
 //  exercise was logged. Primary work earns full credit; secondary work earns
-//  half credit; stabilizers earn one tenth as indirect work. Examples use current authored primaries.
+//  half credit; stabilizers earn one tenth as indirect work. Historical source
+//  exercises are retained for both pools; examples use current authored primaries.
 //
 
 import Foundation
@@ -26,7 +27,8 @@ nonisolated struct MuscleDirectness {
         let muscle: Muscle
         let direct: Double
         let indirect: Double
-        let sources: [Source]
+        let targetedSources: [Source]
+        let supportingSources: [Source]
         let examples: [Example]
         var id: Muscle {
             muscle
@@ -46,13 +48,25 @@ nonisolated struct MuscleDirectness {
         rows.filter { $0.total > 0 }
     }
 
-    /// Largest amount of credited supporting work; percentages alone would
-    /// overstate a tiny incidental exposure. Stable ties follow muscle identity.
-    var passengers: [Row] {
-        rows.filter { $0.indirect > 0 }.sorted {
+    /// Intentional work leads the roster by credited targeted volume. Muscles
+    /// trained only through supporting roles follow by credited supporting volume.
+    /// Stable ties follow muscle identity.
+    var targeted: [Row] {
+        rows.filter { $0.direct > 0 }.sorted {
+            if $0.direct != $1.direct { return $0.direct > $1.direct }
+            return $0.muscle.rawValue < $1.muscle.rawValue
+        }
+    }
+
+    var supportingOnly: [Row] {
+        rows.filter { $0.direct == 0 && $0.indirect > 0 }.sorted {
             if $0.indirect != $1.indirect { return $0.indirect > $1.indirect }
             return $0.muscle.rawValue < $1.muscle.rawValue
         }
+    }
+
+    var ranked: [Row] {
+        targeted + supportingOnly
     }
 
     static func examples(for muscle: Muscle, catalog: [CatalogRecord]) -> [Example] {
@@ -82,33 +96,44 @@ nonisolated extension AnalyticsAccumulator {
     ) -> MuscleDirectness {
         var direct: [Muscle: Double] = [:]
         var indirect: [Muscle: Double] = [:]
-        var sources: [Muscle: [String: MuscleDirectness.Source]] = [:]
+        var targetedSources: [Muscle: [String: MuscleDirectness.Source]] = [:]
+        var supportingSources: [Muscle: [String: MuscleDirectness.Source]] = [:]
         for session in sessions where session.isCompleted && session.date <= now {
             guard !isCancelled() else { break }
             for replay in session.exercises where replay.setEquivalent > 0 {
                 for (muscle, role) in replay.exercise.volumeCredits {
                     if role == 1 {
                         direct[muscle, default: 0] += replay.setEquivalent
+                        let key = replay.exercise.historyKey
+                        var source = targetedSources[muscle]?[key] ?? MuscleDirectness.Source(
+                            id: key, name: replay.name, sets: 0
+                        )
+                        source.sets += replay.setEquivalent
+                        targetedSources[muscle, default: [:]][key] = source
                     } else if role > 0, role < 1 {
                         let credit = replay.setEquivalent * role
                         indirect[muscle, default: 0] += credit
                         let key = replay.exercise.historyKey
-                        var source = sources[muscle]?[key] ?? MuscleDirectness.Source(
+                        var source = supportingSources[muscle]?[key] ?? MuscleDirectness.Source(
                             id: key, name: replay.name, sets: 0
                         )
                         source.sets += credit
-                        sources[muscle, default: [:]][key] = source
+                        supportingSources[muscle, default: [:]][key] = source
                     }
                 }
             }
         }
         return MuscleDirectness(rows: Muscle.allCases.map { muscle in
-            let ranked = Array(sources[muscle, default: [:]].values).sorted {
+            let targeted = Array(targetedSources[muscle, default: [:]].values).sorted {
+                $0.sets == $1.sets ? $0.id < $1.id : $0.sets > $1.sets
+            }
+            let supporting = Array(supportingSources[muscle, default: [:]].values).sorted {
                 $0.sets == $1.sets ? $0.id < $1.id : $0.sets > $1.sets
             }
             return MuscleDirectness.Row(
                 muscle: muscle, direct: direct[muscle, default: 0],
-                indirect: indirect[muscle, default: 0], sources: ranked,
+                indirect: indirect[muscle, default: 0],
+                targetedSources: targeted, supportingSources: supporting,
                 examples: MuscleDirectness.examples(for: muscle, catalog: catalog)
             )
         })

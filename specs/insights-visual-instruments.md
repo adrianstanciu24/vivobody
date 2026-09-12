@@ -79,19 +79,19 @@ meaning that is absent from position, length, label, or accessibility value.
 - Exercise mix and Rep mix appear as compact visual navigation cards. Their
   full charts live on dedicated detail screens. Keep the two previews grouped
   closely, with less padding and visual weight than the main instruments.
-  Each preview names its leading category and percentage above a 24pt share
-  bar; keep the last-four-weeks scope visible. Names and values retain their
+  Each preview names its leading category and percentage above a standard
+  24pt capsule share bar; keep the last-four-weeks scope visible. Names and values retain their
   readable type sizes, wrap freely, and stack at accessibility text sizes.
   When recent data is absent, use a short factual label without an empty chart.
 - Rep mix uses readable fixed-width weekly stacks and enough trailing plot
   inset to keep the newest date label fully visible beside the Y axis.
-- Each preview uses two independently rounded segments: the leading segment
+- Each preview uses two independently capsule-ended segments: the leading segment
   repeats the named category's percentage, and the neutral segment is the
   combined remainder. The name, number, and filled length carry the summary;
   repeated Top/Other legends stay off the preview. Full category legends live
   in the drill-outs; accessibility labels retain both shares and their scope.
 - The Exercise mix drill-out preserves every named exercise and exercise-type
-  share as its own rounded segment with visible separation. Its adjacent
+  share as its own 24pt capsule segment with visible separation. Its adjacent
   legends repeat the exact category names and percentages, so color is never
   the only mapping.
 
@@ -144,6 +144,10 @@ meaning that is absent from position, length, label, or accessibility value.
   its own name-and-number line. Omit set totals, center markers, and empty tracks.
 - Do not permanently show threshold explanations, comparison counts, or all
   qualified rows above the fold.
+- In All comparisons, split the qualified roster into separate content cards for
+  Upper body compound, Upper body isolation, Upper body muscle groups, Lower body,
+  and Training style · descriptive. Omit empty groups; keep any shared building
+  indicator outside the category cards.
 - Distribution-only pairs remain explicitly descriptive and never imply that
   50/50 is a target.
 - Qualification progress is shown only while no meaningful comparison exists,
@@ -179,7 +183,7 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
   future dates. Price exercises with SetStimulus, then split credit equally across
   unique snapshotted planes. The classified denominator counts each exercise once.
 - Show three rows, each pairing a body-and-plane illustration with its anatomical
-  name, plain-language direction, whole percentage, and horizontal share bar.
+  name, plain-language direction, whole percentage, and 8pt micro capsule share bar.
   All bars use the same 0–100% scale. Whole percentages use largest-remainder
   rounding and sum to 100 when data exists; these are shares, not completion targets.
 - Keep the all-time hard-set scope visible. Unclassified hard sets remain visible
@@ -193,23 +197,33 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
 
 - Use the same all-time completed history and SetStimulus pricing. Primary snapshot
   credit 1.0 enters direct work; secondary 0.5 and stabilizer 0.1 enter indirect work. These are credited hard sets, not literal exercise-set counts.
-- Preview the muscles with most supporting credit. Label primary work “targeted”
+- Preview the muscles with most targeted credit, followed by supporting-only
+  muscles when fewer than three have targeted work. Label primary work “targeted”
   and secondary/stabilizing work “supporting”; show complementary whole percentages
   instead of weighted set totals. Pure-role rows say “Supporting work only” or
   “Targeted work only.”
 - Each muscle has a full-width 24pt two-color capsule bar: orange targeted and gray
   supporting, separated by 3pt when both exist, with no unused track. Preview rows
   have 32pt spacing. Zero-work rows show no percentage or bar.
-- Keep “All time” visible. Source exercises show their share of supporting work.
-- The roster includes only muscles with recorded work, without footer disclosures. Each
-  muscle detail shows its indirect exercise sources and up to three current bundled
-  exercises where it is authored primary, preferring family variety. Examples link
-  to Exercise Detail and do not prescribe exercise selection.
+- Keep “All time” visible. Historical source exercises form separate targeted and
+  supporting breakdowns, targeted first. Each caption names the corresponding
+  whole-muscle share; percentages within each group sum to 100. Rows use aligned
+  whole percentages and 8pt capsule bars on a common 0–100% scale: orange for
+  targeted and dark neutral for supporting.
+- The roster includes only muscles with recorded work, without footer disclosures.
+  Muscles with targeted work lead, ordered by targeted credit; supporting-only
+  muscles follow in their own group, ordered by supporting credit. Stable ties use
+  muscle identity, and the preview uses the same order. Each muscle detail also
+  shows up to three current bundled exercises where it is authored primary,
+  preferring family variety. These catalog examples are separate from historical
+  contributors, link to Exercise Detail, and do not prescribe exercise selection.
 
 ### Set-Series Stamina
 
 - The preview explains “Reps retained compared with your first set.” below
   “Reps held · all time” and above the pattern rows, applying to the whole card.
+- Pattern retention uses the standard 24pt capsule rail. Its first-set reference
+  marker spans that same height.
 - Pattern details describe rounded retention changes across comparable series
   in percentage points, using “No change across comparable series” for zero.
   Their sample count reads “Based on N set series · all time”.
@@ -257,5 +271,6 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
 - Exercise mix, Rep mix, and the full balance roster are visual drill-outs.
 - `--ui-test-insights-showcase` supplies a focused deterministic history for
   normal, locked, light, and accessibility verification.
-- Bright brand orange remains the data-mark color. `Tint.primaryText` provides
-  the contrast-safe light-appearance endpoint for orange labels and readouts.
+- Bright brand orange remains the data-mark color and the accent for Insights
+  text and readouts in both appearances, including the training-shape identity,
+  capsule-share values, and training-load verdicts.

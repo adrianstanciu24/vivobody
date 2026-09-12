@@ -53,6 +53,10 @@
       "assert": {
         "required": [
           {
+            "identifier": "insightsBalanceGroup-upper-body-compound",
+            "role": "AXHeading"
+          },
+          {
             "identifier": "insightsBalance-compound-push-pull",
             "labelContains": "Compound Push"
           }
@@ -63,7 +67,72 @@
     {
       "scrollTo": {
         "selector": {
-          "identifier": "insightsBalance-isolation-push-pull"
+          "identifier": "insightsBalanceGroup-upper-body-isolation",
+          "role": "AXHeading"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsBalanceGroup-upper-body-isolation",
+            "role": "AXHeading"
+          },
+          {
+            "identifier": "insightsBalance-isolation-push-pull",
+            "labelContains": "all time"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceGroup-upper-body-muscles",
+          "role": "AXHeading"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsBalanceGroup-upper-body-muscles",
+            "role": "AXHeading"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceGroup-lower-body",
+          "role": "AXHeading"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsBalanceGroup-lower-body",
+            "role": "AXHeading"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceGroup-training-style",
+          "role": "AXHeading"
         },
         "direction": "up"
       }
@@ -71,8 +140,8 @@
   ],
   "required": [
     {
-      "identifier": "insightsBalance-isolation-push-pull",
-      "labelContains": "all time"
+      "identifier": "insightsBalanceGroup-training-style",
+      "role": "AXHeading"
     }
   ],
   "forbidden": []

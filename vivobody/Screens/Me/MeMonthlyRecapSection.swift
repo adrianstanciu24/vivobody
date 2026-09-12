@@ -17,15 +17,18 @@ struct MeMonthlyRecapSection: View {
                 title: "This month",
                 trailing: presentation.monthLabel
             )
-            StatStrip(stats: presentation.metrics.map { metric in
-                Stat(
-                    value: metric.value,
-                    unit: metric.unit,
-                    label: metric.label,
-                    accessibilityLabel: metric.accessibilityLabel,
-                    accent: metric.accent
-                )
-            })
+            StatStrip(
+                stats: presentation.metrics.map { metric in
+                    Stat(
+                        value: metric.value,
+                        unit: metric.unit,
+                        label: metric.label,
+                        accessibilityLabel: metric.accessibilityLabel,
+                        accent: metric.accent
+                    )
+                },
+                columnWeights: [3, 4, 3]
+            )
             .padding(Space.xl)
             .contentCard()
         }

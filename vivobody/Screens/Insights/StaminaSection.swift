@@ -71,7 +71,7 @@ private struct StaminaPatternBeam: View {
                 Text(pattern.pattern.displayName).font(Typography.headline).foregroundStyle(Ink.primary)
                 Spacer(minLength: Space.sm)
                 Text("\(Int((pattern.retention * 100).rounded()))%")
-                    .font(Typography.statValueCompact).foregroundStyle(Tint.primaryText).monospacedDigit()
+                    .font(Typography.statValueCompact).foregroundStyle(Tint.primary).monospacedDigit()
             }
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
@@ -79,11 +79,11 @@ private struct StaminaPatternBeam: View {
                     Capsule().fill(Tint.primary.gradient)
                         .frame(width: proxy.size.width * pattern.retention / scale)
                     Rectangle().fill(Ink.secondary)
-                        .frame(width: 2, height: 24)
+                        .frame(width: 2, height: InstrumentBarHeight.standard)
                         .offset(x: max(0, proxy.size.width / scale - 2))
                 }
             }
-            .frame(height: 12)
+            .frame(height: InstrumentBarHeight.standard)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(pattern.pattern.displayName), holds \(Int((pattern.retention * 100).rounded())) percent of first-set reps, \(pattern.series.count) series, all time")

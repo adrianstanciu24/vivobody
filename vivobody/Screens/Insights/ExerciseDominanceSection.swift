@@ -101,7 +101,7 @@ struct ExerciseDominanceSection: View {
 
                     Text("\(Int((row.share * 100).rounded()))%")
                         .font(Typography.metricInline)
-                        .foregroundStyle(index == 0 ? Tint.primaryText : Ink.secondary)
+                        .foregroundStyle(index == 0 ? Tint.primary : Ink.secondary)
                         .monospacedDigit()
                 }
                 .frame(minHeight: 34)
@@ -217,7 +217,7 @@ struct ExerciseDominanceSection: View {
 
             HStack(spacing: Space.xs) {
                 ForEach(segments) { segment in
-                    RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
+                    Capsule()
                         .fill(segment.fill)
                         .frame(
                             width: totalWeight > 0
@@ -227,7 +227,7 @@ struct ExerciseDominanceSection: View {
                 }
             }
         }
-        .frame(height: 36)
+        .frame(height: InstrumentBarHeight.standard)
         .accessibilityHidden(true)
     }
 

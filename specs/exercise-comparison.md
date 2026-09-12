@@ -21,9 +21,9 @@ model under `Models/Domain/`, not an insight.
 
 ## Placement and flow
 
-1. `ExerciseDetailScreen` gains a "Compare with another exercise" row beside
-   the how-to-perform drill-out, plus a toolbar-menu twin for parity with
-   the other row actions.
+1. `ExerciseDetailScreen` exposes **Compare with Another Exercise** from its
+   existing detail actions menu. It does not repeat the same action as an
+   in-page row.
 2. All users get
    `ExercisePickerSheet` retitled "Compare With" in direct-pick mode, with
    the anchor exercise excluded from every list and the same catalog filter
@@ -43,12 +43,14 @@ The screen behaves as an instrument, not a long report:
 
 - **Persistent control deck** — the two exercise names and a three-mode
   selector stay pinned below the navigation bar. Letters and names carry
-  identity; orange and blue only reinforce it. Switching modes returns the
+  identity; orange and neutral gray only reinforce it. Switching modes returns the
   focused panel to its top.
 - **Muscles** — the default mode first shows whether each exercise is eligible
   for hard-set training volume, then renders every relevant muscle as a bold
-  mirrored beam. Exercise A pulls left and B pulls right on one fixed role
-  scale; full, partial, and absent credit are visible without reading a table.
+  mirrored 24pt capsule-ended beam that matches the Insights balance-bar geometry.
+  Exercise A pulls left and B pulls right on one fixed role scale. A uses the
+  app's standard orange accent and B uses an adaptive neutral gray; full,
+  partial, and absent credit are visible without reading a table.
   The **Volume / All roles** control switches the same beams between effective
   hard-set credit and authored anatomical involvement, including stabilizers
   and non-volume modalities. It uses the exact `SetStimulus` gate:
@@ -113,7 +115,7 @@ the entry to comparison; active-workout hosts continue to hide that entry.
 - Anatomy exercise and scope controls expose selected state, and the figure
   names the selected exercise and scope. Role intensity is explained in
   text, so color and tint strength never carry meaning alone.
-- Harness identifiers: `exercise-compare`, `comparison-done`, mode controls
+- Harness identifiers: `comparison-done`, mode controls
   `comparison-panel-muscles` / `comparison-panel-movement` /
   `comparison-panel-tracking`, section IDs `comparison-stimulus` /
   `comparison-movement` / `comparison-tracking` / `comparison-anatomy` /

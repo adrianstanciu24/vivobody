@@ -26,6 +26,12 @@ supplemental `--family` inputs are never emitted.
   entered. Editing a custom exercise's modality, tracking mode, load mode, or
   bodyweight fraction clears that measured value rather than reinterpreting it
   under a different load equation. Bundled performance semantics are locked.
+- Exercise actions reflect that ownership boundary. Bundled exercises offer
+  **Exercise Defaults**, **Duplicate as Custom**, and **Hide from Library**;
+  they never present themselves as directly editable or deletable. User-created
+  exercises instead offer **Edit** and **Delete**. Hiding a bundled exercise is
+  reversible through the bundled-exercise restore action in Settings, while
+  existing template and workout-history snapshots remain intact.
 - One record describes one movement. Alternatives, supersets, or slash-joined
   movements must be split or deleted.
 - `execution` is one directly authored object whose labeled fields separate
@@ -153,6 +159,10 @@ Custom-exercise authoring exposes these three modalities through
 `ExerciseModality.customExerciseChoices`. Dynamic strength and power are fixed
 to reps; isometric strength is fixed to duration. Conditioning and mobility
 are outside the app's lifter-focused exercise catalog.
+
+Custom-exercise and bundled-default editors present adjustable load, duration,
+and bodyweight-fraction values as large scrubber numerals, with units kept
+visually secondary.
 
 `trackingMode` describes the entered measurement (`reps` or `duration`); it does
 not substitute for modality.

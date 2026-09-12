@@ -35,7 +35,7 @@ struct SignatureAccessibilitySpectrum: View {
                             .font(Typography.sectionHeading)
                             .foregroundStyle(
                                 petal.group == signature.dominantGroup
-                                    ? Tint.primaryText
+                                    ? Tint.primary
                                     : Ink.primary
                             )
                         Spacer(minLength: Space.sm)
@@ -69,7 +69,12 @@ struct SignatureAccessibilitySpectrum: View {
                             Path { path in
                                 let x = proxy.size.width * CGFloat(marker)
                                 path.move(to: CGPoint(x: x, y: 0))
-                                path.addLine(to: CGPoint(x: x, y: 12))
+                                path.addLine(
+                                    to: CGPoint(
+                                        x: x,
+                                        y: InstrumentBarHeight.standard
+                                    )
+                                )
                             }
                             .stroke(
                                 Ink.primary.opacity(0.42),
@@ -77,7 +82,7 @@ struct SignatureAccessibilitySpectrum: View {
                             )
                         }
                     }
-                    .frame(height: 12)
+                    .frame(height: InstrumentBarHeight.standard)
                     .accessibilityHidden(true)
                 }
                 .accessibilityElement(children: .ignore)

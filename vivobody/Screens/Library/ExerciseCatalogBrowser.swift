@@ -184,6 +184,36 @@ struct ExerciseCatalogBrowserActions {
     }
 }
 
+/// Ownership-aware action copy shared by Library rows and Exercise Detail.
+/// Bundled records remain configurable and hideable without implying that the
+/// user can rewrite or permanently delete the app's canonical exercise.
+enum ExerciseCatalogActionCopy {
+    static func editTitle(for item: ExerciseCatalogItem) -> String {
+        item.isUserCreated ? "Edit" : "Exercise Defaults"
+    }
+
+    static func removalTitle(for item: ExerciseCatalogItem) -> String {
+        item.isUserCreated ? "Delete" : "Hide from Library"
+    }
+
+    static func removalConfirmationTitle(for item: ExerciseCatalogItem) -> String {
+        item.isUserCreated
+            ? "Delete \"\(item.name)\"?"
+            : "Hide \"\(item.name)\"?"
+    }
+
+    static func removalConfirmationAction(for item: ExerciseCatalogItem) -> String {
+        item.isUserCreated ? "Delete" : "Hide"
+    }
+
+    static func removalMessage(for item: ExerciseCatalogItem) -> String {
+        if item.isUserCreated {
+            return "Removes the exercise from your catalog. Templates and history that already reference it stay intact."
+        }
+        return "Hides the exercise from your catalog. You can restore bundled exercises in Settings. Templates and history that already reference it stay intact."
+    }
+}
+
 /// Query and mutation host. Its content closure keeps surface rendering local.
 struct ExerciseCatalogBrowserHost<Content: View>: View {
     let query: String
@@ -246,13 +276,18 @@ struct ExerciseCatalogBrowserHost<Content: View>: View {
 
         content(snapshot, actions)
             .alert(
-                "Delete \"\(pendingDeleteItem?.name ?? "exercise")\"?",
+                pendingDeleteItem.map(ExerciseCatalogActionCopy.removalConfirmationTitle)
+                    ?? "Remove exercise?",
                 isPresented: Binding(
                     get: { pendingDeleteItem != nil },
                     set: { if !$0 { pendingDeleteItem = nil } }
                 )
             ) {
-                Button("Delete", role: .destructive) {
+                Button(
+                    pendingDeleteItem.map(ExerciseCatalogActionCopy.removalConfirmationAction)
+                        ?? "Remove",
+                    role: .destructive
+                ) {
                     if let item = pendingDeleteItem {
                         delete(item)
                     }
@@ -262,7 +297,10 @@ struct ExerciseCatalogBrowserHost<Content: View>: View {
                     pendingDeleteItem = nil
                 }
             } message: {
-                Text("This removes the exercise from your catalog. Templates and history that already reference it stay intact.")
+                Text(
+                    pendingDeleteItem.map(ExerciseCatalogActionCopy.removalMessage)
+                        ?? "Removes the exercise from your catalog."
+                )
             }
             .saveErrorAlert($saveError)
     }
@@ -351,7 +389,10 @@ private struct ExerciseCatalogActionMenu: View {
         Button {
             actions.edit(item)
         } label: {
-            Label("Edit", systemImage: "pencil")
+            Label(
+                ExerciseCatalogActionCopy.editTitle(for: item),
+                systemImage: "pencil"
+            )
         }
 
         if item.catalogID != nil, !item.isUserCreated {
@@ -365,7 +406,10 @@ private struct ExerciseCatalogActionMenu: View {
         Button(role: .destructive) {
             actions.requestDelete(item)
         } label: {
-            Label("Delete", systemImage: "trash")
+            Label(
+                ExerciseCatalogActionCopy.removalTitle(for: item),
+                systemImage: item.isUserCreated ? "trash" : "eye.slash"
+            )
         }
     }
 }

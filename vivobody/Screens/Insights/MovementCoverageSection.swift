@@ -62,7 +62,7 @@ struct MovementCoverageSection: View {
                     if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
                     Text("\(report.percentage(plane))%")
                         .font(Typography.statValueCompact).monospacedDigit()
-                        .foregroundStyle(report.share(plane) > 0 ? Tint.primaryText : Ink.tertiary)
+                        .foregroundStyle(report.share(plane) > 0 ? Tint.primary : Ink.tertiary)
                         .fixedSize()
                 }
                 Text(direction(plane))
@@ -75,7 +75,7 @@ struct MovementCoverageSection: View {
                                 .frame(width: proxy.size.width * report.share(plane))
                         }
                 }
-                .frame(height: 7)
+                .frame(height: InstrumentBarHeight.micro)
             }
         }
         .accessibilityElement(children: .ignore)

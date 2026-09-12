@@ -5,13 +5,13 @@
 //  Drill-down view for an ExerciseCatalogItem. Reached by tapping
 //  a row in the ExercisePickerSheet — replaces the previous "tap =
 //  immediate pick" behavior with "tap = explore, then commit via
-//  CTA at the bottom." Long-press on the picker row preserves the
-//  quick Edit / Duplicate / Delete context menu. The toolbar menu
-//  here offers the same actions, with "Duplicate as Custom" limited
-//  to bundled exercises (a custom entry is already fully editable).
-//  Comparison is entered through the "Compare with another exercise"
-//  row beside the how-to drill-out (or the toolbar menu) and
-//  opens a "Compare With" picker, then a comparison sheet. The active-workout
+//  CTA at the bottom." Long-press on the picker row preserves quick
+//  ownership-aware catalog actions. The toolbar menu offers the same
+//  actions: bundled exercises expose
+//  defaults, duplication, and hiding, while custom exercises expose editing
+//  and deletion.
+//  Comparison is entered through the toolbar menu and opens a "Compare With"
+//  picker, then a comparison sheet. The active-workout
 //  add host suppresses comparison so logging stays focused.
 //
 //  Surfaces (when data exists):
@@ -166,9 +166,6 @@ struct ExerciseDetailScreen: View {
                     laterality: item.laterality
                 )
                 instructionsLink
-                if allowsComparison {
-                    compareLink
-                }
                 ExerciseBestHeroCard(
                     bestSet: readModel.bestSet,
                     frequency: readModel.frequency
@@ -267,7 +264,10 @@ struct ExerciseDetailScreen: View {
                     Button {
                         editorTarget = .edit(item)
                     } label: {
-                        Label("Edit", systemImage: "pencil")
+                        Label(
+                            ExerciseCatalogActionCopy.editTitle(for: item),
+                            systemImage: "pencil"
+                        )
                     }
                     if canDuplicateAsCustom {
                         Button {
@@ -279,7 +279,10 @@ struct ExerciseDetailScreen: View {
                     Button(role: .destructive) {
                         isConfirmingDelete = true
                     } label: {
-                        Label("Delete", systemImage: "trash")
+                        Label(
+                            ExerciseCatalogActionCopy.removalTitle(for: item),
+                            systemImage: item.isUserCreated ? "trash" : "eye.slash"
+                        )
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -336,22 +339,25 @@ struct ExerciseDetailScreen: View {
             )
         }
         .alert(
-            "Delete \"\(item.name)\"?",
+            ExerciseCatalogActionCopy.removalConfirmationTitle(for: item),
             isPresented: $isConfirmingDelete
         ) {
-            Button("Delete", role: .destructive) {
+            Button(
+                ExerciseCatalogActionCopy.removalConfirmationAction(for: item),
+                role: .destructive
+            ) {
                 deleteAndDismiss()
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Removes the exercise from your catalog. Templates and history that already reference it stay intact.")
+            Text(ExerciseCatalogActionCopy.removalMessage(for: item))
         }
         .saveErrorAlert($saveError)
     }
 
     // MARK: - Mutations
 
-    /// Both comparison entry points open the picker outside a live workout.
+    /// The detail actions menu opens the picker outside a live workout.
     func startComparison() {
         guard allowsComparison else { return }
         Haptics.soft()
