@@ -46,9 +46,9 @@ final class AppState {
     /// Which tab is selected.
     var selectedTab: AppTab = .today
 
-    /// Lightweight archive presence published by the one canonical
-    /// AnalyticsFeeder query. Insights uses this instead of mounting a
-    /// second SwiftData query at the top of a pushed destination.
+    /// Lightweight archive presence published by the canonical analytics
+    /// snapshot feeder. Insights uses this instead of mounting a SwiftData
+    /// query at the top of a pushed destination.
     var analyticsArchiveHasSessions = false
 
     /// Catalog item surfaced by a Spotlight search-result tap,

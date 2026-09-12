@@ -311,6 +311,35 @@ struct SessionAnalyticsConcurrencyTests {
         #expect(analytics.deepReports == nil)
     }
 
+    @Test func storeBackedWidgetResolutionJoinsTheCurrentArchiveRevision() async {
+        let now = Date(timeIntervalSince1970: 1_700_000_000)
+        let session = completedSession(
+            name: "Store-backed widget",
+            catalogID: "store-backed-widget",
+            completedAt: now
+        )
+        let snapshot = AnalyticsSnapshot(sessions: [session])
+        let control = ControlledAnalyticsWorking()
+        let analytics = await SessionAnalytics(working: control.working())
+
+        analytics.requestCore(
+            for: snapshot,
+            archiveRevision: 7,
+            now: now
+        )
+        await control.waitForCoreCalls(1)
+        #expect(await control.succeedCore(1))
+        await analytics.waitForPendingWork()
+
+        let reports = await analytics.resolvedWidgetReports(
+            for: snapshot,
+            archiveRevision: 7,
+            now: now
+        )
+        #expect(reports != nil)
+        #expect(await control.coreCallCount == 1)
+    }
+
     @Test func sameKeyDeepPromotionDuringCoreBuildStartsOneDeepTask() async {
         let now = Date(timeIntervalSince1970: 1_700_000_000)
         let session = completedSession(
@@ -619,11 +648,17 @@ struct SessionAnalyticsConcurrencyTests {
             catalogID: "cached-history",
             completedAt: now
         )
+        let refreshedAt = now.addingTimeInterval(60)
+        let refreshedSession = completedSession(
+            name: "Cached History",
+            catalogID: "cached-history",
+            completedAt: refreshedAt
+        )
         let key = session.orderedExercises[0].historyKey
         var fetchCount = 0
         let analytics = SessionAnalytics(historyFetch: { _ in
             fetchCount += 1
-            return []
+            return [refreshedSession]
         })
         analytics.requestCore(for: [session], now: now)
         await analytics.waitForPendingWork()
@@ -633,7 +668,15 @@ struct SessionAnalyticsConcurrencyTests {
             analytics.resolvedExerciseHistory(in: harness.context)
         )
         #expect(history[key]?.sessionCount == 1)
+        #expect(analytics.lastInstances[key]?.sessionDate == now)
         #expect(fetchCount == 0)
+
+        analytics.invalidate()
+        _ = try #require(
+            analytics.resolvedExerciseHistory(in: harness.context)
+        )
+        #expect(analytics.lastInstances[key]?.sessionDate == refreshedAt)
+        #expect(fetchCount == 1)
     }
 
     @Test func synchronousHistoryDistinguishesEmptyArchiveFromFetchFailure() throws {

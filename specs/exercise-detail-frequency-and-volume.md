@@ -13,8 +13,8 @@ collects at log time. Both answer questions the screen currently cannot:
    hard-set contribution card.
 
 Neither introduces new logging, new persistence, or new user input. Both
-are read-only projections of the archived session history the screen
-already queries.
+are read-only projections from the shared `SessionAnalytics` cache built by
+the app-level analytics feeder.
 
 ## Product fit
 
@@ -45,8 +45,8 @@ re-adding their bulk.
 ### Data sources (all already cached)
 
 - Session count: `ExerciseHistorySummary.sessionCount` via
-  `sessionAnalytics?.exerciseHistorySummaries[historyKey]` — replaces the
-  screen's current O(archive) `sessionCount` reduce.
+  `sessionAnalytics?.exerciseHistorySummaries[historyKey]` — a stored lookup
+  that replaces the screen's former O(archive) `sessionCount` reduce.
 - Last performed: `lastInstance.sessionDate` (existing).
 - Session dates: `progress.points.map(\.date)` (existing series).
 
@@ -88,22 +88,22 @@ and muscle role.”
 
 ### Computation
 
-New pure value type `ExerciseVolumeContribution` in
-`vivobody/Models/Insights/`, computed per screen appear:
+Pure value type `ExerciseVolumeContribution` in
+`vivobody/Models/Insights/`, computed by the analytics worker:
 
-1. Filter `completedSessions` to `now − 7d … now` (window constant shared
-   with `MuscleVolume`'s default).
+1. Filter the shared immutable analytics accumulator to `now − 7d … now`
+   (window constant shared with `MuscleVolume`'s default).
 2. For each session exercise matching `matchesCatalogItem(item)`, price
    it with the existing `SetStimulus.credit(for:)` and accumulate
    `[Muscle: Double]`.
-3. Join each involved muscle against the already-cached
-   `sessionAnalytics.volume` (`[MuscleVolumeStat]`) for its weekly total.
+3. Join each involved muscle against the worker-built weekly volume totals.
+4. Store the result by exercise history key in `ExerciseDetailReports`; the
+   screen performs one cache lookup when it builds its read model.
 
 Because `SetStimulus` pricing is a pure per-set function with no
-cross-session state, this needs no chronological replay and no
-accumulator changes. Scoping to one exercise over 7 days keeps the pass
-small enough to run synchronously on MainActor; if profiling ever
-disagrees, it moves into `CoreReports` beside `volume`.
+cross-session state, this needs no chronological replay. The work runs off
+the main thread in `CoreReports` beside `volume`; rendering does not traverse
+the SwiftData archive.
 
 All `SetStimulus` semantics are inherited unchanged: only completed
 dynamic-strength reps and completed isometric holds earn credit; RIR
@@ -158,7 +158,7 @@ Swift Testing, deterministic clocks (inject `now` everywhere):
 | File | Change |
 |---|---|
 | `specs/exercise-detail-frequency-and-volume.md` | This doc |
-| `vivobody/Models/Insights/ExerciseVolumeContribution.swift` | New — contribution computation over live models |
+| `vivobody/Models/Insights/ExerciseVolumeContribution.swift` | Pure contribution value used by worker-built detail reports |
 | `vivobody/Models/Insights/ExerciseFrequency.swift` | New — pure per-week rate |
 | `vivobody/Screens/Library/ExerciseBestHeroCard.swift` | New — hero card moved out of the ratcheted sections file, gaining the frequency footer |
 | `vivobody/Screens/Library/ExerciseWeeklyVolumeSection.swift` | New — `This week` section, rows, band bars, DEBUG preview |

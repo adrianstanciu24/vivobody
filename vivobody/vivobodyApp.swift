@@ -11,6 +11,11 @@ import SwiftUI
 
 @main
 struct VivobodyApp: App {
+    private struct Dependencies {
+        let container: ModelContainer
+        let analyticsSnapshotStore: AnalyticsSnapshotStore
+    }
+
     /// The SwiftData container. Holds every archived workout. The
     /// schema declares all @Model classes; cascade-delete
     /// relationships keep exercises and sets bound to their session.
@@ -23,11 +28,17 @@ struct VivobodyApp: App {
     /// Nil only when both the on-disk store and the in-memory fallback
     /// fail — in that case `body` presents a recovery view instead of
     /// crashing.
-    private let container: ModelContainer? = {
+    private let dependencies: Dependencies? = {
         do {
-            return try VivobodyStore.makeContainer(
+            let container = try VivobodyStore.makeContainer(
                 named: "vivobody",
                 isStoredInMemoryOnly: false
+            )
+            return Dependencies(
+                container: container,
+                analyticsSnapshotStore: AnalyticsSnapshotStore(
+                    modelContainer: container
+                )
             )
         } catch {
             AppDiagnostics.storageFallbackAttempt(error: error)
@@ -41,7 +52,12 @@ struct VivobodyApp: App {
                     isStoredInMemoryOnly: true
                 )
                 AppDiagnostics.storageFallbackSucceeded()
-                return memory
+                return Dependencies(
+                    container: memory,
+                    analyticsSnapshotStore: AnalyticsSnapshotStore(
+                        modelContainer: memory
+                    )
+                )
             } catch {
                 AppDiagnostics.storageUnavailable(error: error)
             }
@@ -53,20 +69,22 @@ struct VivobodyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if let container {
-                AppRoot()
-                    .warmUpKeyboardOnce()
+            if let dependencies {
+                AppRoot(
+                    analyticsSnapshotStore: dependencies.analyticsSnapshotStore
+                )
+                .warmUpKeyboardOnce()
                 #if DEBUG
                     .task {
                         // Preserve manual fixture timing after first paint; the
                         // pure route retains the former exclusive precedence.
                         DebugSeedCoordinator.seedManualFixture(
                             UITestSupport.route().manualFixture,
-                            in: container.mainContext
+                            in: dependencies.container.mainContext
                         )
                     }
                 #endif
-                    .modelContainer(container)
+                    .modelContainer(dependencies.container)
             } else {
                 StorageRecoveryView()
             }

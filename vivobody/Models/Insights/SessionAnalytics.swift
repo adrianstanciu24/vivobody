@@ -26,6 +26,7 @@ final class SessionAnalytics {
         let sessionCount: Int
         let newestCompletion: TimeInterval
         let day: TimeInterval
+        let archiveRevision: Int
         let revision: Int
     }
 
@@ -38,6 +39,7 @@ final class SessionAnalytics {
     private(set) var invalidationRevision = 0
     private(set) var exerciseHistorySummaries:
         [String: ExerciseHistorySummary] = [:]
+    private(set) var lastInstances: [String: LastExerciseInstance] = [:]
 
     var hasCoreReports: Bool {
         coreFingerprint != nil
@@ -86,12 +88,6 @@ final class SessionAnalytics {
 
     var workoutLoadBaseline: WorkoutLoadBaseline {
         coreReports.workoutLoadBaseline
-    }
-
-    var lastInstances: [String: LastExerciseInstance] {
-        exerciseHistorySummaries.compactMapValues {
-            $0.lastExerciseInstance
-        }
     }
 
     var overview: ArchiveOverview {
@@ -187,6 +183,7 @@ final class SessionAnalytics {
             core: initialCore
         )
         exerciseHistorySummaries = initialCore.exerciseHistory
+        lastInstances = initialCore.lastInstances
         deepReports = nil
         insightsReports = nil
     }
@@ -208,6 +205,28 @@ final class SessionAnalytics {
             sessionCount: sessions.count,
             newestCompletion: newest,
             day: day,
+            archiveRevision: 0,
+            revision: invalidationRevision
+        )
+    }
+
+    /// Identity for a ModelActor-prepared archive generation. The snapshot is
+    /// newest-first, so its high-water mark is still a constant-time read.
+    func requestKey(
+        for snapshot: AnalyticsSnapshot,
+        archiveRevision: Int,
+        now: Date = Date()
+    ) -> RequestKey {
+        let newest = snapshot.sessions.first?.completedAt?
+            .timeIntervalSince1970 ?? 0
+        let day = Calendar.current
+            .startOfDay(for: now)
+            .timeIntervalSince1970
+        return RequestKey(
+            sessionCount: snapshot.sessions.count,
+            newestCompletion: newest,
+            day: day,
+            archiveRevision: archiveRevision,
             revision: invalidationRevision
         )
     }
@@ -227,6 +246,34 @@ final class SessionAnalytics {
         now: Date = Date()
     ) {
         request(for: sessions, now: now, includesDeepReports: true)
+    }
+
+    /// Production feed for values prepared by AnalyticsSnapshotStore. No
+    /// SwiftData model or context enters this coordinator task.
+    func requestCore(
+        for snapshot: AnalyticsSnapshot,
+        archiveRevision: Int,
+        now: Date = Date()
+    ) {
+        request(
+            for: snapshot,
+            archiveRevision: archiveRevision,
+            now: now,
+            includesDeepReports: false
+        )
+    }
+
+    func requestInsights(
+        for snapshot: AnalyticsSnapshot,
+        archiveRevision: Int,
+        now: Date = Date()
+    ) {
+        request(
+            for: snapshot,
+            archiveRevision: archiveRevision,
+            now: now,
+            includesDeepReports: true
+        )
     }
 
     /// Forces the next visible consumer to build a new generation even
@@ -271,6 +318,7 @@ final class SessionAnalytics {
             AnalyticsSnapshot(sessions: sessions)
         ).exerciseHistoryByExercise()
         exerciseHistorySummaries = history
+        lastInstances = history.compactMapValues { $0.lastExerciseInstance }
         exerciseHistoryFingerprint = requestKey(for: sessions)
         return history
     }
@@ -309,13 +357,71 @@ final class SessionAnalytics {
         return widgetReports
     }
 
+    /// Widget join for the same ModelActor-prepared generation consumed by
+    /// screens. This cannot cancel a current feeder build with a legacy key.
+    func resolvedWidgetReports(
+        for snapshot: AnalyticsSnapshot,
+        archiveRevision: Int,
+        now: Date = Date()
+    ) async -> WidgetReports? {
+        let key = requestKey(
+            for: snapshot,
+            archiveRevision: archiveRevision,
+            now: now
+        )
+        requestCore(
+            for: snapshot,
+            archiveRevision: archiveRevision,
+            now: now
+        )
+        await coreTask?.value
+        guard !Task.isCancelled, widgetFingerprint == key else {
+            return nil
+        }
+        return widgetReports
+    }
+
     private func request(
         for sessions: [WorkoutSession],
         now: Date,
         includesDeepReports: Bool
     ) {
         let key = requestKey(for: sessions, now: now)
+        request(
+            key: key,
+            now: now,
+            includesDeepReports: includesDeepReports,
+            prepareInput: {
+                try await AnalyticsSnapshot.preparing(sessions: sessions)
+            }
+        )
+    }
 
+    private func request(
+        for snapshot: AnalyticsSnapshot,
+        archiveRevision: Int,
+        now: Date,
+        includesDeepReports: Bool
+    ) {
+        let key = requestKey(
+            for: snapshot,
+            archiveRevision: archiveRevision,
+            now: now
+        )
+        request(
+            key: key,
+            now: now,
+            includesDeepReports: includesDeepReports,
+            prepareInput: { snapshot }
+        )
+    }
+
+    private func request(
+        key: RequestKey,
+        now: Date,
+        includesDeepReports: Bool,
+        prepareInput: @escaping @MainActor () async throws -> AnalyticsSnapshot
+    ) {
         if requestedKey == key {
             guard includesDeepReports else { return }
             desiredDeepKey = key
@@ -352,9 +458,9 @@ final class SessionAnalytics {
         isDeepLoading = includesDeepReports
 
         let working = working
-        coreTask = Task { [weak self] in
+        coreTask = Task { @MainActor [weak self] in
             do {
-                let input = try await AnalyticsSnapshot.preparing(sessions: sessions)
+                let input = try await prepareInput()
                 let build = try await working.makeCore(input, now)
                 guard !Task.isCancelled, let self else { return }
                 guard
@@ -367,6 +473,7 @@ final class SessionAnalytics {
                 self.widgetReports = build.widgetReports
                 self.widgetFingerprint = key
                 self.exerciseHistorySummaries = build.reports.exerciseHistory
+                self.lastInstances = build.reports.lastInstances
                 self.exerciseHistoryFingerprint = key
                 self.currentAccumulator = build.accumulator
                 self.currentAccumulatorKey = key

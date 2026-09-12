@@ -61,13 +61,14 @@ struct UpNext {
         sessions: [WorkoutSession],
         load: TrainingLoadReport? = nil,
         now: Date = Date(),
-        calendar: Calendar = .current
+        calendar: Calendar = .current,
+        trainedToday trainedTodayOverride: Bool? = nil
     ) -> UpNext {
         let scheduled = templates.filter(\.isScheduled)
         guard !scheduled.isEmpty else { return UpNext(kind: .unscheduled) }
 
         let today = calendar.startOfDay(for: now)
-        let trainedToday = sessions.contains { session in
+        let trainedToday = trainedTodayOverride ?? sessions.contains { session in
             calendar.isDate(session.completedAt ?? session.startedAt, inSameDayAs: now)
         }
 

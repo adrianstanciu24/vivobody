@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 114.
+Scenario files: 115.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -26,6 +26,7 @@ Scenario files: 114.
 | [active-superset-add-partner](active-superset-add-partner.json) | today | `--ui-test-active-replaceable --static-body` |
 | [active-superset-completion](active-superset-completion.json) | today | `--ui-test-superset` |
 | [active-zero-set-recovery](active-zero-set-recovery.json) | today | `--ui-test-active-zero-set` |
+| [analytics-incremental-archive](analytics-incremental-archive.json) | today | `--ui-test-active-complete-summary --ui-test-widget-start-request --seed-history --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [archive-to-history](archive-to-history.json) | today | `--ui-test-active-partial` |
 | [catalog-ab-wheel-expansion](catalog-ab-wheel-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-active-dead-hang](catalog-active-dead-hang.json) | library | `--static-body` |

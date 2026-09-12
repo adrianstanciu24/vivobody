@@ -3,11 +3,11 @@
 //  vivobody
 //
 //  Immutable, Sendable copies of the SwiftData workout graph used by
-//  analytics. The app builds this graph on the main actor while model
-//  relationships are valid, then sends only these value types to the
-//  background analytics worker. Report code must never retain or cross
-//  an actor boundary with WorkoutSession, Exercise, WorkoutSet, or a
-//  ModelContext.
+//  analytics. Production builds this graph through AnalyticsSnapshotStore's
+//  ModelActor, then sends only these value types to the background analytics
+//  worker. MainActor model adapters remain for focused legacy APIs and tests.
+//  Report code must never retain or cross an actor boundary with
+//  WorkoutSession, Exercise, WorkoutSet, or a ModelContext.
 //
 
 import Foundation
@@ -15,7 +15,7 @@ import Foundation
 /// The complete input to one analytics generation. Input order is
 /// intentionally preserved here; AnalyticsAccumulator performs the one
 /// canonical chronological sort before any report construction.
-nonisolated struct AnalyticsSnapshot {
+nonisolated struct AnalyticsSnapshot: Equatable {
     let sessions: [AnalyticsSessionSnapshot]
 
     nonisolated init(sessions: [AnalyticsSessionSnapshot]) {
@@ -50,7 +50,7 @@ nonisolated struct AnalyticsSnapshot {
 }
 
 /// One workout detached from SwiftData.
-nonisolated struct AnalyticsSessionSnapshot {
+nonisolated struct AnalyticsSessionSnapshot: Equatable {
     /// The persistent session identity, carried so archive-level
     /// reports (e.g. PR-session membership) can be joined back to the
     /// live rows a screen is showing.
@@ -111,7 +111,7 @@ nonisolated struct AnalyticsSessionSnapshot {
 /// One logged exercise detached from its model and owning session.
 /// Resolved identity, anatomy, and classification are captured here so
 /// background work never consults the mutable catalog or model graph.
-nonisolated struct AnalyticsExerciseSnapshot {
+nonisolated struct AnalyticsExerciseSnapshot: Equatable {
     /// Persistent exercise-instance identity, used to join archive reports
     /// back to the exercise rows in a selected completed session.
     let id: UUID
@@ -382,7 +382,7 @@ nonisolated struct AnalyticsExerciseSnapshot {
 
 /// One logged set detached from SwiftData. Planned targets and model IDs
 /// are omitted because no SessionAnalytics report reads them.
-nonisolated struct AnalyticsSetSnapshot {
+nonisolated struct AnalyticsSetSnapshot: Equatable {
     let weight: Double
     let reps: Int
     let duration: TimeInterval

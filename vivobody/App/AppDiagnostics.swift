@@ -68,6 +68,25 @@ nonisolated enum AppDiagnostics {
         }
     }
 
+    static func analyticsSnapshotRefresh(
+        usedFullReload: Bool,
+        didChangeArchive: Bool,
+        rebuiltSessionCount: Int
+    ) {
+        let mode = usedFullReload ? "full" : "delta"
+        let outcome = didChangeArchive ? "changed" : "unchanged"
+        snapshot.notice(
+            "event=analytics.snapshot_refresh rebuilt_sessions=\(rebuiltSessionCount, privacy: .public) mode=\(mode, privacy: .public) outcome=\(outcome, privacy: .public)"
+        )
+    }
+
+    static func analyticsSnapshotRefreshFailed(error: any Error) {
+        let error = error as NSError
+        snapshot.error(
+            "event=analytics.snapshot_refresh outcome=failure error_domain=\(error.domain, privacy: .private) error_code=\(error.code, privacy: .public)"
+        )
+    }
+
     static func healthKitOutcome(event: String, outcome: String) {
         healthKit.notice(
             "event=healthkit.\(event, privacy: .public) outcome=\(outcome, privacy: .public)"

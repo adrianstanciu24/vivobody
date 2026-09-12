@@ -26,12 +26,9 @@ extension SessionAnalytics {
         let workoutLoadBaseline: WorkoutLoadBaseline
         let consistency: ConsistencyReport
         let exerciseHistory: [String: ExerciseHistorySummary]
+        let lastInstances: [String: LastExerciseInstance]
         let exerciseDetail: ExerciseDetailReports
         let overview: ArchiveOverview
-
-        nonisolated var lastInstances: [String: LastExerciseInstance] {
-            exerciseHistory.compactMapValues { $0.lastExerciseInstance }
-        }
 
         nonisolated static func make(
             from common: AnalyticsAccumulator,
@@ -108,6 +105,9 @@ extension SessionAnalytics {
             let history = common.exerciseHistoryByExercise(
                 isCancelled: isCancelled
             )
+            let lastInstances = history.compactMapValues {
+                $0.lastExerciseInstance
+            }
             try checkpoint()
             let stamina = SetSeriesStamina.make(
                 series: common.staminaSeries(now: now, isCancelled: isCancelled), now: now
@@ -148,6 +148,7 @@ extension SessionAnalytics {
                 workoutLoadBaseline: workoutLoadBaseline,
                 consistency: consistency,
                 exerciseHistory: history,
+                lastInstances: lastInstances,
                 exerciseDetail: exerciseDetail,
                 overview: overview
             )

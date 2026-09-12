@@ -22,6 +22,7 @@ enum WidgetSnapshotWriter {
     /// before any production snapshot request; keeping a weak reference
     /// avoids giving this process-wide bridge ownership of AppState.
     private weak static var analytics: SessionAnalytics?
+    private static var snapshotStore: AnalyticsSnapshotStore?
 
     /// Coalesces rapid successive `writeAll` calls (template edits,
     /// body-weight saves, archive changes) into a single deferred
@@ -38,6 +39,10 @@ enum WidgetSnapshotWriter {
 
     static func configure(analytics: SessionAnalytics) {
         self.analytics = analytics
+    }
+
+    static func configure(snapshotStore: AnalyticsSnapshotStore) {
+        self.snapshotStore = snapshotStore
     }
 
     /// Mark full-widget inputs changed after their durable save, then
@@ -130,18 +135,23 @@ enum WidgetSnapshotWriter {
         now: Date
     ) async {
         let templates = fetchTemplates(in: context)
-        let completed = fetchCompletedSessions(in: context)
         let active = fetchActiveSession(in: context)
         let bodyweight = fetchCurrentBodyweight(in: context)
         let unit = WeightUnit.current
         guard
             let analytics,
+            let snapshotStore,
+            let prepared = try? await snapshotStore.prepare(),
             let reports = await analytics.resolvedWidgetReports(
-                for: completed,
+                for: prepared.snapshot,
+                archiveRevision: prepared.archiveRevision,
                 now: now
             ),
             !Task.isCancelled
         else { return }
+
+        let latestCompletedAt = prepared.snapshot.sessions.first?.completedAt
+        let trainedToday = prepared.containsSession(on: now)
 
         mirrorPreferences(unit: unit)
         let snapshots: [(key: String, data: Data?)] = [
@@ -150,7 +160,8 @@ enum WidgetSnapshotWriter {
                 encode(
                     upNextSnapshot(
                         templates: templates,
-                        sessions: completed,
+                        trainedToday: trainedToday,
+                        latestCompletedAt: latestCompletedAt,
                         unit: unit,
                         bodyweight: bodyweight,
                         load: reports.load,
@@ -250,14 +261,6 @@ enum WidgetSnapshotWriter {
         return (try? context.fetch(descriptor)) ?? []
     }
 
-    private static func fetchCompletedSessions(in context: ModelContext) -> [WorkoutSession] {
-        let descriptor = FetchDescriptor<WorkoutSession>(
-            predicate: #Predicate { $0.completedAt != nil },
-            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
-        )
-        return (try? context.fetch(descriptor)) ?? []
-    }
-
     private static func fetchActiveSession(in context: ModelContext) -> WorkoutSession? {
         var descriptor = FetchDescriptor<WorkoutSession>(
             predicate: #Predicate { $0.completedAt == nil },
@@ -280,7 +283,8 @@ enum WidgetSnapshotWriter {
 
     private static func upNextSnapshot(
         templates: [WorkoutTemplate],
-        sessions: [WorkoutSession],
+        trainedToday: Bool,
+        latestCompletedAt: Date?,
         unit: WeightUnit,
         bodyweight: Double?,
         load: TrainingLoadReport,
@@ -288,11 +292,16 @@ enum WidgetSnapshotWriter {
     ) -> UpNextSnapshot {
         let upNext = UpNext.compute(
             templates: templates,
-            sessions: sessions,
+            sessions: [],
+            load: load,
+            now: now,
+            trainedToday: trainedToday
+        )
+        let readiness = ReadinessLine.readiness(
+            lastCompletedAt: latestCompletedAt,
             load: load,
             now: now
-        )
-        let readiness = sessions.readiness(load: load, now: now)?.phrase
+        )?.phrase
 
         switch upNext.kind {
         case let .scheduled(template, _, easeOff):

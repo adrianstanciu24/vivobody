@@ -2,12 +2,10 @@
 //  AnalyticsFeeder.swift
 //  vivobody
 //
-//  The app's single full-archive query. Mounted once behind the tab
-//  shell, it feeds SessionAnalytics whenever the archive changes so
-//  every tab reads cached reports instead of holding its own
-//  complete-history @Query. When the Insights tab is selected it
-//  requests the deep tier too, preserving the
-//  build-on-first-entry behavior. Renders nothing.
+//  The app's archive-change observer. Mounted once behind the tab shell, it
+//  wakes a long-lived ModelActor snapshot store after SwiftData saves, then
+//  feeds immutable values to SessionAnalytics. When the Insights tab is
+//  selected it requests the deep tier too. Renders nothing.
 //
 
 import Foundation
@@ -16,41 +14,62 @@ import SwiftUI
 
 struct AnalyticsFeeder: View {
     var appState: AppState
+    let snapshotStore: AnalyticsSnapshotStore
 
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     @State private var temporalRefresh = 0
-
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: [SortDescriptor(\.completedAt, order: .reverse)]
-    )
-    private var sessions: [WorkoutSession]
+    @State private var saveRevision = 0
 
     /// Task identity: the analytics fingerprint plus which tier is
     /// wanted, so entering Insights re-fires without a data change.
     private struct FeedKey: Hashable {
-        let request: SessionAnalytics.RequestKey
         let includesDeepReports: Bool
         let temporalRefresh: Int
+        let saveRevision: Int
+        let invalidationRevision: Int
     }
 
     var body: some View {
-        let includesDeepReports =
-            appState.selectedTab == .insights && !sessions.isEmpty
+        let includesDeepReports = appState.selectedTab == .insights
         Color.clear
             .task(
                 id: FeedKey(
-                    request: appState.analytics.requestKey(for: sessions),
                     includesDeepReports: includesDeepReports,
-                    temporalRefresh: temporalRefresh
+                    temporalRefresh: temporalRefresh,
+                    saveRevision: saveRevision,
+                    invalidationRevision: appState.analytics.invalidationRevision
                 )
             ) {
-                appState.analyticsArchiveHasSessions = !sessions.isEmpty
-                if includesDeepReports {
-                    appState.analytics.requestInsights(for: sessions)
-                } else {
-                    appState.analytics.requestCore(for: sessions)
+                guard let prepared = await prepareSnapshot(using: snapshotStore),
+                      !Task.isCancelled
+                else {
+                    return
                 }
+                let snapshot = prepared.snapshot
+                appState.analyticsArchiveHasSessions = !snapshot.sessions.isEmpty
+                if includesDeepReports, !snapshot.sessions.isEmpty {
+                    appState.analytics.requestInsights(
+                        for: snapshot,
+                        archiveRevision: prepared.archiveRevision
+                    )
+                } else {
+                    appState.analytics.requestCore(
+                        for: snapshot,
+                        archiveRevision: prepared.archiveRevision
+                    )
+                }
+            }
+            .onReceive(
+                NotificationCenter.default.publisher(
+                    for: ModelContext.didSave,
+                    object: modelContext
+                )
+            ) { _ in
+                // The notification is only a wake-up signal. The ModelActor's
+                // persistent-history token determines the exact delta and also
+                // catches saves missed while this view was inactive.
+                saveRevision &+= 1
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {
@@ -78,5 +97,23 @@ struct AnalyticsFeeder: View {
                 appState.analytics.invalidate()
                 temporalRefresh &+= 1
             }
+    }
+
+    private func prepareSnapshot(
+        using store: AnalyticsSnapshotStore
+    ) async -> AnalyticsSnapshotStore.PreparedSnapshot? {
+        for attempt in 0 ..< 2 {
+            do {
+                return try await store.prepare()
+            } catch is CancellationError {
+                return nil
+            } catch {
+                AppDiagnostics.analyticsSnapshotRefreshFailed(error: error)
+                guard attempt == 0 else { return nil }
+                try? await Task.sleep(for: .milliseconds(150))
+                guard !Task.isCancelled else { return nil }
+            }
+        }
+        return nil
     }
 }

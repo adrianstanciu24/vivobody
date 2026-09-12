@@ -37,6 +37,20 @@ import SwiftUI
 import VivoKit
 
 struct AppRoot: View {
+    let analyticsSnapshotStore: AnalyticsSnapshotStore
+
+    init(analyticsSnapshotStore: AnalyticsSnapshotStore) {
+        self.analyticsSnapshotStore = analyticsSnapshotStore
+    }
+
+    #if DEBUG
+        init(previewContainer: ModelContainer) {
+            analyticsSnapshotStore = AnalyticsSnapshotStore(
+                modelContainer: previewContainer
+            )
+        }
+    #endif
+
     @State private var appState = AppState()
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
@@ -69,10 +83,14 @@ struct AppRoot: View {
         @Bindable var workout = appState.workout
 
         tabView
-            // The one complete-archive query in the app. It keeps the
-            // shared analytics cache current so tabs and backdrops read
-            // reports instead of re-querying the archive themselves.
-            .background(AnalyticsFeeder(appState: appState))
+            // The one archive analytics feeder in the app. Its ModelActor
+            // store resolves SwiftData changes before publishing values.
+            .background(
+                AnalyticsFeeder(
+                    appState: appState,
+                    snapshotStore: analyticsSnapshotStore
+                )
+            )
             // One clock owns rest expiry while the workout is
             // minimized, since Today shows its pinned resume CTA and
             // every other tab shows the MiniBar — neither bar may own a
@@ -104,6 +122,9 @@ struct AppRoot: View {
                 // pending deep links.
                 appState.storageFallbackActive = StorageHealth.shared.didFallbackToInMemory
                 WidgetSnapshotWriter.configure(analytics: appState.analytics)
+                WidgetSnapshotWriter.configure(
+                    snapshotStore: analyticsSnapshotStore
+                )
                 if workout.modelContext == nil {
                     workout.modelContext = modelContext
                 }
@@ -414,6 +435,15 @@ private struct StorageFallbackBanner: View {
 }
 
 #Preview {
-    AppRoot()
+    let configuration = ModelConfiguration(
+        schema: VivobodyStore.schema,
+        isStoredInMemoryOnly: true
+    )
+    let container = try! ModelContainer(
+        for: VivobodyStore.schema,
+        configurations: [configuration]
+    )
+    AppRoot(previewContainer: container)
+        .modelContainer(container)
         .preferredColorScheme(.dark)
 }

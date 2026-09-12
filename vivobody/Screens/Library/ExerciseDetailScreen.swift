@@ -78,16 +78,6 @@ struct ExerciseDetailScreen: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.sessionAnalytics) var sessionAnalytics
 
-    /// All archived sessions — drives progress chart + last-used +
-    /// total-count + recent table. Same filter as the picker; live
-    /// in-flight sessions never contribute.
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: \WorkoutSession.completedAt,
-        order: .reverse
-    )
-    var completedSessions: [WorkoutSession]
-
     /// Current bodyweight is used only for an unlogged catalog default.
     /// Historical points carry their own session snapshots.
     @Query
@@ -146,11 +136,6 @@ struct ExerciseDetailScreen: View {
     @State private var showsInlineTitle: Bool = false
 
     var body: some View {
-        let now = Date()
-        let analyticsRequest = sessionAnalytics?.requestKey(
-            for: completedSessions,
-            now: now
-        )
         let cachedReports = sessionAnalytics?.exerciseDetailCachedReports() ?? .empty
         let readModel = ExerciseDetailReadModel.make(
             item: item,
@@ -243,9 +228,6 @@ struct ExerciseDetailScreen: View {
             withAnimation(.smooth(duration: 0.2)) {
                 showsInlineTitle = show
             }
-        }
-        .task(id: analyticsRequest) {
-            sessionAnalytics?.requestCore(for: completedSessions, now: now)
         }
         .screenBackground()
         .scrollEdgeEffectStyle(.soft, for: .bottom)

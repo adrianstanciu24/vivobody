@@ -46,7 +46,24 @@ extension [WorkoutSession] {
         now: Date = Date(),
         calendar: Calendar = .current
     ) -> ReadinessLine? {
-        guard let last = compactMap(\.completedAt).max() else { return nil }
+        let report = load ?? trainingLoad(now: now, calendar: calendar)
+        return ReadinessLine.readiness(
+            lastCompletedAt: compactMap(\.completedAt).max(),
+            load: report,
+            now: now,
+            calendar: calendar
+        )
+    }
+}
+
+extension ReadinessLine {
+    static func readiness(
+        lastCompletedAt: Date?,
+        load: TrainingLoadReport,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> ReadinessLine? {
+        guard let last = lastCompletedAt else { return nil }
 
         let days = calendar.dateComponents(
             [.day],
@@ -60,14 +77,12 @@ extension [WorkoutSession] {
             return ReadinessLine(lead: "Today's in the bank.", tail: "Recover well.")
         }
 
-        let report = load ?? trainingLoad(now: now)
-
         // Until the load model has enough history, lead with recency.
-        guard report.hasEnoughHistory else { return Self.formingLine(days: days) }
+        guard load.hasEnoughHistory else { return formingLine(days: days) }
 
         // Enough history: the trend verdict dominates, with freshness
         // colouring the productive case.
-        switch report.verdict {
+        switch load.verdict {
         case .high:
             return ReadinessLine(lead: "Training load is high.", tail: "Keep today lighter.")
         case .productive:

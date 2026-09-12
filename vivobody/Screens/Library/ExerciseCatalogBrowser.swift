@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Shared catalog-browsing contract for Library and exercise pickers. It owns
-//  the common SwiftData queries, cached history projection, filtering/search
+//  the catalog query, cached history projection, filtering/search
 //  snapshot, and persisted row actions while each surface keeps its own
 //  navigation, layout, empty-state copy, and tap behavior.
 //
@@ -199,13 +199,6 @@ struct ExerciseCatalogBrowserHost<Content: View>: View {
 
     @Query private var items: [ExerciseCatalogItem]
 
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: \WorkoutSession.completedAt,
-        order: .reverse
-    )
-    private var completedSessions: [WorkoutSession]
-
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
@@ -234,9 +227,7 @@ struct ExerciseCatalogBrowserHost<Content: View>: View {
     }
 
     var body: some View {
-        let analyticsRequest = sessionAnalytics?.requestKey(for: completedSessions)
-        let lookup = sessionAnalytics?.lastInstances
-            ?? completedSessions.lastInstanceByExercise()
+        let lookup = sessionAnalytics?.lastInstances ?? [:]
         let snapshot = ExerciseCatalogBrowserSnapshot(
             items: items,
             query: query,
@@ -254,9 +245,6 @@ struct ExerciseCatalogBrowserHost<Content: View>: View {
         )
 
         content(snapshot, actions)
-            .task(id: analyticsRequest) {
-                sessionAnalytics?.requestCore(for: completedSessions)
-            }
             .alert(
                 "Delete \"\(pendingDeleteItem?.name ?? "exercise")\"?",
                 isPresented: Binding(
