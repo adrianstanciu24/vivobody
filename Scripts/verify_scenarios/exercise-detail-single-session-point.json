@@ -28,15 +28,9 @@
       "scrollTo": {
         "selector": {
           "label": "Load",
-          "value": "Not selected"
+          "value": "Selected"
         },
         "direction": "up"
-      }
-    },
-    {
-      "tap": {
-        "label": "Load",
-        "value": "Not selected"
       }
     },
     {

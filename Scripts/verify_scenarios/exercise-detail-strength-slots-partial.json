@@ -27,6 +27,21 @@
     {
       "scrollTo": {
         "selector": {
+          "label": "e1RM",
+          "value": "Not selected"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "label": "e1RM",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
           "labelContains": "Strength trend building"
         },
         "direction": "up"

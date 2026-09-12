@@ -139,7 +139,7 @@ struct ExerciseDetailScreen: View {
     @State private var comparisonTarget: ExerciseCatalogItem? = nil
     @State var isEditingOneRepMax: Bool = false
     @State var range: ExerciseDetailChartRange = .all
-    @State var chartMetric: ExerciseDetailChartMetric = .e1rm
+    @State var chartMetric: ExerciseDetailChartMetric = .weight
     @State private var saveError: SaveErrorBox? = nil
     /// Drives the inline nav title's fade: the hero owns the name at
     /// rest, so the bar only claims it once the hero has scrolled under.
