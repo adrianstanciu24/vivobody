@@ -35,7 +35,7 @@ struct SignatureWidgetView: View {
     var body: some View {
         small.padding()
             .widgetURL(URL(string: "vivobody://insights"))
-            .containerBackground(.black, for: .widget)
+            .widgetAppearanceBackground()
     }
 
     private var small: some View {

@@ -42,7 +42,7 @@ struct StrengthWidgetView: View {
     var body: some View {
         large.padding()
             .widgetURL(URL(string: "vivobody://library"))
-            .containerBackground(.black, for: .widget)
+            .widgetAppearanceBackground()
     }
 
     @ViewBuilder

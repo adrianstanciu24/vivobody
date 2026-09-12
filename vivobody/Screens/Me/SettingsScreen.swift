@@ -223,6 +223,7 @@ struct SettingsScreen: View {
         switch command {
         case let .setAppearance(value):
             appearanceRaw = value.rawValue
+            AppearanceSideEffects.sync(value)
         case let .setBodyDriftSpeed(value):
             bodyDriftSpeedRaw = value.rawValue
         case let .setWeightUnit(value):

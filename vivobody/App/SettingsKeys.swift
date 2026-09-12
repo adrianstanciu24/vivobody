@@ -8,6 +8,7 @@
 //
 
 import SwiftUI
+import VivoKit
 
 nonisolated enum SettingsKey {
     static let hapticsEnabled = "settings.hapticsEnabled"
@@ -128,15 +129,9 @@ nonisolated enum BodyDriftSpeed: String, CaseIterable, Identifiable {
 /// The user's colour-scheme preference. `system` follows the OS;
 /// `light`/`dark` pin it. Maps to the optional `ColorScheme` SwiftUI
 /// expects at `.preferredColorScheme` (nil = follow system).
-nonisolated enum AppAppearance: String, CaseIterable, Identifiable {
-    case system
-    case light
-    case dark
+typealias AppAppearance = WidgetAppearance
 
-    var id: String {
-        rawValue
-    }
-
+extension WidgetAppearance {
     var label: String {
         switch self {
         case .system: "System"

@@ -128,6 +128,21 @@ enum WidgetSnapshotWriter {
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)
     }
 
+    /// Mirror the app-owned appearance setting into the App Group. Widget
+    /// timelines reload only when the stored preference actually changes.
+    static func writeAppearance(_ appearance: AppAppearance) {
+        guard let defaults = UserDefaults(suiteName: WidgetShared.appGroup)
+        else { return }
+        let didChange = defaults.string(forKey: WidgetShared.appearanceKey)
+            != appearance.rawValue
+        defaults.set(appearance.rawValue, forKey: WidgetShared.appearanceKey)
+        guard didChange else { return }
+        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)
+        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.consistencyKind)
+        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.signatureKind)
+        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.strengthKind)
+    }
+
     private static func writeAllNow(
         in context: ModelContext,
         revision: Int,

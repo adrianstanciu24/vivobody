@@ -92,6 +92,15 @@ enum WorkoutLiveActivityController {
         enqueueUpdate(state)
     }
 
+    /// Re-publish the current activity when the user changes Vivobody's
+    /// appearance while a workout is active.
+    static func updateAppearance(_ appearance: AppAppearance) {
+        guard var state = latestKnownState else { return }
+        state.appearance = appearance
+        latestKnownState = state
+        enqueueUpdate(state)
+    }
+
     /// Trailing debounce used only after a scrub has settled and saved.
     /// The immutable value snapshot is taken before sleeping; SwiftData
     /// models and ModelContext never cross an actor or suspension boundary.
@@ -237,6 +246,7 @@ enum WorkoutLiveActivityController {
             restDuration: session.restDuration,
             totalVolume: session.totalVolume,
             totalSetsCompleted: session.totalSets,
+            appearance: currentAppearance,
             isExerciseComplete: isExerciseComplete
         )
     }
@@ -253,8 +263,18 @@ enum WorkoutLiveActivityController {
             restDuration: 0,
             totalVolume: 0,
             totalSetsCompleted: 0,
+            appearance: currentAppearance,
             isExerciseComplete: false
         )
+    }
+
+    private static var currentAppearance: AppAppearance {
+        guard
+            let rawValue = UserDefaults.standard.string(
+                forKey: SettingsKey.appearance
+            )
+        else { return .system }
+        return AppAppearance(rawValue: rawValue) ?? .system
     }
 
     private static func setSpec(for set: WorkoutSet, exercise: Exercise?) -> String {

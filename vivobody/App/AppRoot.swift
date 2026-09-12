@@ -155,6 +155,7 @@ struct AppRoot: View {
                     }
                 #endif
                 workout.restoreActiveWorkoutIfNeeded()
+                AppearanceSideEffects.sync(appearance)
                 consumeIncomingActions()
 
                 // Non-critical path — defer to a low-priority Task so

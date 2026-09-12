@@ -36,7 +36,7 @@ struct UpNextWidgetView: View {
         small
             .padding()
             .widgetURL(URL(string: "vivobody://today"))
-            .containerBackground(.black, for: .widget)
+            .widgetAppearanceBackground()
     }
 
     private var small: some View {
@@ -70,7 +70,7 @@ struct UpNextWidgetView: View {
             if snapshot.easeOff {
                 Text("Ease off")
                     .font(Typography.caption)
-                    .foregroundStyle(Tint.primary)
+                    .foregroundStyle(Tint.primaryText)
                     .lineLimit(1)
             }
         }

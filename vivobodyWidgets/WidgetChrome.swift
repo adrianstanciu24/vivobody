@@ -9,8 +9,43 @@
 
 import Charts
 import SwiftUI
+import UIKit
 import VivoKit
 import WidgetKit
+
+private struct WidgetAppearanceModifier: ViewModifier {
+    @Environment(\.colorScheme) private var systemColorScheme
+    @AppStorage(
+        WidgetShared.appearanceKey,
+        store: UserDefaults(suiteName: WidgetShared.appGroup)
+    ) private var appearanceRaw = WidgetAppearance.system.rawValue
+
+    private var effectiveColorScheme: ColorScheme {
+        switch WidgetAppearance(rawValue: appearanceRaw) ?? .system {
+        case .system: systemColorScheme
+        case .light: .light
+        case .dark: .dark
+        }
+    }
+
+    private var background: Color {
+        effectiveColorScheme == .dark
+            ? .black
+            : Color(uiColor: .systemGroupedBackground)
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .environment(\.colorScheme, effectiveColorScheme)
+            .containerBackground(background, for: .widget)
+    }
+}
+
+extension View {
+    func widgetAppearanceBackground() -> some View {
+        modifier(WidgetAppearanceModifier())
+    }
+}
 
 struct WidgetStat: Identifiable, Hashable {
     var id: String {
@@ -41,7 +76,7 @@ struct WidgetStatStrip: View {
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text(stat.value)
                             .font(compact ? Typography.metricInline : Typography.statValue)
-                            .foregroundStyle(stat.accent ? Tint.primary : Ink.primary)
+                            .foregroundStyle(stat.accent ? Tint.primaryText : Ink.primary)
                             .monospacedDigit()
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)

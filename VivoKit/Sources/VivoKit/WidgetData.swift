@@ -23,10 +23,23 @@ public nonisolated enum WidgetShared {
     public static let strengthSnapshotKey = "widgets.strength.snapshot"
     public static let activeWorkoutSnapshotKey = "widgets.activeWorkout.snapshot"
     public static let weightUnitKey = "settings.weightUnit"
+    public static let appearanceKey = "settings.appearance"
     public static let startWorkoutRequestKey = "widgets.intent.startWorkoutRequestedAt"
     public static let completeSetRequestKey = "widgets.intent.completeSetRequestedAt"
     public static let startTemplateWorkoutRequestKey = "widgets.intent.startTemplateId"
     public static let templatesSnapshotKey = "widgets.templates.snapshot"
+}
+
+/// The app-owned appearance preference mirrored into the App Group so widgets
+/// can match an explicit Vivobody theme instead of only following the device.
+public enum WidgetAppearance: String, CaseIterable, Codable, Hashable, Identifiable, Sendable {
+    case system
+    case light
+    case dark
+
+    public var id: String {
+        rawValue
+    }
 }
 
 // MARK: - Versioned envelope

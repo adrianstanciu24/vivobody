@@ -23,12 +23,15 @@
             public var restDuration: TimeInterval
             public var totalVolume: Double
             public var totalSetsCompleted: Int
+            /// Optional so a Live Activity created by an older app build can
+            /// still decode and fall back to the system appearance.
+            public var appearance: WidgetAppearance?
             /// True when every set of the displayed exercise is logged. The
             /// widget swaps its Complete button for a Done state instead of
             /// offering a tap that can no-op.
             public var isExerciseComplete: Bool
 
-            public init(exerciseName: String, exerciseIndex: Int, setNumber: Int, plannedSets: Int, setSpec: String, isResting: Bool, restEndsAt: Date?, restDuration: TimeInterval, totalVolume: Double, totalSetsCompleted: Int, isExerciseComplete: Bool) {
+            public init(exerciseName: String, exerciseIndex: Int, setNumber: Int, plannedSets: Int, setSpec: String, isResting: Bool, restEndsAt: Date?, restDuration: TimeInterval, totalVolume: Double, totalSetsCompleted: Int, appearance: WidgetAppearance? = nil, isExerciseComplete: Bool) {
                 self.exerciseName = exerciseName
                 self.exerciseIndex = exerciseIndex
                 self.setNumber = setNumber
@@ -39,6 +42,7 @@
                 self.restDuration = restDuration
                 self.totalVolume = totalVolume
                 self.totalSetsCompleted = totalSetsCompleted
+                self.appearance = appearance
                 self.isExerciseComplete = isExerciseComplete
             }
         }

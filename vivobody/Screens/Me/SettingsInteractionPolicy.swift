@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import VivoKit
 
 nonisolated struct SettingsPreferenceDefaults: Equatable {
     let appearance: AppAppearance

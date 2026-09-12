@@ -10,6 +10,7 @@
 import ActivityKit
 import AppIntents
 import SwiftUI
+import UIKit
 import VivoKit
 import WidgetKit
 
@@ -25,16 +26,17 @@ struct ActiveWorkoutLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: WorkoutActivityAttributes.self) { context in
             ActiveWorkoutActivityView(state: context.state)
-                .activityBackgroundTint(.black)
-                .activitySystemActionForegroundColor(Tint.primary)
         } dynamicIsland: { context in
-            DynamicIsland {
+            let island = DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    if context.state.isResting {
-                        restTimerBlock(context.state)
-                    } else {
-                        setSpecBlock(context.state)
+                    Group {
+                        if context.state.isResting {
+                            restTimerBlock(context.state)
+                        } else {
+                            setSpecBlock(context.state)
+                        }
                     }
+                    .environment(\.colorScheme, .dark)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
                     VStack(alignment: .trailing, spacing: 4) {
@@ -59,32 +61,61 @@ struct ActiveWorkoutLiveActivity: Widget {
                             }
                         }
                     }
+                    .environment(\.colorScheme, .dark)
                 }
             } compactLeading: {
-                HStack(spacing: 4) {
-                    Circle().fill(Tint.primary).frame(width: 6, height: 6)
-                    if !context.state.isResting {
-                        Text("\(context.state.setNumber)/\(context.state.plannedSets)")
-                            .font(Typography.metricUnit)
-                            .monospacedDigit()
+                Text("SET \(context.state.setNumber)/\(context.state.plannedSets)")
+                    .font(Typography.metricUnit)
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                    .overlay(alignment: .leading) {
+                        if context.state.isResting {
+                            RestTransitionArrow()
+                                .offset(x: -(Space.xl + Space.sm))
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .environment(\.colorScheme, .dark)
+            } compactTrailing: {
+                Group {
+                    if context.state.isResting {
+                        HStack(spacing: Space.lg) {
+                            Circle()
+                                .fill(Tint.primary)
+                                .frame(width: 6, height: 6)
+                                .accessibilityHidden(true)
+                            restTimerValue(context.state)
+                        }
+                    } else {
+                        Circle()
+                            .fill(Tint.primary)
+                            .frame(width: 6, height: 6)
+                            .accessibilityHidden(true)
                     }
                 }
-            } compactTrailing: {
-                restOrSetValue(context.state)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .environment(\.colorScheme, .dark)
             } minimal: {
                 Circle().fill(Tint.primary).frame(width: 7, height: 7)
+                    .environment(\.colorScheme, .dark)
             }
+            if context.state.isResting {
+                return island
+                    .contentMargins(.leading, 38, for: .compactLeading)
+                    .contentMargins(.leading, 4, for: .compactTrailing)
+                    .contentMargins(.trailing, 0, for: .compactTrailing)
+            }
+            return island
+                .contentMargins(.leading, Space.lg, for: .compactLeading)
+                .contentMargins(.trailing, Space.lg, for: .compactTrailing)
         }
     }
 
     @ViewBuilder
-    private func restOrSetValue(_ state: WorkoutActivityAttributes.ContentState) -> some View {
-        if state.isResting, let restEndsAt = state.restEndsAt {
+    private func restTimerValue(_ state: WorkoutActivityAttributes.ContentState) -> some View {
+        if let restEndsAt = state.restEndsAt {
             Text(timerInterval: restTimerRange(endingAt: restEndsAt), countsDown: true)
-                .font(Typography.metricUnit)
-                .monospacedDigit()
-        } else {
-            Text("\(state.setNumber)/\(state.plannedSets)")
                 .font(Typography.metricUnit)
                 .monospacedDigit()
         }
@@ -119,17 +150,47 @@ struct ActiveWorkoutLiveActivity: Widget {
     }
 }
 
+private struct RestTransitionArrow: View {
+    var body: some View {
+        Image(systemName: "arrow.right")
+            .font(Typography.caption)
+            .foregroundStyle(Tint.primary)
+            .accessibilityHidden(true)
+    }
+}
+
 struct ActiveWorkoutActivityView: View {
+    @Environment(\.colorScheme) private var systemColorScheme
     let state: WorkoutActivityAttributes.ContentState
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            Text(state.exerciseName)
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.tertiary)
-                .lineLimit(1)
+    private var effectiveColorScheme: ColorScheme {
+        switch state.appearance ?? .system {
+        case .system: systemColorScheme
+        case .light: .light
+        case .dark: .dark
+        }
+    }
 
+    private var background: Color {
+        effectiveColorScheme == .dark
+            ? .black
+            : .white
+    }
+
+    var body: some View {
+        content
+            .environment(\.colorScheme, effectiveColorScheme)
+            .activityBackgroundTint(background)
+            .activitySystemActionForegroundColor(Tint.primary)
+    }
+
+    private var content: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
             if state.isResting, let restEndsAt = state.restEndsAt {
+                Text(state.exerciseName)
+                    .font(Typography.sectionLabel)
+                    .foregroundStyle(Ink.tertiary)
+                    .lineLimit(1)
                 let range = restTimerRange(endingAt: restEndsAt)
                 Text(timerInterval: range, countsDown: true)
                     .font(Typography.metricLg)
@@ -150,14 +211,16 @@ struct ActiveWorkoutActivityView: View {
             } else {
                 Text(state.exerciseName)
                     .font(Typography.title)
+                    .fontWeight(.bold)
                     .foregroundStyle(Ink.primary)
                     .lineLimit(1)
                 Text("Set \(state.setNumber) of \(state.plannedSets)")
-                    .font(Typography.metricInline)
+                    .font(Typography.metricUnit)
                     .foregroundStyle(Ink.secondary)
                 HStack(alignment: .center, spacing: Space.md) {
                     Text(state.setSpec)
                         .font(Typography.statValue)
+                        .fontWeight(.heavy)
                         .foregroundStyle(Ink.primary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.72)

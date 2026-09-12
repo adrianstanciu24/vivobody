@@ -36,7 +36,7 @@ struct ConsistencyWidgetView: View {
     var body: some View {
         graph.padding()
             .widgetURL(URL(string: "vivobody://insights/consistency"))
-            .containerBackground(.black, for: .widget)
+            .widgetAppearanceBackground()
     }
 
     private var graph: some View {
