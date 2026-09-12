@@ -45,6 +45,8 @@ struct ActiveExerciseCard: View {
     var onScrubEnded: (() -> Void)? = nil
     var completionActions: ActiveSetCompletionActions? = nil
     var onReplaceRequested: (() -> Void)? = nil
+    var onAddSupersetPartnerRequested: (() -> Void)? = nil
+    var onRemoveRequested: (() -> Void)? = nil
     /// Parent-owned cancellation generation for archive/discard/minimize.
     var scrubCancellationID: Int = 0
 

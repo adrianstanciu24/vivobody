@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 112.
+Scenario files: 114.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -20,8 +20,10 @@ Scenario files: 112.
 | [active-completion-restoration](active-completion-restoration.json) | today | `--ui-test-completion-restoration -settings.weightUnit lb` |
 | [active-duration](active-duration.json) | today | `--ui-test-active-bodyweight-duration -settings.appearance dark` |
 | [active-no-load](active-no-load.json) | today | `--ui-test-active-no-load -settings.appearance dark` |
+| [active-remove-exercise](active-remove-exercise.json) | today | `--ui-test-superset --static-body` |
 | [active-resistance](active-resistance.json) | today | `--ui-test-active-band -settings.appearance dark` |
 | [active-restoration](active-restoration.json) | today | `--ui-test-active-partial` |
+| [active-superset-add-partner](active-superset-add-partner.json) | today | `--ui-test-active-replaceable --static-body` |
 | [active-superset-completion](active-superset-completion.json) | today | `--ui-test-superset` |
 | [active-zero-set-recovery](active-zero-set-recovery.json) | today | `--ui-test-active-zero-set` |
 | [archive-to-history](archive-to-history.json) | today | `--ui-test-active-partial` |

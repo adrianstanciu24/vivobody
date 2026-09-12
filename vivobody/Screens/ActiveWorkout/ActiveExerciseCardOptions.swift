@@ -17,7 +17,9 @@ extension ActiveExerciseCard {
             session: session,
             onReplace: onReplaceRequested,
             onLinkWithNext: linkWithNextExercise,
-            onUnlink: unlinkFromSuperset
+            onAddSupersetPartner: onAddSupersetPartnerRequested,
+            onUnlink: unlinkFromSuperset,
+            onRemove: onRemoveRequested
         )
     }
 
@@ -41,7 +43,14 @@ struct ExerciseOptionsMenuContent: View {
     let session: WorkoutSession
     let onReplace: (() -> Void)?
     let onLinkWithNext: () -> Void
+    /// Opens the catalog to insert a new partner right after this
+    /// exercise and link the pair. Nil when the host cannot present
+    /// the picker.
+    let onAddSupersetPartner: (() -> Void)?
     let onUnlink: () -> Void
+    /// Removes the exercise from the live workout. Nil when the host
+    /// has no session controller to commit the deletion.
+    let onRemove: (() -> Void)?
 
     var body: some View {
         let exercises = session.orderedExercises
@@ -65,11 +74,25 @@ struct ExerciseOptionsMenuContent: View {
                 Label("Superset with \(exercises[index + 1].name)", systemImage: "link")
             }
         }
+        if let onAddSupersetPartner {
+            Button {
+                onAddSupersetPartner()
+            } label: {
+                Label("Add superset partner…", systemImage: "link.badge.plus")
+            }
+        }
         if session.isInSuperset(exercise) {
             Button {
                 onUnlink()
             } label: {
                 Label("Remove from superset", systemImage: "minus.circle")
+            }
+        }
+        if let onRemove {
+            Button(role: .destructive) {
+                onRemove()
+            } label: {
+                Label("Remove exercise", systemImage: "trash")
             }
         }
     }

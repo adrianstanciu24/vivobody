@@ -50,6 +50,9 @@ struct ActiveWorkoutScreen: View {
         ((ActiveSetCompletionRequest, ActiveSetCompletionMutation) -> ActiveSetCompletionResult)?
     private let onReplaceExercise:
         ((UUID, ExerciseCatalogItem) -> ExerciseSubstitutionCommit)?
+    /// Commits an exercise removal through the session controller;
+    /// returns false when nothing changed. Nil hides the menu action.
+    let onRemoveExercise: ((UUID) -> Bool)?
 
     /// Drives the discard confirmation alert.
     @State private var showDiscardConfirm: Bool = false
@@ -65,12 +68,20 @@ struct ActiveWorkoutScreen: View {
     /// Drives the catalog picker for exercise adds. Legacy/external
     /// empty drafts initialize it as presented instead of showing a
     /// separate empty-workout screen.
-    @State private var showAddExercisePicker: Bool = false
+    @State var showAddExercisePicker: Bool = false
 
     /// Value snapshot for the nested replacement sheet. It deliberately
     /// retains no live Exercise reference because a successful commit deletes
     /// that model before the sheet finishes dismissing.
     @State private var substitutionTarget: ExerciseSubstitutionTarget?
+
+    /// The exercise a picked catalog item will be inserted after and
+    /// linked with. Drives the superset-partner picker sheet.
+    @State var supersetPartnerAnchor: SupersetPartnerAnchor?
+
+    /// When non-nil, the removal confirmation alert is shown for an
+    /// exercise that already has logged sets.
+    @State var removalTarget: ExerciseRemovalTarget?
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
@@ -88,7 +99,8 @@ struct ActiveWorkoutScreen: View {
         onCompleteSet:
         ((ActiveSetCompletionRequest, ActiveSetCompletionMutation) -> ActiveSetCompletionResult)? = nil,
         onReplaceExercise:
-        ((UUID, ExerciseCatalogItem) -> ExerciseSubstitutionCommit)? = nil
+        ((UUID, ExerciseCatalogItem) -> ExerciseSubstitutionCommit)? = nil,
+        onRemoveExercise: ((UUID) -> Bool)? = nil
     ) {
         _session = State(wrappedValue: session)
         _showAddExercisePicker = State(
@@ -100,6 +112,7 @@ struct ActiveWorkoutScreen: View {
         self.onScrubEnded = onScrubEnded
         self.onCompleteSet = onCompleteSet
         self.onReplaceExercise = onReplaceExercise
+        self.onRemoveExercise = onRemoveExercise
     }
 
     var body: some View {
@@ -188,6 +201,19 @@ struct ActiveWorkoutScreen: View {
             )
             .id(target.id)
         }
+        .sheet(item: $supersetPartnerAnchor) { anchor in
+            ExercisePickerSheet(
+                purpose: .addToActiveWorkout,
+                onPick: { item in insertSupersetPartner(after: anchor.id, from: item) }
+            )
+        }
+        .alert(
+            "Remove this exercise?",
+            isPresented: removalAlertBinding,
+            presenting: removalTarget,
+            actions: removalAlertActions(for:),
+            message: removalAlertMessage(for:)
+        )
         .saveErrorAlert($saveError)
     }
 
@@ -228,7 +254,7 @@ struct ActiveWorkoutScreen: View {
     /// they actually used. A first-time exercise falls back to the
     /// catalog defaults (3 sets at the catalog reps × weight). Either
     /// way the count is then adjustable in the card (+ / − a set).
-    private func makeAddedExercise(from item: ExerciseCatalogItem, sortOrder: Int) -> Exercise {
+    func makeAddedExercise(from item: ExerciseCatalogItem, sortOrder: Int) -> Exercise {
         let history = sessionAnalytics?.resolvedExerciseHistory(
             in: modelContext
         )
@@ -325,9 +351,7 @@ struct ActiveWorkoutScreen: View {
     /// Add Exercise and preserves the existing 44pt semantic target.
     @ViewBuilder
     private var exerciseOptionsButton: some View {
-        if let exercise = activeExercise,
-           hasOptions(for: exercise)
-        {
+        if let exercise = activeExercise {
             let linked = session.isInSuperset(exercise)
             Menu {
                 ExerciseOptionsMenuContent(
@@ -337,7 +361,11 @@ struct ActiveWorkoutScreen: View {
                         ? nil
                         : { beginReplacement(of: exercise) },
                     onLinkWithNext: { linkWithNextExercise(exercise) },
-                    onUnlink: { unlinkFromSuperset(exercise) }
+                    onAddSupersetPartner: { beginAddingSupersetPartner(to: exercise) },
+                    onUnlink: { unlinkFromSuperset(exercise) },
+                    onRemove: onRemoveExercise == nil
+                        ? nil
+                        : { beginRemoving(exercise) }
                 )
             } label: {
                 Image(systemName: "ellipsis")
@@ -399,6 +427,12 @@ struct ActiveWorkoutScreen: View {
                     onReplaceRequested: onReplaceExercise == nil
                         ? nil
                         : { beginReplacement(of: exercises[i]) },
+                    onAddSupersetPartnerRequested: {
+                        beginAddingSupersetPartner(to: exercises[i])
+                    },
+                    onRemoveRequested: onRemoveExercise == nil
+                        ? nil
+                        : { beginRemoving(exercises[i]) },
                     scrubCancellationID: scrubCancellationID
                 )
                 .id(exercises[i].id)
@@ -443,20 +477,6 @@ struct ActiveWorkoutScreen: View {
             return nil
         }
         return exercises[session.activeExerciseIndex]
-    }
-
-    private func hasOptions(for exercise: Exercise) -> Bool {
-        onReplaceExercise != nil
-            || session.isInSuperset(exercise)
-            || canLinkWithNext(exercise)
-    }
-
-    private func canLinkWithNext(_ exercise: Exercise) -> Bool {
-        let exercises = session.orderedExercises
-        guard let index = exercises.firstIndex(where: { $0.id == exercise.id }),
-              index + 1 < exercises.count
-        else { return false }
-        return !SupersetGrouping.isSeamLinked(at: index, in: exercises)
     }
 
     private var isBlockingOverlayPresented: Bool {
@@ -516,7 +536,7 @@ struct ActiveWorkoutScreen: View {
     /// Invalidate all child coast tasks before a lifecycle transition. A
     /// minimize/disappear flushes here; archive saves the same in-memory
     /// values itself, while discard intentionally throws them away.
-    private func finishScrubbing(then action: (() -> Void)? = nil) {
+    func finishScrubbing(then action: (() -> Void)? = nil) {
         scrubCancellationID &+= 1
         if let action {
             action()
@@ -525,7 +545,7 @@ struct ActiveWorkoutScreen: View {
         }
     }
 
-    private func saveActiveSessionChanges() {
+    func saveActiveSessionChanges() {
         if let onSessionUpdate {
             onSessionUpdate()
             return

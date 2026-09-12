@@ -157,6 +157,37 @@ final class WorkoutSessionController {
         return .replaced(newExerciseID: replacement.id)
     }
 
+    /// Remove one exercise from the active draft. Later rows close the
+    /// gap, a superset left with a single member dissolves, and the pager
+    /// index follows the card the user was reading.
+    @discardableResult
+    func removeExercise(sessionID: UUID, exerciseID: UUID) -> Bool {
+        guard pendingDiscardSession == nil,
+              let session = activeSession,
+              session.id == sessionID,
+              session.completedAt == nil,
+              let context = modelContext,
+              let index = session.orderedExercises.firstIndex(where: { $0.id == exerciseID })
+        else { return false }
+
+        let removed = session.orderedExercises[index]
+        session.exercises.removeAll { $0.id == exerciseID }
+        let remaining = session.orderedExercises
+        for (i, exercise) in remaining.enumerated() {
+            exercise.sortOrder = i
+        }
+        SupersetGrouping.normalize(remaining)
+
+        if session.activeExerciseIndex > index {
+            session.activeExerciseIndex -= 1
+        }
+        if session.activeExerciseIndex >= remaining.count {
+            session.activeExerciseIndex = max(remaining.count - 1, 0)
+        }
+        context.delete(removed)
+        return persistActiveSessionChanges(for: sessionID, event: .updated)
+    }
+
     // MARK: - Rest expiry
 
     /// End a rest interval whose deadline has passed. The shell drives

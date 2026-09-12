@@ -1,0 +1,108 @@
+{
+  "name": "active-superset-add-partner",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-active-replaceable", "--static-body"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Barbell Bench Press"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeExerciseOptionsButton",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Add superset partner…",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "Add Exercise",
+        "role": "AXGroup"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Flat Dumbbell Fly, Dumbbell · Push"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Muscles used by Flat Dumbbell Fly"
+      }
+    },
+    {
+      "wait": {
+        "label": "Add to Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Add to Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Barbell Bench Press",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeExerciseOptionsButton",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Remove from superset",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Remove from superset",
+      "role": "AXButton"
+    },
+    {
+      "label": "Add superset partner…",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Superset with",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "Add Exercise",
+      "visible": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

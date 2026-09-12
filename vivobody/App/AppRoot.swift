@@ -237,6 +237,12 @@ struct AppRoot: View {
                                 result: result,
                                 saveError: error
                             )
+                        },
+                        onRemoveExercise: { exerciseID in
+                            workout.removeExercise(
+                                sessionID: session.id,
+                                exerciseID: exerciseID
+                            )
                         }
                     )
                     .presentationDetents([.large])

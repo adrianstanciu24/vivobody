@@ -1,0 +1,105 @@
+{
+  "name": "active-remove-exercise",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-superset", "--static-body"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Barbell Bench Press",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeExerciseOptionsButton",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Remove exercise",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Barbell Bent-Over Row",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "today"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Barbell Bent-Over Row",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeExerciseOptionsButton",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Remove exercise",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Remove exercise",
+      "role": "AXButton"
+    },
+    {
+      "label": "Superset with Supinated Straight-Bar Cable Curl",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Remove from superset",
+      "role": "AXButton"
+    },
+    {
+      "label": "Barbell Bench Press",
+      "visible": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}
