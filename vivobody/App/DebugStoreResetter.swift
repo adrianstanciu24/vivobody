@@ -32,6 +32,7 @@ import VivoKit
             try? context.saveOrRollback()
             deleteAll(ExerciseCatalogItem.self, in: context)
             CatalogDeletionTombstones.clear(in: defaults)
+            CatalogLaunchReconciler.invalidate(in: defaults)
             sharedDefaults?.removeObject(forKey: WidgetShared.startWorkoutRequestKey)
             sharedDefaults?.removeObject(forKey: WidgetShared.completeSetRequestKey)
             sharedDefaults?.removeObject(forKey: WidgetShared.startTemplateWorkoutRequestKey)

@@ -54,6 +54,9 @@ nonisolated enum SettingsKey {
     /// String — marketing version plus generated-catalog fingerprint from the
     /// last full Spotlight reindex.
     static let spotlightReindexFingerprint = "settings.spotlightReindexFingerprint"
+    /// String — generated-catalog fingerprint from the last successful
+    /// bundled-row reconciliation.
+    static let catalogReconciliationFingerprint = "settings.catalogReconciliationFingerprint"
     /// [String] — bundled catalog IDs the user explicitly removed. Launch
     /// reconciliation respects these until Reset Exercise Catalog clears them.
     static let hiddenBundledCatalogIDs = "settings.hiddenBundledCatalogIDs"

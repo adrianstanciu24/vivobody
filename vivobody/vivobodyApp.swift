@@ -46,6 +46,7 @@ struct VivobodyApp: App {
             // Fall back to an in-memory store so the app stays usable;
             // the original store is left untouched on disk for recovery.
             StorageHealth.shared.didFallbackToInMemory = true
+            CatalogLaunchReconciler.invalidate()
             do {
                 let memory = try VivobodyStore.makeContainer(
                     named: "vivobody-fallback",

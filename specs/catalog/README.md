@@ -4,7 +4,8 @@
 
 This directory is the canonical source for Vivobody's family-first exercise
 catalog. `Scripts/catalog.py` validates these foundations and reviewed families
-and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
+and is the sole writer of the bundled `vivobody/Resources/catalog.json` plus
+its fixed-size `catalog.fingerprint` change token.
 
 Use the [catalog skill](../../.agents/skills/vivobody-add-exercise/SKILL.md) for
 exercise authorship and review. The [generated inventory](inventory.md) lists
@@ -421,10 +422,11 @@ python3 Scripts/catalog.py --emit-runtime
 python3 -m unittest discover -s Scripts/tests -p 'test_catalog.py'
 ```
 
-`--check` is non-writing and also proves that the checked-in runtime catalog is
-byte-for-byte compiler output. `--emit-runtime` performs an atomic replacement
-after full validation. Explicit `--family PATH` values are supplemental
-validation inputs only and can never enter the runtime projection.
+`--check` is non-writing and proves that the checked-in runtime catalog is
+byte-for-byte compiler output and that its SHA-256 fingerprint matches.
+`--emit-runtime` atomically replaces each generated resource after full
+validation. Explicit `--family PATH` values are supplemental validation inputs
+only and can never enter the runtime projection.
 
 The validator/compiler uses only Python's standard library. It decodes the binary
 SceneKit property list directly and proves every declared mesh has both `_L`

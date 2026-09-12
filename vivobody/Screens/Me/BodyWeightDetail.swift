@@ -23,9 +23,6 @@ import VivoKit
 struct BodyWeightDetail: View {
     @Environment(\.modelContext) private var context
 
-    @Query(sort: \BodyWeightEntry.date, order: .forward)
-    private var entries: [BodyWeightEntry]
-
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
@@ -38,6 +35,7 @@ struct BodyWeightDetail: View {
     @State private var pendingDelete: BodyWeightEntry? = nil
     @State private var saveError: SaveErrorBox? = nil
     @State private var recentEntryLimit = Self.recentEntryPageSize
+    @State private var rangeAnchor = Date()
 
     private static let recentEntryPageSize = 40
 
@@ -56,53 +54,54 @@ struct BodyWeightDetail: View {
             }
         }
 
-        var cutoff: Date? {
-            let cal = Calendar.current
+        func cutoff(relativeTo date: Date, calendar: Calendar = .current) -> Date? {
             switch self {
-            case .oneMonth: return cal.date(byAdding: .month, value: -1, to: Date())
-            case .threeMonths: return cal.date(byAdding: .month, value: -3, to: Date())
-            case .sixMonths: return cal.date(byAdding: .month, value: -6, to: Date())
-            case .all: return nil
+            case .oneMonth: calendar.date(byAdding: .month, value: -1, to: date)
+            case .threeMonths: calendar.date(byAdding: .month, value: -3, to: date)
+            case .sixMonths: calendar.date(byAdding: .month, value: -6, to: date)
+            case .all: nil
             }
         }
     }
 
     var body: some View {
-        // `entries` is already oldest → newest. Derive each view input
-        // once so rows never repeat an O(n log n) sort while rendering.
-        let latest = entries.last
-        let latestDelta = entries.count >= 2
-            ? entries[entries.count - 1].weight - entries[entries.count - 2].weight
-            : nil
-        let visiblePoints = chartPoints(from: entries)
-        let reversedEntries = Array(entries.reversed())
-        let recentEntries = Array(reversedEntries.prefix(recentEntryLimit))
+        BodyWeightDetailQuery(
+            range: range,
+            rangeAnchor: rangeAnchor,
+            recentEntryLimit: recentEntryLimit
+        ) { rangeEntries, recentEntries, hasMoreRecentEntries in
+            let latest = recentEntries.first
+            let latestDelta = recentEntries.count >= 2
+                ? recentEntries[0].weight - recentEntries[1].weight
+                : nil
+            let visiblePoints = chartPoints(from: rangeEntries)
 
-        ScrollView {
-            VStack(alignment: .leading, spacing: Space.xxl) {
-                header(latest: latest, delta: latestDelta)
-                logButton
-                if visiblePoints.count >= 2 {
-                    chart(points: visiblePoints)
-                    rangeStrip
-                } else if !entries.isEmpty {
-                    // Single-entry case — a quiet caption instead of
-                    // an empty Charts frame (which renders a blank
-                    // rectangle) or a boxy placeholder card.
-                    singleEntryHint
+            ScrollView {
+                VStack(alignment: .leading, spacing: Space.xxl) {
+                    header(latest: latest, delta: latestDelta)
+                    logButton
+                    if visiblePoints.count >= 2 {
+                        chart(points: visiblePoints)
+                        rangeStrip
+                    } else if !rangeEntries.isEmpty {
+                        // Single-entry case — a quiet caption instead of
+                        // an empty Charts frame (which renders a blank
+                        // rectangle) or a boxy placeholder card.
+                        singleEntryHint
+                    }
+                    if !recentEntries.isEmpty {
+                        recentTable(
+                            entries: recentEntries,
+                            hasMore: hasMoreRecentEntries
+                        )
+                    }
                 }
-                if !entries.isEmpty {
-                    recentTable(
-                        entries: recentEntries,
-                        hasMore: recentEntries.count < reversedEntries.count
-                    )
-                }
+                .padding(.vertical, 16)
             }
-            .padding(.vertical, 16)
+            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+            .scrollEdgeEffectStyle(.soft, for: .bottom)
         }
-        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-        .scrollEdgeEffectStyle(.soft, for: .bottom)
         .screenBackground()
         .navigationTitle("Body Weight")
         .navigationBarTitleDisplayMode(.inline)
@@ -388,10 +387,9 @@ struct BodyWeightDetail: View {
     // MARK: - Derived
 
     private func chartPoints(from chronologicalEntries: [BodyWeightEntry]) -> [BodyWeightEntry] {
-        guard let cutoff = range.cutoff else {
-            return Self.weeklySamples(from: chronologicalEntries)
-        }
-        return chronologicalEntries.filter { $0.date >= cutoff }
+        range == .all
+            ? Self.weeklySamples(from: chronologicalEntries)
+            : chronologicalEntries
     }
 
     /// The All range can span decades. Keeping the first measurement
@@ -436,4 +434,49 @@ struct BodyWeightDetail: View {
         f.dateFormat = "MMM d  ·  yy"
         return f
     }()
+}
+
+/// Keeps SwiftData subscriptions proportional to what this screen can show:
+/// the chart owns only its selected window, while the header and recent table
+/// retain one bounded newest-first page plus a sentinel row for "Load more."
+private struct BodyWeightDetailQuery<Content: View>: View {
+    @Query private var rangeEntries: [BodyWeightEntry]
+    @Query private var newestEntries: [BodyWeightEntry]
+
+    private let recentEntryLimit: Int
+    private let content: ([BodyWeightEntry], [BodyWeightEntry], Bool) -> Content
+
+    init(
+        range: BodyWeightDetail.TimeRange,
+        rangeAnchor: Date,
+        recentEntryLimit: Int,
+        @ViewBuilder content: @escaping ([BodyWeightEntry], [BodyWeightEntry], Bool) -> Content
+    ) {
+        if let cutoff = range.cutoff(relativeTo: rangeAnchor) {
+            _rangeEntries = Query(FetchDescriptor(
+                predicate: #Predicate<BodyWeightEntry> { $0.date >= cutoff },
+                sortBy: [SortDescriptor(\BodyWeightEntry.date, order: .forward)]
+            ))
+        } else {
+            _rangeEntries = Query(FetchDescriptor(
+                sortBy: [SortDescriptor(\BodyWeightEntry.date, order: .forward)]
+            ))
+        }
+
+        var newestDescriptor = FetchDescriptor<BodyWeightEntry>(
+            sortBy: [SortDescriptor(\BodyWeightEntry.date, order: .reverse)]
+        )
+        newestDescriptor.fetchLimit = recentEntryLimit + 1
+        _newestEntries = Query(newestDescriptor)
+        self.recentEntryLimit = recentEntryLimit
+        self.content = content
+    }
+
+    var body: some View {
+        content(
+            rangeEntries,
+            Array(newestEntries.prefix(recentEntryLimit)),
+            newestEntries.count > recentEntryLimit
+        )
+    }
 }

@@ -22128,6 +22128,10 @@ class CatalogFoundationTests(unittest.TestCase):
             catalog.RUNTIME_CATALOG_PATH.read_text(encoding="utf-8"),
             encoded,
         )
+        self.assertEqual(
+            catalog.RUNTIME_CATALOG_FINGERPRINT_PATH.read_text(encoding="utf-8"),
+            catalog.runtime_catalog_fingerprint(encoded),
+        )
 
     def test_xcode_catalog_sandbox_allowlist_matches_compiler_inputs(self) -> None:
         expected = catalog.encoded_xcode_input_file_list(
@@ -22163,15 +22167,24 @@ class CatalogFoundationTests(unittest.TestCase):
     ) -> None:
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "catalog.json"
+            fingerprint = Path(directory) / "catalog.fingerprint"
             output.write_text("old", encoding="utf-8")
             output.chmod(0o600)
             with mock.patch.object(
                 catalog,
                 "RUNTIME_CATALOG_PATH",
                 output,
+            ), mock.patch.object(
+                catalog,
+                "RUNTIME_CATALOG_FINGERPRINT_PATH",
+                fingerprint,
             ):
                 catalog.write_runtime_catalog_atomically("new\n")
             self.assertEqual(output.read_text(encoding="utf-8"), "new\n")
+            self.assertEqual(
+                fingerprint.read_text(encoding="utf-8"),
+                catalog.runtime_catalog_fingerprint("new\n"),
+            )
             self.assertEqual(output.stat().st_mode & 0o777, 0o644)
             self.assertEqual(list(output.parent.glob(".catalog.json.*.tmp")), [])
 
@@ -22179,6 +22192,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 catalog,
                 "RUNTIME_CATALOG_PATH",
                 output,
+            ), mock.patch.object(
+                catalog,
+                "RUNTIME_CATALOG_FINGERPRINT_PATH",
+                fingerprint,
             ), mock.patch.object(
                 Path,
                 "replace",
@@ -22195,6 +22212,7 @@ class CatalogFoundationTests(unittest.TestCase):
     def test_check_is_read_only_and_emit_is_the_only_write_mode(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "catalog.json"
+            fingerprint = Path(directory) / "catalog.fingerprint"
             allowlist = Path(directory) / "catalog-inputs.xcfilelist"
             allowlist.write_text(
                 catalog.encoded_xcode_input_file_list(
@@ -22203,10 +22221,15 @@ class CatalogFoundationTests(unittest.TestCase):
                 encoding="utf-8",
             )
             output.write_text("stale\n", encoding="utf-8")
+            fingerprint.write_text("stale\n", encoding="utf-8")
             with mock.patch.object(
                 catalog,
                 "RUNTIME_CATALOG_PATH",
                 output,
+            ), mock.patch.object(
+                catalog,
+                "RUNTIME_CATALOG_FINGERPRINT_PATH",
+                fingerprint,
             ), mock.patch.object(
                 catalog,
                 "XCODE_INPUT_FILE_LIST_PATH",
@@ -22222,6 +22245,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 catalog.compile_runtime_catalog(self.real_families)
             )
             self.assertEqual(output.read_text(encoding="utf-8"), expected)
+            self.assertEqual(
+                fingerprint.read_text(encoding="utf-8"),
+                catalog.runtime_catalog_fingerprint(expected),
+            )
 
     def test_check_and_emit_modes_are_mutually_exclusive(self) -> None:
         with mock.patch.object(sys, "stderr"), self.assertRaises(SystemExit):
@@ -22238,11 +22265,16 @@ class CatalogFoundationTests(unittest.TestCase):
                 encoding="utf-8",
             )
             output = temporary_root / "catalog.json"
+            fingerprint = temporary_root / "catalog.fingerprint"
             allowlist = temporary_root / "catalog-inputs.xcfilelist"
             with mock.patch.object(
                 catalog,
                 "RUNTIME_CATALOG_PATH",
                 output,
+            ), mock.patch.object(
+                catalog,
+                "RUNTIME_CATALOG_FINGERPRINT_PATH",
+                fingerprint,
             ), mock.patch.object(
                 catalog,
                 "XCODE_INPUT_FILE_LIST_PATH",

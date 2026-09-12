@@ -105,3 +105,4 @@ $(SRCROOT)/specs/catalog/families/wrist-radial-deviation.json
 $(SRCROOT)/specs/catalog/families/wrist-ulnar-deviation.json
 $(SRCROOT)/vivobody/Resources/BodyModel.scn
 $(SRCROOT)/vivobody/Resources/catalog.json
+$(SRCROOT)/vivobody/Resources/catalog.fingerprint

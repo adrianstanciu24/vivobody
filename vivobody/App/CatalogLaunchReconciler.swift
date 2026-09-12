@@ -11,9 +11,17 @@ import Foundation
 import SwiftData
 
 struct CatalogReconciliationResult: Equatable {
+    let didReconcile: Bool
     let removedItemIDs: [UUID]
     let insertedItemCount: Int
     let reconciledItemCount: Int
+
+    static let unchanged = CatalogReconciliationResult(
+        didReconcile: false,
+        removedItemIDs: [],
+        insertedItemCount: 0,
+        reconciledItemCount: 0
+    )
 }
 
 @MainActor
@@ -25,10 +33,17 @@ enum CatalogLaunchReconciler {
         in context: ModelContext,
         defaults: UserDefaults = .standard,
         now: Date = Date(),
+        catalogFingerprint: String = CatalogData.sourceFingerprint,
         saveChanges: (ModelContext) throws -> Void = { context in
             try context.saveOrRollback()
         }
     ) throws -> CatalogReconciliationResult {
+        guard defaults.string(forKey: SettingsKey.catalogReconciliationFingerprint)
+            != catalogFingerprint
+        else {
+            return .unchanged
+        }
+
         let descriptor = FetchDescriptor<ExerciseCatalogItem>(
             predicate: #Predicate { !$0.isUserCreated }
         )
@@ -78,11 +93,20 @@ enum CatalogLaunchReconciler {
             context.rollback()
             throw error
         }
+        defaults.set(catalogFingerprint, forKey: SettingsKey.catalogReconciliationFingerprint)
         return CatalogReconciliationResult(
+            didReconcile: true,
             removedItemIDs: removedIDs,
             insertedItemCount: insertedCount,
             reconciledItemCount: reconciledCount
         )
+    }
+
+    /// A store reset or fallback invalidates the external cache token so the
+    /// next launch cannot mistake an empty replacement store for a reconciled
+    /// one.
+    static func invalidate(in defaults: UserDefaults = .standard) {
+        defaults.removeObject(forKey: SettingsKey.catalogReconciliationFingerprint)
     }
 }
 

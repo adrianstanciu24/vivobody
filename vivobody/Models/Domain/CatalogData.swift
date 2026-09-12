@@ -144,18 +144,9 @@ nonisolated enum CatalogData {
 
     static let records: [CatalogRecord] = load(sourceData)
 
-    /// Stable FNV-1a digest of the generated resource bytes. This is not a
-    /// security primitive; it is a compact change token for local caches such
-    /// as Spotlight.
-    static let sourceFingerprint: String = {
-        var hash: UInt64 = 14_695_981_039_346_656_037
-        for byte in sourceData {
-            hash ^= UInt64(byte)
-            hash &*= 1_099_511_628_211
-        }
-        let value = String(hash, radix: 16)
-        return String(repeating: "0", count: 16 - value.count) + value
-    }()
+    /// Generated digest read from a fixed-size companion resource. Callers can
+    /// check catalog-backed caches without loading or hashing catalog.json.
+    static let sourceFingerprint: String = loadFingerprint()
 
     static let byName: [String: CatalogRecord] = Dictionary(
         uniqueKeysWithValues: records.map { (normalized($0.name), $0) }
@@ -190,6 +181,23 @@ nonisolated enum CatalogData {
             return try Data(contentsOf: url)
         } catch {
             preconditionFailure("Unable to read bundled catalog.json: \(error)")
+        }
+    }
+
+    private static func loadFingerprint() -> String {
+        guard let url = Bundle.main.url(forResource: "catalog", withExtension: "fingerprint") else {
+            preconditionFailure("catalog.fingerprint is missing from the app bundle")
+        }
+
+        do {
+            let fingerprint = try String(contentsOf: url, encoding: .utf8)
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !fingerprint.isEmpty else {
+                preconditionFailure("Bundled catalog fingerprint is empty")
+            }
+            return fingerprint
+        } catch {
+            preconditionFailure("Unable to read bundled catalog fingerprint: \(error)")
         }
     }
 

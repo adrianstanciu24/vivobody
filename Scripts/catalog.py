@@ -40,6 +40,10 @@ CANONICAL_RUNTIME_CATALOG_PATH = (
     ROOT / "vivobody" / "Resources" / "catalog.json"
 )
 RUNTIME_CATALOG_PATH = CANONICAL_RUNTIME_CATALOG_PATH
+CANONICAL_RUNTIME_CATALOG_FINGERPRINT_PATH = (
+    ROOT / "vivobody" / "Resources" / "catalog.fingerprint"
+)
+RUNTIME_CATALOG_FINGERPRINT_PATH = CANONICAL_RUNTIME_CATALOG_FINGERPRINT_PATH
 XCODE_INPUT_FILE_LIST_PATH = ROOT / "Scripts" / "catalog-inputs.xcfilelist"
 
 # Portion-qualified participation; these are not whole-region action grants.
@@ -2729,6 +2733,10 @@ def encoded_runtime_catalog(records: Iterable[dict[str, Any]]) -> str:
     ) + "\n"
 
 
+def runtime_catalog_fingerprint(contents: str) -> str:
+    return hashlib.sha256(contents.encode("utf-8")).hexdigest() + "\n"
+
+
 def write_text_atomically(path: Path, contents: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary_path: Path | None = None
@@ -2753,6 +2761,10 @@ def write_text_atomically(path: Path, contents: str) -> None:
 
 def write_runtime_catalog_atomically(contents: str) -> None:
     write_text_atomically(RUNTIME_CATALOG_PATH, contents)
+    write_text_atomically(
+        RUNTIME_CATALOG_FINGERPRINT_PATH,
+        runtime_catalog_fingerprint(contents),
+    )
 
 
 def discovered_family_paths() -> list[Path]:
@@ -2770,6 +2782,7 @@ def encoded_xcode_input_file_list(family_paths: Iterable[Path]) -> str:
         *family_paths,
         BODY_MODEL_PATH,
         CANONICAL_RUNTIME_CATALOG_PATH,
+        CANONICAL_RUNTIME_CATALOG_FINGERPRINT_PATH,
     ]
     return "".join(
         f"$(SRCROOT)/{path.relative_to(ROOT)}\n"
@@ -2862,6 +2875,15 @@ def main(argv: list[str] | None = None) -> int:
             require(
                 RUNTIME_CATALOG_PATH.read_text(encoding="utf-8") == runtime_catalog,
                 "bundled runtime catalog differs from catalog compiler output",
+            )
+            require(
+                RUNTIME_CATALOG_FINGERPRINT_PATH.exists(),
+                "bundled runtime catalog fingerprint is missing",
+            )
+            require(
+                RUNTIME_CATALOG_FINGERPRINT_PATH.read_text(encoding="utf-8")
+                == runtime_catalog_fingerprint(runtime_catalog),
+                "bundled runtime catalog fingerprint is stale",
             )
 
         digest = canonical_foundation_digest(foundation)

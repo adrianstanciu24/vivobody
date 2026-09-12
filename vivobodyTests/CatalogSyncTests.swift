@@ -33,9 +33,14 @@ struct CatalogSyncTests {
 
     private func reconcile(
         in context: ModelContext,
-        defaults: UserDefaults
+        defaults: UserDefaults,
+        catalogFingerprint: String = CatalogData.sourceFingerprint
     ) throws -> CatalogReconciliationResult {
-        try CatalogLaunchReconciler.reconcile(in: context, defaults: defaults)
+        try CatalogLaunchReconciler.reconcile(
+            in: context,
+            defaults: defaults,
+            catalogFingerprint: catalogFingerprint
+        )
     }
 
     @Test func synchronizationAddsCurrentBundleAndPreservesCustomExercise() throws {
@@ -53,6 +58,7 @@ struct CatalogSyncTests {
         try context.save()
 
         let result = try reconcile(in: context, defaults: testDefaults.defaults)
+        #expect(result.didReconcile)
         #expect(result.removedItemIDs.isEmpty)
         #expect(result.insertedItemCount == CatalogData.records.count)
 
@@ -94,7 +100,11 @@ struct CatalogSyncTests {
         context.insert(removed)
         try context.save()
 
-        let result = try reconcile(in: context, defaults: testDefaults.defaults)
+        let result = try reconcile(
+            in: context,
+            defaults: testDefaults.defaults,
+            catalogFingerprint: "next-catalog-revision"
+        )
         #expect(result.removedItemIDs == [removed.id])
 
         #expect(bundled.name == authored.name)
@@ -120,11 +130,30 @@ struct CatalogSyncTests {
         let repeated = try reconcile(in: context, defaults: testDefaults.defaults)
         #expect(initial.removedItemIDs.isEmpty)
         #expect(initial.insertedItemCount == CatalogData.records.count)
+        #expect(initial.didReconcile)
+        #expect(!repeated.didReconcile)
         #expect(repeated.removedItemIDs.isEmpty)
         #expect(repeated.insertedItemCount == 0)
-        #expect(repeated.reconciledItemCount == CatalogData.records.count)
+        #expect(repeated.reconciledItemCount == 0)
         let count = try context.fetchCount(FetchDescriptor<ExerciseCatalogItem>())
         #expect(count == CatalogData.records.count)
+    }
+
+    @Test func unchangedFingerprintSkipsTheTransaction() throws {
+        let context = try makeContext()
+        let testDefaults = try makeDefaults()
+        defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
+        _ = try reconcile(in: context, defaults: testDefaults.defaults)
+        var didSave = false
+
+        let result = try CatalogLaunchReconciler.reconcile(
+            in: context,
+            defaults: testDefaults.defaults,
+            saveChanges: { _ in didSave = true }
+        )
+
+        #expect(result == .unchanged)
+        #expect(!didSave)
     }
 
     @Test func synchronizationRepairsPersistedDipAnatomyAndKeepsUserState() throws {
@@ -144,7 +173,11 @@ struct CatalogSyncTests {
         dip.isFavorite = true
         try context.save()
 
-        _ = try reconcile(in: context, defaults: testDefaults.defaults)
+        _ = try reconcile(
+            in: context,
+            defaults: testDefaults.defaults,
+            catalogFingerprint: "repaired-dip-revision"
+        )
 
         #expect(
             dip.muscleInvolvementSnapshot[
@@ -176,7 +209,11 @@ struct CatalogSyncTests {
         #expect(!hidden.contains { $0.catalogID == "barbell-bench-press" })
 
         CatalogDeletionTombstones.clear(in: testDefaults.defaults)
-        _ = try reconcile(in: context, defaults: testDefaults.defaults)
+        _ = try reconcile(
+            in: context,
+            defaults: testDefaults.defaults,
+            catalogFingerprint: "catalog-after-tombstone-clear"
+        )
         let restored = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
         #expect(restored.contains { $0.catalogID == "barbell-bench-press" })
     }
@@ -256,6 +293,12 @@ struct CatalogSyncTests {
         } catch {
             #expect(error is ExpectedSaveError)
         }
+
+        #expect(
+            testDefaults.defaults.string(
+                forKey: SettingsKey.catalogReconciliationFingerprint
+            ) == nil
+        )
 
         let remaining = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
         #expect(remaining.count == 2)

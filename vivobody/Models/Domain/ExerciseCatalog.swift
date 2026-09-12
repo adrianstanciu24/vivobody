@@ -7,9 +7,10 @@
 //  roles, and raw-value accessors for the shared classification vocabulary.
 //
 //  AppRoot reconciles bundled entries with the generated `catalog.json`
-//  (see `CatalogData`) on every launch, so ongoing exercise-authoring edits,
-//  additions, and removals reach the development store. User logging defaults,
-//  favorites, measured 1RM values, and custom entries remain untouched.
+//  (see `CatalogData`) after its source fingerprint changes, so exercise-
+//  authoring edits, additions, and removals reach the store without scanning
+//  unchanged rows on every launch. User logging defaults, favorites, measured
+//  1RM values, and custom entries remain untouched.
 //  Templates and sessions copy stable IDs and display fields, preserving logged workouts.
 //
 
