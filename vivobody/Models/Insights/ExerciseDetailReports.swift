@@ -16,6 +16,7 @@ nonisolated struct ExerciseDetailReports {
     let progressByKey: [String: ExerciseProgress]
     let strengthByKey: [String: StrengthOutlookStat]
     let effortByKey: [String: ExerciseEffortSummary]
+    let cadenceByKey: [String: ProgressionCadence]
     let rawVolumeByKey: [String: ExerciseVolumeContribution.RawContribution]
     let weeklyVolumeByMuscle: [Muscle: MuscleVolumeStat]
     let staminaByKey: [String: ExerciseStamina]
@@ -31,6 +32,7 @@ nonisolated struct ExerciseDetailReports {
             progressByKey: [:],
             strengthByKey: [:],
             effortByKey: [:],
+            cadenceByKey: [:],
             rawVolumeByKey: [:],
             weeklyVolumeByMuscle: [:],
             staminaByKey: [:]
@@ -54,6 +56,18 @@ nonisolated struct ExerciseDetailReports {
             isCancelled: isCancelled
         )
         guard !isCancelled() else { return empty(generatedAt: now) }
+        var cadenceByKey: [String: ProgressionCadence] = [:]
+        cadenceByKey.reserveCapacity(progress.count)
+        for value in progress where value.performanceSemanticKind.comparesLoad {
+            guard !isCancelled() else { return empty(generatedAt: now) }
+            if let cadence = ProgressionCadence.computeChronological(
+                points: value.points,
+                now: now
+            ) {
+                cadenceByKey[value.id] = cadence
+            }
+        }
+        guard !isCancelled() else { return empty(generatedAt: now) }
         let rawVolume = ExerciseVolumeContribution
             .rawContributionsByHistoryKey(
                 accumulator: accumulator,
@@ -68,6 +82,7 @@ nonisolated struct ExerciseDetailReports {
             progressByKey: index(progress, by: \.id),
             strengthByKey: index(strength.stats, by: \.historyKey),
             effortByKey: effort,
+            cadenceByKey: cadenceByKey,
             rawVolumeByKey: rawVolume,
             weeklyVolumeByMuscle: index(weeklyVolume, by: \.muscle),
             staminaByKey: stamina

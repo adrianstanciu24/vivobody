@@ -19,12 +19,7 @@ extension ExerciseDetailReadModel {
     ) -> Frequency? {
         guard let history, history.sessionCount > 0 else { return nil }
         let count = history.sessionCount
-        let rate = progress.flatMap {
-            ExerciseFrequency.perWeek(
-                sessionDates: $0.points.map(\.date),
-                now: now
-            )
-        }
+        let rate = progress?.frequencyPerWeek(now: now)
         let rateText = rate.map(perWeekLabel)
         let lastText = RelativeDate.short(
             history.mostRecentInstance.date,

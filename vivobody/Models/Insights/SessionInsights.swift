@@ -96,11 +96,22 @@ extension WorkoutSession {
     /// non-comparable dynamic resistance participates using the raw
     /// resistance the user logged, without entering strict analytics.
     func receiptContributions() -> [UUID: SessionContribution] {
-        contributions(includingLoggedNonComparable: true)
+        receiptContributions(in: orderedExercises)
+    }
+
+    /// Session-detail presentation already owns the stable exercise order.
+    func receiptContributions(
+        in orderedExercises: [Exercise]
+    ) -> [UUID: SessionContribution] {
+        contributions(
+            includingLoggedNonComparable: true,
+            orderedExercises: orderedExercises
+        )
     }
 
     private func contributions(
-        includingLoggedNonComparable: Bool
+        includingLoggedNonComparable: Bool,
+        orderedExercises: [Exercise]? = nil
     ) -> [UUID: SessionContribution] {
         var tonnageByID: [UUID: Double] = [:]
         var durationByID: [UUID: Double] = [:]
@@ -109,7 +120,7 @@ extension WorkoutSession {
             : comparableTonnageSummary
         let canShowTonnageShares = tonnageSummary.availability == .complete
 
-        for ex in orderedExercises {
+        for ex in orderedExercises ?? self.orderedExercises {
             let completed = ex.sets.filter(\.isAnalyticsEligible)
             if ex.trackingMode == .duration {
                 durationByID[ex.id] = completed.reduce(0) { $0 + $1.duration }
@@ -182,8 +193,21 @@ extension WorkoutSession {
     /// captured at spawn time, paired weight+reps from the same slot
     /// so the comparison stays honest for pyramid programming.
     func adherence(for exercise: Exercise) -> ExerciseAdherence? {
-        guard let top = topSet(for: exercise) else { return nil }
-        let sets = exercise.orderedSets
+        adherence(
+            for: exercise,
+            topSet: topSet(for: exercise),
+            orderedSets: exercise.orderedSets
+        )
+    }
+
+    /// Presentation builders that already resolved set order and the standout
+    /// set can reuse those values instead of repeating both derivations.
+    func adherence(
+        for exercise: Exercise,
+        topSet: WorkoutSet?,
+        orderedSets sets: [WorkoutSet]
+    ) -> ExerciseAdherence? {
+        guard let top = topSet else { return nil }
 
         switch exercise.trackingMode {
         case .reps:

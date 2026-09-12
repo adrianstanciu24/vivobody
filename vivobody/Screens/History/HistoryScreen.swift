@@ -35,32 +35,24 @@ import SwiftUI
 struct HistoryScreen: View {
     @Bindable var appState: AppState
 
-    /// How many archived sessions are currently materialized. Grows a
-    /// page at a time as the user scrolls toward the bottom, so the
-    /// list never loads the whole archive up front. Rebuilding
-    /// `HistoryContent` with the new limit re-creates its @Query with
-    /// the larger fetch limit while the scroll position holds.
-    @State private var limit = HistoryScreen.pageSize
-
     static let pageSize = 60
 
     var body: some View {
-        HistoryContent(appState: appState, limit: limit) {
-            limit += Self.pageSize
-        }
+        HistoryContent(appState: appState)
     }
 }
 
-/// The History tab's real body. Split from `HistoryScreen` so the
-/// session query can be reconstructed with a growing fetch limit —
-/// a view cannot rebuild its own @Query from its own @State.
+/// The History tab's real body. The live first page remains an `@Query`;
+/// older pages append through a keyset cursor so reaching page N never
+/// refetches pages 1 ... N-1.
 struct HistoryContent: View {
     var appState: AppState
 
-    /// Current page ceiling; `sessions.count == limit` means the
-    /// archive probably has more to load.
-    let limit: Int
-    let loadMore: () -> Void
+    @Environment(\.modelContext) private var modelContext
+
+    @State private var olderSessions: [WorkoutSession] = []
+    @State private var reachedArchiveEnd = false
+    @State private var isLoadingPage = false
 
     @AppStorage(SettingsKey.weightUnit)
     var unitRaw: String = SettingsDefaults.weightUnit
@@ -69,27 +61,24 @@ struct HistoryContent: View {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
-    /// The newest `limit` completed (archived) sessions, most-recent
-    /// first. Mid-flight sessions are still un-inserted and therefore
-    /// invisible to this query.
-    @Query var sessions: [WorkoutSession]
+    /// The live newest page. Mid-flight sessions are unarchived and
+    /// therefore invisible to this query.
+    @Query private var newestSessions: [WorkoutSession]
 
     /// Sessions from the start of last week onward (with a one-day
     /// pad for boundary-spanning workouts) — everything the weekly
     /// hero needs, without touching the older archive.
     @Query var recentSessions: [WorkoutSession]
 
-    init(appState: AppState, limit: Int, loadMore: @escaping () -> Void) {
+    init(appState: AppState) {
         self.appState = appState
-        self.limit = limit
-        self.loadMore = loadMore
 
-        var paged = FetchDescriptor<WorkoutSession>(
+        var newest = FetchDescriptor<WorkoutSession>(
             predicate: #Predicate { $0.completedAt != nil },
-            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+            sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
         )
-        paged.fetchLimit = limit
-        _sessions = Query(paged)
+        newest.fetchLimit = HistoryScreen.pageSize
+        _newestSessions = Query(newest)
 
         let calendar = Calendar.current
         let thisWeekStart = calendar
@@ -113,10 +102,56 @@ struct HistoryContent: View {
             }
         }
         .screenBackground()
+        .onChange(of: newestSessions.map(\.id)) { oldIDs, newIDs in
+            guard oldIDs != newIDs else { return }
+            olderSessions.removeAll(keepingCapacity: true)
+            reachedArchiveEnd = false
+        }
+    }
+
+    /// Newest live page plus appended older pages, de-duplicated in one
+    /// cumulative pass in case a newly archived workout shifts the live page.
+    var sessions: [WorkoutSession] {
+        var seen = Set<UUID>()
+        var result: [WorkoutSession] = []
+        result.reserveCapacity(newestSessions.count + olderSessions.count)
+        for session in newestSessions + olderSessions where seen.insert(session.id).inserted {
+            result.append(session)
+        }
+        return result
     }
 
     var hasMoreSessions: Bool {
-        sessions.count == limit
+        !reachedArchiveEnd && !newestSessions.isEmpty
+    }
+
+    /// Fetch only the page strictly older than the current indexed,
+    /// nonoptional start-time cursor. Completion remains the displayed date.
+    @MainActor
+    func loadMoreSessions() {
+        guard hasMoreSessions, !isLoadingPage, let cursor = sessions.last else {
+            return
+        }
+        let startedAt = cursor.startedAt
+        isLoadingPage = true
+        defer { isLoadingPage = false }
+
+        var page = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate {
+                $0.completedAt != nil
+                    && $0.startedAt < startedAt
+            },
+            sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
+        )
+        page.fetchLimit = HistoryScreen.pageSize
+
+        do {
+            let fetched = try modelContext.fetch(page)
+            olderSessions.append(contentsOf: fetched)
+            reachedArchiveEnd = fetched.count < HistoryScreen.pageSize
+        } catch {
+            reachedArchiveEnd = true
+        }
     }
 }
 

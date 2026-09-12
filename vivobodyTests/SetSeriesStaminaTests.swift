@@ -57,6 +57,21 @@ struct SetSeriesStaminaTests {
         #expect(report.latest?.weight == 110)
     }
 
+    @Test func scrubSelectionFindsTheNearestChronologicalSeries() throws {
+        let exercise = F.exercise([F.set(10), F.set(9), F.set(8)])
+        let series = F.replay([
+            F.session([exercise], daysAgo: 10),
+            F.session([exercise], daysAgo: 5),
+            F.session([exercise]),
+        ]).staminaSeries(now: F.now)
+        let report = ExerciseStamina(series: series)
+        let selected = try #require(report.nearestIncludedSeries(
+            to: F.now.addingTimeInterval(-6 * 86400)
+        ))
+
+        #expect(selected.date == F.now.addingTimeInterval(-5 * 86400))
+    }
+
     @Test func includesAllHistoryButRequiresCompletedDynamicRepWork() {
         let sets = [F.set(), F.set(), F.set()]
         let valid = F.exercise(sets)

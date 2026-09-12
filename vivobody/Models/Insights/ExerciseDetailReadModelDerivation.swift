@@ -60,11 +60,11 @@ extension ExerciseDetailReadModel {
     ) -> RecordSource? {
         if let progress {
             let point: ExerciseProgressPoint? = if exercise.supportsPerformanceRecord {
-                progress.points.last(where: \.isStrengthPR)
+                progress.latestStrengthPRPoint
             } else if exercise.trackingMode == .duration {
-                progress.points.max { $0.topDuration < $1.topDuration }
+                progress.bestDurationPoint
             } else if !exercise.tracksResistance {
-                progress.points.max { $0.topReps < $1.topReps }
+                progress.bestRepsPoint
             } else {
                 progress.bestWeightPoint
             }
@@ -158,7 +158,7 @@ extension ExerciseDetailReadModel {
             || exercise.loadMode == .assistanceSubtracted else { return nil }
 
         let source: RecordSource? = if let progress,
-                                       let point = progress.points.last(where: \.isStrengthPR)
+                                       let point = progress.latestStrengthPRPoint
                                        ?? progress.latest
         {
             RecordSource(point)

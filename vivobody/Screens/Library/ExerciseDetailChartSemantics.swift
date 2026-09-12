@@ -83,7 +83,6 @@ nonisolated struct ExerciseDetailChartPresentation: Hashable {
     let effectiveMetric: ExerciseDetailChartMetric
     let availableMetrics: [ExerciseDetailChartMetric]
     let range: ExerciseDetailChartRange
-    let progressThroughNow: ExerciseProgress?
     let strengthTrendReadinessDates: [Date]
     let visiblePoints: [ExerciseProgressPoint]
     let plottablePoints: [PlottablePoint]
@@ -145,17 +144,10 @@ nonisolated struct ExerciseDetailChartPresentation: Hashable {
         effectiveMetric = metric
         availableMetrics = metrics
         self.range = range
-        progressThroughNow = progress.map {
-            ExerciseProgress(
-                catalogID: $0.catalogID,
-                catalogItemID: $0.catalogItemID,
-                name: $0.name,
-                group: $0.group,
-                points: $0.points.filter { $0.date <= readModel.now }
-            )
-        }
-        strengthTrendReadinessDates = readModel.strengthTrendReadinessDates
-            .filter { $0 <= readModel.now }
+        strengthTrendReadinessDates = Self.recentReadinessDates(
+            readModel.strengthTrendReadinessDates,
+            through: readModel.now
+        )
         visiblePoints = visible
         plottablePoints = plottable
         personalRecordPointIDs = Self.personalRecordPointIDs(
@@ -194,6 +186,23 @@ nonisolated struct ExerciseDetailChartPresentation: Hashable {
             : [.weight]
     }
 
+    private static func recentReadinessDates(
+        _ dates: [Date],
+        through end: Date
+    ) -> [Date] {
+        var lower = dates.startIndex
+        var upper = dates.endIndex
+        while lower < upper {
+            let middle = lower + (upper - lower) / 2
+            if dates[middle] <= end {
+                lower = middle + 1
+            } else {
+                upper = middle
+            }
+        }
+        return Array(dates[..<lower].suffix(StrengthOutlookBoard.recentWindow))
+    }
+
     private static func visiblePoints(
         progress: ExerciseProgress?,
         exercise: ExerciseDetailReadModel.ExerciseDescriptor,
@@ -202,18 +211,16 @@ nonisolated struct ExerciseDetailChartPresentation: Hashable {
         now: Date
     ) -> [ExerciseProgressPoint] {
         guard let progress else { return [] }
-        return progress.points.filter { point in
-            guard point.date <= now else { return false }
-            if let cutoff, point.date < cutoff { return false }
+        return progress.points(from: cutoff, through: now).filter { point in
             switch metric {
             case .weight where exercise.performanceSemanticKind.comparesLoad:
-                return point.effectiveTopLoad != nil
+                point.effectiveTopLoad != nil
             case .e1rm:
-                return point.estimated1RM > 0
+                point.estimated1RM > 0
             case .volume:
-                return point.comparableTonnageAvailability == .complete
+                point.comparableTonnageAvailability == .complete
             case .weight, .reps:
-                return true
+                true
             }
         }
     }
@@ -226,18 +233,9 @@ nonisolated struct ExerciseDetailChartPresentation: Hashable {
         guard let progress, exercise.supportsPerformanceRecord else { return [] }
         if exercise.trackingMode == .reps, metric == .volume { return [] }
         if exercise.trackingMode == .duration || metric == .weight {
-            return Set(progress.points.filter(\.isStrengthPR).map(\.id))
+            return progress.strengthPRPointIDs
         }
-
-        var result = Set<UUID>()
-        var runningMaximum = -Double.infinity
-        for point in progress.points {
-            let value = point.estimated1RM
-            guard value > 0, value > runningMaximum else { continue }
-            runningMaximum = value
-            result.insert(point.id)
-        }
-        return result
+        return progress.e1RMRecordPointIDs
     }
 
     private static func chartValue(

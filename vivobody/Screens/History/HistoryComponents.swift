@@ -467,11 +467,14 @@ struct HistoryDateGroup: Identifiable {
         }()
 
         var buckets: [(Bucket, [WorkoutSession])] = []
+        var bucketIndex: [Bucket: Int] = [:]
+        bucketIndex.reserveCapacity(min(sessions.count, 16))
 
         func appendSession(_ session: WorkoutSession, into bucket: Bucket) {
-            if let idx = buckets.firstIndex(where: { $0.0 == bucket }) {
+            if let idx = bucketIndex[bucket] {
                 buckets[idx].1.append(session)
             } else {
+                bucketIndex[bucket] = buckets.count
                 buckets.append((bucket, [session]))
             }
         }

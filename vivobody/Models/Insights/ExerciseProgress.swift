@@ -195,6 +195,49 @@ nonisolated struct ExerciseProgress: Identifiable, Hashable {
     let group: MuscleGroup
     let points: [ExerciseProgressPoint]
 
+    /// Full-series reads captured once when the analytics worker creates the
+    /// chronological series. Exercise Detail can then format records and
+    /// plateau state without walking the same history during every render.
+    let summary: ExerciseProgressSummary
+
+    init(
+        catalogID: String? = nil,
+        catalogItemID: UUID?,
+        name: String,
+        group: MuscleGroup,
+        points: [ExerciseProgressPoint]
+    ) {
+        // Preserve insertion order for equal timestamps while enforcing the
+        // chronological invariant used by binary range lookup.
+        let sorted = points.enumerated().sorted {
+            $0.element.date == $1.element.date
+                ? $0.offset < $1.offset
+                : $0.element.date < $1.element.date
+        }.map(\.element)
+        self.init(
+            catalogID: catalogID,
+            catalogItemID: catalogItemID,
+            name: name,
+            group: group,
+            chronologicallySortedPoints: sorted
+        )
+    }
+
+    init(
+        catalogID: String? = nil,
+        catalogItemID: UUID?,
+        name: String,
+        group: MuscleGroup,
+        chronologicallySortedPoints points: [ExerciseProgressPoint]
+    ) {
+        self.catalogID = catalogID
+        self.catalogItemID = catalogItemID
+        self.name = name
+        self.group = group
+        self.points = points
+        summary = ExerciseProgressSummary(points: points)
+    }
+
     /// How this exercise is measured. Derived from its points (a
     /// single exercise has one consistent mode). Drives whether the
     /// progress UI reads weight or hold-time.
@@ -226,85 +269,6 @@ nonisolated struct ExerciseProgress: Identifiable, Hashable {
     /// know about sort order.
     var latest: ExerciseProgressPoint? {
         points.last
-    }
-
-    /// Point with the greatest history load. Comparable movements use
-    /// effective resistance; non-comparable movements retain raw input
-    /// solely as an ordinary history marker.
-    var bestWeightPoint: ExerciseProgressPoint? {
-        points
-            .filter { $0.historyTopLoad != nil }
-            .max { ($0.historyTopLoad ?? 0) < ($1.historyTopLoad ?? 0) }
-    }
-
-    /// The all-time greatest history load across logged sessions.
-    /// This is effective resistance for bodyweight-added and
-    /// assistance-subtracted movements.
-    var bestWeight: Double {
-        bestWeightPoint?.historyTopLoad ?? 0
-    }
-
-    /// Effective-load delta from the second-most-recent to the
-    /// most-recent point. For non-comparable history, falls back to
-    /// the raw entered marker without making it PR-eligible.
-    var weightDelta: Double? {
-        guard points.count >= 2 else { return nil }
-        guard
-            let latest = points[points.count - 1].historyTopLoad,
-            let previous = points[points.count - 2].historyTopLoad
-        else { return nil }
-        return latest - previous
-    }
-
-    /// Hold-time delta between the two most-recent points — the
-    /// `.duration` counterpart to `weightDelta`.
-    var durationDelta: TimeInterval? {
-        guard points.count >= 2 else { return nil }
-        return points[points.count - 1].topDuration - points[points.count - 2].topDuration
-    }
-
-    /// All-time best estimated 1-rep max across the series. The
-    /// headline strength number on the detail screen — smoother than
-    /// raw top load because it folds reps into the estimate, so a
-    /// heavier-for-fewer set and a lighter-for-more set compare on one
-    /// axis.
-    var bestE1RM: Double {
-        points.map(\.estimated1RM).max() ?? 0
-    }
-
-    /// The point that achieved `bestE1RM` — used to date the PR.
-    var bestE1RMPoint: ExerciseProgressPoint? {
-        points
-            .filter { $0.estimated1RM > 0 }
-            .max(by: { $0.estimated1RM < $1.estimated1RM })
-    }
-
-    /// Plateau check on the shared record performance (load then reps,
-    /// loaded-isometric load then duration, or duration alone): counts
-    /// how many of the most recent sessions have failed to set a new high,
-    /// and reports a stall when that run reaches `threshold`. Points
-    /// are chronological ascending, so the run is measured from the
-    /// last PR to the latest session. Nil when there isn't a long
-    /// enough stale streak (including brand-new exercises).
-    func plateauStatus(threshold: Int) -> PlateauStatus? {
-        guard performanceSemanticKind.supportsRecord else { return nil }
-        let evaluable = points.compactMap(\.strengthPerformance)
-        guard evaluable.count > threshold else { return nil }
-        var runningBest: StrengthPerformance?
-        var lastPRIndex = -1
-        for (i, performance) in evaluable.enumerated() {
-            guard performance.advancement(over: runningBest) != nil else { continue }
-            runningBest = performance
-            lastPRIndex = i
-        }
-
-        guard lastPRIndex >= 0, let runningBest else { return nil }
-        let stale = (evaluable.count - 1) - lastPRIndex
-        guard stale >= threshold else { return nil }
-        return PlateauStatus(
-            sessions: stale,
-            performance: runningBest
-        )
     }
 }
 
@@ -557,7 +521,7 @@ nonisolated extension AnalyticsAccumulator {
                 catalogItemID: bucket.catalogItemID,
                 name: bucket.name,
                 group: bucket.group,
-                points: flagged
+                chronologicallySortedPoints: flagged
             ))
         }
 

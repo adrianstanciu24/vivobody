@@ -41,15 +41,19 @@ struct SessionDetailScreen: View {
     }
 
     var body: some View {
+        let presentation = SessionDetailPresentation(session: session, unit: unit)
         let prExerciseIDs = sessionAnalytics?.prExerciseIDs(for: session.id) ?? []
         let sessionHasPR = !prExerciseIDs.isEmpty
 
         ScrollView {
             VStack(alignment: .leading, spacing: Space.section) {
-                heroCard(sessionHasPR: sessionHasPR)
+                heroCard(presentation: presentation, sessionHasPR: sessionHasPR)
                     .settleIn(0)
-                exercisesSection(prExerciseIDs: prExerciseIDs)
-                    .settleIn(1)
+                exercisesSection(
+                    presentation: presentation,
+                    prExerciseIDs: prExerciseIDs
+                )
+                .settleIn(1)
             }
             .padding(.top, Space.xs)
             .padding(.bottom, Space.xxl)
@@ -68,24 +72,33 @@ struct SessionDetailScreen: View {
     /// The session as one physical object, mirroring History's week
     /// hero: identity on top, the lead numeral next, counts as a
     /// strip, the standout set as the footer note.
-    private func heroCard(sessionHasPR: Bool) -> some View {
+    private func heroCard(
+        presentation: SessionDetailPresentation,
+        sessionHasPR: Bool
+    ) -> some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            header(sessionHasPR: sessionHasPR)
-            heroMetric(sessionHasPR: sessionHasPR)
+            header(presentation: presentation, sessionHasPR: sessionHasPR)
+            heroMetric(
+                presentation: presentation,
+                sessionHasPR: sessionHasPR
+            )
             StatStrip(
                 stats: [
-                    Stat(value: "\(durationMinutes)", unit: "min", label: "Duration"),
-                    Stat(value: "\(session.totalSets)", label: "Sets"),
-                    Stat(value: "\(session.totalReps)", label: "Reps"),
+                    Stat(value: "\(presentation.durationMinutes)", unit: "min", label: "Duration"),
+                    Stat(value: "\(presentation.totalSets)", label: "Sets"),
+                    Stat(value: "\(presentation.totalReps)", label: "Reps"),
                 ],
                 valueFont: Typography.statValue,
                 edgeAligned: true
             )
             .padding(.top, Space.xs)
 
-            topSetDetail(sessionHasPR: sessionHasPR)
+            topSetDetail(
+                value: presentation.topSetValue,
+                sessionHasPR: sessionHasPR
+            )
 
-            if let loadComparison {
+            if let loadComparison = loadComparison(for: presentation) {
                 Rectangle()
                     .fill(Surface.edge)
                     .frame(height: 1)
@@ -101,13 +114,16 @@ struct SessionDetailScreen: View {
         .contentCard()
     }
 
-    private func header(sessionHasPR: Bool) -> some View {
+    private func header(
+        presentation: SessionDetailPresentation,
+        sessionHasPR: Bool
+    ) -> some View {
         VStack(alignment: .leading, spacing: Space.xs) {
-            Text(dateLine)
+            Text(presentation.dateLine)
                 .panelLegendType()
                 .foregroundStyle(Ink.primary.opacity(Opacity.soft))
             HStack(spacing: Space.sm) {
-                Text(workoutTitle)
+                Text(presentation.workoutTitle)
                     .font(Typography.title)
                     .foregroundStyle(Ink.primary)
                     .lineLimit(1)
@@ -117,54 +133,64 @@ struct SessionDetailScreen: View {
         }
     }
 
-    private func heroMetric(sessionHasPR: Bool) -> some View {
+    private func heroMetric(
+        presentation: SessionDetailPresentation,
+        sessionHasPR: Bool
+    ) -> some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                Text(receiptMetric.value + (receiptMetric.qualifier ?? ""))
+                Text(presentation.receiptMetric.value + (presentation.receiptMetric.qualifier ?? ""))
                     .font(Typography.metricHero)
                     .foregroundStyle(sessionHasPR ? Tint.complete : Ink.primary)
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                if let metricUnit = receiptMetric.unit {
+                if let metricUnit = presentation.receiptMetric.unit {
                     Text(metricUnit)
                         .font(Typography.metricInline)
                         .foregroundStyle(Ink.tertiary)
                 }
             }
-            Text(receiptMetricLabel(sessionHasPR: sessionHasPR))
-                .panelLegendType()
-                .foregroundStyle(sessionHasPR ? Tint.complete : Ink.tertiary)
+            Text(receiptMetricLabel(
+                presentation.receiptMetric,
+                sessionHasPR: sessionHasPR
+            ))
+            .panelLegendType()
+            .foregroundStyle(sessionHasPR ? Tint.complete : Ink.tertiary)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(receiptMetric.accessibilityLabel)
+        .accessibilityLabel(presentation.receiptMetric.accessibilityLabel)
     }
 
-    private var receiptMetric: WorkoutReceiptMetric {
-        session.primaryReceiptMetric(unit: unit)
-    }
-
-    private var loadComparison: WorkoutLoadComparison? {
+    private func loadComparison(
+        for presentation: SessionDetailPresentation
+    ) -> WorkoutLoadComparison? {
         guard let sessionAnalytics else { return nil }
         return WorkoutLoadComparison.make(
-            current: WorkoutLoadTrace(session: session),
+            current: presentation.currentLoadTrace,
             baseline: sessionAnalytics.workoutLoadBaseline
         )
     }
 
-    private func receiptMetricLabel(sessionHasPR: Bool) -> String {
-        if sessionHasPR, case .volume(.complete) = receiptMetric.kind {
-            return "\(receiptMetric.label) · personal record"
+    private func receiptMetricLabel(
+        _ metric: WorkoutReceiptMetric,
+        sessionHasPR: Bool
+    ) -> String {
+        if sessionHasPR, case .volume(.complete) = metric.kind {
+            return "\(metric.label) · personal record"
         }
-        return receiptMetric.label
+        return metric.label
     }
 
-    private func topSetDetail(sessionHasPR: Bool) -> some View {
+    private func topSetDetail(
+        value: String,
+        sessionHasPR: Bool
+    ) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: Space.md) {
             Text("Top set")
                 .panelLegend()
             Spacer(minLength: Space.lg)
-            Text(topSetValue)
+            Text(value)
                 .font(Typography.metricInline)
                 .foregroundStyle(sessionHasPR ? Tint.complete : Ink.secondary)
                 .monospacedDigit()
@@ -172,151 +198,66 @@ struct SessionDetailScreen: View {
                 .minimumScaleFactor(0.7)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(topSetValue) top set")
+        .accessibilityLabel("\(value) top set")
     }
 
     // MARK: - Exercises
 
-    private func exercisesSection(prExerciseIDs: Set<UUID>) -> some View {
-        let breakdown = session.receiptContributions()
-        return VStack(alignment: .leading, spacing: Space.sm) {
-            SectionHeader(title: "Exercises", trailing: exercisesSubtitle)
+    private func exercisesSection(
+        presentation: SessionDetailPresentation,
+        prExerciseIDs: Set<UUID>
+    ) -> some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            SectionHeader(
+                title: "Exercises",
+                trailing: presentation.exercisesSubtitle
+            )
 
             VStack(alignment: .leading, spacing: Space.xxl) {
-                ForEach(session.orderedExercises, id: \.id) { exercise in
+                ForEach(presentation.exerciseRows, id: \.exercise.id) { row in
                     ExerciseDetailRow(
-                        exercise: exercise,
+                        presentation: row,
                         unit: unit,
-                        isPR: prExerciseIDs.contains(exercise.id),
-                        supersetTag: session.supersetTag(for: exercise),
-                        contribution: breakdown[exercise.id],
-                        adherence: session.adherence(for: exercise),
-                        showsContributionBar: session.orderedExercises.count > 1
+                        isPR: prExerciseIDs.contains(row.exercise.id),
+                        showsContributionBar: presentation.exerciseRows.count > 1
                     )
                 }
             }
         }
-    }
-
-    private var exercisesSubtitle: String {
-        let n = session.orderedExercises.count
-        return n == 1 ? "1 exercise" : "\(n) exercises"
-    }
-
-    // MARK: - Derived
-
-    private var muscleTags: [MuscleGroup] {
-        session.distinctMuscleGroupsInOrder
-    }
-
-    /// Same derivation HistoryScreen uses for its row title — keeps
-    /// the voice consistent between the list and the detail.
-    private var workoutTitle: String {
-        switch muscleTags.count {
-        case 0: "Workout"
-        case 1: "\(muscleTags[0].displayName) day"
-        case 2: "\(muscleTags[0].displayName) + \(muscleTags[1].displayName)"
-        default: "Full body"
-        }
-    }
-
-    private var dateLine: String {
-        let date = session.completedAt ?? session.startedAt
-        return SessionDetailFormatters.date.string(from: date)
-    }
-
-    private var durationMinutes: Int {
-        max(0, Int(session.duration / 60))
-    }
-
-    /// Strongest load-comparable reps set in the session. Selection uses
-    /// effective resistance (including inverse machine assistance), while
-    /// the label preserves exactly what the user logged. If the receipt has
-    /// only unloaded reps, the highest-rep set becomes its ordinary marker.
-    private var topSetValue: String {
-        let candidates = session.orderedExercises.flatMap { exercise in
-            guard exercise.trackingMode == .reps,
-                  exercise.performanceSemanticKind.comparesLoad
-            else {
-                return [(Exercise, WorkoutSet, Double)]()
-            }
-            return exercise.sets.compactMap { set -> (Exercise, WorkoutSet, Double)? in
-                guard set.isAnalyticsEligible,
-                      let load = exercise.effectiveLoad(loggedWeight: set.weight)
-                else {
-                    return nil
-                }
-                return (exercise, set, load)
-            }
-        }
-        if let (exercise, set, _) = candidates.max(by: { lhs, rhs in
-            if lhs.2 == rhs.2 { return lhs.1.reps < rhs.1.reps }
-            return lhs.2 < rhs.2
-        }) {
-            return exercise.setLabel(set, unit: unit)
-        }
-
-        let repsCandidates = session.orderedExercises.flatMap { exercise in
-            guard exercise.trackingMode == .reps,
-                  !exercise.tracksResistance
-            else {
-                return [(Exercise, WorkoutSet)]()
-            }
-            return exercise.sets.compactMap { set -> (Exercise, WorkoutSet)? in
-                guard set.isAnalyticsEligible, set.reps > 0 else { return nil }
-                return (exercise, set)
-            }
-        }
-        guard let (exercise, set) = repsCandidates.max(by: { $0.1.reps < $1.1.reps }) else {
-            return "—"
-        }
-        return exercise.setLabel(set, unit: unit)
     }
 }
 
 // MARK: - Per-exercise row
 
 private struct ExerciseDetailRow: View {
-    let exercise: Exercise
+    let presentation: SessionDetailPresentation.ExerciseRow
     let unit: WeightUnit
     let isPR: Bool
-    var supersetTag: String? = nil
-    var contribution: SessionContribution? = nil
-    var adherence: ExerciseAdherence? = nil
     var showsContributionBar: Bool = false
+
+    private var exercise: Exercise {
+        presentation.exercise
+    }
 
     private var mode: TrackingMode {
         exercise.trackingMode
     }
 
     private var orderedSets: [WorkoutSet] {
-        exercise.orderedSets
+        presentation.orderedSets
     }
 
     /// The exercise's standout completed set, singled out with the
     /// gold completion accent. The domain selector preserves load-mode
     /// polarity and avoids inventing an absolute load when bodyweight
     /// is unknown.
-    private var topSet: WorkoutSet? {
-        exercise.representativeTopSet
-    }
-
-    private var exerciseVolume: Double {
-        exercise.completedReceiptTonnage ?? 0
-    }
-
-    /// Total timed work across completed sets — the `.duration`
-    /// counterpart to `exerciseVolume`, shown in the row header.
-    private var totalDuration: TimeInterval {
-        exercise.sets
-            .filter(\.isCompleted)
-            .reduce(0) { $0 + $1.duration }
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             header
-            if showsContributionBar, let contribution, contribution.metric > 0 {
+            if showsContributionBar,
+               let contribution = presentation.contribution,
+               contribution.metric > 0
+            {
                 WaterfallRow(share: contribution.share, isDuration: contribution.isDuration)
             }
             setsGrid
@@ -335,14 +276,18 @@ private struct ExerciseDetailRow: View {
                         .font(Typography.caption)
                         .foregroundStyle(Ink.tertiary)
                     if isPR { PRTag() }
-                    if let supersetTag { SupersetTag(tag: supersetTag) }
+                    if let supersetTag = presentation.supersetTag {
+                        SupersetTag(tag: supersetTag)
+                    }
                 }
 
                 Spacer(minLength: Space.sm)
 
                 VStack(alignment: .trailing, spacing: 3) {
                     volumeCluster
-                    if let adherence, !adherence.isOnPlan {
+                    if let adherence = presentation.adherence,
+                       !adherence.isOnPlan
+                    {
                         AdherenceBadge(adherence: adherence, unit: unit)
                     }
                 }
@@ -360,18 +305,16 @@ private struct ExerciseDetailRow: View {
         switch mode {
         case .reps:
             if !exercise.supportsReceiptTonnage {
-                let reps = exercise.sets
-                    .filter(\.isCompleted)
-                    .reduce(0) { $0 + $1.reps }
+                let reps = presentation.completedReps
                 if reps > 0 {
                     Text("\(reps) reps")
                         .font(Typography.metricInline)
                         .foregroundStyle(Ink.secondary)
                         .monospacedDigit()
                 }
-            } else if exerciseVolume > 0 {
+            } else if presentation.receiptTonnage > 0 {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    Text(WeightFormatter.volumeValue(exerciseVolume, unit: unit))
+                    Text(WeightFormatter.volumeValue(presentation.receiptTonnage, unit: unit))
                         .font(Typography.metricInline)
                         .foregroundStyle(Ink.secondary)
                         .monospacedDigit()
@@ -381,9 +324,9 @@ private struct ExerciseDetailRow: View {
                 }
             }
         case .duration:
-            if totalDuration > 0 {
+            if presentation.completedDuration > 0 {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    Text(DurationFormatter.compact(totalDuration))
+                    Text(DurationFormatter.compact(presentation.completedDuration))
                         .font(Typography.metricInline)
                         .foregroundStyle(Ink.secondary)
                         .monospacedDigit()
@@ -409,7 +352,7 @@ private struct ExerciseDetailRow: View {
     }
 
     private func setRow(index: Int, set: WorkoutSet) -> some View {
-        let isTopSet = set === topSet
+        let isTopSet = set.id == presentation.topSetID
         let textColor: Color = isTopSet ? Tint.complete : (set.isCompleted ? Ink.primary : Ink.quaternary)
 
         return HStack(spacing: 0) {
@@ -499,16 +442,6 @@ private struct ExerciseDetailRow: View {
                 .frame(width: 8, height: 8)
         }
     }
-}
-
-// MARK: - Formatters
-
-private enum SessionDetailFormatters {
-    static let date: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "EEEE  ·  MMM d  ·  h:mm a"
-        return f
-    }()
 }
 
 #Preview {

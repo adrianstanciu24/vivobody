@@ -189,6 +189,7 @@ nonisolated struct ExerciseDetailReadModel: Hashable {
         progress: ExerciseProgress?,
         strengthTrendStat: StrengthOutlookStat?,
         effort: ExerciseEffortSummary?,
+        progressionCadence: ProgressionCadence?,
         volumeContribution: ExerciseVolumeContribution?,
         weeklyVolumeByMuscle: [Muscle: MuscleVolumeStat],
         stamina: ExerciseStamina? = nil,
@@ -267,19 +268,10 @@ nonisolated struct ExerciseDetailReadModel: Hashable {
             exercise: exercise
         )
 
-        let cadence: ProgressionCadence? = if exercise.performanceSemanticKind.comparesLoad,
-                                              let points = progress?.points
-        {
-            ProgressionCadence.compute(
-                points: points,
-                now: now,
-                calendar: calendar
-            )
-        } else {
-            nil
-        }
         self.cadence = Self.cadence(
-            cadence,
+            exercise.performanceSemanticKind.comparesLoad
+                ? progressionCadence
+                : nil,
             unit: unit
         )
         weeklyVolume = Self.weeklyVolume(
@@ -325,6 +317,7 @@ extension ExerciseDetailReadModel {
             effort: exercise.supportsEstimatedOneRepMax
                 ? cached.effortByKey[historyKey]
                 : nil,
+            progressionCadence: cached.cadenceByKey[historyKey],
             volumeContribution: ExerciseVolumeContribution.relabel(
                 cached.rawVolumeByKey[historyKey],
                 currentRoles: currentRoles,

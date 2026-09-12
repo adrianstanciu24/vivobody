@@ -18,7 +18,7 @@
 import Foundation
 
 /// The computed cadence read for an exercise's load progression.
-struct ProgressionCadence: Hashable {
+nonisolated struct ProgressionCadence: Hashable {
     /// One progression event: the baseline session or a session whose
     /// top effective load exceeded everything before it.
     struct Event: Hashable {
@@ -75,6 +75,20 @@ struct ProgressionCadence: Hashable {
         now: Date = Date(),
         calendar: Calendar = .current
     ) -> ProgressionCadence? {
+        computeChronological(
+            points: points.sorted { $0.date < $1.date },
+            now: now,
+            calendar: calendar
+        )
+    }
+
+    /// Analytics-owned progress series already carry the chronological
+    /// invariant, so cached detail reports avoid sorting the same points again.
+    static func computeChronological(
+        points: [ExerciseProgressPoint],
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> ProgressionCadence? {
         let loaded = points
             .filter {
                 $0.date <= now
@@ -84,7 +98,6 @@ struct ProgressionCadence: Hashable {
                 guard let load = point.effectiveTopLoad else { return nil }
                 return (point.date, load)
             }
-            .sorted { $0.date < $1.date }
 
         guard let first = loaded.first else { return nil }
 

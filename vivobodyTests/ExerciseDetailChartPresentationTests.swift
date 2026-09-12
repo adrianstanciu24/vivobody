@@ -94,6 +94,7 @@ struct ExerciseDetailChartPresentationTests {
             progress: progress,
             strengthTrendStat: nil,
             effort: nil,
+            progressionCadence: nil,
             volumeContribution: nil,
             weeklyVolumeByMuscle: [:],
             unit: .lb,

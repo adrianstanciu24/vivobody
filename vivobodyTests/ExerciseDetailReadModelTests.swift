@@ -162,6 +162,13 @@ struct ExerciseDetailReadModelTests {
             progress: progress,
             strengthTrendStat: strengthTrendStat,
             effort: effort,
+            progressionCadence: progress.flatMap {
+                ProgressionCadence.compute(
+                    points: $0.points,
+                    now: now,
+                    calendar: calendar
+                )
+            },
             volumeContribution: volumeContribution,
             weeklyVolumeByMuscle: Dictionary(
                 uniqueKeysWithValues: weeklyVolumeStats.map {

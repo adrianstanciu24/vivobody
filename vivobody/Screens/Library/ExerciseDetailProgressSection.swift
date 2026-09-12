@@ -50,7 +50,6 @@ struct ExerciseDetailProgressSection: View {
             if presentation.isStrengthTrend {
                 ExerciseStrengthTrendCard(
                     exerciseName: readModel.exercise.name,
-                    progress: presentation.progressThroughNow,
                     stat: readModel.strengthTrendStat,
                     readinessDates: presentation.strengthTrendReadinessDates,
                     visiblePoints: presentation.visiblePoints,

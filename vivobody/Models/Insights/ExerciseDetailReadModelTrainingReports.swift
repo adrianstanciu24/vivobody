@@ -51,10 +51,15 @@ extension ExerciseDetailReadModel {
         unit: WeightUnit
     ) -> Cadence? {
         guard let cadence else { return nil }
-        let allEvents = cadence.events.map {
+        let eventCount = cadence.increases.count + 1
+        let recentEvents: [ProgressionCadence.Event] = if cadence.increases.count >= cadenceEventLimit {
+            Array(cadence.increases.suffix(cadenceEventLimit))
+        } else {
+            [cadence.baseline] + cadence.increases
+        }
+        let visible = recentEvents.map {
             LoadEvent(date: $0.date, load: $0.load)
         }
-        let visible = Array(allEvents.suffix(cadenceEventLimit))
         let currentGap = dayCountText(
             cadence.daysSinceLastIncrease,
             todayText: "Today"
@@ -88,7 +93,7 @@ extension ExerciseDetailReadModel {
         let currentSentence = cadence.daysSinceLastIncrease == 0
             ? "The latest increase was today"
             : "It has been \(dayCountText(cadence.daysSinceLastIncrease)) since the last increase"
-        let rangeContext = allEvents.count > cadenceEventLimit
+        let rangeContext = eventCount > cadenceEventLimit
             ? "Recent visible load bests"
             : "Visible load bests"
         let firstAccessible = WeightFormatter.string(
@@ -101,7 +106,7 @@ extension ExerciseDetailReadModel {
         )
         return Cadence(
             visibleEvents: visible,
-            showsRecentSubset: allEvents.count > cadenceEventLimit,
+            showsRecentSubset: eventCount > cadenceEventLimit,
             medianGapDays: cadence.medianGapDays,
             daysSinceLastIncrease: cadence.daysSinceLastIncrease,
             isPastUsualRhythm: cadence.isPastUsualRhythm,

@@ -75,6 +75,18 @@ nonisolated enum SupersetGrouping {
         return nil
     }
 
+    /// Every member tag in one pass over the contiguous runs. Receipt-style
+    /// lists use this instead of re-discovering all groups for every row.
+    static func tags(inIDs ids: [UUID?]) -> [String?] {
+        var tags = [String?](repeating: nil, count: ids.count)
+        for (groupIndex, run) in linkedRuns(inIDs: ids).enumerated() {
+            for (memberIndex, index) in run.enumerated() {
+                tags[index] = "\(letter(for: groupIndex))\(memberIndex + 1)"
+            }
+        }
+        return tags
+    }
+
     /// The group letter ("A", "B", …) of the linked run containing
     /// `index`. Nil when the position sits outside every group.
     static func groupLetter(at index: Int, inIDs ids: [UUID?]) -> String? {

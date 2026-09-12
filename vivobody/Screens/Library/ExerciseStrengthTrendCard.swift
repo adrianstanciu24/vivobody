@@ -17,7 +17,6 @@ import VivoKit
 
 struct ExerciseStrengthTrendCard: View {
     let exerciseName: String
-    let progress: ExerciseProgress?
     let stat: StrengthOutlookStat?
     let readinessDates: [Date]
     let visiblePoints: [ExerciseProgressPoint]
@@ -75,19 +74,8 @@ struct ExerciseStrengthTrendCard: View {
     }
 
     private var buildingState: ExerciseStrengthBuildingState {
-        let now = Date()
         let calendar = Calendar.current
-        let progressDates = (progress?.points ?? [])
-            .filter { $0.date <= now && $0.estimated1RM > 0 }
-            .map(\.date)
-        let eligibleDates = readinessDates.isEmpty
-            ? progressDates
-            : readinessDates.filter { $0 <= now }
-        let window = Array(
-            eligibleDates
-                .sorted()
-                .suffix(StrengthOutlookBoard.recentWindow)
-        )
+        let window = readinessDates
         let latest = window.last
         let first = window.first ?? latest
         let span: Int = if let first, let latest {
@@ -111,10 +99,7 @@ struct ExerciseStrengthTrendCard: View {
     // MARK: - Qualified trend
 
     private func populatedCard(_ stat: StrengthOutlookStat) -> some View {
-        let now = Date()
         let points = visiblePoints
-            .filter { $0.date <= now && $0.estimated1RM > 0 }
-            .sorted { $0.date < $1.date }
         let delta = chartDelta(points)
         let color = trendColor(stat.trend)
 

@@ -59,7 +59,7 @@ extension HistoryContent {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, Space.lg)
-                        .onAppear(perform: loadMore)
+                        .onAppear(perform: loadMoreSessions)
                         .accessibilityLabel("Loading older workouts")
                 }
             }

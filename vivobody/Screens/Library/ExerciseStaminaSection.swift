@@ -81,9 +81,7 @@ struct ExerciseStaminaInstrument: View {
 
     private var selectedSeries: StaminaSeries? {
         guard let selectedDate else { return nil }
-        return report.includedSeries.min {
-            abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
-        }
+        return report.nearestIncludedSeries(to: selectedDate)
     }
 
     private func seriesLink(_ series: StaminaSeries) -> some View {
@@ -183,7 +181,7 @@ struct ExerciseStaminaInstrument: View {
                     .foregroundStyle(Tint.primary).symbolSize(45)
             }
         }
-        .chartYScale(domain: 0 ... max(110, (report.includedSeries.map(\.retention).max() ?? 1) * 110))
+        .chartYScale(domain: 0 ... max(110, report.maximumIncludedRetention * 110))
         .chartXSelection(value: $selectedDate)
         .chartXScale(range: .plotDimension(startPadding: 12, endPadding: 24))
         .chartXAxis {

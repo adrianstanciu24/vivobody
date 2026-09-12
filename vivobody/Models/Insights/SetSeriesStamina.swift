@@ -61,25 +61,58 @@ nonisolated struct StaminaSeries: Identifiable, Hashable {
 
 nonisolated struct ExerciseStamina: Hashable {
     let series: [StaminaSeries]
+    let includedSeries: [StaminaSeries]
+    let overallRetention: Double?
+    let maximumIncludedRetention: Double
+    let trend: [StaminaSeries]
+
+    init(series: [StaminaSeries]) {
+        let sorted = series.enumerated().sorted {
+            $0.element.date == $1.element.date
+                ? $0.offset < $1.offset
+                : $0.element.date < $1.element.date
+        }.map(\.element)
+        let included = sorted.filter { !$0.isHeldBack }
+        let retentionTotal = included.reduce(0) { $0 + $1.retention }
+        let latestKey = sorted.last?.comparisonKey
+
+        self.series = sorted
+        includedSeries = included
+        overallRetention = included.isEmpty
+            ? nil
+            : retentionTotal / Double(included.count)
+        maximumIncludedRetention = included.map(\.retention).max() ?? 1
+        trend = latestKey.map { key in
+            sorted.filter { $0.comparisonKey == key }
+        } ?? []
+    }
+
     var latest: StaminaSeries? {
         series.last
     }
 
-    /// Equal weight per series, matching the movement summary's retention currency.
-    var includedSeries: [StaminaSeries] {
-        series.filter { !$0.isHeldBack }
-    }
-
-    var overallRetention: Double? {
-        let included = includedSeries
-        guard !included.isEmpty else { return nil }
-        return included.reduce(0) { $0 + $1.retention } / Double(included.count)
-    }
-
-    /// Show the latest run's matched history; never silently switch loads.
-    var trend: [StaminaSeries] {
-        guard let key = latest?.comparisonKey else { return [] }
-        return series.filter { $0.comparisonKey == key }
+    /// Closest chart point to a scrubbed date. The included series are
+    /// chronological, so selection is logarithmic rather than a full scan on
+    /// every gesture update.
+    func nearestIncludedSeries(to date: Date) -> StaminaSeries? {
+        guard !includedSeries.isEmpty else { return nil }
+        var lower = includedSeries.startIndex
+        var upper = includedSeries.endIndex
+        while lower < upper {
+            let middle = lower + (upper - lower) / 2
+            if includedSeries[middle].date < date {
+                lower = middle + 1
+            } else {
+                upper = middle
+            }
+        }
+        if lower == includedSeries.startIndex { return includedSeries[lower] }
+        if lower == includedSeries.endIndex { return includedSeries[lower - 1] }
+        let before = includedSeries[lower - 1]
+        let after = includedSeries[lower]
+        return date.timeIntervalSince(before.date) <= after.date.timeIntervalSince(date)
+            ? before
+            : after
     }
 }
 

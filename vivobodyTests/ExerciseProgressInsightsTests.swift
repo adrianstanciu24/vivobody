@@ -15,11 +15,12 @@ import Testing
 
 @MainActor
 struct ExerciseProgressInsightsTests {
-
     // MARK: - Virtual clock
 
     private static let origin = Date(timeIntervalSince1970: 1_700_000_000)
-    private func day(_ n: Double) -> Date { Self.origin.addingTimeInterval(n * 86_400) }
+    private func day(_ n: Double) -> Date {
+        Self.origin.addingTimeInterval(n * 86400)
+    }
 
     // MARK: - Builders
 
@@ -55,9 +56,9 @@ struct ExerciseProgressInsightsTests {
         )
         ex.modality = .isometricStrength
         ex.loadMode = .nonComparable
-        ex.sets.forEach {
-            $0.duration = seconds
-            $0.isCompleted = true
+        for set in ex.sets {
+            set.duration = seconds
+            set.isCompleted = true
         }
         return ex
     }
@@ -84,6 +85,22 @@ struct ExerciseProgressInsightsTests {
         // The PR point is the 130×3 session (the last one).
         #expect(prog?.bestE1RMPoint?.topWeight == 130)
         #expect(prog?.bestE1RMPoint?.topReps == 3)
+    }
+
+    @Test func dateRangeKeepsChronologicalInclusiveBounds() throws {
+        let sessions = series(
+            "Range Fixture",
+            [(100, 8), (105, 8), (110, 8), (115, 8)],
+            everyDays: 7
+        )
+        let prog = try #require(progress(Array(sessions.reversed()), "Range Fixture"))
+
+        let visible = prog.points(
+            from: day(6),
+            through: day(14)
+        )
+
+        #expect(visible.map(\.date) == [day(7), day(14)])
     }
 
     @Test func sessionE1RMUsesStrongestEstimateNotRepresentativeRecordSet() {
@@ -287,7 +304,7 @@ struct ExerciseProgressInsightsTests {
             [pullUp(reps: 5)],
             bodyweightAtStart: 180
         )
-        let unknown = (1...5).map { index in
+        let unknown = (1 ... 5).map { index in
             session(at: day(Double(index)), [pullUp(reps: 5)])
         }
         let prog = progress([known] + unknown, "Plateau Bodyweight Fixture")
@@ -310,10 +327,10 @@ struct ExerciseProgressInsightsTests {
                 loadMode: .external,
                 plannedDuration: duration
             )
-            exercise.sets.forEach {
-                $0.weight = weight
-                $0.duration = duration
-                $0.isCompleted = true
+            for set in exercise.sets {
+                set.weight = weight
+                set.duration = duration
+                set.isCompleted = true
             }
             return exercise
         }
@@ -331,7 +348,7 @@ struct ExerciseProgressInsightsTests {
         #expect(prog?.recordPoint?.topDuration == 45)
         #expect(prog?.recordPoint?.strengthPerformance?.primaryMetricKind == .load)
 
-        let stalled = (0..<6).map { index in
+        let stalled = (0 ..< 6).map { index in
             session(
                 at: day(10 + Double(index)),
                 [loadedHold(weight: 55, duration: 45)]
