@@ -29,10 +29,10 @@ import WidgetKit
     SnapshotEntry(date: .now, snapshot: ConsistencySnapshot.placeholder)
 }
 
-#Preview("Strength Large", as: .systemLarge) {
-    StrengthWidget()
+#Preview("Training Load Large", as: .systemLarge) {
+    TrainingLoadWidget()
 } timeline: {
-    SnapshotEntry(date: .now, snapshot: StrengthSnapshot.placeholder)
+    SnapshotEntry(date: .now, snapshot: TrainingLoadSnapshot.placeholder)
 }
 
 #Preview("Live Activity Rest") {

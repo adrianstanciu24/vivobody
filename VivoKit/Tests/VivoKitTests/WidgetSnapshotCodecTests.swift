@@ -16,7 +16,7 @@ struct WidgetSnapshotCodecTests {
         try expectRoundTrip(UpNextSnapshot.placeholder)
         try expectRoundTrip(ConsistencySnapshot.placeholder)
         try expectRoundTrip(SignatureSnapshot.placeholder)
-        try expectRoundTrip(StrengthSnapshot.placeholder)
+        try expectRoundTrip(TrainingLoadSnapshot.placeholder)
         try expectRoundTrip(ActiveWorkoutSnapshot.placeholder)
     }
 
@@ -39,7 +39,7 @@ struct WidgetSnapshotCodecTests {
     }
 
     @Test func malformedPayloadUsesExplicitFallback() {
-        let malformed = Data(#"{"version":4,"payload":not-json}"#.utf8)
+        let malformed = Data(#"{"version":5,"payload":not-json}"#.utf8)
 
         #expect(WidgetSnapshotCodec.decode(UpNextSnapshot.self, from: malformed) == nil)
         #expect(
@@ -72,8 +72,7 @@ struct WidgetSnapshotCodecTests {
         )
     }
 
-    private func expectRoundTrip<T>(_ value: T) throws
-    where T: Codable & Equatable {
+    private func expectRoundTrip<T: Codable & Equatable>(_ value: T) throws {
         let data = try #require(WidgetSnapshotCodec.encode(value))
         let decoded = try #require(WidgetSnapshotCodec.decode(T.self, from: data))
         #expect(decoded == value)

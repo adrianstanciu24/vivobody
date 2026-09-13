@@ -118,6 +118,11 @@ state instead of an empty mark.
   coverage note rather than implying the volume-load total is complete.
 - Baseline-building state uses the same dormant chart geometry and factual
   collection progress.
+- The large Training Load widget distills this instrument to the current
+  seven-day value, range verdict, rolling 12-week line and range band, and the
+  numeric personal range. Supporting driver counts remain in Insights. While
+  the range is forming, show baseline days and active-week progress instead;
+  tapping the widget opens Insights.
 
 ### Rhythm
 

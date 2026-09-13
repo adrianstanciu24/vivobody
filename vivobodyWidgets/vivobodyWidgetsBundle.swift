@@ -7,7 +7,7 @@
 //    • UpNextWidget.swift (small only)
 //    • SignatureWidget.swift (small only)
 //    • ConsistencyWidget.swift (medium only)
-//    • StrengthWidget.swift (large only)
+//    • StrengthWidget.swift (Training Load, large only)
 //    • StartWorkoutControl.swift
 //    • ActiveWorkoutLiveActivity.swift
 //  Shared view primitives are in WidgetChrome.swift.
@@ -25,7 +25,7 @@ struct VivobodyWidgetsBundle: WidgetBundle {
         UpNextWidget()
         SignatureWidget()
         ConsistencyWidget()
-        StrengthWidget()
+        TrainingLoadWidget()
         ActiveWorkoutLiveActivity()
         StartWorkoutControl()
     }

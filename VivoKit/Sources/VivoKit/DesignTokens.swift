@@ -223,6 +223,8 @@
         public static let metricInline = Font.system(.callout, design: .monospaced, weight: .semibold)
         public static let metricUnit = Font.system(.footnote, design: .monospaced, weight: .medium)
         public static let metricMicro = Font.system(.caption2, design: .monospaced, weight: .medium)
+        public static let panelLegend = Font.system(.caption2, design: .monospaced, weight: .semibold)
+        public static let panelLegendTracking: CGFloat = 1.6
 
         // Scalable text tokens — text-style-based so they react to Dynamic Type.
         public static let display = Font.system(.largeTitle, weight: .bold)

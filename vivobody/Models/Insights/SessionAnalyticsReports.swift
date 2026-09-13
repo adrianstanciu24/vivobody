@@ -259,7 +259,7 @@ extension SessionAnalytics {
     nonisolated struct WidgetReports {
         let consistency: ConsistencySnapshot
         let signature: SignatureSnapshot
-        let strength: StrengthSnapshot
+        let trainingLoad: TrainingLoadSnapshot
         let load: TrainingLoadReport
     }
 }

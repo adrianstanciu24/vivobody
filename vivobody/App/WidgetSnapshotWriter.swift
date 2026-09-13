@@ -140,7 +140,7 @@ enum WidgetSnapshotWriter {
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.consistencyKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.signatureKind)
-        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.strengthKind)
+        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.trainingLoadKind)
     }
 
     private static func writeAllNow(
@@ -192,7 +192,7 @@ enum WidgetSnapshotWriter {
             ),
             (WidgetShared.consistencySnapshotKey, encode(reports.consistency)),
             (WidgetShared.signatureSnapshotKey, encode(reports.signature)),
-            (WidgetShared.strengthSnapshotKey, encode(reports.strength)),
+            (WidgetShared.trainingLoadSnapshotKey, encode(reports.trainingLoad)),
             (
                 WidgetShared.activeWorkoutSnapshotKey,
                 encode(activeWorkoutSnapshot(session: active, unit: unit))
@@ -224,7 +224,7 @@ enum WidgetSnapshotWriter {
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.consistencyKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.signatureKind)
-        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.strengthKind)
+        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.trainingLoadKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
     }
 

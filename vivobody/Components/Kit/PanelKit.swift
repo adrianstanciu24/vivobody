@@ -37,8 +37,8 @@ extension View {
     /// usually `Ink.tertiary`, but accented panels keep their tint).
     func panelLegendType() -> some View {
         self
-            .font(.system(.caption2, design: .monospaced, weight: .semibold))
-            .tracking(1.6)
+            .font(Typography.panelLegend)
+            .tracking(Typography.panelLegendTracking)
             .textCase(.uppercase)
     }
 

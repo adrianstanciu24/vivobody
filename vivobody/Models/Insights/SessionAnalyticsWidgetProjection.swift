@@ -59,67 +59,42 @@ extension SessionAnalytics {
         return WidgetReports(
             consistency: consistencySnapshot,
             signature: signatureSnapshot,
-            strength: strengthSnapshot(
-                board: core.strength,
-                progress: core.progress
-            ),
+            trainingLoad: trainingLoadSnapshot(core.load),
             load: core.load
         )
     }
 
-    private nonisolated static func strengthSnapshot(
-        board: StrengthOutlookBoard,
-        progress: [ExerciseProgress]
-    ) -> StrengthSnapshot {
-        guard let lead = board.stats.first else { return .empty }
-        let series = progress.first { $0.id == lead.historyKey }
-        var runningMax = -Double.infinity
-        var points: [StrengthPointSnapshot] = []
-        for point in series?.points ?? [] where point.estimated1RM > 0 {
-            let isPR = point.estimated1RM > runningMax
-            if isPR { runningMax = point.estimated1RM }
-            points.append(
-                StrengthPointSnapshot(
-                    date: point.date,
-                    e1RM: point.estimated1RM,
-                    isPR: isPR
+    private nonisolated static func trainingLoadSnapshot(
+        _ report: TrainingLoadReport
+    ) -> TrainingLoadSnapshot {
+        let range = report.recentRange
+        let measure: TrainingLoadSnapshot.Measure = switch report.measure {
+        case .volumeLoad: .volumeLoad
+        case .hardSets: .hardSets
+        }
+        let verdict: TrainingLoadSnapshot.Verdict = switch report.verdict {
+        case .insufficient: .insufficient
+        case .low: .low
+        case .productive: .within
+        case .high: .high
+        }
+        return TrainingLoadSnapshot(
+            measure: measure,
+            currentLoad: report.currentLoad,
+            verdict: verdict,
+            rangeLower: range?.lowerBound,
+            rangeUpper: range?.upperBound,
+            observedBaselineDays: report.observedBaselineDays,
+            activeBaselineWeeks: report.activeBaselineWeeks,
+            points: report.points.suffix(TrainingLoadSnapshot.maxPoints).map {
+                TrainingLoadPointSnapshot(
+                    date: $0.date,
+                    load: $0.load,
+                    rangeLower: $0.rangeLower,
+                    rangeUpper: $0.rangeUpper
                 )
-            )
-        }
-
-        return StrengthSnapshot(
-            exercise: lead.exercise,
-            points: Array(points.suffix(StrengthSnapshot.maxPoints)),
-            currentE1RM: lead.currentE1RM,
-            bestE1RM: lead.bestE1RM,
-            trendLabel: strengthTrendLabel(lead),
-            climbingCount: board.climbingCount,
-            stalledCount: board.plateauedCount,
-            slippingCount: board.slippingCount,
-            hasData: !points.isEmpty
+            }
         )
-    }
-
-    private nonisolated static func strengthTrendLabel(
-        _ stat: StrengthOutlookStat
-    ) -> String {
-        switch stat.trend {
-        case .climbing:
-            if stat.isFreshPR { return "PR" }
-            if let days = stat.daysToPR {
-                return days <= 21
-                    ? "~\(days)d"
-                    : "~\(Int((Double(days) / 7).rounded()))w"
-            }
-            return "up"
-        case .plateaued:
-            if let weeks = stat.weeksSinceBest, weeks > 0 {
-                return "\(weeks)w flat"
-            }
-            return "flat"
-        case .slipping:
-            return "down"
-        }
     }
 
     private nonisolated static func signatureVerdict(
