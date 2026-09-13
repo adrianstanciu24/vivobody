@@ -2,8 +2,9 @@
 //  SignatureWidget.swift
 //  vivobodyWidgets
 //
-//  The "Your Signature" widget — small family only. Renders the
-//  all-time training-identity bloom with a one-line verdict.
+//  The Training Signature widget — small family only. Lets the
+//  all-time training-identity bloom fill the tile without duplicating
+//  the labels and supporting reads owned by Insights.
 //
 
 import SwiftUI
@@ -23,9 +24,10 @@ struct SignatureWidget: Widget {
         ) { entry in
             SignatureWidgetView(snapshot: entry.snapshot)
         }
-        .configurationDisplayName("Your Signature")
-        .description("Your all-time training distribution in one mark.")
+        .configurationDisplayName("Training Signature")
+        .description("Your all-time training distribution as a six-petal mark.")
         .supportedFamilies([.systemSmall])
+        .contentMarginsDisabled()
     }
 }
 
@@ -33,38 +35,28 @@ struct SignatureWidgetView: View {
     let snapshot: SignatureSnapshot
 
     var body: some View {
-        small.padding()
+        small
             .widgetURL(URL(string: "vivobody://insights"))
             .widgetAppearanceBackground()
     }
 
+    @ViewBuilder
     private var small: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Your signature")
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.tertiary)
-            if snapshot.hasSignature {
-                SignatureEmblem(snapshot: snapshot, showsLabels: false)
-                    .frame(maxWidth: .infinity, maxHeight: 92)
-                Text(snapshot.verdictLine)
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(Ink.secondary)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.8)
-            } else {
-                Spacer(minLength: 0)
-                Text(snapshot.verdictLine)
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.secondary)
-                    .lineLimit(3)
-            }
+        if snapshot.hasSignature {
+            SignatureEmblem(snapshot: snapshot)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else {
+            Text(snapshot.verdictLine)
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .lineLimit(3)
+                .padding()
         }
     }
 }
 
 struct SignatureEmblem: View {
     let snapshot: SignatureSnapshot
-    var showsLabels: Bool
     @Environment(\.widgetRenderingMode) private var renderingMode
 
     /// One petal's precomputed placement, shared by the bloom, body,
@@ -215,9 +207,7 @@ struct SignatureEmblem: View {
             }
 
             for item in placed {
-                let petal = item.petal
                 let angle = item.angle
-                let dominant = item.isDominant
                 let opacity = item.opacity
                 let hueShift = item.hueShift
                 let shape = item.shape
@@ -295,14 +285,6 @@ struct SignatureEmblem: View {
                         lineWidth: SignatureEmblemTuning.rimLineWidth
                     )
                 }
-
-                if showsLabels {
-                    let p = CGPoint(x: center.x + cos(angle) * radius * 0.88, y: center.y + sin(angle) * radius * 0.88)
-                    let label = Text(petal.group.prefix(3).uppercased())
-                        .font(Typography.micro)
-                        .foregroundStyle(dominant ? Ink.primary : Ink.tertiary)
-                    context.draw(label, at: p, anchor: .center)
-                }
             }
 
             // The core's orange light landing on the petal roots,
@@ -360,7 +342,14 @@ struct SignatureEmblem: View {
         }
         .widgetAccentable()
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(snapshot.verdictLine.isEmpty ? "Training signature" : snapshot.verdictLine)
+        .accessibilityLabel(accessibilitySummary)
+    }
+
+    private var accessibilitySummary: String {
+        let shares = snapshot.petals.map { petal in
+            "\(petal.group) \(Int((petal.volumeShare * 100).rounded())) percent"
+        }.joined(separator: ", ")
+        return "Training signature. All-time distribution: \(shares). \(snapshot.verdictLine)"
     }
 
     private func petalColor(opacity: Double) -> Color {

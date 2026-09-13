@@ -3,9 +3,11 @@
 //  vivobodyWidgets
 //
 //  The "Up Next" widget — small family only. Shows today's scheduled
-//  workout or the next rest-day target.
+//  workout as a compact card, with a separate start/resume action,
+//  or the next rest-day target. The surrounding tile opens Today.
 //
 
+import AppIntents
 import SwiftUI
 import VivoKit
 import WidgetKit
@@ -30,49 +32,84 @@ struct UpNextWidget: Widget {
 }
 
 struct UpNextWidgetView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     let snapshot: UpNextSnapshot
 
     var body: some View {
-        small
-            .padding()
+        // Extra Large already needs the compact hierarchy in a small widget.
+        card(showDetails: dynamicTypeSize <= .large)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .widgetURL(URL(string: "vivobody://today"))
-            .widgetAppearanceBackground()
+            .widgetAppearanceBackground(warmAccent: true)
     }
 
-    private var small: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            kicker
+    private func card(showDetails: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            if showDetails {
+                Text("Today")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.secondary)
+            }
             Spacer(minLength: Space.xs)
             Text(title)
-                .font(Typography.display)
+                .font(showDetails ? .system(.title2, weight: .bold) : Typography.headline)
+                .fontWeight(.bold)
                 .foregroundStyle(Ink.primary)
                 .lineLimit(2)
-                .minimumScaleFactor(0.68)
-            Text(subtitle)
-                .font(Typography.metricInline)
-                .foregroundStyle(Ink.secondary)
-                .lineLimit(2)
-                .minimumScaleFactor(0.75)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Spacer(minLength: Space.xs)
+            if snapshot.kind == .scheduled {
+                scheduledFooter(showDetails: showDetails)
+            } else {
+                Text(subtitle)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.secondary)
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
+        .accessibilityElement(children: .contain)
     }
 
-    private var kicker: some View {
-        HStack(spacing: Space.sm) {
-            Text("Today")
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.tertiary)
-            if snapshot.kind == .scheduled {
-                Circle()
-                    .fill(Tint.primary)
-                    .frame(width: 7, height: 7)
-                    .accessibilityHidden(true)
+    private func scheduledFooter(showDetails: Bool) -> some View {
+        HStack(alignment: .bottom, spacing: Space.sm) {
+            Group {
+                if showDetails {
+                    HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
+                        Text(snapshot.totalSets, format: .number)
+                            .font(Typography.statValue)
+                            .fontWeight(.bold)
+                            .foregroundStyle(Tint.primaryText)
+                            .monospacedDigit()
+                            .widgetAccentable()
+                        Text(snapshot.totalSets == 1 ? "set" : "sets")
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.secondary)
+                    }
+                } else {
+                    Text(subtitle)
+                        .font(Typography.caption)
+                        .foregroundStyle(Tint.primaryText)
+                        .widgetAccentable()
+                }
             }
-            if snapshot.easeOff {
-                Text("Ease off")
-                    .font(Typography.caption)
-                    .foregroundStyle(Tint.primaryText)
-                    .lineLimit(1)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("\(snapshot.totalSets) planned \(snapshot.totalSets == 1 ? "set" : "sets")")
+            Spacer(minLength: 0)
+            Button(intent: StartTodaysWorkoutIntent()) {
+                Image(systemName: "arrow.up.right")
+                    .font(Typography.headline)
+                    .foregroundStyle(Tint.onAccent)
+                    .frame(width: Space.tapMin, height: Space.tapMin)
+                    .background(Tint.primary, in: Circle())
             }
+            .buttonStyle(.plain)
+            .widgetAccentable()
+            .accessibilityLabel("Start \(title)")
+            .accessibilityHint("Opens your workout in Vivobody. Resumes a workout if one is already active.")
+            .accessibilityIdentifier("upNextWidgetStartButton")
         }
     }
 

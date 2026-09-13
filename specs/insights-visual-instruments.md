@@ -76,6 +76,12 @@ meaning that is absent from position, length, label, or accessibility value.
   coverage. Cadence belongs to Rhythm.
 - The equal-share reference may use one micro legend. Do not show an
   explanatory paragraph.
+
+The small Training Signature Home Screen widget presents the same still bloom
+as a full-tile mark. It omits the visible title, verdict, cadence, and region
+labels; tapping the tile opens Insights, while VoiceOver receives the complete
+regional distribution and verdict. A missing signature uses a short text empty
+state instead of an empty mark.
 - Exercise mix and Rep mix appear as compact visual navigation cards. Their
   full charts live on dedicated detail screens. Keep the two previews grouped
   closely, with less padding and visual weight than the main instruments.
@@ -262,7 +268,7 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
 
 - No change to existing analytics formulas or persistence.
 - No new user score or prescriptive training recommendation.
-- No change to existing per-exercise strength progress, widgets, or active-workout UI.
+- No change to existing per-exercise strength progress or active-workout UI.
 
 ## Implementation
 

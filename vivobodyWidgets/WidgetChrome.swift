@@ -14,6 +14,9 @@ import VivoKit
 import WidgetKit
 
 private struct WidgetAppearanceModifier: ViewModifier {
+    var warmAccent = false
+
+    @Environment(\.widgetRenderingMode) private var renderingMode
     @Environment(\.colorScheme) private var systemColorScheme
     @AppStorage(
         WidgetShared.appearanceKey,
@@ -37,13 +40,25 @@ private struct WidgetAppearanceModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .environment(\.colorScheme, effectiveColorScheme)
-            .containerBackground(background, for: .widget)
+            .containerBackground(for: .widget) {
+                background
+                    .overlay {
+                        if warmAccent, renderingMode == .fullColor {
+                            RadialGradient(
+                                colors: [Tint.primary.opacity(0.16), .clear],
+                                center: .topTrailing,
+                                startRadius: 0,
+                                endRadius: 220
+                            )
+                        }
+                    }
+            }
     }
 }
 
 extension View {
-    func widgetAppearanceBackground() -> some View {
-        modifier(WidgetAppearanceModifier())
+    func widgetAppearanceBackground(warmAccent: Bool = false) -> some View {
+        modifier(WidgetAppearanceModifier(warmAccent: warmAccent))
     }
 }
 

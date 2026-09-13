@@ -30,6 +30,24 @@ Training Load and its detailed range comparison belong in Insights and are not
 rendered on Today. The underlying analytics remain available to their existing
 consumers.
 
+## Up Next Home Screen widget
+
+The small widget uses the system content margins, a leading-aligned workout
+name of up to two lines, and an orange planned-set count. A quiet Today label
+sits above the name; a subtle warm background follows the app's light/dark
+preference. System tinting owns the appearance in accented widget modes. At
+larger text sizes, the Today label yields space to the workout name and action.
+
+Tapping the tile opens Today. The separate 44-point orange arrow starts today's
+scheduled workout through the existing widget intent, or expands an already
+active workout. The app resolves the current schedule when handling the intent;
+the widget does not write workout data. Rest-day and unscheduled states retain
+their next-workout or no-schedule copy and open Today without a start button.
+
+Use [widget-start-handoff](../Scripts/verify_scenarios/widget-start-handoff.json)
+for the app-side action. Inspect the actual Home Screen widget for alignment,
+light/dark appearance, large text, and the separate tile/button tap targets.
+
 ## Initial content
 
 The pinned start/resume action, Up next template preview, recent consistency
