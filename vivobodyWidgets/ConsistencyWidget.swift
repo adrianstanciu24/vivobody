@@ -2,9 +2,9 @@
 //  ConsistencyWidget.swift
 //  vivobodyWidgets
 //
-//  The "Consistency" widget — medium family only. Just the graph:
-//  the weekly-volume sparkline over the six-month training heatmap
-//  with the intensity legend. No headings or stat strips.
+//  The "Consistency" widget — medium family only. The weekly-volume
+//  sparkline sits over the six-month training heatmap, with the matching
+//  days-trained total and intensity legend.
 //
 
 import SwiftUI
@@ -42,9 +42,35 @@ struct ConsistencyWidgetView: View {
     private var graph: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             WeeklyVolumeSparkline(values: snapshot.weeklyVolume, height: 28)
-            ConsistencyHeatmapGrid(weeks: snapshot.weeks, cellSpacing: 3)
-                .accessibilityLabel("Training heatmap, \(snapshot.daysTrained) days trained in the last six months")
+            HStack(spacing: Space.md) {
+                ConsistencyHeatmapGrid(weeks: snapshot.weeks, cellSpacing: 3)
+                    .accessibilityLabel("Training heatmap, \(daysTrainedAccessibilityLabel) in the last six months")
+
+                Spacer(minLength: 0)
+
+                VStack(alignment: .trailing, spacing: 1) {
+                    Text(snapshot.daysTrained, format: .number)
+                        .font(Typography.metricLg)
+                        .fontWeight(.black)
+                        .foregroundStyle(Ink.primary)
+                        .monospacedDigit()
+                    Text(daysTrainedLabel)
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                }
+                .accessibilityHidden(true)
+            }
             HeatmapLegend()
         }
+    }
+
+    private var daysTrainedLabel: String {
+        snapshot.daysTrained == 1 ? "day trained" : "days trained"
+    }
+
+    private var daysTrainedAccessibilityLabel: String {
+        "\(snapshot.daysTrained) \(daysTrainedLabel)"
     }
 }
