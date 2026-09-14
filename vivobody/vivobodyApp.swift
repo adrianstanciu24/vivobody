@@ -20,10 +20,8 @@ struct VivobodyApp: App {
     /// schema declares all @Model classes; cascade-delete
     /// relationships keep exercises and sets bound to their session.
     ///
-    /// The app is still pre-production, so it has one current schema and one
-    /// neutral development store. Model-breaking changes reset development
-    /// data rather than accumulating migration versions before persistence
-    /// ships as a product contract.
+    /// SchemaV1 is the first frozen persistence contract. Future model changes
+    /// add a version and migration stage instead of replacing stored history.
     ///
     /// Nil only when both the on-disk store and the in-memory fallback
     /// fail — in that case `body` presents a recovery view instead of

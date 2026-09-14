@@ -1,22 +1,22 @@
 # Verification
 
-This is the canonical guide for proving Vivobody changes. Match verification
-cost to risk, but always compile before declaring an app code change done.
-Simulator processes stay headless: never open the Simulator app and never run
-XCTest UI tests as part of the agent workflow.
+This is the canonical guide for proving Vivobody changes. Agents use one
+focused Baguette check after implementation and leave broader validation to the
+user. Simulator processes stay headless: never open the Simulator app and never
+run XCTest UI tests as part of the agent workflow.
 
-## Default validation
+## Default agent validation
 
-For app, data, build, and runtime-contract changes, run from the repository root:
+Choose the smallest relevant scenario from the feature/scenario map and run:
 
 ```bash
-Scripts/check.sh
+SCENARIO=<relevant-scenario> Scripts/verify.sh
 ```
 
-The command runs the Python guardrail tests, documentation and architecture
-checks, generated-catalog parity validation, and a complete simulator build.
-The full build log is written to `.verify/check-build.log`. Unexpected warnings
-fail the command; the known external AppIntents framework warning is filtered.
+Inspect its screenshot and accessibility tree. Do not add a clean build, a
+separate simulator build, `xcodebuild test`, `swift test`, or `Scripts/check.sh`
+to routine agent verification. If Baguette cannot observe the changed contract,
+state the limitation and leave that evidence to the user.
 
 ## Documentation and process tooling
 
@@ -51,7 +51,8 @@ These documentation-only paths do not require Xcode, a simulator, or
 implement it; label proposed behavior explicitly and preserve the request boundary.
 If the change also affects app code, catalog JSON/schema, runtime resources,
 snapshot/persistence fixtures, scenario JSON or runner behavior, build settings,
-or other validation hooks/scripts, use the stronger applicable evidence below.
+or other validation hooks/scripts, use the focused Baguette evidence described
+below and report any unobserved contracts as user testing.
 
 The [catalog inventory](../specs/catalog/inventory.md) and
 [scenario directory](../Scripts/verify_scenarios/index.md) are generated Markdown.
@@ -65,22 +66,16 @@ Regeneration describes those inputs; it does not replace catalog validation,
 scenario execution, or screenshot inspection. Do not regenerate or alter
 unrelated inputs merely to hide a pre-existing verification failure.
 
-## Fast structural loop
+## Optional read-only structural diagnosis
 
-Before compiling:
+These checks may diagnose a problem while investigating, but they do not replace
+the required focused Baguette check after implementation:
 
 ```bash
 /usr/bin/python3 Scripts/check_architecture.py
 /usr/bin/python3 Scripts/check_documentation.py
 /usr/bin/python3 Scripts/check_source_sizes.py
 /usr/bin/python3 Scripts/check_complexity.py
-```
-
-To isolate a compiler failure:
-
-```bash
-xcodebuild -scheme vivobody \
-  -destination 'generic/platform=iOS Simulator' build
 ```
 
 ## Pre-commit hooks
@@ -98,10 +93,9 @@ The commit stage checks file hygiene, formats staged Swift files under
 (matching the `Scripts/check.sh` formatting boundary), and runs the
 architecture, source-size, complexity, documentation, and catalog-parity
 guardrails scoped to the files that can break them. The push stage runs the
-Python guardrail suites and the VivoKit snapshot contract tests. For changes
-requiring `Scripts/check.sh`, hooks surface failures earlier and do not replace
-it. Run the full tree manually with `pre-commit run --all-files`, adding
-`--hook-stage pre-push` for the push stage.
+Python guardrail suites and the VivoKit snapshot contract tests. These hooks do
+not expand the agent verification policy; the user may run the full tree with
+`pre-commit run --all-files`, adding `--hook-stage pre-push` for the push stage.
 
 ## Headless UI verification with Baguette
 
@@ -203,13 +197,11 @@ The scenario schema, selector rules, and current scenario catalog are in
 Add stable identifiers only to controls needed for important harness flows;
 decorative views do not need identifiers.
 
-## Targeted unit suites
+## Broader user-run validation
 
-Run the smallest relevant targeted unit suite by default whenever logic
-changes. This gives agents autonomy to prove pure logic and boundary contracts
-without paying for every simulator test. `xcodebuild` may use a headless
-simulator destination, but must target `vivobodyTests` explicitly so the
-`vivobodyUITests` target never runs. Do not run the full simulator suite.
+The user may run targeted Swift Testing suites or the broad validator when
+deeper logic, persistence, or serialization evidence is needed. Agents do not
+run these commands unless the user explicitly requests them.
 
 ```bash
 # Targeted suite, preferred
@@ -217,7 +209,7 @@ xcodebuild -scheme vivobody \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
   test -only-testing:vivobodyTests/TrainingLoadTests
 
-# Current pre-release store reopen contract
+# SchemaV1 store reopen contract
 xcodebuild -scheme vivobody \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
   -parallel-testing-enabled NO \
@@ -237,14 +229,13 @@ graphs. Follow `vivobodyTests/TrainingLoadTests.swift` for the prevailing style.
 |---|---|
 | Prose-only documentation or instructions | Documentation checker, diff hygiene, and manual guidance review; catalog Python suite when catalog guidance/proposals change; no build |
 | Documentation checker, inventory generator, or their hook routing | Prose checks plus `test_check_documentation.py`; no app build |
-| Scenario JSON or verification harness | Focused Python harness tests, `Scripts/check.sh`, and affected headless scenarios with inspected evidence |
-| Pure analytics or domain logic | Smallest relevant targeted unit suite, then `Scripts/check.sh` |
-| Pre-release persistence shape or container opening | Current-store reopen contract, then `Scripts/check.sh` |
-| Post-release persistence shape or migration | Every retained version fixture, then `Scripts/check.sh`; use a migration plan |
-| Session lifecycle | Targeted controller/domain tests, build, and a relevant semantic scenario |
-| UI layout or interaction | Build plus inspected screenshot and accessibility tree |
-| VivoKit snapshot payload or widget decoding | `swift test --package-path VivoKit`, build, and semantic handoff evidence when behavior changes |
-| HealthKit, StoreKit, provisioning, or hardware behavior | Build and all observable harness evidence; list remaining device/App Store checks explicitly |
+| Scenario JSON or verification harness | Affected headless scenario with inspected evidence; focused harness tests are user-run |
+| Pure analytics or domain logic | Closest semantic Baguette scenario; targeted logic suites are user-run |
+| Persistence shape or migration | Closest launch/restoration scenario; store fixtures and migration suites are user-run |
+| Session lifecycle | Relevant semantic scenario |
+| UI layout or interaction | Inspected Baguette screenshot and accessibility tree |
+| VivoKit snapshot payload or widget decoding | Relevant semantic handoff scenario; package tests are user-run |
+| HealthKit, StoreKit, provisioning, or hardware behavior | All observable Baguette evidence; list remaining device/App Store checks explicitly |
 
 Anything Baguette cannot observe remains a user-owned manual verification item;
 do not substitute an XCTest UI test or unrelated simulator test merely to
@@ -265,15 +256,12 @@ Generate the unscheduled maintenance report with:
 ```
 
 Documentation paths, architecture boundaries, source-size growth, and function
-complexity are also enforced independently by `Scripts/check.sh`. Stale dates,
+complexity are also covered by the user-run `Scripts/check.sh`. Stale dates,
 orphaned screens, and repeated UI-surface expressions are deliberately
 report-only heuristics.
 Review several manual reports and tune false positives before scheduling it.
 
-The current pre-release store lives in `vivobodyTests/Fixtures/`. Contract tests
-always reopen a temporary copy. Before V1, an intentional breaking schema
-change may replace this baseline and its checksum because development data is
-not yet a compatibility promise. When the first public release establishes
-`SchemaV1`, retain that fixture permanently and add newer fixtures rather than
-rewriting shipped history. The checksum gate in `Scripts/check.sh` catches
-accidental baseline changes in either phase.
+The SchemaV1 store lives in `vivobodyTests/Fixtures/`. Contract tests reopen a
+temporary copy. Retain that fixture permanently and add newer fixtures rather
+than rewriting shipped history. The checksum gate in the user-run
+`Scripts/check.sh` catches accidental baseline changes.

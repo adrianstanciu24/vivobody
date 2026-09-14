@@ -184,34 +184,8 @@ enum WorkoutLiveActivityController {
             // A state for workout B must not be delivered to workout A's
             // activity while A is still ending. If B is still requesting
             // its activity, wait for that request before enumerating too.
-            if let pendingEnd {
-                await pendingEnd.value
-            }
-            if let pendingStart {
-                await pendingStart.value
-            }
-
-            while !Task.isCancelled,
-                  generation == deliveryGeneration,
-                  let state = queuedUpdateState
-            {
-                queuedUpdateState = nil
-                if lastDeliveredState == state { continue }
-
-                inFlightUpdateState = state
-                let content = ActivityContent(state: state, staleDate: nil)
-                let activities = Activity<WorkoutActivityAttributes>.activities
-                for activity in activities {
-                    guard !Task.isCancelled, generation == deliveryGeneration else { break }
-                    await activity.update(content)
-                }
-
-                guard !Task.isCancelled, generation == deliveryGeneration else { break }
-                if !activities.isEmpty {
-                    lastDeliveredState = state
-                }
-                inFlightUpdateState = nil
-            }
+            await waitForLifecycle(end: pendingEnd, start: pendingStart)
+            await deliverQueuedUpdates(generation: generation)
 
             guard generation == deliveryGeneration else { return }
             inFlightUpdateState = nil
@@ -220,6 +194,38 @@ enum WorkoutLiveActivityController {
                 startUpdatePumpIfNeeded()
             }
         }
+    }
+
+    private static func waitForLifecycle(
+        end: Task<Void, Never>?,
+        start: Task<Void, Never>?
+    ) async {
+        if let end { await end.value }
+        if let start { await start.value }
+    }
+
+    private static func deliverQueuedUpdates(generation: Int) async {
+        while canDeliver(generation), let state = queuedUpdateState {
+            queuedUpdateState = nil
+            guard lastDeliveredState != state else { continue }
+            await deliver(state, generation: generation)
+        }
+    }
+
+    private static func deliver(_ state: ContentState, generation: Int) async {
+        inFlightUpdateState = state
+        let content = ActivityContent(state: state, staleDate: nil)
+        let activities = Activity<WorkoutActivityAttributes>.activities
+        for activity in activities where canDeliver(generation) {
+            await activity.update(content)
+        }
+        guard canDeliver(generation) else { return }
+        if !activities.isEmpty { lastDeliveredState = state }
+        inFlightUpdateState = nil
+    }
+
+    private static func canDeliver(_ generation: Int) -> Bool {
+        !Task.isCancelled && generation == deliveryGeneration
     }
 
     private static func contentState(for session: WorkoutSession) -> WorkoutActivityAttributes.ContentState {

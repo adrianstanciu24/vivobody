@@ -124,12 +124,9 @@ require it, in-memory stores, and fixed `Date` values or virtual clocks. Test
 public behavior and invariants. A new insight includes a model test suite; a
 new structural rule includes a failing mutation fixture.
 
-Risky serialization boundaries keep compatibility fixtures. Before V1, the
-SwiftData fixture proves the current schema can reopen a representative store;
-an intentional breaking change may replace it because development data is not
-yet a shipped contract. The first public release freezes `SchemaV1` and its
-fixture permanently. From then on, every schema must open all retained stores,
-and old fixtures are never rewritten to make migrations pass.
+Risky serialization boundaries keep compatibility fixtures. `SchemaV1` and its
+fixture are permanent. Every later schema must open all retained stores, and old
+fixtures are never rewritten to make migrations pass.
 
 A widget snapshot change must cover the current envelope, obsolete versions,
 malformed and missing data, and the supported legacy-unversioned payload.

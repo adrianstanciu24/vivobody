@@ -58,15 +58,13 @@ def stale_knowledge_records(
     today: date,
     stale_days: int,
 ) -> list[tuple[str, int, str, int]]:
-    candidates = [root / "specs" / "index.md", root / "engineering" / "tech-debt.md"]
+    candidates = [root / "specs" / "index.md"]
     records: list[tuple[str, int, str, int]] = []
     for path in candidates:
         if not path.is_file():
             continue
         for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
             if path.name == "index.md" and not line.lstrip().startswith("|"):
-                continue
-            if path.name == "tech-debt.md" and "Last checked:" not in line:
                 continue
             matches = DATE_PATTERN.findall(line)
             if not matches:

@@ -186,36 +186,21 @@ nonisolated extension AnalyticsAccumulator {
         var prSessionIDs: Set<UUID> = []
         var prExerciseIDsBySession: [UUID: Set<UUID>] = [:]
 
-        sessionLoop: for replay in completed {
+        for replay in completed {
             guard !isCancelled() else { break }
             let session = replay.session
             let sets = session.totalCompletedSets
-            var sessionTonnage = ComparableTonnageSummary.zero
+            let sessionTonnage = Self.accumulateExercises(
+                replay,
+                bestByExercise: &bestByExercise,
+                prSessionIDs: &prSessionIDs,
+                prExerciseIDsBySession: &prExerciseIDsBySession,
+                isCancelled: isCancelled
+            )
 
             totalSets += sets
             dates.append(session.date)
-            if let done = session.completedAt {
-                if trainingSince == nil || done < trainingSince! {
-                    trainingSince = done
-                }
-            }
-
-            for exerciseReplay in replay.exercises {
-                guard !isCancelled() else { break sessionLoop }
-                let exercise = exerciseReplay.exercise
-                sessionTonnage = sessionTonnage.merging(
-                    exercise.comparableTonnageSummary
-                )
-                if let performance = exercise.bestStrengthPerformance {
-                    let key = exercise.historyKey
-                    if bestByExercise[key] == nil || performance.beats(bestByExercise[key]!) {
-                        bestByExercise[key] = performance
-                        prSessionIDs.insert(session.id)
-                        prExerciseIDsBySession[session.id, default: []]
-                            .insert(exercise.id)
-                    }
-                }
-            }
+            trainingSince = Self.earliest(trainingSince, session.completedAt)
 
             lifetimeTonnage = lifetimeTonnage.merging(sessionTonnage)
             if let done = session.completedAt, let monthInterval,
@@ -247,19 +232,11 @@ nonisolated extension AnalyticsAccumulator {
         // continuously through `now`, so this remains a true lifetime
         // rate and naturally reflects inactive stretches.
         let cadenceDates = dates.filter { $0 <= now }
-        let averageWorkoutsPerWeek: Double
-        if let first = cadenceDates.min() {
-            let daySpan = calendar.dateComponents(
-                [.day],
-                from: calendar.startOfDay(for: first),
-                to: calendar.startOfDay(for: now)
-            ).day ?? 0
-            let observedDays = max(7, daySpan + 1)
-            averageWorkoutsPerWeek = Double(cadenceDates.count) * 7.0
-                / Double(observedDays)
-        } else {
-            averageWorkoutsPerWeek = 0
-        }
+        let averageWorkoutsPerWeek = Self.averageWorkoutsPerWeek(
+            dates: cadenceDates,
+            now: now,
+            calendar: calendar
+        )
 
         let consistencyHistory = ConsistencyHistory.make(
             dates: dates,
@@ -287,5 +264,46 @@ nonisolated extension AnalyticsAccumulator {
             prExerciseIDsBySession: prExerciseIDsBySession,
             forgeWarmth: ForgeWarmth.compute(dates: dates, now: now, calendar: calendar)
         )
+    }
+
+    private static func earliest(_ current: Date?, _ candidate: Date?) -> Date? {
+        guard let candidate else { return current }
+        return current.map { min($0, candidate) } ?? candidate
+    }
+
+    private static func accumulateExercises(
+        _ replay: AnalyticsSessionReplay,
+        bestByExercise: inout [String: StrengthPerformance],
+        prSessionIDs: inout Set<UUID>,
+        prExerciseIDsBySession: inout [UUID: Set<UUID>],
+        isCancelled: @Sendable () -> Bool
+    ) -> ComparableTonnageSummary {
+        var tonnage = ComparableTonnageSummary.zero
+        for exerciseReplay in replay.exercises {
+            guard !isCancelled() else { break }
+            let exercise = exerciseReplay.exercise
+            tonnage = tonnage.merging(exercise.comparableTonnageSummary)
+            guard let performance = exercise.bestStrengthPerformance else { continue }
+            let key = exercise.historyKey
+            guard bestByExercise[key].map({ performance.beats($0) }) ?? true else { continue }
+            bestByExercise[key] = performance
+            prSessionIDs.insert(replay.session.id)
+            prExerciseIDsBySession[replay.session.id, default: []].insert(exercise.id)
+        }
+        return tonnage
+    }
+
+    private static func averageWorkoutsPerWeek(
+        dates: [Date],
+        now: Date,
+        calendar: Calendar
+    ) -> Double {
+        guard let first = dates.min() else { return 0 }
+        let daySpan = calendar.dateComponents(
+            [.day],
+            from: calendar.startOfDay(for: first),
+            to: calendar.startOfDay(for: now)
+        ).day ?? 0
+        return Double(dates.count) * 7.0 / Double(max(7, daySpan + 1))
     }
 }

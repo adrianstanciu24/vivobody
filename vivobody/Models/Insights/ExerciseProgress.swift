@@ -434,97 +434,8 @@ nonisolated extension AnalyticsAccumulator {
     func progressByExercise(
         isCancelled: @Sendable () -> Bool = { false }
     ) -> [ExerciseProgress] {
-        // Tuple bucket (not a nested struct) — Swift doesn't allow
-        // nested types in generic function bodies, and this lives
-        // inside an extension.
-        var byKey: [String: (
-            catalogID: String?,
-            catalogItemID: UUID?,
-            name: String,
-            group: MuscleGroup,
-            points: [ExerciseProgressPoint]
-        )] = [:]
-
-        sessionReplay: for replay in sessions {
-            guard !isCancelled() else { return [] }
-            let date = replay.session.date
-            for exerciseReplay in replay.exercises {
-                guard !isCancelled() else { break sessionReplay }
-                let exercise = exerciseReplay.exercise
-                let completed = exercise.sets.filter(\.isAnalyticsEligible)
-                guard !completed.isEmpty else { continue }
-
-                // Top set is mode/load-aware: greatest effective
-                // resistance for comparable work, duration for
-                // duration-only work. Non-comparable work keeps an ordinary
-                // history marker without becoming PR-eligible.
-                guard let top = exercise.representativeTopSet else { continue }
-
-                let tonnage = exercise.comparableTonnageSummary
-
-                let point = ExerciseProgressPoint(
-                    date: date,
-                    topWeight: top.weight,
-                    topReps: top.reps,
-                    estimatedOneRepMaxSample: exercise.bestEstimatedOneRepMaxSample,
-                    topDuration: top.duration,
-                    trackingMode: exercise.trackingMode,
-                    modality: exercise.modality,
-                    loadMode: exercise.loadMode,
-                    bodyweightFraction: exercise.bodyweightFraction,
-                    tracksResistance: exercise.tracksResistance,
-                    bodyweightAtSession: exercise.loadBodyweight,
-                    totalVolume: tonnage.knownSubtotal,
-                    comparableTonnageAvailability: tonnage.availability
-                )
-
-                let key = exercise.historyKey
-                if var bucket = byKey[key] {
-                    bucket.points.append(point)
-                    byKey[key] = bucket
-                } else {
-                    let metadata = exerciseMetadata[key]
-                    byKey[key] = (
-                        catalogID: metadata?.catalogID ?? exercise.catalogID,
-                        catalogItemID: metadata?.catalogItemID ?? exercise.catalogItemID,
-                        name: metadata?.name ?? exercise.name,
-                        group: metadata?.group ?? exercise.group,
-                        points: [point]
-                    )
-                }
-            }
-        }
-
-        var result: [ExerciseProgress] = []
-        result.reserveCapacity(byKey.count)
-        for (_, bucket) in byKey where bucket.points.count >= 2 {
-            guard !isCancelled() else { return [] }
-            // Sort by date ASC then walk to mark records at the
-            // moment they were achieved — only when the exercise
-            // modality supports a strength record for its mode.
-            let sorted = bucket.points.sorted { $0.date < $1.date }
-            var runningBest: StrengthPerformance?
-            var flagged: [ExerciseProgressPoint] = []
-            flagged.reserveCapacity(sorted.count)
-            for var p in sorted {
-                guard !isCancelled() else { return [] }
-                if let performance = p.strengthPerformance,
-                   performance.advancement(over: runningBest) != nil
-                {
-                    p.isStrengthPR = true
-                    runningBest = performance
-                }
-                flagged.append(p)
-            }
-            result.append(ExerciseProgress(
-                catalogID: bucket.catalogID,
-                catalogItemID: bucket.catalogItemID,
-                name: bucket.name,
-                group: bucket.group,
-                chronologicallySortedPoints: flagged
-            ))
-        }
-
+        guard let buckets = progressBuckets(isCancelled: isCancelled) else { return [] }
+        guard let result = Self.progressReports(buckets, isCancelled: isCancelled) else { return [] }
         guard !isCancelled() else { return [] }
         return result.sorted { lhs, rhs in
             let lDate = lhs.latest?.date ?? .distantPast
@@ -532,4 +443,113 @@ nonisolated extension AnalyticsAccumulator {
             return lDate > rDate
         }
     }
+
+    private func progressBuckets(
+        isCancelled: @Sendable () -> Bool
+    ) -> [String: ExerciseProgressBucket]? {
+        var buckets: [String: ExerciseProgressBucket] = [:]
+        for replay in sessions {
+            guard !isCancelled() else { return nil }
+            for exerciseReplay in replay.exercises {
+                guard !isCancelled() else { return nil }
+                guard let point = Self.progressPoint(
+                    exerciseReplay.exercise,
+                    date: replay.session.date
+                ) else { continue }
+                addProgressPoint(point, exercise: exerciseReplay.exercise, to: &buckets)
+            }
+        }
+        return buckets
+    }
+
+    private static func progressPoint(
+        _ exercise: AnalyticsExerciseSnapshot,
+        date: Date
+    ) -> ExerciseProgressPoint? {
+        guard exercise.sets.contains(where: \.isAnalyticsEligible),
+              let top = exercise.representativeTopSet
+        else { return nil }
+        let tonnage = exercise.comparableTonnageSummary
+        return ExerciseProgressPoint(
+            date: date,
+            topWeight: top.weight,
+            topReps: top.reps,
+            estimatedOneRepMaxSample: exercise.bestEstimatedOneRepMaxSample,
+            topDuration: top.duration,
+            trackingMode: exercise.trackingMode,
+            modality: exercise.modality,
+            loadMode: exercise.loadMode,
+            bodyweightFraction: exercise.bodyweightFraction,
+            tracksResistance: exercise.tracksResistance,
+            bodyweightAtSession: exercise.loadBodyweight,
+            totalVolume: tonnage.knownSubtotal,
+            comparableTonnageAvailability: tonnage.availability
+        )
+    }
+
+    private func addProgressPoint(
+        _ point: ExerciseProgressPoint,
+        exercise: AnalyticsExerciseSnapshot,
+        to buckets: inout [String: ExerciseProgressBucket]
+    ) {
+        let key = exercise.historyKey
+        if var bucket = buckets[key] {
+            bucket.points.append(point)
+            buckets[key] = bucket
+            return
+        }
+        let metadata = exerciseMetadata[key]
+        buckets[key] = ExerciseProgressBucket(
+            catalogID: metadata?.catalogID ?? exercise.catalogID,
+            catalogItemID: metadata?.catalogItemID ?? exercise.catalogItemID,
+            name: metadata?.name ?? exercise.name,
+            group: metadata?.group ?? exercise.group,
+            points: [point]
+        )
+    }
+
+    private static func progressReports(
+        _ buckets: [String: ExerciseProgressBucket],
+        isCancelled: @Sendable () -> Bool
+    ) -> [ExerciseProgress]? {
+        var result: [ExerciseProgress] = []
+        for bucket in buckets.values where bucket.points.count >= 2 {
+            guard let points = flaggedProgressPoints(bucket.points, isCancelled: isCancelled) else { return nil }
+            result.append(ExerciseProgress(
+                catalogID: bucket.catalogID,
+                catalogItemID: bucket.catalogItemID,
+                name: bucket.name,
+                group: bucket.group,
+                chronologicallySortedPoints: points
+            ))
+        }
+        return result
+    }
+
+    private static func flaggedProgressPoints(
+        _ points: [ExerciseProgressPoint],
+        isCancelled: @Sendable () -> Bool
+    ) -> [ExerciseProgressPoint]? {
+        var runningBest: StrengthPerformance?
+        var flagged: [ExerciseProgressPoint] = []
+        for var point in points.sorted(by: { $0.date < $1.date }) {
+            guard !isCancelled() else { return nil }
+            if let performance = point.strengthPerformance,
+               performance.advancement(over: runningBest) != nil
+            {
+                point.isStrengthPR = true
+                runningBest = performance
+            }
+            flagged.append(point)
+        }
+        return flagged
+    }
+}
+
+private nonisolated struct ExerciseProgressBucket {
+    let catalogID: String?
+    let catalogItemID: UUID?
+    let name: String
+    let group: MuscleGroup
+    var points: [ExerciseProgressPoint]
 }

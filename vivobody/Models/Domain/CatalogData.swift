@@ -212,121 +212,103 @@ nonisolated enum CatalogData {
     static func validate(_ records: [CatalogRecord]) throws {
         guard !records.isEmpty else { throw ValidationError.emptyCatalog }
         try CatalogMovementFamily.validate(records)
-
+        let names = try validateNames(records)
         var catalogIDs: Set<String> = []
-        var names: Set<String> = []
-
-        for record in records {
-            let normalizedName = normalized(record.name)
-            guard !normalizedName.isEmpty else {
-                throw ValidationError.emptyName(record.catalogID)
-            }
-            guard names.insert(normalizedName).inserted else {
-                throw ValidationError.duplicateName(record.name)
-            }
-        }
-
         var aliases: Set<String> = []
-
         for record in records {
-            guard isStableCatalogID(record.catalogID) else {
-                throw ValidationError.invalidCatalogID(record.catalogID)
-            }
-            guard isStableCatalogID(record.familyID) else {
-                throw ValidationError.invalidFamilyID(record.familyID)
-            }
-            guard catalogIDs.insert(record.catalogID).inserted else {
-                throw ValidationError.duplicateCatalogID(record.catalogID)
-            }
-
+            try validateIdentity(record, catalogIDs: &catalogIDs)
             try validateExecution(record)
-            guard record.defaultWeight >= 0, record.reps > 0 else {
-                throw ValidationError.invalidDefaults(record.catalogID)
-            }
-            guard record.defaultWeight == 0 || record.defaultWeightKg != nil else {
-                throw ValidationError.missingKilogramDefault(record.catalogID)
-            }
-            guard (0 ... 100).contains(record.searchPriorityValue) else {
-                throw ValidationError.invalidSearchPriority(record.catalogID)
-            }
-            guard (0 ... 1).contains(record.bodyweightFraction) else {
-                throw ValidationError.invalidBodyweightFraction(record.catalogID)
-            }
-            if let kilograms = record.defaultWeightKg {
-                let gridUnits = kilograms / 2.5
-                guard kilograms > 0, abs(gridUnits.rounded() - gridUnits) < 0.000_001 else {
-                    throw ValidationError.invalidKilogramDefault(record.catalogID)
-                }
-            }
-            guard record.trackingMode != .duration || (record.defaultDuration ?? 0) > 0 else {
-                throw ValidationError.missingDuration(record.catalogID)
-            }
-
-            guard record.trackingMode == record.modality.requiredTrackingMode else {
-                throw ValidationError.invalidModalityTracking(record.catalogID)
-            }
-
-            switch record.loadMode {
-            case .external, .nonComparable:
-                guard record.bodyweightFraction == 0 else {
-                    throw ValidationError.invalidLoadFraction(record.catalogID)
-                }
-            case .bodyweightAdded, .assistanceSubtracted:
-                guard record.bodyweightFraction > 0 else {
-                    throw ValidationError.invalidLoadFraction(record.catalogID)
-                }
-            }
-
+            try validateDefaults(record)
+            try validateLoad(record)
             try validateEquipmentLoad(record)
-
-            switch record.mechanic {
-            case .compound:
-                guard record.pattern != nil else {
-                    throw ValidationError.invalidMechanicPattern(record.catalogID)
-                }
-            case .isolation:
-                guard record.pattern == nil else {
-                    throw ValidationError.invalidMechanicPattern(record.catalogID)
-                }
-            }
-
+            try validateMechanic(record)
             try validateTrainingRole(record)
+            try validateInvolvement(record)
+            try validateClassification(record)
+            try validateAliases(record, names: names, aliases: &aliases)
+        }
+    }
 
-            let muscles = record.involvement.map(\.muscle)
-            guard !muscles.isEmpty else {
-                throw ValidationError.emptyInvolvement(record.catalogID)
-            }
-            guard Set(muscles).count == muscles.count else {
-                throw ValidationError.duplicateMuscle(record.catalogID)
-            }
-            guard record.involvement.contains(where: { $0.role == .primary }) else {
-                throw ValidationError.missingPrimary(record.catalogID)
-            }
-            guard record.involvement.contains(where: {
-                $0.role == .primary && $0.muscle.group == record.group
-            }) else {
-                throw ValidationError.primaryGroupMismatch(record.catalogID)
-            }
+    private static func validateNames(_ records: [CatalogRecord]) throws -> Set<String> {
+        var names: Set<String> = []
+        for record in records {
+            let name = normalized(record.name)
+            guard !name.isEmpty else { throw ValidationError.emptyName(record.catalogID) }
+            guard names.insert(name).inserted else { throw ValidationError.duplicateName(record.name) }
+        }
+        return names
+    }
 
-            let isPushPull = record.pattern == .push || record.pattern == .pull
-            guard isPushPull == (record.direction != nil) else {
-                throw ValidationError.invalidDirection(record.catalogID)
-            }
-            guard !record.planes.isEmpty,
-                  Set(record.planes).count == record.planes.count
-            else {
-                throw ValidationError.invalidPlanes(record.catalogID)
-            }
+    private static func validateIdentity(
+        _ record: CatalogRecord,
+        catalogIDs: inout Set<String>
+    ) throws {
+        guard isStableCatalogID(record.catalogID) else { throw ValidationError.invalidCatalogID(record.catalogID) }
+        guard isStableCatalogID(record.familyID) else { throw ValidationError.invalidFamilyID(record.familyID) }
+        guard catalogIDs.insert(record.catalogID).inserted else { throw ValidationError.duplicateCatalogID(record.catalogID) }
+    }
 
-            for alias in record.aliases {
-                let normalizedAlias = normalized(alias)
-                guard !normalizedAlias.isEmpty, !names.contains(normalizedAlias) else {
-                    throw ValidationError.aliasConflictsWithName(alias)
-                }
-                guard aliases.insert(normalizedAlias).inserted else {
-                    throw ValidationError.duplicateAlias(alias)
-                }
-            }
+    private static func validateDefaults(_ record: CatalogRecord) throws {
+        guard record.defaultWeight >= 0, record.reps > 0 else { throw ValidationError.invalidDefaults(record.catalogID) }
+        guard record.defaultWeight == 0 || record.defaultWeightKg != nil else { throw ValidationError.missingKilogramDefault(record.catalogID) }
+        guard (0 ... 100).contains(record.searchPriorityValue) else { throw ValidationError.invalidSearchPriority(record.catalogID) }
+        guard (0 ... 1).contains(record.bodyweightFraction) else { throw ValidationError.invalidBodyweightFraction(record.catalogID) }
+        try validateKilogramDefault(record)
+        guard record.trackingMode != .duration || (record.defaultDuration ?? 0) > 0 else { throw ValidationError.missingDuration(record.catalogID) }
+        guard record.trackingMode == record.modality.requiredTrackingMode else { throw ValidationError.invalidModalityTracking(record.catalogID) }
+    }
+
+    private static func validateKilogramDefault(_ record: CatalogRecord) throws {
+        guard let kilograms = record.defaultWeightKg else { return }
+        let gridUnits = kilograms / 2.5
+        guard kilograms > 0, abs(gridUnits.rounded() - gridUnits) < 0.000_001 else {
+            throw ValidationError.invalidKilogramDefault(record.catalogID)
+        }
+    }
+
+    private static func validateLoad(_ record: CatalogRecord) throws {
+        let valid = switch record.loadMode {
+        case .external, .nonComparable: record.bodyweightFraction == 0
+        case .bodyweightAdded, .assistanceSubtracted: record.bodyweightFraction > 0
+        }
+        guard valid else { throw ValidationError.invalidLoadFraction(record.catalogID) }
+    }
+
+    private static func validateMechanic(_ record: CatalogRecord) throws {
+        let valid = switch record.mechanic {
+        case .compound: record.pattern != nil
+        case .isolation: record.pattern == nil
+        }
+        guard valid else { throw ValidationError.invalidMechanicPattern(record.catalogID) }
+    }
+
+    private static func validateInvolvement(_ record: CatalogRecord) throws {
+        let muscles = record.involvement.map(\.muscle)
+        guard !muscles.isEmpty else { throw ValidationError.emptyInvolvement(record.catalogID) }
+        guard Set(muscles).count == muscles.count else { throw ValidationError.duplicateMuscle(record.catalogID) }
+        guard record.involvement.contains(where: { $0.role == .primary }) else { throw ValidationError.missingPrimary(record.catalogID) }
+        guard record.involvement.contains(where: { $0.role == .primary && $0.muscle.group == record.group }) else {
+            throw ValidationError.primaryGroupMismatch(record.catalogID)
+        }
+    }
+
+    private static func validateClassification(_ record: CatalogRecord) throws {
+        let isPushPull = record.pattern == .push || record.pattern == .pull
+        guard isPushPull == (record.direction != nil) else { throw ValidationError.invalidDirection(record.catalogID) }
+        guard !record.planes.isEmpty, Set(record.planes).count == record.planes.count else {
+            throw ValidationError.invalidPlanes(record.catalogID)
+        }
+    }
+
+    private static func validateAliases(
+        _ record: CatalogRecord,
+        names: Set<String>,
+        aliases: inout Set<String>
+    ) throws {
+        for alias in record.aliases {
+            let normalizedAlias = normalized(alias)
+            guard !normalizedAlias.isEmpty, !names.contains(normalizedAlias) else { throw ValidationError.aliasConflictsWithName(alias) }
+            guard aliases.insert(normalizedAlias).inserted else { throw ValidationError.duplicateAlias(alias) }
         }
     }
 

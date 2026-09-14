@@ -28,7 +28,6 @@ REQUIRED_FILES = (
     "engineering/verification.md",
     "engineering/code-review.md",
     "engineering/quality.md",
-    "engineering/tech-debt.md",
     "engineering/decisions/README.md",
     "engineering/plans/README.md",
     "engineering/plans/active/README.md",

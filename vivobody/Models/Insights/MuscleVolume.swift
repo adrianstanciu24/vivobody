@@ -135,35 +135,14 @@ nonisolated extension AnalyticsAccumulator {
         var effective: [Muscle: Double] = [:]
         var allTimeEffective: [Muscle: Double] = [:]
         var lastTrained: [Muscle: Date] = [:]
-
-        sessionReplay: for session in sessions {
-            guard !isCancelled() else { return [] }
-            // Reports are snapshots "as of" `now`; scheduled or
-            // accidentally future-dated sessions cannot count as work
-            // already performed or produce negative recency.
-            guard session.date <= now else { continue }
-            for exercise in session.exercises {
-                guard !isCancelled() else { break sessionReplay }
-                let credit = exercise.byMuscle
-                guard !credit.isEmpty else { continue }
-
-                let inWindow = session.date >= cutoff
-                for (muscle, sets) in credit {
-                    guard !isCancelled() else { return [] }
-                    // Recency tracks the whole archive.
-                    if let existing = lastTrained[muscle] {
-                        if session.date > existing { lastTrained[muscle] = session.date }
-                    } else {
-                        lastTrained[muscle] = session.date
-                    }
-                    // Effective sets only accrue inside the window.
-                    if inWindow {
-                        effective[muscle, default: 0] += sets
-                    }
-                    allTimeEffective[muscle, default: 0] += sets
-                }
-            }
-        }
+        guard accumulateMuscleVolume(
+            through: now,
+            cutoff: cutoff,
+            effective: &effective,
+            allTimeEffective: &allTimeEffective,
+            lastTrained: &lastTrained,
+            isCancelled: isCancelled
+        ) else { return [] }
 
         let calendar = Calendar.current
         var result: [MuscleVolumeStat] = []
@@ -188,6 +167,29 @@ nonisolated extension AnalyticsAccumulator {
             ))
         }
         return result
+    }
+
+    private func accumulateMuscleVolume(
+        through now: Date,
+        cutoff: Date,
+        effective: inout [Muscle: Double],
+        allTimeEffective: inout [Muscle: Double],
+        lastTrained: inout [Muscle: Date],
+        isCancelled: @Sendable () -> Bool
+    ) -> Bool {
+        for session in sessions where session.date <= now {
+            guard !isCancelled() else { return false }
+            for exercise in session.exercises where !exercise.byMuscle.isEmpty {
+                guard !isCancelled() else { return false }
+                for (muscle, sets) in exercise.byMuscle {
+                    guard !isCancelled() else { return false }
+                    lastTrained[muscle] = max(lastTrained[muscle] ?? session.date, session.date)
+                    if session.date >= cutoff { effective[muscle, default: 0] += sets }
+                    allTimeEffective[muscle, default: 0] += sets
+                }
+            }
+        }
+        return true
     }
 }
 

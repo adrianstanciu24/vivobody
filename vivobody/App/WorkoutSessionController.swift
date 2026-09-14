@@ -14,10 +14,6 @@
 //  and scrubber detents remain in memory until the gesture, coast, or scene
 //  ends.
 //
-//  Also the single dispatch site for IncomingAction — the unified
-//  enum that normalizes every external entry point (URL scheme,
-//  Handoff, Spotlight, widget / Siri mailboxes).
-//
 
 import SwiftData
 import SwiftUI
@@ -512,86 +508,6 @@ final class WorkoutSessionController {
             context.rollback()
             lastSaveError = SaveErrorBox(error)
             AppDiagnostics.sessionTransitionFailed(kind: "archive", error: error)
-        }
-    }
-
-    // MARK: - Unified action handler
-
-    /// The single dispatch site for every external entry point.
-    /// Each `IncomingAction` parser feeds into this; new deep links
-    /// or widget intents add one case here.
-    func handle(_ action: IncomingAction) {
-        AppDiagnostics.incomingActionReceived(kind: action.diagnosticKind)
-        switch action {
-        case let .openTab(tab):
-            if tab == .insights {
-                appState?.presentInsights()
-            } else {
-                appState?.selectedTab = tab
-            }
-
-        case .resumeWorkout:
-            appState?.selectedTab = .today
-            expandIfActive()
-
-        case .startTodaysWorkout:
-            guard let context = modelContext, activeSession == nil else {
-                if activeSession != nil { isWorkoutExpanded = true }
-                return
-            }
-            let templates = (try? context.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
-            switch UpNext.compute(
-                templates: templates,
-                sessions: [],
-                load: appState?.analytics.load
-            ).kind {
-            case let .scheduled(template, _, _):
-                startWorkoutFromTemplate(template)
-            default:
-                var latest = FetchDescriptor<WorkoutSession>(
-                    predicate: #Predicate { $0.completedAt != nil },
-                    sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
-                )
-                latest.fetchLimit = 1
-                let session = try? context.fetch(latest).first
-                startTodaysWorkout(basedOn: session)
-            }
-
-        case let .startTemplate(uuid):
-            guard let context = modelContext, activeSession == nil else {
-                if activeSession != nil { isWorkoutExpanded = true }
-                return
-            }
-            var descriptor = FetchDescriptor<WorkoutTemplate>(
-                predicate: #Predicate { $0.id == uuid }
-            )
-            descriptor.fetchLimit = 1
-            if let template = try? context.fetch(descriptor).first {
-                startWorkoutFromTemplate(template)
-                appState?.selectedTab = .today
-            } else {
-                appState?.selectedTab = .library
-            }
-
-        case let .continueSession(id):
-            continueWorkout(with: id)
-
-        case let .showExercise(uuid):
-            guard let context = modelContext else { return }
-            var descriptor = FetchDescriptor<ExerciseCatalogItem>(
-                predicate: #Predicate { $0.id == uuid }
-            )
-            descriptor.fetchLimit = 1
-            if let item = try? context.fetch(descriptor).first {
-                isWorkoutExpanded = false
-                appState?.selectedTab = .library
-                appState?.presentSpotlightExercise(item)
-            } else {
-                appState?.selectedTab = .library
-            }
-
-        case .completeActiveSet:
-            completeActiveSet()
         }
     }
 }

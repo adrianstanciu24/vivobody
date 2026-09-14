@@ -69,21 +69,12 @@ nonisolated struct MuscleMapReport {
     ) -> MuscleMapReport {
         guard !isCancelled() else { return MuscleMapReport(entries: []) }
         let volumeByMuscle = Dictionary(uniqueKeysWithValues: volume.map { ($0.muscle, $0) })
-        var exerciseCredit: [Muscle: [String: Double]] = [:]
         let cutoff = now.addingTimeInterval(-90 * 86400)
-
-        sessionReplay: for session in accumulator.sessions {
-            guard !isCancelled() else { return MuscleMapReport(entries: []) }
-            for exercise in session.exercises {
-                guard !isCancelled() else { break sessionReplay }
-                if session.date >= cutoff {
-                    for (muscle, value) in exercise.byMuscle where value > 0 {
-                        guard !isCancelled() else { return MuscleMapReport(entries: []) }
-                        exerciseCredit[muscle, default: [:]][exercise.name, default: 0] += value
-                    }
-                }
-            }
-        }
+        guard let exerciseCredit = recentExerciseCredit(
+            accumulator.sessions,
+            cutoff: cutoff,
+            isCancelled: isCancelled
+        ) else { return MuscleMapReport(entries: []) }
 
         var entries: [MuscleMapEntry] = []
         entries.reserveCapacity(Muscle.allCases.count)
@@ -91,27 +82,12 @@ nonisolated struct MuscleMapReport {
             guard !isCancelled() else { return MuscleMapReport(entries: []) }
             let channels = development.channels(muscle)
             let top = (exerciseCredit[muscle] ?? [:])
-                .sorted {
-                    if $0.value == $1.value { return $0.key < $1.key }
-                    return $0.value > $1.value
-                }
+                .sorted(by: creditRanksBefore)
                 .prefix(3)
                 .map(\.key)
             guard !isCancelled() else { return MuscleMapReport(entries: []) }
             let counts = accumulator.muscleQuality[muscle]
-            let confidence: MuscleEstimateConfidence?
-            if channels.baseline == .noData || counts == nil || counts?.eligible == 0 {
-                confidence = nil
-            } else {
-                let coverage = Double(counts?.complete ?? 0) / Double(counts?.eligible ?? 1)
-                if (counts?.eligible ?? 0) >= 6, coverage >= 0.8 {
-                    confidence = .high
-                } else if (counts?.eligible ?? 0) >= 3, coverage >= 0.4 {
-                    confidence = .moderate
-                } else {
-                    confidence = .limited
-                }
-            }
+            let confidence = confidence(channels: channels, counts: counts)
             let stat = volumeByMuscle[muscle]
             entries.append(MuscleMapEntry(
                 muscle: muscle,
@@ -124,5 +100,42 @@ nonisolated struct MuscleMapReport {
             ))
         }
         return MuscleMapReport(entries: entries)
+    }
+
+    private static func recentExerciseCredit(
+        _ sessions: [AnalyticsSessionReplay],
+        cutoff: Date,
+        isCancelled: @Sendable () -> Bool
+    ) -> [Muscle: [String: Double]]? {
+        var result: [Muscle: [String: Double]] = [:]
+        for session in sessions where session.date >= cutoff {
+            guard !isCancelled() else { return nil }
+            for exercise in session.exercises {
+                guard !isCancelled() else { return nil }
+                for (muscle, value) in exercise.byMuscle where value > 0 {
+                    guard !isCancelled() else { return nil }
+                    result[muscle, default: [:]][exercise.name, default: 0] += value
+                }
+            }
+        }
+        return result
+    }
+
+    private static func creditRanksBefore(
+        _ lhs: Dictionary<String, Double>.Element,
+        _ rhs: Dictionary<String, Double>.Element
+    ) -> Bool {
+        lhs.value == rhs.value ? lhs.key < rhs.key : lhs.value > rhs.value
+    }
+
+    private static func confidence(
+        channels: MuscleMapChannels,
+        counts: AnalyticsMuscleQuality?
+    ) -> MuscleEstimateConfidence? {
+        guard channels.baseline != .noData, let counts, counts.eligible > 0 else { return nil }
+        let coverage = Double(counts.complete) / Double(counts.eligible)
+        if counts.eligible >= 6, coverage >= 0.8 { return .high }
+        if counts.eligible >= 3, coverage >= 0.4 { return .moderate }
+        return .limited
     }
 }

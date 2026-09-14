@@ -189,73 +189,75 @@ struct PRCelebration: View {
     private func startSequence() {
         sequenceTask = Task { @MainActor in
             Haptics.swell(sound: .personalRecord)
-
-            if reduceMotion {
-                withAnimation(.easeInOut(duration: 0.15)) { backdropVisible = true }
-            } else {
-                withAnimation(.easeOut(duration: 0.32)) { backdropVisible = true }
-            }
-
-            do {
-                try await Task.sleep(for: .milliseconds(180))
-            } catch { return }
-            if reduceMotion {
-                withAnimation(.easeInOut(duration: 0.15)) { titleVisible = true }
-            } else {
-                withAnimation(.spring(response: 0.42, dampingFraction: 0.85)) { titleVisible = true }
-            }
+            revealBackdrop()
+            guard await wait(milliseconds: 180) else { return }
+            revealTitle()
 
             // The number lands with weight.
-            do {
-                try await Task.sleep(for: .milliseconds(120))
-            } catch { return }
+            guard await wait(milliseconds: 120) else { return }
             // Keep the physical landing without layering the synthesized
             // slam over the authored PR recording.
             Haptics.slam(playsSound: false)
-            if reduceMotion {
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    valueScale = 1.0
-                    valueVisible = true
-                }
-            } else {
-                withAnimation(.spring(response: 0.55, dampingFraction: 0.55)) {
-                    valueScale = 1.0
-                    valueVisible = true
-                }
-            }
+            revealValue()
 
             // Gold hairline draws in under the number.
-            do {
-                try await Task.sleep(for: .milliseconds(60))
-            } catch { return }
-            if reduceMotion {
-                withAnimation(.easeInOut(duration: 0.15)) { underlineProgress = 1 }
-            } else {
-                withAnimation(.easeOut(duration: 0.6)) { underlineProgress = 1 }
-            }
-
-            do {
-                try await Task.sleep(for: .milliseconds(220))
-            } catch { return }
-            if reduceMotion {
-                withAnimation(.easeInOut(duration: 0.15)) { detailVisible = true }
-            } else {
-                withAnimation(.spring(response: 0.42, dampingFraction: 0.82)) { detailVisible = true }
-            }
-
-            do {
-                try await Task.sleep(for: .milliseconds(780))
-            } catch { return }
-            if reduceMotion {
-                withAnimation(.easeInOut(duration: 0.15)) { promptVisible = true }
-            } else {
-                withAnimation(.easeOut(duration: 0.5)) { promptVisible = true }
-            }
+            guard await wait(milliseconds: 60) else { return }
+            revealUnderline()
+            guard await wait(milliseconds: 220) else { return }
+            revealDetail()
+            guard await wait(milliseconds: 780) else { return }
+            revealPrompt()
             if !reduceMotion {
                 withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
                     breathing = 1.02
                 }
             }
+        }
+    }
+
+    private func wait(milliseconds: Int) async -> Bool {
+        do {
+            try await Task.sleep(for: .milliseconds(milliseconds))
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    private func revealBackdrop() {
+        withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .easeOut(duration: 0.32)) {
+            backdropVisible = true
+        }
+    }
+
+    private func revealTitle() {
+        withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .spring(response: 0.42, dampingFraction: 0.85)) {
+            titleVisible = true
+        }
+    }
+
+    private func revealValue() {
+        withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .spring(response: 0.55, dampingFraction: 0.55)) {
+            valueScale = 1.0
+            valueVisible = true
+        }
+    }
+
+    private func revealUnderline() {
+        withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .easeOut(duration: 0.6)) {
+            underlineProgress = 1
+        }
+    }
+
+    private func revealDetail() {
+        withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .spring(response: 0.42, dampingFraction: 0.82)) {
+            detailVisible = true
+        }
+    }
+
+    private func revealPrompt() {
+        withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .easeOut(duration: 0.5)) {
+            promptVisible = true
         }
     }
 

@@ -27,14 +27,9 @@ class QualityScanTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "specs").mkdir()
-            (root / "engineering").mkdir()
             (root / "specs" / "index.md").write_text(
                 "| Old spec | Active | source | 2025-01-01 |\n"
                 "| Fresh spec | Active | source | 2026-08-01 |\n",
-                encoding="utf-8",
-            )
-            (root / "engineering" / "tech-debt.md").write_text(
-                "- Last checked: 2025-02-01\n",
                 encoding="utf-8",
             )
 
@@ -44,7 +39,7 @@ class QualityScanTests(unittest.TestCase):
                 90,
             )
 
-        self.assertEqual(len(records), 2)
+        self.assertEqual(len(records), 1)
 
     def test_orphaned_screen_candidate_has_only_its_definition(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

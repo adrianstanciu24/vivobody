@@ -112,15 +112,7 @@ nonisolated extension AnalyticsAccumulator {
         now: Date = Date(),
         isCancelled: @Sendable () -> Bool = { false }
     ) -> RepRangeMigrationReport {
-        let cancelled = RepRangeMigrationReport(
-            points: [],
-            slopePerWeek: 0,
-            currentAverage: 0,
-            earlierAverage: 0,
-            verdict: .stable,
-            confidence: .insufficient,
-            totalSets: 0
-        )
+        let cancelled = Self.cancelledRepRangeReport
         guard !isCancelled() else { return cancelled }
 
         let calendar = Calendar.current
@@ -129,71 +121,20 @@ nonisolated extension AnalyticsAccumulator {
             now: now,
             calendar: calendar
         ) else { return cancelled }
-        let validWeekStarts = Set(window.weekStarts)
-
-        // Bucket completed `.reps` sets (reps > 0) by week start.
-        var totalRepsByWeek: [Date: Int] = [:]
-        var setCountByWeek: [Date: Int] = [:]
-
-        for session in sessions {
-            guard !isCancelled() else { return cancelled }
-            let date = session.date
-            guard date >= window.start, date <= now else { continue }
-            guard let weekStart = calendar.dateInterval(
-                of: .weekOfYear,
-                for: date
-            )?.start,
-                validWeekStarts.contains(weekStart) else { continue }
-
-            for replay in session.exercises {
-                guard !isCancelled() else { return cancelled }
-                guard replay.exercise.modality == .dynamicStrength,
-                      replay.exercise.trackingMode == .reps
-                else {
-                    continue
-                }
-                for set in replay.exercise.sets {
-                    guard !isCancelled() else { return cancelled }
-                    guard set.isAnalyticsEligible, set.reps > 0 else {
-                        continue
-                    }
-                    totalRepsByWeek[weekStart, default: 0] += set.reps
-                    setCountByWeek[weekStart, default: 0] += 1
-                }
-            }
-        }
-
-        // Build chronological weekly points.
-        guard !isCancelled() else { return cancelled }
-        let orderedWeeks = window.weekStarts.filter { totalRepsByWeek[$0] != nil }
-        var points: [RepRangePoint] = []
-        points.reserveCapacity(orderedWeeks.count)
-        for weekStart in orderedWeeks {
-            guard !isCancelled() else { return cancelled }
-            let total = totalRepsByWeek[weekStart, default: 0]
-            let count = setCountByWeek[weekStart, default: 0]
-            let average = count > 0 ? Double(total) / Double(count) : 0
-            points.append(
-                RepRangePoint(
-                    weekStart: weekStart,
-                    averageReps: average,
-                    sets: count
-                )
-            )
-        }
+        guard let totals = repRangeWeekTotals(
+            window: window,
+            now: now,
+            calendar: calendar,
+            isCancelled: isCancelled
+        ) else { return cancelled }
+        guard let points = Self.repRangePoints(
+            weekStarts: window.weekStarts,
+            totals: totals,
+            isCancelled: isCancelled
+        ) else { return cancelled }
 
         let totalSets = points.reduce(0) { $0 + $1.sets }
-        let confidence: RepTrendConfidence = if points.count >= RepRangeMigrationReport.establishedTrendWeeks,
-                                                totalSets >= RepRangeMigrationReport.establishedTrendSets
-        {
-            .established
-        } else if points.count >= RepRangeMigrationReport.minimumTrendWeeks,
-                  totalSets >= RepRangeMigrationReport.minimumTrendSets
-        {
-            .emerging
-        } else {
-            .insufficient
-        }
+        let confidence = Self.repTrendConfidence(points: points, totalSets: totalSets)
 
         // Thin samples retain their observed weekly averages but do
         // not manufacture a direction.
@@ -209,46 +150,13 @@ nonisolated extension AnalyticsAccumulator {
             )
         }
 
-        // Completed-set-weighted least-squares fit on exact calendar
-        // week indices. Empty weeks retain their spacing without
-        // becoming zero-rep samples.
-        let weekIndices = Dictionary(
-            uniqueKeysWithValues: window.weekStarts.enumerated().map { ($1, Double($0)) }
-        )
-        var xs: [Double] = []
-        xs.reserveCapacity(points.count)
-        for point in points {
-            guard !isCancelled() else { return cancelled }
-            xs.append(weekIndices[point.weekStart] ?? 0)
-        }
-        let totalWeight = Double(totalSets)
-        var weightedX = 0.0
-        var weightedY = 0.0
-        for (index, point) in points.enumerated() {
-            guard !isCancelled() else { return cancelled }
-            let weight = Double(point.sets)
-            weightedX += weight * xs[index]
-            weightedY += weight * point.averageReps
-        }
-        let meanX = weightedX / totalWeight
-        let meanY = weightedY / totalWeight
-        var num = 0.0, den = 0.0
-        for (index, point) in points.enumerated() {
-            guard !isCancelled() else { return cancelled }
-            let weight = Double(point.sets)
-            let dx = xs[index] - meanX
-            num += weight * dx * (point.averageReps - meanY)
-            den += weight * dx * dx
-        }
-        let slopePerWeek = den > 0 ? num / den : 0
-
-        let verdict: RepDriftVerdict = if slopePerWeek >= 0.1 {
-            .towardEndurance
-        } else if slopePerWeek <= -0.1 {
-            .towardStrength
-        } else {
-            .stable
-        }
+        guard let slopePerWeek = Self.weightedSlope(
+            points: points,
+            weekStarts: window.weekStarts,
+            totalSets: totalSets,
+            isCancelled: isCancelled
+        ) else { return cancelled }
+        let verdict = Self.repDriftVerdict(slope: slopePerWeek)
 
         guard !isCancelled() else { return cancelled }
         return RepRangeMigrationReport(
@@ -261,4 +169,150 @@ nonisolated extension AnalyticsAccumulator {
             totalSets: totalSets
         )
     }
+
+    private static var cancelledRepRangeReport: RepRangeMigrationReport {
+        RepRangeMigrationReport(
+            points: [],
+            slopePerWeek: 0,
+            currentAverage: 0,
+            earlierAverage: 0,
+            verdict: .stable,
+            confidence: .insufficient,
+            totalSets: 0
+        )
+    }
+
+    private func repRangeWeekTotals(
+        window: RepRangeWeekWindow,
+        now: Date,
+        calendar: Calendar,
+        isCancelled: @Sendable () -> Bool
+    ) -> [Date: RepRangeWeekTotal]? {
+        let validWeekStarts = Set(window.weekStarts)
+        var totals: [Date: RepRangeWeekTotal] = [:]
+        for session in sessions where session.date >= window.start && session.date <= now {
+            guard !isCancelled() else { return nil }
+            guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: session.date)?.start,
+                  validWeekStarts.contains(weekStart)
+            else { continue }
+            guard accumulateRepRangeTotals(
+                session,
+                weekStart: weekStart,
+                totals: &totals,
+                isCancelled: isCancelled
+            ) else { return nil }
+        }
+        return totals
+    }
+
+    private func accumulateRepRangeTotals(
+        _ session: AnalyticsSessionReplay,
+        weekStart: Date,
+        totals: inout [Date: RepRangeWeekTotal],
+        isCancelled: @Sendable () -> Bool
+    ) -> Bool {
+        for replay in session.exercises
+            where replay.exercise.modality == .dynamicStrength
+            && replay.exercise.trackingMode == .reps
+        {
+            guard !isCancelled() else { return false }
+            for set in replay.exercise.sets where set.isAnalyticsEligible && set.reps > 0 {
+                guard !isCancelled() else { return false }
+                totals[weekStart, default: RepRangeWeekTotal()].totalReps += set.reps
+                totals[weekStart, default: RepRangeWeekTotal()].sets += 1
+            }
+        }
+        return true
+    }
+
+    private static func repRangePoints(
+        weekStarts: [Date],
+        totals: [Date: RepRangeWeekTotal],
+        isCancelled: @Sendable () -> Bool
+    ) -> [RepRangePoint]? {
+        var points: [RepRangePoint] = []
+        for weekStart in weekStarts {
+            guard !isCancelled() else { return nil }
+            guard let total = totals[weekStart], total.sets > 0 else { continue }
+            points.append(RepRangePoint(
+                weekStart: weekStart,
+                averageReps: Double(total.totalReps) / Double(total.sets),
+                sets: total.sets
+            ))
+        }
+        return points
+    }
+
+    private static func repTrendConfidence(
+        points: [RepRangePoint],
+        totalSets: Int
+    ) -> RepTrendConfidence {
+        if points.count >= RepRangeMigrationReport.establishedTrendWeeks,
+           totalSets >= RepRangeMigrationReport.establishedTrendSets
+        {
+            return .established
+        }
+        if points.count >= RepRangeMigrationReport.minimumTrendWeeks,
+           totalSets >= RepRangeMigrationReport.minimumTrendSets
+        {
+            return .emerging
+        }
+        return .insufficient
+    }
+
+    private static func weightedSlope(
+        points: [RepRangePoint],
+        weekStarts: [Date],
+        totalSets: Int,
+        isCancelled: @Sendable () -> Bool
+    ) -> Double? {
+        let weekIndices = Dictionary(uniqueKeysWithValues: weekStarts.enumerated().map { ($1, Double($0)) })
+        let xs = points.map { weekIndices[$0.weekStart] ?? 0 }
+        let totalWeight = Double(totalSets)
+        var weightedX = 0.0
+        var weightedY = 0.0
+        for (index, point) in points.enumerated() {
+            guard !isCancelled() else { return nil }
+            let weight = Double(point.sets)
+            weightedX += weight * xs[index]
+            weightedY += weight * point.averageReps
+        }
+        return weightedSlope(
+            points: points,
+            xs: xs,
+            meanX: weightedX / totalWeight,
+            meanY: weightedY / totalWeight,
+            isCancelled: isCancelled
+        )
+    }
+
+    private static func weightedSlope(
+        points: [RepRangePoint],
+        xs: [Double],
+        meanX: Double,
+        meanY: Double,
+        isCancelled: @Sendable () -> Bool
+    ) -> Double? {
+        var numerator = 0.0
+        var denominator = 0.0
+        for (index, point) in points.enumerated() {
+            guard !isCancelled() else { return nil }
+            let weight = Double(point.sets)
+            let deltaX = xs[index] - meanX
+            numerator += weight * deltaX * (point.averageReps - meanY)
+            denominator += weight * deltaX * deltaX
+        }
+        return denominator > 0 ? numerator / denominator : 0
+    }
+
+    private static func repDriftVerdict(slope: Double) -> RepDriftVerdict {
+        if slope >= 0.1 { return .towardEndurance }
+        if slope <= -0.1 { return .towardStrength }
+        return .stable
+    }
+}
+
+private nonisolated struct RepRangeWeekTotal {
+    var totalReps = 0
+    var sets = 0
 }

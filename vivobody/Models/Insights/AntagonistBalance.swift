@@ -248,39 +248,14 @@ nonisolated extension AnalyticsAccumulator {
         var muscleSessions: [SymmetryMuscleBucket: Set<UUID>] = [:]
         var movementSessions: [SymmetryMovementBucket: Set<UUID>] = [:]
 
-        sessionLoop: for session in sessions {
-            guard !isCancelled() else { break }
-            guard session.date <= now else { continue }
-
-            for exercise in session.exercises {
-                guard !isCancelled() else { break sessionLoop }
-                let stimulus = exercise.setEquivalent
-                guard stimulus > 0 else { continue }
-
-                var strongestCreditByBucket: [SymmetryMuscleBucket: Double] = [:]
-                for (muscle, credit) in exercise.byMuscle {
-                    guard !isCancelled() else { break sessionLoop }
-                    guard let bucket = SymmetryMuscleBucket.bucket(for: muscle) else { continue }
-                    strongestCreditByBucket[bucket] = max(
-                        strongestCreditByBucket[bucket] ?? 0,
-                        credit
-                    )
-                }
-                for (bucket, credit) in strongestCreditByBucket where credit > 0 {
-                    muscleSets[bucket, default: 0] += credit
-                    muscleSessions[bucket, default: []].insert(session.session.id)
-                }
-
-                guard let classification = exercise.classification else {
-                    continue
-                }
-                for bucket in SymmetryMovementBucket.buckets(for: classification) {
-                    movementSets[bucket, default: 0] += stimulus
-                    movementSessions[bucket, default: []]
-                        .insert(session.session.id)
-                }
-            }
-        }
+        accumulateAntagonistSets(
+            through: now,
+            muscleSets: &muscleSets,
+            movementSets: &movementSets,
+            muscleSessions: &muscleSessions,
+            movementSessions: &movementSessions,
+            isCancelled: isCancelled
+        )
 
         func musclePair(
             _ id: String,
@@ -403,5 +378,63 @@ nonisolated extension AnalyticsAccumulator {
         ]
 
         return AntagonistBoard(pairs: pairs)
+    }
+
+    private func accumulateAntagonistSets(
+        through now: Date,
+        muscleSets: inout [SymmetryMuscleBucket: Double],
+        movementSets: inout [SymmetryMovementBucket: Double],
+        muscleSessions: inout [SymmetryMuscleBucket: Set<UUID>],
+        movementSessions: inout [SymmetryMovementBucket: Set<UUID>],
+        isCancelled: @Sendable () -> Bool
+    ) {
+        sessionLoop: for session in sessions where session.date <= now {
+            guard !isCancelled() else { break }
+            for exercise in session.exercises where exercise.setEquivalent > 0 {
+                guard !isCancelled() else { break sessionLoop }
+                accumulateMuscleSymmetry(
+                    exercise,
+                    sessionID: session.session.id,
+                    sets: &muscleSets,
+                    sessions: &muscleSessions
+                )
+                accumulateMovementSymmetry(
+                    exercise,
+                    sessionID: session.session.id,
+                    sets: &movementSets,
+                    sessions: &movementSessions
+                )
+            }
+        }
+    }
+
+    private func accumulateMuscleSymmetry(
+        _ exercise: AnalyticsExerciseReplay,
+        sessionID: UUID,
+        sets: inout [SymmetryMuscleBucket: Double],
+        sessions: inout [SymmetryMuscleBucket: Set<UUID>]
+    ) {
+        var strongest: [SymmetryMuscleBucket: Double] = [:]
+        for (muscle, credit) in exercise.byMuscle {
+            guard let bucket = SymmetryMuscleBucket.bucket(for: muscle) else { continue }
+            strongest[bucket] = max(strongest[bucket] ?? 0, credit)
+        }
+        for (bucket, credit) in strongest where credit > 0 {
+            sets[bucket, default: 0] += credit
+            sessions[bucket, default: []].insert(sessionID)
+        }
+    }
+
+    private func accumulateMovementSymmetry(
+        _ exercise: AnalyticsExerciseReplay,
+        sessionID: UUID,
+        sets: inout [SymmetryMovementBucket: Double],
+        sessions: inout [SymmetryMovementBucket: Set<UUID>]
+    ) {
+        guard let classification = exercise.classification else { return }
+        for bucket in SymmetryMovementBucket.buckets(for: classification) {
+            sets[bucket, default: 0] += exercise.setEquivalent
+            sessions[bucket, default: []].insert(sessionID)
+        }
     }
 }

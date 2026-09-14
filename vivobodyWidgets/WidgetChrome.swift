@@ -215,22 +215,14 @@ struct ConsistencyHeatmapGrid: View {
 
     private func heatmapFill(_ level: Int) -> Color {
         if renderingMode == .vibrant {
-            switch level {
-            case 1: return .white.opacity(0.30)
-            case 2: return .white.opacity(0.55)
-            case 3: return .white.opacity(0.78)
-            case 4: return .white
-            default: return .white.opacity(0.10)
-            }
+            let opacities = [0.10, 0.30, 0.55, 0.78, 1.0]
+            let index = Swift.min(Swift.max(level, 0), 4)
+            return .white.opacity(opacities[index])
         }
-
-        switch level {
-        case 1: return Tint.primary.opacity(0.30)
-        case 2: return Tint.primary.opacity(0.55)
-        case 3: return Tint.primary.opacity(0.78)
-        case 4: return Tint.primary
-        default: return Surface.cardTint
-        }
+        guard level > 0 else { return Surface.cardTint }
+        let opacities = [0.30, 0.55, 0.78, 1.0]
+        let index = Swift.min(level - 1, 3)
+        return Tint.primary.opacity(opacities[index])
     }
 }
 

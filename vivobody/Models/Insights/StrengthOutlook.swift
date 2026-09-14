@@ -215,149 +215,172 @@ nonisolated extension StrengthOutlookBoard {
 
         for exerciseProgress in progress {
             guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
-            guard exerciseProgress.trackingMode == .reps else { continue }
-
-            var points: [ExerciseProgressPoint] = []
-            points.reserveCapacity(exerciseProgress.points.count)
-            for point in exerciseProgress.points {
-                guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
-                if point.date <= now, point.estimated1RM > 0 {
-                    points.append(point)
-                }
-            }
-            guard points.count >= StrengthOutlookBoard.minPoints else { continue }
-
-            // Confidence follows the same recent window as the fit. A
-            // long archive cannot make six compressed workouts look mature.
-            let window = points.suffix(StrengthOutlookBoard.recentWindow)
-            let firstDate = window.first!.date
-            let lastDate = window.last!.date
-            let spanDays = Swift.max(
-                0,
-                calendar.dateComponents(
-                    [.day],
-                    from: calendar.startOfDay(for: firstDate),
-                    to: calendar.startOfDay(for: lastDate)
-                ).day ?? 0
-            )
-            guard spanDays >= StrengthOutlookBoard.minimumSpanDays else { continue }
-
-            // Recent-window least-squares fit on (days, e1RM).
-            let t0 = window.first!.date
-            let xs = window.map { $0.date.timeIntervalSince(t0) / 86400 }
-            let ys = window.map(\.estimated1RM)
-            let n = Double(xs.count)
-            let meanX = xs.reduce(0, +) / n
-            let meanY = ys.reduce(0, +) / n
-            var num = 0.0, den = 0.0
-            for i in xs.indices {
-                guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
-                num += (xs[i] - meanX) * (ys[i] - meanY)
-                den += (xs[i] - meanX) * (xs[i] - meanX)
-            }
-            let slopePerDay = den > 0 ? num / den : 0
-            let intercept = meanY - slopePerDay * meanX
-            let slopePerWeek = slopePerDay * 7
-
-            // e1RM highs, current level, and recency. This is explicitly
-            // separate from the app's load-then-reps strength-record axis.
-            let best = points.max { $0.estimated1RM < $1.estimated1RM }!
-            let bestE1RM = best.estimated1RM
-            let current = points.last!
-            let currentE1RM = current.estimated1RM
-            var priorBest = 0.0
-            for point in points.dropLast() {
-                guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
-                priorBest = Swift.max(priorBest, point.estimated1RM)
-            }
-            let isLatestE1RMHigh = currentE1RM > priorBest + 1e-6
-
-            let daysSinceLastEstimate = calendar.dateComponents(
-                [.day],
-                from: calendar.startOfDay(for: current.date),
-                to: today
-            ).day.map { Swift.max(0, $0) }
-            let isRecentE1RMHigh = isLatestE1RMHigh
-                && (daysSinceLastEstimate ?? Int.max) <= StrengthOutlookBoard.recentHighDays
-
-            let confidence: StrengthTrendConfidence =
-                window.count >= StrengthOutlookBoard.establishedPoints
-                    && spanDays >= StrengthOutlookBoard.establishedSpanDays
-                    ? .established
-                    : .developing
-
-            let trend: PRTrend = if slopePerWeek >= StrengthOutlookBoard.climbPerWeek {
-                .climbing
-            } else if slopePerWeek <= -StrengthOutlookBoard.climbPerWeek {
-                .slipping
-            } else {
-                .plateaued
-            }
-
-            // Absolute trend-line crossing, converted back to a remaining
-            // interval from `now`. A projection that has already passed is
-            // stale evidence, not the same ETA repeated forever.
-            var daysToE1RMHigh: Int?
-            if trend == .climbing,
-               confidence == .established,
-               !isLatestE1RMHigh,
-               slopePerDay > 0
-            {
-                let crossingX = (bestE1RM - intercept) / slopePerDay
-                let crossingDate = t0.addingTimeInterval(crossingX * 86400)
-                let remaining = crossingDate.timeIntervalSince(now) / 86400
-                if remaining.isFinite,
-                   remaining > 0,
-                   remaining <= Double(StrengthOutlookBoard.horizonDays)
-                {
-                    daysToE1RMHigh = Swift.max(1, Int(remaining.rounded(.up)))
-                }
-            }
-
-            let weeksSinceBest = calendar.dateComponents(
-                [.day],
-                from: calendar.startOfDay(for: best.date),
-                to: today
-            ).day.map { Swift.max(0, $0) / 7 }
-
-            // Strength math uses the latest comparable e1RM point, but
-            // training recency must include a later session whose
-            // bodyweight-dependent load or rep range could not be resolved.
-            let latestTrainedDate = exerciseProgress.points
-                .last(where: { $0.date <= now })?.date ?? current.date
-            let daysSince = calendar.dateComponents(
-                [.day],
-                from: calendar.startOfDay(for: latestTrainedDate),
-                to: today
-            ).day.map { Swift.max(0, $0) }
-
-            stats.append(
-                StrengthOutlookStat(
-                    historyKey: exerciseProgress.id,
-                    catalogID: exerciseProgress.catalogID,
-                    exercise: exerciseProgress.name,
-                    group: exerciseProgress.group,
-                    currentE1RM: currentE1RM,
-                    bestE1RM: bestE1RM,
-                    slopePerWeek: slopePerWeek,
-                    trend: trend,
-                    confidence: confidence,
-                    sampleCount: window.count,
-                    spanDays: spanDays,
-                    daysToE1RMHigh: daysToE1RMHigh,
-                    isLatestE1RMHigh: isLatestE1RMHigh,
-                    isRecentE1RMHigh: isRecentE1RMHigh,
-                    weeksSinceBest: weeksSinceBest,
-                    daysSinceLastEstimate: daysSinceLastEstimate,
-                    daysSinceLastTrained: daysSince
-                )
-            )
+            if let stat = makeStat(
+                exerciseProgress,
+                now: now,
+                today: today,
+                calendar: calendar,
+                isCancelled: isCancelled
+            ) { stats.append(stat) }
         }
 
         guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
         stats.sort(by: Self.isOrderedBefore)
 
         return StrengthOutlookBoard(stats: stats)
+    }
+
+    private static func makeStat(
+        _ progress: ExerciseProgress,
+        now: Date,
+        today: Date,
+        calendar: Calendar,
+        isCancelled: @Sendable () -> Bool
+    ) -> StrengthOutlookStat? {
+        guard progress.trackingMode == .reps else { return nil }
+        guard let points = eligiblePoints(progress.points, through: now, isCancelled: isCancelled),
+              points.count >= StrengthOutlookBoard.minPoints,
+              let fit = strengthFit(points, calendar: calendar, isCancelled: isCancelled)
+        else { return nil }
+        let best = points.max { $0.estimated1RM < $1.estimated1RM }!
+        let current = points.last!
+        let latestIsHigh = current.estimated1RM > priorBest(in: points) + 1e-6
+        let lastEstimateDays = days(from: current.date, to: today, calendar: calendar)
+        let confidence = trendConfidence(sampleCount: fit.sampleCount, spanDays: fit.spanDays)
+        let trend = trend(slopePerWeek: fit.slopePerDay * 7)
+        let latestTrained = progress.points.last(where: { $0.date <= now })?.date ?? current.date
+        return StrengthOutlookStat(
+            historyKey: progress.id,
+            catalogID: progress.catalogID,
+            exercise: progress.name,
+            group: progress.group,
+            currentE1RM: current.estimated1RM,
+            bestE1RM: best.estimated1RM,
+            slopePerWeek: fit.slopePerDay * 7,
+            trend: trend,
+            confidence: confidence,
+            sampleCount: fit.sampleCount,
+            spanDays: fit.spanDays,
+            daysToE1RMHigh: projectedDays(
+                best: best.estimated1RM,
+                fit: fit,
+                now: now,
+                trend: trend,
+                confidence: confidence,
+                latestIsHigh: latestIsHigh
+            ),
+            isLatestE1RMHigh: latestIsHigh,
+            isRecentE1RMHigh: latestIsHigh && (lastEstimateDays ?? Int.max) <= StrengthOutlookBoard.recentHighDays,
+            weeksSinceBest: days(from: best.date, to: today, calendar: calendar).map { $0 / 7 },
+            daysSinceLastEstimate: lastEstimateDays,
+            daysSinceLastTrained: days(from: latestTrained, to: today, calendar: calendar)
+        )
+    }
+
+    private static func eligiblePoints(
+        _ points: [ExerciseProgressPoint],
+        through now: Date,
+        isCancelled: @Sendable () -> Bool
+    ) -> [ExerciseProgressPoint]? {
+        var result: [ExerciseProgressPoint] = []
+        for point in points {
+            guard !isCancelled() else { return nil }
+            if point.date <= now, point.estimated1RM > 0 { result.append(point) }
+        }
+        return result
+    }
+
+    private static func strengthFit(
+        _ points: [ExerciseProgressPoint],
+        calendar: Calendar,
+        isCancelled: @Sendable () -> Bool
+    ) -> StrengthOutlookFit? {
+        let window = Array(points.suffix(StrengthOutlookBoard.recentWindow))
+        let start = window.first!.date
+        let spanDays = days(from: start, to: window.last!.date, calendar: calendar) ?? 0
+        guard spanDays >= StrengthOutlookBoard.minimumSpanDays else { return nil }
+        let xs = window.map { $0.date.timeIntervalSince(start) / 86400 }
+        let ys = window.map(\.estimated1RM)
+        let count = Double(xs.count)
+        let meanX = xs.reduce(0, +) / count
+        let meanY = ys.reduce(0, +) / count
+        guard let slope = leastSquaresSlope(xs: xs, ys: ys, meanX: meanX, meanY: meanY, isCancelled: isCancelled) else {
+            return nil
+        }
+        return StrengthOutlookFit(
+            start: start,
+            slopePerDay: slope,
+            intercept: meanY - slope * meanX,
+            sampleCount: window.count,
+            spanDays: spanDays
+        )
+    }
+
+    private static func leastSquaresSlope(
+        xs: [Double],
+        ys: [Double],
+        meanX: Double,
+        meanY: Double,
+        isCancelled: @Sendable () -> Bool
+    ) -> Double? {
+        var numerator = 0.0
+        var denominator = 0.0
+        for index in xs.indices {
+            guard !isCancelled() else { return nil }
+            numerator += (xs[index] - meanX) * (ys[index] - meanY)
+            denominator += (xs[index] - meanX) * (xs[index] - meanX)
+        }
+        return denominator > 0 ? numerator / denominator : 0
+    }
+
+    private static func priorBest(in points: [ExerciseProgressPoint]) -> Double {
+        points.dropLast().reduce(0) { max($0, $1.estimated1RM) }
+    }
+
+    private static func days(from start: Date, to end: Date, calendar: Calendar) -> Int? {
+        calendar.dateComponents(
+            [.day],
+            from: calendar.startOfDay(for: start),
+            to: calendar.startOfDay(for: end)
+        ).day.map { max(0, $0) }
+    }
+
+    private static func trendConfidence(
+        sampleCount: Int,
+        spanDays: Int
+    ) -> StrengthTrendConfidence {
+        sampleCount >= StrengthOutlookBoard.establishedPoints
+            && spanDays >= StrengthOutlookBoard.establishedSpanDays
+            ? .established
+            : .developing
+    }
+
+    private static func trend(slopePerWeek: Double) -> PRTrend {
+        if slopePerWeek >= StrengthOutlookBoard.climbPerWeek { return .climbing }
+        if slopePerWeek <= -StrengthOutlookBoard.climbPerWeek { return .slipping }
+        return .plateaued
+    }
+
+    private static func projectedDays(
+        best: Double,
+        fit: StrengthOutlookFit,
+        now: Date,
+        trend: PRTrend,
+        confidence: StrengthTrendConfidence,
+        latestIsHigh: Bool
+    ) -> Int? {
+        guard trend == .climbing,
+              confidence == .established,
+              !latestIsHigh,
+              fit.slopePerDay > 0
+        else { return nil }
+        let crossing = (best - fit.intercept) / fit.slopePerDay
+        let remaining = fit.start.addingTimeInterval(crossing * 86400).timeIntervalSince(now) / 86400
+        guard remaining.isFinite,
+              remaining > 0,
+              remaining <= Double(StrengthOutlookBoard.horizonDays)
+        else { return nil }
+        return max(1, Int(remaining.rounded(.up)))
     }
 
     private static func isOrderedBefore(
@@ -413,4 +436,12 @@ nonisolated extension StrengthOutlookBoard {
         }
         return lhs.historyKey < rhs.historyKey
     }
+}
+
+private nonisolated struct StrengthOutlookFit {
+    let start: Date
+    let slopePerDay: Double
+    let intercept: Double
+    let sampleCount: Int
+    let spanDays: Int
 }

@@ -56,12 +56,11 @@ recovery path if opening the store fails. Before changing a model, read
 `vivobody/App/Persistence.swift`, `vivobody/vivobodyApp.swift`, and
 `vivobodyTests/PersistenceStoreContractTests.swift`.
 
-Before the first public release, the app deliberately has one current schema
-and no `VersionedSchema` or migration plan; breaking changes may reset
-development data and intentionally replace the checked-in baseline. At the
-release boundary, freeze the then-current model definitions as `SchemaV1`,
-retain its store fixture permanently, and route every later shipped schema
-change through explicit versioned migration work.
+`VivobodySchemaV1` freezes the first public model graph and
+`VivobodyMigrationPlan` is the production container's migration boundary.
+Retain the SchemaV1 store fixture permanently. Every later model change adds a
+new `VersionedSchema`, the required migration stage, and a retained fixture;
+never rewrite an older fixture to make migration pass.
 
 All user mutations stay in the app and save through the error-reporting helper
 in `vivobody/App/SaveError.swift`. The active workout is restored from the

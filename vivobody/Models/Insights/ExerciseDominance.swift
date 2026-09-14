@@ -97,87 +97,104 @@ nonisolated extension AnalyticsAccumulator {
 
         // Bucket keyed by stable identity; preserves the first-seen
         // display name and the muscle group.
-        var byExercise: [String: (display: String, group: MuscleGroup, sets: Int)] = [:]
+        guard let byExercise = dominanceBuckets(
+            after: cutoff,
+            through: now,
+            isCancelled: isCancelled
+        ) else { return cancelled }
 
-        for session in sessions {
-            guard !isCancelled() else { return cancelled }
-            let date = session.date
-            guard date > cutoff, date <= now else { continue }
-
-            for replay in session.exercises {
-                guard !isCancelled() else { return cancelled }
-                guard replay.exercise.modality.supportsHardSetAnalytics else {
-                    continue
-                }
-
-                let exercise = replay.exercise
-                let key = exercise.historyKey
-                var sets = 0
-                for set in exercise.sets {
-                    guard !isCancelled() else { return cancelled }
-                    switch (exercise.modality, exercise.trackingMode) {
-                    case (.dynamicStrength, .reps)
-                        where set.isAnalyticsEligible && set.reps > 0:
-                        sets += 1
-                    case (.isometricStrength, .duration)
-                        where set.isAnalyticsEligible && set.duration > 0:
-                        sets += 1
-                    default:
-                        break
-                    }
-                }
-                guard sets > 0 else { continue }
-
-                if var bucket = byExercise[key] {
-                    bucket.sets += sets
-                    byExercise[key] = bucket
-                } else {
-                    let metadata = exerciseMetadata[key]
-                    byExercise[key] = (
-                        display: metadata?.name ?? exercise.name,
-                        group: metadata?.group ?? exercise.group,
-                        sets: sets
-                    )
-                }
-            }
-        }
-
-        var totalSets = 0
-        for bucket in byExercise.values {
-            guard !isCancelled() else { return cancelled }
-            totalSets += bucket.sets
-        }
+        let totalSets = byExercise.values.reduce(0) { $0 + $1.sets }
         guard totalSets > 0 else {
             return ExerciseDominanceBoard(stats: [], totalSets: 0)
         }
 
-        var stats: [ExerciseDominanceStat] = []
-        stats.reserveCapacity(byExercise.count)
-        for (key, bucket) in byExercise {
-            guard !isCancelled() else { return cancelled }
-            stats.append(
-                ExerciseDominanceStat(
-                    historyKey: key,
-                    name: bucket.display,
-                    group: bucket.group,
-                    sets: bucket.sets,
-                    share: Double(bucket.sets) / Double(totalSets)
-                )
-            )
-        }
+        var stats = Self.dominanceStats(byExercise, totalSets: totalSets)
         guard !isCancelled() else { return cancelled }
-        stats.sort {
-            if $0.sets == $1.sets {
-                let nameOrder = $0.name.localizedCaseInsensitiveCompare($1.name)
-                if nameOrder == .orderedSame {
-                    return $0.historyKey < $1.historyKey
-                }
-                return nameOrder == .orderedAscending
-            }
-            return $0.sets > $1.sets
-        }
+        stats.sort(by: Self.ranksBefore)
         guard !isCancelled() else { return cancelled }
 
         return ExerciseDominanceBoard(stats: stats, totalSets: totalSets)
+    }
+
+    private func dominanceBuckets(
+        after cutoff: Date,
+        through now: Date,
+        isCancelled: @Sendable () -> Bool
+    ) -> [String: (display: String, group: MuscleGroup, sets: Int)]? {
+        var buckets: [String: (display: String, group: MuscleGroup, sets: Int)] = [:]
+        for session in sessions where session.date > cutoff && session.date <= now {
+            guard !isCancelled() else { return nil }
+            for replay in session.exercises where replay.exercise.modality.supportsHardSetAnalytics {
+                guard !isCancelled() else { return nil }
+                guard accumulateDominance(
+                    replay.exercise,
+                    buckets: &buckets,
+                    isCancelled: isCancelled
+                ) else { return nil }
+            }
+        }
+        return buckets
+    }
+
+    private func accumulateDominance(
+        _ exercise: AnalyticsExerciseSnapshot,
+        buckets: inout [String: (display: String, group: MuscleGroup, sets: Int)],
+        isCancelled: @Sendable () -> Bool
+    ) -> Bool {
+        guard let count = Self.eligibleSetCount(exercise, isCancelled: isCancelled) else { return false }
+        guard count > 0 else { return true }
+        let key = exercise.historyKey
+        if var bucket = buckets[key] {
+            bucket.sets += count
+            buckets[key] = bucket
+            return true
+        }
+        let metadata = exerciseMetadata[key]
+        buckets[key] = (
+            display: metadata?.name ?? exercise.name,
+            group: metadata?.group ?? exercise.group,
+            sets: count
+        )
+        return true
+    }
+
+    private static func eligibleSetCount(
+        _ exercise: AnalyticsExerciseSnapshot,
+        isCancelled: @Sendable () -> Bool
+    ) -> Int? {
+        var count = 0
+        for set in exercise.sets {
+            guard !isCancelled() else { return nil }
+            guard set.isAnalyticsEligible else { continue }
+            let eligible = switch (exercise.modality, exercise.trackingMode) {
+            case (.dynamicStrength, .reps): set.reps > 0
+            case (.isometricStrength, .duration): set.duration > 0
+            default: false
+            }
+            if eligible { count += 1 }
+        }
+        return count
+    }
+
+    private static func dominanceStats(
+        _ buckets: [String: (display: String, group: MuscleGroup, sets: Int)],
+        totalSets: Int
+    ) -> [ExerciseDominanceStat] {
+        buckets.map { key, bucket in
+            ExerciseDominanceStat(
+                historyKey: key,
+                name: bucket.display,
+                group: bucket.group,
+                sets: bucket.sets,
+                share: Double(bucket.sets) / Double(totalSets)
+            )
+        }
+    }
+
+    private static func ranksBefore(_ lhs: ExerciseDominanceStat, _ rhs: ExerciseDominanceStat) -> Bool {
+        guard lhs.sets == rhs.sets else { return lhs.sets > rhs.sets }
+        let nameOrder = lhs.name.localizedCaseInsensitiveCompare(rhs.name)
+        guard nameOrder == .orderedSame else { return nameOrder == .orderedAscending }
+        return lhs.historyKey < rhs.historyKey
     }
 }

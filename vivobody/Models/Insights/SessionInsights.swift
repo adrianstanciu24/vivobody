@@ -208,68 +208,84 @@ extension WorkoutSession {
         orderedSets sets: [WorkoutSet]
     ) -> ExerciseAdherence? {
         guard let top = topSet else { return nil }
-
         switch exercise.trackingMode {
         case .reps:
-            let comparesLoad = exercise.performanceSemanticKind.comparesLoad
-            let plannedTop = sets.max { a, b in
-                if comparesLoad {
-                    let left = exercise.loadProfile.withinSnapshotLoadMarker(
-                        loggedWeight: a.plannedWeight
-                    ) ?? 0
-                    let right = exercise.loadProfile.withinSnapshotLoadMarker(
-                        loggedWeight: b.plannedWeight
-                    ) ?? 0
-                    if left == right { return a.plannedReps < b.plannedReps }
-                    return left < right
-                }
-                if a.plannedReps == b.plannedReps { return a.plannedWeight < b.plannedWeight }
-                return a.plannedReps < b.plannedReps
-            }
-            guard let plan = plannedTop, plan.plannedWeight > 0 || plan.plannedReps > 0 else {
-                return nil
-            }
-            let weightDelta: Double = if comparesLoad {
-                exercise.loadProfile.withinSnapshotLoadDelta(
-                    actualLoggedWeight: top.weight,
-                    plannedLoggedWeight: plan.plannedWeight
-                ) ?? 0
-            } else {
-                0
-            }
-            return ExerciseAdherence(
-                isDuration: false,
-                weightDelta: weightDelta,
-                repsDelta: top.reps - plan.plannedReps,
-                durationDelta: 0
-            )
+            return repsAdherence(for: exercise, top: top, sets: sets)
         case .duration:
-            let comparesLoad = exercise.performanceSemanticKind.comparesLoad
-            let plannedTop = sets.max { a, b in
-                if comparesLoad {
-                    let left = exercise.loadProfile.withinSnapshotLoadMarker(
-                        loggedWeight: a.plannedWeight
-                    ) ?? 0
-                    let right = exercise.loadProfile.withinSnapshotLoadMarker(
-                        loggedWeight: b.plannedWeight
-                    ) ?? 0
-                    if left != right { return left < right }
-                }
-                return a.plannedDuration < b.plannedDuration
-            }
-            guard let plan = plannedTop, plan.plannedDuration > 0 else { return nil }
-            let weightDelta = comparesLoad
-                ? exercise.loadProfile.withinSnapshotLoadDelta(
-                    actualLoggedWeight: top.weight,
-                    plannedLoggedWeight: plan.plannedWeight
-                ) ?? 0
-                : 0
-            return ExerciseAdherence(
-                isDuration: true,
-                weightDelta: weightDelta,
-                repsDelta: 0,
-                durationDelta: top.duration - plan.plannedDuration
-            )
+            return durationAdherence(for: exercise, top: top, sets: sets)
         }
+    }
+
+    private func repsAdherence(
+        for exercise: Exercise,
+        top: WorkoutSet,
+        sets: [WorkoutSet]
+    ) -> ExerciseAdherence? {
+        let comparesLoad = exercise.performanceSemanticKind.comparesLoad
+        let plan = sets.max { repsPlanRanksBefore($0, $1, exercise: exercise, comparesLoad: comparesLoad) }
+        guard let plan, plan.plannedWeight > 0 || plan.plannedReps > 0 else { return nil }
+        return ExerciseAdherence(
+            isDuration: false,
+            weightDelta: plannedWeightDelta(top: top, plan: plan, exercise: exercise, comparesLoad: comparesLoad),
+            repsDelta: top.reps - plan.plannedReps,
+            durationDelta: 0
+        )
+    }
+
+    private func durationAdherence(
+        for exercise: Exercise,
+        top: WorkoutSet,
+        sets: [WorkoutSet]
+    ) -> ExerciseAdherence? {
+        let comparesLoad = exercise.performanceSemanticKind.comparesLoad
+        let plan = sets.max { durationPlanRanksBefore($0, $1, exercise: exercise, comparesLoad: comparesLoad) }
+        guard let plan, plan.plannedDuration > 0 else { return nil }
+        return ExerciseAdherence(
+            isDuration: true,
+            weightDelta: plannedWeightDelta(top: top, plan: plan, exercise: exercise, comparesLoad: comparesLoad),
+            repsDelta: 0,
+            durationDelta: top.duration - plan.plannedDuration
+        )
+    }
+
+    private func plannedWeightDelta(
+        top: WorkoutSet,
+        plan: WorkoutSet,
+        exercise: Exercise,
+        comparesLoad: Bool
+    ) -> Double {
+        guard comparesLoad else { return 0 }
+        return exercise.loadProfile.withinSnapshotLoadDelta(
+            actualLoggedWeight: top.weight,
+            plannedLoggedWeight: plan.plannedWeight
+        ) ?? 0
+    }
+
+    private func repsPlanRanksBefore(
+        _ lhs: WorkoutSet,
+        _ rhs: WorkoutSet,
+        exercise: Exercise,
+        comparesLoad: Bool
+    ) -> Bool {
+        guard comparesLoad else {
+            return lhs.plannedReps == rhs.plannedReps
+                ? lhs.plannedWeight < rhs.plannedWeight
+                : lhs.plannedReps < rhs.plannedReps
+        }
+        let left = exercise.loadProfile.withinSnapshotLoadMarker(loggedWeight: lhs.plannedWeight) ?? 0
+        let right = exercise.loadProfile.withinSnapshotLoadMarker(loggedWeight: rhs.plannedWeight) ?? 0
+        return left == right ? lhs.plannedReps < rhs.plannedReps : left < right
+    }
+
+    private func durationPlanRanksBefore(
+        _ lhs: WorkoutSet,
+        _ rhs: WorkoutSet,
+        exercise: Exercise,
+        comparesLoad: Bool
+    ) -> Bool {
+        guard comparesLoad else { return lhs.plannedDuration < rhs.plannedDuration }
+        let left = exercise.loadProfile.withinSnapshotLoadMarker(loggedWeight: lhs.plannedWeight) ?? 0
+        let right = exercise.loadProfile.withinSnapshotLoadMarker(loggedWeight: rhs.plannedWeight) ?? 0
+        return left == right ? lhs.plannedDuration < rhs.plannedDuration : left < right
     }
 }

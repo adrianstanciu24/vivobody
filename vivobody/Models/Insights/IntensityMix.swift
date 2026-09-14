@@ -208,30 +208,15 @@ nonisolated extension AnalyticsAccumulator {
         guard !isCancelled() else { return cancelled }
 
         let cutoff = now.addingTimeInterval(-window)
+        guard let samples = intensitySamples(from: cutoff, through: now, isCancelled: isCancelled) else {
+            return cancelled
+        }
         var strength = 0, hypertrophy = 0, endurance = 0
-
-        for session in sessions {
-            guard !isCancelled() else { return cancelled }
-            let date = session.date
-            guard date >= cutoff, date <= now else { continue }
-            for replay in session.exercises {
-                guard !isCancelled() else { return cancelled }
-                guard replay.exercise.modality == .dynamicStrength,
-                      replay.exercise.trackingMode == .reps
-                else {
-                    continue
-                }
-                for set in replay.exercise.sets {
-                    guard !isCancelled() else { return cancelled }
-                    guard set.isAnalyticsEligible, set.reps > 0 else {
-                        continue
-                    }
-                    switch IntensityZone.zone(forReps: set.reps) {
-                    case .strength: strength += 1
-                    case .hypertrophy: hypertrophy += 1
-                    case .endurance: endurance += 1
-                    }
-                }
+        for sample in samples {
+            switch IntensityZone.zone(forReps: sample.reps) {
+            case .strength: strength += 1
+            case .hypertrophy: hypertrophy += 1
+            case .endurance: endurance += 1
             }
         }
 
@@ -260,39 +245,20 @@ nonisolated extension AnalyticsAccumulator {
         ) else { return [] }
         let validWeekStarts = Set(window.weekStarts)
 
-        var byWeek: [Date: (strength: Int, hypertrophy: Int, endurance: Int)] = [:]
+        var byWeek: [Date: IntensityCounts] = [:]
 
-        for session in sessions {
-            guard !isCancelled() else { return [] }
-            let date = session.date
-            guard date >= window.start, date <= now else { continue }
+        guard let samples = intensitySamples(from: window.start, through: now, isCancelled: isCancelled) else {
+            return []
+        }
+        for sample in samples {
             guard let weekStart = calendar.dateInterval(
                 of: .weekOfYear,
-                for: date
+                for: sample.date
             )?.start,
                 validWeekStarts.contains(weekStart) else { continue }
-
-            for replay in session.exercises {
-                guard !isCancelled() else { return [] }
-                guard replay.exercise.modality == .dynamicStrength,
-                      replay.exercise.trackingMode == .reps
-                else {
-                    continue
-                }
-                for set in replay.exercise.sets {
-                    guard !isCancelled() else { return [] }
-                    guard set.isAnalyticsEligible, set.reps > 0 else {
-                        continue
-                    }
-                    var bucket = byWeek[weekStart] ?? (0, 0, 0)
-                    switch IntensityZone.zone(forReps: set.reps) {
-                    case .strength: bucket.strength += 1
-                    case .hypertrophy: bucket.hypertrophy += 1
-                    case .endurance: bucket.endurance += 1
-                    }
-                    byWeek[weekStart] = bucket
-                }
-            }
+            var bucket = byWeek[weekStart] ?? IntensityCounts()
+            bucket.add(reps: sample.reps)
+            byWeek[weekStart] = bucket
         }
 
         guard !isCancelled() else { return [] }
@@ -300,7 +266,7 @@ nonisolated extension AnalyticsAccumulator {
         result.reserveCapacity(window.weekStarts.count)
         for weekStart in window.weekStarts {
             guard !isCancelled() else { return [] }
-            let bucket = byWeek[weekStart] ?? (0, 0, 0)
+            let bucket = byWeek[weekStart] ?? IntensityCounts()
             result.append(IntensityWeek(
                 weekStart: weekStart,
                 strengthSets: bucket.strength,
@@ -310,5 +276,46 @@ nonisolated extension AnalyticsAccumulator {
             ))
         }
         return result
+    }
+
+    private func intensitySamples(
+        from start: Date,
+        through end: Date,
+        isCancelled: @Sendable () -> Bool
+    ) -> [IntensitySample]? {
+        var samples: [IntensitySample] = []
+        for session in sessions where session.date >= start && session.date <= end {
+            guard !isCancelled() else { return nil }
+            for replay in session.exercises
+                where replay.exercise.modality == .dynamicStrength
+                && replay.exercise.trackingMode == .reps
+            {
+                guard !isCancelled() else { return nil }
+                for set in replay.exercise.sets where set.isAnalyticsEligible && set.reps > 0 {
+                    guard !isCancelled() else { return nil }
+                    samples.append(IntensitySample(date: session.date, reps: set.reps))
+                }
+            }
+        }
+        return samples
+    }
+}
+
+private nonisolated struct IntensitySample {
+    let date: Date
+    let reps: Int
+}
+
+private nonisolated struct IntensityCounts {
+    var strength = 0
+    var hypertrophy = 0
+    var endurance = 0
+
+    mutating func add(reps: Int) {
+        switch IntensityZone.zone(forReps: reps) {
+        case .strength: strength += 1
+        case .hypertrophy: hypertrophy += 1
+        case .endurance: endurance += 1
+        }
     }
 }

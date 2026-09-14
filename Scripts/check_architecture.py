@@ -82,6 +82,13 @@ LOGGER_BOUNDARY = "vivobody/App/AppDiagnostics.swift"
 DIRECT_SAVE_SUPPRESSION = "architecture: allow-direct-save"
 VERSION_SOURCE = "Shared.xcconfig"
 VERSION_KEYS = ("MARKETING_VERSION", "CURRENT_PROJECT_VERSION")
+PERSISTENCE_BOUNDARY = "vivobody/App/Persistence.swift"
+PERSISTENCE_VERSIONING_PATTERNS = (
+    "enum VivobodySchemaV1: VersionedSchema",
+    "enum VivobodyMigrationPlan: SchemaMigrationPlan",
+    "Schema(versionedSchema: VivobodySchemaV1.self)",
+    "migrationPlan: VivobodyMigrationPlan.self",
+)
 
 IMPORT_PATTERN = re.compile(r"(?m)^\s*import\s+([A-Za-z_][A-Za-z0-9_]*)\b")
 RAW_GLASS_PATTERN = re.compile(r"\bglassEffect\s*\(")
@@ -532,6 +539,27 @@ def check_version_sources(root: Path) -> list[Violation]:
     return violations
 
 
+def check_persistence_versioning(root: Path) -> list[Violation]:
+    path = root / PERSISTENCE_BOUNDARY
+    if not path.is_file():
+        return [Violation(
+            PERSISTENCE_BOUNDARY,
+            1,
+            "ARCH013",
+            "The canonical persistence boundary is missing.",
+        )]
+    code = mask_swift(path.read_text(encoding="utf-8")).code
+    missing = [pattern for pattern in PERSISTENCE_VERSIONING_PATTERNS if pattern not in code]
+    if not missing:
+        return []
+    return [Violation(
+        PERSISTENCE_BOUNDARY,
+        1,
+        "ARCH013",
+        "Keep SchemaV1 and VivobodyMigrationPlan wired through every production container.",
+    )]
+
+
 def check_repository(root: Path = ROOT) -> tuple[list[Violation], int]:
     paths = discovered_swift_paths(root)
     violations: list[Violation] = []
@@ -540,6 +568,7 @@ def check_repository(root: Path = ROOT) -> tuple[list[Violation], int]:
         violations.extend(check_swift_file(relative, path.read_text(encoding="utf-8")))
     violations.extend(check_boundary_configuration(root))
     violations.extend(check_version_sources(root))
+    violations.extend(check_persistence_versioning(root))
     return sorted(set(violations)), len(paths)
 
 
@@ -573,7 +602,7 @@ def main(argv: list[str] | None = None) -> int:
         "architecture checks passed: "
         f"{file_count} Swift files, "
         f"{len(GLOBAL_FRAMEWORK_BOUNDARIES) + len(APP_FRAMEWORK_BOUNDARIES)} framework boundaries, "
-        "8 structural contracts"
+        "9 structural contracts"
     )
     return 0
 

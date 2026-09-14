@@ -203,6 +203,20 @@ import SwiftUI
             {violation.path for violation in violations},
         )
 
+    def test_persistence_requires_versioned_schema_and_migration_plan(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            persistence = root / "vivobody" / "App"
+            persistence.mkdir(parents=True)
+            (persistence / "Persistence.swift").write_text(
+                "import SwiftData\nlet schema = Schema([])\n",
+                encoding="utf-8",
+            )
+
+            violations = check_architecture.check_persistence_versioning(root)
+
+        self.assertEqual({violation.rule for violation in violations}, {"ARCH013"})
+
 
 if __name__ == "__main__":
     unittest.main()

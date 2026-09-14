@@ -110,29 +110,38 @@ nonisolated struct AnalyticsAccumulator {
         sortsChronologically: Bool,
         isCancelled: @Sendable () -> Bool
     ) -> AnalyticsAccumulator {
-        guard !isCancelled() else {
-            return AnalyticsAccumulator(
-                sessions: [],
-                muscleQuality: [:],
-                exerciseMetadata: [:]
-            )
-        }
+        guard !isCancelled() else { return empty }
         let ordered = sortsChronologically
             ? input.sessions.sorted { $0.date < $1.date }
             : input.sessions
-        guard !isCancelled() else {
-            return AnalyticsAccumulator(
-                sessions: [],
-                muscleQuality: [:],
-                exerciseMetadata: [:]
-            )
-        }
+        guard !isCancelled() else { return empty }
         var quality: [Muscle: AnalyticsMuscleQuality] = [:]
-        var metadata: [String: AnalyticsExerciseMetadata] = [:]
+        let metadata = exerciseMetadata(from: input.sessions, isCancelled: isCancelled)
         var replayed: [AnalyticsSessionReplay] = []
         replayed.reserveCapacity(ordered.count)
+        for session in ordered {
+            guard !isCancelled() else { break }
+            replayed.append(replaySession(
+                session,
+                stimulusParameters: stimulusParameters,
+                pricesStimulus: pricesStimulus,
+                quality: &quality,
+                isCancelled: isCancelled
+            ))
+        }
+        return AnalyticsAccumulator(sessions: replayed, muscleQuality: quality, exerciseMetadata: metadata)
+    }
 
-        metadataReplay: for session in input.sessions {
+    private static var empty: AnalyticsAccumulator {
+        AnalyticsAccumulator(sessions: [], muscleQuality: [:], exerciseMetadata: [:])
+    }
+
+    private static func exerciseMetadata(
+        from sessions: [AnalyticsSessionSnapshot],
+        isCancelled: @Sendable () -> Bool
+    ) -> [String: AnalyticsExerciseMetadata] {
+        var metadata: [String: AnalyticsExerciseMetadata] = [:]
+        metadataReplay: for session in sessions {
             guard !isCancelled() else { break }
             for exercise in session.exercises {
                 guard !isCancelled() else { break metadataReplay }
@@ -145,88 +154,104 @@ nonisolated struct AnalyticsAccumulator {
                 )
             }
         }
+        return metadata
+    }
 
-        for session in ordered {
+    private static func replaySession(
+        _ session: AnalyticsSessionSnapshot,
+        stimulusParameters: SetStimulus.Parameters,
+        pricesStimulus: Bool,
+        quality: inout [Muscle: AnalyticsMuscleQuality],
+        isCancelled: @Sendable () -> Bool
+    ) -> AnalyticsSessionReplay {
+        var events: [AnalyticsExerciseReplay] = []
+        var total = 0.0
+        var volumeLoad = ComparableTonnageSummary.zero
+        var heavySets = 0.0
+        var moderateSets = 0.0
+        for exercise in session.exercises {
             guard !isCancelled() else { break }
-            var exerciseEvents: [AnalyticsExerciseReplay] = []
-            exerciseEvents.reserveCapacity(session.exercises.count)
-            var sessionTotal = 0.0
-            var sessionVolumeLoad = ComparableTonnageSummary.zero
-            var heavySets = 0.0
-            var moderateSets = 0.0
-
-            for exercise in session.exercises {
-                guard !isCancelled() else { break }
-                let priced = pricesStimulus
-                    ? SetStimulus.price(for: exercise, parameters: stimulusParameters)
-                    : SetStimulus.ExerciseCredit(
-                        setEquivalent: 0,
-                        byMuscle: [:]
-                    )
-                sessionTotal += priced.setEquivalent
-                sessionVolumeLoad = sessionVolumeLoad.merging(
-                    exercise.comparableTonnageSummary
-                )
-
-                if pricesStimulus,
-                   exercise.modality == .dynamicStrength,
-                   exercise.trackingMode == .reps
-                {
-                    heavySets += Double(
-                        exercise.sets.count(where: {
-                            $0.isAnalyticsEligible && (1 ... 5).contains($0.reps)
-                        })
-                    )
-                    moderateSets += Double(
-                        exercise.sets.count(where: {
-                            $0.isAnalyticsEligible && (6 ... 12).contains($0.reps)
-                        })
-                    )
-                }
-
-                for muscle in exercise.volumeCredits.keys where pricesStimulus {
-                    for set in exercise.sets where set.isAnalyticsEligible {
-                        switch (exercise.modality, exercise.trackingMode) {
-                        case (.dynamicStrength, .reps) where set.reps > 0:
-                            quality[muscle, default: AnalyticsMuscleQuality()].eligible += 1
-                            if set.rirLogged {
-                                quality[muscle, default: AnalyticsMuscleQuality()].complete += 1
-                            }
-                        case (.isometricStrength, .duration) where set.duration > 0:
-                            quality[muscle, default: AnalyticsMuscleQuality()].eligible += 1
-                            quality[muscle, default: AnalyticsMuscleQuality()].complete += 1
-                        default:
-                            break
-                        }
-                    }
-                }
-
-                exerciseEvents.append(
-                    AnalyticsExerciseReplay(
-                        exercise: exercise,
-                        setEquivalent: priced.setEquivalent,
-                        byMuscle: priced.byMuscle,
-                    )
-                )
-            }
-
-            replayed.append(
-                AnalyticsSessionReplay(
-                    session: session,
-                    exercises: exerciseEvents,
-                    totalSetEquivalent: sessionTotal,
-                    volumeLoad: sessionVolumeLoad,
-                    heavySets: heavySets,
-                    moderateSets: moderateSets
-                )
+            let priced = exerciseCredit(
+                exercise,
+                parameters: stimulusParameters,
+                pricesStimulus: pricesStimulus
             )
+            total += priced.setEquivalent
+            volumeLoad = volumeLoad.merging(exercise.comparableTonnageSummary)
+            let repCounts = strengthRepCounts(exercise, pricesStimulus: pricesStimulus)
+            heavySets += repCounts.heavy
+            moderateSets += repCounts.moderate
+            accumulateQuality(exercise, pricesStimulus: pricesStimulus, quality: &quality)
+            events.append(AnalyticsExerciseReplay(
+                exercise: exercise,
+                setEquivalent: priced.setEquivalent,
+                byMuscle: priced.byMuscle
+            ))
         }
-
-        return AnalyticsAccumulator(
-            sessions: replayed,
-            muscleQuality: quality,
-            exerciseMetadata: metadata
+        return AnalyticsSessionReplay(
+            session: session,
+            exercises: events,
+            totalSetEquivalent: total,
+            volumeLoad: volumeLoad,
+            heavySets: heavySets,
+            moderateSets: moderateSets
         )
+    }
+
+    private static func exerciseCredit(
+        _ exercise: AnalyticsExerciseSnapshot,
+        parameters: SetStimulus.Parameters,
+        pricesStimulus: Bool
+    ) -> SetStimulus.ExerciseCredit {
+        pricesStimulus
+            ? SetStimulus.price(for: exercise, parameters: parameters)
+            : SetStimulus.ExerciseCredit(setEquivalent: 0, byMuscle: [:])
+    }
+
+    private static func strengthRepCounts(
+        _ exercise: AnalyticsExerciseSnapshot,
+        pricesStimulus: Bool
+    ) -> (heavy: Double, moderate: Double) {
+        guard pricesStimulus,
+              exercise.modality == .dynamicStrength,
+              exercise.trackingMode == .reps
+        else { return (0, 0) }
+        let eligibleReps = exercise.sets.filter(\.isAnalyticsEligible).map(\.reps)
+        return (
+            Double(eligibleReps.count(where: { (1 ... 5).contains($0) })),
+            Double(eligibleReps.count(where: { (6 ... 12).contains($0) }))
+        )
+    }
+
+    private static func accumulateQuality(
+        _ exercise: AnalyticsExerciseSnapshot,
+        pricesStimulus: Bool,
+        quality: inout [Muscle: AnalyticsMuscleQuality]
+    ) {
+        guard pricesStimulus else { return }
+        for muscle in exercise.volumeCredits.keys {
+            for set in exercise.sets where set.isAnalyticsEligible {
+                accumulateQuality(for: set, exercise: exercise, muscle: muscle, quality: &quality)
+            }
+        }
+    }
+
+    private static func accumulateQuality(
+        for set: AnalyticsSetSnapshot,
+        exercise: AnalyticsExerciseSnapshot,
+        muscle: Muscle,
+        quality: inout [Muscle: AnalyticsMuscleQuality]
+    ) {
+        switch (exercise.modality, exercise.trackingMode) {
+        case (.dynamicStrength, .reps) where set.reps > 0:
+            quality[muscle, default: AnalyticsMuscleQuality()].eligible += 1
+            if set.rirLogged { quality[muscle, default: AnalyticsMuscleQuality()].complete += 1 }
+        case (.isometricStrength, .duration) where set.duration > 0:
+            quality[muscle, default: AnalyticsMuscleQuality()].eligible += 1
+            quality[muscle, default: AnalyticsMuscleQuality()].complete += 1
+        default:
+            break
+        }
     }
 
     /// Compatibility bridge for report-level APIs and existing tests.

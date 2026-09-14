@@ -2,9 +2,8 @@
 //  PersistenceStoreContractTests.swift
 //  vivobodyTests
 //
-//  Reopens a checked-in pre-release SwiftData baseline through the production
-//  container factory and verifies representative user-owned graphs survive.
-//  SchemaV1 and permanent migration fixtures begin at the release boundary.
+//  Reopens the checked-in SchemaV1 SwiftData baseline through the production
+//  migration plan and verifies representative user-owned graphs survive.
 //
 
 import Foundation
@@ -42,7 +41,7 @@ struct PersistenceStoreContractTests {
         )
     }
 
-    @Test func preReleaseBaselineReopensAndPreservesUserData() throws {
+    @Test func schemaV1BaselineReopensAndPreservesUserData() throws {
         let bundle = Bundle(for: PersistenceFixtureBundleToken.self)
         let fixtureURL = try #require(
             bundle.url(

@@ -108,25 +108,10 @@ nonisolated extension AnalyticsAccumulator {
     ) -> ConsistencyReport {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: now)
-        var completed: [AnalyticsSessionReplay] = []
-        completed.reserveCapacity(sessions.count)
-        for session in sessions {
-            guard !isCancelled() else { break }
-            if session.session.completedAt != nil, session.date <= now {
-                completed.append(session)
-            }
-        }
+        let completed = completedSessions(through: now, isCancelled: isCancelled)
 
         // Completed sets per calendar day.
-        var setsByDay: [Date: Int] = [:]
-        for session in completed {
-            guard !isCancelled() else { break }
-            let snapshot = session.session
-            let day = calendar.startOfDay(
-                for: snapshot.completedAt ?? snapshot.startedAt
-            )
-            setsByDay[day, default: 0] += snapshot.totalCompletedSets
-        }
+        let setsByDay = Self.setsByDay(completed, calendar: calendar, isCancelled: isCancelled)
 
         // Grid aligned so the rightmost column is the current week.
         // Uses the calendar's locale-aware week interval so
@@ -138,29 +123,13 @@ nonisolated extension AnalyticsAccumulator {
             to: currentWeekStart
         ) ?? today
 
-        var weeks: [[ConsistencyDay]] = []
-        var daysTrained = 0
-        weekLoop: for w in 0 ..< ConsistencyReport.windowWeeks {
-            guard !isCancelled() else { break }
-            var column: [ConsistencyDay] = []
-            for d in 0 ..< 7 {
-                guard !isCancelled() else { break weekLoop }
-                let date = calendar.date(byAdding: .day, value: w * 7 + d, to: gridStart) ?? gridStart
-                let sets = setsByDay[date] ?? 0
-                let inRange = date <= today
-                if inRange, sets > 0 { daysTrained += 1 }
-                column.append(
-                    ConsistencyDay(
-                        date: date,
-                        sets: sets,
-                        isInRange: inRange,
-                        isToday: calendar.isDate(date, inSameDayAs: today),
-                        level: ConsistencyReport.level(forSets: sets)
-                    )
-                )
-            }
-            weeks.append(column)
-        }
+        let grid = Self.consistencyGrid(
+            from: gridStart,
+            through: today,
+            setsByDay: setsByDay,
+            calendar: calendar,
+            isCancelled: isCancelled
+        )
 
         // Recent rhythm + effort. This is exactly 28 calendar days:
         // the day 27 days ago through tomorrow's boundary, half-open.
@@ -172,37 +141,17 @@ nonisolated extension AnalyticsAccumulator {
             to: today
         ) ?? today
         let recentEnd = calendar.date(byAdding: .day, value: 1, to: today) ?? now
-        var recentSessions = 0
-        var rirSum = 0
-        var rirEligibleSets = 0
-        var rirLoggedSets = 0
-        recentSessionLoop: for session in completed {
-            guard !isCancelled() else { break }
-            let snapshot = session.session
-            let date = snapshot.completedAt ?? snapshot.startedAt
-            guard date >= recentStart, date < recentEnd, date <= now else { continue }
-            recentSessions += 1
-            for replay in session.exercises
-                where replay.exercise.modality == .dynamicStrength
-                && replay.exercise.trackingMode == .reps
-            {
-                guard !isCancelled() else { break recentSessionLoop }
-                for set in replay.exercise.sets
-                    where set.isAnalyticsEligible && set.reps > 0
-                {
-                    guard !isCancelled() else { break recentSessionLoop }
-                    rirEligibleSets += 1
-                    if set.rirLogged {
-                        rirSum += set.repsInReserve
-                        rirLoggedSets += 1
-                    }
-                }
-            }
-        }
+        let recent = Self.recentMetrics(
+            completed,
+            start: recentStart,
+            end: recentEnd,
+            now: now,
+            isCancelled: isCancelled
+        )
         let weeksElapsed = Double(ConsistencyReport.recentDays) / 7.0
-        let sessionsPerWeek = Double(recentSessions) / weeksElapsed
-        let averageRIR = rirLoggedSets > 0
-            ? Double(rirSum) / Double(rirLoggedSets)
+        let sessionsPerWeek = Double(recent.sessions) / weeksElapsed
+        let averageRIR = recent.rirLoggedSets > 0
+            ? Double(recent.rirSum) / Double(recent.rirLoggedSets)
             : nil
 
         let trainedWeekStarts = Set<Date>(setsByDay.compactMap { entry in
@@ -217,15 +166,100 @@ nonisolated extension AnalyticsAccumulator {
         )
 
         return ConsistencyReport(
-            weeks: weeks,
+            weeks: grid.weeks,
             sessionsPerWeek: sessionsPerWeek,
             weekStreak: weekStreak,
             averageRIR: averageRIR,
-            rirEligibleSets: rirEligibleSets,
-            rirLoggedSets: rirLoggedSets,
-            recentSessions: recentSessions,
-            daysTrainedInWindow: daysTrained
+            rirEligibleSets: recent.rirEligibleSets,
+            rirLoggedSets: recent.rirLoggedSets,
+            recentSessions: recent.sessions,
+            daysTrainedInWindow: grid.daysTrained
         )
+    }
+
+    private func completedSessions(
+        through now: Date,
+        isCancelled: @Sendable () -> Bool
+    ) -> [AnalyticsSessionReplay] {
+        var result: [AnalyticsSessionReplay] = []
+        result.reserveCapacity(sessions.count)
+        for session in sessions {
+            guard !isCancelled() else { break }
+            if session.session.completedAt != nil, session.date <= now { result.append(session) }
+        }
+        return result
+    }
+
+    private static func setsByDay(
+        _ sessions: [AnalyticsSessionReplay],
+        calendar: Calendar,
+        isCancelled: @Sendable () -> Bool
+    ) -> [Date: Int] {
+        var result: [Date: Int] = [:]
+        for session in sessions {
+            guard !isCancelled() else { break }
+            let snapshot = session.session
+            let day = calendar.startOfDay(for: snapshot.completedAt ?? snapshot.startedAt)
+            result[day, default: 0] += snapshot.totalCompletedSets
+        }
+        return result
+    }
+
+    private static func consistencyGrid(
+        from start: Date,
+        through today: Date,
+        setsByDay: [Date: Int],
+        calendar: Calendar,
+        isCancelled: @Sendable () -> Bool
+    ) -> (weeks: [[ConsistencyDay]], daysTrained: Int) {
+        var weeks: [[ConsistencyDay]] = []
+        var daysTrained = 0
+        weekLoop: for week in 0 ..< ConsistencyReport.windowWeeks {
+            guard !isCancelled() else { break }
+            var column: [ConsistencyDay] = []
+            for day in 0 ..< 7 {
+                guard !isCancelled() else { break weekLoop }
+                let date = calendar.date(byAdding: .day, value: week * 7 + day, to: start) ?? start
+                let sets = setsByDay[date] ?? 0
+                let inRange = date <= today
+                if inRange, sets > 0 { daysTrained += 1 }
+                column.append(ConsistencyDay(
+                    date: date,
+                    sets: sets,
+                    isInRange: inRange,
+                    isToday: calendar.isDate(date, inSameDayAs: today),
+                    level: ConsistencyReport.level(forSets: sets)
+                ))
+            }
+            weeks.append(column)
+        }
+        return (weeks, daysTrained)
+    }
+
+    private static func recentMetrics(
+        _ sessions: [AnalyticsSessionReplay],
+        start: Date,
+        end: Date,
+        now: Date,
+        isCancelled: @Sendable () -> Bool
+    ) -> (sessions: Int, rirSum: Int, rirEligibleSets: Int, rirLoggedSets: Int) {
+        var result = (sessions: 0, rirSum: 0, rirEligibleSets: 0, rirLoggedSets: 0)
+        sessionLoop: for session in sessions {
+            guard !isCancelled() else { break }
+            let date = session.session.completedAt ?? session.session.startedAt
+            guard date >= start, date < end, date <= now else { continue }
+            result.sessions += 1
+            for replay in session.exercises where replay.exercise.modality == .dynamicStrength && replay.exercise.trackingMode == .reps {
+                for set in replay.exercise.sets where set.isAnalyticsEligible && set.reps > 0 {
+                    guard !isCancelled() else { break sessionLoop }
+                    result.rirEligibleSets += 1
+                    guard set.rirLogged else { continue }
+                    result.rirSum += set.repsInReserve
+                    result.rirLoggedSets += 1
+                }
+            }
+        }
+        return result
     }
 
     /// Consecutive weeks with at least one trained day, counting back

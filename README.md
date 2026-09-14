@@ -77,10 +77,11 @@ pre-commit install
 
 ## Validating a change
 
-`Scripts/check.sh` is the canonical non-UI validator. It runs the guardrail
+`Scripts/check.sh` is the user-run broad non-UI validator. It runs the guardrail
 unit tests, the VivoKit snapshot contracts, the persistence baseline checksum,
 architecture, naming, size, complexity, formatting, documentation, and catalog
-checks, then builds the full app and widget graph.
+checks, then builds the full app and widget graph. Agents use only the smallest
+relevant Baguette scenario through `Scripts/verify.sh` after implementation.
 
 Prose-only changes use `/usr/bin/python3 Scripts/check_documentation.py` and
 `git diff --check`. Documentation-tooling changes also run their focused Python
@@ -96,9 +97,9 @@ swift test --package-path VivoKit # shared widget payload contracts
 ```
 
 Simulator processes stay headless: do not open the Simulator app or run the
-XCTest UI-test target. Run the smallest relevant targeted unit suite when logic
-changes. [engineering/verification.md](engineering/verification.md) has the
-exact commands, the risk-to-evidence matrix, and the Baguette scenario format.
+XCTest UI-test target. [engineering/verification.md](engineering/verification.md)
+separates the focused agent workflow from broader user-run validation and
+documents the Baguette scenario format.
 
 ## Repository layout
 
@@ -122,5 +123,4 @@ exact commands, the risk-to-evidence matrix, and the Baguette scenario format.
 | Proving a change | [engineering/verification.md](engineering/verification.md) |
 | Maintainability and accessibility bar | [engineering/quality.md](engineering/quality.md) |
 | Reviewing a diff | [engineering/code-review.md](engineering/code-review.md) |
-| Known compromises | [engineering/tech-debt.md](engineering/tech-debt.md) |
 | Specifications | [specs/index.md](specs/index.md) |
