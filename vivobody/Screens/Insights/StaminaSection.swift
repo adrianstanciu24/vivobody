@@ -78,9 +78,6 @@ private struct StaminaPatternBeam: View {
                     Capsule().fill(Surface.cardTintBright)
                     Capsule().fill(Tint.primary.gradient)
                         .frame(width: proxy.size.width * pattern.retention / scale)
-                    Rectangle().fill(Ink.secondary)
-                        .frame(width: 2, height: InstrumentBarHeight.standard)
-                        .offset(x: max(0, proxy.size.width / scale - 2))
                 }
             }
             .frame(height: InstrumentBarHeight.standard)

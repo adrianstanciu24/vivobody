@@ -90,7 +90,7 @@ struct DormantBaseline: View {
     }
 }
 
-private struct DormantBaselineShape: Shape {
+private nonisolated struct DormantBaselineShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         path.move(to: CGPoint(x: rect.minX, y: rect.midY))

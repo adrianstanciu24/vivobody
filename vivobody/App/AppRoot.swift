@@ -86,7 +86,7 @@ struct AppRoot: View {
             // The one archive analytics feeder in the app. Its ModelActor
             // store resolves SwiftData changes before publishing values.
             .background(
-                AnalyticsFeeder(
+                WorkoutInsightsFeeder(
                     appState: appState,
                     snapshotStore: analyticsSnapshotStore
                 )

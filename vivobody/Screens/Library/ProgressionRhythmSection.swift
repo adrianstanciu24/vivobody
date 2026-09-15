@@ -310,7 +310,7 @@ private nonisolated func scaledStairPoints(
 }
 
 /// The recorded history: baseline through the newest increase.
-private struct StaircaseLine: Shape {
+private nonisolated struct StaircaseLine: Shape {
     let unitPoints: [CGPoint]
     let inset: CGFloat
 
@@ -329,7 +329,7 @@ private struct StaircaseLine: Shape {
 
 /// The run since the last increase: a flat lead-out from the newest
 /// event to today's right edge.
-private struct TailLine: Shape {
+private nonisolated struct TailLine: Shape {
     let unitPoints: [CGPoint]
     let inset: CGFloat
 
@@ -345,7 +345,7 @@ private struct TailLine: Shape {
 
 /// Region beneath the staircase (including the lead-out), for the
 /// soft underglow fill.
-private struct StaircaseArea: Shape {
+private nonisolated struct StaircaseArea: Shape {
     let unitPoints: [CGPoint]
     let inset: CGFloat
 

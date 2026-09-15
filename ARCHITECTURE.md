@@ -119,7 +119,7 @@ work.
 ### Insights
 
 Insights are pure functions over immutable session snapshots and are shared
-through the fingerprint-keyed `SessionAnalytics` cache. `AnalyticsFeeder`
+through the fingerprint-keyed `SessionAnalytics` cache. `WorkoutInsightsFeeder`
 observes app-context saves as wake-up signals; a long-lived
 `AnalyticsSnapshotStore` ModelActor reads the archive and uses SwiftData
 persistent history to replace only changed session snapshots. Cold loads and

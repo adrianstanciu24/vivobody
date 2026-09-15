@@ -1,5 +1,5 @@
 //
-//  AnalyticsFeeder.swift
+//  WorkoutInsightsFeeder.swift
 //  vivobody
 //
 //  The app's archive-change observer. Mounted once behind the tab shell, it
@@ -12,7 +12,7 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-struct AnalyticsFeeder: View {
+struct WorkoutInsightsFeeder: View {
     var appState: AppState
     let snapshotStore: AnalyticsSnapshotStore
 

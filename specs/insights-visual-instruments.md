@@ -233,8 +233,7 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
 
 - The preview explains “Reps retained compared with your first set.” below
   “Reps held · all time” and above the pattern rows, applying to the whole card.
-- Pattern retention uses the standard 24pt capsule rail. Its first-set reference
-  marker spans that same height.
+- Pattern retention uses the standard 24pt capsule rail without an end marker.
 - Pattern details describe rounded retention changes across comparable series
   in percentage points, using “No change across comparable series” for zero.
   Their sample count reads “Based on N set series · all time”.

@@ -12,7 +12,7 @@ keeps its existing generation checks and background report worker.
 
 ## Boundaries
 
-- `AnalyticsFeeder` observes saves only as wake-up signals and passes the shared
+- `WorkoutInsightsFeeder` observes saves only as wake-up signals and passes the shared
   snapshot actor, never models or a `ModelContext`, across the actor boundary.
 - The app root creates one actor from the production or fallback container and
   injects it into both the feeder and widget writer.

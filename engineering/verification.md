@@ -1,22 +1,58 @@
 # Verification
 
-This is the canonical guide for proving Vivobody changes. Agents use one
-focused Baguette check after implementation and leave broader validation to the
-user. Simulator processes stay headless: never open the Simulator app and never
-run XCTest UI tests as part of the agent workflow.
+This is the canonical guide for proving Vivobody changes. Agents use the smallest
+affected build for non-UI changes and a focused Baguette check for UI or interaction
+changes. Broader validation belongs to the user. Simulator processes stay headless:
+never open the Simulator app and never run XCTest UI tests as part of the agent workflow.
 
 ## Default agent validation
 
-Choose the smallest relevant scenario from the feature/scenario map and run:
+Choose by the effect of the change, not just the file's location. A model edit
+that changes a visible interaction needs that interaction checked; a pure internal
+refactor does not need a UI launch.
+
+For non-UI changes, incrementally build the smallest affected target or module.
+Use the app scheme when the change crosses targets or cannot be isolated. The
+checked-in schemes are `vivobody` and `vivobodyWidgets`; use the widget scheme
+for widget-only code. For example, an app build without launching a simulator:
+
+```bash
+xcodebuild -project vivobody.xcodeproj -scheme vivobody \
+  -configuration Debug -destination 'generic/platform=iOS Simulator' \
+  -derivedDataPath .verify/DerivedData build
+```
+
+Reuse the existing destination and build cache when practical; the Baguette
+defaults are in `Scripts/verify.sh`. For isolated changes to the host-compatible
+snapshot core, the smaller build is:
+
+```bash
+swift build --package-path VivoKit --target VivoKitSnapshotCore
+```
+
+That package target covers `WidgetData.swift`, not all of VivoKit. Shared API
+changes also require the consuming app/widget build. A successful build proves
+compilation, not logic correctness, persistence compatibility, or runtime behavior;
+report those unverified boundaries without implying that tests passed.
+
+For UI or interaction changes, choose the smallest relevant scenario from the
+[feature/scenario map](../Scripts/verify_scenarios/README.md#choose-evidence-for-the-change) and run:
 
 ```bash
 SCENARIO=<relevant-scenario> Scripts/verify.sh
 ```
 
-Inspect its screenshot and accessibility tree. Do not add a clean build, a
-separate simulator build, `xcodebuild test`, `swift test`, or `Scripts/check.sh`
-to routine agent verification. If Baguette cannot observe the changed contract,
-state the limitation and leave that evidence to the user.
+Inspect its screenshot and accessibility tree. Baguette includes the incremental
+build, so do not build separately first. For a mixed change, this check can cover
+both compilation and the affected interaction.
+
+Verify once after a coherent change, not after every tiny edit. Repeat only after
+further relevant edits, a failure, or an unresolved concern. Avoid clean builds,
+cache resets, extra devices, and broad scenario sweeps. Do not add `xcodebuild test`,
+`swift test`, or `Scripts/check.sh` to routine agent verification. An existing quick,
+non-mutating diagnostic can help establish behavior when relevant; it does not
+authorize a wider test suite. If the chosen check is unavailable or cannot observe
+the changed contract, state the limitation and leave deeper evidence to the user.
 
 ## Documentation and process tooling
 
@@ -51,8 +87,8 @@ These documentation-only paths do not require Xcode, a simulator, or
 implement it; label proposed behavior explicitly and preserve the request boundary.
 If the change also affects app code, catalog JSON/schema, runtime resources,
 snapshot/persistence fixtures, scenario JSON or runner behavior, build settings,
-or other validation hooks/scripts, use the focused Baguette evidence described
-below and report any unobserved contracts as user testing.
+or other validation hooks/scripts, choose the check by effect using the default
+policy above and the change-type table below. Report unobserved contracts as user testing.
 
 The [catalog inventory](../specs/catalog/inventory.md) and
 [scenario directory](../Scripts/verify_scenarios/index.md) are generated Markdown.
@@ -69,7 +105,7 @@ unrelated inputs merely to hide a pre-existing verification failure.
 ## Optional read-only structural diagnosis
 
 These checks may diagnose a problem while investigating, but they do not replace
-the required focused Baguette check after implementation:
+the selected build or focused Baguette check after implementation:
 
 ```bash
 /usr/bin/python3 Scripts/check_architecture.py
@@ -172,7 +208,7 @@ review screenshots for layout, hierarchy, clipping, and visual regressions.
 ## Semantic scenarios
 
 Start with the [feature/scenario map](../Scripts/verify_scenarios/README.md#choose-evidence-for-the-change)
-to select the smallest relevant flow and focused unit suite. The generated
+to select the smallest relevant flow and identify user-run logic suites. The generated
 directory lists every scenario and its initial launch options. A normal-state
 pass is not evidence for a failure, locked, or accessibility state.
 
@@ -230,14 +266,14 @@ graphs. Follow `vivobodyTests/TrainingLoadTests.swift` for the prevailing style.
 | Prose-only documentation or instructions | Documentation checker, diff hygiene, and manual guidance review; catalog Python suite when catalog guidance/proposals change; no build |
 | Documentation checker, inventory generator, or their hook routing | Prose checks plus `test_check_documentation.py`; no app build |
 | Scenario JSON or verification harness | Affected headless scenario with inspected evidence; focused harness tests are user-run |
-| Pure analytics or domain logic | Closest semantic Baguette scenario; targeted logic suites are user-run |
-| Persistence shape or migration | Closest launch/restoration scenario; store fixtures and migration suites are user-run |
-| Session lifecycle | Relevant semantic scenario |
+| Pure analytics or domain logic | Smallest affected incremental build; targeted logic suites are user-run |
+| Persistence shape or migration | Affected app build; Baguette if UI/interaction changes; store fixtures and migration suites are user-run |
+| Session lifecycle | Affected build; relevant semantic scenario when user interaction changes |
 | UI layout or interaction | Inspected Baguette screenshot and accessibility tree |
-| VivoKit snapshot payload or widget decoding | Relevant semantic handoff scenario; package tests are user-run |
-| HealthKit, StoreKit, provisioning, or hardware behavior | All observable Baguette evidence; list remaining device/App Store checks explicitly |
+| VivoKit snapshot payload or widget decoding | Smallest affected build plus consumers for shared API changes; Baguette for changed handoffs/UI; package tests are user-run |
+| HealthKit, StoreKit, provisioning, or hardware behavior | Affected build; Baguette for changed UI/interaction; list remaining device/App Store checks explicitly |
 
-Anything Baguette cannot observe remains a user-owned manual verification item;
+Runtime contracts not exercised by the selected check remain user-owned verification items;
 do not substitute an XCTest UI test or unrelated simulator test merely to
 produce a green result.
 

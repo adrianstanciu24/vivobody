@@ -107,10 +107,10 @@ struct MuscleMapDetailsSheet: View {
         bandCounts.enumerated().reduce(Text("")) { line, item in
             let (index, entry) = item
             let separator = index == 0 ? "" : "  ·  "
-            return line
-                + Text(separator).foregroundStyle(Ink.quaternary)
-                + Text("\(entry.count) ").foregroundStyle(Ink.secondary).monospacedDigit()
-                + Text(entry.band.displayName).foregroundStyle(Ink.tertiary)
+            let separatorText = Text(separator).foregroundStyle(Ink.quaternary)
+            let countText = Text("\(entry.count) ").foregroundStyle(Ink.secondary).monospacedDigit()
+            let bandText = Text(entry.band.displayName).foregroundStyle(Ink.tertiary)
+            return Text("\(line)\(separatorText)\(countText)\(bandText)")
         }
     }
 

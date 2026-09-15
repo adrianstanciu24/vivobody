@@ -397,7 +397,7 @@ private struct Ripple: View {
 
 // MARK: - Checkmark path
 
-private struct Checkmark: Shape {
+private nonisolated struct Checkmark: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         p.move(to: CGPoint(x: rect.minX, y: rect.midY + rect.height * 0.05))
