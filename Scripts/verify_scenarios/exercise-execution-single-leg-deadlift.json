@@ -87,7 +87,7 @@
       "assert": {
         "required": [
           {
-            "labelContains": "Stabilizer, Upper Traps · External Rotators · Brachialis · Radial Wrist Extensors · Finger Flexors · Abs · Obliques · Biceps Femoris · Glute Med · Gastrocnemius · Soleus"
+            "labelContains": "Stabilizer, Upper Traps · External Rotators · Brachialis · Flexor Carpi Radialis · Flexor Carpi Ulnaris · Radial Wrist Extensors · Extensor Carpi Ulnaris · Finger Flexors · Finger Extensors · Abs · Obliques · Biceps Femoris · Glute Med · Gastrocnemius · Soleus"
           }
         ]
       }

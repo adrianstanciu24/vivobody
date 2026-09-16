@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 115.
+Scenario files: 119.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -38,6 +38,8 @@ Scenario files: 115.
 | [catalog-essential-hold](catalog-essential-hold.json) | library | None declared |
 | [catalog-essential-power](catalog-essential-power.json) | library | None declared |
 | [catalog-essential-strength](catalog-essential-strength.json) | library | None declared |
+| [catalog-forearm-development](catalog-forearm-development.json) | today | `--ui-test-forearm-development --static-body -settings.appearance dark` |
+| [catalog-forearm-stabilizers](catalog-forearm-stabilizers.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-horizontal-leg-press](catalog-horizontal-leg-press.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-expansion](catalog-machine-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-first-wave-assisted-dip](catalog-machine-first-wave-assisted-dip.json) | library | `--static-body -settings.appearance dark` |
@@ -48,6 +50,7 @@ Scenario files: 115.
 | [catalog-magnus-extension](catalog-magnus-extension.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-must-have-expansion](catalog-must-have-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
+| [catalog-tfl-compound-development](catalog-tfl-compound-development.json) | today | `--ui-test-tfl-development --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-tfl-coverage](catalog-tfl-coverage.json) | library | `--static-body -settings.appearance dark` |
 | [custom-exercise-assistance](custom-exercise-assistance.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
 | [custom-exercise-type](custom-exercise-type.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
@@ -130,3 +133,4 @@ Scenario files: 115.
 | [workout-load-comparison-live-light](workout-load-comparison-live-light.json) | today | `--ui-test-active-complete-summary --ui-test-widget-start-request --seed-history --static-body -settings.weightUnit lb -settings.appearance light` |
 | [workout-load-comparison-live](workout-load-comparison-live.json) | today | `--ui-test-active-complete-summary --ui-test-widget-start-request --seed-history --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [workout-load-comparison](workout-load-comparison.json) | today | `--ui-test-active-complete-summary --ui-test-widget-start-request --seed-history --static-body -settings.weightUnit lb -settings.appearance dark` |
+| [years-templates](years-templates.json) | library | `-years --static-body -settings.appearance light` |

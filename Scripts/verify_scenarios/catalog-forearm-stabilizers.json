@@ -1,0 +1,223 @@
+{
+  "name": "catalog-forearm-stabilizers",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Conventional Barbell Deadlift, "
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Conventional Barbell Deadlift, "
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Stabilizer, .*Flexor Carpi Radialis.*Flexor Carpi Ulnaris.*Extensor Carpi Ulnaris.*Finger Extensors"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Stabilizer, .*Flexor Carpi Radialis.*Flexor Carpi Ulnaris.*Extensor Carpi Ulnaris.*Finger Extensors"
+          },
+          {
+            "label": "Conventional Barbell Deadlift"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^(Primary|Secondary), .*Extensor Carpi Ulnaris"
+          },
+          {
+            "labelRegex": "^(Primary|Secondary), .*Finger Extensors"
+          },
+          {
+            "labelRegex": "^(Primary|Secondary), .*Flexor Carpi Radialis"
+          },
+          {
+            "labelRegex": "^(Primary|Secondary), .*Flexor Carpi Ulnaris"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "dark"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Pull-Up, "
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Pull-Up, "
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Stabilizer, .*Flexor Carpi Radialis.*Flexor Carpi Ulnaris.*Extensor Carpi Ulnaris.*Finger Extensors"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Stabilizer, .*Flexor Carpi Radialis.*Flexor Carpi Ulnaris.*Extensor Carpi Ulnaris.*Finger Extensors"
+          },
+          {
+            "label": "Pull-Up"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^(Primary|Secondary), .*Extensor Carpi Ulnaris"
+          },
+          {
+            "labelRegex": "^(Primary|Secondary), .*Finger Extensors"
+          },
+          {
+            "labelRegex": "^(Primary|Secondary), .*Flexor Carpi Radialis"
+          },
+          {
+            "labelRegex": "^(Primary|Secondary), .*Flexor Carpi Ulnaris"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "dark"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Standing Dumbbell Overhead Press, "
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Standing Dumbbell Overhead Press, "
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Stabilizer, .*Flexor Carpi Radialis.*Flexor Carpi Ulnaris.*Extensor Carpi Ulnaris.*Finger Extensors"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Stabilizer, .*Flexor Carpi Radialis.*Flexor Carpi Ulnaris.*Extensor Carpi Ulnaris.*Finger Extensors"
+          },
+          {
+            "label": "Standing Dumbbell Overhead Press"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^(Primary|Secondary), .*Extensor Carpi Ulnaris"
+          },
+          {
+            "labelRegex": "^(Primary|Secondary), .*Finger Extensors"
+          },
+          {
+            "labelRegex": "^(Primary|Secondary), .*Flexor Carpi Radialis"
+          },
+          {
+            "labelRegex": "^(Primary|Secondary), .*Flexor Carpi Ulnaris"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelRegex": "^Stabilizer, .*Flexor Carpi Radialis.*Flexor Carpi Ulnaris.*Extensor Carpi Ulnaris.*Finger Extensors"
+    },
+    {
+      "label": "Standing Dumbbell Overhead Press"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelRegex": "^(Primary|Secondary), .*Extensor Carpi Ulnaris"
+    },
+    {
+      "labelRegex": "^(Primary|Secondary), .*Finger Extensors"
+    },
+    {
+      "labelRegex": "^(Primary|Secondary), .*Flexor Carpi Radialis"
+    },
+    {
+      "labelRegex": "^(Primary|Secondary), .*Flexor Carpi Ulnaris"
+    }
+  ]
+}

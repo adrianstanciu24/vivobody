@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "bilateral-squat",
   "name": "Bilateral Squat",
-  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures; NASM's single-dumbbell goblet fixture descending to approximately thigh parallel or deeper as mobility allows; and one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion. Those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply only to loaded branches. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and otherwise unbounded full-depth variants remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the free bilateral squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. Adductor magnus receives secondary credit only on the reviewed barbell-back-squat fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants.",
+  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures; NASM's single-dumbbell goblet fixture descending to approximately thigh parallel or deeper as mobility allows; and one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion. Those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply only to loaded branches. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and otherwise unbounded full-depth variants remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the free bilateral squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. Adductor magnus receives secondary credit only on the reviewed barbell-back-squat fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants. TFL receives stabilizer credit only in the five free fixtures for hip, pelvic and knee alignment. Selkowitz directly measured low TFL activity during an unloaded squat. Transfer across load placement, stance, foot orientation, depth and cadence is categorical anatomy and mechanics, not exact-fixture EMG or a strong TFL target. The guided Smith roster is outside this evidence slice; exclusion does not establish absent recruitment. No hip-flexion prime action or unrestricted rotation is added.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "armstrong-2022-squat-movement-dynamics",
@@ -22,7 +22,8 @@
     "deforest-2014-single-double-leg-squat",
     "wu-2020-loading-devices-squat-lunge",
     "benn-2018-adductor-magnus-regional-emg",
-    "collings-2026-hip-adductor-muscle-forces"
+    "collings-2026-hip-adductor-muscle-forces",
+    "selkowitz-2013-gluteal-tfl-fine-wire-emg"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -201,7 +202,8 @@
         "abs",
         "obliques",
         "lumbarExtensors",
-        "tibialisAnterior"
+        "tibialisAnterior",
+        "tensorFasciaeLatae"
       ]
     }
   },
@@ -707,6 +709,24 @@
           "role": "stabilizer"
         }
       ]
+    },
+    {
+      "id": "free-fixture-requires-tfl-control",
+      "description": "Require bounded TFL hip/pelvic control in reviewed free squat fixtures; retain the guided Smith roster.",
+      "when": {
+        "field": "variant.fixedPath",
+        "operator": "equals",
+        "value": false
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
+      ]
     }
   ],
   "exercises": [
@@ -745,6 +765,10 @@
         { "muscle": "lumbarExtensors", "role": "stabilizer" },
         {
           "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
           "role": "stabilizer"
         }
       ],
@@ -833,6 +857,10 @@
         {
           "muscle": "tibialisAnterior",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -905,6 +933,10 @@
         {
           "muscle": "tibialisAnterior",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -952,6 +984,10 @@
         {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
         {
           "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
           "role": "stabilizer"
         }
       ],
@@ -1045,6 +1081,10 @@
         {"muscle": "lumbarExtensors", "role": "stabilizer"},
         {
           "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
           "role": "stabilizer"
         }
       ],

@@ -1,0 +1,96 @@
+{
+  "name": "catalog-forearm-development",
+  "launch": {
+    "reset": false,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-forearm-development",
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Current training development body model"
+      }
+    },
+    {
+      "tap": {
+        "label": "Current training development legend. No history, low, building, consistent, and high"
+      }
+    },
+    {
+      "wait": {
+        "label": "Current development"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Flexor Carpi Radialis, (Low|Building|Consistent|High)"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Flexor Carpi Radialis, (Low|Building|Consistent|High)\\..*effective sets in 14 days.*Pull-Up"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Flexor Carpi (Radialis|Ulnaris), No history"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Flexor Carpi Ulnaris, (Low|Building|Consistent|High)"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Flexor Carpi Ulnaris, (Low|Building|Consistent|High)\\..*effective sets in 14 days.*Pull-Up"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Flexor Carpi Ulnaris, No history"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Done",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Current training development body model"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Current training development body model"
+    }
+  ],
+  "forbidden": [],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

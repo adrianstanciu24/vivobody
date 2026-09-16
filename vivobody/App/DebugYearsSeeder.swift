@@ -55,6 +55,26 @@ import SwiftData
             ],
         ]
 
+        /// Reuses the first three -years workouts with current catalog snapshots.
+        /// Unique fixture IDs preserve existing history during focused map checks.
+        static func seedTFLVerification(in context: ModelContext, now: Date = Date()) {
+            guard let sessions = try? context.fetch(FetchDescriptor<WorkoutSession>()) else { return }
+            let existingIDs = Set(sessions.map(\.id))
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = .current
+            guard let anchor = calendar.date(from: DateComponents(year: 2020, month: 1, day: 6)) else { return }
+            let elapsed = calendar.dateComponents([.day], from: anchor, to: now).day ?? 0
+            let week = elapsed / 7
+            for slot in 0 ..< 3 {
+                let id = UUID(uuidString: String(format: "F0630000-0000-4000-8000-%012d", slot + 1))!
+                guard !existingIDs.contains(id),
+                      let started = calendar.date(byAdding: .day, value: -slot - 1, to: now)
+                else { continue }
+                context.insert(makeSession(id: id, started: started, week: week, slot: slot))
+            }
+            try? context.saveOrRollback()
+        }
+
         static func seed(in context: ModelContext, now: Date = Date()) {
             var calendar = Calendar(identifier: .gregorian)
             calendar.timeZone = .current
@@ -96,7 +116,8 @@ import SwiftData
         }
 
         private static func makeSession(id: UUID, started: Date, week: Int, slot: Int) -> WorkoutSession {
-            let count = 4 + (week + slot) % 3
+            // Shift the prefix between training blocks so late entries are sampled.
+            let count = 4 + (week + slot + week / 12) % 3
             let exercises = workouts[slot].prefix(count).enumerated().map { order, lift in
                 // Small training cycles add progression, rep variation and deloads.
                 let deload = week % 12 == 11

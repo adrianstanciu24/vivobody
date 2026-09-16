@@ -1,0 +1,50 @@
+{
+  "name": "years-templates",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "-years",
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "label": "Templates",
+        "value": "Selected"
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelRegex": "^Lower A, .*"
+    },
+    {
+      "labelRegex": "^Upper Push, .*"
+    },
+    {
+      "labelRegex": "^Lower B, .*"
+    },
+    {
+      "labelRegex": "^Upper Pull, .*"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

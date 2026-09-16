@@ -71,6 +71,22 @@ three exact squat/deadlift fixtures listed in the [catalog foundation](catalog/R
 Exercise Detail provides a collapsed “About adductor magnus” explanation when
 magnus is secondary. Existing identities and saved snapshots are retained.
 
+The [forearm grip-stabilizer correction](catalog/proposals/forearm-grip-stabilizer-correction.md)
+credits reviewed finger flexors/extensors and radial/ulnar wrist flexors/extensors
+in existing deadlift, suspended pull-up/chin-up, and external overhead-press
+fixtures. These are categorical stabilizer inferences, not measured growth or
+equal involvement.
+Bundled Library entries reconcile to the corrected catalog; saved template and
+workout muscle-role snapshots retain their original values. Starting from an
+existing template therefore retains its original roles until the exercise is
+reselected. The correction does not retroactively recolor the Today history map.
+
+The [TFL compound-exercise correction](catalog/proposals/tfl-compound-coverage.md)
+adds reviewed hip/pelvic-control stabilizer roles to 19 existing free lower-body
+fixtures, and a secondary role in the existing lateral-lunge abduction phase.
+Shared capabilities and role weights remain unchanged. The same frozen-snapshot
+boundary applies to existing templates, workouts and already-seeded debug history.
+
 Roles are encoded in the SwiftData snapshot shape, projected onto Exercise
 Anatomy, and projected into training credit separately:
 

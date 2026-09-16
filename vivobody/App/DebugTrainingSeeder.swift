@@ -3,7 +3,8 @@
 //  vivobody
 //
 //  Manual -debug fixture: four scheduled templates and six calendar months
-//  of completed training. Stable IDs make repeated launches additive and safe.
+//  of completed training. -years reuses only the template fixture. Stable IDs
+//  make repeated launches additive and safe.
 //
 
 import Foundation
@@ -61,25 +62,9 @@ import SwiftData
             else { return }
 
             let sessionIDs = Set(existingSessions.map(\.id))
-            let nextOrder = (existingTemplates.map(\.sortOrder).max() ?? -1) + 1
-            let templates = plans.enumerated().map { index, plan in
-                let id = fixtureID(suffix: index + 1)
-                if let existing = existingTemplates.first(where: { $0.id == id }) {
-                    addCore(to: existing, plan: plan)
-                    return existing
-                }
-                let template = WorkoutTemplate(
-                    id: id, name: plan.name, sortOrder: nextOrder + index, createdAt: start
-                )
-                template.scheduledWeekdays = [plan.weekday]
-                template.exercises = plan.lifts.enumerated().map { order, lift in
-                    debugCatalogTemplateExercise(
-                        named: lift.name, plannedSets: 3, plannedReps: lift.reps,
-                        plannedWeight: lift.pounds, sortOrder: order
-                    )
-                }
-                context.insert(template)
-                return template
+            let templates = makeTemplates(in: context, existing: existingTemplates, createdAt: start)
+            for (index, template) in templates.enumerated() {
+                addCore(to: template, plan: plans[index])
             }
 
             updateExistingSessions(existingSessions, calendar: calendar)
@@ -108,6 +93,45 @@ import SwiftData
                 day = next
             }
             try? context.saveOrRollback()
+        }
+
+        /// Shared template fixture for -years; existing templates remain untouched.
+        static func seedTemplates(
+            in context: ModelContext,
+            now: Date = Date(),
+            calendar: Calendar = .current
+        ) {
+            guard let existing = try? context.fetch(FetchDescriptor<WorkoutTemplate>()),
+                  let createdAt = calendar.date(byAdding: .month, value: -6, to: calendar.startOfDay(for: now))
+            else { return }
+            _ = makeTemplates(in: context, existing: existing, createdAt: createdAt)
+            try? context.saveOrRollback()
+        }
+
+        private static func makeTemplates(
+            in context: ModelContext,
+            existing: [WorkoutTemplate],
+            createdAt: Date
+        ) -> [WorkoutTemplate] {
+            let nextOrder = (existing.map(\.sortOrder).max() ?? -1) + 1
+            return plans.enumerated().map { index, plan in
+                let id = fixtureID(suffix: index + 1)
+                if let existing = existing.first(where: { $0.id == id }) {
+                    return existing
+                }
+                let template = WorkoutTemplate(
+                    id: id, name: plan.name, sortOrder: nextOrder + index, createdAt: createdAt
+                )
+                template.scheduledWeekdays = [plan.weekday]
+                template.exercises = plan.lifts.enumerated().map { order, lift in
+                    debugCatalogTemplateExercise(
+                        named: lift.name, plannedSets: 3, plannedReps: lift.reps,
+                        plannedWeight: lift.pounds, sortOrder: order
+                    )
+                }
+                context.insert(template)
+                return template
+            }
         }
 
         private static func makeSession(plan: Plan, id: UUID, started: Date, week: Int) -> WorkoutSession {

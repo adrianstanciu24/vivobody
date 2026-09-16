@@ -3,12 +3,14 @@
   "schemaVersion": 1,
   "id": "step-up",
   "name": "Forward Step-Up",
-  "definition": "A lead-limb closed-chain compound step in which the lead foot begins on a raised platform and raises the body without propulsive help from the trail leg. The roster owns two source-exact forward fixtures: a complete 21-centimeter bodyweight sequence with bilateral top support and both feet returning to the floor, and an approximately 38-centimeter two-dumbbell sequence that repeats one lead side while leaving terminal trail-foot contact and descent order unreported. The contract preserves those unknowns rather than converting them into a generic continuous step-up. Other box heights, trail-leg propulsion, hand support, stair climbing, step-downs, and lateral, crossover, diagonal, reverse, explosive, or machine-stepping tasks remain outside this family.",
+  "definition": "A lead-limb closed-chain compound step in which the lead foot begins on a raised platform and raises the body without propulsive help from the trail leg. The roster owns two source-exact forward fixtures: a complete 21-centimeter bodyweight sequence with bilateral top support and both feet returning to the floor, and an approximately 38-centimeter two-dumbbell sequence that repeats one lead side while leaving terminal trail-foot contact and descent order unreported. The contract preserves those unknowns rather than converting them into a generic continuous step-up. Other box heights, trail-leg propulsion, hand support, stair climbing, step-downs, and lateral, crossover, diagonal, reverse, explosive, or machine-stepping tasks remain outside this family. TFL receives stabilizer credit for hip and pelvic control during unilateral support. Selkowitz measured TFL in a forward step-up; Besomi recorded it with surface and fine-wire methods and found electrode-dependent differences. Transfer to the exact heights, paired loading and contact sequences is categorical anatomy and mechanics, not matched-protocol amplitudes, force, equal recruitment or adaptation. TFL does not produce the ascent hip-extension action.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "simenz-2012-loaded-step-up-variations",
     "wang-2003-forward-lateral-step-up-biomechanics",
-    "anders-2006-ace-glutes-to-max"
+    "anders-2006-ace-glutes-to-max",
+    "selkowitz-2013-gluteal-tfl-fine-wire-emg",
+    "besomi-2025-tfl-dynamic-emg-methods"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -172,6 +174,12 @@
           "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "tensorFasciaeLatae"
+        ],
+        "minimumRole": "stabilizer"
       }
     ],
     "allowedByRole": {
@@ -195,7 +203,8 @@
         "extensorCarpiRadialis",
         "externalRotators",
         "trapeziusUpper",
-        "brachialis"
+        "brachialis",
+        "tensorFasciaeLatae"
       ]
     }
   },
@@ -491,7 +500,11 @@
         { "muscle": "gluteMed", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -558,7 +571,11 @@
         {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
         {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
         {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
-        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}
+        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"},
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "leadFootRaisedStart",

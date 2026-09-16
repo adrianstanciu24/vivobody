@@ -3,14 +3,18 @@
   "schemaVersion": 1,
   "id": "trap-bar-deadlift",
   "name": "Trap-Bar Deadlift",
-  "definition": "A bilateral unsupported floor pull performed while standing inside a free hexagonal frame and holding parallel handles beside the lower legs. The frame rises from the floor to an upright endpoint through combined hip extension, knee extension, and ankle plantarflexion. The roster is limited to two independently documented fixtures and does not claim that their handle heights are interchangeable. Lake et al.'s low-handle fixture used a Pullum Sports hex bar whose published figure places the unraised handles at the sleeve axis, a parallel palms-facing grip, bare feet, three separate single repetitions at 90 percent of the low-handle fixture's separately tested one-repetition maximum, and at least two minutes between attempts. Lockie et al.'s high-handle fixture used the high handles of an American Barbell dual-height hex bar; the high-handle centers were 10 centimeters above the low-handle centers and 64 centimeters apart. That fixture used one-repetition-maximum attempts, three minutes between attempts, maximal force intent, and self-selected footwear kept consistent on an Olympic platform. Both sources analyzed the ascent from the resting floor position to standing and did not prescribe an eccentric cadence; the catalog's controlled return to the floor is an explicit logging adaptation rather than a measured phase. Swinton et al. support the shared hip-, knee-, and ankle-extension actions and show a greater knee moment with lower lumbar and hip moments for their unspecified-height hex bar, but their shoulder-width, maximal-speed, 10-to-80-percent-straight-bar-one-repetition-maximum protocol supplies no fixture values to either active record. Camara et al. support vastus-lateralis, biceps-femoris, and erector-spinae involvement for an unspecified-height hex bar, not numeric muscle contribution or high-handle equivalence. Gluteus maximus and the combined vasti region are non-ranked co-primary training emphases; rectus femoris and the plantarflexors are secondary, while hamstrings, loaded-grip, upper-limb, and trunk contributors receive conservative stabilization credit. The one-repetition defaults reflect the directly studied trial structures. The 45-pound and 20-kilogram load seeds are product initialization, not claims about trap-bar frame mass or either source prescription. Neither active source standardized stance width, toe angle, spinal kinematics, or the return phase, so none is invented. Straight-bar, sumo, arbitrary handle heights, open-frame bars, farmer carries, jumps, mid-thigh pulls, shrugs, deficits, blocks, racks, unilateral or staggered stances, straps, and non-trap-bar equipment remain outside this contract.",
+  "definition": "A bilateral unsupported floor pull performed while standing inside a free hexagonal frame and holding parallel handles beside the lower legs. The frame rises from the floor to an upright endpoint through combined hip extension, knee extension, and ankle plantarflexion. The roster is limited to two independently documented fixtures and does not claim that their handle heights are interchangeable. Lake et al.'s low-handle fixture used a Pullum Sports hex bar whose published figure places the unraised handles at the sleeve axis, a parallel palms-facing grip, bare feet, three separate single repetitions at 90 percent of the low-handle fixture's separately tested one-repetition maximum, and at least two minutes between attempts. Lockie et al.'s high-handle fixture used the high handles of an American Barbell dual-height hex bar; the high-handle centers were 10 centimeters above the low-handle centers and 64 centimeters apart. That fixture used one-repetition-maximum attempts, three minutes between attempts, maximal force intent, and self-selected footwear kept consistent on an Olympic platform. Both sources analyzed the ascent from the resting floor position to standing and did not prescribe an eccentric cadence; the catalog's controlled return to the floor is an explicit logging adaptation rather than a measured phase. Swinton et al. support the shared hip-, knee-, and ankle-extension actions and show a greater knee moment with lower lumbar and hip moments for their unspecified-height hex bar, but their shoulder-width, maximal-speed, 10-to-80-percent-straight-bar-one-repetition-maximum protocol supplies no fixture values to either active record. Camara et al. support vastus-lateralis, biceps-femoris, and erector-spinae involvement for an unspecified-height hex bar, not numeric muscle contribution or high-handle equivalence. Gluteus maximus and the combined vasti region are non-ranked co-primary training emphases; rectus femoris and the plantarflexors are secondary, while hamstrings, loaded-grip, upper-limb, and trunk contributors receive conservative stabilization credit. The one-repetition defaults reflect the directly studied trial structures. The 45-pound and 20-kilogram load seeds are product initialization, not claims about trap-bar frame mass or either source prescription. Neither active source standardized stance width, toe angle, spinal kinematics, or the return phase, so none is invented. Straight-bar, sumo, arbitrary handle heights, open-frame bars, farmer carries, jumps, mid-thigh pulls, shrugs, deficits, blocks, racks, unilateral or staggered stances, straps, and non-trap-bar equipment remain outside this contract. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. Radial and ulnar wrist flexors are distinct grip-associated wrist-control co-contributors and receive stabilizer roles. Pratt directly measured flexor carpi ulnaris during conventional barbell deadlifts; Mannella measured both wrist flexors during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Transfer to each reviewed deadlift fixture is a categorical anatomy-and-mechanics inference, not direct measurement of its phases or uniformly high recruitment. Forman shows that wrist-flexor activity depends on wrist-force direction and can be low. These roles do not introduce dynamic wrist flexion, equal involvement, or measured adaptation.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "camara-2016-straight-hex-bar-emg",
     "christophy-2012-lumbar-spine",
     "lake-2017-low-handle-hex-bar-deadlift",
     "lockie-2018-high-handle-hex-bar-deadlift",
-    "swinton-2011-straight-hex-bar-biomechanics"
+    "swinton-2011-straight-hex-bar-biomechanics",
+    "krings-2021-fat-grip-resistance-exercise",
+    "forman-2019-handgrip-wrist-force",
+    "pratt-2020-deadlift-grip-forearm-emg",
+    "mannella-2022-grip-wrist-perturbations"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -207,6 +211,30 @@
           "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiUlnaris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "flexorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "flexorCarpiUlnaris"
+        ],
+        "minimumRole": "stabilizer"
       }
     ],
     "allowedByRole": {
@@ -229,7 +257,11 @@
         "triceps",
         "abs",
         "obliques",
-        "lumbarExtensors"
+        "lumbarExtensors",
+        "extensorCarpiUlnaris",
+        "fingerExtensors",
+        "flexorCarpiRadialis",
+        "flexorCarpiUlnaris"
       ]
     }
   },
@@ -800,6 +832,22 @@
         {
           "muscle": "lumbarExtensors",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -929,6 +977,22 @@
         },
         {
           "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
           "role": "stabilizer"
         }
       ],

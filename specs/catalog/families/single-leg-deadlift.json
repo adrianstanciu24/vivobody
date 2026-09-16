@@ -3,13 +3,18 @@
   "schemaVersion": 1,
   "id": "single-leg-deadlift",
   "name": "Single-Leg Deadlift",
-  "definition": "A unilateral unsupported free-weight hinge performed on one working leg, with hip extension as the sole dynamic prime action and the free leg used for balance rather than propulsion. The roster contains exactly three reviewed fixtures. Diamant et al. studied a floor-start barbell single-leg deadlift using an individual eight-repetition-maximum load: the working foot was centered before a standard Olympic bar, the free leg extended behind, the knee bent only enough to preserve the instructed extended back, both hands used a shoulder-width pronated grip, the bar stayed close to the body, the working hip reached full extension, the free foot could touch briefly at the top for stabilization, and the bar returned to the floor. Mo et al. studied continuous dumbbell single-leg Romanian deadlifts with either an ipsilateral or contralateral one-hand load: the dominant working leg maintained an instructed approximately 15-degree knee angle, the bottom trunk posture was about parallel to the ground, and six repetitions were performed at maximal concentric and eccentric speed with an individually matched metronome pace. Mo standardized foot and grip placement but did not report their dimensions or orientation, did not report the free-leg trajectory, and did not separately state whether the dumbbell cycle entered at the top or bottom. Product instructions therefore expose those limits rather than filling them from generic coaching convention, and mirroring either source to the other working side is an explicit catalog adaptation. The fixed 45-pound / 20-kilogram barbell and 25-pound / 12.5-kilogram dumbbell seeds are product initialization, not claims that they equal an athlete's eight-repetition maximum or Mo's flywheel-matched six-repetition load. The sagittal plane classification follows the hip-extension prime; frontal- and transverse-plane control remain stability demands, not invented dynamic actions. Medial hamstrings and gluteus maximus are non-ranked co-primary hip extensors, while the directly measured lumbar extensors oppose the source-described spinal-flexion tendency. Gluteus medius and obliques control the pelvis and trunk. The visible biceps-femoris region remains a stabilizer because its combined mesh cannot distinguish the hip-extending long head from the short head. Surface EMG supports the existence and distinction of these fixtures but does not establish numeric muscle contribution, equal activation, hypertrophy, or equipment equivalence. Mooney et al. directly documented a staggered-stance barbell Romanian deadlift but did not report rear-foot load sharing, stance width, knee behavior, grip, range endpoint, bar path, or cadence and combined that exercise with Nordic work and field training. B-stance, kickstand, staggered-stance, flywheel, bodyweight, kettlebell, cable, machine, externally supported, unstable-surface, arbitrary-load-side, and other familiar single-leg hinge names therefore remain outside this contract.",
+  "definition": "A unilateral unsupported free-weight hinge performed on one working leg, with hip extension as the sole dynamic prime action and the free leg used for balance rather than propulsion. The roster contains exactly three reviewed fixtures. Diamant et al. studied a floor-start barbell single-leg deadlift using an individual eight-repetition-maximum load: the working foot was centered before a standard Olympic bar, the free leg extended behind, the knee bent only enough to preserve the instructed extended back, both hands used a shoulder-width pronated grip, the bar stayed close to the body, the working hip reached full extension, the free foot could touch briefly at the top for stabilization, and the bar returned to the floor. Mo et al. studied continuous dumbbell single-leg Romanian deadlifts with either an ipsilateral or contralateral one-hand load: the dominant working leg maintained an instructed approximately 15-degree knee angle, the bottom trunk posture was about parallel to the ground, and six repetitions were performed at maximal concentric and eccentric speed with an individually matched metronome pace. Mo standardized foot and grip placement but did not report their dimensions or orientation, did not report the free-leg trajectory, and did not separately state whether the dumbbell cycle entered at the top or bottom. Product instructions therefore expose those limits rather than filling them from generic coaching convention, and mirroring either source to the other working side is an explicit catalog adaptation. The fixed 45-pound / 20-kilogram barbell and 25-pound / 12.5-kilogram dumbbell seeds are product initialization, not claims that they equal an athlete's eight-repetition maximum or Mo's flywheel-matched six-repetition load. The sagittal plane classification follows the hip-extension prime; frontal- and transverse-plane control remain stability demands, not invented dynamic actions. Medial hamstrings and gluteus maximus are non-ranked co-primary hip extensors, while the directly measured lumbar extensors oppose the source-described spinal-flexion tendency. Gluteus medius and obliques control the pelvis and trunk. The visible biceps-femoris region remains a stabilizer because its combined mesh cannot distinguish the hip-extending long head from the short head. Surface EMG supports the existence and distinction of these fixtures but does not establish numeric muscle contribution, equal activation, hypertrophy, or equipment equivalence. Mooney et al. directly documented a staggered-stance barbell Romanian deadlift but did not report rear-foot load sharing, stance width, knee behavior, grip, range endpoint, bar path, or cadence and combined that exercise with Nordic work and field training. B-stance, kickstand, staggered-stance, flywheel, bodyweight, kettlebell, cable, machine, externally supported, unstable-surface, arbitrary-load-side, and other familiar single-leg hinge names therefore remain outside this contract. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. Radial and ulnar wrist flexors are distinct grip-associated wrist-control co-contributors and receive stabilizer roles. Pratt directly measured flexor carpi ulnaris during conventional barbell deadlifts; Mannella measured both wrist flexors during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Transfer to each reviewed deadlift fixture is a categorical anatomy-and-mechanics inference, not direct measurement of its phases or uniformly high recruitment. Forman shows that wrist-flexor activity depends on wrist-force direction and can be low. These roles do not introduce dynamic wrist flexion, equal involvement, or measured adaptation. TFL receives stabilizer credit for unsupported single-leg hip and pelvic control, not hip extension. Collings recorded TFL in related single-leg Romanian tasks but reported modeled gluteal forces, not TFL force or ranking. Transfer to the floor-start barbell and both single-dumbbell load sides uses unchanged anatomical capability and each fixture geometry; exact TFL phase recruitment, equal effort and adaptation are not established.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
     "diamant-2021-barbell-single-leg-deadlift",
     "mo-2023-single-leg-romanian-loading-position",
-    "mooney-2026-staggered-stance-romanian-deadlift"
+    "mooney-2026-staggered-stance-romanian-deadlift",
+    "krings-2021-fat-grip-resistance-exercise",
+    "forman-2019-handgrip-wrist-force",
+    "pratt-2020-deadlift-grip-forearm-emg",
+    "mannella-2022-grip-wrist-perturbations",
+    "collings-2023-gluteal-muscle-forces"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -198,6 +203,36 @@
           "obliques"
         ],
         "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiUlnaris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "flexorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "flexorCarpiUlnaris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "tensorFasciaeLatae"
+        ],
+        "minimumRole": "stabilizer"
       }
     ],
     "allowedByRole": {
@@ -219,7 +254,12 @@
         "trapeziusUpper",
         "brachialis",
         "abs",
-        "obliques"
+        "obliques",
+        "extensorCarpiUlnaris",
+        "fingerExtensors",
+        "flexorCarpiRadialis",
+        "flexorCarpiUlnaris",
+        "tensorFasciaeLatae"
       ]
     }
   },
@@ -711,7 +751,27 @@
         { "muscle": "trapeziusUpper", "role": "stabilizer" },
         { "muscle": "brachialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" }
+        { "muscle": "obliques", "role": "stabilizer" },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "unilateralClosed",
@@ -795,7 +855,27 @@
         { "muscle": "trapeziusUpper", "role": "stabilizer" },
         { "muscle": "brachialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" }
+        { "muscle": "obliques", "role": "stabilizer" },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "unilateralClosed",
@@ -880,7 +960,27 @@
         { "muscle": "trapeziusUpper", "role": "stabilizer" },
         { "muscle": "brachialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" }
+        { "muscle": "obliques", "role": "stabilizer" },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "unilateralClosed",

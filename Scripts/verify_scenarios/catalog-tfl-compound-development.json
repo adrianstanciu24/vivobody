@@ -1,0 +1,74 @@
+{
+  "name": "catalog-tfl-compound-development",
+  "launch": {
+    "reset": false,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-tfl-development",
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Current training development body model"
+      }
+    },
+    {
+      "tap": {
+        "label": "Current training development legend. No history, low, building, consistent, and high"
+      }
+    },
+    {
+      "wait": {
+        "label": "Current development"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^TFL, (Low|Building|Consistent|High)"
+        },
+        "direction": "up",
+        "maxSwipes": 14
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^TFL, (Low|Building|Consistent|High)\\..*effective sets in 14 days(?=.*Lateral Lunge)(?=.*Barbell Back Squat)(?=.*Barbell Front Squat)"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^TFL, No history"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Done",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Current training development body model"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Current training development body model"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

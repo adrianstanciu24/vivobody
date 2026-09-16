@@ -56,6 +56,8 @@ import Foundation
         case scheduledTemplate
         case widgetStartRequest
         case weeklyVolume
+        case forearmDevelopment
+        case tflDevelopment
     }
 
     enum DebugManualFixture: Equatable {
@@ -149,6 +151,8 @@ import Foundation
                 requested(.scheduledTemplate, by: "--ui-test-scheduled-template", in: arguments),
                 requested(.widgetStartRequest, by: "--ui-test-widget-start-request", in: arguments),
                 requested(.weeklyVolume, by: "--ui-test-weekly-volume", in: arguments),
+                requested(.forearmDevelopment, by: "--ui-test-forearm-development", in: arguments),
+                requested(.tflDevelopment, by: "--ui-test-tfl-development", in: arguments),
             ].compactMap(\.self)
         }
 

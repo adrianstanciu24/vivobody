@@ -169,7 +169,13 @@ ago through yesterday. Full Monday–Sunday weeks follow a repeatable mix of
 4–6 catalog exercises with three completed sets, varied reps, logged RIR,
 load cycles, and occasional deloads. The weekly mix covers upper and lower
 body, pushing, pulling, squatting, hinging, core, and all three movement planes.
-This history-only fixture uses its own stable date IDs, preserves existing data,
+It also adds the four scheduled templates from `-debug` (Lower A, Upper Push,
+Lower B, Upper Pull), with five exercises and three sets per exercise, using the
+same stable template IDs. Existing templates and their saved exercise snapshots
+remain unchanged. This does not run the six-month history seeder or upgrade its
+archived sessions. Missing templates are filled in on the next `-years` launch;
+no reinstall is needed.
+The two-year history uses its own stable date IDs, preserves existing data,
 and fills newly elapsed training days without duplicating its sessions.
 It takes precedence over `-debug` and the manual `--seed-*` flags. Previously
 seeded history remains additive if switching between fixtures.

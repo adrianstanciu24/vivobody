@@ -431,7 +431,7 @@
       "year": 2024,
       "doi": "10.1007/s11332-024-01301-w",
       "url": "https://doi.org/10.1007/s11332-024-01301-w",
-      "scope": "Prime-mover and stabilizer excitation during 8-RM standing barbell and single-arm standard-orientation kettlebell overhead presses in ten experienced male instructors, including deltoids, triceps, upper trapezius, rectus abdominis, external oblique, and erector spinae."
+      "scope": "Published online in December 2024 and in the 2025 journal volume. Ten male StrongFirst-certified instructors performed non-fatiguing standing bilateral barbell and standard-kettlebell overhead-press trials at eight-repetition-maximum loads. Surface EMG directly measured FCU in both phases; FCR was not measured. Standard bells contacted the forearms while wrists were aligned, so contact does not establish absent flexor control. Transfer to the exact seated, dumbbell, single-arm kettlebell, Smith and lever-guided fixtures is categorical anatomy and mechanics, not measured fixture-specific recruitment, resistance equivalence, force, adaptation, or medical benefit."
     },
     {
       "id": "balsalobre-fernandez-2018-smith-military-press",
@@ -4392,6 +4392,163 @@
       "pmid": "41931009",
       "url": "https://doi.org/10.1249/MSS.0000000000004002",
       "scope": "Fifteen injury-free participants performed eight hip-adductor exercises. Three-dimensional kinematics, ground reaction forces and surface EMG informed a neuromusculoskeletal model that estimated individual adductor forces, separating pubofemoral and ischiocondylar magnus. Squat, conventional deadlift and sumo deadlift generated substantial modeled ischiocondylar-magnus forces. These are model estimates, not direct muscle-force measurements, and do not establish uniform whole-magnus recruitment or catalog primary rankings. Exact existing catalog geometry remains governed by each fixture original sources."
+    },
+    {
+      "id": "krings-2021-fat-grip-resistance-exercise",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Impact of Fat Grip Attachments on Muscular Strength and Neuromuscular Activation During Resistance Exercise",
+      "authors": [
+        "Ben M. Krings",
+        "Brandon D. Shepherd",
+        "Jon C. Swain",
+        "Alana J. Turner",
+        "Harish Chander",
+        "Hunter S. Waldman",
+        "Matthew J. McAllister",
+        "Adam C. Knight",
+        "JohnEric W. Smith"
+      ],
+      "year": 2021,
+      "doi": "10.1519/JSC.0000000000002954",
+      "pmid": "30694963",
+      "url": "https://doi.org/10.1519/JSC.0000000000002954",
+      "scope": "Published online in 2019 and in print in 2021. Fifteen resistance-trained men performed standard Olympic-bar and thicker-grip deadlift and row trials plus pull-ups. The EMG panel included radial and ulnar wrist extensors, but not finger extensors or finger flexors. Supports wrist-extensor participation in deadlift and pull-up categories; transfer to the authored catalog variants is categorical rather than exact-fixture measurement. No muscle-force, hypertrophy, universal grip threshold, or equal-recruitment claim."
+    },
+    {
+      "id": "forman-2019-handgrip-wrist-force",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The influence of simultaneous handgrip and wrist force on forearm muscle activity",
+      "authors": [
+        "Davis A. Forman",
+        "Garrick N. Forman",
+        "Jason Robathan",
+        "Michael W. R. Holmes"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.jelekin.2019.02.004",
+      "pmid": "30822679",
+      "url": "https://doi.org/10.1016/j.jelekin.2019.02.004",
+      "scope": "Brief seated isometric trials combined submaximal handgrip with palmar or dorsal wrist forces using a supported neutral forearm. EMG measured flexor digitorum superficialis, radial and ulnar wrist extensors, and extensor digitorum among eight muscles. Supports distinct grip-associated co-contributors to wrist stiffness; transfer to the reviewed hand-held deadlift, suspended pull-up/chin-up, and external overhead-press fixtures is an anatomy-and-mechanics inference, not exact-exercise recruitment or measured training stimulus. Extensor digitorum credit describes control rather than resisted finger extension. Does not measure flexor digitorum profundus separately or establish equal aggregate loading. The recorded panel also included flexor carpi radialis and flexor carpi ulnaris. Wrist-flexor activity depended on palmar versus dorsal force direction and was low in dorsal-dominant tasks; categorical participation does not imply extensor-equivalent or uniformly high activity."
+    },
+    {
+      "id": "van-elk-2004-grip-extension-assistance",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The application of an external wrist extension force reduces electromyographic activity of wrist extensor muscles during gripping",
+      "authors": [
+        "Niek van Elk",
+        "Miriam Faes",
+        "Hans Degens",
+        "Jan G. M. Kooloos",
+        "Jan A. de Lint",
+        "Maria T. E. Hopman"
+      ],
+      "year": 2004,
+      "doi": "10.2519/jospt.2004.34.5.228",
+      "pmid": "15189014",
+      "url": "https://doi.org/10.2519/jospt.2004.34.5.228",
+      "scope": "Healthy-volunteer submaximal gripping trials compared EMG with and without externally applied wrist-extension assistance. Radial wrist-extensor and extensor digitorum activity decreased with assistance, supporting active grip-related wrist control and the limitation that external support can reduce demand. Supports bounded external-press grip inference alongside anatomy and combined grip/wrist-force evidence; does not measure overhead presses, kettlebells, machine fixtures, muscle force, or adaptation."
+    },
+    {
+      "id": "pratt-2020-deadlift-grip-forearm-emg",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Forearm electromyographic activity during the deadlift exercise is affected by grip type and sex",
+      "authors": [
+        "Jedd Pratt",
+        "Arianna Hoffman",
+        "Adam Grainger",
+        "Massimiliano Ditroilo"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.jelekin.2020.102428",
+      "pmid": "32446132",
+      "url": "https://doi.org/10.1016/j.jelekin.2020.102428",
+      "scope": "Twenty-nine resistance-trained athletes performed conventional barbell deadlifts at three relative loads with double-overhand, hook and mixed grips. Surface EMG measured flexor carpi ulnaris, brachialis and brachioradialis. Directly supports FCU participation in this deadlift category; FCR was not measured. Transfers to the exact authored deadlift variants are categorical anatomy-and-mechanics inferences, not equal recruitment across grips, muscle force, or adaptation."
+    },
+    {
+      "id": "mannella-2022-grip-wrist-perturbations",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The effects of isometric hand grip force on wrist kinematics and forearm muscle activity during radial and ulnar wrist joint perturbations",
+      "authors": [
+        "Kailynn Mannella",
+        "Garrick N. Forman",
+        "Maddalena Mugnosso",
+        "Jacopo Zenzeri",
+        "Michael W. R. Holmes"
+      ],
+      "year": 2022,
+      "doi": "10.7717/peerj.13495",
+      "pmid": "35646483",
+      "pmcid": "PMC9138088",
+      "url": "https://doi.org/10.7717/peerj.13495",
+      "scope": "Twenty healthy right-handed young adults performed power grips at four force levels with anticipated radial/ulnar wrist perturbations. The forearm was supported and strapped to a robot; flexion/extension and pronation/supination were locked. Measured FCR and FCU activity increased with grip force, supporting distinct grip-associated wrist-control co-contributors. Biceps brachii did not show this grip effect despite the abstract generalization. Transfer to reviewed deadlift and suspended-pull fixtures is categorical, not direct phase recruitment, a demand threshold, muscle force, or hypertrophy."
+    },
+    {
+      "id": "collings-2023-gluteal-muscle-forces",
+      "sourceType": "musculoskeletalModel",
+      "title": "Gluteal Muscle Forces during Hip-Focused Injury Prevention and Rehabilitation Exercises",
+      "authors": [
+        "Tyler J. Collings",
+        "Matthew N. Bourne",
+        "Rod S. Barrett",
+        "Evy Meinders",
+        "Basílio A. M. Gonçalves",
+        "Anthony J. Shield",
+        "Laura E. Diamond"
+      ],
+      "year": 2023,
+      "doi": "10.1249/MSS.0000000000003091",
+      "pmid": "36918403",
+      "scope": "Fourteen trained female footballers performed hip-focused tasks with TFL among the recorded surface-EMG channels. Supplements describe a two-dumbbell stationary split squat and a barbell single-leg Romanian deadlift allowing brief free-foot resets. Published outcomes estimate gluteal forces, not TFL force or a TFL recruitment ranking. TFL recording corroborates neighboring-task participation alongside Arnold capability; exact floor-start, load-side, rear-foot-support, stance, depth and cadence transfers are categorical mechanics, not direct TFL phase measurements or adaptation.",
+      "url": "https://doi.org/10.1249/MSS.0000000000003091"
+    },
+    {
+      "id": "bouillon-2012-unilateral-weight-bearing-emg",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographic assessment of muscle activity between genders during unilateral weight-bearing tasks using adjusted distances",
+      "authors": [
+        "Lucinda E. Bouillon",
+        "Jacqueline Wilhelm",
+        "Patricia Eisel",
+        "Jessica Wiesner",
+        "Megan Rachow",
+        "Lindsay Hatteberg"
+      ],
+      "year": 2012,
+      "pmid": "23316423",
+      "pmcid": "PMC3537460",
+      "scope": "Forty healthy recreational adults performed bodyweight forward and side-step lunges with TFL among eight surface recordings. Source strides were leg-length-based from shoulder-width standing. Transfer to the exact feet-together/body-height lateral fixture, loaded forward, reverse and continuous walking fixtures is explicit anatomy and mechanics, not exact-protocol EMG, a magnitude hierarchy, force or adaptation. Secondary lateral-lunge credit follows the existing abduction step; sagittal-lunge credit describes hip/pelvic control rather than hip extension.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3537460/"
+    },
+    {
+      "id": "besomi-2025-tfl-dynamic-emg-methods",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Methodological influences on tensor fascia latae EMG during dynamic tasks: Electrode- and normalisation-dependent variability",
+      "authors": [
+        "Manuela Besomi",
+        "Wolbert van den Hoorn",
+        "Bill Vicenzino",
+        "Paul W. Hodges"
+      ],
+      "year": 2025,
+      "doi": "10.1016/j.jelekin.2025.103079",
+      "pmid": "41172796",
+      "scope": "TFL was recorded with surface and fine-wire electrodes during dynamic step-up/down tasks; six participants remained after signal exclusions. Surface signals differed during early step-up, potentially reflecting crosstalk, and interpretation depended on normalization. Supports step-task participation, not portable amplitudes. Transfer to catalog heights, paired loading, propulsion restrictions and contact sequences is categorical stabilization through existing anatomy, not direct exact-fixture force, ranking or adaptation.",
+      "url": "https://doi.org/10.1016/j.jelekin.2025.103079"
+    },
+    {
+      "id": "selkowitz-2013-gluteal-tfl-fine-wire-emg",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Which exercises target the gluteal muscles while minimizing activation of the tensor fascia lata? Electromyographic assessment using fine-wire electrodes",
+      "authors": [
+        "David M. Selkowitz",
+        "George J. Beneck",
+        "Christopher M. Powers"
+      ],
+      "year": 2013,
+      "doi": "10.2519/jospt.2013.4116",
+      "pmid": "23160432",
+      "scope": "Twenty healthy adults performed eleven exercises with fine-wire TFL, gluteus-medius and superior-gluteus-maximus recordings. Direct TFL participation occurred in forward lunge, forward step-up and unloaded squat; squat activity was low. The squat used outward feet, source-defined width and approximately ninety-degree hip/knee flexion. Catalog load placement, stance, depth, cadence, heights and support transitions differ. Stabilizer transfer uses unchanged anatomy and exact catalog geometry, not a strong target, equal activity, force, growth or unrestricted rotation. Guided Smith mechanics are not established by this source.",
+      "url": "https://doi.org/10.2519/jospt.2013.4116"
     }
   ]
 }

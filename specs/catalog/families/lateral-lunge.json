@@ -3,8 +3,8 @@
   "schemaVersion": 1,
   "id": "lateral-lunge",
   "name": "Lateral Lunge",
-  "definition": "A bodyweight side-step lunge in which one foot travels laterally by 60 percent of body height, the lead leg descends to a self-selected depth, and the athlete drives back to bilateral standing. Hip abduction and adduction and the corresponding gluteus-medius and adductor-longus/brevis roles are transparent anatomy-and-mechanics inferences from the source-exact lateral displacement and Arnold capability map; Riemann et al. directly measured sagittal lower-limb mechanics but did not measure frontal-plane joint moments, muscle activity, or a relative muscle ranking. Adductor magnus, gracilis, and pectineus receive secondary credit specifically for the hip-adduction return through Arnold anatomy and Lovell resisted-adduction evidence; this transfer is not direct lateral-lunge EMG and does not grant magnus hip-extension credit. Forward, reverse, walking, Cossack, split-squat, lateral step-up, jumping, loaded, and differently standardized stride variants remain outside this family.",
-  "evidenceRefs": ["arnold-2010-lower-limb", "riemann-2013-forward-lateral-lunge", "lovell-2012-hip-adductor-tests"],
+  "definition": "A bodyweight side-step lunge in which one foot travels laterally by 60 percent of body height, the lead leg descends to a self-selected depth, and the athlete drives back to bilateral standing. Hip abduction and adduction and the corresponding gluteus-medius and adductor-longus/brevis roles are transparent anatomy-and-mechanics inferences from the source-exact lateral displacement and Arnold capability map; Riemann et al. directly measured sagittal lower-limb mechanics but did not measure frontal-plane joint moments, muscle activity, or a relative muscle ranking. Adductor magnus, gracilis, and pectineus receive secondary credit specifically for the hip-adduction return through Arnold anatomy and Lovell resisted-adduction evidence; this transfer is not direct lateral-lunge EMG and does not grant magnus hip-extension credit. Forward, reverse, walking, Cossack, split-squat, lateral step-up, jumping, loaded, and differently standardized stride variants remain outside this family. TFL receives secondary credit specifically for the existing hip-abduction lateral-step phase, not the hip-extension return. Bouillon recorded TFL during a side-step lunge from shoulder-width standing with a leg-length-based stride; this feet-together, body-height-based fixture differs. Its role is an explicit anatomy-and-mechanics transfer through the unchanged abduction capability, not exact-protocol EMG, force, ranking or adaptation.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "riemann-2013-forward-lateral-lunge", "lovell-2012-hip-adductor-tests", "bouillon-2012-unilateral-weight-bearing-emg"],
   "fixed": {
     "mechanic": "compound",
     "trainingRole": "legs",
@@ -80,11 +80,17 @@
       {"anyOf": ["gracilis"], "minimumRole": "secondary"},
       {"anyOf": ["pectineus"], "minimumRole": "secondary"},
       {"anyOf": ["gastrocnemius", "soleus"], "minimumRole": "secondary"},
-      {"anyOf": ["abs", "obliques"], "minimumRole": "stabilizer"}
+      {"anyOf": ["abs", "obliques"], "minimumRole": "stabilizer"},
+      {
+        "anyOf": [
+          "tensorFasciaeLatae"
+        ],
+        "minimumRole": "secondary"
+      }
     ],
     "allowedByRole": {
       "primary": ["vasti"],
-      "secondary": ["gluteMax", "gluteMed", "adductorLongusBrevis", "adductorMagnus", "gracilis", "pectineus", "rectusFemoris", "gastrocnemius", "soleus"],
+      "secondary": ["gluteMax", "gluteMed", "adductorLongusBrevis", "adductorMagnus", "gracilis", "pectineus", "rectusFemoris", "gastrocnemius", "soleus", "tensorFasciaeLatae"],
       "stabilizer": ["medialHamstrings", "bicepsFemoris", "abs", "obliques", "lumbarExtensors"]
     }
   },
@@ -126,7 +132,11 @@
         {"muscle": "gluteMed", "role": "secondary"},
         {"muscle": "medialHamstrings", "role": "stabilizer"},
         {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}
+        {"muscle": "obliques", "role": "stabilizer"},
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "secondary"
+        }
       ],
       "variant": {
         "kineticChain": "closed",

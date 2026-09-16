@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "conventional-deadlift",
   "name": "Conventional Deadlift",
-  "definition": "A strict bilateral conventional straight-bar deadlift in which a free bar is held with both hands outside a symmetric medium stance, contacts the floor at the bottom, and travels to an upright standing endpoint through combined hip extension, knee extension, and ankle plantarflexion. Lee et al. directly tested experienced lifters with a stance equal to 100 percent of pelvis width, a double-overhand grip, self-selected speed, and the same absolute load equal to 70 percent of each participant's Romanian-deadlift one-repetition maximum. Their measured trials began upright, touched the floor during the descent, and returned upright; the catalog presents those same measured phases in the familiar floor-to-standing-to-floor order as an explicit product reordering and does not claim a dead-stop pause or complete unloading between repetitions. Lee measured rectus-femoris, biceps-femoris, and gluteus-maximus EMG plus three-dimensional lower-extremity kinematics and kinetics. Lyons et al. separately measured greater vastus-lateralis excitation in the conventional than Romanian condition, but used each participant's typical uncoached technique. Gluteus maximus and the combined vasti region are non-ranked co-primary training emphases; rectus femoris and the plantarflexors are secondary, while medial hamstrings and the unsplit biceps-femoris region receive conservative hip, pelvis, and knee-control credit. The five-repetition, 45-pound, and 20-kilogram defaults are product initialization rather than a claim that either source prescribed those universal values. Lee did not report spinal kinematics, foot orientation, or a dead-stop reset, so none is invented. Schellenberg et al.'s shoulder-width, slight-toe-out, mixed-grip deadlift is boundary context only and supplies no fixture detail to this record. Sumo, trap-bar, Romanian, stiff-leg, deficit, block, rack, explicit dead-stop, paused, touch-and-go-as-a-distinct-technique, mixed-grip, hook-grip, straps, snatch-grip, unilateral, staggered, dumbbell, kettlebell, cable, Smith, and machine variants remain outside this contract. Tibialis anterior receives ankle/foot stabilizer credit supported by its measured activity in Hanen et al.'s conventional comparison and existing anatomical control capability. This is a categorical transfer to the current Lee fixture, not an exact-fixture muscle-force or training-stimulus measurement. Hanen's barefoot stance, adjusted relative load, maximal-speed intent, and dead-stop protocol are not imported into this record. Adductor magnus receives secondary credit only on the reviewed conventional-barbell-deadlift fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants.",
+  "definition": "A strict bilateral conventional straight-bar deadlift in which a free bar is held with both hands outside a symmetric medium stance, contacts the floor at the bottom, and travels to an upright standing endpoint through combined hip extension, knee extension, and ankle plantarflexion. Lee et al. directly tested experienced lifters with a stance equal to 100 percent of pelvis width, a double-overhand grip, self-selected speed, and the same absolute load equal to 70 percent of each participant's Romanian-deadlift one-repetition maximum. Their measured trials began upright, touched the floor during the descent, and returned upright; the catalog presents those same measured phases in the familiar floor-to-standing-to-floor order as an explicit product reordering and does not claim a dead-stop pause or complete unloading between repetitions. Lee measured rectus-femoris, biceps-femoris, and gluteus-maximus EMG plus three-dimensional lower-extremity kinematics and kinetics. Lyons et al. separately measured greater vastus-lateralis excitation in the conventional than Romanian condition, but used each participant's typical uncoached technique. Gluteus maximus and the combined vasti region are non-ranked co-primary training emphases; rectus femoris and the plantarflexors are secondary, while medial hamstrings and the unsplit biceps-femoris region receive conservative hip, pelvis, and knee-control credit. The five-repetition, 45-pound, and 20-kilogram defaults are product initialization rather than a claim that either source prescribed those universal values. Lee did not report spinal kinematics, foot orientation, or a dead-stop reset, so none is invented. Schellenberg et al.'s shoulder-width, slight-toe-out, mixed-grip deadlift is boundary context only and supplies no fixture detail to this record. Sumo, trap-bar, Romanian, stiff-leg, deficit, block, rack, explicit dead-stop, paused, touch-and-go-as-a-distinct-technique, mixed-grip, hook-grip, straps, snatch-grip, unilateral, staggered, dumbbell, kettlebell, cable, Smith, and machine variants remain outside this contract. Tibialis anterior receives ankle/foot stabilizer credit supported by its measured activity in Hanen et al.'s conventional comparison and existing anatomical control capability. This is a categorical transfer to the current Lee fixture, not an exact-fixture muscle-force or training-stimulus measurement. Hanen's barefoot stance, adjusted relative load, maximal-speed intent, and dead-stop protocol are not imported into this record. Adductor magnus receives secondary credit only on the reviewed conventional-barbell-deadlift fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. Radial and ulnar wrist flexors are distinct grip-associated wrist-control co-contributors and receive stabilizer roles. Pratt directly measured flexor carpi ulnaris during conventional barbell deadlifts; Mannella measured both wrist flexors during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Transfer to each reviewed deadlift fixture is a categorical anatomy-and-mechanics inference, not direct measurement of its phases or uniformly high recruitment. Forman shows that wrist-flexor activity depends on wrist-force direction and can be low. These roles do not introduce dynamic wrist flexion, equal involvement, or measured adaptation.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
@@ -12,7 +12,11 @@
     "schellenberg-2013-deadlift-goodmorning-kinematics",
     "hanen-2025-conventional-sumo-deadlift",
     "benn-2018-adductor-magnus-regional-emg",
-    "collings-2026-hip-adductor-muscle-forces"
+    "collings-2026-hip-adductor-muscle-forces",
+    "krings-2021-fat-grip-resistance-exercise",
+    "forman-2019-handgrip-wrist-force",
+    "pratt-2020-deadlift-grip-forearm-emg",
+    "mannella-2022-grip-wrist-perturbations"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -221,6 +225,30 @@
           "adductorMagnus"
         ],
         "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiUlnaris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "flexorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "flexorCarpiUlnaris"
+        ],
+        "minimumRole": "stabilizer"
       }
     ],
     "allowedByRole": {
@@ -245,7 +273,11 @@
         "abs",
         "obliques",
         "lumbarExtensors",
-        "tibialisAnterior"
+        "tibialisAnterior",
+        "extensorCarpiUlnaris",
+        "fingerExtensors",
+        "flexorCarpiRadialis",
+        "flexorCarpiUlnaris"
       ]
     }
   },
@@ -525,6 +557,22 @@
         {
           "muscle": "adductorMagnus",
           "role": "secondary"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {

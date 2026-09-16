@@ -1979,6 +1979,164 @@ class CatalogFoundationTests(unittest.TestCase):
                     {"biceps", "forearms"}.isdisjoint(strings(source))
                 )
 
+    def test_tfl_compound_coverage_preserves_exact_role_boundaries(self) -> None:
+        expected = {
+            "barbell-single-leg-deadlift": "stabilizer",
+            "dumbbell-single-leg-romanian-deadlift-ipsilateral-load": "stabilizer",
+            "dumbbell-single-leg-romanian-deadlift-contralateral-load": "stabilizer",
+            "barbell-split-squat": "stabilizer",
+            "two-dumbbell-stationary-split-squat": "stabilizer",
+            "barbell-rear-foot-elevated-split-squat": "stabilizer",
+            "two-dumbbell-rear-foot-elevated-split-squat": "stabilizer",
+            "bodyweight-forward-lunge": "stabilizer",
+            "bodyweight-reverse-lunge": "stabilizer",
+            "two-dumbbell-forward-lunge": "stabilizer",
+            "two-dumbbell-reverse-lunge": "stabilizer",
+            "two-dumbbell-continuous-walking-lunge": "stabilizer",
+            "bodyweight-forward-step-up-21cm": "stabilizer",
+            "two-dumbbell-forward-step-up": "stabilizer",
+            "barbell-back-squat": "stabilizer",
+            "barbell-front-squat": "stabilizer",
+            "kettlebell-goblet-squat": "stabilizer",
+            "single-dumbbell-goblet-squat": "stabilizer",
+            "bodyweight-floor-squat-100-degrees": "stabilizer",
+            "bodyweight-lateral-lunge-60-percent-height": "secondary",
+        }
+        matched = set()
+        for original in self.real_families:
+            for index, exercise in enumerate(original["exercises"]):
+                identifier = exercise["catalogID"]
+                if identifier not in expected:
+                    continue
+                matched.add(identifier)
+                involvement = next(
+                    item for item in exercise["involvement"]
+                    if item["muscle"] == "tensorFasciaeLatae"
+                )
+                self.assertEqual(involvement["role"], expected[identifier])
+                for mutation in ("remove", "primary", "secondary", "stabilizer"):
+                    if mutation == expected[identifier]:
+                        continue
+                    family = copy.deepcopy(original)
+                    items = family["exercises"][index]["involvement"]
+                    target = next(item for item in items if item["muscle"] == "tensorFasciaeLatae")
+                    if mutation == "remove":
+                        items.remove(target)
+                    else:
+                        target["role"] = mutation
+                    with self.subTest(fixture=identifier, mutation=mutation):
+                        with self.assertRaises(catalog.ValidationFailure):
+                            catalog.validate_family(family, self.foundation, "TFL control mutation")
+        self.assertEqual(matched, set(expected))
+
+    def test_tfl_compound_coverage_does_not_expand_supported_machine_or_hinge_rosters(self) -> None:
+        excluded_families = {
+            "conventional-deadlift", "romanian-deadlift", "sumo-deadlift",
+            "trap-bar-deadlift", "inclined-leg-press", "horizontal-leg-press",
+        }
+        for family in self.real_families:
+            for exercise in family["exercises"]:
+                if family["id"] not in excluded_families and exercise["catalogID"] != "smith-machine-upper-back-squat":
+                    continue
+                with self.subTest(fixture=exercise["catalogID"]):
+                    self.assertNotIn("tensorFasciaeLatae", {
+                        item["muscle"] for item in exercise["involvement"]
+                    })
+
+    def forearm_correction_fixtures(self):
+        deadlift_ids = {
+            "conventional-deadlift", "romanian-deadlift", "sumo-deadlift",
+            "trap-bar-deadlift", "single-leg-deadlift",
+        }
+        for family in self.real_families:
+            for index, exercise in enumerate(family["exercises"]):
+                if family["id"] in deadlift_ids or (
+                    family["id"] == "vertical-pull"
+                    and exercise["variant"]["bodyPosition"] == "suspended"
+                ):
+                    yield family, index, (
+                        "extensorCarpiUlnaris", "fingerExtensors",
+                        "flexorCarpiRadialis", "flexorCarpiUlnaris",
+                    )
+                elif (
+                    family["id"] == "vertical-press"
+                    and exercise["equipment"] != "bodyweight"
+                ):
+                    yield family, index, (
+                        "fingerFlexors", "extensorCarpiRadialis",
+                        "extensorCarpiUlnaris", "fingerExtensors",
+                        "flexorCarpiRadialis", "flexorCarpiUlnaris",
+                    )
+
+    def test_forearm_correction_requires_each_distinct_control_contributor(
+        self,
+    ) -> None:
+        fixture_count = 0
+        for original, index, muscles in self.forearm_correction_fixtures():
+            fixture_count += 1
+            for muscle in muscles:
+                for mutation in ("remove", "primary", "secondary"):
+                    family = copy.deepcopy(original)
+                    exercise = family["exercises"][index]
+                    if mutation == "remove":
+                        exercise["involvement"] = [
+                            item
+                            for item in exercise["involvement"]
+                            if item["muscle"] != muscle
+                        ]
+                    else:
+                        next(
+                            item for item in exercise["involvement"]
+                            if item["muscle"] == muscle
+                        )["role"] = mutation
+                    with self.subTest(
+                        fixture=exercise["catalogID"], muscle=muscle,
+                        mutation=mutation,
+                    ):
+                        with self.assertRaises(catalog.ValidationFailure):
+                            catalog.validate_family(
+                                family, self.foundation, "forearm control mutation"
+                            )
+        self.assertEqual(fixture_count, 29)
+
+    def test_external_overhead_press_requires_wrist_and_hand_demands(self) -> None:
+        for index, exercise in enumerate(self.vertical_press["exercises"]):
+            if exercise["equipment"] == "bodyweight":
+                continue
+            for region in ("wrist", "hand"):
+                family = self.vertical_press_copy()
+                family["exercises"][index]["additionalStabilityDemands"].remove(
+                    region
+                )
+                with self.subTest(fixture=exercise["catalogID"], region=region):
+                    self.assert_vertical_press_fails(
+                        family,
+                        "cannot stabilize any declared demand|"
+                        "violates exercise rule external-load-requires-grip-and-wrist-control",
+                    )
+
+    def test_forearm_correction_excludes_seated_pulldowns_and_handstand(self) -> None:
+        seated = [
+            exercise for exercise in self.vertical_pull["exercises"]
+            if exercise["variant"]["bodyPosition"] == "seated"
+        ]
+        self.assertEqual(len(seated), 7)
+        handstand = next(
+            exercise for exercise in self.vertical_press["exercises"]
+            if exercise["catalogID"] == "wall-supported-strict-handstand-push-up"
+        )
+        for exercise in [*seated, handstand]:
+            roles = {
+                item["muscle"]: item["role"] for item in exercise["involvement"]
+            }
+            with self.subTest(fixture=exercise["catalogID"]):
+                self.assertNotIn("extensorCarpiUlnaris", roles)
+                self.assertNotIn("fingerExtensors", roles)
+                self.assertNotIn("flexorCarpiRadialis", roles)
+                self.assertNotIn("flexorCarpiUlnaris", roles)
+                self.assertEqual(roles["fingerFlexors"], "stabilizer")
+                self.assertEqual(roles["extensorCarpiRadialis"], "stabilizer")
+
     def test_distal_migration_assigns_explicit_hand_and_wrist_stabilizers(
         self,
     ) -> None:
@@ -2591,7 +2749,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             f"fails muscle requirement {requirement_index}",
                         )
                     demotion_count += 1
-        self.assertEqual(removal_count, 60)
+        self.assertEqual(removal_count, 63)
         self.assertEqual(demotion_count, 24)
 
     def test_late_lower_body_stability_providers_are_exact(self) -> None:
@@ -2642,6 +2800,11 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "ankle": {"gastrocnemius", "soleus", "tibialisAnterior"},
             "foot": {"gastrocnemius", "soleus", "tibialisAnterior"},
+        }
+        lunge_providers = {
+            region: providers | {"tensorFasciaeLatae"}
+            if region in {"pelvis", "hip", "knee"} else providers
+            for region, providers in lunge_providers.items()
         }
         expected["bodyweight-forward-lunge"] = lunge_providers
         expected["bodyweight-reverse-lunge"] = lunge_providers
@@ -3667,54 +3830,54 @@ class CatalogFoundationTests(unittest.TestCase):
             {
                 "standing-barbell-overhead-press": (
                     "barbell", "bilateral", "standing", "none", "free",
-                    90, "pronated", False, None, None, ("spine", "pelvis"),
+                    90, "pronated", False, None, None, ("spine", "pelvis", "wrist", "hand"),
                 ),
                 "standing-dumbbell-overhead-press": (
                     "dumbbell", "bilateral", "standing", "none", "free",
-                    90, "pronated", False, None, None, ("spine", "pelvis"),
+                    90, "pronated", False, None, None, ("spine", "pelvis", "wrist", "hand"),
                 ),
                 "single-arm-standing-dumbbell-overhead-press": (
                     "dumbbell", "unilateral", "standing", "none", "free",
-                    90, "pronated", False, None, None, ("spine", "pelvis"),
+                    90, "pronated", False, None, None, ("spine", "pelvis", "wrist", "hand"),
                 ),
                 "seated-dumbbell-overhead-press": (
                     "dumbbell", "bilateral", "seated", "bench",
                     "supportConstrained", 85, "pronated", False, None, None,
-                    (),
+                    ("wrist", "hand"),
                 ),
                 "seated-barbell-overhead-press": (
                     "barbell", "bilateral", "seated", "bench",
                     "supportConstrained", 80, "pronated", False, None, None,
-                    (),
+                    ("wrist", "hand"),
                 ),
                 "unsupported-seated-dumbbell-overhead-press": (
                     "dumbbell", "bilateral", "seated", "none", "free",
-                    90, "pronated", False, None, None, ("spine",),
+                    90, "pronated", False, None, None, ("spine", "wrist", "hand"),
                 ),
                 "single-arm-seated-dumbbell-overhead-press": (
                     "dumbbell", "unilateral", "seated", "bench",
                     "supportConstrained", 75, "neutral", False, None, None,
-                    ("spine", "pelvis"),
+                    ("spine", "pelvis", "wrist", "hand"),
                 ),
                 "single-arm-standing-kettlebell-overhead-press": (
                     "kettlebell", "unilateral", "standing", "none", "free",
                     90, "neutral", False, None, "standard",
-                    ("spine", "pelvis"),
+                    ("spine", "pelvis", "wrist", "hand"),
                 ),
                 "seated-smith-machine-overhead-press": (
                     "machine", "bilateral", "seated", "bench",
                     "supportConstrained", 85, "pronated", True, "smith", None,
-                    (),
+                    ("wrist", "hand"),
                 ),
                 "machine-shoulder-press": (
                     "machine", "bilateral", "seated", "machinePad",
                     "supportConstrained", 80, "neutral", True,
-                    "convergingShoulderPress", None, (),
+                    "convergingShoulderPress", None, ("wrist", "hand"),
                 ),
                 "hammer-strength-mtssp-single-arm-shoulder-press": (
                     "machine", "unilateral", "seated", "machinePad",
                     "supportConstrained", None, "sourceUnreported", True,
-                    "independentMTSShoulderPress", None, ("spine", "pelvis"),
+                    "independentMTSShoulderPress", None, ("spine", "pelvis", "wrist", "hand"),
                 ),
                 "wall-supported-strict-handstand-push-up": (
                     "bodyweight", "bilateral", "inverted", "none", "free",
@@ -3876,6 +4039,12 @@ class CatalogFoundationTests(unittest.TestCase):
                 "abs": "stabilizer",
                 "obliques": "stabilizer",
                 "lumbarExtensors": "stabilizer",
+                "fingerFlexors": "stabilizer",
+                "extensorCarpiRadialis": "stabilizer",
+                "extensorCarpiUlnaris": "stabilizer",
+                "fingerExtensors": "stabilizer",
+                "flexorCarpiRadialis": "stabilizer",
+                "flexorCarpiUlnaris": "stabilizer",
             },
         )
         self.assertEqual(
@@ -3905,7 +4074,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertEqual(unilateral["involvement"], bilateral["involvement"])
         self.assertEqual(
             unilateral["additionalStabilityDemands"],
-            ["spine", "pelvis"],
+            ["spine", "pelvis", "wrist", "hand"],
         )
         self.assertEqual(unilateral["evidenceRefs"], bilateral["evidenceRefs"])
 
@@ -3920,7 +4089,7 @@ class CatalogFoundationTests(unittest.TestCase):
             == "single-arm-standing-dumbbell-overhead-press"
         )
         exercise["variant"]["bodyPosition"] = "seated"
-        exercise["additionalStabilityDemands"] = ["spine"]
+        exercise["additionalStabilityDemands"] = ["spine", "wrist", "hand"]
         self.assert_vertical_press_fails(
             family,
             "violates exercise rule "
@@ -3969,7 +4138,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 if muscle not in {"abs", "obliques", "lumbarExtensors"}
             },
         )
-        self.assertEqual(seated["additionalStabilityDemands"], [])
+        self.assertEqual(seated["additionalStabilityDemands"], ["wrist", "hand"])
         self.assertEqual(
             seated["evidenceRefs"],
             [
@@ -4013,7 +4182,7 @@ class CatalogFoundationTests(unittest.TestCase):
 
     def test_standing_vertical_press_requires_spine_and_pelvis_demands(self) -> None:
         family = self.vertical_press_copy()
-        family["exercises"][0]["additionalStabilityDemands"] = ["spine"]
+        family["exercises"][0]["additionalStabilityDemands"] = ["spine", "wrist", "hand"]
         self.assert_vertical_press_fails(
             family,
             "violates exercise rule "
@@ -4025,7 +4194,7 @@ class CatalogFoundationTests(unittest.TestCase):
         family = self.vertical_press_copy()
         exercise = family["exercises"][0]
         exercise["variant"]["bodyPosition"] = "seated"
-        exercise["additionalStabilityDemands"] = ["pelvis"]
+        exercise["additionalStabilityDemands"] = ["pelvis", "wrist", "hand"]
         self.assert_vertical_press_fails(
             family,
             "violates exercise rule "
@@ -4152,7 +4321,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     if exercise["catalogID"] == catalog_id
                 )
                 exercise["laterality"] = "unilateral"
-                exercise["additionalStabilityDemands"] = ["spine", "pelvis"]
+                exercise["additionalStabilityDemands"] = ["spine", "pelvis", "wrist", "hand"]
                 if not any(
                     assignment["muscle"] == "abs"
                     for assignment in exercise["involvement"]
@@ -10516,6 +10685,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "wu-2020-loading-devices-squat-lunge",
                     "benn-2018-adductor-magnus-regional-emg",
                     "collings-2026-hip-adductor-muscle-forces",
+                    "selkowitz-2013-gluteal-tfl-fine-wire-emg",
                 ],
                 "roster": [
                     "barbell-back-squat",
@@ -10589,6 +10759,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "mackey-2021-bulgarian-split-squat",
                     "nsca-2016-division-i-basketball-injury-screening",
                     "deforest-2014-single-double-leg-squat",
+                    "collings-2023-gluteal-muscle-forces",
                 ],
                 "roster": [
                     "barbell-split-squat",
@@ -10625,6 +10796,8 @@ class CatalogFoundationTests(unittest.TestCase):
                     "simenz-2012-loaded-step-up-variations",
                     "wang-2003-forward-lateral-step-up-biomechanics",
                     "anders-2006-ace-glutes-to-max",
+                    "selkowitz-2013-gluteal-tfl-fine-wire-emg",
+                                "besomi-2025-tfl-dynamic-emg-methods",
                 ],
                 "roster": [
                     "bodyweight-forward-step-up-21cm",
@@ -10690,6 +10863,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "lumbarExtensors": "stabilizer",
                     "tibialisAnterior": "stabilizer",
                     "adductorMagnus": "secondary",
+                    "tensorFasciaeLatae": "stabilizer",
                 },
                 "evidence": [
                     "armstrong-2022-squat-movement-dynamics",
@@ -10721,6 +10895,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "abs": "stabilizer", "obliques": "stabilizer",
                     "lumbarExtensors": "stabilizer",
                     "tibialisAnterior": "stabilizer",
+                    "tensorFasciaeLatae": "stabilizer",
                 },
                 "evidence": [
                     "armstrong-2022-squat-movement-dynamics",
@@ -10773,6 +10948,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "abs": "stabilizer", "obliques": "stabilizer",
                     "lumbarExtensors": "stabilizer",
                     "tibialisAnterior": "stabilizer",
+                    "tensorFasciaeLatae": "stabilizer",
                 },
                 "evidence": [
                     "song-2023-split-squat-step-length",
@@ -10791,6 +10967,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "bicepsFemoris": "stabilizer", "gluteMed": "stabilizer",
                     "abs": "stabilizer", "obliques": "stabilizer",
                     "lumbarExtensors": "stabilizer",
+                    "tensorFasciaeLatae": "stabilizer",
                 },
                 "evidence": [
                     "wang-2003-forward-lateral-step-up-biomechanics"
@@ -11193,6 +11370,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "not-applicable-load-accounting-is-bodyweight-only",
                 "bodyweight-floor-squat-fixture",
                 "free-fixture-requires-tibialis-control",
+                "free-fixture-requires-tfl-control",
             ],
             "hip-thrust-bridge": [
                 "bench-supported-fixture-is-hip-thrust",
@@ -11363,7 +11541,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "mutated Batch-5 stability requirement",
                             )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 168)
+        self.assertEqual(mutation_count, 169)
 
     def test_batch5_squat_shoulder_rules_are_minima_not_exclusive(self) -> None:
         family = copy.deepcopy(self.batch5_families["bilateral-squat"])
@@ -11477,7 +11655,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             f"fails muscle requirement {requirement_index}",
                         )
                     demotion_count += 1
-        self.assertEqual(removal_count, 130)
+        self.assertEqual(removal_count, 135)
         self.assertEqual(demotion_count, 54)
 
     def test_batch5_step_up_contract_mutates_every_invariant_directly(
@@ -11774,6 +11952,18 @@ class CatalogFoundationTests(unittest.TestCase):
             region: providers | ({"adductorMagnus"} if region in {"hip", "pelvis"} else set())
             for region, providers in expected["barbell-back-squat"].items()
         }
+        for exercise_id in (
+            "barbell-back-squat", "barbell-front-squat", "kettlebell-goblet-squat",
+            "bodyweight-floor-squat-100-degrees", "barbell-split-squat",
+            "barbell-rear-foot-elevated-split-squat",
+            "two-dumbbell-rear-foot-elevated-split-squat",
+            "bodyweight-forward-step-up-21cm", "two-dumbbell-forward-step-up",
+        ):
+            expected[exercise_id] = {
+                region: providers | {"tensorFasciaeLatae"}
+                if region in {"pelvis", "hip", "knee"} else providers
+                for region, providers in expected[exercise_id].items()
+            }
         for family in self.batch5_families.values():
             for exercise in family["exercises"]:
                 if exercise["catalogID"] in DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS:
@@ -12079,6 +12269,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     (("obliques",), "stabilizer"),
                     (("lumbarExtensors",), "stabilizer"),
                     (("tibialisAnterior",), "stabilizer"),
+                    (("tensorFasciaeLatae",), "stabilizer"),
                 ),
                 "roles": {
                     "primary": ("vasti", "gluteMax"),
@@ -12090,7 +12281,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         "abs", "obliques", "lumbarExtensors",
                         "externalRotators", "trapeziusUpper", "triceps",
                         "fingerFlexors", "extensorCarpiRadialis",
-                        "tibialisAnterior",
+                        "tibialisAnterior", "tensorFasciaeLatae",
                     ),
                 },
                 "reps": (5, 15),
@@ -12099,6 +12290,8 @@ class CatalogFoundationTests(unittest.TestCase):
                     "comfort-2015-forward-reverse-lunge-kinetics",
                     "riemann-2012-anterior-lunge-external-load",
                     "wu-2020-loading-devices-squat-lunge",
+                    "bouillon-2012-unilateral-weight-bearing-emg",
+                    "selkowitz-2013-gluteal-tfl-fine-wire-emg",
                 ),
                 "roster": (
                     "bodyweight-forward-lunge",
@@ -12328,6 +12521,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "obliques": "stabilizer",
             "lumbarExtensors": "stabilizer",
             "tibialisAnterior": "stabilizer",
+            "tensorFasciaeLatae": "stabilizer",
         }
         expected["bodyweight-forward-lunge"]["roles"] = lunge_roles
         expected["bodyweight-reverse-lunge"]["roles"] = lunge_roles
@@ -12661,6 +12855,10 @@ class CatalogFoundationTests(unittest.TestCase):
                     "hanen-2025-conventional-sumo-deadlift",
                     "benn-2018-adductor-magnus-regional-emg",
                     "collings-2026-hip-adductor-muscle-forces",
+                    "krings-2021-fat-grip-resistance-exercise",
+                    "forman-2019-handgrip-wrist-force",
+                    "pratt-2020-deadlift-grip-forearm-emg",
+                    "mannella-2022-grip-wrist-perturbations",
                 ),
                 "roster": ("conventional-barbell-deadlift",),
             },
@@ -12677,6 +12875,10 @@ class CatalogFoundationTests(unittest.TestCase):
                     "lyons-2026-conventional-romanian-deadlift",
                     "ace-2025-romanian-deadlift",
                     "nsca-2012-basics-strength-conditioning",
+                    "krings-2021-fat-grip-resistance-exercise",
+                    "forman-2019-handgrip-wrist-force",
+                    "pratt-2020-deadlift-grip-forearm-emg",
+                    "mannella-2022-grip-wrist-perturbations",
                 ),
                 "roster": (
                     "barbell-romanian-deadlift",
@@ -12764,6 +12966,10 @@ class CatalogFoundationTests(unittest.TestCase):
             "brachialis": "stabilizer",
             "abs": "stabilizer",
             "obliques": "stabilizer",
+            "extensorCarpiUlnaris": "stabilizer",
+            "fingerExtensors": "stabilizer",
+            "flexorCarpiRadialis": "stabilizer",
+            "flexorCarpiUlnaris": "stabilizer",
         }
         expected = {
             "conventional-barbell-deadlift": {
@@ -12791,6 +12997,10 @@ class CatalogFoundationTests(unittest.TestCase):
                     "lumbarExtensors": "stabilizer",
                     "tibialisAnterior": "stabilizer",
                     "adductorMagnus": "secondary",
+                    "extensorCarpiUlnaris": "stabilizer",
+                    "fingerExtensors": "stabilizer",
+                    "flexorCarpiRadialis": "stabilizer",
+                    "flexorCarpiUlnaris": "stabilizer",
                 },
                 "evidence": (
                     "lee-2018-conventional-romanian-deadlift",
@@ -13250,6 +13460,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 ("lumbarExtensors", "stabilizer"),
                 ("tibialisAnterior", "stabilizer"),
                 ("adductorMagnus", "secondary"),
+                ("extensorCarpiUlnaris", "stabilizer"),
+                ("fingerExtensors", "stabilizer"),
+                ("flexorCarpiRadialis", "stabilizer"),
+                ("flexorCarpiUlnaris", "stabilizer"),
             ),
             "romanian-deadlift": (
                 ("medialHamstrings", "primary"),
@@ -13266,6 +13480,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 ("brachialis", "stabilizer"),
                 ("abs", "stabilizer"),
                 ("obliques", "stabilizer"),
+                ("extensorCarpiUlnaris", "stabilizer"),
+                ("fingerExtensors", "stabilizer"),
+                ("flexorCarpiRadialis", "stabilizer"),
+                ("flexorCarpiUlnaris", "stabilizer"),
             ),
         }
         removal_count = 0
@@ -13345,7 +13563,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "demoted deadlift role",
                             )
                     demotion_count += 1
-        self.assertEqual(removal_count, 87)
+        self.assertEqual(removal_count, 111)
         self.assertEqual(demotion_count, 21)
 
     def test_deadlift_followup_evidence_scopes_preserve_limitations(self) -> None:
@@ -13457,6 +13675,10 @@ class CatalogFoundationTests(unittest.TestCase):
                     "hanen-2025-conventional-sumo-deadlift",
                     "benn-2018-adductor-magnus-regional-emg",
                     "collings-2026-hip-adductor-muscle-forces",
+                    "krings-2021-fat-grip-resistance-exercise",
+                    "forman-2019-handgrip-wrist-force",
+                    "pratt-2020-deadlift-grip-forearm-emg",
+                    "mannella-2022-grip-wrist-perturbations",
                 ),
                 "roster": ("barefoot-dead-stop-sumo-barbell-deadlift",),
             },
@@ -13479,6 +13701,10 @@ class CatalogFoundationTests(unittest.TestCase):
                     "lake-2017-low-handle-hex-bar-deadlift",
                     "lockie-2018-high-handle-hex-bar-deadlift",
                     "swinton-2011-straight-hex-bar-biomechanics",
+                    "krings-2021-fat-grip-resistance-exercise",
+                    "forman-2019-handgrip-wrist-force",
+                    "pratt-2020-deadlift-grip-forearm-emg",
+                    "mannella-2022-grip-wrist-perturbations",
                 ),
                 "roster": (
                     "low-handle-trap-bar-deadlift",
@@ -13503,6 +13729,11 @@ class CatalogFoundationTests(unittest.TestCase):
                     "diamant-2021-barbell-single-leg-deadlift",
                     "mo-2023-single-leg-romanian-loading-position",
                     "mooney-2026-staggered-stance-romanian-deadlift",
+                    "krings-2021-fat-grip-resistance-exercise",
+                    "forman-2019-handgrip-wrist-force",
+                    "pratt-2020-deadlift-grip-forearm-emg",
+                    "mannella-2022-grip-wrist-perturbations",
+                    "collings-2023-gluteal-muscle-forces",
                 ),
                 "roster": (
                     "barbell-single-leg-deadlift",
@@ -14359,6 +14590,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 ("abs", "stabilizer"),
                 ("obliques", "stabilizer"),
                 ("lumbarExtensors", "stabilizer"),
+                ("extensorCarpiUlnaris", "stabilizer"),
+                ("fingerExtensors", "stabilizer"),
+                ("flexorCarpiRadialis", "stabilizer"),
+                ("flexorCarpiUlnaris", "stabilizer"),
             ),
             "trap-bar-deadlift": (
                 ("gluteMax", "primary"),
@@ -14376,6 +14611,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 ("abs", "stabilizer"),
                 ("obliques", "stabilizer"),
                 ("lumbarExtensors", "stabilizer"),
+                ("extensorCarpiUlnaris", "stabilizer"),
+                ("fingerExtensors", "stabilizer"),
+                ("flexorCarpiRadialis", "stabilizer"),
+                ("flexorCarpiUlnaris", "stabilizer"),
             ),
             "single-leg-deadlift": (
                 ("medialHamstrings", "primary"),
@@ -14392,6 +14631,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 ("brachialis", "stabilizer"),
                 ("abs", "stabilizer"),
                 ("obliques", "stabilizer"),
+                ("extensorCarpiUlnaris", "stabilizer"),
+                ("fingerExtensors", "stabilizer"),
+                ("flexorCarpiRadialis", "stabilizer"),
+                ("flexorCarpiUlnaris", "stabilizer"),
+                ("tensorFasciaeLatae", "stabilizer"),
             ),
         }
         removal_count = 0
@@ -14476,7 +14720,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "demoted deadlift-expansion role",
                             )
                     demotion_count += 1
-        self.assertEqual(removal_count, 90)
+        self.assertEqual(removal_count, 117)
         self.assertEqual(demotion_count, 25)
 
     def test_deadlift_expansion_evidence_scopes_preserve_limits(self) -> None:
@@ -22934,7 +23178,7 @@ class CatalogFoundationTests(unittest.TestCase):
         runtime_by_id = {record["catalogID"]: record for record in runtime}
         self.assertEqual(len(self.real_families), 99)
         self.assertEqual(len(runtime), 237)
-        self.assertEqual(len(self.foundation.evidence_ids), 268)
+        self.assertEqual(len(self.foundation.evidence_ids), 277)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids
@@ -23531,9 +23775,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 self.assertEqual(actual, wanted)
 
         expected_record_digests = {
-            "single-dumbbell-goblet-squat": "a8a8db44bd00642d5576b7f136c09806d00153e6d8d01c53c69b6774463aeda5",
-            "two-dumbbell-stationary-split-squat": "2b05d26bc44ae1fa5192446d252b3f8624852cbfb081fd76cff961ed2b12a6fc",
-            "two-dumbbell-reverse-lunge": "22e83c943de1cbac4acb04cea3338b4fa14f597d7918fa2d6a29480d4dcca981",
+            "single-dumbbell-goblet-squat": "c53012eb99ff4671ad0d6606df088f6aeda8ef8b194535f1430942f0174246e6",
+            "two-dumbbell-stationary-split-squat": "b46c4f5eb5293e4ee2ea71c8c55f336265bb71d0134251af02bba786e516e305",
+            "two-dumbbell-reverse-lunge": "9314f9f6173279ba6603d24f13550ed3a075bcfed51e5b592d92ec38ad29df09",
             "bilateral-dumbbell-shrug": "91ec8faddf96d84265f3655fb180aaf6b7debd680fb09f8bffde750b9d9c5b88",
             "scapular-pull-up": "5fca3d5c1bb8c831757adfdbe59e4049090886f58b06f7331ad3589d0a2876ff",
             "high-handle-trap-bar-farmer-carry": "17193b3ba873b923ba0fbf00fdd3ad9c12424215206d49850ab1d31da1ffb6c3",

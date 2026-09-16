@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "romanian-deadlift",
   "name": "Romanian and Stiff-Leg Deadlift",
-  "definition": "A bilateral unsupported hip-dominant hinge with planted feet, a braced spine, and either a free barbell or paired dumbbells. The roster preserves three reviewed floor-contact barbell fixtures and adds source-exact continuous top-start barbell and paired-dumbbell fixtures that reverse near mid-shin without touching down. Floor-touch and continuous identities remain separate so their histories do not merge. Hip extension is the sole dynamic prime; prescribed knee technique remains nondefining, and the straight-spine instruction supports resisting spinal flexion rather than inventing dynamic spinal extension. Arbitrary deficits, staggered or single-leg support, rotating grips, and floor-start dumbbell variants remain outside this family.",
+  "definition": "A bilateral unsupported hip-dominant hinge with planted feet, a braced spine, and either a free barbell or paired dumbbells. The roster preserves three reviewed floor-contact barbell fixtures and adds source-exact continuous top-start barbell and paired-dumbbell fixtures that reverse near mid-shin without touching down. Floor-touch and continuous identities remain separate so their histories do not merge. Hip extension is the sole dynamic prime; prescribed knee technique remains nondefining, and the straight-spine instruction supports resisting spinal flexion rather than inventing dynamic spinal extension. Arbitrary deficits, staggered or single-leg support, rotating grips, and floor-start dumbbell variants remain outside this family. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. Radial and ulnar wrist flexors are distinct grip-associated wrist-control co-contributors and receive stabilizer roles. Pratt directly measured flexor carpi ulnaris during conventional barbell deadlifts; Mannella measured both wrist flexors during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Transfer to each reviewed deadlift fixture is a categorical anatomy-and-mechanics inference, not direct measurement of its phases or uniformly high recruitment. Forman shows that wrist-flexor activity depends on wrist-force direction and can be low. These roles do not introduce dynamic wrist flexion, equal involvement, or measured adaptation.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
@@ -11,7 +11,11 @@
     "lee-2018-conventional-romanian-deadlift",
     "lyons-2026-conventional-romanian-deadlift",
     "ace-2025-romanian-deadlift",
-    "nsca-2012-basics-strength-conditioning"
+    "nsca-2012-basics-strength-conditioning",
+    "krings-2021-fat-grip-resistance-exercise",
+    "forman-2019-handgrip-wrist-force",
+    "pratt-2020-deadlift-grip-forearm-emg",
+    "mannella-2022-grip-wrist-perturbations"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -200,6 +204,30 @@
           "obliques"
         ],
         "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiUlnaris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "flexorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "flexorCarpiUlnaris"
+        ],
+        "minimumRole": "stabilizer"
       }
     ],
     "allowedByRole": {
@@ -221,7 +249,11 @@
         "trapeziusUpper",
         "brachialis",
         "abs",
-        "obliques"
+        "obliques",
+        "extensorCarpiUlnaris",
+        "fingerExtensors",
+        "flexorCarpiRadialis",
+        "flexorCarpiUlnaris"
       ]
     }
   },
@@ -713,6 +745,22 @@
         {
           "muscle": "obliques",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -834,6 +882,22 @@
         {
           "muscle": "obliques",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -954,6 +1018,22 @@
         {
           "muscle": "obliques",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1005,7 +1085,7 @@
     {
       "catalogID": "continuous-top-start-barbell-romanian-deadlift", "name": "Continuous Top-Start Barbell Romanian Deadlift", "aliases": ["Barbell Romanian Deadlift", "Romanian Deadlift", "RDL"],
       "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 8, "searchPriority": 99,
-      "involvement": [{"muscle": "medialHamstrings", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"}, {"muscle": "lumbarExtensors", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "gastrocnemius", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "involvement": [{"muscle": "medialHamstrings", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"}, {"muscle": "lumbarExtensors", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "gastrocnemius", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "extensorCarpiUlnaris", "role": "stabilizer"}, {"muscle": "fingerExtensors", "role": "stabilizer"}, {"muscle": "flexorCarpiRadialis", "role": "stabilizer"}, {"muscle": "flexorCarpiUlnaris", "role": "stabilizer"}],
       "variant": {"kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral", "stanceWidth": "hipDistance", "footOrientation": "unreported", "footContact": "continuous", "supportSurface": "floor", "loadPlacement": "handsInFrontOfBody", "gripWidth": "shoulderDistance", "gripOrientation": "pronated", "shoulderPosition": "drawnBackAndDown", "externalLoadPrescription": "sourceUnspecified", "hipMotion": "extends", "spineMotion": "straightPostureInstructedKinematicsUnmeasured", "kneeTechnique": "slightlyFlexedHeld", "rangeOfMotion": "topStartToMidShinWithoutFloorContact", "tempo": "controlledSourceUnreported", "fixedPath": false, "interRepSupport": "noneContinuous", "implementConfiguration": "straightBarbell", "loadAccounting": "totalBarAndPlates", "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"},
       "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ace-2025-romanian-deadlift", "nsca-2012-basics-strength-conditioning", "coratella-2022-romanian-step-stiff-leg-deadlift", "lee-2018-conventional-romanian-deadlift"],
       "execution": {"startingPosition": "Take the bar from a rack at thigh-to-waist height, stand with feet hip-width apart, hold it in front of the thighs with a shoulder-width palms-down grip, and keep a slight knee bend.", "movement": "Push the hips back and hinge while keeping the bar close to the legs and the spine long.", "endpoint": "Reverse near mid-shin, or earlier when hamstring tension limits the hinge, without touching the floor.", "returnPhase": "Drive the hips forward to stand and bring the bar back to the thighs, then begin the next repetition without setting it down.", "controlledJoints": "Keep the slight knee bend, straight elbows, and braced spine throughout.", "supportAndPosture": "Keep both feet planted and do not use a rack or floor between repetitions.", "disqualifyingCompensations": ["Touching or resetting the bar on the floor turns the fixture into a floor-contact Romanian deadlift.", "Bending the knees into a squat changes the hip-dominant hinge.", "Rounding the spine or pulling the bar away from the legs leaves the reviewed technique."]}
@@ -1013,7 +1093,7 @@
     {
       "catalogID": "two-dumbbell-continuous-romanian-deadlift", "name": "Two-Dumbbell Continuous Romanian Deadlift", "aliases": ["Two-Dumbbell Romanian Deadlift", "Dumbbell Romanian Deadlift", "Dumbbell RDL"],
       "equipment": "dumbbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 8, "searchPriority": 96,
-      "involvement": [{"muscle": "medialHamstrings", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"}, {"muscle": "lumbarExtensors", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "gastrocnemius", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],
+      "involvement": [{"muscle": "medialHamstrings", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"}, {"muscle": "lumbarExtensors", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "gastrocnemius", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "extensorCarpiUlnaris", "role": "stabilizer"}, {"muscle": "fingerExtensors", "role": "stabilizer"}, {"muscle": "flexorCarpiRadialis", "role": "stabilizer"}, {"muscle": "flexorCarpiUlnaris", "role": "stabilizer"}],
       "variant": {"kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral", "stanceWidth": "hipDistance", "footOrientation": "unreported", "footContact": "continuous", "supportSurface": "floor", "loadPlacement": "pairedBesideLegs", "gripWidth": "notApplicableIndependentHandles", "gripOrientation": "neutral", "shoulderPosition": "drawnBackAndDown", "externalLoadPrescription": "sourceUnspecified", "hipMotion": "extends", "spineMotion": "straightPostureInstructedKinematicsUnmeasured", "kneeTechnique": "slightlyFlexedHeld", "rangeOfMotion": "topStartToMidShinWithoutFloorContact", "tempo": "controlledSourceUnreported", "fixedPath": false, "interRepSupport": "noneContinuous", "implementConfiguration": "pairedDumbbells", "loadAccounting": "perImplement", "lowerBodyContribution": "hipDominantHingeWithNondefiningKneeTechnique"},
       "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ace-2025-romanian-deadlift", "nsca-2012-basics-strength-conditioning", "lee-2018-conventional-romanian-deadlift"],
       "execution": {"startingPosition": "Log one dumbbell's weight, not the pair total. Stand with feet hip-width apart, one matching dumbbell beside each thigh, palms facing inward, and a slight knee bend.", "movement": "Push the hips back and hinge while keeping both dumbbells close to the legs and the spine long.", "endpoint": "Reverse near mid-shin, or earlier when hamstring tension limits the hinge, without touching the floor.", "returnPhase": "Drive the hips forward to stand and return both dumbbells beside the thighs, then begin the next repetition without setting them down.", "controlledJoints": "Keep the slight knee bend, straight elbows, neutral wrists, and braced spine throughout.", "supportAndPosture": "Keep both feet planted and both dumbbells moving together.", "disqualifyingCompensations": ["Touching or resetting the dumbbells on the floor leaves the continuous top-start fixture.", "Alternating the dumbbells changes the paired implementation.", "Bending the knees into a squat or rounding the spine changes the reviewed hinge."]}

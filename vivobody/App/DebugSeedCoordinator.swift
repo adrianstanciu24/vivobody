@@ -19,6 +19,14 @@ import VivoKit
             in context: ModelContext
         ) {
             for step in steps {
+                if step == .forearmDevelopment {
+                    DebugForearmDevelopmentSeeder.seed(in: context)
+                    continue
+                }
+                if step == .tflDevelopment {
+                    DebugYearsSeeder.seedTFLVerification(in: context)
+                    continue
+                }
                 if DebugActiveWorkoutSeeder.handleCore(step, in: context) { continue }
                 if DebugActiveWorkoutSeeder.handleInstrument(step, in: context) { continue }
                 if DebugArchivedHistorySeeder.handle(step, in: context) { continue }
@@ -35,6 +43,7 @@ import VivoKit
         ) {
             switch fixture {
             case .years:
+                DebugTrainingSeeder.seedTemplates(in: context)
                 DebugYearsSeeder.seed(in: context)
             case .training:
                 DebugTrainingSeeder.seed(in: context)

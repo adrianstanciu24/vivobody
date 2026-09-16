@@ -17,7 +17,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 268 |
+| Evidence sources | 277 |
 
 ## Family roster
 

@@ -884,6 +884,10 @@
       {
         "muscle": "tibialisAnterior",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
       }
     ]
   },
@@ -1007,6 +1011,10 @@
       {
         "muscle": "tibialisAnterior",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
       }
     ]
   },
@@ -1128,6 +1136,10 @@
       },
       {
         "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]
@@ -1251,6 +1263,10 @@
       },
       {
         "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]
@@ -1473,6 +1489,10 @@
       },
       {
         "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]
@@ -2263,6 +2283,22 @@
       {
         "muscle": "adductorMagnus",
         "role": "secondary"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -3294,6 +3330,10 @@
       {
         "muscle": "tibialisAnterior",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
       }
     ]
   },
@@ -3403,6 +3443,10 @@
       },
       {
         "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]
@@ -3537,6 +3581,10 @@
       {
         "muscle": "tibialisAnterior",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
       }
     ]
   },
@@ -3668,6 +3716,10 @@
       },
       {
         "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]
@@ -10808,6 +10860,10 @@
       {
         "muscle": "obliques",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
       }
     ]
   },
@@ -12520,6 +12576,22 @@
       {
         "muscle": "obliques",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -12632,6 +12704,22 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -12748,6 +12836,22 @@
       {
         "muscle": "obliques",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -12862,6 +12966,22 @@
       {
         "muscle": "obliques",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -12975,6 +13095,22 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -17062,6 +17198,26 @@
       {
         "muscle": "obliques",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
       }
     ]
   },
@@ -17177,6 +17333,26 @@
       {
         "muscle": "obliques",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
       }
     ]
   },
@@ -17291,6 +17467,26 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]
@@ -17936,6 +18132,10 @@
       {
         "muscle": "tibialisAnterior",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
       }
     ]
   },
@@ -18069,6 +18269,10 @@
       {
         "muscle": "tibialisAnterior",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
       }
     ]
   },
@@ -18200,6 +18404,10 @@
       },
       {
         "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]
@@ -18333,6 +18541,10 @@
       },
       {
         "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]
@@ -18609,6 +18821,10 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
       }
     ]
   },
@@ -18736,6 +18952,10 @@
       },
       {
         "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]
@@ -19067,6 +19287,22 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -19467,6 +19703,22 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -19591,6 +19843,22 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -20052,6 +20320,30 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -20179,6 +20471,30 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -20311,6 +20627,30 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -20427,6 +20767,30 @@
       {
         "muscle": "subscapularis",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -20542,6 +20906,30 @@
       },
       {
         "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -20670,6 +21058,30 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -20801,6 +21213,30 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -20931,6 +21367,30 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -21047,6 +21507,30 @@
       {
         "muscle": "subscapularis",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -21162,6 +21646,30 @@
       },
       {
         "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -21293,6 +21801,30 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -21559,6 +22091,22 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -21680,6 +22228,22 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -21795,6 +22359,22 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -21920,6 +22500,22 @@
       {
         "muscle": "lumbarExtensors",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
       }
     ]
   },
@@ -22032,6 +22628,22 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -22149,6 +22761,22 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]
@@ -23091,6 +23719,10 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
         "role": "stabilizer"
       }
     ]

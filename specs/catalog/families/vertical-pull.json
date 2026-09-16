@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "vertical-pull",
   "name": "Vertical Pull",
-  "definition": "A strict compound pull in which the humerus travels down from an overhead position through shoulder adduction with a sagittal extension component, the scapula retracts, and the elbow flexes. The family covers front/scapular-path pull-ups, assisted pull-ups, cable pulldowns, and lever pulldowns without deliberate trunk or lower-body propulsion. Straight-arm pulldowns, scapular pull-ups, flared horizontal-abduction high rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, band-assisted pull-ups, and one-arm bodyweight pull-ups remain outside this contract. Flared high rows route to shoulder-horizontal-abduction-row; the measured 45-degree cable fixture routes to diagonal-pull; and product-named lever high rows remain excluded until their own geometry is reviewed.",
+  "definition": "A strict compound pull in which the humerus travels down from an overhead position through shoulder adduction with a sagittal extension component, the scapula retracts, and the elbow flexes. The family covers front/scapular-path pull-ups, assisted pull-ups, cable pulldowns, and lever pulldowns without deliberate trunk or lower-body propulsion. Straight-arm pulldowns, scapular pull-ups, flared horizontal-abduction high rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, band-assisted pull-ups, and one-arm bodyweight pull-ups remain outside this contract. Flared high rows route to shoulder-horizontal-abduction-row; the measured 45-degree cable fixture routes to diagonal-pull; and product-named lever high rows remain excluded until their own geometry is reviewed. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. This correction applies only to the six suspended pull-up/chin-up fixtures, including platform-assisted variants; the seven seated pulldown rosters are unchanged. Assistance and grip orientation may change demand without implying equal activity. Radial and ulnar wrist flexors additionally receive stabilizer roles in the same six suspended fixtures. Mannella measured both during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Suspension, assistance, and grip orientation differ from that protocol; exact-fixture transfer is a categorical anatomy-and-mechanics inference, not direct phase recruitment, uniformly high activity, muscle force, or adaptation. Forman bounds this transfer because wrist-flexor activity varies with wrist-force direction and can be low. No dynamic wrist-flexion prime action is added; seated pulldown rosters remain unchanged.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "andersen-2014-lat-pulldown-width",
@@ -15,7 +15,10 @@
     "lusk-2010-lat-pulldown-grip",
     "padovan-2024-lat-pulldown-front-back",
     "prinold-2016-pullup-scapular-kinematics",
-    "youdas-2010-pullup-chinup"
+    "youdas-2010-pullup-chinup",
+    "krings-2021-fat-grip-resistance-exercise",
+    "forman-2019-handgrip-wrist-force",
+    "mannella-2022-grip-wrist-perturbations"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -185,7 +188,11 @@
         "subscapularis",
         "serratus",
         "trapeziusUpper",
-        "pectoralisMinor"
+        "pectoralisMinor",
+        "extensorCarpiUlnaris",
+        "fingerExtensors",
+        "flexorCarpiRadialis",
+        "flexorCarpiUlnaris"
       ]
     }
   },
@@ -536,7 +543,7 @@
     },
     {
       "id": "suspended-requires-pelvic-control",
-      "description": "A suspended strict pull explicitly declares pelvic stability even when an assistance platform guides the body path.",
+      "description": "A suspended strict pull explicitly declares pelvic stability even when an assistance platform guides the body path. These six loaded-grip fixtures also require reviewed ulnar wrist-extensor and finger-extensor control co-contributors. Radial and ulnar wrist flexors also contribute distinct grip-associated wrist control in these reviewed fixtures.",
       "when": {
         "field": "variant.bodyPosition",
         "operator": "equals",
@@ -547,6 +554,32 @@
       "requireAbsent": [],
       "requireAdditionalStabilityDemands": [
         "pelvis"
+      ],
+      "requireMuscleRequirements": [
+        {
+          "anyOf": [
+            "extensorCarpiUlnaris"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "fingerExtensors"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "flexorCarpiRadialis"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "flexorCarpiUlnaris"
+          ],
+          "minimumRole": "stabilizer"
+        }
       ]
     }
   ],
@@ -586,7 +619,23 @@
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -652,7 +701,23 @@
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -715,7 +780,23 @@
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -780,7 +861,23 @@
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -843,7 +940,23 @@
         { "muscle": "fingerFlexors", "role": "stabilizer" },
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" }
+        { "muscle": "obliques", "role": "stabilizer" },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -907,7 +1020,23 @@
         { "muscle": "fingerFlexors", "role": "stabilizer" },
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" }
+        { "muscle": "obliques", "role": "stabilizer" },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",

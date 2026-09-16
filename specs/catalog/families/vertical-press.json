@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "vertical-press",
   "name": "Vertical Press",
-  "definition": "A shoulder-oriented compound press whose strict concentric phase elevates the humerus in a front or scapular path through shoulder flexion and abduction, scapular upward rotation and posterior tilt, and elbow extension. Open-chain presses move an external implement 75 to 90 degrees superior to horizontal; the reviewed closed-chain branch is a strict wall-supported handstand push-up that moves the body between a fifteen-centimeter head target and full elbow-and-shoulder extension. Li et al. directly establish its inversion-stand spacing, feet-only wall contact, forty-second maximum-repetition test, and no-waist-collapse or bent-leg validity rules, but do not measure joint, scapular, or muscle actions. The existing vertical-press signature and mover hierarchy are therefore an explicit mechanics transfer, while Kinoshita et al. support only the static handstand stability environment. The five-repetition product seed is not a source prescription. High-incline, landmine, rotating Arnold, behind-neck, leg-driven push-press or jerk, cable, pike, freestanding, parallettes, deficit, and kipping variants remain outside this family.",
+  "definition": "A shoulder-oriented compound press whose strict concentric phase elevates the humerus in a front or scapular path through shoulder flexion and abduction, scapular upward rotation and posterior tilt, and elbow extension. Open-chain presses move an external implement 75 to 90 degrees superior to horizontal; the reviewed closed-chain branch is a strict wall-supported handstand push-up that moves the body between a fifteen-centimeter head target and full elbow-and-shoulder extension. Li et al. directly establish its inversion-stand spacing, feet-only wall contact, forty-second maximum-repetition test, and no-waist-collapse or bent-leg validity rules, but do not measure joint, scapular, or muscle actions. The existing vertical-press signature and mover hierarchy are therefore an explicit mechanics transfer, while Kinoshita et al. support only the static handstand stability environment. The five-repetition product seed is not a source prescription. High-incline, landmine, rotating Arnold, behind-neck, leg-driven push-press or jerk, cable, pike, freestanding, parallettes, deficit, and kipping variants remain outside this family. The reviewed external-load fixtures additionally credit finger flexors, radial and ulnar wrist extensors, and finger extensors as distinct secure-grip and wrist-stiffness co-contributors. Forman measured these regions during combined grip and wrist-force tasks; transfer to overhead pressing is categorical anatomy and mechanics, not press-specific EMG or resistance against gravity by every contributor. Palm loading, bell-on-forearm contact, rails, and levers can alter or reduce wrist demand without immobilizing the authored hand grip; van Elk documents reduced extensor activity with extension assistance. No equal involvement, extensor dominance, whole-aggregate loading, or measured adaptation is claimed. Source-unreported grip orientation remains unreported. The separate handstand fixture retains its existing reviewed roster. Radial and ulnar wrist flexors also receive stabilizer roles as distinct hand/wrist-control co-contributors in the eleven reviewed external-load fixtures. Padovan directly measured flexor carpi ulnaris in standing bilateral barbell and standard-kettlebell overhead presses, including bells contacting the forearms; radial wrist flexors were not measured. Transfer to seated, dumbbell, unilateral kettlebell, rail-guided, and lever-guided fixtures is categorical anatomy and mechanics. Torso support and guided paths do not immobilize the authored wrist grip, but may change or reduce demand. Source-unreported grip orientation and wrist moments remain unreported. Forman directly measured both wrist flexors in supported grip/wrist-force tasks and shows direction-dependent activity that can be low. No free-weight equivalence, uniform recruitment, dynamic wrist flexion, or measured adaptation is claimed; handstand roles remain unchanged.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "balsalobre-fernandez-2018-smith-military-press",
@@ -15,7 +15,9 @@
     "padovan-2024-standing-overhead-press",
     "saeterbakken-2012-shoulder-press-core",
     "saeterbakken-2013-shoulder-press-position",
-    "seth-2019-shoulder-work"
+    "seth-2019-shoulder-work",
+    "forman-2019-handgrip-wrist-force",
+    "van-elk-2004-grip-extension-assistance"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -158,7 +160,11 @@
         "gluteMax",
         "vasti",
         "gastrocnemius",
-        "soleus"
+        "soleus",
+        "extensorCarpiUlnaris",
+        "fingerExtensors",
+        "flexorCarpiRadialis",
+        "flexorCarpiUlnaris"
       ]
     }
   },
@@ -818,6 +824,60 @@
         "variant.trunkAndLegStandard",
         "variant.sourceTestDurationSeconds"
       ]
+    },
+    {
+      "id": "external-load-requires-grip-and-wrist-control",
+      "description": "The reviewed external implements require secure-grip co-contributors and explicit wrist/hand control; this branch does not alter the handstand fixture. Radial and ulnar wrist flexors also contribute distinct grip-associated wrist control in these reviewed fixtures.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "bodyweight"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireMuscleRequirements": [
+        {
+          "anyOf": [
+            "fingerFlexors"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "extensorCarpiRadialis"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "extensorCarpiUlnaris"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "fingerExtensors"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "flexorCarpiRadialis"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "flexorCarpiUlnaris"
+          ],
+          "minimumRole": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "wrist",
+        "hand"
+      ]
     }
   ],
   "exercises": [
@@ -892,6 +952,30 @@
         {
           "muscle": "lumbarExtensors",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -908,7 +992,9 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
         "spine",
-        "pelvis"
+        "pelvis",
+        "wrist",
+        "hand"
       ],
       "evidenceRefs": [
         "coratella-2022-overhead-press-variants",
@@ -999,6 +1085,30 @@
         {
           "muscle": "lumbarExtensors",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1015,7 +1125,9 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
         "spine",
-        "pelvis"
+        "pelvis",
+        "wrist",
+        "hand"
       ],
       "evidenceRefs": [
         "ichihashi-2014-military-press-kinematics",
@@ -1106,6 +1218,30 @@
         {
           "muscle": "lumbarExtensors",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1122,7 +1258,9 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
         "spine",
-        "pelvis"
+        "pelvis",
+        "wrist",
+        "hand"
       ],
       "evidenceRefs": [
         "ichihashi-2014-military-press-kinematics",
@@ -1202,6 +1340,30 @@
         {
           "muscle": "subscapularis",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1216,7 +1378,7 @@
         "pressPath": "frontScapular"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
+      "additionalStabilityDemands": ["wrist", "hand"],
       "evidenceRefs": [
         "ichihashi-2014-military-press-kinematics",
         "luczak-2013-dumbbell-press-inclinations",
@@ -1294,6 +1456,30 @@
         {
           "muscle": "subscapularis",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1308,7 +1494,7 @@
         "pressPath": "frontScapular"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
+      "additionalStabilityDemands": ["wrist", "hand"],
       "evidenceRefs": [
         "coratella-2022-overhead-press-variants",
         "ichihashi-2014-military-press-kinematics",
@@ -1397,6 +1583,30 @@
         {
           "muscle": "lumbarExtensors",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1412,7 +1622,9 @@
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
-        "spine"
+        "spine",
+        "wrist",
+        "hand"
       ],
       "evidenceRefs": [
         "ichihashi-2014-military-press-kinematics",
@@ -1501,6 +1713,30 @@
         {
           "muscle": "lumbarExtensors",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1517,7 +1753,9 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
         "spine",
-        "pelvis"
+        "pelvis",
+        "wrist",
+        "hand"
       ],
       "evidenceRefs": [
         "ichihashi-2014-military-press-kinematics",
@@ -1608,6 +1846,30 @@
         {
           "muscle": "lumbarExtensors",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1625,7 +1887,9 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
         "spine",
-        "pelvis"
+        "pelvis",
+        "wrist",
+        "hand"
       ],
       "evidenceRefs": [
         "ichihashi-2014-military-press-kinematics",
@@ -1704,6 +1968,30 @@
         {
           "muscle": "subscapularis",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1719,7 +2007,7 @@
         "pressPath": "frontScapular"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
+      "additionalStabilityDemands": ["wrist", "hand"],
       "evidenceRefs": [
         "balsalobre-fernandez-2018-smith-military-press",
         "ichihashi-2014-military-press-kinematics"
@@ -1795,6 +2083,30 @@
         {
           "muscle": "subscapularis",
           "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
         }
       ],
       "variant": {
@@ -1810,7 +2122,7 @@
         "pressPath": "frontScapular"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
+      "additionalStabilityDemands": ["wrist", "hand"],
       "evidenceRefs": [
         "coratella-2022-overhead-press-variants",
         "ichihashi-2014-military-press-kinematics"
@@ -1833,9 +2145,9 @@
       "name": "Hammer Strength MTSSP Single-Arm Shoulder Press",
       "aliases": ["Independent-Arm Machine Shoulder Press", "Single-Arm MTS Shoulder Press", "Unilateral Machine Shoulder Press"],
       "equipment": "machine", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 96,
-      "involvement": [{"muscle": "deltoidAnterior", "role": "primary"}, {"muscle": "deltoidLateral", "role": "secondary"}, {"muscle": "supraspinatus", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"}, {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "trapeziusLower", "role": "secondary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}],
+      "involvement": [{"muscle": "deltoidAnterior", "role": "primary"}, {"muscle": "deltoidLateral", "role": "secondary"}, {"muscle": "supraspinatus", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"}, {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "trapeziusLower", "role": "secondary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "extensorCarpiUlnaris", "role": "stabilizer"}, {"muscle": "fingerExtensors", "role": "stabilizer"}, {"muscle": "flexorCarpiRadialis", "role": "stabilizer"}, {"muscle": "flexorCarpiUlnaris", "role": "stabilizer"}],
       "variant": {"kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "machinePad", "scapularTranslation": "supportConstrained", "gripOrientation": "sourceUnreported", "fixedPath": true, "machineType": "independentMTSShoulderPress", "lowerBodyContribution": "none", "pressPath": "manufacturerShoulderPressPath", "machineFixture": "hammerStrengthMTSSP", "leverArmConfiguration": "independent", "armSequence": "oneArmAtATime", "loadAccounting": "workingSideStackSameFixtureOnly", "sideLoadConvention": "equalSideSettingsEnterOnce"},
-      "additionalPrimeActions": [], "additionalStabilityDemands": ["spine", "pelvis"],
+      "additionalPrimeActions": [], "additionalStabilityDemands": ["spine", "pelvis", "wrist", "hand"],
       "evidenceRefs": ["life-fitness-2026-mts-shoulder-press", "ackland-2008-shoulder-moment-arms", "ichihashi-2014-military-press-kinematics"],
       "execution": {
         "sideOrDirection": "Use the same selected stack value on both sides, enter that per-working-side value once, complete all repetitions with one arm, then repeat on the other side.",
