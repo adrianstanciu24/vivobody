@@ -94,6 +94,7 @@ enum Sounds {
     }
 
     private static var engine: AVAudioEngine?
+    private static var isStartingEngine = false
     private static var voices: [Voice] = []
     private static var nextVoice = 0
     private static var buffers: [Effect: AVAudioPCMBuffer] = [:]
@@ -184,9 +185,14 @@ enum Sounds {
         guard !buffers.isEmpty else { return }
 
         if engine == nil {
-            try? AVAudioSession.sharedInstance().setCategory(
-                .ambient, options: [.mixWithOthers]
-            )
+            do {
+                try AVAudioSession.sharedInstance().setCategory(
+                    .ambient, options: [.mixWithOthers]
+                )
+            } catch {
+                AppDiagnostics.audioFailed(event: "configure", error: error)
+                return
+            }
 
             let e = AVAudioEngine()
             let format = buffers.values.first?.format
@@ -211,15 +217,56 @@ enum Sounds {
             engine = e
         }
 
-        guard let engine, !engine.isRunning else { return }
-        try? AVAudioSession.sharedInstance().setActive(true)
-        engine.prepare()
-        try? engine.start()
-        for voice in voices where !voice.player.isPlaying {
-            voice.player.play()
+        guard let engine, !engine.isRunning, !isStartingEngine else { return }
+        isStartingEngine = true
+        Task { await startEngine(engine) }
+    }
+
+    private static func startEngine(_ engine: AVAudioEngine) async {
+        defer { isStartingEngine = false }
+        do {
+            try await activateSession()
+            engine.prepare()
+            try engine.start()
+            for voice in voices where !voice.player.isPlaying {
+                voice.player.play()
+            }
+            for player in recordedPlayers.values where !player.isPlaying {
+                player.play()
+            }
+        } catch {
+            // Discard queued sounds rather than replaying stale feedback
+            // if a later foreground transition or tap retries startup.
+            for voice in voices {
+                voice.player.stop()
+            }
+            for player in recordedPlayers.values {
+                player.stop()
+            }
+            AppDiagnostics.audioFailed(event: "start", error: error)
         }
-        for player in recordedPlayers.values where !player.isPlaying {
-            player.play()
+    }
+
+    private nonisolated static func activateSession() async throws {
+        if #available(iOS 27.0, *) {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+                AVAudioSession.sharedInstance().activate(options: []) { activated, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else if activated {
+                        continuation.resume()
+                    } else {
+                        continuation.resume(throwing: NSError(
+                            domain: "Vivobody.AudioSession", code: 1
+                        ))
+                    }
+                }
+            }
+        } else {
+            // iOS 26 has only synchronous activation; keep it off MainActor.
+            try await Task.detached {
+                try AVAudioSession.sharedInstance().setActive(true)
+            }.value
         }
     }
 
@@ -247,11 +294,11 @@ enum Sounds {
         if let last = lastEmission[effect], now - last < minInterval { return }
         lastEmission[effect] = now
 
-        // Engine stops on backgrounding / route changes; recover inline
-        // so the first sound after foregrounding still lands.
+        // Recovery is asynchronous. Schedule on the existing nodes while
+        // activation is in flight; startup begins playback once ready.
         if engine?.isRunning != true {
             startEngineIfNeeded()
-            guard let engine, engine.isRunning else { return }
+            guard let engine, engine.isRunning || isStartingEngine else { return }
             engine.mainMixerNode.outputVolume = duckLevel(now: now)
         } else {
             engine?.mainMixerNode.outputVolume = duckLevel(now: now)
@@ -266,7 +313,7 @@ enum Sounds {
         voice.player.volume = humanize ? powf(10, Float.random(in: -1 ... 1) / 20) : 1
 
         voice.player.scheduleBuffer(buffer, at: nil, options: .interrupts)
-        if !voice.player.isPlaying { voice.player.play() }
+        if engine?.isRunning == true, !voice.player.isPlaying { voice.player.play() }
     }
 
     /// Play a cleaned recording on its dedicated player at the bundled
@@ -284,11 +331,11 @@ enum Sounds {
         lastEmission[effect] = now
 
         if engine?.isRunning != true { startEngineIfNeeded() }
-        guard let engine, engine.isRunning else { return }
+        guard let engine, engine.isRunning || isStartingEngine else { return }
         engine.mainMixerNode.outputVolume = duckLevel(now: now)
 
         player.scheduleBuffer(buffer, at: nil, options: .interrupts)
-        if !player.isPlaying { player.play() }
+        if engine.isRunning, !player.isPlaying { player.play() }
     }
 
     /// Emit one scroll detent for one crossed value boundary.
@@ -302,7 +349,7 @@ enum Sounds {
         if engine?.isRunning != true {
             startEngineIfNeeded()
         }
-        guard let engine, engine.isRunning else { return }
+        guard let engine, engine.isRunning || isStartingEngine else { return }
         engine.mainMixerNode.outputVolume = duckLevel(now: now)
 
         let variantIndex: Int
@@ -320,7 +367,7 @@ enum Sounds {
         voice.varispeed.rate = 1
         voice.player.volume = 1
         voice.player.scheduleBuffer(buffer, at: nil, options: .interrupts)
-        if !voice.player.isPlaying { voice.player.play() }
+        if engine.isRunning, !voice.player.isPlaying { voice.player.play() }
     }
 
     /// 55% under someone else's audio, full level otherwise.

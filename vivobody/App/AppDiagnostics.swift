@@ -18,6 +18,14 @@ nonisolated enum AppDiagnostics {
     private static let session = Logger(subsystem: subsystem, category: "session")
     private static let snapshot = Logger(subsystem: subsystem, category: "snapshot")
     private static let healthKit = Logger(subsystem: subsystem, category: "healthkit")
+    private static let audio = Logger(subsystem: subsystem, category: "audio")
+
+    static func audioFailed(event: String, error: any Error) {
+        let error = error as NSError
+        audio.error(
+            "event=audio.\(event, privacy: .public) outcome=failure error_domain=\(error.domain, privacy: .private) error_code=\(error.code, privacy: .public)"
+        )
+    }
 
     static func storageFallbackAttempt(error: any Error) {
         let error = error as NSError
