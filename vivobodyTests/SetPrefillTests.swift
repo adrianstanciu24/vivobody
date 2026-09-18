@@ -7,8 +7,8 @@
 //  values onto the remaining same-plan pending sets, leaving pyramid
 //  prescriptions intact) and template-start prefill (spawning a
 //  workout from a template seeds each set's working values from the
-//  most recent archived performance while the planned snapshots keep
-//  the template's prescription).
+//  most recent compatible completed performance while preserving targets
+//  and capturing the resolved starting load in planned snapshots).
 //
 
 import Foundation
@@ -136,14 +136,10 @@ struct TemplatePrefillTests {
     }
 
     private func templateExercise(catalogID: String? = "bench-press") -> TemplateExercise {
-        TemplateExercise(
-            name: "Bench Press",
-            catalogID: catalogID,
-            group: .chest,
-            plannedSets: 3,
-            plannedReps: 8,
-            plannedWeight: 135
-        )
+        let exercise = TemplateExercise(name: "Bench Press", catalogID: catalogID, group: .chest,
+                                        plannedSets: 3, plannedReps: 8, plannedWeight: 135)
+        exercise.loadPolicy = .lastWorkout
+        return exercise
     }
 
     /// Archive one session containing a single logged exercise built
@@ -207,10 +203,11 @@ struct TemplatePrefillTests {
 
         let sets = spawned.orderedSets
         #expect(sets.count == 3)
-        #expect(sets[0].weight == 155 && sets[0].reps == 6)
-        #expect(sets[2].weight == 150 && sets[2].reps == 5)
-        // The template's prescription survives in the planned snapshots.
-        #expect(sets.allSatisfy { $0.plannedWeight == 135 && $0.plannedReps == 8 })
+        #expect(sets[0].weight == 155 && sets[0].reps == 8)
+        #expect(sets[2].weight == 150 && sets[2].reps == 8)
+        // Load snapshots match the resolved session plan; repetition targets survive.
+        #expect(sets.map(\.plannedWeight) == [155, 155, 150])
+        #expect(sets.allSatisfy { $0.plannedReps == 8 })
         #expect(sets.allSatisfy { !$0.isCompleted })
     }
 
@@ -238,7 +235,7 @@ struct TemplatePrefillTests {
         let sets = spawned.orderedSets
         #expect(sets[0].weight == 145)
         #expect(sets[1].weight == 150)
-        #expect(sets[2].weight == 150 && sets[2].reps == 6)
+        #expect(sets[2].weight == 150 && sets[2].reps == 8)
     }
 
     @Test func noHistoryKeepsTemplateValues() throws {
@@ -340,6 +337,27 @@ struct TemplatePrefillTests {
         #expect(spawned.orderedSets[0].weight == 150)
         #expect(spawned.orderedSets[1].weight == 145)
         #expect(spawned.orderedSets[2].weight == 145)
+    }
+
+    @Test func fixedLoadIgnoresRecentPerformance() throws {
+        let context = try makeContext()
+        try archiveSession(in: context, daysAgo: 1) {
+            appendCompletedSets([(200, 3)], to: $0)
+        }
+        let template = templateExercise()
+        template.loadPolicy = .fixed
+        let spawned = try spawn(template, in: context)
+        #expect(spawned.orderedSets.allSatisfy { $0.weight == 135 && $0.reps == 8 && $0.plannedWeight == 135 })
+    }
+
+    @Test func completedRowsOnlySupplyRememberedLoads() throws {
+        let context = try makeContext()
+        try archiveSession(in: context, daysAgo: 1) { exercise in
+            appendCompletedSets([(155, 6)], to: exercise)
+            exercise.sets.append(WorkoutSet(weight: 999, reps: 1, isCompleted: false, sortOrder: 1))
+        }
+        let spawned = try spawn(templateExercise(), in: context)
+        #expect(spawned.orderedSets.allSatisfy { $0.weight == 155 && $0.reps == 8 })
     }
 
     @Test func perSetTemplatesSpawnExactlyAsWritten() throws {

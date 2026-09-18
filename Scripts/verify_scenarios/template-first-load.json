@@ -1,0 +1,111 @@
+{
+  "name": "template-first-load",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-template-starting-loads",
+      "-settings.appearance",
+      "dark",
+      "-settings.weightUnit",
+      "lb"
+    ]
+  },
+  "steps": [
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Load Test",
+        "labelRegex": "^(?!Start).*",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Add exercise",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Flat Dumbbell Fly",
+          "role": "AXButton"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Flat Dumbbell Fly",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "templateSetStartingLoad"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "templateLoadPolicy",
+            "value": "Use last workout"
+          },
+          {
+            "label": "Add to Template",
+            "enabled": false
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "templateLastUsedLoad"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "templateSetStartingLoad"
+      }
+    },
+    {
+      "wait": {
+        "label": "Add to Template",
+        "enabled": true
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Weight",
+          "valueContains": "0"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "templateLoadPolicy",
+      "value": "Use last workout"
+    },
+    {
+      "label": "Weight",
+      "valueContains": "0"
+    },
+    {
+      "label": "Add to Template",
+      "enabled": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

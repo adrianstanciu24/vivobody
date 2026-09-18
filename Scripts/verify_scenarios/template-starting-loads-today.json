@@ -1,0 +1,47 @@
+{
+  "name": "template-starting-loads-today",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-template-starting-loads",
+      "--ui-test-remembered-template-load",
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-settings.weightUnit",
+      "lb"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "todayUpNextPreview",
+        "labelContains": "Last used: Set 1: 155 lb \u00b7 Set 2: 150 lb \u00b7 Set 3: 150 lb"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "todayUpNextPreview"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "todayUpNextPreview",
+      "labelContains": "Last used: Set 1: 155 lb \u00b7 Set 2: 150 lb \u00b7 Set 3: 150 lb"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

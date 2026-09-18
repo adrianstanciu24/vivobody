@@ -217,6 +217,24 @@ import SwiftUI
 
         self.assertEqual({violation.rule for violation in violations}, {"ARCH013"})
 
+    def test_persistence_rejects_dropped_history_stage_or_old_current_schema(self) -> None:
+        current = (check_architecture.ROOT / check_architecture.PERSISTENCE_BOUNDARY).read_text()
+        mutations = [
+            current.replace("[VivobodySchemaV1.self, VivobodySchemaV2.self]", "[VivobodySchemaV2.self]"),
+            current.replace(".lightweight(fromVersion: VivobodySchemaV1.self, toVersion: VivobodySchemaV2.self)", ""),
+            current.replace("Schema(versionedSchema: VivobodySchemaV2.self)", "Schema(versionedSchema: VivobodySchemaV1.self)"),
+        ]
+        for mutation in mutations:
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                path = root / check_architecture.PERSISTENCE_BOUNDARY
+                path.parent.mkdir(parents=True)
+                path.write_text(mutation)
+                self.assertEqual({v.rule for v in check_architecture.check_persistence_versioning(root)}, {"ARCH013"})
+
+    def test_current_persistence_retains_schema_history(self) -> None:
+        self.assertEqual(check_architecture.check_persistence_versioning(check_architecture.ROOT), [])
+
 
 if __name__ == "__main__":
     unittest.main()

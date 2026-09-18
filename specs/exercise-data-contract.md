@@ -300,6 +300,8 @@ or unavailable subtotal as a complete total.
 
 Default load, repetitions, and duration are starting UI values, not
 biomechanical truths. Machine-stack values are not portable between machines.
+New template exercises use compatible recorded loads or an explicitly entered
+first-workout load rather than catalog weights; see [template starting loads](template-starting-loads.md).
 
 An anatomy review may use anatomical action, kinematics, force measurements,
 and exercise-specific activation studies to establish roles. Evidence does not

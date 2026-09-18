@@ -86,7 +86,10 @@ PERSISTENCE_BOUNDARY = "vivobody/App/Persistence.swift"
 PERSISTENCE_VERSIONING_PATTERNS = (
     "enum VivobodySchemaV1: VersionedSchema",
     "enum VivobodyMigrationPlan: SchemaMigrationPlan",
-    "Schema(versionedSchema: VivobodySchemaV1.self)",
+    "enum VivobodySchemaV2: VersionedSchema",
+    "Schema(versionedSchema: VivobodySchemaV2.self)",
+    "[VivobodySchemaV1.self, VivobodySchemaV2.self]",
+    ".lightweight(fromVersion: VivobodySchemaV1.self, toVersion: VivobodySchemaV2.self)",
     "migrationPlan: VivobodyMigrationPlan.self",
 )
 
@@ -556,7 +559,7 @@ def check_persistence_versioning(root: Path) -> list[Violation]:
         PERSISTENCE_BOUNDARY,
         1,
         "ARCH013",
-        "Keep SchemaV1 and VivobodyMigrationPlan wired through every production container.",
+        "Retain SchemaV1, migrate to SchemaV2, and wire the migration plan through every production container.",
     )]
 
 

@@ -10,7 +10,8 @@ with Resume Workout or Finish Workout and hides Up next.
 ## Up next
 
 - Scheduled templates retain their existing Today, Tomorrow, or future-day
-  label and exercise prescription preview.
+  label and exercise target preview. Starting-load references resolve under the
+  [template starting loads](template-starting-loads.md) contract.
 - When no templates are scheduled, show the most recently used nonempty saved
   template as a **Repeat option**. Never-used templates do not imply a previous
   workout. If no eligible template exists, omit the card; Start Workout remains

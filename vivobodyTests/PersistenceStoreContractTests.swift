@@ -102,6 +102,8 @@ struct PersistenceStoreContractTests {
         #expect(templateExercise.id == Fixture.templateExerciseID)
         #expect(templateExercise.catalogID == "barbell-bench-press")
         #expect(templateExercise.trainingRoleRaw == nil)
+        #expect(templateExercise.loadPolicy == .fixed)
+        #expect(templateExercise.hasStartingLoad)
         let templateSet = try #require(templateExercise.orderedSets.first)
         #expect(templateSet.id == Fixture.templateSetID)
         #expect(templateSet.weight == 205)
@@ -120,5 +122,29 @@ struct PersistenceStoreContractTests {
         let bodyWeight = try #require(weights.first { $0.id == Fixture.bodyWeightID })
         #expect(bodyWeight.date == Fixture.startedAt)
         #expect(bodyWeight.weight == 182.5)
+    }
+
+    @Test func schemaV2LoadPolicyAndSessionPlanReopen() throws {
+        let bundle = Bundle(for: PersistenceFixtureBundleToken.self)
+        let fixture = try #require(bundle.url(forResource: "PersistenceTemplateLoadsV2", withExtension: "store", subdirectory: "Fixtures")
+            ?? bundle.url(forResource: "PersistenceTemplateLoadsV2", withExtension: "store"))
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("SchemaV2Reopen-\(UUID())")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let url = directory.appendingPathComponent("vivobody.store")
+        try FileManager.default.copyItem(at: fixture, to: url)
+        let container = try VivobodyStore.makeContainer(at: url)
+        let context = ModelContext(container)
+        let template = try #require(context.fetch(FetchDescriptor<WorkoutTemplate>()).first { $0.name == "Load Test" })
+        let exercise = try #require(template.orderedExercises.first)
+        #expect(exercise.loadPolicy == .lastWorkout)
+        #expect(exercise.hasStartingLoad)
+        #expect(exercise.plannedWeight == 135)
+        #expect(exercise.plannedReps == 8)
+        let active = try #require(context.fetch(FetchDescriptor<WorkoutSession>()).first { $0.completedAt == nil })
+        let activeExercise = try #require(active.orderedExercises.first)
+        #expect(activeExercise.orderedSets.map(\.weight) == [155, 150, 150])
+        #expect(activeExercise.orderedSets.map(\.plannedWeight) == [155, 150, 150])
+        #expect(activeExercise.orderedSets.allSatisfy { $0.reps == 8 && $0.plannedReps == 8 && !$0.isCompleted })
     }
 }

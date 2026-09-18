@@ -318,8 +318,8 @@ final class WorkoutSessionController {
     }
 
     /// Start a workout from a saved template. Each TemplateExercise
-    /// spawns a fresh Exercise, with working values prefilled from
-    /// the user's most recent logged version of that exercise (see
+    /// spawns a fresh Exercise with fixed or compatible remembered loads,
+    /// preserving its target repetitions/duration (see
     /// `Exercise.fromTemplate(_:history:)`). The template's
     /// `lastUsedAt` is stamped so the Library list can highlight
     /// recent picks.
@@ -329,6 +329,12 @@ final class WorkoutSessionController {
             return
         }
         let history = resolvedExerciseHistory()
+        if let missing = template.orderedExercises.first(where: {
+            $0.tracksResistance && $0.resolveLoad(history: history?[$0.historyKey]).weights == nil
+        }) {
+            lastSaveError = SaveErrorBox(TemplateStartingLoadRequired(exerciseName: missing.name), title: "Set starting load")
+            return
+        }
         let plan = template.orderedExercises.map { templateExercise in
             Exercise.fromTemplate(
                 templateExercise,

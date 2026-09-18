@@ -54,6 +54,7 @@ import Foundation
         case insightsHardSets
         case meShowcase
         case scheduledTemplate
+        case templateStartingLoads
         case widgetStartRequest
         case weeklyVolume
         case forearmDevelopment
@@ -148,6 +149,7 @@ import Foundation
                 requested(.insightsDimensions, by: "--ui-test-insights-dimensions", in: arguments),
                 requested(.insightsHardSets, by: "--ui-test-insights-hard-sets", in: arguments),
                 requested(.meShowcase, by: "--ui-test-me-showcase", in: arguments),
+                requested(.templateStartingLoads, by: "--ui-test-template-starting-loads", in: arguments),
                 requested(.scheduledTemplate, by: "--ui-test-scheduled-template", in: arguments),
                 requested(.widgetStartRequest, by: "--ui-test-widget-start-request", in: arguments),
                 requested(.weeklyVolume, by: "--ui-test-weekly-volume", in: arguments),

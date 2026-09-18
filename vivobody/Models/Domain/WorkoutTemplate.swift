@@ -128,6 +128,10 @@ final class TemplateExercise: Identifiable {
     var plannedReps: Int = 8
     var plannedWeight: Double = 0
 
+    /// Older templates retain their saved load until explicitly switched.
+    var loadPolicyRaw: String = "fixed"
+    var hasStartingLoad: Bool = true
+
     /// Pick-time muscle snapshot copied from the catalog item. Used
     /// when spawning a WorkoutSession exercise so renamed custom
     /// lifts keep contributing to muscle analytics.
@@ -179,6 +183,11 @@ final class TemplateExercise: Identifiable {
     /// fields are stale — consumers should use `orderedSets` instead.
     @Relationship(deleteRule: .cascade, inverse: \TemplateSet.exercise)
     var sets: [TemplateSet] = []
+
+    var loadPolicy: TemplateLoadPolicy {
+        get { TemplateLoadPolicy(rawValue: loadPolicyRaw) ?? .fixed }
+        set { loadPolicyRaw = newValue.rawValue }
+    }
 
     /// Computed accessor for the muscle group enum. Lets the rest of
     /// the app treat `templateExercise.group` like a normal property
@@ -295,8 +304,8 @@ final class TemplateExercise: Identifiable {
         self.sortOrder = sortOrder
     }
 
-    /// Build a template exercise from a catalog pick. Muscles are
-    /// resolved by name from the curated map, so nothing to copy.
+    /// A new catalog selection remembers compatible loads at start.
+    /// The first-workout fallback stays unset until explicitly entered.
     convenience init(from item: ExerciseCatalogItem, sortOrder: Int) {
         self.init(
             name: item.name,
@@ -306,7 +315,7 @@ final class TemplateExercise: Identifiable {
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
-            plannedWeight: item.defaultWeightSeed,
+            plannedWeight: 0,
             muscleInvolvement: item.muscleInvolvement,
             classification: item.classification,
             trackingMode: item.trackingMode,
@@ -316,6 +325,8 @@ final class TemplateExercise: Identifiable {
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder
         )
+        loadPolicy = .lastWorkout
+        hasStartingLoad = false
     }
 }
 
@@ -459,37 +470,22 @@ extension Exercise {
         )
     }
 
-    /// Spawn a ready-to-start Exercise from a template row with each
-    /// set's working weight / reps / duration mirrored from the
-    /// user's most recent archived performance of the same exercise,
-    /// matched set by set, so the scrubbers start where the user
-    /// actually worked last time instead of at the template's seed
-    /// values. The per-set `planned*` snapshots keep the template's
-    /// prescription, so adherence analytics still measure against
-    /// the plan. Per-set (pyramid / wave) templates are deliberate
-    /// programming and spawn exactly as written; so does an exercise
-    /// the user has never logged.
+    /// Resolve the starting load without changing the template's set count,
+    /// target repetitions or duration. Session snapshots record the resolved
+    /// starting load so analytics never compare against an obsolete seed.
     static func fromTemplate(
         _ templateExercise: TemplateExercise,
         history summary: ExerciseHistorySummary?
     ) -> Exercise {
         let exercise = Exercise(from: templateExercise)
-        guard
-            !templateExercise.hasPerSetData,
-            let last = summary?.mostRecentInstance(
-                matching: templateExercise.performanceSignature
-            )
-        else { return exercise }
-
-        let logged = last.completedSetPrescription
-        guard !logged.isEmpty else { return exercise }
-
-        for (i, set) in exercise.orderedSets.enumerated() {
-            let source = logged[min(i, logged.count - 1)]
-            set.weight = exercise.trackedWeight(source.weight)
-            set.reps = source.reps
-            set.duration = source.duration
+        let resolution = templateExercise.resolveLoad(history: summary)
+        guard !templateExercise.hasPerSetData else { return exercise }
+        for (index, set) in exercise.orderedSets.enumerated() {
+            let weight = resolution.weights?[index] ?? 0
+            set.weight = weight
+            set.plannedWeight = weight
         }
+        exercise.plannedWeight = resolution.weights?.first ?? 0
         return exercise
     }
 }

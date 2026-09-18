@@ -1,0 +1,88 @@
+{
+  "name": "template-starting-loads-detail",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-template-starting-loads",
+      "--ui-test-remembered-template-load",
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-settings.weightUnit",
+      "lb"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "todayUpNextPreview"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayUpNextPreview"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Barbell Bench Press, 3 \u00d7 8 \u00b7 Last used:"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, 3 \u00d7 8 \u00b7 Last used:"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "templateLoadPolicy"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "wait": {
+        "identifier": "templateLastUsedLoad",
+        "labelContains": "Set 1: 155 lb"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "templateLastUsedLoad"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "templateLoadPolicy",
+      "value": "Use last workout"
+    },
+    {
+      "identifier": "templateLastUsedLoad",
+      "labelContains": "Set 1: 155 lb"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

@@ -30,6 +30,7 @@ import VivoKit
 struct TemplateEditorScreen: View {
     let target: TemplateEditorTarget
 
+    @Environment(\.sessionAnalytics) private var sessionAnalytics
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -110,7 +111,7 @@ struct TemplateEditorScreen: View {
                 )
             }
             .sheet(item: $configureTarget) { cfg in
-                ConfigureExerciseSheet(target: cfg) { updated in
+                ConfigureExerciseSheet(target: cfg, history: history(for: cfg)) { updated in
                     applyConfigured(updated)
                 }
             }
@@ -131,6 +132,13 @@ struct TemplateEditorScreen: View {
             } message: {
                 Text("\(blockedPerSetExerciseName ?? "This exercise") uses explicit set-by-set programming. This quick editor only changes uniform exercises, so the per-set rows were left unchanged.")
             }
+        }
+    }
+
+    private func history(for target: ConfigureExerciseTarget) -> ExerciseHistorySummary? {
+        switch target {
+        case let .adding(item): sessionAnalytics?.exerciseHistorySummaries[item.historyKey]
+        case let .editing(draft): sessionAnalytics?.exerciseHistorySummaries[draft.historyKey]
         }
     }
 
@@ -340,10 +348,9 @@ struct TemplateEditorScreen: View {
                         Text(exercise.name)
                             .font(Typography.title)
                             .foregroundStyle(Ink.primary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
-                    Text(exercise.summary(unit: unit))
+                    Text(exercise.loadSummary(history: sessionAnalytics?.exerciseHistorySummaries[exercise.historyKey], unit: unit))
                         .font(Typography.metricUnit)
                         .foregroundStyle(Ink.tertiary)
                 }
@@ -398,6 +405,7 @@ struct TemplateEditorScreen: View {
     private func presentConfigureForPendingPick() {
         guard let item = pendingPick else { return }
         pendingPick = nil
+        _ = sessionAnalytics?.resolvedExerciseHistory(in: modelContext)
         configureTarget = .adding(item)
     }
 

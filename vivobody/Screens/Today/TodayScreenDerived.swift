@@ -92,7 +92,8 @@ extension TodayScreen {
             daysUntil: daysUntil,
             otherScheduledCount: more,
             shouldEaseOff: shouldEaseOff,
-            outlook: outlook
+            outlook: outlook,
+            history: appState.analytics.exerciseHistorySummaries
         )
         return (
             template,

@@ -19,6 +19,10 @@ import VivoKit
             in context: ModelContext
         ) {
             for step in steps {
+                if step == .templateStartingLoads {
+                    DebugTemplateLoadsSeeder.seed(in: context)
+                    continue
+                }
                 if step == .forearmDevelopment {
                     DebugForearmDevelopmentSeeder.seed(in: context)
                     continue

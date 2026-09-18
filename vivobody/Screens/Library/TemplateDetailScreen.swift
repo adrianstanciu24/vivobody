@@ -13,8 +13,7 @@
 //    • Add an exercise — tap the "+" toolbar button → picker sheet.
 //
 //    • Edit an exercise's plan — tap its row → push to
-//      TemplateExerciseEditorScreen (sets / reps / weight with
-//      native Stepper + scrubber sheet).
+//      TemplateExerciseEditorScreen (target scrubbers and starting-load policy).
 //
 //    • Delete an exercise — swipe-left on the row OR enter Edit
 //      mode (toolbar EditButton) for batch delete + drag-reorder.
@@ -43,6 +42,8 @@ struct TemplateDetailScreen: View {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
+    @State private var pendingPick: ExerciseCatalogItem?
+    @State private var configureTarget: ConfigureExerciseTarget?
     @State private var showPicker: Bool = false
     @State private var saveError: SaveErrorBox? = nil
 
@@ -103,9 +104,21 @@ struct TemplateDetailScreen: View {
                 .accessibilityLabel("Add exercise")
             }
         }
-        .sheet(isPresented: $showPicker) {
-            ExercisePickerSheet { item in
-                appendExercise(from: item)
+        .sheet(isPresented: $showPicker, onDismiss: {
+            if let item = pendingPick {
+                _ = appState.analytics.resolvedExerciseHistory(in: modelContext)
+                configureTarget = .adding(item)
+                pendingPick = nil
+            }
+        }) {
+            ExercisePickerSheet(purpose: .addToTemplate) { item in
+                pendingPick = item
+                showPicker = false
+            }
+        }
+        .sheet(item: $configureTarget) { target in
+            ConfigureExerciseSheet(target: target, history: configureHistory(target)) { draft in
+                appendExercise(draft)
             }
         }
         .saveErrorAlert($saveError)
@@ -159,7 +172,7 @@ struct TemplateDetailScreen: View {
                     // Closure form pushes the literal destination
                     // and is deterministic.
                     NavigationLink {
-                        TemplateExerciseEditorScreen(exercise: exercise)
+                        TemplateExerciseEditorScreen(exercise: exercise, appState: appState)
                     } label: {
                         exerciseRow(exercise)
                     }
@@ -202,7 +215,7 @@ struct TemplateDetailScreen: View {
                     Text(exercise.name)
                         .font(Typography.title)
                         .foregroundStyle(Ink.primary)
-                        .lineLimit(1)
+                        .fixedSize(horizontal: false, vertical: true)
                     if exercise.hasPerSetData {
                         Text("Per set")
                             .font(Typography.caption)
@@ -228,45 +241,15 @@ struct TemplateDetailScreen: View {
     }
 
     private func exerciseSummary(_ exercise: TemplateExercise) -> String {
-        switch exercise.trackingMode {
-        case .reps:
-            if exercise.hasPerSetData {
-                let sets = exercise.orderedSets
-                let weights = sets.map { exercise.trackedWeight($0.weight) }
-                guard let lo = weights.min(), let hi = weights.max() else { return "" }
-                if lo == hi, let first = sets.first {
-                    let load = exercise.loadMode.summaryLoadLabel(lo, unit: unit)
-                    return load.map { "\(sets.count) × \(first.reps) @ \($0)" }
-                        ?? "\(sets.count) × \(first.reps)"
-                }
-                let loadRange = exercise.loadMode.summaryLoadRangeLabel(lo, hi, unit: unit)
-                return loadRange.map { "\(sets.count) sets · \($0)" }
-                    ?? "\(sets.count) sets"
-            }
-            let load = exercise.loadMode.summaryLoadLabel(
-                exercise.trackedWeight(exercise.plannedWeight),
-                unit: unit
-            )
-            return load.map { "\(exercise.plannedSets) × \(exercise.plannedReps) @ \($0)" }
-                ?? "\(exercise.plannedSets) × \(exercise.plannedReps)"
+        let target = ExerciseDraft(from: exercise).targetSummary
+        guard exercise.tracksResistance else { return target }
+        let resolution = exercise.resolveLoad(history: appState.analytics.exerciseHistorySummaries[exercise.historyKey])
+        return "\(target) · \(resolution.summary(loadMode: exercise.loadMode, unit: unit))"
+    }
 
-        case .duration:
-            if exercise.hasPerSetData {
-                let sets = exercise.orderedSets
-                let durations = sets.map(\.duration)
-                guard let lo = durations.min(), let hi = durations.max() else { return "" }
-                if lo == hi {
-                    return "\(sets.count) × \(DurationFormatter.string(lo)) \(exercise.modality.durationLabelLowercased)"
-                }
-                return "\(sets.count) \(exercise.modality.durationCountLabel) · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
-            }
-            let base = "\(exercise.plannedSets) × \(DurationFormatter.string(exercise.plannedDuration)) \(exercise.modality.durationLabelLowercased)"
-            guard let load = exercise.loadMode.summaryLoadLabel(
-                exercise.trackedWeight(exercise.plannedWeight),
-                unit: unit
-            ) else { return base }
-            return "\(base) @ \(load)"
-        }
+    private func configureHistory(_ target: ConfigureExerciseTarget) -> ExerciseHistorySummary? {
+        guard case let .adding(item) = target else { return nil }
+        return appState.analytics.exerciseHistorySummaries[item.historyKey]
     }
 
     // MARK: - Start bar
@@ -291,10 +274,10 @@ struct TemplateDetailScreen: View {
 
     // MARK: - Mutations
 
-    /// Add a TemplateExercise from a catalog pick. Uniform mode with
-    /// catalog defaults; the new row appears at the end of the list.
-    private func appendExercise(from item: ExerciseCatalogItem) {
-        let new = TemplateExercise(from: item, sortOrder: template.exercises.count)
+    /// Persist a configured exercise with its load policy and initial fallback.
+    /// The new row appears at the end of the list.
+    private func appendExercise(_ draft: ExerciseDraft) {
+        let new = draft.makeTemplateExercise(sortOrder: template.exercises.count)
         template.exercises.append(new)
         do {
             try modelContext.saveOrRollback()

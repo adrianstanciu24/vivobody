@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 119.
+Scenario files: 125.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -125,6 +125,12 @@ Scenario files: 119.
 | [strength-routine-builder-unlimited-templates](strength-routine-builder-unlimited-templates.json) | library | `--seed-templates --ui-test-strength-routine-builder` |
 | [strength-routine-builder](strength-routine-builder.json) | library | `--ui-test-strength-routine-builder` |
 | [strength-routine-picker-contract](strength-routine-picker-contract.json) | library | `--ui-test-strength-routine-builder` |
+| [template-first-load](template-first-load.json) | library | `--ui-test-template-starting-loads -settings.appearance dark -settings.weightUnit lb` |
+| [template-starting-loads-accessibility](template-starting-loads-accessibility.json) | library | `--ui-test-template-starting-loads -settings.appearance dark -settings.weightUnit lb -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [template-starting-loads-detail](template-starting-loads-detail.json) | today | `--ui-test-template-starting-loads --ui-test-remembered-template-load --static-body -settings.appearance dark -settings.weightUnit lb` |
+| [template-starting-loads-light](template-starting-loads-light.json) | library | `--ui-test-template-starting-loads -settings.appearance light -settings.weightUnit lb` |
+| [template-starting-loads-today](template-starting-loads-today.json) | today | `--ui-test-template-starting-loads --ui-test-remembered-template-load --static-body -settings.appearance dark -settings.weightUnit lb` |
+| [template-starting-loads](template-starting-loads.json) | library | `--ui-test-template-starting-loads -settings.appearance dark -settings.weightUnit lb` |
 | [today-actions](today-actions.json) | today | `--static-body` |
 | [today-journal-accessibility](today-journal-accessibility.json) | today | `--seed-history --static-body` |
 | [today-up-next](today-up-next.json) | today | `--ui-test-scheduled-template --static-body` |

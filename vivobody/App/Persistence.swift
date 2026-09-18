@@ -29,19 +29,38 @@ enum VivobodySchemaV1: VersionedSchema {
     }
 }
 
+enum VivobodySchemaV2: VersionedSchema {
+    static var versionIdentifier: Schema.Version {
+        Schema.Version(2, 0, 0)
+    }
+
+    static var models: [any PersistentModel.Type] {
+        [
+            WorkoutSession.self,
+            Exercise.self,
+            WorkoutSet.self,
+            WorkoutTemplate.self,
+            TemplateExercise.self,
+            TemplateSet.self,
+            ExerciseCatalogItem.self,
+            BodyWeightEntry.self,
+        ]
+    }
+}
+
 enum VivobodyMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [VivobodySchemaV1.self]
+        [VivobodySchemaV1.self, VivobodySchemaV2.self]
     }
 
     static var stages: [MigrationStage] {
-        []
+        [.lightweight(fromVersion: VivobodySchemaV1.self, toVersion: VivobodySchemaV2.self)]
     }
 }
 
 enum VivobodyStore {
     static var schema: Schema {
-        Schema(versionedSchema: VivobodySchemaV1.self)
+        Schema(versionedSchema: VivobodySchemaV2.self)
     }
 
     /// Creates the normal named container used by the app, including its

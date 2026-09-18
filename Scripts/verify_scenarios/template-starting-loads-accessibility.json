@@ -1,0 +1,106 @@
+{
+  "name": "template-starting-loads-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-template-starting-loads",
+      "-settings.appearance",
+      "dark",
+      "-settings.weightUnit",
+      "lb",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Load Test",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Load Test",
+        "role": "AXButton",
+        "labelRegex": "^(?!Start).*"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Fixed: 135 lb"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press",
+        "labelRegex": ".*Fixed: 135 lb.*",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "templateLoadPolicy"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "templateLoadPolicy"
+      }
+    },
+    {
+      "tap": {
+        "label": "Use last workout"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "templateLastUsedLoad",
+        "labelContains": "Set 1: 155 lb"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "templateLastUsedLoad"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "templateLoadPolicy",
+      "value": "Use last workout"
+    },
+    {
+      "identifier": "templateLastUsedLoad",
+      "labelContains": "Set 1: 155 lb"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

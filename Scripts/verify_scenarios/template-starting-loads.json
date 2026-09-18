@@ -1,0 +1,144 @@
+{
+  "name": "template-starting-loads",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-template-starting-loads",
+      "-settings.appearance",
+      "dark",
+      "-settings.weightUnit",
+      "lb"
+    ]
+  },
+  "steps": [
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Load Test",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Load Test",
+        "role": "AXButton",
+        "labelRegex": "^(?!Start).*"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Fixed: 135 lb"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press",
+        "labelRegex": ".*Fixed: 135 lb.*",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "templateLoadPolicy"
+      }
+    },
+    {
+      "tap": {
+        "label": "Use last workout"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "templateLastUsedLoad",
+        "labelContains": "Set 1: 155 lb"
+      }
+    },
+    {
+      "tap": {
+        "label": "Save Changes",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "3 \u00d7 8 \u00b7 Last used: Set 1: 155 lb \u00b7 Set 2: 150 lb \u00b7 Set 3: 150 lb"
+      }
+    },
+    {
+      "tap": {
+        "label": "Save",
+        "role": "AXButton"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "-settings.appearance",
+          "dark",
+          "-settings.weightUnit",
+          "lb"
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Load Test",
+        "role": "AXButton",
+        "labelRegex": "^(?!Start).*"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "3 \u00d7 8 \u00b7 Last used: Set 1: 155 lb \u00b7 Set 2: 150 lb \u00b7 Set 3: 150 lb"
+      }
+    },
+    {
+      "tap": {
+        "label": "Cancel",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Start Load Test",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "completeSetButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Weight",
+      "valueContains": "155"
+    },
+    {
+      "label": "Reps",
+      "valueContains": "8"
+    },
+    {
+      "identifier": "completeSetButton",
+      "enabled": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

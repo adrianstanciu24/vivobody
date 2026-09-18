@@ -10,7 +10,7 @@
 //
 //  Same instrument language as the rest of the app: huge monospaced
 //  numerals you scrub with a vertical drag (BareScrubber), a quiet
-//  kicker header, a live "3 × 8 @ 135 lb" preview, and a single lime
+//  kicker header, starting-load controls, a target preview, and a single lime
 //  CTA. Nothing is persisted here — the sheet hands a value-type
 //  ExerciseDraft back to the builder via `onCommit`, and the builder
 //  decides when (and whether) to write it through to SwiftData.
@@ -22,7 +22,7 @@ import VivoKit
 /// What the configure sheet is operating on. Driven as an
 /// Identifiable so the builder can present it via `.sheet(item:)`.
 enum ConfigureExerciseTarget: Identifiable {
-    /// A fresh catalog pick — defaults seeded from the catalog item.
+    /// A fresh catalog pick — targets from the catalog, load from history or explicit entry.
     case adding(ExerciseCatalogItem)
     /// An existing draft row being revised — fields prefilled.
     case editing(ExerciseDraft)
@@ -52,6 +52,10 @@ struct ConfigureExerciseSheet: View {
     @State private var reps: Int
     /// Canonical lb — scrubbed in display units, stored as lb.
     @State private var weight: Double
+    @State private var loadPolicy: TemplateLoadPolicy
+    @State private var hasStartingLoad: Bool
+    private let lastWeights: [Double]
+    private let lastDate: Date?
     /// Hold length (seconds) — used only in `.duration` mode.
     @State private var duration: Double
 
@@ -77,9 +81,18 @@ struct ConfigureExerciseSheet: View {
         )
     }
 
-    init(target: ConfigureExerciseTarget, onCommit: @escaping (ExerciseDraft) -> Void) {
+    init(target: ConfigureExerciseTarget, history: ExerciseHistorySummary? = nil, onCommit: @escaping (ExerciseDraft) -> Void) {
         self.target = target
         self.onCommit = onCommit
+        let signature: ExercisePerformanceSignature = switch target {
+        case let .adding(item): item.performanceSignature
+        case let .editing(draft):
+            ExercisePerformanceSignature(modality: draft.modality, trackingMode: draft.trackingMode,
+                                         loadMode: draft.loadMode, bodyweightFraction: draft.bodyweightFraction, tracksResistance: draft.tracksResistance)
+        }
+        let last = history?.mostRecentInstance(matching: signature)
+        lastWeights = last?.completedSetPrescription.map(\.weight) ?? []
+        lastDate = last?.date
         switch target {
         case let .adding(item):
             name = item.name
@@ -95,7 +108,9 @@ struct ConfigureExerciseSheet: View {
             bodyweightFraction = item.bodyweightFraction
             _sets = State(initialValue: 3)
             _reps = State(initialValue: item.defaultReps)
-            _weight = State(initialValue: item.defaultWeightSeed)
+            _weight = State(initialValue: lastWeights.first ?? 0)
+            _loadPolicy = State(initialValue: .lastWorkout)
+            _hasStartingLoad = State(initialValue: !lastWeights.isEmpty)
             _duration = State(initialValue: item.defaultDuration > 0 ? item.defaultDuration : 45)
             isEditing = false
             draftID = UUID()
@@ -115,6 +130,8 @@ struct ConfigureExerciseSheet: View {
             _sets = State(initialValue: draft.plannedSets)
             _reps = State(initialValue: draft.plannedReps)
             _weight = State(initialValue: draft.plannedWeight)
+            _loadPolicy = State(initialValue: draft.loadPolicy)
+            _hasStartingLoad = State(initialValue: draft.hasStartingLoad)
             _duration = State(initialValue: draft.plannedDuration > 0 ? draft.plannedDuration : 45)
             isEditing = true
             draftID = draft.id
@@ -172,22 +189,8 @@ struct ConfigureExerciseSheet: View {
 
                     if tracksResistance {
                         SectionDivider()
-
-                        valueRow(label: loadMode.inputLabel) {
-                            BareScrubber(
-                                value: weightDisplayBinding,
-                                range: unit.strengthRange,
-                                step: unit.strengthStep,
-                                pointsPerStep: 8,
-                                fontSize: 56,
-                                unit: unit.symbol,
-                                unitFontSize: 16,
-                                numberColor: Ink.primary,
-                                unitColor: Ink.tertiary,
-                                accessibilityLabel: loadMode.inputLabel,
-                                tickTone: .deep
-                            )
-                        }
+                        TemplateLoadControls(policy: $loadPolicy, weight: $weight, hasStartingLoad: $hasStartingLoad,
+                                             loadMode: loadMode, unit: unit, lastWeights: lastWeights, lastDate: lastDate)
                     }
                 }
                 .padding(.top, Space.lg)
@@ -257,6 +260,7 @@ struct ConfigureExerciseSheet: View {
                 onCommit(buildDraft())
                 dismiss()
             }
+            .disabled(tracksResistance && !hasStartingLoad && (loadPolicy == .fixed || lastWeights.isEmpty))
         }
         .padding(.horizontal, Space.gutter)
         .padding(.top, Space.md)
@@ -264,21 +268,8 @@ struct ConfigureExerciseSheet: View {
     }
 
     private var previewLine: String {
-        switch mode {
-        case .reps:
-            let load = loadMode.summaryLoadLabel(
-                tracksResistance ? weight : 0,
-                unit: unit
-            )
-            return load.map { "\(sets) × \(reps) @ \($0)" } ?? "\(sets) × \(reps)"
-        case .duration:
-            let base = "\(sets) × \(DurationFormatter.string(duration)) \(modality.durationLabelLowercased)"
-            guard let load = loadMode.summaryLoadLabel(
-                tracksResistance ? weight : 0,
-                unit: unit
-            ) else { return base }
-            return "\(base) @ \(load)"
-        }
+        mode == .reps ? "\(sets) × \(reps)"
+            : "\(sets) × \(DurationFormatter.string(duration)) \(modality.durationLabelLowercased)"
     }
 
     // MARK: - Bindings
@@ -304,13 +295,6 @@ struct ConfigureExerciseSheet: View {
         )
     }
 
-    private var weightDisplayBinding: Binding<Double> {
-        Binding(
-            get: { WeightFormatter.toDisplay(weight, unit: unit) },
-            set: { weight = WeightFormatter.toCanonical($0, unit: unit) }
-        )
-    }
-
     // MARK: - Draft
 
     private func buildDraft() -> ExerciseDraft {
@@ -325,6 +309,8 @@ struct ConfigureExerciseSheet: View {
                 plannedSets: originalDraft.plannedSets,
                 plannedReps: originalDraft.plannedReps,
                 plannedWeight: originalDraft.plannedWeight,
+                loadPolicy: .fixed,
+                hasStartingLoad: originalDraft.hasStartingLoad,
                 muscleInvolvement: Muscle.Involvement(snapshot: originalDraft.muscleInvolvementSnapshot),
                 classification: originalDraft.classification,
                 trackingMode: mode,
@@ -347,6 +333,8 @@ struct ConfigureExerciseSheet: View {
             plannedSets: sets,
             plannedReps: reps,
             plannedWeight: tracksResistance ? weight : 0,
+            loadPolicy: loadPolicy,
+            hasStartingLoad: hasStartingLoad,
             muscleInvolvement: muscleInvolvement,
             classification: classification,
             trackingMode: mode,

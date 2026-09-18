@@ -42,8 +42,10 @@ extension ModelContext {
 struct SaveErrorBox: Identifiable {
     let id = UUID()
     let message: String
+    let title: String
 
-    init(_ error: Error) {
+    init(_ error: Error, title: String = "Couldn’t save") {
+        self.title = title
         message = (error as? LocalizedError)?.errorDescription
             ?? (error as NSError).localizedDescription
     }
@@ -56,7 +58,7 @@ extension View {
     /// dismissal so the editor stays open for a retry.
     func saveErrorAlert(_ box: Binding<SaveErrorBox?>) -> some View {
         alert(
-            "Couldn’t save",
+            box.wrappedValue?.title ?? "Couldn’t save",
             isPresented: Binding(
                 get: { box.wrappedValue != nil },
                 set: { if !$0 { box.wrappedValue = nil } }

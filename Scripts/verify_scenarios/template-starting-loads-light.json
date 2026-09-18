@@ -1,0 +1,92 @@
+{
+  "name": "template-starting-loads-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-template-starting-loads",
+      "-settings.appearance",
+      "light",
+      "-settings.weightUnit",
+      "lb"
+    ]
+  },
+  "steps": [
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Load Test",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Load Test",
+        "role": "AXButton",
+        "labelRegex": "^(?!Start).*"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Fixed: 135 lb"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press",
+        "labelRegex": ".*Fixed: 135 lb.*",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "templateLoadPolicy"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "templateLoadPolicy"
+      }
+    },
+    {
+      "tap": {
+        "label": "Use last workout"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "templateLastUsedLoad",
+        "labelContains": "Set 1: 155 lb"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "templateLastUsedLoad"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "templateLoadPolicy",
+      "value": "Use last workout"
+    },
+    {
+      "identifier": "templateLastUsedLoad",
+      "labelContains": "Set 1: 155 lb"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

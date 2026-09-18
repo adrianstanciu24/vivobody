@@ -42,6 +42,8 @@ struct ExerciseDraft: Identifiable, Hashable {
     var plannedSets: Int
     var plannedReps: Int
     var plannedWeight: Double
+    var loadPolicy: TemplateLoadPolicy
+    var hasStartingLoad: Bool
 
     /// Pick-time muscle snapshot. Carried through the value draft so
     /// editing a template does not strip analytics identity.
@@ -90,6 +92,8 @@ struct ExerciseDraft: Identifiable, Hashable {
         plannedSets: Int = 3,
         plannedReps: Int = 8,
         plannedWeight: Double = 0,
+        loadPolicy: TemplateLoadPolicy = .fixed,
+        hasStartingLoad: Bool = true,
         muscleInvolvement: Muscle.Involvement? = nil,
         classification: ExerciseClassification? = nil,
         trackingMode: TrackingMode = .reps,
@@ -109,6 +113,8 @@ struct ExerciseDraft: Identifiable, Hashable {
         self.group = group
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
+        self.loadPolicy = loadPolicy
+        self.hasStartingLoad = hasStartingLoad
         self.plannedWeight = ExerciseResistanceCapability.normalizedWeight(
             plannedWeight,
             loadMode: loadMode,
@@ -173,9 +179,8 @@ extension ExerciseDraft {
         )
     }
 
-    /// Build from a catalog pick — pre-fills sensible defaults so
-    /// the user doesn't always scrub from zero. Starts in uniform
-    /// mode; the user can expand to per-set in the editor.
+    /// Build from a catalog pick with editable set/rep/time targets.
+    /// Load follows compatible history; its first-workout fallback is unset.
     init(from item: ExerciseCatalogItem) {
         self.init(
             name: item.name,
@@ -185,7 +190,9 @@ extension ExerciseDraft {
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
-            plannedWeight: item.defaultWeightSeed,
+            plannedWeight: 0,
+            loadPolicy: .lastWorkout,
+            hasStartingLoad: false,
             muscleInvolvement: item.muscleInvolvement,
             classification: item.classification,
             trackingMode: item.trackingMode,
@@ -214,6 +221,8 @@ extension ExerciseDraft {
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
+                loadPolicy: templateExercise.loadPolicy,
+                hasStartingLoad: templateExercise.hasStartingLoad,
                 muscleInvolvement: templateExercise.muscleInvolvement,
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
@@ -237,6 +246,8 @@ extension ExerciseDraft {
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
+                loadPolicy: templateExercise.loadPolicy,
+                hasStartingLoad: templateExercise.hasStartingLoad,
                 muscleInvolvement: templateExercise.muscleInvolvement,
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
@@ -278,6 +289,8 @@ extension ExerciseDraft {
             plannedDuration: fallbackDuration,
             sortOrder: sortOrder
         )
+        exercise.loadPolicy = isPerSet ? .fixed : loadPolicy
+        exercise.hasStartingLoad = hasStartingLoad
         exercise.supersetID = supersetID
 
         if isPerSet {
@@ -310,6 +323,8 @@ extension ExerciseDraft {
         let duration = plannedDuration
         sets = (0 ..< count).map { _ in SetDraft(weight: weight, reps: reps, duration: duration) }
         isPerSet = true
+        loadPolicy = .fixed
+        hasStartingLoad = true
     }
 
     /// Collapse explicit rows back to uniform. Only safe when every
@@ -337,51 +352,44 @@ extension ExerciseDraft {
         }
     }
 
-    // MARK: - Summary line
-
-    /// Human-readable summary for the collapsed editor row and the
-    /// TemplateDetailScreen list. Uniform mode reads as "3 × 8 @ 135 lb";
-    /// per-set mode condenses to a count + range like "5 sets · 135–185 lb".
-    /// Caller passes the user's preferred unit so the value type stays
-    /// pure and doesn't reach into UserDefaults.
-    func summary(unit: WeightUnit) -> String {
-        switch trackingMode {
-        case .reps:
-            if isPerSet, !sets.isEmpty {
-                let weights = sets.map { trackedWeight($0.weight) }
-                guard let lo = weights.min(), let hi = weights.max() else { return "" }
-                if lo == hi {
-                    // All rows happen to be identical — read uniformly.
-                    let load = loadMode.summaryLoadLabel(lo, unit: unit)
-                    return load.map { "\(sets.count) × \(sets[0].reps) @ \($0)" }
-                        ?? "\(sets.count) × \(sets[0].reps)"
-                }
-                let loadRange = loadMode.summaryLoadRangeLabel(lo, hi, unit: unit)
-                return loadRange.map { "\(sets.count) sets · \($0)" }
-                    ?? "\(sets.count) sets"
-            }
-            let load = loadMode.summaryLoadLabel(
-                trackedWeight(plannedWeight),
-                unit: unit
-            )
-            return load.map { "\(plannedSets) × \(plannedReps) @ \($0)" }
-                ?? "\(plannedSets) × \(plannedReps)"
-
-        case .duration:
-            if isPerSet, !sets.isEmpty {
-                let durations = sets.map(\.duration)
-                guard let lo = durations.min(), let hi = durations.max() else { return "" }
-                if lo == hi {
-                    return "\(sets.count) × \(DurationFormatter.string(lo)) \(modality.durationLabelLowercased)"
-                }
-                return "\(sets.count) \(modality.durationCountLabel) · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
-            }
-            let base = "\(plannedSets) × \(DurationFormatter.string(plannedDuration)) \(modality.durationLabelLowercased)"
-            guard let load = loadMode.summaryLoadLabel(
-                trackedWeight(plannedWeight),
-                unit: unit
-            ) else { return base }
-            return "\(base) @ \(load)"
+    var targetSummary: String {
+        let count = isPerSet ? sets.count : plannedSets
+        if trackingMode == .duration {
+            let values = isPerSet ? sets.map(\.duration) : [plannedDuration]
+            let lo = values.min() ?? plannedDuration
+            let hi = values.max() ?? plannedDuration
+            let time = lo == hi ? DurationFormatter.string(lo) : "\(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
+            return "\(count) × \(time) \(modality.durationLabelLowercased)"
         }
+        let values = isPerSet ? sets.map(\.reps) : [plannedReps]
+        let lo = values.min() ?? plannedReps
+        let hi = values.max() ?? plannedReps
+        return lo == hi ? "\(count) × \(lo)" : "\(count) × \(lo)–\(hi)"
+    }
+
+    func summary(unit: WeightUnit) -> String {
+        loadSummary(history: nil, unit: unit)
+    }
+}
+
+extension ExerciseDraft {
+    var performanceSignature: ExercisePerformanceSignature {
+        ExercisePerformanceSignature(modality: modality, trackingMode: trackingMode, loadMode: loadMode,
+                                     bodyweightFraction: bodyweightFraction, tracksResistance: tracksResistance)
+    }
+
+    var historyKey: String {
+        ExerciseIdentity.key(catalogID: catalogID, catalogItemID: catalogItemID, name: name, performanceSignature: performanceSignature)
+    }
+
+    func loadSummary(history: ExerciseHistorySummary?, unit: WeightUnit) -> String {
+        guard tracksResistance else { return targetSummary }
+        let last = history?.mostRecentInstance(matching: performanceSignature)
+        let resolution = isPerSet
+            ? TemplateLoadResolution(weights: sets.map { trackedWeight($0.weight) }, source: "Fixed", date: nil)
+            : TemplateLoadResolution.resolve(policy: loadPolicy, setCount: plannedSets,
+                                             startingWeight: hasStartingLoad ? plannedWeight : nil,
+                                             lastWeights: last?.completedSetPrescription.map { trackedWeight($0.weight) } ?? [], lastDate: last?.date)
+        return "\(targetSummary) · \(resolution.summary(loadMode: loadMode, unit: unit))"
     }
 }

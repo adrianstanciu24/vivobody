@@ -127,7 +127,8 @@ private struct TodayUpNextExerciseRow: View {
     let usesAccessibilityLayout: Bool
 
     var body: some View {
-        let layout = usesAccessibilityLayout
+        let stacked = usesAccessibilityLayout || row.scheme.loadReference != nil
+        let layout = stacked
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.sm))
             : AnyLayout(HStackLayout(alignment: .center, spacing: Space.sm))
         layout {
@@ -144,12 +145,12 @@ private struct TodayUpNextExerciseRow: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            if !usesAccessibilityLayout {
+            if !stacked {
                 Spacer(minLength: Space.sm)
             }
 
             schemeReadout
-                .padding(.leading, usesAccessibilityLayout ? 36 : 0)
+                .padding(.leading, stacked ? 36 : 0)
         }
         .padding(.vertical, Space.sm)
         .accessibilityElement(children: .ignore)
@@ -160,26 +161,34 @@ private struct TodayUpNextExerciseRow: View {
         let layout = usesAccessibilityLayout
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
             : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.sm))
-        return layout {
-            Text(row.scheme.count)
-                .font(Typography.metricUnit)
-                .foregroundStyle(Ink.tertiary)
-                .monospacedDigit()
-                .fixedSize(horizontal: false, vertical: true)
-            if let load = row.scheme.load {
-                HStack(alignment: .firstTextBaseline, spacing: 3) {
-                    Text(load)
-                        .font(Typography.metricInline)
-                        .foregroundStyle(Ink.secondary)
-                        .monospacedDigit()
-                        .fixedSize(horizontal: false, vertical: true)
-                    if let loadUnit = row.scheme.loadUnit {
-                        Text(loadUnit)
-                            .font(Typography.metricMicro)
-                            .foregroundStyle(Ink.tertiary)
+        return VStack(alignment: .leading, spacing: Space.xs) {
+            layout {
+                Text(row.scheme.count)
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.tertiary)
+                    .monospacedDigit()
+                    .fixedSize(horizontal: false, vertical: true)
+                if let load = row.scheme.load {
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
+                        Text(load)
+                            .font(Typography.metricInline)
+                            .foregroundStyle(Ink.secondary)
+                            .monospacedDigit()
                             .fixedSize(horizontal: false, vertical: true)
+                        if let loadUnit = row.scheme.loadUnit {
+                            Text(loadUnit)
+                                .font(Typography.metricMicro)
+                                .foregroundStyle(Ink.tertiary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
                     }
                 }
+            }
+            if let reference = row.scheme.loadReference {
+                Text(reference)
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
     }

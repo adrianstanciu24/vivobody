@@ -31,6 +31,7 @@ nonisolated struct TodayUpNextPresentation: Equatable {
             let plannedDuration: TimeInterval
             let plannedWeight: Double
             let sets: [SetPlan]
+            var startingLoadResolution: TemplateLoadResolution? = nil
 
             var effectiveSetCount: Int {
                 sets.isEmpty ? plannedSets : sets.count
@@ -57,9 +58,10 @@ nonisolated struct TodayUpNextPresentation: Equatable {
         let count: String
         let load: String?
         let loadUnit: String?
+        var loadReference: String? = nil
 
         var accessibilityText: String {
-            [count, load, loadUnit]
+            [count, load, loadUnit, loadReference]
                 .compactMap(\.self)
                 .joined(separator: " ")
         }
@@ -204,12 +206,16 @@ nonisolated struct TodayUpNextPresentation: Equatable {
         unit: WeightUnit
     ) -> Scheme {
         let trackingMode = TrackingMode(rawValue: exercise.trackingModeRaw) ?? .reps
-        switch trackingMode {
-        case .reps:
-            return repsScheme(for: exercise, unit: unit)
-        case .duration:
-            return durationScheme(for: exercise, unit: unit)
+        let scheme: Scheme = switch trackingMode {
+        case .reps: repsScheme(for: exercise, unit: unit)
+        case .duration: durationScheme(for: exercise, unit: unit)
         }
+        guard let resolution = exercise.startingLoadResolution else { return scheme }
+        let loadMode = ExerciseLoadMode(rawValue: exercise.loadModeRaw) ?? .external
+        let reference = resolution.summary(loadMode: loadMode, unit: unit)
+        return trackingMode == .duration
+            ? Scheme(count: scheme.count, load: scheme.load, loadUnit: exercise.durationLabel, loadReference: reference)
+            : Scheme(count: scheme.count, load: nil, loadUnit: nil, loadReference: reference)
     }
 
     private static func repsScheme(
@@ -306,7 +312,8 @@ extension TodayUpNextPresentation.Source {
         daysUntil: Int,
         otherScheduledCount: Int,
         shouldEaseOff: Bool,
-        outlook: StrengthOutlookBoard
+        outlook: StrengthOutlookBoard,
+        history: [String: ExerciseHistorySummary] = [:]
     ) {
         let exercises = template.orderedExercises.map { exercise in
             Exercise(
@@ -327,7 +334,10 @@ extension TodayUpNextPresentation.Source {
                         duration: set.duration,
                         weight: exercise.trackedWeight(set.weight)
                     )
-                }
+                },
+                startingLoadResolution: exercise.tracksResistance
+                    ? exercise.resolveLoad(history: history[exercise.historyKey])
+                    : nil
             )
         }
         let nearestPR = outlook.nearestPR.map { stat in

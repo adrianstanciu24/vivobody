@@ -58,6 +58,9 @@ recovery path if opening the store fails. Before changing a model, read
 
 `VivobodySchemaV1` freezes the first public model graph and
 `VivobodyMigrationPlan` is the production container's migration boundary.
+SchemaV2 adds template starting-load policy through a lightweight migration;
+existing templates preserve saved loads as fixed plans. Frozen V1 stored models
+live in the `SchemaV1*` files, separate from current runtime models.
 Retain the SchemaV1 store fixture permanently. Every later model change adds a
 new `VersionedSchema`, the required migration stage, and a retained fixture;
 never rewrite an older fixture to make migration pass.

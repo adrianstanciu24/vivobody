@@ -313,12 +313,23 @@ struct TodayUpNextPresentationTests {
             "5 lb from an Overhead Press PR")
     }
 
+    @Test func rememberedStartingLoadsFormatInTheRequestedUnit() {
+        var lift = exercise(plannedSets: 3, plannedReps: 8)
+        lift.startingLoadResolution = TemplateLoadResolution(weights: [155, 150, 150], source: "Last used", date: nil)
+        let presentation = makePresentation(exercises: [lift], unit: .kg)
+        let reference = presentation.exerciseRows[0].scheme.loadReference
+        #expect(reference?.contains("kg") == true)
+        #expect(reference?.contains("lb") == false)
+        #expect(presentation.exerciseRows[0].scheme.count == "3 × 8")
+    }
+
     private func makePresentation(
         daysUntil: Int = 0,
         otherScheduledCount: Int = 0,
         shouldEaseOff: Bool = false,
         exercises: [ExerciseSource]? = nil,
         nearestPR: Source.NearestPR? = nil,
+        unit: WeightUnit = .lb,
         defaultRestSeconds: Int = SettingsDefaults.defaultRestSeconds
     ) -> TodayUpNextPresentation {
         TodayUpNextPresentation(
@@ -330,7 +341,7 @@ struct TodayUpNextPresentationTests {
                 exercises: exercises ?? [exercise()],
                 nearestPR: nearestPR
             ),
-            unit: .lb,
+            unit: unit,
             defaultRestSeconds: defaultRestSeconds
         )
     }

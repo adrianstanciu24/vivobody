@@ -2,20 +2,9 @@
 //  TemplateExerciseEditorScreen.swift
 //  vivobody
 //
-//  Edits a single TemplateExercise in the app's instrument language:
-//  full-bleed on black, a type-forward kicker header, and the planned
-//  Sets / Reps / Weight set as huge monospaced numerals you scrub
-//  with a vertical drag — the same BareScrubber the live workout hero
-//  uses, so editing a template feels identical to editing mid-set.
-//  Drag up to increase, down to decrease; haptic tick on every step;
-//  rubber-band at the range walls. Values bind straight to the @Model
-//  via @Bindable + modelContext.saveOrRollback() on change, so edits
-//  flow back to the parent list summary the instant a drag ends.
-//
-//  Why scrubbers, not iOS Form Steppers: the active workout sets the
-//  app's visual + interaction language. The template editor has to
-//  match — otherwise template-side editing feels like a different app
-//  from workout-side editing.
+//  Edits one persisted template exercise's targets and starting-load policy.
+//  Scrubber controls reuse the workout's input language. Each meaningful change
+//  saves with rollback/error handling; fixed per-set programming stays intact.
 //
 
 import SwiftData
@@ -24,6 +13,7 @@ import VivoKit
 
 struct TemplateExerciseEditorScreen: View {
     @Bindable var exercise: TemplateExercise
+    @Bindable var appState: AppState
 
     @Environment(\.modelContext) private var modelContext
 
@@ -85,21 +75,16 @@ struct TemplateExerciseEditorScreen: View {
 
                 if exercise.tracksResistance {
                     SectionDivider()
-
-                    valueRow(label: exercise.loadMode.inputLabel) {
-                        BareScrubber(
-                            value: weightDisplayBinding,
-                            range: unit.strengthRange,
-                            step: unit.strengthStep,
-                            pointsPerStep: 8,
-                            fontSize: 64,
-                            unit: unit.symbol,
-                            unitFontSize: 16,
-                            numberColor: Ink.primary,
-                            unitColor: Ink.tertiary,
-                            accessibilityLabel: exercise.loadMode.inputLabel,
-                            tickTone: .deep
-                        )
+                    if exercise.hasPerSetData {
+                        Text("Fixed per-set plan")
+                            .font(Typography.sectionHeading)
+                        Text(ExerciseDraft(from: exercise).summary(unit: unit))
+                            .font(Typography.body)
+                            .foregroundStyle(Ink.secondary)
+                    } else {
+                        TemplateLoadControls(policy: $exercise.loadPolicy, weight: $exercise.plannedWeight,
+                                             hasStartingLoad: $exercise.hasStartingLoad, loadMode: exercise.loadMode, unit: unit,
+                                             lastWeights: last?.completedSetPrescription.map(\.weight) ?? [], lastDate: last?.date)
                     }
                 }
             }
@@ -118,9 +103,15 @@ struct TemplateExerciseEditorScreen: View {
         .onChange(of: exercise.plannedSets) { _, _ in save() }
         .onChange(of: exercise.plannedReps) { _, _ in save() }
         .onChange(of: exercise.plannedWeight) { _, _ in save() }
+        .onChange(of: exercise.loadPolicyRaw) { _, _ in save() }
+        .onChange(of: exercise.hasStartingLoad) { _, _ in save() }
         .onChange(of: exercise.plannedDuration) { _, _ in save() }
         .onAppear { normalizeUntrackedResistance() }
         .saveErrorAlert($saveError)
+    }
+
+    private var last: ExerciseHistoryInstance? {
+        appState.analytics.exerciseHistorySummaries[exercise.historyKey]?.mostRecentInstance(matching: exercise.performanceSignature)
     }
 
     // MARK: - Header
@@ -180,15 +171,6 @@ struct TemplateExerciseEditorScreen: View {
         Binding(
             get: { exercise.plannedDuration },
             set: { exercise.plannedDuration = $0 }
-        )
-    }
-
-    /// Scrubbed in display units; converted to/from canonical lb at
-    /// the binding boundary so the model only ever stores lb.
-    private var weightDisplayBinding: Binding<Double> {
-        Binding(
-            get: { WeightFormatter.toDisplay(exercise.plannedWeight, unit: unit) },
-            set: { exercise.plannedWeight = WeightFormatter.toCanonical($0, unit: unit) }
         )
     }
 
