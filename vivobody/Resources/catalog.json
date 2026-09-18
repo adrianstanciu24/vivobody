@@ -496,6 +496,140 @@
     ]
   },
   {
+    "familyID": "ankle-plantarflexion",
+    "familyName": "Ankle Plantarflexion",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "standing-dumbbell-calf-raise",
+    "name": "Standing Dumbbell Calf Raise",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Dumbbell Calf Raise",
+      "Two-Dumbbell Calf Raise"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Hold one dumbbell at each side and place both forefeet on a stable raised platform with your heels free. Enter the combined weight of both dumbbells.",
+      "movement": "Raise both heels together as high as you can while keeping your knees extended.",
+      "endpoint": "Finish at your highest controlled heel position.",
+      "returnPhase": "Lower both heels under control through a comfortable ankle range.",
+      "controlledJoints": "Keep your knees, hips, and spine steady, with arms hanging and wrists held neutral.",
+      "supportAndPosture": "Stand tall without external hand support; keep both forefeet firmly supported.",
+      "disqualifyingCompensations": [
+        "Bending and extending the knees changes the ankle-only movement.",
+        "Bouncing or swinging the dumbbells propels the load.",
+        "Lifting one heel first changes the simultaneous bilateral fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gastrocnemius",
+        "role": "primary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "primary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "ankle-plantarflexion",
+    "familyName": "Ankle Plantarflexion",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "leg-press-calf-raise",
+    "name": "Leg-Press Calf Raise",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Calf Press",
+      "Leg Press Calf Raise"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit in a leg press suitable for calf raises with your back supported and both forefeet secure on the platform edge, heels free. Extend your knees without forcing them backward. Compare the entered load only on this machine.",
+      "movement": "Press through both forefeet together to move the platform away by extending your ankles.",
+      "endpoint": "Finish at your highest controlled plantarflexion without changing your knee angle.",
+      "returnPhase": "Return through a comfortable ankle range under control while both forefeet stay securely supported.",
+      "controlledJoints": "Keep the knees extended and the hips, pelvis, and back steady.",
+      "supportAndPosture": "Keep your back and pelvis against the machine pads; follow its safety-stop instructions.",
+      "disqualifyingCompensations": [
+        "Bending and straightening the knees turns this into a leg press.",
+        "Lifting the pelvis off the seat changes the supported fixture.",
+        "Letting the forefeet slip off the platform loses the required support."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gastrocnemius",
+        "role": "primary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "primary"
+      }
+    ]
+  },
+  {
     "familyID": "anti-extension",
     "familyName": "Anti-Extension",
     "movementActions": [
@@ -744,6 +878,118 @@
       },
       {
         "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "anti-rotation-press",
+    "familyName": "Anti-Rotation Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.protraction",
+        "name": "Scapular protraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "cable-pallof-press",
+    "name": "Cable Pallof Press",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Pallof Press",
+      "Standing Cable Anti-Rotation Press"
+    ],
+    "searchPriority": 85,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Set a cable pulley at chest height beside you. Hold one handle in both hands at your chest.",
+      "movement": "Press your hands forward without turning your torso or hips.",
+      "endpoint": "Pause with your arms extended, then bring the handle back to your chest under control.",
+      "returnPhase": "Retract the handle to your chest under control without turning toward the pulley.",
+      "controlledJoints": "Keep your wrists steady and your back upright.",
+      "supportAndPosture": "Stand side-on with parallel feet about hip-width apart and knees slightly bent.",
+      "disqualifyingCompensations": [
+        "Turning toward the pulley changes the trunk action.",
+        "Leaning or stepping to move the handle changes the fixture."
+      ],
+      "sideOrDirection": "Complete the prescribed repetitions with the cable on each side. One press and return is one repetition. Record the selected stack load; pulley ratios differ between machines."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
       },
       {
@@ -1577,6 +1823,131 @@
       },
       {
         "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "bird-dog",
+    "familyName": "Bird Dog",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "bird-dog",
+    "name": "Bird Dog",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Bird-Dog",
+      "Quadruped Opposite Arm and Leg Extension"
+    ],
+    "searchPriority": 85,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Start on hands and knees, with hands under shoulders and knees under hips.",
+      "movement": "Lift one arm forward while straightening and lifting the opposite leg backward.",
+      "endpoint": "Reach toward torso height only while your back stays steady, then return to the start.",
+      "returnPhase": "Return the moving limbs to their starting position under control.",
+      "controlledJoints": "Keep your shoulders and hips level without sagging or twisting.",
+      "supportAndPosture": "Keep the supporting palm and opposite knee on the floor.",
+      "disqualifyingCompensations": [
+        "Arching or rotating the trunk changes the intended control task.",
+        "Pulling the elbow and knee together adds a crunch."
+      ],
+      "sideOrDirection": "Alternate sides. Count each opposite arm-leg raise and return as one repetition; use an even total for equal work."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "secondary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
         "role": "stabilizer"
       }
     ]
@@ -2470,6 +2841,108 @@
       {
         "muscle": "serratus",
         "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "dead-bug",
+    "familyName": "Dead Bug",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "dead-bug",
+    "name": "Dead Bug",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Supine Dead Bug",
+      "Alternating Dead Bug"
+    ],
+    "searchPriority": 85,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with arms pointing upward, hips and knees bent to 90 degrees.",
+      "movement": "Reach one arm overhead as you straighten the opposite leg toward the floor.",
+      "endpoint": "Stop before your low back arches or your limbs touch down, then return to the start.",
+      "returnPhase": "Return the moving limbs to their starting position under control.",
+      "controlledJoints": "Keep your low back against the floor and your elbows straight.",
+      "supportAndPosture": "Keep your head and torso supported; breathe throughout.",
+      "disqualifyingCompensations": [
+        "Arching the low back loses the trunk position.",
+        "Moving both legs together changes the exercise."
+      ],
+      "sideOrDirection": "Alternate sides. Count each opposite arm-leg reach and return as one repetition; use an even total for equal work."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lats",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
       },
       {
         "muscle": "triceps",
@@ -16655,6 +17128,121 @@
       },
       {
         "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "landmine-t-bar-row",
+    "name": "Landmine T-Bar Row",
+    "group": "back",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "horizontal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Close-Grip Landmine Row",
+      "Unsupported T-Bar Row"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Secure one barbell end in a landmine anchor. Straddle the bar facing away from the anchor, hinge forward, and grasp a close neutral-grip handle with both hands. Log only the added plates; compare loads on this same setup.",
+      "movement": "Pull the handle toward your lower torso with your elbows tucked beside you.",
+      "endpoint": "Finish with the handle close to your torso while keeping your hinge unchanged.",
+      "returnPhase": "Extend your arms under control along the anchored bar arc without resting the plates between repetitions.",
+      "controlledJoints": "Keep your knees, hips, and spine steady; allow your shoulder blades to move as you row.",
+      "supportAndPosture": "Support yourself through both feet without a chest pad or hand support.",
+      "disqualifyingCompensations": [
+        "Driving upward through the hips changes the strict row.",
+        "Flaring the elbows changes the reviewed shoulder-extension path.",
+        "Using a chest pad changes this unsupported fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
       },
       {

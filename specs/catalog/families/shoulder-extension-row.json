@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "shoulder-extension-row",
   "name": "Horizontal Row",
-  "definition": "A strict compound horizontal pull whose concentric phase combines shoulder extension from a flexed start, scapular retraction, and elbow flexion while the torso and lower body resist rather than propel the load. The admitted upper-arm path remains tucked or within a modest scapular corridor. Wide or deliberately flared horizontal-abduction rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, face pulls, momentum rows, renegade rows, and unreviewed bodyweight inclinations or apparatuses remain outside this contract. The measured 45-degree fixture routes to diagonal-pull; product-named lever high rows do not inherit that ownership without geometry review.",
+  "definition": "A strict compound horizontal pull whose concentric phase combines shoulder extension from a flexed start, scapular retraction, and elbow flexion while the torso and lower body resist rather than propel the load. The admitted upper-arm path remains tucked or within a modest scapular corridor. Wide or deliberately flared horizontal-abduction rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, face pulls, momentum rows, renegade rows, and unreviewed bodyweight inclinations or apparatuses remain outside this contract. The measured 45-degree fixture routes to diagonal-pull; product-named lever high rows do not inherit that ownership without geometry review. The anchored-bar branch is only the unsupported bilateral close-neutral-grip landmine T-bar row, with tucked elbows and an anchored lever arc; other landmine rows remain excluded.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "fennell-2016-shoulder-retractor-row",
@@ -16,7 +16,8 @@
     "vural-2023-suspension-row-loading",
     "wattanaprakornkul-2011-rotator-cuff-bench-press-and-row",
     "youdas-2016-inverted-row",
-    "youdas-2021-suspension-row"
+    "youdas-2021-suspension-row",
+    "lincoln-2022-landmine-row"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -350,6 +351,36 @@
       "allowedValues": [
         "parallelFeetFloor"
       ]
+    },
+    {
+      "id": "externalPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external implement constraint; a landmine anchor constrains radius while allowing its lever arc.",
+      "allowedValues": [
+        "free",
+        "machineConstrained",
+        "landmineArc"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": false,
+      "description": "Landmine load records added plate mass only, compared on the same bar, attachment, and anchor.",
+      "allowedValues": [
+        "addedPlatesSameLandmineOnly"
+      ]
+    },
+    {
+      "id": "barbellSetup",
+      "valueType": "enum",
+      "required": false,
+      "description": "The barbell support distinguishing a freely held bar from the anchored landmine.",
+      "allowedValues": [
+        "freeBar",
+        "landmine"
+      ]
     }
   ],
   "exerciseRules": [
@@ -446,16 +477,14 @@
       "requireAbsent": []
     },
     {
-      "id": "non-machine-requires-free-path",
-      "description": "Non-machine rows use an unconstrained external-load path and omit machine mechanism metadata.",
+      "id": "non-machine-omits-machine-metadata",
+      "description": "Non-machine rows omit machine mechanism fields; their externalPath separately declares free or anchored geometry.",
       "when": {
         "field": "equipment",
         "operator": "notEquals",
         "value": "machine"
       },
-      "then": [
-        { "field": "variant.fixedPath", "value": false }
-      ],
+      "then": [],
       "requirePresent": [],
       "requireAbsent": [
         "variant.machineType",
@@ -520,17 +549,25 @@
     },
     {
       "id": "barbell-is-unsupported-hip-hinged",
-      "description": "A barbell row is an unsupported hip-hinged free-path pull using pronated or supinated grip.",
+      "description": "Barbell rows use an unsupported bilateral hip hinge; path-specific rules distinguish free barbells and the close-neutral anchored bar.",
       "when": {
         "field": "equipment",
         "operator": "equals",
         "value": "barbell"
       },
       "then": [
-        { "field": "variant.bodyPosition", "value": "hipHinged" },
-        { "field": "variant.torsoSupport", "value": "none" },
-        { "field": "variant.fixedPath", "value": false },
-        { "field": "variant.gripOrientation", "allowedValues": ["pronated", "supinated"] }
+        {
+          "field": "variant.bodyPosition",
+          "value": "hipHinged"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -798,6 +835,277 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "free-path-is-unconstrained",
+      "description": "free path is unconstrained.",
+      "when": {
+        "field": "variant.externalPath",
+        "operator": "equals",
+        "value": "free"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.loadAccounting"
+      ]
+    },
+    {
+      "id": "machine-path-requires-machine",
+      "description": "machine path requires machine.",
+      "when": {
+        "field": "variant.externalPath",
+        "operator": "equals",
+        "value": "machineConstrained"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "machine"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.loadAccounting"
+      ]
+    },
+    {
+      "id": "machine-uses-machine-path",
+      "description": "machine uses machine path.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.externalPath",
+          "value": "machineConstrained"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "cable-retains-free-path",
+      "description": "cable retains free path.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        {
+          "field": "variant.externalPath",
+          "value": "free"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-retains-free-path",
+      "description": "dumbbell retains free path.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        {
+          "field": "variant.externalPath",
+          "value": "free"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-retains-free-path",
+      "description": "bodyweight retains free path.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [
+        {
+          "field": "variant.externalPath",
+          "value": "free"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "landmine-arc-is-exact-close-grip-fixture",
+      "description": "landmine arc is exact close grip fixture.",
+      "when": {
+        "field": "variant.externalPath",
+        "operator": "equals",
+        "value": "landmineArc"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "hipHinged"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.relativeGripWidth",
+          "value": "narrow"
+        },
+        {
+          "field": "variant.upperArmPath",
+          "value": "tucked"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.interRepSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.contralateralSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "addedPlatesSameLandmineOnly"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineType",
+        "variant.leverArmConfiguration"
+      ]
+    },
+    {
+      "id": "landmine-accounting-requires-landmine",
+      "description": "landmine accounting requires landmine.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "addedPlatesSameLandmineOnly"
+      },
+      "then": [
+        {
+          "field": "variant.externalPath",
+          "value": "landmineArc"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "barbell-requires-setup",
+      "description": "Barbell rows declare free or anchored setup.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "barbell"
+      },
+      "then": [],
+      "requirePresent": [
+        "variant.barbellSetup"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "free-bar-setup",
+      "description": "free bar setup.",
+      "when": {
+        "field": "variant.barbellSetup",
+        "operator": "equals",
+        "value": "freeBar"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "variant.externalPath",
+          "value": "free"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "allowedValues": [
+            "pronated",
+            "supinated"
+          ]
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "landmine-bar-setup",
+      "description": "landmine bar setup.",
+      "when": {
+        "field": "variant.barbellSetup",
+        "operator": "equals",
+        "value": "landmine"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "variant.externalPath",
+          "value": "landmineArc"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "landmine-arc-requires-anchored-bar",
+      "description": "landmine arc requires anchored bar.",
+      "when": {
+        "field": "variant.externalPath",
+        "operator": "equals",
+        "value": "landmineArc"
+      },
+      "then": [
+        {
+          "field": "variant.barbellSetup",
+          "value": "landmine"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "recommended": {
@@ -851,7 +1159,9 @@
         "fixedPath": false,
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "free",
+        "barbellSetup": "freeBar"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -922,7 +1232,9 @@
         "fixedPath": false,
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "free",
+        "barbellSetup": "freeBar"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -990,7 +1302,9 @@
         "fixedPath": false,
         "lowerBodyContribution": "none",
         "interRepSupport": "floor",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "free",
+        "barbellSetup": "freeBar"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1058,7 +1372,8 @@
         "fixedPath": false,
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "free"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1126,7 +1441,8 @@
         "fixedPath": false,
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "handAndKneeOnBench"
+        "contralateralSupport": "handAndKneeOnBench",
+        "externalPath": "free"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1194,7 +1510,8 @@
         "fixedPath": false,
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "free"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -1258,7 +1575,8 @@
         "fixedPath": false,
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "free"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1325,7 +1643,8 @@
         "fixedPath": false,
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "free"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1394,7 +1713,8 @@
         "leverArmConfiguration": "linked",
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "machineConstrained"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -1459,7 +1779,8 @@
         "leverArmConfiguration": "independent",
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "machineConstrained"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1527,7 +1848,8 @@
         "machineType": "smith",
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
-        "contralateralSupport": "none"
+        "contralateralSupport": "none",
+        "externalPath": "machineConstrained"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1598,7 +1920,8 @@
         "interRepSupport": "none",
         "contralateralSupport": "none",
         "bodyweightApparatus": "fixedBar",
-        "bodyLeverage": "parallelFeetFloor"
+        "bodyLeverage": "parallelFeetFloor",
+        "externalPath": "free"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1621,6 +1944,118 @@
         "disqualifyingCompensations": [
           "Bending at the hips turns the straight-body row into a bent-hip hang.",
           "Kicking with the legs turns the strict row into a momentum row."
+        ]
+      }
+    },
+    {
+      "catalogID": "landmine-t-bar-row",
+      "name": "Landmine T-Bar Row",
+      "aliases": [
+        "Close-Grip Landmine Row",
+        "Unsupported T-Bar Row"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 98,
+      "involvement": [
+        {
+          "muscle": "lats",
+          "role": "primary"
+        },
+        {
+          "muscle": "teresMajor",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidPosterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "secondary"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "secondary"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "hipHinged",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "narrow",
+        "upperArmPath": "tucked",
+        "fixedPath": true,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none",
+        "externalPath": "landmineArc",
+        "barbellSetup": "landmine",
+        "loadAccounting": "addedPlatesSameLandmineOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "lincoln-2022-landmine-row",
+        "fenwick-2009-row-trunk-loading"
+      ],
+      "execution": {
+        "startingPosition": "Secure one barbell end in a landmine anchor. Straddle the bar facing away from the anchor, hinge forward, and grasp a close neutral-grip handle with both hands. Log only the added plates; compare loads on this same setup.",
+        "movement": "Pull the handle toward your lower torso with your elbows tucked beside you.",
+        "endpoint": "Finish with the handle close to your torso while keeping your hinge unchanged.",
+        "returnPhase": "Extend your arms under control along the anchored bar arc without resting the plates between repetitions.",
+        "controlledJoints": "Keep your knees, hips, and spine steady; allow your shoulder blades to move as you row.",
+        "supportAndPosture": "Support yourself through both feet without a chest pad or hand support.",
+        "disqualifyingCompensations": [
+          "Driving upward through the hips changes the strict row.",
+          "Flaring the elbows changes the reviewed shoulder-extension path.",
+          "Using a chest pad changes this unsupported fixture."
         ]
       }
     }

@@ -1,0 +1,48 @@
+{
+  "name": "catalog-six-leg-press-calf-raise",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Leg-Press Calf Raise,"
+        },
+        "direction": "up",
+        "maxSwipes": 65
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Leg-Press Calf Raise,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Leg-Press Calf Raise"
+    },
+    {
+      "labelContains": "Muscles used by Leg-Press Calf Raise"
+    }
+  ],
+  "forbidden": []
+}

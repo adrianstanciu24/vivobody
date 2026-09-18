@@ -4619,6 +4619,77 @@
       "year": 2026,
       "url": "https://download.bowflex.com/supportdocs/OM/Bowflex/BFX.1090i.OM.ALL.pdf",
       "scope": "Undated manual accessed September 18, 2026; year denotes access, not publication. The overhead triceps extension instructions establish both hands under the inside edge of one dumbbell head, overhead upper arms and elbow extension. Supports the hand interface; does not establish an exact radioulnar orientation, anatomical wrist angle, seated support comparison or muscle-role ranking."
+    },
+    {
+      "id": "lincoln-2022-landmine-row",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Exercise Technique: The Landmine Row",
+      "authors": [
+        "Merrick A. Lincoln",
+        "Gareth W. Sapstead",
+        "Kayla N. Moore",
+        "Anthony Weldon"
+      ],
+      "year": 2022,
+      "doi": "10.1519/SSC.0000000000000751",
+      "url": "https://doi.org/10.1519/SSC.0000000000000751",
+      "scope": "NSCA technique column, online 2022 and print 2023, defines unsupported landmine T-bar rowing with an anchored barbell, straddled stance, hip hinge, and grip-dependent upper-arm paths. The narrow neutral-grip fixture is restricted to shoulder extension with tucked elbows. This is a technique standard and anatomy-based interpretation, not exact-fixture EMG or proof of muscle ranking. Added-plate logging is an authored same-setup convention."
+    },
+    {
+      "id": "nsca-2012-developing-endurance",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Developing Endurance",
+      "authors": [
+        "National Strength and Conditioning Association",
+        "Ben Reuter"
+      ],
+      "year": 2012,
+      "url": "https://books.google.com/books?id=Su96DwAAQBAJ",
+      "scope": "NSCA technical text, Dumbbell Calf Raise, specifies bilateral forefoot support on a raised surface, a dumbbell held at each side, and a heel rise with extended or slightly bent knees. The catalog narrows to held extended knees. Hand and wrist stabilization is categorical anatomy inference; combined dumbbell mass is an authored logging convention. The text does not measure exercise-specific muscle rankings."
+    },
+    {
+      "id": "nasm-2026-leg-press-calf-raise",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Leg Press Calf Raise",
+      "authors": [
+        "National Academy of Sports Medicine"
+      ],
+      "year": 2026,
+      "url": "https://www.nasm.org/resource-center/exercise-library/leg-press-calf-raise",
+      "scope": "Undated official exercise technique, retrieved 2026, defines seated backrest support, bilateral forefeet on the platform with heels free, plantarflexion, and controlled return. The catalog narrows to held extended knees and uses existing plantarflexor anatomy for categorical gastrocnemius and soleus roles. No medical, outcome, comparative loading, or muscle-ranking claims are adopted. Entered load is comparable only on the same fixture."
+    },
+    {
+      "id": "ace-2026-standing-anti-rotation-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Standing Anti-Rotation Press",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/332/standing-anti-rotation-press/",
+      "scope": "Undated official standard accessed 18 September 2026; year denotes retrieval. Hip-width standing, lateral chest-height cable, two-hand grip, elbows beside torso, forward press, brief pause and controlled retraction. Establishes fixture geometry, not muscle rankings or cable-machine load equivalence."
+    },
+    {
+      "id": "ace-2026-bird-dog",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Bird-dog",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/14/bird-dog/",
+      "scope": "Undated official standard accessed 18 September 2026; year denotes retrieval. Quadruped contralateral hip extension, knee straightening and shoulder flexion, a controlled return and alternating sides. Establishes fixture and control-limited endpoint, not quantitative muscle roles or clinical benefits."
+    },
+    {
+      "id": "nasm-2026-dead-bug",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Dead Bug",
+      "authors": [
+        "National Academy of Sports Medicine"
+      ],
+      "year": 2026,
+      "url": "https://www.nasm.org/resource-center/exercise-library/dead-bug",
+      "scope": "Undated official standard accessed 18 September 2026; year denotes retrieval. Supine arms toward ceiling, hips and knees at 90 degrees, opposite arm overhead and leg extending short of floor contact, return and alternate. Establishes fixture geometry and trunk-control intent; categorical limb roles are anatomy-and-mechanics inferences, not measured EMG or clinical claims."
     }
   ]
 }

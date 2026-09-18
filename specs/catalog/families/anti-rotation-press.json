@@ -1,0 +1,413 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "anti-rotation-press",
+  "name": "Anti-Rotation Press",
+  "definition": "A narrow standing cable anti-rotation press with a hip-width parallel stance. The trunk resists rotation while the arms press and retract; this differs from the feet-together isometric band hold. Shoulder flexion, elbow extension and scapular protraction describe the press, not spinal rotation. Obliques are primary through the existing direction-aggregated opposition capability. Arm movers and the static lower-body and grip chain receive bounded anatomy-and-mechanics roles; the technical standard does not measure recruitment. Both cable sides are prescribed. Kneeling, band, overhead, stepping, twisting and timed-only holds remain excluded.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "arnold-2010-lower-limb",
+    "holzbaur-2005-upper-extremity",
+    "ackland-2008-shoulder-moment-arms",
+    "seth-2019-shoulder-work",
+    "ace-2026-standing-anti-rotation-press"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "cable"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.rotation"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "elbow.extension",
+      "scapula.protraction"
+    ],
+    "resistedActions": [
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [
+        "deltoidAnterior",
+        "triceps",
+        "serratus"
+      ],
+      "stabilizer": [
+        "abs",
+        "lumbarExtensors",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMed",
+        "vasti",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Stable floor or mat support.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Spine remains controlled rather than creating repetitions.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Pelvis does not deliberately tilt or rotate to create repetitions.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Train both mirrored directions or contralateral limb pairs.",
+      "allowedValues": [
+        "bothSides"
+      ]
+    },
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "The feet stay fixed while the hands move.",
+      "allowedValues": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Standing upright throughout the press.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "Parallel hip-width feet; no tandem or split stance.",
+      "allowedValues": [
+        "hipWidthParallel"
+      ]
+    },
+    {
+      "id": "resistanceSide",
+      "valueType": "enum",
+      "required": true,
+      "description": "The cable acts from one lateral side.",
+      "allowedValues": [
+        "oneSideAtATime"
+      ]
+    },
+    {
+      "id": "resistanceAnchor",
+      "valueType": "enum",
+      "required": true,
+      "description": "A pulley at chest height beside the athlete.",
+      "allowedValues": [
+        "chestHeightCable"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both hands share one handle.",
+      "allowedValues": [
+        "twoHandHandlePress"
+      ]
+    },
+    {
+      "id": "repetitionType",
+      "valueType": "enum",
+      "required": true,
+      "description": "Count a complete press and controlled retraction.",
+      "allowedValues": [
+        "pressAndReturn"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The legs hold the standing position.",
+      "allowedValues": [
+        "staticSupportOnly"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "cable-pallof-press",
+      "name": "Cable Pallof Press",
+      "aliases": [
+        "Pallof Press",
+        "Standing Cable Anti-Rotation Press"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 85,
+      "involvement": [
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "supportSurface": "floor",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "trainingSidePrescription": "bothSides",
+        "kineticChain": "mixed",
+        "bodyPosition": "standing",
+        "stanceConfiguration": "hipWidthParallel",
+        "resistanceSide": "oneSideAtATime",
+        "resistanceAnchor": "chestHeightCable",
+        "handTask": "twoHandHandlePress",
+        "repetitionType": "pressAndReturn",
+        "lowerBodyContribution": "staticSupportOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ace-2026-standing-anti-rotation-press"
+      ],
+      "execution": {
+        "startingPosition": "Set a cable pulley at chest height beside you. Hold one handle in both hands at your chest.",
+        "movement": "Press your hands forward without turning your torso or hips.",
+        "endpoint": "Pause with your arms extended, then bring the handle back to your chest under control.",
+        "controlledJoints": "Keep your wrists steady and your back upright.",
+        "supportAndPosture": "Stand side-on with parallel feet about hip-width apart and knees slightly bent.",
+        "disqualifyingCompensations": [
+          "Turning toward the pulley changes the trunk action.",
+          "Leaning or stepping to move the handle changes the fixture."
+        ],
+        "sideOrDirection": "Complete the prescribed repetitions with the cable on each side. One press and return is one repetition. Record the selected stack load; pulley ratios differ between machines.",
+        "returnPhase": "Retract the handle to your chest under control without turning toward the pulley."
+      }
+    }
+  ]
+}

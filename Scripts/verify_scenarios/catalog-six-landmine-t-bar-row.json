@@ -1,0 +1,48 @@
+{
+  "name": "catalog-six-landmine-t-bar-row",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Landmine T-Bar Row,"
+        },
+        "direction": "up",
+        "maxSwipes": 65
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Landmine T-Bar Row,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Landmine T-Bar Row"
+    },
+    {
+      "labelContains": "Muscles used by Landmine T-Bar Row"
+    }
+  ],
+  "forbidden": []
+}

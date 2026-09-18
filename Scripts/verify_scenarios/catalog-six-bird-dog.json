@@ -1,0 +1,59 @@
+{
+  "name": "catalog-six-bird-dog",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterCore"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Bird Dog,"
+        },
+        "direction": "up",
+        "maxSwipes": 65
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Bird Dog,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Bird Dog"
+    },
+    {
+      "labelContains": "Muscles used by Bird Dog"
+    }
+  ],
+  "forbidden": []
+}

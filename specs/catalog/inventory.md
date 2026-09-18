@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 102 |
-| Exercises | 246 |
+| Reviewed families | 105 |
+| Exercises | 252 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 283 |
+| Evidence sources | 289 |
 
 ## Family roster
 
@@ -25,17 +25,20 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 |---|---:|
 | [active-dead-hang](families/active-dead-hang.json) | 1 |
 | [ankle-dorsiflexion](families/ankle-dorsiflexion.json) | 2 |
-| [ankle-plantarflexion](families/ankle-plantarflexion.json) | 5 |
+| [ankle-plantarflexion](families/ankle-plantarflexion.json) | 7 |
 | [anti-extension](families/anti-extension.json) | 1 |
 | [anti-lateral-flexion](families/anti-lateral-flexion.json) | 1 |
+| [anti-rotation-press](families/anti-rotation-press.json) | 1 |
 | [anti-rotation](families/anti-rotation.json) | 1 |
 | [belt-loaded-machine-glute-bridge](families/belt-loaded-machine-glute-bridge.json) | 1 |
 | [bilateral-squat](families/bilateral-squat.json) | 6 |
+| [bird-dog](families/bird-dog.json) | 1 |
 | [bodyweight-glute-bridge](families/bodyweight-glute-bridge.json) | 1 |
 | [chest-fly](families/chest-fly.json) | 4 |
 | [clean-and-jerk](families/clean-and-jerk.json) | 1 |
 | [conventional-deadlift](families/conventional-deadlift.json) | 1 |
 | [copenhagen-adduction](families/copenhagen-adduction.json) | 1 |
+| [dead-bug](families/dead-bug.json) | 1 |
 | [decline-press](families/decline-press.json) | 5 |
 | [diagonal-pull](families/diagonal-pull.json) | 1 |
 | [dip](families/dip.json) | 3 |
@@ -94,7 +97,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [seated-machine-back-extension](families/seated-machine-back-extension.json) | 1 |
 | [shoulder-abduction-raise](families/shoulder-abduction-raise.json) | 3 |
 | [shoulder-extension-isolation](families/shoulder-extension-isolation.json) | 4 |
-| [shoulder-extension-row](families/shoulder-extension-row.json) | 12 |
+| [shoulder-extension-row](families/shoulder-extension-row.json) | 13 |
 | [shoulder-external-rotation](families/shoulder-external-rotation.json) | 3 |
 | [shoulder-flexion-raise](families/shoulder-flexion-raise.json) | 1 |
 | [shoulder-horizontal-abduction-row](families/shoulder-horizontal-abduction-row.json) | 6 |

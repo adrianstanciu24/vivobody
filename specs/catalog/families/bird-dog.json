@@ -1,0 +1,424 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "bird-dog",
+  "name": "Bird Dog",
+  "definition": "A quadruped alternating contralateral arm-and-leg extension drill. Shoulder flexion, scapular upward rotation, hip extension and knee extension lift the free limbs while the contacted hand and opposite knee support the body. The trunk resists extension and rotation rather than performing a crunch or twist. Abs and obliques are primary for that core-control intent; deltoid, serratus, gluteal and knee-extensor roles are bounded anatomy-and-mechanics inferences, not measured recruitment rankings. Lumbar extensors control spinal posture but do not create deliberate spinal extension. The app credits this extensor system without painting unrelated back meshes. Standing, weighted, same-side, elbow-to-knee crunch and timed-only variants remain excluded.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "arnold-2010-lower-limb",
+    "holzbaur-2005-upper-extremity",
+    "ackland-2008-shoulder-moment-arms",
+    "seth-2019-shoulder-work",
+    "ace-2026-bird-dog"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension",
+      "spine.rotation"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "scapula.upwardRotation",
+      "hip.extension",
+      "knee.extension"
+    ],
+    "resistedActions": [
+      "spine.extension",
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "abs",
+        "obliques"
+      ],
+      "secondary": [
+        "deltoidAnterior",
+        "serratus",
+        "gluteMax",
+        "vasti"
+      ],
+      "stabilizer": [
+        "lumbarExtensors",
+        "triceps",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMed"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Stable floor or mat support.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Spine remains controlled rather than creating repetitions.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Pelvis does not deliberately tilt or rotate to create repetitions.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Train both mirrored directions or contralateral limb pairs.",
+      "allowedValues": [
+        "bothSides"
+      ]
+    },
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "One hand and opposite knee support while the other limbs move.",
+      "allowedValues": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Start on hands and knees.",
+      "allowedValues": [
+        "quadruped"
+      ]
+    },
+    {
+      "id": "limbPairing",
+      "valueType": "enum",
+      "required": true,
+      "description": "Raise one arm with the opposite leg.",
+      "allowedValues": [
+        "contralateralAlternating"
+      ]
+    },
+    {
+      "id": "handSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The supporting palm remains on the floor.",
+      "allowedValues": [
+        "palmOnFloor"
+      ]
+    },
+    {
+      "id": "armEndpoint",
+      "valueType": "enum",
+      "required": true,
+      "description": "Reach forward to torso height or earlier if trunk control limits range.",
+      "allowedValues": [
+        "torsoAligned"
+      ]
+    },
+    {
+      "id": "legEndpoint",
+      "valueType": "enum",
+      "required": true,
+      "description": "Reach the opposite leg backward to torso height or earlier.",
+      "allowedValues": [
+        "torsoAligned"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Straighten the raised knee and return it under the hip.",
+      "allowedValues": [
+        "extendAndReturn"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Keep elbows extended without a push-up.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "repetitionCounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "One opposite arm-leg raise and return counts as one repetition.",
+      "allowedValues": [
+        "eachLimbPair"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "bird-dog",
+      "name": "Bird Dog",
+      "aliases": [
+        "Bird-Dog",
+        "Quadruped Opposite Arm and Leg Extension"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 85,
+      "involvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "secondary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "secondary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "supportSurface": "floor",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "trainingSidePrescription": "bothSides",
+        "kineticChain": "mixed",
+        "bodyPosition": "quadruped",
+        "limbPairing": "contralateralAlternating",
+        "handSupport": "palmOnFloor",
+        "armEndpoint": "torsoAligned",
+        "legEndpoint": "torsoAligned",
+        "kneeMotion": "extendAndReturn",
+        "elbowMotion": "angleHeld",
+        "repetitionCounting": "eachLimbPair"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ace-2026-bird-dog"
+      ],
+      "execution": {
+        "startingPosition": "Start on hands and knees, with hands under shoulders and knees under hips.",
+        "movement": "Lift one arm forward while straightening and lifting the opposite leg backward.",
+        "endpoint": "Reach toward torso height only while your back stays steady, then return to the start.",
+        "controlledJoints": "Keep your shoulders and hips level without sagging or twisting.",
+        "supportAndPosture": "Keep the supporting palm and opposite knee on the floor.",
+        "disqualifyingCompensations": [
+          "Arching or rotating the trunk changes the intended control task.",
+          "Pulling the elbow and knee together adds a crunch."
+        ],
+        "sideOrDirection": "Alternate sides. Count each opposite arm-leg raise and return as one repetition; use an even total for equal work.",
+        "returnPhase": "Return the moving limbs to their starting position under control."
+      }
+    }
+  ]
+}

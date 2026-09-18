@@ -1,0 +1,388 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "dead-bug",
+  "name": "Dead Bug",
+  "definition": "A supine alternating contralateral arm-and-leg drill with the lumbar position held. The unsupported limbs increase the external spinal-extension tendency while the trunk remains still. Hip flexion and shoulder extension from a flexed position describe the return against gravity; knee extension and scapular upward rotation describe the outward reach. These produced actions occur at different points of a repetition, not as a simultaneous concentric phase. Lowering the leg and arm is not relabeled as a hip-extension or shoulder-flexion strengthening action. Abs are primary, obliques secondary, and limb contributors are bounded anatomy-and-mechanics inferences. No quantitative bodyweight fraction is assigned. The app does not separately represent transversus abdominis. Heel taps, weighted versions, hollow holds, crunches and simultaneous four-limb reaches remain excluded.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "arnold-2010-lower-limb",
+    "holzbaur-2005-upper-extremity",
+    "ackland-2008-shoulder-moment-arms",
+    "seth-2019-shoulder-work",
+    "nasm-2026-dead-bug"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension"
+    ],
+    "primeActions": [
+      "hip.flexion",
+      {
+        "action": "shoulder.extension",
+        "condition": "fromFlexedPosition"
+      },
+      "knee.extension",
+      "scapula.upwardRotation"
+    ],
+    "resistedActions": [
+      "spine.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "iliopsoas"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "lats"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "abs"
+      ],
+      "secondary": [
+        "obliques",
+        "iliopsoas",
+        "rectusFemoris",
+        "lats",
+        "serratus"
+      ],
+      "stabilizer": [
+        "triceps"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Stable floor or mat support.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Spine remains controlled rather than creating repetitions.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Pelvis does not deliberately tilt or rotate to create repetitions.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Train both mirrored directions or contralateral limb pairs.",
+      "allowedValues": [
+        "bothSides"
+      ]
+    },
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reaching hand and foot move freely.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The head and torso stay supported on the floor.",
+      "allowedValues": [
+        "supine"
+      ]
+    },
+    {
+      "id": "limbPairing",
+      "valueType": "enum",
+      "required": true,
+      "description": "One arm reaches with the opposite leg; alternate pairs.",
+      "allowedValues": [
+        "contralateralAlternating"
+      ]
+    },
+    {
+      "id": "startHipAngle",
+      "valueType": "enum",
+      "required": true,
+      "description": "Start with thighs above the hips.",
+      "allowedValues": [
+        "ninetyDegrees"
+      ]
+    },
+    {
+      "id": "startKneeAngle",
+      "valueType": "enum",
+      "required": true,
+      "description": "Start with bent knees.",
+      "allowedValues": [
+        "ninetyDegrees"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Straighten the reaching leg and return to its bent start.",
+      "allowedValues": [
+        "extendAndReturn"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Keep both elbows extended.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "armReach",
+      "valueType": "enum",
+      "required": true,
+      "description": "Reach one arm toward the floor overhead.",
+      "allowedValues": [
+        "overhead"
+      ]
+    },
+    {
+      "id": "limbContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The moving limbs stop before resting on the floor.",
+      "allowedValues": [
+        "remainOffFloor"
+      ]
+    },
+    {
+      "id": "repetitionCounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "One opposite arm-leg reach and return counts as one repetition.",
+      "allowedValues": [
+        "eachLimbPair"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "dead-bug",
+      "name": "Dead Bug",
+      "aliases": [
+        "Supine Dead Bug",
+        "Alternating Dead Bug"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 85,
+      "involvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "secondary"
+        },
+        {
+          "muscle": "iliopsoas",
+          "role": "secondary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "lats",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "supportSurface": "floor",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "trainingSidePrescription": "bothSides",
+        "kineticChain": "open",
+        "bodyPosition": "supine",
+        "limbPairing": "contralateralAlternating",
+        "startHipAngle": "ninetyDegrees",
+        "startKneeAngle": "ninetyDegrees",
+        "kneeMotion": "extendAndReturn",
+        "elbowMotion": "angleHeld",
+        "armReach": "overhead",
+        "limbContact": "remainOffFloor",
+        "repetitionCounting": "eachLimbPair"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "nasm-2026-dead-bug"
+      ],
+      "execution": {
+        "startingPosition": "Lie on your back with arms pointing upward, hips and knees bent to 90 degrees.",
+        "movement": "Reach one arm overhead as you straighten the opposite leg toward the floor.",
+        "endpoint": "Stop before your low back arches or your limbs touch down, then return to the start.",
+        "controlledJoints": "Keep your low back against the floor and your elbows straight.",
+        "supportAndPosture": "Keep your head and torso supported; breathe throughout.",
+        "disqualifyingCompensations": [
+          "Arching the low back loses the trunk position.",
+          "Moving both legs together changes the exercise."
+        ],
+        "sideOrDirection": "Alternate sides. Count each opposite arm-leg reach and return as one repetition; use an even total for equal work.",
+        "returnPhase": "Return the moving limbs to their starting position under control."
+      }
+    }
+  ]
+}

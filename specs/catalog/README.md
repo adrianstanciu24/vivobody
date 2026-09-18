@@ -340,12 +340,20 @@ guided body path. `kineticChain` independently records whether the hands or the
 implement move.
 
 Shoulder-extension row reuses the external-load meaning of `fixedPath` for
-Smith rails and lever-row machines while keeping a fixed-bar inverted row
+Smith rails, lever-row machines, and the anchored landmine lever arc while
+keeping a fixed-bar inverted row
 `fixedPath: false`; distal hand fixation is still expressed by
 `kineticChain: closed`. Its family plane remains sagittal because
 `shoulder.extension` is the shoulder basis action. The transverse
 `scapula.retraction` prime action occurs at a different joint and does not add
-a transverse shoulder plane.
+a transverse shoulder plane. The close-neutral unsupported landmine fixture
+uses `externalPath: landmineArc` and added-plate accounting on the same setup;
+free-bar and machine rows retain their separate path constraints.
+
+The [six requested strength additions](proposals/requested-six-strength-exercises.md)
+also add paired-dumbbell and straight-knee leg-press calf raises plus separate
+dynamic cable Pallof, dead-bug and bird-dog families. Rep-counted core drills do
+not broaden the existing static hold contracts.
 
 Shoulder-horizontal-abduction row owns the strict flared shoulder-height row:
 its transverse family plane comes from the shoulder basis action

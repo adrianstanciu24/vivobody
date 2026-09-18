@@ -1,0 +1,53 @@
+{
+  "name": "catalog-six-dead-bug",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterCore"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Dead Bug,"
+        },
+        "direction": "up",
+        "maxSwipes": 65
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Dead Bug,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Dead Bug"
+    },
+    {
+      "labelContains": "Muscles used by Dead Bug"
+    }
+  ],
+  "forbidden": []
+}

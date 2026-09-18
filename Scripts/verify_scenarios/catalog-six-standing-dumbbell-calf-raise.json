@@ -1,0 +1,48 @@
+{
+  "name": "catalog-six-standing-dumbbell-calf-raise",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Standing Dumbbell Calf Raise,"
+        },
+        "direction": "up",
+        "maxSwipes": 65
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Standing Dumbbell Calf Raise,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Standing Dumbbell Calf Raise"
+    },
+    {
+      "labelContains": "Muscles used by Standing Dumbbell Calf Raise"
+    }
+  ],
+  "forbidden": []
+}
