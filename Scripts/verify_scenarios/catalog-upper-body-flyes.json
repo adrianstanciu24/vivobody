@@ -1,0 +1,183 @@
+{
+  "name": "catalog-upper-body-flyes",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPull"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Cable\\ Rear\\-Delt\\ Fly,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Cable\\ Rear\\-Delt\\ Fly,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Cable Rear-Delt Fly"
+          },
+          {
+            "labelContains": "Muscles used by Cable Rear-Delt Fly"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "log one stack setting"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "dark"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPull"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Bent\\-Over\\ Dumbbell\\ Reverse\\ Fly,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Bent\\-Over\\ Dumbbell\\ Reverse\\ Fly,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Bent-Over Dumbbell Reverse Fly"
+          },
+          {
+            "labelContains": "Muscles used by Bent-Over Dumbbell Reverse Fly"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Log one dumbbell's weight"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercise-execution-starting-position"
+    }
+  ],
+  "forbidden": []
+}

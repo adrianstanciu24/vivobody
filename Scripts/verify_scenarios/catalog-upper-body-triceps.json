@@ -1,0 +1,183 @@
+{
+  "name": "catalog-upper-body-triceps",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPush"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Overhead\\ Rope\\ Cable\\ Triceps\\ Extension,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Overhead\\ Rope\\ Cable\\ Triceps\\ Extension,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Overhead Rope Cable Triceps Extension"
+          },
+          {
+            "labelContains": "Muscles used by Overhead Rope Cable Triceps Extension"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Log the stack"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPush"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Two\\-Handed\\ Dumbbell\\ Overhead\\ Triceps\\ Extension,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Two\\-Handed\\ Dumbbell\\ Overhead\\ Triceps\\ Extension,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Two-Handed Dumbbell Overhead Triceps Extension"
+          },
+          {
+            "labelContains": "Muscles used by Two-Handed Dumbbell Overhead Triceps Extension"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Log "
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercise-execution-starting-position"
+    }
+  ],
+  "forbidden": []
+}

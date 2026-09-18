@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "elbow-extension",
   "name": "Elbow Extension",
-  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. The roster admits reviewed cable, dumbbell, barbell, and exact Life Fitness Pro 2 PSTE selectorized fixtures. The PSTE supports both upper arms on a pad, aligns the elbows with the pivots, and guides self-adjusting handles; its manual does not report forearm orientation or wrist posture, so both remain unreported. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials. Other machine topologies remain outside this contract.",
+  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. The roster admits reviewed cable, dumbbell, barbell, and exact Life Fitness Pro 2 PSTE selectorized fixtures. The PSTE supports both upper arms on a pad, aligns the elbows with the pivots, and guides self-adjusting handles; its manual does not report forearm orientation or wrist posture, so both remain unreported. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials. Other machine topologies remain outside this contract. The two-arm rope fixture uses a high pulley behind a split-stance athlete; the seated two-hand dumbbell fixture holds one head with both hands and counts that implement once. These exact additions transfer categorical muscle roles from established anatomy and held-posture mechanics.",
   "evidenceRefs": [
     "holzbaur-2005-upper-extremity",
     "alves-2018-triceps-shoulder-position",
@@ -239,7 +239,7 @@
       "id": "upperArmPosition",
       "valueType": "enum",
       "required": true,
-      "description": "The torso-relative upper-arm posture held while the elbow moves: anatomical side, 90 degrees of sagittal flexion, or 180-degree overhead flexion. A held posture does not add a shoulder prime action.",
+      "description": "The held upper-arm posture relative to the torso: at side, flexed90, overhead beside the head, or pad supported. The original Maeo record uses its source-defined 180-degree position; overhead does not impose that measurement on every fixture.",
       "allowedValues": [
         "atSide",
         "flexed90",
@@ -310,45 +310,28 @@
       "valueType": "enum",
       "required": true,
       "description": "The reviewed load-to-hand interface used by the cable or dumbbell fixture.",
-      "allowedValues": [
-        "singleCableHandle",
-        "unreportedCableInterface",
-        "dumbbellHandle",
-        "straightCableBar",
-        "rope",
-        "barbellShapeUnreported",
-        "selfAdjustingMachineHandles"
-      ]
+      "allowedValues": ["singleCableHandle", "unreportedCableInterface", "dumbbellHandle", "straightCableBar", "rope", "barbellShapeUnreported", "selfAdjustingMachineHandles", "dumbbellHeadTwoHandHold"]
     },
     {
       "id": "resistanceGeometry",
       "valueType": "enum",
       "required": true,
       "description": "How the reviewed task creates elbow-extension resistance without implying a guided external path. highCablePushdown records Villalba's at-side pulley setup; overheadCableExtension identifies Maeo's 180-degree cable task but deliberately does not claim an unreported pulley height or cable angle; gravityLoadedDumbbell records the Alves fixtures.",
-      "allowedValues": [
-        "highCablePushdown",
-        "overheadCableExtension",
-        "gravityLoadedDumbbell",
-        "gravityLoadedBarbell",
-        "selectorizedCamLever"
-      ]
+      "allowedValues": ["highCablePushdown", "overheadCableExtension", "gravityLoadedDumbbell", "gravityLoadedBarbell", "selectorizedCamLever", "standingOverheadRopeCableExtension"]
     },
     {
       "id": "loadAccounting",
       "valueType": "enum",
       "required": false,
-      "description": "Cable-stack values are comparable only on the same cable station and attachment fixture; dumbbell fixtures omit this field.",
-      "allowedValues": [
-        "enteredExternalLoadSameFixtureOnly",
-        "totalBarAndPlates"
-      ]
+      "description": "Cable values compare only on the same station and attachment; singleImplement logs the full marked mass of one dumbbell held by both hands.",
+      "allowedValues": ["enteredExternalLoadSameFixtureOnly", "totalBarAndPlates", "singleImplement"]
     },
     {
       "id": "seatedFixture",
       "valueType": "enum",
       "required": false,
-      "description": "A discriminator that keeps the two reviewed seated topologies from forming unsupported combinations.",
-      "allowedValues": ["unsupportedOverheadDumbbell", "lifeFitnessPro2PSTE"]
+      "description": "A discriminator that keeps the reviewed seated topologies from forming unsupported combinations.",
+      "allowedValues": ["unsupportedOverheadDumbbell", "lifeFitnessPro2PSTE", "unsupportedTwoHandOverheadDumbbell"]
     },
     {
       "id": "machineFixture",
@@ -392,6 +375,15 @@
       "allowedValues": [
         "none"
       ]
+    },
+    {
+      "id": "cableSetup",
+      "valueType": "enum",
+      "required": false,
+      "description": "Exact high-pulley-behind standing rope fixture: face away in a split stance with a held slight forward torso lean.",
+      "allowedValues": [
+        "highPulleyFacingAwaySplitStance"
+      ]
     }
   ],
   "recommended": {
@@ -421,10 +413,7 @@
         },
         {
           "field": "variant.resistanceGeometry",
-          "allowedValues": [
-            "highCablePushdown",
-            "overheadCableExtension"
-          ]
+          "allowedValues": ["highCablePushdown", "overheadCableExtension", "standingOverheadRopeCableExtension"]
         },
         {
           "field": "variant.loadAccounting",
@@ -438,7 +427,7 @@
     },
     {
       "id": "dumbbell-extension-uses-dumbbell-handle",
-      "description": "Every reviewed dumbbell extension uses a dumbbell handle rather than a cable interface.",
+      "description": "Dumbbell extensions use either the unilateral handle grip or the exact two-hand single-head hold.",
       "when": {
         "field": "equipment",
         "operator": "equals",
@@ -447,7 +436,10 @@
       "then": [
         {
           "field": "variant.handleType",
-          "value": "dumbbellHandle"
+          "allowedValues": [
+            "dumbbellHandle",
+            "dumbbellHeadTwoHandHold"
+          ]
         },
         {
           "field": "variant.resistanceGeometry",
@@ -455,13 +447,11 @@
         }
       ],
       "requirePresent": [],
-      "requireAbsent": [
-        "variant.loadAccounting"
-      ]
+      "requireAbsent": []
     },
     {
       "id": "standing-extension-uses-reviewed-cable-setups",
-      "description": "The reviewed standing branch uses an unsupported free-scapula cable setup with the upper arm at the side or overhead and the forearm supinated or pronated.",
+      "description": "The reviewed standing branch uses an unsupported free-scapula cable setup with the upper arm at the side or overhead and the forearm supinated, pronated, or neutral.",
       "when": {
         "field": "variant.bodyPosition",
         "operator": "equals",
@@ -501,7 +491,7 @@
     },
     {
       "id": "seated-extension-requires-reviewed-fixture",
-      "description": "Every seated record declares which of the two reviewed seated topologies it uses.",
+      "description": "Every seated record declares which of the three reviewed seated topologies it uses.",
       "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "seated"},
       "then": [{"field": "equipment", "allowedValues": ["dumbbell", "machine"]}],
       "requirePresent": ["variant.seatedFixture"],
@@ -661,10 +651,7 @@
       "then": [
         {
           "field": "variant.resistanceGeometry",
-          "allowedValues": [
-            "overheadCableExtension",
-            "gravityLoadedDumbbell"
-          ]
+          "allowedValues": ["overheadCableExtension", "gravityLoadedDumbbell", "standingOverheadRopeCableExtension"]
         }
       ],
       "requirePresent": [],
@@ -781,7 +768,7 @@
       "when": {"field": "variant.handleType", "operator": "equals", "value": "dumbbellHandle"},
       "then": [{"field": "laterality", "value": "unilateral"}],
       "requirePresent": [],
-      "requireAbsent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth"]
+      "requireAbsent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth", "variant.loadAccounting"]
     },
     {
       "id": "unreported-barbell-shape-pins-bilateral-lying-fixture",
@@ -805,17 +792,40 @@
       "requireAbsent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth"]
     },
     {
-      "id": "rope-pins-bilateral-neutral-pushdown",
-      "description": "The rope attachment pins the upright bilateral neutral-grip pushdown while omitting straight-bar-only geometry.",
+      "id": "rope-pins-bilateral-neutral-cable-fixtures",
+      "description": "Both reviewed rope fixtures are bilateral standing neutral-grip cable extensions; the resistance geometry pins their arm position.",
       "when": {"field": "variant.handleType", "operator": "equals", "value": "rope"},
       "then": [
-        {"field": "equipment", "value": "cable"}, {"field": "laterality", "value": "bilateral"},
-        {"field": "variant.bodyPosition", "value": "standing"}, {"field": "variant.torsoSupport", "value": "none"},
-        {"field": "variant.upperArmPosition", "value": "atSide"}, {"field": "variant.forearmOrientation", "value": "neutral"},
-        {"field": "variant.resistanceGeometry", "value": "highCablePushdown"}
+        {
+          "field": "equipment",
+          "value": "cable"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "allowedValues": [
+            "highCablePushdown",
+            "standingOverheadRopeCableExtension"
+          ]
+        }
       ],
       "requirePresent": [],
-      "requireAbsent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth"]
+      "requireAbsent": ["variant.upperArmTorsoRelationship", "variant.gripWidth", "variant.torsoInclination"]
     },
     {
       "id": "straight-cable-bar-pins-bilateral-pushdown",
@@ -829,6 +839,360 @@
         {"field": "variant.gripWidth", "value": "shoulderWidth"}
       ],
       "requirePresent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth"],
+      "requireAbsent": []
+    },
+    {
+      "id": "high-cable-pushdown-keeps-upper-arm-at-side",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.resistanceGeometry",
+        "operator": "equals",
+        "value": "highCablePushdown"
+      },
+      "then": [
+        {
+          "field": "variant.upperArmPosition",
+          "value": "atSide"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "overhead-rope-cable-triceps-extension-fixture",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.resistanceGeometry",
+        "operator": "equals",
+        "value": "standingOverheadRopeCableExtension"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "cable"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.forearmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.upperArmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.hipContact",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "overhead"
+        },
+        {
+          "field": "variant.elbowMotion",
+          "value": "extends"
+        },
+        {
+          "field": "variant.forearmMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.wristMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.wristPosture",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "staticImplementHold"
+        },
+        {
+          "field": "variant.handleType",
+          "value": "rope"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "standingOverheadRopeCableExtension"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "enteredExternalLoadSameFixtureOnly"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.cableSetup",
+          "value": "highPulleyFacingAwaySplitStance"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.gripWidth",
+        "variant.upperArmTorsoRelationship"
+      ],
+      "requireInvolvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ]
+    },
+    {
+      "id": "two-handed-dumbbell-overhead-triceps-extension-fixture",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.handleType",
+        "operator": "equals",
+        "value": "dumbbellHeadTwoHandHold"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.forearmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.upperArmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.hipContact",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.seatedFixture",
+          "value": "unsupportedTwoHandOverheadDumbbell"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "overhead"
+        },
+        {
+          "field": "variant.elbowMotion",
+          "value": "extends"
+        },
+        {
+          "field": "variant.forearmMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.wristMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.wristPosture",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "staticImplementHold"
+        },
+        {
+          "field": "variant.handleType",
+          "value": "dumbbellHeadTwoHandHold"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "gravityLoadedDumbbell"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "singleImplement"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.gripWidth",
+        "variant.upperArmTorsoRelationship",
+        "variant.cableSetup",
+        "variant.torsoInclination"
+      ],
+      "requireInvolvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ]
+    },
+    {
+      "id": "two-hand-seated-fixture-requires-head-hold",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.seatedFixture",
+        "operator": "equals",
+        "value": "unsupportedTwoHandOverheadDumbbell"
+      },
+      "then": [
+        {
+          "field": "variant.handleType",
+          "value": "dumbbellHeadTwoHandHold"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "single-implement-accounting-requires-two-hand-dumbbell",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "singleImplement"
+      },
+      "then": [
+        {
+          "field": "variant.handleType",
+          "value": "dumbbellHeadTwoHandHold"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "high-pulley-split-stance-identifies-overhead-rope",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.cableSetup",
+        "operator": "equals",
+        "value": "highPulleyFacingAwaySplitStance"
+      },
+      "then": [
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "standingOverheadRopeCableExtension"
+        }
+      ],
+      "requirePresent": [],
       "requireAbsent": []
     }
   ],
@@ -1423,6 +1787,192 @@
         "controlledJoints": "Create the repetition only by straightening the elbows, letting the self-adjusting handles follow naturally without deliberately turning the forearms or bending the wrists.",
         "supportAndPosture": "Keep the hips against the lower-back pad, the back straight, both upper arms on the arm pad, and both feet under the foot bar.",
         "disqualifyingCompensations": ["Lifting an upper arm from the pad changes the reviewed supported fixture.", "Driving through the torso or feet adds body momentum.", "Using another machine model or independent lever topology changes the fixture-specific load history."]
+      }
+    },
+    {
+      "catalogID": "overhead-rope-cable-triceps-extension",
+      "name": "Overhead Rope Cable Triceps Extension",
+      "aliases": [
+        "Two-Arm Overhead Cable Extension",
+        "Rope Overhead Triceps Extension"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
+        "upperArmPosition": "overhead",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "rope",
+        "resistanceGeometry": "standingOverheadRopeCableExtension",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "cableSetup": "highPulleyFacingAwaySplitStance"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "murray-1995-elbow-forearm-moment-arms",
+        "inspire-ft2-overhead-rope-extension"
+      ],
+      "execution": {
+        "startingPosition": "Attach a rope to a high pulley and face away from the station in a split stance. Hold one rope end in each hand with the elbows bent beside your ears. Log the stack setting once and compare only this same station and attachment.",
+        "movement": "Straighten both elbows together while holding the upper arms beside the head.",
+        "endpoint": "Finish with both elbows comfortably extended and the upper arms still overhead.",
+        "returnPhase": "Bend both elbows under control to return behind the head without moving the upper arms.",
+        "controlledJoints": "Keep the forearm orientation and wrist angle steady; create the repetition through elbow extension.",
+        "supportAndPosture": "Hold a slight forward torso lean with the trunk braced and the split stance fixed.",
+        "disqualifyingCompensations": [
+          "Dropping the upper arms changes the overhead extension into a pushdown.",
+          "Driving with the legs or swinging the torso changes the strict extension."
+        ]
+      }
+    },
+    {
+      "catalogID": "two-handed-dumbbell-overhead-triceps-extension",
+      "name": "Two-Handed Dumbbell Overhead Triceps Extension",
+      "aliases": [
+        "Two-Hand Dumbbell Triceps Extension",
+        "Seated Two-Handed Dumbbell Overhead Extension"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
+        "seatedFixture": "unsupportedTwoHandOverheadDumbbell",
+        "upperArmPosition": "overhead",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "unreported",
+        "wristMotion": "angleHeld",
+        "wristPosture": "unreported",
+        "handTask": "staticImplementHold",
+        "handleType": "dumbbellHeadTwoHandHold",
+        "resistanceGeometry": "gravityLoadedDumbbell",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "loadAccounting": "singleImplement"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "murray-1995-elbow-forearm-moment-arms",
+        "usmc-force-fitness-exercise-guidebook",
+        "bowflex-1090i-overhead-triceps-extension"
+      ],
+      "execution": {
+        "startingPosition": "Sit upright without back support, feet planted. Hold one dumbbell vertically with both hands securely under its upper head, then position it behind your head with elbows bent and upper arms overhead. Log the full weight of the single dumbbell once.",
+        "movement": "Straighten both elbows together while holding the upper arms beside the head.",
+        "endpoint": "Finish with both elbows comfortably extended and the upper arms still overhead.",
+        "returnPhase": "Bend both elbows under control to return behind the head without moving the upper arms.",
+        "controlledJoints": "Keep the forearm orientation and wrist angle steady; create the repetition through elbow extension.",
+        "supportAndPosture": "Keep the torso upright, spine steady, and upper arms beside the head without back support.",
+        "disqualifyingCompensations": [
+          "Dropping the upper arms changes the overhead extension.",
+          "Arching or swinging the torso to move the load changes the strict extension.",
+          "Using one arm or two separate dumbbells changes this two-hand fixture."
+        ]
       }
     }
   ]

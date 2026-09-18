@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 128.
+Scenario files: 131.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -55,6 +55,9 @@ Scenario files: 128.
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
 | [catalog-tfl-compound-development](catalog-tfl-compound-development.json) | today | `--ui-test-tfl-development --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-tfl-coverage](catalog-tfl-coverage.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-upper-body-curls](catalog-upper-body-curls.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-upper-body-flyes](catalog-upper-body-flyes.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-upper-body-triceps](catalog-upper-body-triceps.json) | library | `--static-body -settings.appearance light` |
 | [custom-exercise-assistance](custom-exercise-assistance.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
 | [custom-exercise-type](custom-exercise-type.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
 | [deep-link-insights](deep-link-insights.json) | today | None declared |

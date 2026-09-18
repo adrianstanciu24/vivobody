@@ -4526,6 +4526,163 @@
     ]
   },
   {
+    "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "overhead-rope-cable-triceps-extension",
+    "name": "Overhead Rope Cable Triceps Extension",
+    "group": "arms",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Two-Arm Overhead Cable Extension",
+      "Rope Overhead Triceps Extension"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0.0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Attach a rope to a high pulley and face away from the station in a split stance. Hold one rope end in each hand with the elbows bent beside your ears. Log the stack setting once and compare only this same station and attachment.",
+      "movement": "Straighten both elbows together while holding the upper arms beside the head.",
+      "endpoint": "Finish with both elbows comfortably extended and the upper arms still overhead.",
+      "returnPhase": "Bend both elbows under control to return behind the head without moving the upper arms.",
+      "controlledJoints": "Keep the forearm orientation and wrist angle steady; create the repetition through elbow extension.",
+      "supportAndPosture": "Hold a slight forward torso lean with the trunk braced and the split stance fixed.",
+      "disqualifyingCompensations": [
+        "Dropping the upper arms changes the overhead extension into a pushdown.",
+        "Driving with the legs or swinging the torso changes the strict extension."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "two-handed-dumbbell-overhead-triceps-extension",
+    "name": "Two-Handed Dumbbell Overhead Triceps Extension",
+    "group": "arms",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Two-Hand Dumbbell Triceps Extension",
+      "Seated Two-Handed Dumbbell Overhead Extension"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0.0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit upright without back support, feet planted. Hold one dumbbell vertically with both hands securely under its upper head, then position it behind your head with elbows bent and upper arms overhead. Log the full weight of the single dumbbell once.",
+      "movement": "Straighten both elbows together while holding the upper arms beside the head.",
+      "endpoint": "Finish with both elbows comfortably extended and the upper arms still overhead.",
+      "returnPhase": "Bend both elbows under control to return behind the head without moving the upper arms.",
+      "controlledJoints": "Keep the forearm orientation and wrist angle steady; create the repetition through elbow extension.",
+      "supportAndPosture": "Keep the torso upright, spine steady, and upper arms beside the head without back support.",
+      "disqualifyingCompensations": [
+        "Dropping the upper arms changes the overhead extension.",
+        "Arching or swinging the torso to move the load changes the strict extension.",
+        "Using one arm or two separate dumbbells changes this two-hand fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "elbow-flexion",
     "familyName": "Elbow Flexion",
     "movementActions": [
@@ -5373,6 +5530,148 @@
         "Alternating the handles or rotating the forearms changes the dependent palms-up task.",
         "Using another machine model, independent arms, or a plate-loaded mechanism changes the load history and fixture."
       ]
+    },
+    "involvement": [
+      {
+        "muscle": "brachialis",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "dumbbell-concentration-curl",
+    "name": "Dumbbell Concentration Curl",
+    "group": "arms",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Concentration Curl",
+      "Seated Concentration Curl"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit with your feet planted and hold one dumbbell with the palm facing up. Rest the working upper arm against the inside of the same-side thigh. Log the weight of that one dumbbell.",
+      "movement": "Curl the dumbbell by bending the working elbow while keeping the upper arm supported.",
+      "endpoint": "Stop at the top of your controlled elbow-flexion range without lifting the upper arm.",
+      "returnPhase": "Lower the dumbbell under control toward a comfortably extended elbow.",
+      "controlledJoints": "Keep the palm facing up and the wrist steady; let the elbow create the repetition.",
+      "supportAndPosture": "Keep the upper arm against the inside of the same-side thigh and the torso still.",
+      "disqualifyingCompensations": [
+        "Lifting the upper arm from its support changes the supported curl.",
+        "Swinging the torso or rotating the forearm changes the strict palms-up curl."
+      ],
+      "sideOrDirection": "Complete the set on one arm, then repeat on the other arm."
+    },
+    "involvement": [
+      {
+        "muscle": "brachialis",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "single-arm-dumbbell-preacher-curl",
+    "name": "Single-Arm Dumbbell Preacher Curl",
+    "group": "arms",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "One-Arm Dumbbell Preacher Curl",
+      "Dumbbell Preacher Curl"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit with your feet planted and hold one dumbbell with the palm facing up. Rest the working upper arm fully on the inclined preacher pad. Log the weight of that one dumbbell.",
+      "movement": "Curl the dumbbell by bending the working elbow while keeping the upper arm supported.",
+      "endpoint": "Stop at the top of your controlled elbow-flexion range without lifting the upper arm.",
+      "returnPhase": "Lower the dumbbell under control toward a comfortably extended elbow.",
+      "controlledJoints": "Keep the palm facing up and the wrist steady; let the elbow create the repetition.",
+      "supportAndPosture": "Keep the upper arm fully on the inclined preacher pad and the torso still.",
+      "disqualifyingCompensations": [
+        "Lifting the upper arm from its support changes the supported curl.",
+        "Swinging the torso or rotating the forearm changes the strict palms-up curl."
+      ],
+      "sideOrDirection": "Complete the set on one arm, then repeat on the other arm."
     },
     "involvement": [
       {
@@ -12474,6 +12773,184 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "reverse-fly",
+    "familyName": "Reverse Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "cable-rear-delt-fly",
+    "name": "Cable Rear-Delt Fly",
+    "group": "shoulders",
+    "defaultWeight": 5,
+    "defaultWeightKg": 2.5,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Cable Reverse Fly",
+      "Standing Cable Rear-Delt Fly"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand centered in front of two mid-to-high cable pulleys. Hold the opposite handles with palms down, crossed in front at shoulder height. Set both stacks equally and log one stack setting; compare only the same station and setup.",
+      "movement": "Sweep both upper arms outward at shoulder height with a fixed slight elbow bend.",
+      "endpoint": "Stop when the upper arms line up with the torso.",
+      "returnPhase": "Return under control along the same arc without changing the elbow angle.",
+      "controlledJoints": "Keep the wrists steady and elbows slightly bent. Control the shoulder blades without deliberately squeezing them together.",
+      "supportAndPosture": "Keep the torso upright and still with your feet planted.",
+      "disqualifyingCompensations": [
+        "Bending the elbows to pull the handles inward turns the fly into a row.",
+        "Rotating the shoulders or deliberately pinching the shoulder blades changes the movement.",
+        "Using hip drive or swinging the torso changes the strict fly."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidPosterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "reverse-fly",
+    "familyName": "Reverse Fly",
+    "movementActions": [
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "bent-over-dumbbell-reverse-fly",
+    "name": "Bent-Over Dumbbell Reverse Fly",
+    "group": "shoulders",
+    "defaultWeight": 5,
+    "defaultWeightKg": 2.5,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Bent-Over Dumbbell Rear-Delt Fly",
+      "Bent-Over Reverse Fly"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Hold one matching dumbbell in each hand with palms facing inward. Hinge at the hips until your torso is near horizontal, with knees slightly bent. Log one dumbbell's weight, not the pair total.",
+      "movement": "Sweep both upper arms outward at shoulder height with a fixed slight elbow bend.",
+      "endpoint": "Stop when the upper arms line up with the torso.",
+      "returnPhase": "Return under control along the same arc without changing the elbow angle.",
+      "controlledJoints": "Keep the wrists steady and elbows slightly bent. Control the shoulder blades without deliberately squeezing them together.",
+      "supportAndPosture": "Hold the unsupported hip hinge and keep the spine steady throughout the set.",
+      "disqualifyingCompensations": [
+        "Bending the elbows to pull the weights inward turns the fly into a row.",
+        "Rotating the shoulders or deliberately pinching the shoulder blades changes the movement.",
+        "Using hip drive or swinging the torso changes the strict fly."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidPosterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
         "role": "stabilizer"
       }
     ]

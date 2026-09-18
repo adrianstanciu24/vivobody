@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "elbow-flexion",
   "name": "Elbow Flexion",
-  "definition": "An open-chain isolation in which the elbow flexes while the reviewed fixture holds its upper-arm posture, forearm orientation, and wrist posture. The eleven source-bounded fixtures cover three standing cable grips, separate standing straight-bar and undulated EZ-bar curls, standing single-arm and simultaneous bilateral supinated dumbbell curls, a simultaneous bilateral neutral-grip dumbbell curl, a seated barbell preacher curl with unreported bar shape and pad angle, a bilateral supinated dumbbell curl against a 45-degree posterior bench, and the exact Life Fitness Insignia SS-BCD dependent selectorized machine preacher curl. The EZ-bar source reports near-semipronated forearms but not grip width, wrist posture, or a universal upper-arm angle; those facts remain unreported rather than being borrowed from the straight-bar fixture. Brachialis is the orientation-neutral primary baseline; biceps brachii is co-primary in the reviewed supinated and EZ-bar records and secondary in the neutral and pronated standing records. Rotating or alternating curls, unsupported preacher shapes, alternate-arm incline curls, other machines, and variants adding shoulder or scapular prime actions remain outside this contract.",
+  "definition": "An open-chain isolation in which the elbow flexes while the reviewed fixture holds its upper-arm posture, forearm orientation, and wrist posture. The thirteen source-bounded fixtures cover three standing cable grips, separate standing straight-bar and undulated EZ-bar curls, standing single-arm and simultaneous bilateral supinated dumbbell curls, a simultaneous bilateral neutral-grip dumbbell curl, a seated barbell preacher curl with unreported bar shape and pad angle, a bilateral supinated dumbbell curl against a 45-degree posterior bench, and the exact Life Fitness Insignia SS-BCD dependent selectorized machine preacher curl. The EZ-bar source reports near-semipronated forearms but not grip width, wrist posture, or a universal upper-arm angle; those facts remain unreported rather than being borrowed from the straight-bar fixture. Brachialis is the orientation-neutral primary baseline; biceps brachii is co-primary in the reviewed supinated and EZ-bar records and secondary in the neutral and pronated standing records. Rotating or alternating curls, unsupported preacher shapes, alternate-arm incline curls, other machines, and variants adding shoulder or scapular prime actions remain outside this contract. The seated concentration curl supports the working upper arm against the inner thigh; the unilateral dumbbell preacher curl supports it on an inclined preacher pad. Both retain a held supinated forearm and strict elbow-only motion.",
   "evidenceRefs": [
     "holzbaur-2005-upper-extremity", "murray-1995-elbow-forearm-moment-arms", "coratella-2023-curl-handgrips", "kleiber-2015-elbow-flexion-hand-position", "marcolin-2018-curl-variants", "oliveira-2009-dumbbell-curl-shoulder-position", "nunes-2020-barbell-preacher-curl", "zabaleta-korta-2023-incline-dumbbell-curl", "ace-2026-hammer-curl", "parpa-2025-traditional-dumbbell-bayesian-curl", "life-fitness-2024-insignia-series-manual"
   ],
@@ -29,14 +29,14 @@
     "allowedByRole": {"primary": ["brachialis", "bicepsBrachii"], "secondary": ["bicepsBrachii", "brachioradialis"], "stabilizer": ["deltoidAnterior", "trapeziusMiddle", "fingerFlexors", "extensorCarpiRadialis", "obliques"]}
   },
   "variantAxes": [
-    {"id": "curlFixture", "valueType": "enum", "required": true, "description": "The exact reviewed implement, posture, support, and sequence branch.", "allowedValues": ["standingSupinatedStraightBarCable", "standingNeutralRopeCable", "standingPronatedStraightBarCable", "standingStraightBarBarbell", "standingEZBarbell", "standingSingleArmSupinatedDumbbell", "standingBilateralSupinatedDumbbell", "standingBilateralNeutralDumbbell", "preacherBarbellUnreportedShape", "inclineBilateralSupinatedDumbbell", "machinePreacherLifeFitnessInsigniaDependent"]},
+    {"id": "curlFixture", "valueType": "enum", "required": true, "description": "The exact reviewed implement, posture, support, and sequence branch.", "allowedValues": ["standingSupinatedStraightBarCable", "standingNeutralRopeCable", "standingPronatedStraightBarCable", "standingStraightBarBarbell", "standingEZBarbell", "standingSingleArmSupinatedDumbbell", "standingBilateralSupinatedDumbbell", "standingBilateralNeutralDumbbell", "preacherBarbellUnreportedShape", "inclineBilateralSupinatedDumbbell", "machinePreacherLifeFitnessInsigniaDependent", "seatedConcentrationSupinatedDumbbell", "preacherSingleArmSupinatedDumbbell"]},
     {"id": "kineticChain", "valueType": "enum", "required": true, "description": "Whether the loaded hand moves freely.", "allowedValues": ["open"]},
     {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed whole-body posture.", "allowedValues": ["standing", "seated", "reclined45Degrees"]},
     {"id": "torsoSupport", "valueType": "enum", "required": true, "description": "The external surface directly supporting the torso.", "allowedValues": ["none", "posteriorBench45Degrees"]},
     {"id": "scapularTranslation", "valueType": "enum", "required": true, "description": "Whether scapular translation is free or unstandardized by the source.", "allowedValues": ["free", "unstandardized"]},
     {"id": "forearmSupport", "valueType": "enum", "required": true, "description": "Whether the forearm itself is externally supported.", "allowedValues": ["none"]},
-    {"id": "upperArmSupport", "valueType": "enum", "required": true, "description": "The external surface supporting the upper arm.", "allowedValues": ["none", "preacherPad"]},
-    {"id": "upperArmPosition", "valueType": "enum", "required": true, "description": "The torso-relative upper-arm posture held while the elbow moves.", "allowedValues": ["atSide", "flexedOverPreacherPad", "behindTorso", "sourceUnreported"]},
+    {"id": "upperArmSupport", "valueType": "enum", "required": true, "description": "The external surface supporting the upper arm.", "allowedValues": ["none", "preacherPad", "innerThigh"]},
+    {"id": "upperArmPosition", "valueType": "enum", "required": true, "description": "The torso-relative upper-arm posture held while the elbow moves.", "allowedValues": ["atSide", "flexedOverPreacherPad", "behindTorso", "sourceUnreported", "bracedAgainstInnerThigh"]},
     {"id": "armSequence", "valueType": "enum", "required": true, "description": "Whether both arms move together or one side is completed then mirrored.", "allowedValues": ["simultaneousBilateral", "singleArmThenMirror"]},
     {"id": "elbowMotion", "valueType": "enum", "required": true, "description": "The dynamic elbow action.", "allowedValues": ["flexes"]},
     {"id": "forearmMotion", "valueType": "enum", "required": true, "description": "Whether radioulnar angle changes deliberately.", "allowedValues": ["angleHeld"]},
@@ -124,6 +124,265 @@
       "id": "per-implement-accounting-identifies-paired-dumbbells", "description": "Only simultaneous bilateral dumbbell curls may log one implement rather than a total load.", "when": {"field": "variant.loadAccounting", "operator": "equals", "value": "perImplement"},
       "then": [{"field": "equipment", "value": "dumbbell"}, {"field": "laterality", "value": "bilateral"}, {"field": "variant.armSequence", "value": "simultaneousBilateral"}, {"field": "variant.handleType", "value": "dumbbellHandle"}, {"field": "variant.resistanceGeometry", "value": "gravityLoadedDumbbell"}],
       "requirePresent": [], "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-concentration-curl-fixture",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.curlFixture",
+        "operator": "equals",
+        "value": "seatedConcentrationSupinatedDumbbell"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.curlFixture",
+          "value": "seatedConcentrationSupinatedDumbbell"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "unstandardized"
+        },
+        {
+          "field": "variant.forearmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.upperArmSupport",
+          "value": "innerThigh"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "bracedAgainstInnerThigh"
+        },
+        {
+          "field": "variant.armSequence",
+          "value": "singleArmThenMirror"
+        },
+        {
+          "field": "variant.elbowMotion",
+          "value": "flexes"
+        },
+        {
+          "field": "variant.forearmMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "value": "supinated"
+        },
+        {
+          "field": "variant.wristMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.wristPosture",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "staticImplementHold"
+        },
+        {
+          "field": "variant.handleType",
+          "value": "dumbbellHandle"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "gravityLoadedDumbbell"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineFixture",
+        "variant.cadence",
+        "variant.loadAccounting",
+        "variant.preacherPadAngle"
+      ],
+      "requireInvolvement": [
+        {
+          "muscle": "brachialis",
+          "role": "primary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        }
+      ]
+    },
+    {
+      "id": "single-arm-dumbbell-preacher-curl-fixture",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.curlFixture",
+        "operator": "equals",
+        "value": "preacherSingleArmSupinatedDumbbell"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.curlFixture",
+          "value": "preacherSingleArmSupinatedDumbbell"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "unstandardized"
+        },
+        {
+          "field": "variant.forearmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.upperArmSupport",
+          "value": "preacherPad"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "flexedOverPreacherPad"
+        },
+        {
+          "field": "variant.armSequence",
+          "value": "singleArmThenMirror"
+        },
+        {
+          "field": "variant.elbowMotion",
+          "value": "flexes"
+        },
+        {
+          "field": "variant.forearmMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "value": "supinated"
+        },
+        {
+          "field": "variant.wristMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.wristPosture",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "staticImplementHold"
+        },
+        {
+          "field": "variant.handleType",
+          "value": "dumbbellHandle"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "gravityLoadedDumbbell"
+        },
+        {
+          "field": "variant.preacherPadAngle",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineFixture",
+        "variant.cadence",
+        "variant.loadAccounting"
+      ],
+      "requireInvolvement": [
+        {
+          "muscle": "brachialis",
+          "role": "primary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        }
+      ]
     }
   ],
   "exercises": [
@@ -203,6 +462,167 @@
       "variant": {"curlFixture": "machinePreacherLifeFitnessInsigniaDependent", "kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "none", "scapularTranslation": "unstandardized", "forearmSupport": "none", "upperArmSupport": "preacherPad", "upperArmPosition": "flexedOverPreacherPad", "armSequence": "simultaneousBilateral", "elbowMotion": "flexes", "forearmMotion": "angleHeld", "forearmOrientation": "supinated", "wristMotion": "angleHeld", "wristPosture": "unreported", "handTask": "staticImplementHold", "handleType": "dependentBilateralMachineHandles", "resistanceGeometry": "selectorizedDependentLever", "loadAccounting": "enteredExternalLoadSameFixtureOnly", "machineFixture": "lifeFitnessInsigniaBicepsCurlDependentSSBCD", "preacherPadAngle": "unreported", "fixedPath": true, "lowerBodyContribution": "none"},
       "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["life-fitness-2024-insignia-series-manual", "murray-1995-elbow-forearm-moment-arms", "nunes-2020-barbell-preacher-curl"],
       "execution": {"startingPosition": "Compare the entered load only on this same Life Fitness Insignia SS-BCD fixture. Sit down, adjust the seat so the backs of both upper arms rest fully on the arm pad, align the elbows with the machine pivot, and take the handles with palms up from the straight-arm start.", "movement": "Curl both dependent handles toward the upper arms while keeping both elbows on the pad.", "endpoint": "Briefly hold the top position with both elbows flexed and both upper arms fully supported.", "returnPhase": "Lower the handles slowly to the straight-arm start.", "controlledJoints": "Create the repetition through simultaneous elbow flexion while keeping the palms up; the source does not specify a wrist posture.", "supportAndPosture": "Keep both upper arms against the pad and maintain the seated setup throughout the set.", "disqualifyingCompensations": ["Lifting an upper arm from the pad leaves the reviewed machine fixture.", "Alternating the handles or rotating the forearms changes the dependent palms-up task.", "Using another machine model, independent arms, or a plate-loaded mechanism changes the load history and fixture."]}
+    },
+    {
+      "catalogID": "dumbbell-concentration-curl",
+      "name": "Dumbbell Concentration Curl",
+      "aliases": [
+        "Concentration Curl",
+        "Seated Concentration Curl"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "brachialis",
+          "role": "primary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "curlFixture": "seatedConcentrationSupinatedDumbbell",
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "none",
+        "scapularTranslation": "unstandardized",
+        "forearmSupport": "none",
+        "upperArmSupport": "innerThigh",
+        "upperArmPosition": "bracedAgainstInnerThigh",
+        "armSequence": "singleArmThenMirror",
+        "elbowMotion": "flexes",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "supinated",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "dumbbellHandle",
+        "resistanceGeometry": "gravityLoadedDumbbell",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "murray-1995-elbow-forearm-moment-arms",
+        "elshafei-2021-concentration-curl-protocol"
+      ],
+      "execution": {
+        "startingPosition": "Sit with your feet planted and hold one dumbbell with the palm facing up. Rest the working upper arm against the inside of the same-side thigh. Log the weight of that one dumbbell.",
+        "movement": "Curl the dumbbell by bending the working elbow while keeping the upper arm supported.",
+        "endpoint": "Stop at the top of your controlled elbow-flexion range without lifting the upper arm.",
+        "returnPhase": "Lower the dumbbell under control toward a comfortably extended elbow.",
+        "controlledJoints": "Keep the palm facing up and the wrist steady; let the elbow create the repetition.",
+        "supportAndPosture": "Keep the upper arm against the inside of the same-side thigh and the torso still.",
+        "disqualifyingCompensations": [
+          "Lifting the upper arm from its support changes the supported curl.",
+          "Swinging the torso or rotating the forearm changes the strict palms-up curl."
+        ],
+        "sideOrDirection": "Complete the set on one arm, then repeat on the other arm."
+      }
+    },
+    {
+      "catalogID": "single-arm-dumbbell-preacher-curl",
+      "name": "Single-Arm Dumbbell Preacher Curl",
+      "aliases": [
+        "One-Arm Dumbbell Preacher Curl",
+        "Dumbbell Preacher Curl"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "brachialis",
+          "role": "primary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "curlFixture": "preacherSingleArmSupinatedDumbbell",
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "none",
+        "scapularTranslation": "unstandardized",
+        "forearmSupport": "none",
+        "upperArmSupport": "preacherPad",
+        "upperArmPosition": "flexedOverPreacherPad",
+        "armSequence": "singleArmThenMirror",
+        "elbowMotion": "flexes",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "supinated",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "dumbbellHandle",
+        "resistanceGeometry": "gravityLoadedDumbbell",
+        "preacherPadAngle": "unreported",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "murray-1995-elbow-forearm-moment-arms",
+        "oliveira-2009-dumbbell-curl-shoulder-position"
+      ],
+      "execution": {
+        "startingPosition": "Sit with your feet planted and hold one dumbbell with the palm facing up. Rest the working upper arm fully on the inclined preacher pad. Log the weight of that one dumbbell.",
+        "movement": "Curl the dumbbell by bending the working elbow while keeping the upper arm supported.",
+        "endpoint": "Stop at the top of your controlled elbow-flexion range without lifting the upper arm.",
+        "returnPhase": "Lower the dumbbell under control toward a comfortably extended elbow.",
+        "controlledJoints": "Keep the palm facing up and the wrist steady; let the elbow create the repetition.",
+        "supportAndPosture": "Keep the upper arm fully on the inclined preacher pad and the torso still.",
+        "disqualifyingCompensations": [
+          "Lifting the upper arm from its support changes the supported curl.",
+          "Swinging the torso or rotating the forearm changes the strict palms-up curl."
+        ],
+        "sideOrDirection": "Complete the set on one arm, then repeat on the other arm."
+      }
     }
   ]
 }

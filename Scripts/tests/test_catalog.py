@@ -340,8 +340,27 @@ DEFAULT_CANDIDATE_FOLLOW_UP_RULE_IDS = {
 
 ANTERIOR_SHIN_RECORD_IDS = {"wall-supported-tibialis-raise"}
 
+UPPER_BODY_ADDITION_RECORD_IDS = {
+    "overhead-rope-cable-triceps-extension",
+    "two-handed-dumbbell-overhead-triceps-extension",
+    "cable-rear-delt-fly",
+    "bent-over-dumbbell-reverse-fly",
+    "dumbbell-concentration-curl",
+    "single-arm-dumbbell-preacher-curl",
+}
+
+UPPER_BODY_ADDITION_EVIDENCE_IDS = {
+    "life-fitness-2011-cable-motion-manual",
+    "linkul-2021-bent-over-shoulder-raise",
+    "elshafei-2021-concentration-curl-protocol",
+    "inspire-ft2-overhead-rope-extension",
+    "usmc-force-fitness-exercise-guidebook",
+    "bowflex-1090i-overhead-triceps-extension",
+}
+
 HISTORICAL_BATCH_EXCLUSION_RECORD_IDS = (
-    ANTERIOR_SHIN_RECORD_IDS
+    UPPER_BODY_ADDITION_RECORD_IDS
+    | ANTERIOR_SHIN_RECORD_IDS
     | ESSENTIAL_EXPANSION_RECORD_IDS
     | REQUESTED_EXERCISE_RECORD_IDS
     | COMPREHENSIVE_EXPANSION_RECORD_IDS
@@ -354,7 +373,8 @@ HISTORICAL_BATCH_EXCLUSION_RECORD_IDS = (
 )
 
 HISTORICAL_BATCH_EXCLUSION_EVIDENCE_IDS = (
-    COMPREHENSIVE_EXPANSION_EVIDENCE_IDS
+    UPPER_BODY_ADDITION_EVIDENCE_IDS
+    | COMPREHENSIVE_EXPANSION_EVIDENCE_IDS
     | MACHINE_CATALOG_EXPANSION_EVIDENCE_IDS
     | MACHINE_FIRST_WAVE_EVIDENCE_IDS
     | MACHINE_SECOND_WAVE_EVIDENCE_IDS
@@ -6627,7 +6647,8 @@ class CatalogFoundationTests(unittest.TestCase):
                         for exercise in family["exercises"]
                         if exercise["catalogID"]
                         not in (
-                            COMPREHENSIVE_EXPANSION_RECORD_IDS
+                            UPPER_BODY_ADDITION_RECORD_IDS
+                            | COMPREHENSIVE_EXPANSION_RECORD_IDS
                             | DEFAULT_CATALOG_GAP_RECORD_IDS
                             | DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS
                         )
@@ -7228,6 +7249,60 @@ class CatalogFoundationTests(unittest.TestCase):
         for source_id, phrase in expected_scope_phrases.items():
             with self.subTest(source=source_id):
                 self.assertIn(phrase, source_by_id[source_id]["scope"])
+
+    def test_upper_body_additions_have_exact_roster_and_tracking(self) -> None:
+        additions = {
+            e["catalogID"]: (f, e)
+            for f in self.real_families for e in f["exercises"]
+            if e["catalogID"] in UPPER_BODY_ADDITION_RECORD_IDS
+        }
+        self.assertEqual(set(additions), UPPER_BODY_ADDITION_RECORD_IDS)
+        for identifier, (family, exercise) in additions.items():
+            with self.subTest(exercise=identifier):
+                catalog.validate_family(family, self.foundation)
+                self.assertEqual(exercise["modality"], "dynamicStrength")
+                self.assertEqual(exercise["trackingMode"], "reps")
+                self.assertEqual(exercise["loadMode"], "external")
+                self.assertEqual(exercise["additionalPrimeActions"], [])
+                self.assertEqual(
+                    exercise["laterality"],
+                    "unilateral" if "curl" in identifier else "bilateral",
+                )
+
+    def test_upper_body_addition_boundaries_reject_neighboring_fixtures(self) -> None:
+        cases = [
+            ("overhead-rope-cable-triceps-extension", "variant.handleType", "straightCableBar"),
+            ("overhead-rope-cable-triceps-extension", "variant.upperArmPosition", "atSide"),
+            ("two-handed-dumbbell-overhead-triceps-extension", "laterality", "unilateral"),
+            ("two-handed-dumbbell-overhead-triceps-extension", "variant.torsoSupport", "bench"),
+            ("two-handed-dumbbell-overhead-triceps-extension", "variant.bodyPosition", "supine"),
+            ("cable-rear-delt-fly", "variant.elbowMotion", "flexes"),
+            ("cable-rear-delt-fly", "variant.fixedPath", True),
+            ("cable-rear-delt-fly", "variant.gripOrientation", "neutral"),
+            ("bent-over-dumbbell-reverse-fly", "variant.torsoSupport", "bench"),
+            ("bent-over-dumbbell-reverse-fly", "additionalPrimeActions", ["hip.extension"]),
+            ("dumbbell-concentration-curl", "variant.upperArmSupport", "none"),
+            ("dumbbell-concentration-curl", "variant.upperArmSupport", "preacherPad"),
+            ("single-arm-dumbbell-preacher-curl", "variant.upperArmSupport", "innerThigh"),
+            ("single-arm-dumbbell-preacher-curl", "variant.forearmMotion", "supinates"),
+            ("bilateral-rope-cable-triceps-pushdown", "variant.torsoInclination", "slightForward"),
+            ("prone-dumbbell-reverse-fly", "variant.cableAnchorHeight", "midToHigh"),
+            ("prone-dumbbell-reverse-fly", "variant.handleConfiguration", "oppositeCrossedHandles"),
+            ("prone-dumbbell-reverse-fly", "variant.loadDistribution", "equalAcrossTwoTowers"),
+            ("single-arm-overhead-cable-triceps-extension", "variant.cableSetup", "highPulleyFacingAwaySplitStance"),
+            ("seated-single-arm-overhead-dumbbell-triceps-extension", "variant.seatedFixture", "unsupportedTwoHandOverheadDumbbell"),
+        ]
+        for identifier, field, value in cases:
+            with self.subTest(exercise=identifier, field=field):
+                family = copy.deepcopy(next(f for f in self.real_families if any(e["catalogID"] == identifier for e in f["exercises"])))
+                exercise = next(e for e in family["exercises"] if e["catalogID"] == identifier)
+                target = exercise
+                parts = field.split(".")
+                for part in parts[:-1]:
+                    target = target[part]
+                target[parts[-1]] = value
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(family, self.foundation)
 
     def test_batch1_later_closures_are_active_families(self) -> None:
         active_ids = {family["id"] for family in self.real_families}
@@ -8020,6 +8095,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "gravityLoadedDumbbell",
                 "gravityLoadedBarbell",
                 "selectorizedCamLever",
+                "standingOverheadRopeCableExtension",
             ],
         )
         self.assertEqual(
@@ -8032,6 +8108,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "rope",
                 "barbellShapeUnreported",
                 "selfAdjustingMachineHandles",
+                "dumbbellHeadTwoHandHold",
             ],
         )
         self.assertEqual(

@@ -1,0 +1,175 @@
+{
+  "name": "catalog-upper-body-curls",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPull"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Dumbbell\\ Concentration\\ Curl,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Dumbbell\\ Concentration\\ Curl,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Dumbbell Concentration Curl"
+          },
+          {
+            "labelContains": "Muscles used by Dumbbell Concentration Curl"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Log "
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light",
+          "-UIPreferredContentSizeCategoryName",
+          "UICTContentSizeCategoryAccessibilityL"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPull"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Single\\-Arm\\ Dumbbell\\ Preacher\\ Curl,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Single\\-Arm\\ Dumbbell\\ Preacher\\ Curl,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Single-Arm Dumbbell Preacher Curl"
+          },
+          {
+            "labelContains": "Muscles used by Single-Arm Dumbbell Preacher Curl"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Log "
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercise-execution-starting-position"
+    }
+  ],
+  "forbidden": []
+}

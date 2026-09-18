@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "reverse-fly",
   "name": "Reverse Fly",
-  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally abducts the upper arms at shoulder height with a fixed, nearly extended elbow posture and no deliberate scapular-retraction prime action. The admitted roster is limited to directly reviewed dumbbell, elastic-band, and reverse-fly-machine variants; cable, suspension, bodyweight, rowing, external-rotation, and bent-arm variants remain outside this contract.",
+  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally abducts the upper arms at shoulder height with a fixed, nearly extended elbow posture and no deliberate scapular-retraction prime action. The admitted roster is limited to directly reviewed prone and unsupported hip-hinged dumbbell, elastic-band, standing crossed-cable, and reverse-fly-machine variants; suspension, bodyweight, rowing, external-rotation, and bent-arm variants remain outside this contract. Cable and hip-hinged records use exact fixture rules; role assignments transfer categorical anatomy and mechanics rather than exercise-specific EMG rankings.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "holzbaur-2005-upper-extremity",
@@ -26,11 +26,7 @@
     ]
   },
   "allowed": {
-    "equipment": [
-      "dumbbell",
-      "band",
-      "machine"
-    ],
+    "equipment": ["dumbbell", "band", "machine", "cable"],
     "modalities": [
       "dynamicStrength"
     ],
@@ -133,24 +129,7 @@
       "secondary": [
         "externalRotators"
       ],
-      "stabilizer": [
-        "deltoidLateral",
-        "lats",
-        "trapeziusUpper",
-        "trapeziusMiddle",
-        "trapeziusLower",
-        "rhomboids",
-        "serratus",
-        "subscapularis",
-        "supraspinatus",
-        "brachialis",
-        "triceps",
-        "fingerFlexors",
-        "extensorCarpiRadialis",
-        "abs",
-        "obliques",
-        "lumbarExtensors"
-      ]
+      "stabilizer": ["deltoidLateral", "lats", "trapeziusUpper", "trapeziusMiddle", "trapeziusLower", "rhomboids", "serratus", "subscapularis", "supraspinatus", "brachialis", "triceps", "fingerFlexors", "extensorCarpiRadialis", "abs", "obliques", "lumbarExtensors", "gluteMax"]
     }
   },
   "variantAxes": [
@@ -177,11 +156,7 @@
       "valueType": "enum",
       "required": true,
       "description": "The reviewed body position used for the reverse fly.",
-      "allowedValues": [
-        "prone",
-        "standing",
-        "seated"
-      ]
+      "allowedValues": ["prone", "standing", "seated", "hipHinged"]
     },
     {
       "id": "torsoSupport",
@@ -271,6 +246,53 @@
       "allowedValues": [
         "reverseFly"
       ]
+    },
+    {
+      "id": "flyFixture",
+      "valueType": "enum",
+      "required": false,
+      "description": "Exact newly reviewed cable or unsupported dumbbell topology.",
+      "allowedValues": [
+        "standingCrossedCable",
+        "unsupportedHipHingedDumbbell"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": false,
+      "description": "Enter one matched stack on the same cable fixture, or one dumbbell from the matching pair.",
+      "allowedValues": [
+        "perStack",
+        "perImplement"
+      ]
+    },
+    {
+      "id": "cableAnchorHeight",
+      "valueType": "enum",
+      "required": false,
+      "description": "Pulley setting that keeps the crossed handles at shoulder height.",
+      "allowedValues": [
+        "midToHigh"
+      ]
+    },
+    {
+      "id": "handleConfiguration",
+      "valueType": "enum",
+      "required": false,
+      "description": "Each hand holds the opposite tower handle.",
+      "allowedValues": [
+        "oppositeCrossedHandles"
+      ]
+    },
+    {
+      "id": "loadDistribution",
+      "valueType": "enum",
+      "required": false,
+      "description": "Use the same displayed resistance on both towers.",
+      "allowedValues": [
+        "equalAcrossTwoTowers"
+      ]
     }
   ],
   "recommended": {
@@ -338,9 +360,9 @@
       "id": "dumbbell-reverse-fly-uses-prone-supported-setup",
       "description": "The reviewed dumbbell reverse fly is prone on a bench with a neutral grip and comparable external load.",
       "when": {
-        "field": "equipment",
+        "field": "variant.bodyPosition",
         "operator": "equals",
-        "value": "dumbbell"
+        "value": "prone"
       },
       "then": [
         {
@@ -358,10 +380,14 @@
         {
           "field": "variant.gripOrientation",
           "value": "neutral"
-        }
+        },
+    {
+      "field": "equipment",
+      "value": "dumbbell"
+    }
       ],
       "requirePresent": [],
-      "requireAbsent": []
+      "requireAbsent": ["variant.flyFixture", "variant.loadAccounting"]
     },
     {
       "id": "band-reverse-fly-uses-standing-free-load-semantics",
@@ -399,6 +425,380 @@
       ],
       "requireAdditionalStabilityDemands": [
         "spine"
+      ]
+    },
+    {
+      "id": "dumbbell-reverse-fly-reviewed-positions",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "allowedValues": [
+            "prone",
+            "hipHinged"
+          ]
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "cable-rear-delt-fly-fixture",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.flyFixture",
+        "operator": "equals",
+        "value": "standingCrossedCable"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "cable"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.scapularStrategy",
+          "value": "neutralControlled"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
+          "field": "variant.elbowMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.elbowPosture",
+          "value": "nearExtended"
+        },
+        {
+          "field": "variant.upperArmPath",
+          "value": "flared"
+        },
+        {
+          "field": "variant.upperArmElevationDegrees",
+          "value": 90
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.flyFixture",
+          "value": "standingCrossedCable"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "perStack"
+        },
+        {
+          "field": "variant.cableAnchorHeight",
+          "value": "midToHigh"
+        },
+        {
+          "field": "variant.handleConfiguration",
+          "value": "oppositeCrossedHandles"
+        },
+        {
+          "field": "variant.loadDistribution",
+          "value": "equalAcrossTwoTowers"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "deltoidPosterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine"
+      ]
+    },
+    {
+      "id": "bent-over-dumbbell-reverse-fly-fixture",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.flyFixture",
+        "operator": "equals",
+        "value": "unsupportedHipHingedDumbbell"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "hipHinged"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.scapularStrategy",
+          "value": "neutralControlled"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.elbowMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.elbowPosture",
+          "value": "nearExtended"
+        },
+        {
+          "field": "variant.upperArmPath",
+          "value": "flared"
+        },
+        {
+          "field": "variant.upperArmElevationDegrees",
+          "value": 90
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.flyFixture",
+          "value": "unsupportedHipHingedDumbbell"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "perImplement"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.cableAnchorHeight",
+        "variant.handleConfiguration",
+        "variant.loadDistribution"
+      ],
+      "requireInvolvement": [
+        {
+          "muscle": "deltoidPosterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ]
+    },
+    {
+      "id": "cable-reverse-fly-requires-reviewed-fixture",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        {
+          "field": "variant.flyFixture",
+          "value": "standingCrossedCable"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "hip-hinged-reverse-fly-requires-reviewed-fixture",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "hipHinged"
+      },
+      "then": [
+        {
+          "field": "variant.flyFixture",
+          "value": "unsupportedHipHingedDumbbell"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "per-stack-load-identifies-crossed-cable-fly",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "perStack"
+      },
+      "then": [
+        {
+          "field": "variant.flyFixture",
+          "value": "standingCrossedCable"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "per-implement-load-identifies-hip-hinged-fly",
+      "description": "Pins the exact reviewed fixture and excludes neighboring unsupported combinations.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "perImplement"
+      },
+      "then": [
+        {
+          "field": "variant.flyFixture",
+          "value": "unsupportedHipHingedDumbbell"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-cable-reverse-fly-omits-cable-geometry",
+      "description": "Cable-only topology cannot be attached to free-weight, band or machine fixtures.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "cable"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.cableAnchorHeight",
+        "variant.handleConfiguration",
+        "variant.loadDistribution"
       ]
     }
   ],
@@ -735,6 +1135,203 @@
         "disqualifyingCompensations": [
           "Turning the upper arms outward during the sweep turns the reverse fly into a rotation drill.",
           "Rowing the handles toward the torso turns the reverse fly into a row."
+        ]
+      }
+    },
+    {
+      "catalogID": "cable-rear-delt-fly",
+      "name": "Cable Rear-Delt Fly",
+      "aliases": [
+        "Cable Reverse Fly",
+        "Standing Cable Rear-Delt Fly"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 5,
+      "defaultWeightKg": 2.5,
+      "reps": 12,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "deltoidPosterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "lowerBodyContribution": "none",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "scapularStrategy": "neutralControlled",
+        "gripOrientation": "pronated",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "upperArmPath": "flared",
+        "upperArmElevationDegrees": 90,
+        "fixedPath": false,
+        "flyFixture": "standingCrossedCable",
+        "loadAccounting": "perStack",
+        "cableAnchorHeight": "midToHigh",
+        "handleConfiguration": "oppositeCrossedHandles",
+        "loadDistribution": "equalAcrossTwoTowers"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "schoenfeld-2013-reverse-fly-hand-position",
+        "life-fitness-2011-cable-motion-manual"
+      ],
+      "execution": {
+        "startingPosition": "Stand centered in front of two mid-to-high cable pulleys. Hold the opposite handles with palms down, crossed in front at shoulder height. Set both stacks equally and log one stack setting; compare only the same station and setup.",
+        "movement": "Sweep both upper arms outward at shoulder height with a fixed slight elbow bend.",
+        "endpoint": "Stop when the upper arms line up with the torso.",
+        "returnPhase": "Return under control along the same arc without changing the elbow angle.",
+        "controlledJoints": "Keep the wrists steady and elbows slightly bent. Control the shoulder blades without deliberately squeezing them together.",
+        "supportAndPosture": "Keep the torso upright and still with your feet planted.",
+        "disqualifyingCompensations": [
+          "Bending the elbows to pull the handles inward turns the fly into a row.",
+          "Rotating the shoulders or deliberately pinching the shoulder blades changes the movement.",
+          "Using hip drive or swinging the torso changes the strict fly."
+        ]
+      }
+    },
+    {
+      "catalogID": "bent-over-dumbbell-reverse-fly",
+      "name": "Bent-Over Dumbbell Reverse Fly",
+      "aliases": [
+        "Bent-Over Dumbbell Rear-Delt Fly",
+        "Bent-Over Reverse Fly"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 5,
+      "defaultWeightKg": 2.5,
+      "reps": 12,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "deltoidPosterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "lowerBodyContribution": "none",
+        "bodyPosition": "hipHinged",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "scapularStrategy": "neutralControlled",
+        "gripOrientation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "upperArmPath": "flared",
+        "upperArmElevationDegrees": 90,
+        "fixedPath": false,
+        "flyFixture": "unsupportedHipHingedDumbbell",
+        "loadAccounting": "perImplement"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "schoenfeld-2013-reverse-fly-hand-position",
+        "linkul-2021-bent-over-shoulder-raise"
+      ],
+      "execution": {
+        "startingPosition": "Hold one matching dumbbell in each hand with palms facing inward. Hinge at the hips until your torso is near horizontal, with knees slightly bent. Log one dumbbell's weight, not the pair total.",
+        "movement": "Sweep both upper arms outward at shoulder height with a fixed slight elbow bend.",
+        "endpoint": "Stop when the upper arms line up with the torso.",
+        "returnPhase": "Return under control along the same arc without changing the elbow angle.",
+        "controlledJoints": "Keep the wrists steady and elbows slightly bent. Control the shoulder blades without deliberately squeezing them together.",
+        "supportAndPosture": "Hold the unsupported hip hinge and keep the spine steady throughout the set.",
+        "disqualifyingCompensations": [
+          "Bending the elbows to pull the weights inward turns the fly into a row.",
+          "Rotating the shoulders or deliberately pinching the shoulder blades changes the movement.",
+          "Using hip drive or swinging the torso changes the strict fly."
         ]
       }
     }

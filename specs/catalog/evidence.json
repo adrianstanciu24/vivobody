@@ -2993,7 +2993,7 @@
       "pmid": "24150552",
       "pmcid": "PMC3737788",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3737788/",
-      "scope": "Trained right-handed men performed right-arm standing, preacher, and incline dumbbell curls at forty percent of an isometric maximum and self-selected speed. The incline condition used a unilateral 50-degree trunk-hyperextension geometry; elbow angle and long-head biceps-brachii surface EMG were recorded. It directly supports the existing unilateral standing fixture and supports incline-curl biceps activity only across a geometry mismatch; it does not define the proposed 45-degree bench, fully supinated grip, bilateral or simultaneous sequence, fixed tempo, other elbow-flexor rankings, chronic adaptation, or universal load."
+      "scope": "Trained right-handed men performed right-arm standing, preacher, and incline dumbbell curls at forty percent of an isometric maximum and self-selected speed. The incline condition used a unilateral 50-degree trunk-hyperextension geometry; elbow angle and long-head biceps-brachii surface EMG were recorded. It directly supports the existing unilateral standing fixture and supports incline-curl biceps activity only across a geometry mismatch; it does not define the proposed 45-degree bench, fully supinated grip, bilateral or simultaneous sequence, fixed tempo, other elbow-flexor rankings, chronic adaptation, or universal load. The unilateral preacher protocol also supports the seated upper-arm-supported dumbbell curl. Its reported shoulder flexion is not a preacher-pad angle; the catalog keeps pad angle unreported and explicitly selects a static supinated grip."
     },
     {
       "id": "hussain-2020-triceps-pushdown-fatigue",
@@ -4549,6 +4549,76 @@
       "pmid": "23160432",
       "scope": "Twenty healthy adults performed eleven exercises with fine-wire TFL, gluteus-medius and superior-gluteus-maximus recordings. Direct TFL participation occurred in forward lunge, forward step-up and unloaded squat; squat activity was low. The squat used outward feet, source-defined width and approximately ninety-degree hip/knee flexion. Catalog load placement, stance, depth, cadence, heights and support transitions differ. Stabilizer transfer uses unchanged anatomy and exact catalog geometry, not a strong target, equal activity, force, growth or unrestricted rotation. Guided Smith mechanics are not established by this source.",
       "url": "https://doi.org/10.2519/jospt.2013.4116"
+    },
+    {
+      "id": "life-fitness-2011-cable-motion-manual",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Cable Motion / Multi Jungle Owner’s Manual, 8314401 Rev B-2",
+      "authors": [
+        "Life Fitness"
+      ],
+      "year": 2011,
+      "url": "https://fitnesssuperstore.info/pdfs/Life%20Fitness%20Cable%20Motion-Multi%20Jungle%20Owners%20Manual.pdf",
+      "scope": "Manufacturer manual dated January 25, 2011, hosted by a dealer. Printed page 66 describes standing crossed opposite handles with overhand grip, shoulder-height horizontal arc, slight fixed elbow bend and mid-to-high pulleys. Equipment pages describe resistance per handle. The catalog selects equal stacks and logs one displayed setting on the same fixture. It does not measure muscle recruitment or establish cross-machine equivalence."
+    },
+    {
+      "id": "linkul-2021-bent-over-shoulder-raise",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Resistance Training for the Older Adult: Progressions to Achieve an Overhead Press",
+      "authors": [
+        "Robert Linkul"
+      ],
+      "year": 2021,
+      "url": "https://dxpprod.nsca.com/contentassets/308466ea629044a3833935c8a3d5d78d/ptq-8.4.2-resistance-training-for-the-older-adult-progressions-to-achieve-an-overhead-press.pdf",
+      "scope": "NSCA Personal Training Quarterly 8.4, printed page 12: bilateral dumbbells, held hip hinge, nearly extended elbows, lateral sweep and neutral-grip option. Supports the bent-over reverse-fly fixture. Shoulder roles and lumbar/gluteal stabilization are bounded anatomy-and-mechanics inferences using existing capabilities, not directly measured recruitment or medical benefit."
+    },
+    {
+      "id": "elshafei-2021-concentration-curl-protocol",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Towards Detecting Biceps Muscle Fatigue in Gym Activity Using Wearables",
+      "authors": [
+        "Mohamed Elshafei",
+        "Emad Shihab"
+      ],
+      "year": 2021,
+      "url": "https://doi.org/10.3390/s21030759",
+      "scope": "Section 2.1 defines a seated dumbbell concentration curl with working elbow supported against the inner thigh, forearm motion, controlled lowering and one arm followed by the other. The catalog selects a held supinated grip and neutral wrist; categorical elbow-flexor and grip roles use existing anatomical capabilities. No fatigue-detection, medical, ranking or universal-load claim is imported.",
+      "doi": "10.3390/s21030759",
+      "pmid": "33498702",
+      "pmcid": "PMC7865622"
+    },
+    {
+      "id": "inspire-ft2-overhead-rope-extension",
+      "sourceType": "officialTechnicalStandard",
+      "title": "FT2 Exercise Manual: Overhead Triceps Extension",
+      "authors": [
+        "Inspire Fitness"
+      ],
+      "year": 2012,
+      "url": "https://inspirefitnesssolutions.co.uk/wp-content/uploads/2015/10/Inspire-FT2-Exercise-Manual.pdf",
+      "scope": "Printed page 28 specifies high pulley, facing away, split stance, slight forward lean, both rope ends, elbows beside ears and overhead elbow extension. Year is the PDF creation year, not a confirmed publication date. Neutral held forearms and same-fixture single-stack accounting define the narrow catalog fixture; muscle roles are bounded anatomy/mechanics transfer, not measured recruitment."
+    },
+    {
+      "id": "usmc-force-fitness-exercise-guidebook",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Force Fitness Exercise Guidebook: Overhead Triceps Extension",
+      "authors": [
+        "United States Marine Corps"
+      ],
+      "year": 2026,
+      "url": "https://www.tbs.marines.mil/Portals/230/Force%20Fitness%20Exercise%20Guidebook.pdf?ver=eGNb828lVw2cF1Ji_XVUsg%3D%3D",
+      "scope": "Undated guide accessed September 18, 2026; year denotes access, not publication. Printed page 25 describes both hands holding a dumbbell overhead, seated or standing, vertical upper arms, elbow flexion behind the head and neutral spine. The catalog selects seated without back support as a narrow fixture. It does not establish radioulnar orientation, wrist angle, comparative recruitment or medical effects."
+    },
+    {
+      "id": "bowflex-1090i-overhead-triceps-extension",
+      "sourceType": "officialTechnicalStandard",
+      "title": "SelectTech 1090i Dumbbell Owner’s Manual: Overhead Triceps Extension",
+      "authors": [
+        "BowFlex"
+      ],
+      "year": 2026,
+      "url": "https://download.bowflex.com/supportdocs/OM/Bowflex/BFX.1090i.OM.ALL.pdf",
+      "scope": "Undated manual accessed September 18, 2026; year denotes access, not publication. The overhead triceps extension instructions establish both hands under the inside edge of one dumbbell head, overhead upper arms and elbow extension. Supports the hand interface; does not establish an exact radioulnar orientation, anatomical wrist angle, seated support comparison or muscle-role ranking."
     }
   ]
 }

@@ -13,11 +13,11 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | Measure | Count |
 |---|---:|
 | Reviewed families | 102 |
-| Exercises | 240 |
+| Exercises | 246 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 277 |
+| Evidence sources | 283 |
 
 ## Family roster
 
@@ -40,8 +40,8 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [diagonal-pull](families/diagonal-pull.json) | 1 |
 | [dip](families/dip.json) | 3 |
 | [dynamic-lunge](families/dynamic-lunge.json) | 4 |
-| [elbow-extension](families/elbow-extension.json) | 9 |
-| [elbow-flexion](families/elbow-flexion.json) | 11 |
+| [elbow-extension](families/elbow-extension.json) | 11 |
+| [elbow-flexion](families/elbow-flexion.json) | 13 |
 | [externally-rotating-face-pull](families/externally-rotating-face-pull.json) | 1 |
 | [farmer-carry](families/farmer-carry.json) | 2 |
 | [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |
@@ -81,7 +81,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [power-snatch](families/power-snatch.json) | 1 |
 | [push-jerk](families/push-jerk.json) | 1 |
 | [push-press](families/push-press.json) | 1 |
-| [reverse-fly](families/reverse-fly.json) | 4 |
+| [reverse-fly](families/reverse-fly.json) | 6 |
 | [roman-chair-hip-extension](families/roman-chair-hip-extension.json) | 1 |
 | [romanian-deadlift](families/romanian-deadlift.json) | 5 |
 | [scapular-depression](families/scapular-depression.json) | 1 |
