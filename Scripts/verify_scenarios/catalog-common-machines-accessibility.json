@@ -1,0 +1,77 @@
+{
+  "name": "catalog-common-machines-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Life\\ Fitness\\ Insignia\\ Seated\\ Abdominal\\ Crunch,"
+        },
+        "direction": "up",
+        "maxSwipes": 160
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Life\\ Fitness\\ Insignia\\ Seated\\ Abdominal\\ Crunch,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Life Fitness Insignia Seated Abdominal Crunch"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Muscles used by Life Fitness Insignia Seated Abdominal Crunch"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Primary.*Abs"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Primary.*Abs"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}

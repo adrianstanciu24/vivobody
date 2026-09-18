@@ -10,6 +10,7 @@ $(SRCROOT)/specs/catalog/families/ankle-plantarflexion.json
 $(SRCROOT)/specs/catalog/families/anti-extension.json
 $(SRCROOT)/specs/catalog/families/anti-lateral-flexion.json
 $(SRCROOT)/specs/catalog/families/anti-rotation.json
+$(SRCROOT)/specs/catalog/families/belt-loaded-machine-glute-bridge.json
 $(SRCROOT)/specs/catalog/families/bilateral-squat.json
 $(SRCROOT)/specs/catalog/families/bodyweight-glute-bridge.json
 $(SRCROOT)/specs/catalog/families/chest-fly.json
@@ -70,6 +71,8 @@ $(SRCROOT)/specs/catalog/families/scapular-protraction.json
 $(SRCROOT)/specs/catalog/families/scapular-pull-up.json
 $(SRCROOT)/specs/catalog/families/scapular-retraction.json
 $(SRCROOT)/specs/catalog/families/seated-dip-press.json
+$(SRCROOT)/specs/catalog/families/seated-machine-abdominal-crunch.json
+$(SRCROOT)/specs/catalog/families/seated-machine-back-extension.json
 $(SRCROOT)/specs/catalog/families/shoulder-abduction-raise.json
 $(SRCROOT)/specs/catalog/families/shoulder-extension-isolation.json
 $(SRCROOT)/specs/catalog/families/shoulder-extension-row.json

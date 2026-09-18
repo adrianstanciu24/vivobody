@@ -1,0 +1,442 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "belt-loaded-machine-glute-bridge",
+  "name": "Belt-Loaded Machine Glute Bridge",
+  "definition": "A bilateral belt-loaded compound bridge on the exact Life Fitness Insignia SS-GLB selectorized fixture. The hips press upward into a centered tightened belt, the feet stay on the footplate, the upper torso remains supported by the back pad, and the arms are crossed over the chest. The manufacturer endpoint aligns the femur with the spine. Hip extension follows the instruction; knee extension is a bounded categorical inference from visible opening in the start/finish diagrams, not measured kinematics or a transferred barbell knee angle. Gluteus maximus is primary and the vasti secondary by hip-dominant mechanics and existing action capabilities. Biceps femoris receives knee-control credit only because the visible region does not distinguish the long and short heads; it does not inherit hip-extension capability. Lumbar extensors, gluteus medius, and soleus provide conservative trunk, pelvic, and planted-foot control inferred from the fixture and anatomy. No deliberate spinal action, numerical joint range, barbell load equivalence, plate-loaded glute-drive topology, SS-GLD geometry, unilateral bridge, or band resistance is admitted.",
+  "evidenceRefs": [
+    "life-fitness-2024-insignia-series-manual",
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMax"
+      ],
+      "secondary": [
+        "vasti"
+      ],
+      "stabilizer": [
+        "bicepsFemoris",
+        "lumbarExtensors",
+        "gluteMed",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain planted on the footplate.",
+      "allowedValues": [
+        "bilateralClosed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The upper torso rests on the machine back pad.",
+      "allowedValues": [
+        "backSupportedReclined"
+      ]
+    },
+    {
+      "id": "machineFixture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact selectorized glute-bridge model, distinct from SS-GLD.",
+      "allowedValues": [
+        "lifeFitnessInsigniaSSGLB"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The upper torso remains supported by the posterior pad.",
+      "allowedValues": [
+        "machineBackPad"
+      ]
+    },
+    {
+      "id": "footSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain on the machine platform.",
+      "allowedValues": [
+        "bilateralMachineFootplate"
+      ]
+    },
+    {
+      "id": "footPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "The manufacturer places the feet as far back as is comfortable without a numeric stance.",
+      "allowedValues": [
+        "asFarRearwardAsComfortable"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The belt is tightened against the hip bones with its buckle centered.",
+      "allowedValues": [
+        "tightCenteredHipBelt"
+      ]
+    },
+    {
+      "id": "armPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The manufacturer crosses the arms rather than gripping the support handles during the repetition.",
+      "allowedValues": [
+        "crossedOverChest"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The pelvis rises through hip extension to the manufacturer endpoint.",
+      "allowedValues": [
+        "extendsUntilFemurAlignedWithSpine"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The illustrated knee angle opens; no numeric excursion is claimed.",
+      "allowedValues": [
+        "extendsByStartFinishDiagramInference"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Do not deliberately articulate the spine to create the repetition; zero excursion is not claimed.",
+      "allowedValues": [
+        "noDeliberateSpinalAction"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact stack-loaded belt/lever topology is distinct from free weights and plate-loaded machines.",
+      "allowedValues": [
+        "selectorizedBeltLoadedGuidedLever"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Record the selected stack value and compare only the same machine and setup.",
+      "allowedValues": [
+        "enteredExternalLoadSameFixtureOnly"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The machine lever constrains the external resistance path.",
+      "fixedValue": true
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "exact-selectorized-fixture-and-load",
+      "description": "Keep the fixture externally stack-loaded, two-sided, and limited to its reviewed action and control envelope.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "modality",
+          "value": "dynamicStrength"
+        },
+        {
+          "field": "trackingMode",
+          "value": "reps"
+        }
+      ],
+      "requirePresent": [
+        "variant.machineFixture",
+        "variant.loadAccounting"
+      ],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "requireAdditionalPrimeActions": [],
+      "requireAdditionalStabilityDemands": []
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 6,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "life-fitness-insignia-ss-glb-glute-bridge",
+      "name": "Life Fitness Insignia Machine Glute Bridge",
+      "aliases": [
+        "Machine Hip Thrust",
+        "Hip Thrust Machine",
+        "Machine Glute Bridge",
+        "Glute Drive Machine",
+        "Selectorized Glute Bridge"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "bilateralClosed",
+        "bodyPosition": "backSupportedReclined",
+        "machineFixture": "lifeFitnessInsigniaSSGLB",
+        "torsoSupport": "machineBackPad",
+        "footSupport": "bilateralMachineFootplate",
+        "footPlacement": "asFarRearwardAsComfortable",
+        "loadInterface": "tightCenteredHipBelt",
+        "armPosition": "crossedOverChest",
+        "hipMotion": "extendsUntilFemurAlignedWithSpine",
+        "kneeMotion": "extendsByStartFinishDiagramInference",
+        "spineMotion": "noDeliberateSpinalAction",
+        "resistanceGeometry": "selectorizedBeltLoadedGuidedLever",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
+        "fixedPath": true
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "life-fitness-2024-insignia-series-manual",
+        "arnold-2010-lower-limb",
+        "christophy-2012-lumbar-spine"
+      ],
+      "execution": {
+        "startingPosition": "Select the stack weight on the Life Fitness Insignia SS-GLB. Rest your upper body on the back pad, fasten the belt snugly over your hip bones with the buckle centered, and place both feet as far back on the footplate as is comfortable. Cross your arms over your chest. Record the selected stack weight and compare it only on the same machine and setup.",
+        "movement": "Raise your hips into the belt by straightening at the hips, allowing your knees to straighten as your hips rise. Keep both feet planted.",
+        "endpoint": "Stop when your thighs line up with your torso, then pause briefly.",
+        "returnPhase": "Lower your hips slowly to the starting position without letting the stack drop.",
+        "controlledJoints": "Keep your knees aligned with your feet and avoid deliberately arching or curling your back to lift the belt.",
+        "supportAndPosture": "Keep your upper body against the back pad, the belt snug and centered, and both feet on the footplate.",
+        "disqualifyingCompensations": [
+          "Lifting one foot changes the two-leg bridge into a one-leg variation.",
+          "Arching the back to raise the belt adds deliberate back motion.",
+          "Using loose or off-center belt contact changes the supported load interface."
+        ]
+      }
+    }
+  ]
+}

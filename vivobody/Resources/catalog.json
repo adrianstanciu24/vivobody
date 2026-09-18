@@ -761,6 +761,90 @@
     ]
   },
   {
+    "familyID": "belt-loaded-machine-glute-bridge",
+    "familyName": "Belt-Loaded Machine Glute Bridge",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "life-fitness-insignia-ss-glb-glute-bridge",
+    "name": "Life Fitness Insignia Machine Glute Bridge",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Machine Hip Thrust",
+      "Hip Thrust Machine",
+      "Machine Glute Bridge",
+      "Glute Drive Machine",
+      "Selectorized Glute Bridge"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Select the stack weight on the Life Fitness Insignia SS-GLB. Rest your upper body on the back pad, fasten the belt snugly over your hip bones with the buckle centered, and place both feet as far back on the footplate as is comfortable. Cross your arms over your chest. Record the selected stack weight and compare it only on the same machine and setup.",
+      "movement": "Raise your hips into the belt by straightening at the hips, allowing your knees to straighten as your hips rise. Keep both feet planted.",
+      "endpoint": "Stop when your thighs line up with your torso, then pause briefly.",
+      "returnPhase": "Lower your hips slowly to the starting position without letting the stack drop.",
+      "controlledJoints": "Keep your knees aligned with your feet and avoid deliberately arching or curling your back to lift the belt.",
+      "supportAndPosture": "Keep your upper body against the back pad, the belt snug and centered, and both feet on the footplate.",
+      "disqualifyingCompensations": [
+        "Lifting one foot changes the two-leg bridge into a one-leg variation.",
+        "Arching the back to raise the belt adds deliberate back motion.",
+        "Using loose or off-center belt contact changes the supported load interface."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "bilateral-squat",
     "familyName": "Bilateral Squat",
     "movementActions": [
@@ -13946,6 +14030,134 @@
       {
         "muscle": "extensorCarpiRadialis",
         "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "seated-machine-abdominal-crunch",
+    "familyName": "Seated Machine Abdominal Crunch",
+    "movementActions": [
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "life-fitness-insignia-ss-ab-abdominal-crunch",
+    "name": "Life Fitness Insignia Seated Abdominal Crunch",
+    "group": "core",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "trainingRole": "core",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Seated Abdominal Crunch Machine",
+      "Machine Abdominal Crunch",
+      "Ab Crunch Machine",
+      "Seated Machine Crunch"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Select the stack weight on the Life Fitness Insignia SS-AB. Adjust the seat so your lower back rests against the lumbar pad, keep your hips on the seat, and grip the handles. Record the selected stack weight and compare it only on the same machine and setup.",
+      "movement": "Curl your upper torso forward in a controlled crunch. Let your arms guide the handles without pulling them down.",
+      "endpoint": "Finish the upper-body curl while keeping your hips seated.",
+      "returnPhase": "Return slowly to the starting position without letting the stack drop.",
+      "controlledJoints": "Create the repetition by curling your back rather than deliberately hinging at your hips.",
+      "supportAndPosture": "Keep your lower back supported and your hips in contact with the seat.",
+      "disqualifyingCompensations": [
+        "Pulling down with the arms changes the abdominal crunch into an arm-driven repetition.",
+        "Lifting the hips or deliberately folding at the hips changes the strict seated crunch.",
+        "Dropping the stack replaces the controlled return with momentum."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      }
+    ]
+  },
+  {
+    "familyID": "seated-machine-back-extension",
+    "familyName": "Seated Machine Back Extension",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "life-fitness-insignia-ss-be-back-extension",
+    "name": "Life Fitness Insignia Seated Back Extension",
+    "group": "back",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Seated Back Extension Machine",
+      "Machine Back Extension",
+      "Seated Machine Back Extension",
+      "Lower Back Extension Machine"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Select the stack weight on the Life Fitness Insignia SS-BE. Sit with your hips against the lumbar pad, place your feet on the foot support, and adjust the back pad to a comfortable starting position. Grip the handles with your chest up. Record the selected stack weight and compare it only on the same machine and start setting.",
+      "movement": "Extend your back and hips together as you press your upper torso backward against the roller.",
+      "endpoint": "Stop when your lower back contacts the lumbar pad, then pause briefly.",
+      "returnPhase": "Return slowly to the starting position without letting the stack drop.",
+      "controlledJoints": "Keep the movement controlled and avoid twisting or driving the repetition with your legs.",
+      "supportAndPosture": "Keep your hips seated against the lumbar support and both feet on the foot support.",
+      "disqualifyingCompensations": [
+        "Lifting the hips off the seat changes the supported seated extension.",
+        "Pushing forcefully through the legs adds a leg-driven repetition.",
+        "Twisting or throwing the torso backward replaces the controlled extension."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "lumbarExtensors",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "secondary"
       }
     ]
   },

@@ -12,8 +12,8 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 99 |
-| Exercises | 237 |
+| Reviewed families | 102 |
+| Exercises | 240 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
@@ -29,6 +29,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [anti-extension](families/anti-extension.json) | 1 |
 | [anti-lateral-flexion](families/anti-lateral-flexion.json) | 1 |
 | [anti-rotation](families/anti-rotation.json) | 1 |
+| [belt-loaded-machine-glute-bridge](families/belt-loaded-machine-glute-bridge.json) | 1 |
 | [bilateral-squat](families/bilateral-squat.json) | 6 |
 | [bodyweight-glute-bridge](families/bodyweight-glute-bridge.json) | 1 |
 | [chest-fly](families/chest-fly.json) | 4 |
@@ -89,6 +90,8 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [scapular-pull-up](families/scapular-pull-up.json) | 1 |
 | [scapular-retraction](families/scapular-retraction.json) | 1 |
 | [seated-dip-press](families/seated-dip-press.json) | 1 |
+| [seated-machine-abdominal-crunch](families/seated-machine-abdominal-crunch.json) | 1 |
+| [seated-machine-back-extension](families/seated-machine-back-extension.json) | 1 |
 | [shoulder-abduction-raise](families/shoulder-abduction-raise.json) | 3 |
 | [shoulder-extension-isolation](families/shoulder-extension-isolation.json) | 4 |
 | [shoulder-extension-row](families/shoulder-extension-row.json) | 12 |

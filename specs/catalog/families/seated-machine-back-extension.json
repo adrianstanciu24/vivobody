@@ -1,0 +1,377 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "seated-machine-back-extension",
+  "name": "Seated Machine Back Extension",
+  "definition": "A supported compound seated back extension on the exact Life Fitness Insignia SS-BE selectorized fixture. The hips remain seated against the lumbar pad and the feet rest on the foot support while the torso presses the posterior roller backward, finishing when the lower back contacts the lumbar pad. Spinal extension and hip extension are a disclosed categorical inference from the manufacturer execution, extensor/gluteal context, and schematic hip opening; the diagrams do not partition lumbar versus pelvic excursion or establish numeric joint ranges. Lumbar extensors are primary and gluteus maximus secondary by back-extension emphasis and existing action capabilities. This is not fully restrained MedX lumbar isolation, a hip-only Roman-chair extension, an unsupported hinge, a reverse hyper, or another machine model. Lumbar extensors receive truthful region credit without a substitute body-model surface.",
+  "evidenceRefs": [
+    "life-fitness-2024-insignia-series-manual",
+    "christophy-2012-lumbar-spine",
+    "arnold-2010-lower-limb"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension"
+    ],
+    "primeActions": [
+      "spine.extension",
+      "hip.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "lumbarExtensors"
+      ],
+      "secondary": [
+        "gluteMax"
+      ],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "The seated athlete moves the torso against the posterior roller with feet supported.",
+      "allowedValues": [
+        "supportedSeated"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact fixture is used seated.",
+      "allowedValues": [
+        "seated"
+      ]
+    },
+    {
+      "id": "machineFixture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact selectorized back-extension model.",
+      "allowedValues": [
+        "lifeFitnessInsigniaSSBE"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso moves against the roller and returns to lumbar-pad contact at the endpoint.",
+      "allowedValues": [
+        "posteriorRollerAndLumbarPad"
+      ]
+    },
+    {
+      "id": "pelvisContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Seated hip contact is not a MedX pelvic restraint or a zero-motion claim.",
+      "allowedValues": [
+        "hipsAgainstLumbarPadNotFullyRestrained"
+      ]
+    },
+    {
+      "id": "footSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The feet rest on the manufacturer foot support.",
+      "allowedValues": [
+        "machineFootSupport"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso extends against the adjustable posterior roller.",
+      "allowedValues": [
+        "posteriorUpperTorsoRoller"
+      ]
+    },
+    {
+      "id": "startPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The start mechanism is adjusted to a comfortable position without a prescribed angle.",
+      "allowedValues": [
+        "adjustableBackPadComfortableStart"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Spinal extension is a categorical execution inference, not measured kinematics.",
+      "allowedValues": [
+        "extendsThenReturnsUnmeasured"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Schematic hip opening supports extension without partitioning hip and lumbar excursion.",
+      "allowedValues": [
+        "extendsWithSeatedTorsoTravelUnmeasured"
+      ]
+    },
+    {
+      "id": "endpoint",
+      "valueType": "enum",
+      "required": true,
+      "description": "The manufacturer endpoint is lower-back contact with the lumbar pad.",
+      "allowedValues": [
+        "lowerBackContactsLumbarPad"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The guided lever transmits selected stack resistance.",
+      "allowedValues": [
+        "selectorizedGuidedLever"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Record selected stack weight and compare only the same machine and start setting.",
+      "allowedValues": [
+        "enteredExternalLoadSameFixtureOnly"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The machine lever constrains the external resistance path.",
+      "fixedValue": true
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "exact-selectorized-fixture-and-load",
+      "description": "Keep the fixture externally stack-loaded, two-sided, and limited to its reviewed action and control envelope.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "modality",
+          "value": "dynamicStrength"
+        },
+        {
+          "field": "trackingMode",
+          "value": "reps"
+        }
+      ],
+      "requirePresent": [
+        "variant.machineFixture",
+        "variant.loadAccounting"
+      ],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "lumbarExtensors",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "secondary"
+        }
+      ],
+      "requireAdditionalPrimeActions": [],
+      "requireAdditionalStabilityDemands": []
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 6,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "life-fitness-insignia-ss-be-back-extension",
+      "name": "Life Fitness Insignia Seated Back Extension",
+      "aliases": [
+        "Seated Back Extension Machine",
+        "Machine Back Extension",
+        "Seated Machine Back Extension",
+        "Lower Back Extension Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "lumbarExtensors",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "supportedSeated",
+        "bodyPosition": "seated",
+        "machineFixture": "lifeFitnessInsigniaSSBE",
+        "torsoSupport": "posteriorRollerAndLumbarPad",
+        "pelvisContact": "hipsAgainstLumbarPadNotFullyRestrained",
+        "footSupport": "machineFootSupport",
+        "loadInterface": "posteriorUpperTorsoRoller",
+        "startPosition": "adjustableBackPadComfortableStart",
+        "spineMotion": "extendsThenReturnsUnmeasured",
+        "hipMotion": "extendsWithSeatedTorsoTravelUnmeasured",
+        "endpoint": "lowerBackContactsLumbarPad",
+        "resistanceGeometry": "selectorizedGuidedLever",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
+        "fixedPath": true
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "life-fitness-2024-insignia-series-manual",
+        "christophy-2012-lumbar-spine",
+        "arnold-2010-lower-limb"
+      ],
+      "execution": {
+        "startingPosition": "Select the stack weight on the Life Fitness Insignia SS-BE. Sit with your hips against the lumbar pad, place your feet on the foot support, and adjust the back pad to a comfortable starting position. Grip the handles with your chest up. Record the selected stack weight and compare it only on the same machine and start setting.",
+        "movement": "Extend your back and hips together as you press your upper torso backward against the roller.",
+        "endpoint": "Stop when your lower back contacts the lumbar pad, then pause briefly.",
+        "returnPhase": "Return slowly to the starting position without letting the stack drop.",
+        "controlledJoints": "Keep the movement controlled and avoid twisting or driving the repetition with your legs.",
+        "supportAndPosture": "Keep your hips seated against the lumbar support and both feet on the foot support.",
+        "disqualifyingCompensations": [
+          "Lifting the hips off the seat changes the supported seated extension.",
+          "Pushing forcefully through the legs adds a leg-driven repetition.",
+          "Twisting or throwing the torso backward replaces the controlled extension."
+        ]
+      }
+    }
+  ]
+}

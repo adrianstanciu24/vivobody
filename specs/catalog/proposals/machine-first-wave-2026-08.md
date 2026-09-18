@@ -1,6 +1,6 @@
 # Commercial-gym machine first wave — August 2026
 
-Status: four exact fixtures active; two candidates remain evidence-blocked.
+Status: four original exact fixtures active; the two held categories now have exact Insignia fixtures active. Other mechanisms remain unreviewed.
 
 ## Decisions
 
@@ -10,8 +10,8 @@ Status: four exact fixtures active; two candidates remain evidence-blocked.
 | Life Fitness Pro 2 PSTE seated triceps extension | Active | `elbow-extension` expansion | Supported upper arms, pivot-aligned elbows, and selectorized guided handles. |
 | Technogym Selection Glute kickback | Active | `hip-extension` expansion | Unilateral 90-degree-flexion-to-neutral fixture with the knee held near extension. |
 | Life Fitness Pro 2 PSPEC pec fly | Active | New `upper-arm-pad-chest-fly` family | Combined forearm/elbow pads plus gripped rotating handles remain separate from handled-only chest-fly history. |
-| Machine hip thrust / glute drive | Proposal only | Unassigned | Available research compares a machine condition but does not identify the tested model or resistance topology. |
-| Seated abdominal crunch machine | Proposal only | Unassigned | Available EMG identifies a Technogym seated crunch but does not resolve whether the repetition is strict spinal flexion or includes deliberate hip/pelvis motion. |
+| Machine hip thrust / glute drive | Exact SS-GLB active | `belt-loaded-machine-glute-bridge` | Life Fitness Insignia SS-GLB selectorized belt fixture only; other mechanisms do not share its history. |
+| Seated abdominal crunch machine | Exact SS-AB active | `seated-machine-abdominal-crunch` | Life Fitness Insignia SS-AB seated upper-torso crunch only; other abdominal machines remain unreviewed. |
 
 ## Evidence and product gate
 
@@ -33,7 +33,15 @@ selected assistance makes the repetition easier. Generic aliases remain
 searchable, but stable catalog IDs keep incompatible machine mechanisms out of
 the same workout history.
 
-## Concrete unlocks for held candidates
+## Original holds and September resolution
+
+The original evidence gaps below describe the unidentified machine conditions,
+not a blanket requirement for measured kinematics or exact EMG. On 2026-09-18,
+the owner authorized the three [common machine additions](common-machine-additions-2026-09.md).
+The existing 2024 Insignia manufacturer manual and start/finish diagrams resolve
+exact SS-AB and SS-GLB fixture geometry; existing anatomical capabilities support
+explicitly bounded categorical action and role inferences. They do not activate
+the unidentified research machines or every fixture using the same search alias.
 
 - **Machine hip thrust:** identify the exact tested or owner-selected model and
   obtain an authoritative manual that fixes the body contacts, lever/load
@@ -53,7 +61,8 @@ the same workout history.
   a Technogym seated crunch and measures abdominal, oblique, and rectus-femoris
   EMG but does not report the hip or pelvic kinematics needed for ownership.
 
-Neither held candidate is emitted into the runtime catalog, reserves an alias,
-or contributes to catalog counts.
+The exact SS-AB and SS-GLB records are now emitted into the runtime catalog and
+have conventional search aliases. The unidentified research fixtures remain
+excluded; aliases do not establish load equivalence between mechanisms.
 
-Source verification date: **2026-08-29**.
+Original source verification date: **2026-08-29**. Insignia follow-up: **2026-09-18**.
