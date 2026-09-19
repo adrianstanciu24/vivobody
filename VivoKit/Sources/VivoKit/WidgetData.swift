@@ -10,7 +10,7 @@
 import Foundation
 
 public nonisolated enum WidgetShared {
-    public static let appGroup = "group.astanciu.vivobody"
+    public static let appGroup = "group.astanciu.vivobody.shared"
     public static let upNextKind = "vivobody.upNext"
     public static let consistencyKind = "vivobody.consistency"
     public static let signatureKind = "vivobody.signature"
