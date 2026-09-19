@@ -38,6 +38,19 @@ import VivoKit
             ]).resetRequest == nil)
         }
 
+        @Test func onboardingDefaultCanBePreparedBeforeAppRootInitialization() throws {
+            let defaultsName = "DebugSeedRoutingTests.defaults.\(UUID().uuidString)"
+            let defaults = try #require(UserDefaults(suiteName: defaultsName))
+            defer { defaults.removePersistentDomain(forName: defaultsName) }
+
+            DebugStoreResetter.prepareDefaults(
+                ifRequested: DebugStoreResetRequest(shouldShowOnboarding: true),
+                defaults: defaults
+            )
+
+            #expect(defaults.bool(forKey: SettingsKey.onboardingCompleted) == false)
+        }
+
         @Test func launchStepsPreserveTheCompleteHistoricalDispatchOrder() {
             let arguments = [
                 "app",

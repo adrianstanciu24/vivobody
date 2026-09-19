@@ -14,6 +14,17 @@ import VivoKit
 
     @MainActor
     enum DebugStoreResetter {
+        static func prepareDefaults(
+            ifRequested request: DebugStoreResetRequest?,
+            defaults: UserDefaults = .standard
+        ) {
+            guard let request else { return }
+            defaults.set(
+                !request.shouldShowOnboarding,
+                forKey: SettingsKey.onboardingCompleted
+            )
+        }
+
         static func reset(
             ifRequested request: DebugStoreResetRequest?,
             in context: ModelContext,
@@ -21,10 +32,7 @@ import VivoKit
             sharedDefaults: UserDefaults? = UserDefaults(suiteName: WidgetShared.appGroup)
         ) {
             guard let request else { return }
-            defaults.set(
-                !request.shouldShowOnboarding,
-                forKey: SettingsKey.onboardingCompleted
-            )
+            prepareDefaults(ifRequested: request, defaults: defaults)
             defaults.removeObject(forKey: SettingsKey.restNotificationsEnabled)
             defaults.removeObject(forKey: SettingsKey.hasSeenRestNotificationPrimer)
             deleteAll(WorkoutSession.self, in: context)

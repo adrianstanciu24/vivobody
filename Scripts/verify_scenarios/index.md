@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 153.
+Scenario files: 156.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -138,6 +138,9 @@ Scenario files: 153.
 | [insights-stamina](insights-stamina.json) | insights | `--ui-test-insights-dimensions --static-body` |
 | [library-training-role-filters](library-training-role-filters.json) | library | None declared |
 | [me-showcase](me-showcase.json) | me | `--ui-test-me-showcase --static-body -settings.weightUnit lb` |
+| [onboarding-first-workout-accessibility](onboarding-first-workout-accessibility.json) | today | `--ui-test-onboarding -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [onboarding-first-workout-light](onboarding-first-workout-light.json) | today | `--ui-test-onboarding -settings.appearance light` |
+| [onboarding-first-workout](onboarding-first-workout.json) | today | `--ui-test-onboarding -settings.appearance dark` |
 | [receipt-live-summary-accessibility](receipt-live-summary-accessibility.json) | today | `--ui-test-active-partial --ui-test-receipt-summary --ui-test-widget-start-request --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [receipt-live-summary-light](receipt-live-summary-light.json) | today | `--ui-test-active-partial --ui-test-receipt-summary --ui-test-widget-start-request --static-body -settings.weightUnit lb -settings.appearance light` |
 | [receipt-live-summary](receipt-live-summary.json) | today | `--ui-test-active-partial --ui-test-receipt-summary --ui-test-widget-start-request --static-body -settings.weightUnit lb -settings.appearance dark` |

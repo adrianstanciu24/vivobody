@@ -66,6 +66,17 @@ struct VivobodyApp: App {
         }
     }()
 
+    init() {
+        #if DEBUG
+            // AppRoot's @AppStorage values are initialized before its
+            // onAppear reset. Prepare the first-run gate one level earlier so
+            // --ui-test-onboarding deterministically presents its cover.
+            DebugStoreResetter.prepareDefaults(
+                ifRequested: UITestSupport.route().resetRequest
+            )
+        #endif
+    }
+
     var body: some Scene {
         WindowGroup {
             if let dependencies {

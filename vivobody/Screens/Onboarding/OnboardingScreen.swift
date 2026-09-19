@@ -357,6 +357,7 @@ struct OnboardingScreen: View {
         ) {
             saveAndStart()
         }
+        .accessibilityIdentifier("onboardingStartButton")
         .disabled(isSaving)
         .opacity(isSaving ? Opacity.medium : 1)
         .accessibilityHint(

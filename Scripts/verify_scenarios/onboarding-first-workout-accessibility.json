@@ -1,0 +1,119 @@
+{
+  "name": "onboarding-first-workout-accessibility",
+  "launch": {
+    "reset": true,
+    "resetPermissions": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-onboarding",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "onboardingStartButton",
+          "label": "Start",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "tap": {
+        "identifier": "onboardingStartButton",
+        "label": "Start",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Fresh Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Fresh Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "Add Exercise",
+        "role": "AXGroup"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Flat Dumbbell Fly, Dumbbell · Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Add to Workout",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "tap": {
+        "label": "Add to Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Flat Dumbbell Fly",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "completeSetButton",
+          "role": "AXButton",
+          "value": "not completed",
+          "enabled": true
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "endWorkoutButton",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "completeSetButton",
+      "role": "AXButton",
+      "value": "not completed",
+      "enabled": true
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "onboardingStartButton",
+      "visible": true
+    },
+    {
+      "identifier": "Add Exercise",
+      "visible": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

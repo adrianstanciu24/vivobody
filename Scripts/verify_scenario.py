@@ -365,6 +365,11 @@ class ScenarioRunner:
             ["xcrun", "simctl", "terminate", self.udid, self.bundle_id],
             check=False,
         )
+        if configuration.get("resetPermissions", False):
+            self.command([
+                "xcrun", "simctl", "privacy", self.udid,
+                "reset", "all", self.bundle_id,
+            ])
         self.command(
             ["xcrun", "simctl", "launch", self.udid, self.bundle_id, *arguments]
         )
@@ -835,13 +840,17 @@ def _string_list(value: Any, field: str) -> list[str]:
 def validate_launch_configuration(configuration: Any, field: str) -> None:
     if not isinstance(configuration, Mapping):
         raise ScenarioFailure(f"Scenario {field} must be an object.")
-    unknown = set(configuration) - {"reset", "tab", "arguments"}
+    unknown = set(configuration) - {"reset", "resetPermissions", "tab", "arguments"}
     if unknown:
         raise ScenarioFailure(
             f"Scenario {field} has unsupported field(s): {', '.join(sorted(unknown))}."
         )
     if "reset" in configuration and not isinstance(configuration["reset"], bool):
         raise ScenarioFailure(f"Scenario {field}.reset must be a boolean.")
+    if "resetPermissions" in configuration and not isinstance(
+        configuration["resetPermissions"], bool
+    ):
+        raise ScenarioFailure(f"Scenario {field}.resetPermissions must be a boolean.")
     tab = configuration.get("tab")
     if tab is not None and tab not in {"today", "history", "library", "insights", "me"}:
         raise ScenarioFailure(f"Scenario {field}.tab has unknown value {tab!r}.")

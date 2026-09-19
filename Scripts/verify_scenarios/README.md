@@ -24,6 +24,7 @@ launch arguments, including fixture, appearance, and text-size flags.
 
 | Feature | Starting flows | Additional states to consider | Focused logic suites |
 |---|---|---|---|
+| First run | [Onboarding to first workout](onboarding-first-workout.json) | [Light](onboarding-first-workout-light.json) and [Accessibility Large](onboarding-first-workout-accessibility.json); the flow must reach the active workout without an automatic permission interruption | [DebugSeedRoutingTests](../../vivobodyTests/DebugSeedRoutingTests.swift) |
 | Today and start/resume | [today-actions](today-actions.json), [today-up-next](today-up-next.json) | Empty, scheduled, active, and restored states in `today-actions`; [journal semantic grouping](today-journal-accessibility.json) | [TodayUpNextPresentationTests](../../vivobodyTests/TodayUpNextPresentationTests.swift), [UpNextTests](../../vivobodyTests/UpNextTests.swift) |
 | Active sets and rest | [start-complete-rest](start-complete-rest.json), [superset completion](active-superset-completion.json), [add superset partner](active-superset-add-partner.json) | [Restoration](active-completion-restoration.json), [zero-set recovery](active-zero-set-recovery.json), `active-*` tracking variants in the directory; save-failure paths are unit contracts | [ActiveSetCompletionTests](../../vivobodyTests/ActiveSetCompletionTests.swift), [WorkoutSessionArchiveFailureTests](../../vivobodyTests/WorkoutSessionArchiveFailureTests.swift) |
 | Active exercise replacement | [replacement](replace-active-exercise.json), [substitution sheet](exercise-substitution-sheet.json), [removal](active-remove-exercise.json) | [Blocked replacement](replace-active-exercise-blocked.json) | [WorkoutExerciseReplacementTests](../../vivobodyTests/WorkoutExerciseReplacementTests.swift), [ExerciseSubstitutionTests](../../vivobodyTests/ExerciseSubstitutionTests.swift) |
@@ -62,6 +63,8 @@ framework chatter or user-owned values.
 ## Launch
 
 - `reset`: adds `--ui-test-reset` when true.
+- `resetPermissions`: resets this app's simulator permissions before launch so
+  first-request flows begin from the system's undetermined state.
 - `tab`: adds `--verify-tab <tab>`.
 - `arguments`: additional deterministic debug launch arguments. Pass
   `--static-body` on any scenario that lands on a screen with the 3D body
