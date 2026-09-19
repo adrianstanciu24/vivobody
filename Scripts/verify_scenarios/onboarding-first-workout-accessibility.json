@@ -16,6 +16,38 @@
     {
       "scrollTo": {
         "selector": {
+          "identifier": "onboardingAddBodyWeightButton",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "tap": {
+        "identifier": "onboardingAddBodyWeightButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "onboardingNotNowButton",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "tap": {
+        "identifier": "onboardingNotNowButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
           "identifier": "onboardingStartButton",
           "label": "Start",
           "role": "AXButton"

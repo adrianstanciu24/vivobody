@@ -66,23 +66,28 @@ struct AppRoot: View {
         AppAppearance(rawValue: appearanceRaw) ?? .system
     }
 
-    /// First-launch gate. Once true the welcome screen never shows
-    /// again. The fullScreenCover binding is derived from its inverse
-    /// so tapping Start (which sets this true) dismisses the cover.
+    /// First-launch gate. Onboarding is the window's root until this flips,
+    /// so the main tab hierarchy cannot paint behind a later modal presentation.
     @AppStorage(SettingsKey.onboardingCompleted)
     private var onboardingCompleted: Bool = SettingsDefaults.onboardingCompleted
 
-    private var showOnboarding: Binding<Bool> {
-        Binding(
-            get: { !onboardingCompleted },
-            set: { presented in onboardingCompleted = !presented }
-        )
+    var body: some View {
+        Group {
+            if onboardingCompleted {
+                mainApp
+            } else {
+                OnboardingScreen(onStart: { onboardingCompleted = true })
+            }
+        }
+        .preferredColorScheme(appearance.colorScheme)
+        .tint(Tint.primary)
+        .environment(\.sessionAnalytics, appState.analytics)
     }
 
-    var body: some View {
+    private var mainApp: some View {
         @Bindable var workout = appState.workout
 
-        tabView
+        return tabView
             // The one archive analytics feeder in the app. Its ModelActor
             // store resolves SwiftData changes before publishing values.
             .background(
@@ -103,8 +108,6 @@ struct AppRoot: View {
                     RestExpiryTicker(workout: workout)
                 }
             }
-            .preferredColorScheme(appearance.colorScheme)
-            .tint(Tint.primary)
             .miniBarAccessory(
                 session: miniBarSession(workout),
                 onExpand: { workout.expandWorkout() }
@@ -130,10 +133,6 @@ struct AppRoot: View {
                 }
                 #if DEBUG
                     let debugRoute = UITestSupport.route()
-                    DebugStoreResetter.reset(
-                        ifRequested: debugRoute.resetRequest,
-                        in: modelContext
-                    )
                 #endif
                 let catalogReconciliation = try? CatalogLaunchReconciler.reconcile(
                     in: modelContext
@@ -283,10 +282,6 @@ struct AppRoot: View {
                 }
                 .presentationDragIndicator(.visible)
             }
-            .fullScreenCover(isPresented: showOnboarding) {
-                OnboardingScreen(onStart: { onboardingCompleted = true })
-            }
-            .environment(\.sessionAnalytics, appState.analytics)
     }
 
     /// The session the accessory pill should render, if any. Today owns

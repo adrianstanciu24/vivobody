@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UIKit
 import VivoKit
 
 struct BareScrubber: View {
@@ -65,10 +66,6 @@ struct BareScrubber: View {
     @State private var nudgeOffset: CGFloat = 0
     @State private var hasNudged = false
     @State private var nudgeTask: Task<Void, Never>?
-    @State private var naturalWidth: CGFloat = 0
-    @State private var templateWidth: CGFloat = 0
-    @State private var templateHeight: CGFloat = 0
-    @State private var availableWidth: CGFloat = 0
 
     /// Value-settle spring. When Reduce Motion is on, skip the
     /// decorative spring so the number snaps to its new value.
@@ -200,61 +197,39 @@ struct BareScrubber: View {
         }
     }
 
-    /// Invisible worst-case row: the range's upper bound rendered with
-    /// the same fonts and spacing as `numberUnitRow`. Its measured
-    /// width drives `fitScale`, so the scale is fixed for the whole
-    /// scrub regardless of the live value's digit count. A plain Text
-    /// matches DigitTicker's per-glyph width because the font is
-    /// monospaced.
-    private var sizingRow: some View {
-        HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-            Text(templateFormat(range.upperBound))
-                .font(.system(size: fontSize, weight: .bold))
-                .monospacedDigit()
-            if !unit.isEmpty {
-                Text(unit)
-                    .font(.system(size: unitFontSize, weight: .semibold, design: .monospaced))
-            }
-        }
-    }
-
     /// When `fitsWidth` is off, the number keeps its intrinsic width
-    /// (galleries, editors). When on, the layout element is a clear
-    /// base that takes exactly the offered width and the sizing row's
-    /// height; the live number row renders in an OVERLAY on that
-    /// base. Overlays never negotiate layout, so the intrinsic 104pt
-    /// row can never stretch the parent card — a yet-unmeasured
-    /// worst-case value used to overflow the card, get its own
-    /// stretched width measured back as "available", and freeze the
-    /// whole card oversized until the digit count dropped.
-    /// `scaleEffect` doesn't change layout, so measuring stays free
-    /// of feedback.
+    /// (galleries, editors). When on, a single GeometryReader supplies the
+    /// offered width while deterministic font metrics provide the live and
+    /// worst-case row sizes. No geometry value is written into view state, so
+    /// insertion needs one layout transaction rather than a measurement loop.
     @ViewBuilder
     private var heroLayout: some View {
         if fitsWidth {
-            Color.clear
-                .frame(maxWidth: .infinity)
-                .frame(height: max(fontSize, templateHeight))
-                .background(widthReader($availableWidth))
-                .overlay(alignment: fittedContentAlignment) {
-                    HStack(alignment: .center, spacing: Space.sm) {
-                        numberUnitRow
-                            .fixedSize(horizontal: true, vertical: false)
-                            .background(widthReader($naturalWidth))
-                            .scaleEffect(fitScale, anchor: fittedScaleAnchor)
-                            .frame(
-                                width: naturalWidth > 0 ? naturalWidth * fitScale : nil,
-                                alignment: fittedContentAlignment
-                            )
-                        hintChevrons
-                    }
+            let liveSize = rowSize(for: formattedValue)
+            let templateSize = rowSize(for: templateFormat(range.upperBound))
+            GeometryReader { proxy in
+                let scale = fitScale(
+                    availableWidth: proxy.size.width,
+                    templateWidth: templateSize.width
+                )
+                HStack(alignment: .center, spacing: Space.sm) {
+                    numberUnitRow
+                        .fixedSize(horizontal: true, vertical: false)
+                        .scaleEffect(scale, anchor: fittedScaleAnchor)
+                        .frame(
+                            width: liveSize.width * scale,
+                            height: templateSize.height,
+                            alignment: fittedContentAlignment
+                        )
+                    hintChevrons
                 }
-                .overlay(alignment: .leading) {
-                    sizingRow
-                        .fixedSize()
-                        .background(sizeReader($templateWidth, $templateHeight))
-                        .hidden()
-                }
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity,
+                    alignment: fittedContentAlignment
+                )
+            }
+            .frame(height: max(fontSize, templateSize.height))
         } else {
             HStack(alignment: .center, spacing: Space.sm) {
                 numberUnitRow
@@ -268,8 +243,8 @@ struct BareScrubber: View {
     /// into the offered width, reserving a little room for the
     /// chevrons while the first-use hint is showing. Constant during a
     /// scrub because it depends on the range, not the live value.
-    private var fitScale: CGFloat {
-        guard fitsWidth, templateWidth > 0, availableWidth > 0 else { return 1 }
+    private func fitScale(availableWidth: CGFloat, templateWidth: CGFloat) -> CGFloat {
+        guard templateWidth > 0, availableWidth > 0 else { return 1 }
         let reserve: CGFloat = (showsScrubHint && !hasScrubbed) ? (Space.sm + 16) : 0
         let target = max(1, availableWidth - reserve)
         guard templateWidth > target else { return 1 }
@@ -284,30 +259,19 @@ struct BareScrubber: View {
         centersValue ? .center : .leading
     }
 
-    /// Writes a view's measured width into `binding`. Uses
-    /// onAppear/onChange (main-actor) rather than a PreferenceKey so it
-    /// stays clear of Swift 6 Sendable-closure warnings.
-    private func widthReader(_ binding: Binding<CGFloat>) -> some View {
-        GeometryReader { proxy in
-            Color.clear
-                .onAppear { binding.wrappedValue = proxy.size.width }
-                .onChange(of: proxy.size.width) { _, w in binding.wrappedValue = w }
+    private func rowSize(for number: String) -> CGSize {
+        let numberFont = UIFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .bold)
+        let numberSize = (number as NSString).size(withAttributes: [.font: numberFont])
+        guard !unit.isEmpty else {
+            return CGSize(width: ceil(numberSize.width), height: ceil(numberFont.lineHeight))
         }
-    }
 
-    /// Same as `widthReader`, but captures both dimensions.
-    private func sizeReader(_ width: Binding<CGFloat>, _ height: Binding<CGFloat>) -> some View {
-        GeometryReader { proxy in
-            Color.clear
-                .onAppear {
-                    width.wrappedValue = proxy.size.width
-                    height.wrappedValue = proxy.size.height
-                }
-                .onChange(of: proxy.size) { _, s in
-                    width.wrappedValue = s.width
-                    height.wrappedValue = s.height
-                }
-        }
+        let unitFont = UIFont.monospacedSystemFont(ofSize: unitFontSize, weight: .semibold)
+        let unitSize = (unit as NSString).size(withAttributes: [.font: unitFont])
+        return CGSize(
+            width: ceil(numberSize.width + Space.sm + unitSize.width),
+            height: ceil(max(numberFont.lineHeight, unitFont.lineHeight))
+        )
     }
 
     // MARK: - First-use hint

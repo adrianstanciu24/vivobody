@@ -49,8 +49,8 @@ nonisolated enum SettingsKey {
     /// this flag before writing.
     static let healthKitEnabled = "settings.healthKitEnabled"
     /// Bool — whether the first-launch welcome screen has been
-    /// dismissed. Gates the one-time OnboardingScreen presented over
-    /// AppRoot; flips true the moment the user taps Start.
+    /// completed. Gates AppRoot between OnboardingScreen and the main
+    /// tab hierarchy; flips true the moment the user taps Start.
     static let onboardingCompleted = "settings.onboardingCompleted"
     /// Bool — whether the user has ever performed a real vertical
     /// scrub on a number scrubber. Gates the in-context first-use

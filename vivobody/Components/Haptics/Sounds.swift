@@ -65,7 +65,7 @@ import AVFoundation
 
 @MainActor
 enum Sounds {
-    enum Effect: String, CaseIterable {
+    nonisolated enum Effect: String, CaseIterable {
         case click, commit, alert
         case setCompletion = "set-completion"
         case personalRecord = "personal-record"
@@ -102,6 +102,7 @@ enum Sounds {
     private static var recordedPlayers: [Effect: AVAudioPlayerNode] = [:]
     private static var standardScrubBuffers: [AVAudioPCMBuffer] = []
     private static var deepScrubBuffers: [AVAudioPCMBuffer] = []
+    private static var bufferPreparation: Task<Void, Never>?
     private static var nextStandardScrubVariant = 0
     private static var nextDeepScrubVariant = 0
 
@@ -131,14 +132,33 @@ enum Sounds {
     /// Call at app launch and on every foreground transition
     /// (Haptics.prepare() forwards here). Safe to call repeatedly.
     static func prepare() {
-        if buffers.isEmpty { loadBuffers() }
-        if standardScrubBuffers.isEmpty || deepScrubBuffers.isEmpty {
-            loadScrubBuffers()
+        if buffers.isEmpty || standardScrubBuffers.isEmpty || deepScrubBuffers.isEmpty {
+            guard bufferPreparation == nil else { return }
+            bufferPreparation = Task {
+                let prepared = await Task.detached(priority: .utility) {
+                    loadPreparedBuffers()
+                }.value
+                buffers = prepared.buffers
+                recordedBuffers = prepared.recordedBuffers
+                standardScrubBuffers = prepared.standardScrubBuffers
+                deepScrubBuffers = prepared.deepScrubBuffers
+                bufferPreparation = nil
+                startEngineIfNeeded()
+            }
+            return
         }
         startEngineIfNeeded()
     }
 
-    private static func loadBuffers() {
+    private nonisolated struct PreparedBuffers: @unchecked Sendable {
+        var buffers: [Effect: AVAudioPCMBuffer] = [:]
+        var recordedBuffers: [Effect: AVAudioPCMBuffer] = [:]
+        var standardScrubBuffers: [AVAudioPCMBuffer] = []
+        var deepScrubBuffers: [AVAudioPCMBuffer] = []
+    }
+
+    private nonisolated static func loadPreparedBuffers() -> PreparedBuffers {
+        var prepared = PreparedBuffers()
         for effect in Effect.allCases {
             guard
                 let buffer = loadBuffer(
@@ -147,25 +167,23 @@ enum Sounds {
                 )
             else { continue }
             if effect.isRecorded {
-                recordedBuffers[effect] = buffer
+                prepared.recordedBuffers[effect] = buffer
             } else {
-                buffers[effect] = buffer
+                prepared.buffers[effect] = buffer
             }
         }
+        prepared.standardScrubBuffers = loadScrubBuffers(prefix: "sfx-scrub-reps")
+        prepared.deepScrubBuffers = loadScrubBuffers(prefix: "sfx-scrub-load")
+        return prepared
     }
 
-    private static func loadScrubBuffers() {
-        standardScrubBuffers = loadScrubBuffers(prefix: "sfx-scrub-reps")
-        deepScrubBuffers = loadScrubBuffers(prefix: "sfx-scrub-load")
-    }
-
-    private static func loadScrubBuffers(prefix: String) -> [AVAudioPCMBuffer] {
+    private nonisolated static func loadScrubBuffers(prefix: String) -> [AVAudioPCMBuffer] {
         (1 ... 6).compactMap { variant in
             loadBuffer(named: "\(prefix)-\(variant)", extension: "caf")
         }
     }
 
-    private static func loadBuffer(
+    private nonisolated static func loadBuffer(
         named name: String,
         extension ext: String
     ) -> AVAudioPCMBuffer? {

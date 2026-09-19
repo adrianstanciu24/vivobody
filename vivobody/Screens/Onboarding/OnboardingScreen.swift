@@ -2,8 +2,8 @@
 //  OnboardingScreen.swift
 //  vivobody
 //
-//  The one-time first-launch welcome, presented full-screen over
-//  AppRoot until SettingsKey.onboardingCompleted flips true.
+//  The one-time first-launch welcome. AppRoot renders it as the window's
+//  root until SettingsKey.onboardingCompleted flips true.
 //
 //  Deliberately NOT a wizard. workout-app-principles.md cuts
 //  onboarding wizards, tutorial carousels, and motivational hero copy,
@@ -13,8 +13,8 @@
 //  Permissions (Health, notifications) remain contextual.
 //
 //  The user explicitly opts into body-weight entry before the scrubber is
-//  shown. Tapping Start persists it only in that state, then calls AppRoot,
-//  which sets the @AppStorage completion flag and dismisses the cover. The
+//  activated. Tapping Start persists it only in that state, then calls AppRoot,
+//  which sets the @AppStorage completion flag and switches to the main app. The
 //  unit choice writes straight to SettingsKey.weightUnit; canonical storage
 //  remains pounds at the scrubber boundary.
 //
@@ -25,7 +25,7 @@ import VivoKit
 
 struct OnboardingScreen: View {
     /// Raised when the user taps Start. AppRoot owns the
-    /// onboarding-completed flag and the cover's dismissal.
+    /// onboarding-completed flag and transition to the main app.
     let onStart: () -> Void
 
     @Environment(\.modelContext) private var context
@@ -74,11 +74,13 @@ struct OnboardingScreen: View {
             .scrollIndicators(.hidden)
             .screenBackground()
             .onAppear(perform: hydrate)
+            .task(prepareFeedback)
             .saveErrorAlert($saveError)
         } else {
             standardLayout
                 .screenBackground()
                 .onAppear(perform: hydrate)
+                .task(prepareFeedback)
                 .saveErrorAlert($saveError)
         }
     }
@@ -89,24 +91,19 @@ struct OnboardingScreen: View {
             // leaves the centre to the one piece of personal setup.
             brand
                 .padding(.top, Space.section)
-                .settleIn(0)
 
             Spacer(minLength: Space.md)
 
             VStack(spacing: Space.section + Space.xl) {
                 bodyWeightPicker
-
-                if includesBodyWeight {
-                    unitPicker
-                }
+                unitPicker
+                    .modifier(OnboardingStateVisibility(isVisible: includesBodyWeight))
             }
             .frame(maxWidth: 360)
-            .settleIn(1)
 
             Spacer(minLength: Space.xl)
 
             onboardingActions
-                .settleIn(2)
         }
         .padding(.horizontal, Space.gutter)
         .padding(.bottom, Space.xl)
@@ -119,19 +116,15 @@ struct OnboardingScreen: View {
     private var accessibilityLayout: some View {
         VStack(spacing: Space.section) {
             brand
-                .settleIn(0)
 
             VStack(spacing: Space.section) {
                 bodyWeightPicker
-                if includesBodyWeight {
-                    unitPicker
-                }
+                unitPicker
+                    .modifier(OnboardingStateVisibility(isVisible: includesBodyWeight))
             }
             .frame(maxWidth: 360)
-            .settleIn(1)
 
             onboardingActions
-                .settleIn(2)
         }
         .padding(.horizontal, Space.gutter)
         .padding(.vertical, Space.section)
@@ -173,24 +166,28 @@ struct OnboardingScreen: View {
             Text("Body weight · Optional")
                 .panelLegend()
 
-            if includesBodyWeight {
-                WeightScrubber(
-                    canonicalWeight: $bodyWeight,
-                    purpose: .body,
-                    displayStep: bodyWeightStep,
-                    label: nil,
-                    pointsPerStep: 8,
-                    valueFontSize: 88,
-                    presentation: .bare,
-                    showsScrubHint: true,
-                    performsScrubNudge: true,
-                    keepsRailVisible: true,
-                    centersValue: true
-                )
+            ZStack {
+                VStack(spacing: Space.md) {
+                    WeightScrubber(
+                        canonicalWeight: $bodyWeight,
+                        purpose: .body,
+                        displayStep: bodyWeightStep,
+                        label: nil,
+                        pointsPerStep: 8,
+                        valueFontSize: 88,
+                        presentation: .bare,
+                        showsScrubHint: includesBodyWeight,
+                        performsScrubNudge: includesBodyWeight,
+                        keepsRailVisible: true,
+                        centersValue: true
+                    )
 
-                bodyWeightStepControl
-            } else {
+                    bodyWeightStepControl
+                }
+                .modifier(OnboardingStateVisibility(isVisible: includesBodyWeight))
+
                 bodyWeightEmptyState
+                    .modifier(OnboardingStateVisibility(isVisible: !includesBodyWeight))
             }
         }
         .accessibilityElement(children: .contain)
@@ -210,8 +207,8 @@ struct OnboardingScreen: View {
                 .frame(maxWidth: 280)
 
             Button {
-                Haptics.selection()
                 includesBodyWeight = true
+                Haptics.selection()
             } label: {
                 Label("Add body weight", systemImage: "plus")
                     .font(Typography.headline)
@@ -222,6 +219,7 @@ struct OnboardingScreen: View {
             .buttonStyle(.plain)
             .coloredGlassControl(cornerRadius: Radius.pill)
             .padding(.top, Space.lg)
+            .accessibilityIdentifier("onboardingAddBodyWeightButton")
             .accessibilityHint("Shows an adjustable body weight")
         }
     }
@@ -326,21 +324,21 @@ struct OnboardingScreen: View {
 
     private var onboardingActions: some View {
         VStack(spacing: Space.md) {
-            if includesBodyWeight {
-                Button {
-                    Haptics.selection()
-                    includesBodyWeight = false
-                } label: {
-                    Text("Not now")
-                        .font(Typography.headline)
-                        .foregroundStyle(Ink.secondary)
-                        .frame(maxWidth: .infinity, minHeight: Space.tapMin)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .coloredGlassControl(cornerRadius: Radius.chip)
-                .accessibilityHint("Continues setup without recording body weight")
+            Button {
+                includesBodyWeight = false
+                Haptics.selection()
+            } label: {
+                Text("Not now")
+                    .font(Typography.headline)
+                    .foregroundStyle(Ink.secondary)
+                    .frame(maxWidth: .infinity, minHeight: Space.tapMin)
+                    .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
+            .coloredGlassControl(cornerRadius: Radius.chip)
+            .accessibilityIdentifier("onboardingNotNowButton")
+            .accessibilityHint("Continues setup without recording body weight")
+            .modifier(OnboardingStateVisibility(isVisible: includesBodyWeight))
 
             startButton
         }
@@ -378,6 +376,13 @@ struct OnboardingScreen: View {
         snapBodyWeight(to: bodyWeightStep, unit: weightUnit)
     }
 
+    private func prepareFeedback() async {
+        // Commit the first frame before warming feedback. Audio buffers decode
+        // on a utility task, so preparation cannot hold up either toggle.
+        await Task.yield()
+        Haptics.prepare()
+    }
+
     private func snapBodyWeight(to step: Double, unit: WeightUnit) {
         let displayed = WeightFormatter.toDisplay(bodyWeight, unit: unit)
         let snapped = (displayed / step).rounded() * step
@@ -411,6 +416,21 @@ struct OnboardingScreen: View {
             saveError = SaveErrorBox(error)
             isSaving = false
         }
+    }
+}
+
+/// Keeps both onboarding states in the render tree from the first frame.
+/// Toggling body-weight entry then changes only presentation and interaction;
+/// it does not synchronously construct and compile a new glass-heavy subtree.
+private struct OnboardingStateVisibility: ViewModifier {
+    let isVisible: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(isVisible ? 1 : 0)
+            .allowsHitTesting(isVisible)
+            .accessibilityHidden(!isVisible)
+            .disabled(!isVisible)
     }
 }
 

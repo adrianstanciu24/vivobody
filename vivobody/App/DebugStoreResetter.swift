@@ -49,14 +49,14 @@ import VivoKit
             try? context.saveOrRollback()
         }
 
-        private static func deleteAll<T: PersistentModel>(
-            _ model: T.Type,
+        private static func deleteAll(
+            _ model: (some PersistentModel).Type,
             in context: ModelContext
         ) {
-            let models = (try? context.fetch(FetchDescriptor<T>())) ?? []
-            for model in models {
-                context.delete(model)
-            }
+            // SwiftData's model delete executes in the persistent store. Avoid
+            // materializing every historical graph on MainActor merely to mark
+            // each instance for deletion during deterministic DEBUG setup.
+            try? context.delete(model: model)
         }
     }
 

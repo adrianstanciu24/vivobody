@@ -68,9 +68,9 @@ struct VivobodyApp: App {
 
     init() {
         #if DEBUG
-            // AppRoot's @AppStorage values are initialized before its
-            // onAppear reset. Prepare the first-run gate one level earlier so
-            // --ui-test-onboarding deterministically presents its cover.
+            // AppRoot reads this default while it initializes. Store mutation
+            // belongs to DebugLaunchRoot's explicit bootstrap phase instead of
+            // blocking the application initializer and its first frame.
             DebugStoreResetter.prepareDefaults(
                 ifRequested: UITestSupport.route().resetRequest
             )
@@ -80,27 +80,78 @@ struct VivobodyApp: App {
     var body: some Scene {
         WindowGroup {
             if let dependencies {
-                AppRoot(
-                    analyticsSnapshotStore: dependencies.analyticsSnapshotStore
-                )
-                .warmUpKeyboardOnce()
                 #if DEBUG
-                    .task {
-                        // Preserve manual fixture timing after first paint; the
-                        // pure route retains the former exclusive precedence.
-                        DebugSeedCoordinator.seedManualFixture(
-                            UITestSupport.route().manualFixture,
-                            in: dependencies.container.mainContext
-                        )
-                    }
-                #endif
+                    DebugLaunchRoot(
+                        analyticsSnapshotStore: dependencies.analyticsSnapshotStore
+                    )
+                    .warmUpKeyboardOnce()
                     .modelContainer(dependencies.container)
+                #else
+                    AppRoot(
+                        analyticsSnapshotStore: dependencies.analyticsSnapshotStore
+                    )
+                    .warmUpKeyboardOnce()
+                    .modelContainer(dependencies.container)
+                #endif
             } else {
                 StorageRecoveryView()
             }
         }
     }
 }
+
+#if DEBUG
+    /// Keeps deterministic reset and manual-fixture work out of App.init and
+    /// completes it before any tappable product surface is mounted. Explicit
+    /// heavy fixtures can delay this bootstrap state, but can never starve an
+    /// already-visible onboarding or tab interaction.
+    private struct DebugLaunchRoot: View {
+        let analyticsSnapshotStore: AnalyticsSnapshotStore
+
+        @Environment(\.modelContext) private var modelContext
+        @State private var isPrepared: Bool
+
+        private let route: UITestRoute
+
+        init(analyticsSnapshotStore: AnalyticsSnapshotStore) {
+            self.analyticsSnapshotStore = analyticsSnapshotStore
+            let route = UITestSupport.route()
+            self.route = route
+            _isPrepared = State(initialValue: route.resetRequest == nil && route.manualFixture == nil)
+        }
+
+        var body: some View {
+            Group {
+                if isPrepared {
+                    AppRoot(analyticsSnapshotStore: analyticsSnapshotStore)
+                } else {
+                    bootstrapPlaceholder
+                }
+            }
+            .task {
+                guard !isPrepared else { return }
+                // Let the lightweight bootstrap state reach the compositor
+                // before deterministic fixture work begins.
+                await Task.yield()
+                DebugStoreResetter.reset(
+                    ifRequested: route.resetRequest,
+                    in: modelContext
+                )
+                DebugSeedCoordinator.seedManualFixture(
+                    route.manualFixture,
+                    in: modelContext
+                )
+                isPrepared = true
+            }
+        }
+
+        private var bootstrapPlaceholder: some View {
+            ProgressView("Preparing preview data")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .screenBackground()
+        }
+    }
+#endif
 
 // MARK: - Recovery view
 

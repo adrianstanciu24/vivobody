@@ -19,6 +19,36 @@
       }
     },
     {
+      "wait": {
+        "identifier": "onboardingAddBodyWeightButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "onboardingAddBodyWeightButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "onboardingNotNowButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "onboardingNotNowButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "onboardingAddBodyWeightButton",
+        "role": "AXButton"
+      }
+    },
+    {
       "tap": {
         "identifier": "onboardingStartButton",
         "label": "Start",
