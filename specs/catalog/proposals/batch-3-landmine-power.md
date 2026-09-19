@@ -1,6 +1,7 @@
 # Batch 3 — nonstandard press resolution
 
-Status: closed. `landmine-press` is active as one bounded power-test family;
+Status: closed. This decision activated the initial bounded power-test record;
+the family now also contains a separately reviewed everyday strength record.
 `leg-driven-overhead-press` remains active as `push-press`. These contracts do
 not merge because their resistance geometry, lower-body contribution, and
 reviewed outcomes differ.
@@ -11,6 +12,11 @@ reviewed outcomes differ.
 |---|---|---:|
 | `landmine-press` | Activate narrow split-stance pivoted-bar power test | 1 |
 | `leg-driven-overhead-press` | Active as `push-press` | 1 |
+
+The active count above records this batch's original decision. The later
+everyday expansion preserves the same split-stance pivot geometry, adds a
+`dynamicStrength` identity, and uses added-plates-only logging limited to the
+same landmine setup. It does not rename or reinterpret the power-test history.
 
 ## Landmine fixture
 

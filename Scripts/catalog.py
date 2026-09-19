@@ -217,6 +217,7 @@ RULE_FIELD_DOMAINS = {
 }
 RULE_NUMERIC_FIELDS = {
     "bodyweightFraction": (0, 1),
+    "reps": (1, sys.maxsize),
 }
 
 ActionRequirement = tuple[str, Optional[str]]

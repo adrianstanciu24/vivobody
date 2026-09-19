@@ -4768,6 +4768,48 @@
       ],
       "year": 2007,
       "scope": "NSCA primary textbook content available via third-party text mirror; exact EZ-bar inside grip, five-point bench contact and bar-near-forehead endpoint."
+    },
+    {
+      "id": "ross-2024-good-morning-technique",
+      "sourceType": "officialTechnicalStandard",
+      "title": "The Good Morning—Exercise Technique and Exercise Selection Principles",
+      "authors": [
+        "Steven Ross",
+        "Paul Comfort",
+        "John J. McMahon"
+      ],
+      "year": 2024,
+      "doi": "10.1519/SSC.0000000000000802",
+      "url": "https://doi.org/10.1519/SSC.0000000000000802",
+      "scope": "NSCA Strength and Conditioning Journal technique review defines the standing bilateral free-bar good morning with the bar across the upper trapezius, an approximately hip-width stance, forward or slightly externally rotated feet, an overhand grip with hands equidistant from bar center, slight knee flexion maintained through the descent, a hip hinge through an individual range, and return to upright. It supports strength-oriented repetitions and program-selected volume-load rather than one universal body-mass percentage, repetition count, or tempo. It is a technical standard and narrative review, not direct exercise-specific kinematics or a between-muscle force ranking."
+    },
+    {
+      "id": "vigotsky-2015-good-morning-load",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Effects of Load on Good Morning Kinematics and EMG Activity",
+      "authors": [
+        "Andrew David Vigotsky",
+        "Erin Nicole Harper",
+        "David Russell Ryan",
+        "Bret Contreras"
+      ],
+      "year": 2015,
+      "doi": "10.7717/peerj.708",
+      "pmid": "25653899",
+      "pmcid": "PMC4304869",
+      "url": "https://doi.org/10.7717/peerj.708",
+      "scope": "Fifteen trained men performed standing high-bar good mornings at 50, 60, 70, 80, and 90 percent of estimated one-repetition maximum. The protocol prescribed no depth or tempo so participants used their normal training execution. Two-dimensional kinematics directly measured hip, knee, ankle, and lumbar motion, while surface EMG measured medial and lateral hamstrings plus lumbar and thoracic erector spinae. Knee flexion increased with load while lumbar and hip flexion did not change remarkably across conditions. The study supports broader program-selected external loads and measured lumbar excursion, and identifies load-dependent knee flexion as an observed limitation rather than prescribed technique; it does not define one everyday default load, repetition count, stance width, foot angle, cadence, or cross-muscle force ranking."
+    },
+    {
+      "id": "nsca-2016-landmine-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "The Landmine Press—Implementation and Variation",
+      "authors": [
+        "Matthew M. Szelog"
+      ],
+      "year": 2016,
+      "url": "https://www.nsca.com/education/articles/nsca-coach/the-landmine-pressimplementation-and-variation/",
+      "scope": "NSCA Coach technique article presents the landmine press as a fixed-base barbell exercise used for strength, stability, and power. It supports an everyday strength application and repeated controlled pressing, but does not establish the catalog's exact Zhao split stance, human joint kinematics, muscle hierarchy, or a plate-only resistance measure. Added-plate logging is an authored same-bar, same-pivot, same-setup convention and is not comparable across unlike landmine fixtures."
     }
   ]
 }

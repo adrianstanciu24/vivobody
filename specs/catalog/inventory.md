@@ -13,11 +13,11 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | Measure | Count |
 |---|---:|
 | Reviewed families | 107 |
-| Exercises | 260 |
+| Exercises | 262 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 296 |
+| Evidence sources | 299 |
 
 ## Family roster
 
@@ -61,7 +61,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hip-extension](families/hip-extension.json) | 3 |
 | [hip-external-rotation](families/hip-external-rotation.json) | 1 |
 | [hip-flexion](families/hip-flexion.json) | 2 |
-| [hip-hinge](families/hip-hinge.json) | 1 |
+| [hip-hinge](families/hip-hinge.json) | 2 |
 | [hip-internal-rotation](families/hip-internal-rotation.json) | 1 |
 | [hip-thrust-bridge](families/hip-thrust-bridge.json) | 2 |
 | [hollow-hold](families/hollow-hold.json) | 1 |
@@ -73,7 +73,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [knee-extension](families/knee-extension.json) | 3 |
 | [knee-flexion](families/knee-flexion.json) | 4 |
 | [kneeling-ab-wheel-rollout](families/kneeling-ab-wheel-rollout.json) | 1 |
-| [landmine-press](families/landmine-press.json) | 1 |
+| [landmine-press](families/landmine-press.json) | 2 |
 | [lateral-band-walk](families/lateral-band-walk.json) | 1 |
 | [lateral-lunge](families/lateral-lunge.json) | 1 |
 | [machine-hack-squat](families/machine-hack-squat.json) | 1 |

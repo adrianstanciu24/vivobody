@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 140.
+Scenario files: 143.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -41,6 +41,9 @@ Scenario files: 140.
 | [catalog-essential-hold](catalog-essential-hold.json) | library | None declared |
 | [catalog-essential-power](catalog-essential-power.json) | library | None declared |
 | [catalog-essential-strength](catalog-essential-strength.json) | library | None declared |
+| [catalog-everyday-good-morning](catalog-everyday-good-morning.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-everyday-landmine-press-accessibility](catalog-everyday-landmine-press-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [catalog-everyday-landmine-press-light](catalog-everyday-landmine-press-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-forearm-development](catalog-forearm-development.json) | today | `--ui-test-forearm-development --static-body -settings.appearance dark` |
 | [catalog-forearm-stabilizers](catalog-forearm-stabilizers.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-horizontal-leg-press](catalog-horizontal-leg-press.json) | library | `--static-body -settings.appearance dark` |

@@ -338,6 +338,32 @@ DEFAULT_CANDIDATE_FOLLOW_UP_RULE_IDS = {
     "total-bar-accounting-identifies-trap-bar",
 }
 
+EVERYDAY_COVERAGE_RECORD_IDS = {
+    "barbell-good-morning",
+    "standing-single-arm-landmine-press",
+}
+
+EVERYDAY_COVERAGE_EVIDENCE_IDS = {
+    "ross-2024-good-morning-technique",
+    "vigotsky-2015-good-morning-load",
+    "nsca-2016-landmine-press",
+}
+
+EVERYDAY_COVERAGE_RULE_IDS = {
+    "body-mass-test-fixture-is-source-exact",
+    "everyday-good-morning-fixture-is-training-programmed",
+    "power-test-uses-total-system-load",
+    "everyday-strength-uses-same-landmine-plate-load",
+}
+
+LATE_LOWER_BODY_FOLLOW_UP_RECORD_IDS = (
+    DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS | EVERYDAY_COVERAGE_RECORD_IDS
+)
+
+LATE_LOWER_BODY_FOLLOW_UP_EVIDENCE_IDS = (
+    DEFAULT_CANDIDATE_FOLLOW_UP_EVIDENCE_IDS | EVERYDAY_COVERAGE_EVIDENCE_IDS
+)
+
 ANTERIOR_SHIN_RECORD_IDS = {"wall-supported-tibialis-raise"}
 
 UPPER_BODY_ADDITION_RECORD_IDS = {
@@ -389,6 +415,7 @@ HISTORICAL_BATCH_EXCLUSION_RECORD_IDS = (
     | MACHINE_SECOND_WAVE_RECORD_IDS
     | DEFAULT_CATALOG_GAP_RECORD_IDS
     | DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS
+    | EVERYDAY_COVERAGE_RECORD_IDS
 )
 
 HISTORICAL_BATCH_EXCLUSION_EVIDENCE_IDS = (
@@ -400,6 +427,7 @@ HISTORICAL_BATCH_EXCLUSION_EVIDENCE_IDS = (
     | MACHINE_SECOND_WAVE_EVIDENCE_IDS
     | DEFAULT_CATALOG_GAP_EVIDENCE_IDS
     | DEFAULT_CANDIDATE_FOLLOW_UP_EVIDENCE_IDS
+    | EVERYDAY_COVERAGE_EVIDENCE_IDS
 )
 
 
@@ -2796,8 +2824,8 @@ class CatalogFoundationTests(unittest.TestCase):
                             f"fails muscle requirement {requirement_index}",
                         )
                     demotion_count += 1
-        self.assertEqual(removal_count, 63)
-        self.assertEqual(demotion_count, 24)
+        self.assertEqual(removal_count, 77)
+        self.assertEqual(demotion_count, 27)
 
     def test_late_lower_body_stability_providers_are_exact(self) -> None:
         expected = {
@@ -2832,6 +2860,9 @@ class CatalogFoundationTests(unittest.TestCase):
             "knee": {"rectusFemoris", "tensorFasciaeLatae"},
             "spine": {"abs", "obliques"},
         }
+        expected["barbell-good-morning"] = expected[
+            "barbell-good-morning-25-percent-body-mass"
+        ]
         lunge_providers = {
             "spine": {"abs", "obliques", "lumbarExtensors"},
             "pelvis": {
@@ -2913,28 +2944,43 @@ class CatalogFoundationTests(unittest.TestCase):
                 "bodyPosition": enum("standing"),
                 "torsoSupport": enum("none"),
                 "stanceConfiguration": enum("symmetricBilateral"),
-                "stanceWidth": enum("shoulderWidth"),
-                "footOrientation": enum("slightNaturalToeOut"),
+                "stanceWidth": enum("shoulderWidth", "approximatelyHipWidth"),
+                "footOrientation": enum(
+                    "slightNaturalToeOut", "forwardOrSlightToeOut"
+                ),
                 "footContact": enum("continuous"),
-                "loadPlacement": enum("posteriorShoulderUpperBack"),
-                "gripOrientation": enum("comfortableUnreported"),
+                "loadPlacement": enum(
+                    "posteriorShoulderUpperBack", "upperTrapeziusHighBar"
+                ),
+                "gripOrientation": enum(
+                    "comfortableUnreported", "overhandEquidistant"
+                ),
                 "externalLoadPrescription": enum(
-                    "twentyFivePercentBodyMass"
+                    "twentyFivePercentBodyMass", "programSelectedExternalLoad"
                 ),
                 "hipMotion": enum("extends"),
                 "spineMotion": enum(
-                    "extendsWithMeasuredSegmentalExcursion"
+                    "extendsWithMeasuredSegmentalExcursion",
+                    "extendsAfterMeasuredLumbarExcursion",
                 ),
-                "kneeMotion": enum("measuredSmallNondefiningExcursion"),
+                "kneeMotion": enum(
+                    "measuredSmallNondefiningExcursion",
+                    "slightFlexionMaintainedWithObservedLoadDependentExcursion",
+                ),
                 "rangeOfMotion": enum(
-                    "maximumHipFlexionWithNaturalSpineTechnique"
+                    "maximumHipFlexionWithNaturalSpineTechnique",
+                    "selfSelectedControlledDepth",
                 ),
-                "headPosition": enum("alignedWithSpine"),
-                "tempo": enum("equalNormalDescentAscent"),
+                "headPosition": enum("alignedWithSpine", "nonstandardized"),
+                "tempo": enum(
+                    "equalNormalDescentAscent",
+                    "controlledSelfSelectedCatalogBoundary",
+                ),
                 "fixedPath": ("boolean", False),
                 "interRepSupport": enum("none"),
                 "lowerBodyContribution": enum(
-                    "hipAndSpineExtensionWithSmallKneeExcursion"
+                    "hipAndSpineExtensionWithSmallKneeExcursion",
+                    "hipAndSpineExtensionWithSlightMaintainedKneeFlexion",
                 ),
             },
             "dynamic-lunge": {
@@ -3117,7 +3163,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             ),
                         )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 168)
+        self.assertEqual(mutation_count, 192)
 
     def test_matching_rule_requires_explicit_additional_stability_demand(self) -> None:
         family = self.family_copy()
@@ -6790,7 +6836,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            260,
+            262,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -9527,37 +9573,320 @@ class CatalogFoundationTests(unittest.TestCase):
 
     def test_landmine_press_mutates_every_axis_action_and_required_role(self) -> None:
         original = self.landmine_press
-        for axis in original["variantAxes"]:
-            family = copy.deepcopy(original)
-            del family["exercises"][0]["variant"][axis["id"]]
-            with self.subTest(kind="axis", axis=axis["id"]):
-                self.assert_family_fails(
-                    family,
-                    f"is missing required axes: {re.escape(axis['id'])}",
-                )
-        for action in original["movementSignature"]["forbiddenPrimeActions"]:
-            family = copy.deepcopy(original)
-            family["exercises"][0]["additionalPrimeActions"] = [action]
-            with self.subTest(kind="action", action=action):
-                self.assert_family_fails(
-                    family,
-                    f"declares forbidden prime action {re.escape(action)}",
-                )
-        for index, requirement in enumerate(
-            original["musclePolicy"]["requirements"]
-        ):
-            candidate = requirement["anyOf"][0]
-            family = copy.deepcopy(original)
-            family["exercises"][0]["involvement"] = [
-                item
-                for item in family["exercises"][0]["involvement"]
-                if item["muscle"] != candidate
-            ]
-            with self.subTest(kind="role", muscle=candidate):
-                self.assert_family_fails(
-                    family,
-                    f"fails muscle requirement {index}|requires at least one primary muscle",
-                )
+        for exercise_index, exercise in enumerate(original["exercises"]):
+            for axis in original["variantAxes"]:
+                family = copy.deepcopy(original)
+                del family["exercises"][exercise_index]["variant"][axis["id"]]
+                with self.subTest(
+                    catalog_id=exercise["catalogID"], kind="axis",
+                    axis=axis["id"],
+                ):
+                    self.assert_family_fails(
+                        family,
+                        f"is missing required axes: {re.escape(axis['id'])}",
+                    )
+            for action in original["movementSignature"]["forbiddenPrimeActions"]:
+                family = copy.deepcopy(original)
+                family["exercises"][exercise_index][
+                    "additionalPrimeActions"
+                ] = [action]
+                with self.subTest(
+                    catalog_id=exercise["catalogID"], kind="action",
+                    action=action,
+                ):
+                    self.assert_family_fails(
+                        family,
+                        f"declares forbidden prime action {re.escape(action)}",
+                    )
+            for index, requirement in enumerate(
+                original["musclePolicy"]["requirements"]
+            ):
+                candidate = requirement["anyOf"][0]
+                family = copy.deepcopy(original)
+                family["exercises"][exercise_index]["involvement"] = [
+                    item
+                    for item in family["exercises"][exercise_index][
+                        "involvement"
+                    ]
+                    if item["muscle"] != candidate
+                ]
+                with self.subTest(
+                    catalog_id=exercise["catalogID"], kind="role",
+                    muscle=candidate,
+                ):
+                    self.assert_family_fails(
+                        family,
+                        f"fails muscle requirement {index}|requires at least one primary muscle",
+                    )
+
+    def test_everyday_good_morning_and_landmine_press_are_distinct(self) -> None:
+        hip_hinge = self.late_lower_body_closure_families["hip-hinge"]
+        good_morning = next(
+            exercise
+            for exercise in hip_hinge["exercises"]
+            if exercise["catalogID"] == "barbell-good-morning"
+        )
+        landmine = next(
+            exercise
+            for exercise in self.landmine_press["exercises"]
+            if exercise["catalogID"]
+            == "standing-single-arm-landmine-press"
+        )
+
+        self.assertEqual(
+            {
+                "name": good_morning["name"],
+                "modality": good_morning["modality"],
+                "reps": good_morning["reps"],
+                "defaultWeight": good_morning["defaultWeight"],
+                "defaultWeightKg": good_morning["defaultWeightKg"],
+                "stanceWidth": good_morning["variant"]["stanceWidth"],
+                "gripOrientation": good_morning["variant"][
+                    "gripOrientation"
+                ],
+                "prescription": good_morning["variant"][
+                    "externalLoadPrescription"
+                ],
+                "kneeMotion": good_morning["variant"]["kneeMotion"],
+                "tempo": good_morning["variant"]["tempo"],
+            },
+            {
+                "name": "Barbell Good Morning",
+                "modality": "dynamicStrength",
+                "reps": 8,
+                "defaultWeight": 45,
+                "defaultWeightKg": 20,
+                "stanceWidth": "approximatelyHipWidth",
+                "gripOrientation": "overhandEquidistant",
+                "prescription": "programSelectedExternalLoad",
+                "kneeMotion": (
+                    "slightFlexionMaintainedWithObservedLoadDependentExcursion"
+                ),
+                "tempo": "controlledSelfSelectedCatalogBoundary",
+            },
+        )
+        self.assertEqual(
+            {
+                "name": landmine["name"],
+                "modality": landmine["modality"],
+                "reps": landmine["reps"],
+                "defaultWeight": landmine["defaultWeight"],
+                "defaultWeightKg": landmine["defaultWeightKg"],
+                "loadAccounting": landmine["variant"]["loadAccounting"],
+            },
+            {
+                "name": "Standing Single-Arm Landmine Press",
+                "modality": "dynamicStrength",
+                "reps": 8,
+                "defaultWeight": 25,
+                "defaultWeightKg": 10,
+                "loadAccounting": "addedPlatesSameLandmineOnly",
+            },
+        )
+        self.assertEqual(
+            {rule["id"] for rule in hip_hinge["exerciseRules"]}
+            | {rule["id"] for rule in self.landmine_press["exerciseRules"]},
+            EVERYDAY_COVERAGE_RULE_IDS,
+        )
+        self.assertEqual(
+            good_morning["evidenceRefs"],
+            [
+                "ross-2024-good-morning-technique",
+                "vigotsky-2015-good-morning-load",
+            ],
+        )
+        self.assertEqual(
+            landmine["evidenceRefs"],
+            [
+                "zhao-2026-landmine-press-kinematics",
+                "nsca-2016-landmine-press",
+            ],
+        )
+
+        source_digests = {
+            good_morning["catalogID"]: hashlib.sha256(
+                json.dumps(
+                    good_morning, sort_keys=True, separators=(",", ":")
+                ).encode()
+            ).hexdigest(),
+            landmine["catalogID"]: hashlib.sha256(
+                json.dumps(
+                    landmine, sort_keys=True, separators=(",", ":")
+                ).encode()
+            ).hexdigest(),
+        }
+        self.assertEqual(
+            source_digests,
+            {
+                "barbell-good-morning": (
+                    "e3d694aeec3fd933f7c2ddc15b24b8e3d9cb861e57194868c2e304f15d10607c"
+                ),
+                "standing-single-arm-landmine-press": (
+                    "fcc110f6d6f25e344c5f56afdd6662794c5ad4bf82610fda5393c62f459f000d"
+                ),
+            },
+        )
+
+        runtime = {
+            record["catalogID"]: record
+            for record in catalog.compile_runtime_catalog(self.real_families)
+        }
+        for catalog_id in EVERYDAY_COVERAGE_RECORD_IDS:
+            with self.subTest(catalog_id=catalog_id):
+                self.assertIn(catalog_id, runtime)
+                self.assertEqual(runtime[catalog_id]["modality"], "dynamicStrength")
+        runtime_digests = {
+            catalog_id: hashlib.sha256(
+                json.dumps(
+                    runtime[catalog_id], sort_keys=True, separators=(",", ":")
+                ).encode()
+            ).hexdigest()
+            for catalog_id in EVERYDAY_COVERAGE_RECORD_IDS
+        }
+        self.assertEqual(
+            runtime_digests,
+            {
+                "barbell-good-morning": (
+                    "db7ec7204d2a6fa7d7371885fb82e09414efea3ea7e17b601b16fb69aa50b2cc"
+                ),
+                "standing-single-arm-landmine-press": (
+                    "6da20b16d3e418a596876e1bb1cd83c3a1dd1b199bcda22d3ba98b3b78c04eca"
+                ),
+            },
+        )
+
+    def test_everyday_coverage_family_contract_surfaces_are_exact(self) -> None:
+        contract_keys = (
+            "allowed", "recommended", "movementSignature", "variantAxes",
+            "exerciseRules", "musclePolicy",
+        )
+        expected = {
+            "hip-hinge": {
+                "allowed": "667a712fb724756d285c22700574f606f42241a6b7c93baa229a20826ec23a4c",
+                "recommended": "330c8f339794dd6a4f81d94bd4eb7395163c7e7ce9ec0c08ba317399773e3331",
+                "movementSignature": "88f3100e88746c14df1b5f57affae7f9ecbf52e866fe42871340f0c3fb155f9c",
+                "variantAxes": "fb63478cf3f25ab73a316e139fa049a3c48e4ec7d806f9ca5ba19adaac5e23be",
+                "exerciseRules": "a6b8f3ad47de79f5c1610d96a1f6157243f6ae7ed7ad8754ef4a4d981c20b6ee",
+                "musclePolicy": "3fc5e5acdc93036f6ecaa8045d25446534e842af471741ea251fef2f206638ce",
+            },
+            "landmine-press": {
+                "allowed": "2a90f8978a391db025b84f1695c378284137d8d3a31236c63127c86c3346c26e",
+                "recommended": "a07fe8ed0eae9d2ab391cf7b2d67d12fff46aed4fba41e4fd3a898a9bbedc561",
+                "movementSignature": "b796825269b75343474af267928d7958ec26da8d6268856b4fb2b445b1a51ef3",
+                "variantAxes": "04b89c7a21a368ea3f55695fa444722a144e5a4b46554b49ffcd1d6fe778f185",
+                "exerciseRules": "48a73f73d56e1c7921aa66ce94062198c1cb393495d0463b1754bc3535db2e43",
+                "musclePolicy": "a5917e807108c407217c4ab3f12b4d67dbe02c4da28fc2f1802e8cc5a045c74d",
+            },
+        }
+        families = {
+            "hip-hinge": self.late_lower_body_closure_families["hip-hinge"],
+            "landmine-press": self.landmine_press,
+        }
+        actual = {
+            family_id: {
+                key: hashlib.sha256(
+                    json.dumps(
+                        family[key], sort_keys=True, separators=(",", ":")
+                    ).encode()
+                ).hexdigest()
+                for key in contract_keys
+            }
+            for family_id, family in families.items()
+        }
+        self.assertEqual(actual, expected)
+
+    def test_everyday_contract_rules_reject_mixed_semantics(self) -> None:
+        hip_hinge = copy.deepcopy(
+            self.late_lower_body_closure_families["hip-hinge"]
+        )
+        exact_good_morning = next(
+            exercise
+            for exercise in hip_hinge["exercises"]
+            if exercise["catalogID"]
+            == "barbell-good-morning-25-percent-body-mass"
+        )
+        exact_good_morning["variant"]["externalLoadPrescription"] = (
+            "programSelectedExternalLoad"
+        )
+        self.assert_family_fails(hip_hinge, "violates exercise rule")
+
+        hip_hinge = copy.deepcopy(
+            self.late_lower_body_closure_families["hip-hinge"]
+        )
+        everyday_good_morning = next(
+            exercise
+            for exercise in hip_hinge["exercises"]
+            if exercise["catalogID"] == "barbell-good-morning"
+        )
+        everyday_good_morning["variant"]["externalLoadPrescription"] = (
+            "twentyFivePercentBodyMass"
+        )
+        self.assert_family_fails(hip_hinge, "violates exercise rule")
+
+        hip_hinge = copy.deepcopy(
+            self.late_lower_body_closure_families["hip-hinge"]
+        )
+        exact_good_morning = next(
+            exercise
+            for exercise in hip_hinge["exercises"]
+            if exercise["catalogID"]
+            == "barbell-good-morning-25-percent-body-mass"
+        )
+        exact_good_morning["reps"] = 10
+        self.assert_family_fails(hip_hinge, "reps must equal 8")
+
+        hip_hinge = copy.deepcopy(
+            self.late_lower_body_closure_families["hip-hinge"]
+        )
+        everyday_good_morning = next(
+            exercise
+            for exercise in hip_hinge["exercises"]
+            if exercise["catalogID"] == "barbell-good-morning"
+        )
+        everyday_good_morning["reps"] = 10
+        catalog.validate_family(hip_hinge, self.foundation, "training fixture")
+
+        landmine = copy.deepcopy(self.landmine_press)
+        everyday_landmine = next(
+            exercise
+            for exercise in landmine["exercises"]
+            if exercise["catalogID"]
+            == "standing-single-arm-landmine-press"
+        )
+        everyday_landmine["variant"]["loadAccounting"] = "totalBarAndPlates"
+        self.assert_family_fails(landmine, "violates exercise rule")
+
+        landmine = copy.deepcopy(self.landmine_press)
+        power_landmine = next(
+            exercise
+            for exercise in landmine["exercises"]
+            if exercise["catalogID"]
+            == "standing-single-arm-landmine-press-power-test"
+        )
+        power_landmine["variant"]["loadAccounting"] = (
+            "addedPlatesSameLandmineOnly"
+        )
+        self.assert_family_fails(landmine, "violates exercise rule")
+
+        landmine = copy.deepcopy(self.landmine_press)
+        power_landmine = next(
+            exercise
+            for exercise in landmine["exercises"]
+            if exercise["catalogID"]
+            == "standing-single-arm-landmine-press-power-test"
+        )
+        power_landmine["reps"] = 8
+        self.assert_family_fails(landmine, "reps must equal 3")
+
+        landmine = copy.deepcopy(self.landmine_press)
+        everyday_landmine = next(
+            exercise
+            for exercise in landmine["exercises"]
+            if exercise["catalogID"]
+            == "standing-single-arm-landmine-press"
+        )
+        everyday_landmine["reps"] = 3
+        self.assert_family_fails(landmine, "reps must equal 8")
 
     def test_wall_handstand_branch_is_exact_and_cannot_escape_its_rules(self) -> None:
         family = self.vertical_press
@@ -12090,7 +12419,11 @@ class CatalogFoundationTests(unittest.TestCase):
             }
         for family in self.batch5_families.values():
             for exercise in family["exercises"]:
-                if exercise["catalogID"] in (DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS | REQUESTED_GAPS_RECORD_IDS):
+                if exercise["catalogID"] in (
+                    DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS
+                    | REQUESTED_GAPS_RECORD_IDS
+                    | EVERYDAY_COVERAGE_RECORD_IDS
+                ):
                     continue
                 assigned = {
                     item["muscle"] for item in exercise["involvement"]
@@ -12233,7 +12566,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "walking or alternating lunges",
             normalized_lunge,
         )
-        self.assertIn("| [hip-hinge](families/hip-hinge.json) | 1 |", self.catalog_inventory)
+        self.assertIn("| [hip-hinge](families/hip-hinge.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [dynamic-lunge](families/dynamic-lunge.json) | 4 |", self.catalog_inventory)
         self.assertIn(
             "Later review activated both the good-morning hinge owner and the "
@@ -12241,7 +12574,7 @@ class CatalogFoundationTests(unittest.TestCase):
             normalized_roadmap,
         )
         self.assertIn(
-            "one exact 25-percent-body-mass barbell good morning",
+            "the exact 25-percent-body-mass barbell good morning",
             normalized_readme,
         )
 
@@ -12355,7 +12688,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         "trapeziusUpper", "brachialis", "abs", "obliques",
                     ),
                 },
-                "reps": (8, 8),
+                "reps": (6, 12),
                 "evidence": (
                     "arnold-2010-lower-limb",
                     "christophy-2012-lumbar-spine",
@@ -12482,7 +12815,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         source_id
                         for source_id in family["evidenceRefs"]
                         if source_id
-                        not in DEFAULT_CANDIDATE_FOLLOW_UP_EVIDENCE_IDS
+                        not in LATE_LOWER_BODY_FOLLOW_UP_EVIDENCE_IDS
                     ),
                     contract["evidence"],
                 )
@@ -12491,7 +12824,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         exercise["catalogID"]
                         for exercise in family["exercises"]
                         if exercise["catalogID"]
-                        not in DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS
+                        not in LATE_LOWER_BODY_FOLLOW_UP_RECORD_IDS
                     ),
                     contract["roster"],
                 )
@@ -12662,7 +12995,7 @@ class CatalogFoundationTests(unittest.TestCase):
         actual = {}
         for family in self.late_lower_body_closure_families.values():
             for exercise in family["exercises"]:
-                if exercise["catalogID"] in DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS:
+                if exercise["catalogID"] in LATE_LOWER_BODY_FOLLOW_UP_RECORD_IDS:
                     continue
                 actual[exercise["catalogID"]] = {
                     "name": exercise["name"],
@@ -12773,7 +13106,7 @@ class CatalogFoundationTests(unittest.TestCase):
             exercise["catalogID"]: exercise["variant"]
             for exercise in lunge["exercises"]
             if exercise["catalogID"]
-            not in DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS
+            not in LATE_LOWER_BODY_FOLLOW_UP_RECORD_IDS
         }
         self.assertEqual(
             {
@@ -16516,7 +16849,7 @@ class CatalogFoundationTests(unittest.TestCase):
             10,
         )
         self.assertEqual(len(self.real_families), 107)
-        self.assertEqual(len(self.foundation.evidence_ids), 296)
+        self.assertEqual(len(self.foundation.evidence_ids), 299)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -17918,7 +18251,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 240 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 262 |", self.catalog_inventory)
         self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
@@ -19061,8 +19394,8 @@ class CatalogFoundationTests(unittest.TestCase):
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
         self.assertEqual(len(self.real_families), 107)
-        self.assertEqual(len(records), 260)
-        self.assertEqual(len(self.foundation.evidence_ids), 296)
+        self.assertEqual(len(records), 262)
+        self.assertEqual(len(self.foundation.evidence_ids), 299)
         self.assertEqual(
             {
                 key: upright[key]
@@ -19408,7 +19741,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 240 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 262 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -22332,16 +22665,16 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 240 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 262 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_107_families_and_260_exercises(
+    def test_runtime_projection_is_exactly_107_families_and_262_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 260)
+        self.assertEqual(len(records), 262)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
@@ -22752,7 +23085,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 240)
+            self.assertEqual(len(emitted), 262)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -23398,8 +23731,8 @@ class CatalogFoundationTests(unittest.TestCase):
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
         self.assertEqual(len(self.real_families), 107)
-        self.assertEqual(len(runtime), 260)
-        self.assertEqual(len(self.foundation.evidence_ids), 296)
+        self.assertEqual(len(runtime), 262)
+        self.assertEqual(len(self.foundation.evidence_ids), 299)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids

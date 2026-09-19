@@ -53,8 +53,10 @@ standing-band scapular-depression fixture, resolved upward rotation inside
 added the strict wall-supported handstand push-up branch to `vertical-press`.
 Downward rotation is intentionally not a standalone family: the reviewed
 foundation has no clean training-defining fixture independent of its coupled
-task. The landmine record discloses that its human actions and no-leg-drive
-boundary are mechanics adaptations from a bar-end study; the handstand record
+task. Both landmine records disclose that their human actions and no-leg-drive
+boundary are mechanics adaptations from a bar-end study. The everyday strength
+record logs added plates only and limits comparison to the same landmine setup;
+the power test retains total bar-plus-plate accounting. The handstand record
 discloses that its exact apparatus is directly reviewed while its dynamic
 action and mover policy transfer from vertical press.
 
@@ -71,7 +73,10 @@ Batch 5 and its initial deadlift follow-up added thirteen exercises across
 `hip-hinge`, `dynamic-lunge`, `conventional-deadlift`, and
 `romanian-deadlift`. The original nine records remain the reviewed squat,
 thrust/bridge, split-squat, step-up, good-morning, and dynamic-lunge fixtures.
-That roster still includes one exact 25-percent-body-mass barbell good morning.
+That roster still includes the exact 25-percent-body-mass barbell good morning,
+and a later review added a separate everyday high-bar strength record with
+program-selected external load and source-bounded stance, tempo, and knee-motion
+semantics.
 The follow-up adds one conventional barbell deadlift plus distinct Romanian,
 15-centimeter step-Romanian, and stiff-leg barbell fixtures. Their floor
 contact, knee technique, range, and load geometry stay explicit; they do not

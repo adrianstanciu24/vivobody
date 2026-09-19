@@ -63,12 +63,12 @@ class RequestedCatalogGapTests(unittest.TestCase):
         families = [catalog.load_json(p) for p in catalog.FAMILIES_ROOT.glob("*.json")]
         records = [r for r in catalog.compile_runtime_catalog(families)
                    if r["catalogID"] not in OWNERS]
-        self.assertEqual(len(records), 252)
+        self.assertEqual(len(records), 254)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()
-        # Reviewed HEAD runtime before this batch; source-only support metadata
-        # may change without changing existing product records or muscle credit.
+        # Reviewed runtime after later catalog additions; source-only support
+        # metadata may change without changing product records or muscle credit.
         self.assertEqual(hashlib.sha256(encoded).hexdigest(),
-                         "986d33f1dd9dd22c2bef9083f8bee8e8112513b204f2fbf62e33ae3eeeb50026")
+                         "918c60bc17a9f3a7fdbd3d2841afb376c2e6492c51e24466e28710fab61746e0")
 
     def test_unloaded_splits_do_not_credit_an_implement_hold(self):
         for catalog_id in ("bodyweight-split-squat", "bodyweight-bulgarian-split-squat"):

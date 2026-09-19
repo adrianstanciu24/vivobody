@@ -12,6 +12,11 @@ measured good-morning fixture; it does not revive the rejected static-knee
 Romanian-deadlift draft. Neither review surveys every exercise commonly given
 these names.
 
+A later everyday-coverage review retained that exact 25-percent-body-mass
+record and added a separate high-bar barbell good morning with program-selected
+external load. Its broader stance, tempo, range, and load-variable knee-motion
+values are source-bounded rather than aliases for the original test fixture.
+
 ## Outcome
 
 | Candidate | Decision | Initial roster |

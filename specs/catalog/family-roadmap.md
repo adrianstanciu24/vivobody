@@ -296,8 +296,11 @@ one-exercise barbell power family whose leg countermovement, triple extension,
 continuous foot contact, and no-redip standing reception distinguish it from
 strict press, thruster, push jerk, and split jerk.
 
-Landmine press is bounded to Zhao et al.'s unilateral split-stance pivoted-bar
-power test. Because the study tracks bar endpoints rather than human segments,
+Landmine press began with Zhao et al.'s unilateral split-stance pivoted-bar
+power test. A later review added a separate everyday dynamic-strength record
+while preserving the same strict geometry; it logs added plates only for
+same-landmine comparison, whereas the power test retains total-system load.
+Because Zhao tracks bar endpoints rather than human segments,
 the sagittal flexion model, diagonal classification, no-leg-drive execution,
 mirrored-side prescription, and muscle hierarchy are disclosed adaptations;
 no scapular prime is inferred. The closed-chain branch is bounded to Li et
@@ -360,10 +363,13 @@ good morning at 25 percent of body mass; and Comfort et al.'s bodyweight
 forward and reverse step-and-return lunges.
 
 The good morning establishes the hinge owner without generalizing from the
-rejected Romanian-deadlift fixtures. It declares hip and spine extension as
-prime actions, explicitly records the measured spinal excursion, and preserves
-the small measured knee excursion as nondefining rather than falsely calling
-the knee held or promoting knee extension. Romanian, stiff-leg, conventional,
+rejected Romanian-deadlift fixtures. A later review retained the exact
+25-percent-body-mass record and added a separate everyday high-bar strength
+fixture with program-selected load. Both declare hip and spine extension as
+prime actions. The source-exact record preserves its small measured knee
+excursion, while the everyday record prescribes a slight maintained knee bend
+and discloses load-dependent extra knee excursion as an observed limitation
+rather than promoting knee extension. Romanian, stiff-leg, conventional,
 sumo, trap-bar, deficit, floor-pull, and supported-back-extension variants
 remain outside the contract.
 

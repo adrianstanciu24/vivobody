@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 240)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 102)
+        #expect(CatalogData.records.count == 262)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 107)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -869,6 +869,19 @@ struct CatalogBiomechanicsTests {
         #expect(landmine.muscleInvolvement.role(for: .triceps) == .secondary)
         #expect(landmine.muscleInvolvement.role(for: .serratus) == .stabilizer)
 
+        let everydayLandmine = try #require(
+            CatalogData.record(forExerciseNamed: "Standing Single-Arm Landmine Press")
+        )
+        #expect(everydayLandmine.familyID == "landmine-press")
+        #expect(everydayLandmine.modality == .dynamicStrength)
+        #expect(everydayLandmine.laterality == .unilateral)
+        #expect(everydayLandmine.defaultWeight == 25)
+        #expect(everydayLandmine.defaultWeightKg == 10)
+        #expect(everydayLandmine.reps == 8)
+        #expect(everydayLandmine.muscleInvolvement.role(for: .deltoidAnterior) == .primary)
+        #expect(everydayLandmine.muscleInvolvement.role(for: .triceps) == .secondary)
+        #expect(everydayLandmine.muscleInvolvement.role(for: .serratus) == .stabilizer)
+
         let handstand = try #require(
             CatalogData.record(forExerciseNamed: "Wall-Supported Strict Handstand Push-Up")
         )
@@ -912,6 +925,20 @@ struct CatalogBiomechanicsTests {
         #expect(goodMorning.muscleInvolvement.role(for: .gluteMax) == .primary)
         #expect(goodMorning.muscleInvolvement.role(for: .lumbarExtensors) == .primary)
         #expect(goodMorning.muscleInvolvement.role(for: .bicepsFemoris) == .stabilizer)
+
+        let everydayGoodMorning = try #require(
+            CatalogData.record(forExerciseNamed: "Barbell Good Morning")
+        )
+        #expect(everydayGoodMorning.familyID == "hip-hinge")
+        #expect(everydayGoodMorning.modality == .dynamicStrength)
+        #expect(everydayGoodMorning.laterality == .bilateral)
+        #expect(everydayGoodMorning.defaultWeight == 45)
+        #expect(everydayGoodMorning.defaultWeightKg == 20)
+        #expect(everydayGoodMorning.reps == 8)
+        #expect(everydayGoodMorning.muscleInvolvement.role(for: .medialHamstrings) == .primary)
+        #expect(everydayGoodMorning.muscleInvolvement.role(for: .gluteMax) == .primary)
+        #expect(everydayGoodMorning.muscleInvolvement.role(for: .lumbarExtensors) == .primary)
+        #expect(everydayGoodMorning.muscleInvolvement.role(for: .bicepsFemoris) == .stabilizer)
 
         for name in ["Bodyweight Forward Lunge", "Bodyweight Reverse Lunge"] {
             let lunge = try #require(CatalogData.record(forExerciseNamed: name))
