@@ -36,9 +36,14 @@ exercise name, without set targets or load references. Selecting the row opens
 the exercise editor where its programming and resolved load live. The Today
 preview shows target structure but no load reference.
 
-An unresolved load reads **Set starting load**. Programmatically created plans
-may remain unset; starting one surfaces an error identifying the exercise to
-configure instead of creating a workout with an invented weight.
+The exercise editor groups load policy and input under the load mode's direct
+label, such as **Weight**. With no compatible history, it says that no previous
+weight was found and presents a full-width, required **Set first workout
+weight** control. The commit button summarizes targets in words, such as **3
+sets · 10 reps**, rather than showing detached multiplication shorthand.
+Programmatically created plans may remain unset; starting one surfaces an error
+identifying the exercise to configure instead of creating a workout with an
+invented weight.
 
 Workout inputs retain target reps and duration. Per-set planned-load snapshots
 capture the resolved starting load, preserving accurate comparison against the

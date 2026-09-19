@@ -20,7 +20,7 @@ struct TemplateLoadControls: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            Text("Starting load")
+            Text(loadMode.inputLabel)
                 .sectionLabelStyle(Opacity.medium)
             Menu {
                 ForEach(TemplateLoadPolicy.allCases, id: \.self) { choice in
@@ -46,7 +46,7 @@ struct TemplateLoadControls: View {
                 .frame(maxWidth: .infinity, minHeight: Space.tapMin, alignment: .leading)
                 .contentShape(Rectangle())
             }
-            .accessibilityLabel("Starting load")
+            .accessibilityLabel("\(loadMode.inputLabel) source")
             .accessibilityValue(policy.title)
             .accessibilityIdentifier("templateLoadPolicy")
 
@@ -57,9 +57,9 @@ struct TemplateLoadControls: View {
                     .foregroundStyle(Ink.secondary)
                     .accessibilityIdentifier("templateLastUsedLoad")
             } else {
-                Text(policy == .fixed ? loadMode.inputLabel : "First workout \(loadMode.inputLabel.lowercased())")
-                    .sectionLabelStyle(Opacity.medium)
                 if hasStartingLoad {
+                    Text(manualLoadLabel)
+                        .sectionLabelStyle(Opacity.medium)
                     BareScrubber(
                         value: Binding(
                             get: { WeightFormatter.toDisplay(weight, unit: unit) },
@@ -77,18 +77,51 @@ struct TemplateLoadControls: View {
                         tickTone: .deep
                     )
                 } else {
+                    if policy == .lastWorkout {
+                        Text("No previous \(loadMode.inputLabel.lowercased()) found")
+                            .font(Typography.body)
+                            .foregroundStyle(Ink.secondary)
+                    }
+
                     Button {
                         hasStartingLoad = true
                     } label: {
-                        Text("Set starting load")
-                            .font(Typography.sectionHeading)
-                            .frame(maxWidth: .infinity, minHeight: Space.tapMin, alignment: .leading)
-                            .contentShape(Rectangle())
+                        HStack(spacing: Space.md) {
+                            VStack(alignment: .leading, spacing: Space.xs) {
+                                Text(setLoadTitle)
+                                    .font(Typography.sectionHeading)
+                                    .foregroundStyle(Ink.primary)
+                                Text("Required to continue")
+                                    .font(Typography.caption)
+                                    .foregroundStyle(Ink.secondary)
+                            }
+                            Spacer(minLength: Space.md)
+                            Image(systemName: "arrow.right")
+                                .font(Typography.sectionHeading)
+                                .foregroundStyle(Tint.primary)
+                        }
+                        .frame(maxWidth: .infinity, minHeight: Space.tapMin, alignment: .leading)
+                        .padding(Space.md)
+                        .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
                     }
+                    .buttonStyle(.plain)
+                    .glassChip(cornerRadius: Radius.card, interactive: true)
+                    .accessibilityLabel(setLoadTitle)
+                    .accessibilityHint("Required to continue")
                     .accessibilityIdentifier("templateSetStartingLoad")
                 }
             }
         }
+    }
+
+    private var manualLoadLabel: String {
+        policy == .fixed ? loadMode.inputLabel : "First workout \(loadMode.inputLabel.lowercased())"
+    }
+
+    private var setLoadTitle: String {
+        policy == .fixed
+            ? "Set \(loadMode.inputLabel.lowercased())"
+            : "Set first workout \(loadMode.inputLabel.lowercased())"
     }
 }
 

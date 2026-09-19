@@ -59,6 +59,13 @@
             "value": "Use last workout"
           },
           {
+            "label": "No previous weight found"
+          },
+          {
+            "identifier": "templateSetStartingLoad",
+            "label": "Set first workout weight"
+          },
+          {
             "label": "Add to Template",
             "enabled": false
           }

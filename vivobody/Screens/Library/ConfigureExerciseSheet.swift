@@ -244,32 +244,30 @@ struct ConfigureExerciseSheet: View {
     // MARK: - Commit bar
 
     private var commitBar: some View {
-        VStack(spacing: Space.md) {
-            Text(previewLine)
-                .font(Typography.metricInline)
-                .foregroundStyle(Ink.tertiary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            PrimaryActionButton(
-                title: isEditing ? "Save Changes" : "Add to Template",
-                subtitle: nil,
-                inputLabels: isEditing
-                    ? ["Save Changes", "Save", "Done"]
-                    : ["Add to Template", "Add", "Save"]
-            ) {
-                onCommit(buildDraft())
-                dismiss()
-            }
-            .disabled(tracksResistance && !hasStartingLoad && (loadPolicy == .fixed || lastWeights.isEmpty))
+        PrimaryActionButton(
+            title: isEditing ? "Save Changes" : "Add to Template",
+            subtitle: previewLine,
+            inputLabels: isEditing
+                ? ["Save Changes", "Save", "Done"]
+                : ["Add to Template", "Add", "Save"]
+        ) {
+            onCommit(buildDraft())
+            dismiss()
         }
+        .disabled(!canCommit)
+        .opacity(canCommit ? 1 : Opacity.soft)
         .padding(.horizontal, Space.gutter)
         .padding(.top, Space.md)
         .padding(.bottom, Space.sm)
     }
 
+    private var canCommit: Bool {
+        !tracksResistance || hasStartingLoad || (loadPolicy == .lastWorkout && !lastWeights.isEmpty)
+    }
+
     private var previewLine: String {
-        mode == .reps ? "\(sets) × \(reps)"
-            : "\(sets) × \(DurationFormatter.string(duration)) \(modality.durationLabelLowercased)"
+        mode == .reps ? "\(sets) sets · \(reps) reps"
+            : "\(sets) sets · \(DurationFormatter.string(duration)) \(modality.durationLabelLowercased)"
     }
 
     // MARK: - Bindings
