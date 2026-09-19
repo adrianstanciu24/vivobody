@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 137.
+Scenario files: 140.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -53,6 +53,9 @@ Scenario files: 137.
 | [catalog-magnus-extension](catalog-magnus-extension.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-must-have-expansion](catalog-must-have-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
+| [catalog-requested-gaps-accessibility](catalog-requested-gaps-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
+| [catalog-requested-gaps-light](catalog-requested-gaps-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-requested-gaps](catalog-requested-gaps.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-six-bird-dog](catalog-six-bird-dog.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-six-cable-pallof-press](catalog-six-cable-pallof-press.json) | library | `--static-body -settings.appearance light` |
 | [catalog-six-dead-bug](catalog-six-dead-bug.json) | library | `--static-body -settings.appearance light` |

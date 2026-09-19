@@ -358,8 +358,27 @@ UPPER_BODY_ADDITION_EVIDENCE_IDS = {
     "bowflex-1090i-overhead-triceps-extension",
 }
 
+REQUESTED_GAPS_RECORD_IDS = {
+    "band-assisted-pull-up", "bodyweight-split-squat",
+    "bodyweight-bulgarian-split-squat", "standing-cable-hip-abduction",
+    "dumbbell-triceps-kickback", "ez-bar-skull-crusher",
+    "cable-pull-through", "pike-push-up",
+}
+
+REQUESTED_GAPS_FAMILY_IDS = {
+    "cable-pull-through", "pike-push-up",
+}
+
+REQUESTED_GAPS_EVIDENCE_IDS = {
+    "crossfit-2008-assistance-bodyweight-exercises",
+    "nasm-2026-bulgarian-split-squat", "ace-2009-cable-crossover-lower-body",
+    "sussex-undated-cable-pull-through", "nasm-undated-pike-push-up",
+    "ace-2011-triceps-kickback", "nsca-2007-strength-training-ez-lying-extension",
+}
+
 HISTORICAL_BATCH_EXCLUSION_RECORD_IDS = (
-    UPPER_BODY_ADDITION_RECORD_IDS
+    REQUESTED_GAPS_RECORD_IDS
+    | UPPER_BODY_ADDITION_RECORD_IDS
     | ANTERIOR_SHIN_RECORD_IDS
     | ESSENTIAL_EXPANSION_RECORD_IDS
     | REQUESTED_EXERCISE_RECORD_IDS
@@ -373,7 +392,8 @@ HISTORICAL_BATCH_EXCLUSION_RECORD_IDS = (
 )
 
 HISTORICAL_BATCH_EXCLUSION_EVIDENCE_IDS = (
-    UPPER_BODY_ADDITION_EVIDENCE_IDS
+    REQUESTED_GAPS_EVIDENCE_IDS
+    | UPPER_BODY_ADDITION_EVIDENCE_IDS
     | COMPREHENSIVE_EXPANSION_EVIDENCE_IDS
     | MACHINE_CATALOG_EXPANSION_EVIDENCE_IDS
     | MACHINE_FIRST_WAVE_EVIDENCE_IDS
@@ -2124,7 +2144,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             catalog.validate_family(
                                 family, self.foundation, "forearm control mutation"
                             )
-        self.assertEqual(fixture_count, 29)
+        self.assertEqual(fixture_count, 30)
 
     def test_external_overhead_press_requires_wrist_and_hand_demands(self) -> None:
         for index, exercise in enumerate(self.vertical_press["exercises"]):
@@ -4445,6 +4465,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "single-arm-cable-lat-pulldown",
                 "machine-lat-pulldown",
                 "single-arm-machine-lat-pulldown",
+                "band-assisted-pull-up",
             ],
         )
 
@@ -4534,6 +4555,11 @@ class CatalogFoundationTests(unittest.TestCase):
                     "machine", "unilateral", "external", 0, "open", "seated",
                     "thighPad", "neutral", None, "leverGuided",
                     "leverPulldown", ("pelvis",),
+                ),
+                "band-assisted-pull-up": (
+                    "band", "bilateral", "nonComparable", 0,
+                    "closed", "suspended", "elasticBandUnderFoot", "pronated",
+                    "shoulderWidth", "free", None, ("pelvis",),
                 ),
             },
         )
@@ -6669,6 +6695,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             | COMPREHENSIVE_EXPANSION_RECORD_IDS
                             | DEFAULT_CATALOG_GAP_RECORD_IDS
                             | DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS
+                            | REQUESTED_GAPS_RECORD_IDS
                         )
                     ],
                     contract["roster"],
@@ -6754,6 +6781,7 @@ class CatalogFoundationTests(unittest.TestCase):
             *COMMON_MACHINE_FAMILY_IDS,
             *DEFAULT_CATALOG_GAP_FAMILY_IDS,
             *DEFAULT_CANDIDATE_FOLLOW_UP_FAMILY_IDS,
+            *REQUESTED_GAPS_FAMILY_IDS,
             "copenhagen-adduction", "anti-rotation-press", "dead-bug", "bird-dog",
         }
         self.assertEqual(
@@ -6762,7 +6790,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            252,
+            260,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -7760,6 +7788,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "wall-sit",
             "clean-and-jerk",
             *DEFAULT_CATALOG_GAP_FAMILY_IDS,
+            *REQUESTED_GAPS_FAMILY_IDS,
         }
         actual_family_ids = set()
         for original in self.real_families:
@@ -8127,6 +8156,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "barbellShapeUnreported",
                 "selfAdjustingMachineHandles",
                 "dumbbellHeadTwoHandHold",
+                "ezBarInsideGrip",
             ],
         )
         self.assertEqual(
@@ -10838,50 +10868,36 @@ class CatalogFoundationTests(unittest.TestCase):
                 ],
                 "roster": ["barbell-hip-thrust", "barbell-glute-bridge"],
             },
-            "split-stance-squat": {
-                "name": "Stationary Split Squat",
-                "fixed": {
-                    "mechanic": "compound",
-                    "pattern": "lunge",
-                    "direction": None,
-                    "planes": ["sagittal"],
-                },
-                "prime": [
-                    "hip.extension",
-                    "knee.extension",
-                    "ankle.plantarflexion",
-                ],
-                "demands": [
-                    "shoulder", "scapula", "elbow", "wrist", "hand",
-                    "spine", "pelvis", "hip", "knee", "ankle", "foot",
-                ],
-                "primary": ["vasti", "gluteMax"],
-                "reps": {"minimum": 5, "maximum": 15},
-                "allowed": {
-                    "equipment": ["barbell", "dumbbell"],
-                    "modalities": ["dynamicStrength"],
-                    "trackingModes": ["reps"],
-                    "loadModes": ["external"],
-                    "lateralities": ["unilateral"],
-                },
-                "evidence": [
-                    "arnold-2010-lower-limb",
-                    "song-2023-split-squat-step-length",
-                    "stastny-2015-split-squat-dumbbell-position",
-                    "usmc-2017-dumbbell-split-squat",
-                    "nsca-2024-tsac-report-74-dumbbell-split-squat",
-                    "mackey-2021-bulgarian-split-squat",
-                    "nsca-2016-division-i-basketball-injury-screening",
-                    "deforest-2014-single-double-leg-squat",
-                    "collings-2023-gluteal-muscle-forces",
-                ],
-                "roster": [
-                    "barbell-split-squat",
-                    "two-dumbbell-stationary-split-squat",
-                    "barbell-rear-foot-elevated-split-squat",
-                    "two-dumbbell-rear-foot-elevated-split-squat",
-                ],
-            },
+            "split-stance-squat": {'name': 'Stationary Split Squat',
+                                   'fixed': {'mechanic': 'compound',
+                                             'pattern': 'lunge',
+                                             'direction': None,
+                                             'planes': ['sagittal']},
+                                   'prime': ['hip.extension', 'knee.extension', 'ankle.plantarflexion'],
+                                   'demands': ['spine', 'pelvis', 'hip', 'knee', 'ankle', 'foot'],
+                                   'primary': ['vasti', 'gluteMax'],
+                                   'reps': {'minimum': 5, 'maximum': 15},
+                                   'allowed': {'equipment': ['barbell', 'dumbbell', 'bodyweight'],
+                                               'modalities': ['dynamicStrength'],
+                                               'trackingModes': ['reps'],
+                                               'loadModes': ['external', 'nonComparable'],
+                                               'lateralities': ['unilateral']},
+                                   'evidence': ['arnold-2010-lower-limb',
+                                                'song-2023-split-squat-step-length',
+                                                'stastny-2015-split-squat-dumbbell-position',
+                                                'usmc-2017-dumbbell-split-squat',
+                                                'nsca-2024-tsac-report-74-dumbbell-split-squat',
+                                                'mackey-2021-bulgarian-split-squat',
+                                                'nsca-2016-division-i-basketball-injury-screening',
+                                                'deforest-2014-single-double-leg-squat',
+                                                'collings-2023-gluteal-muscle-forces',
+                                                'nasm-2026-bulgarian-split-squat'],
+                                   'roster': ['barbell-split-squat',
+                                              'two-dumbbell-stationary-split-squat',
+                                              'barbell-rear-foot-elevated-split-squat',
+                                              'two-dumbbell-rear-foot-elevated-split-squat',
+                                              'bodyweight-split-squat',
+                                              'bodyweight-bulgarian-split-squat']},
             "step-up": {
                 "name": "Forward Step-Up",
                 "fixed": {
@@ -11115,7 +11131,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 self.assertEqual(exercise["additionalPrimeActions"], [])
                 expected_demands = (
                     ["shoulder", "scapula", "elbow", "wrist", "hand"]
-                    if family["id"] == "bilateral-squat"
+                    if family["id"] in {"bilateral-squat", "split-stance-squat"}
                     else []
                 )
                 self.assertEqual(
@@ -11219,55 +11235,42 @@ class CatalogFoundationTests(unittest.TestCase):
                 "benchHeightCm": number(35.5, 35.5, False),
                 "lowerBodyContribution": enum("combinedHipAndKneeExtension"),
             },
-            "split-stance-squat": {
-                "kineticChain": enum("closed"),
-                "bodyPosition": enum("standing"),
-                "torsoSupport": enum("none"),
-                "stanceConfiguration": enum("splitSagittal"),
-                "stanceLength": enum(
-                    "approximatelyLegLength",
-                    "individualizedPatellaOverLeadToeAtParallel",
-                    "sourceUnreported",
-                ),
-                "leadFootSupport": enum("fullFootFloor"),
-                "trailFootSupport": enum(
-                    "forefootFloor",
-                    "elevatedBoxFootFixedAgainstPosteriorStop",
-                    "elevatedBenchTopOfFoot",
-                ),
-                "rearSupportHeight": enum(
-                    "floor",
-                    "baseOfPatellaToGround",
-                    "sourceUnreported",
-                ),
-                "interRepFootTransition": enum("none"),
-                "loadPlacement": enum(
-                    "upperBackBarbell",
-                    "highBarUpperBackBarbell",
-                    "pairedBesideBody",
-                ),
-                "gripOrientation": enum("pronated", "neutral"),
-                "rangeOfMotion": enum(
-                    "leadThighParallel",
-                    "leadKneeApproximatelyNinetyDegrees",
-                ),
-                "trunkOrientation": enum("erect", "nonstandardized"),
-                "spineMotion": enum("nonstandardized"),
-                "hipMotion": enum("extends"),
-                "kneeMotion": enum("extends"),
-                "ankleMotion": enum("plantarflexes"),
-                "footMotion": enum("positionHeld"),
-                "footContact": enum("continuous"),
-                "interRepSupport": enum("none"),
-                "fixedPath": ("boolean", False),
-                "implementConfiguration": enum(
-                    "straightBarbell", "pairedDumbbells"
-                ),
-                "loadAccounting": enum(
-                    "totalBarAndPlates", "perImplement"
-                ),
-                "lowerBodyContribution": enum("compoundHipKneeAnkleExtension"),
-            },
+            "split-stance-squat": {'kineticChain': ('enum', ('closed',)),
+                                   'bodyPosition': ('enum', ('standing',)),
+                                   'torsoSupport': ('enum', ('none',)),
+                                   'stanceConfiguration': ('enum', ('splitSagittal',)),
+                                   'stanceLength': ('enum',
+                                                    ('approximatelyLegLength',
+                                                     'individualizedPatellaOverLeadToeAtParallel',
+                                                     'sourceUnreported')),
+                                   'leadFootSupport': ('enum', ('fullFootFloor',)),
+                                   'trailFootSupport': ('enum',
+                                                        ('forefootFloor',
+                                                         'elevatedBoxFootFixedAgainstPosteriorStop',
+                                                         'elevatedBenchTopOfFoot')),
+                                   'rearSupportHeight': ('enum', ('floor', 'baseOfPatellaToGround', 'sourceUnreported')),
+                                   'interRepFootTransition': ('enum', ('none',)),
+                                   'loadPlacement': ('enum',
+                                                     ('upperBackBarbell',
+                                                      'highBarUpperBackBarbell',
+                                                      'pairedBesideBody',
+                                                      'none')),
+                                   'gripOrientation': ('enum', ('pronated', 'neutral', 'notApplicable')),
+                                   'rangeOfMotion': ('enum', ('leadThighParallel', 'leadKneeApproximatelyNinetyDegrees')),
+                                   'trunkOrientation': ('enum', ('erect', 'nonstandardized')),
+                                   'spineMotion': ('enum', ('nonstandardized',)),
+                                   'hipMotion': ('enum', ('extends',)),
+                                   'kneeMotion': ('enum', ('extends',)),
+                                   'ankleMotion': ('enum', ('plantarflexes',)),
+                                   'footMotion': ('enum', ('positionHeld',)),
+                                   'footContact': ('enum', ('continuous',)),
+                                   'interRepSupport': ('enum', ('none',)),
+                                   'fixedPath': ('boolean', False),
+                                   'implementConfiguration': ('enum', ('straightBarbell', 'pairedDumbbells', 'none')),
+                                   'loadAccounting': ('enum', ('totalBarAndPlates', 'perImplement', 'none')),
+                                   'lowerBodyContribution': ('enum', ('compoundHipKneeAnkleExtension',)),
+                                   'handPosition': ('enum', ('hips',)),
+                                   'rearFootBenchFixture': ('enum', ('pairedDumbbells', 'bodyweight'))},
             "step-up": {
                 "kineticChain": enum("closed"),
                 "bodyPosition": enum("standing"),
@@ -11314,6 +11317,7 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         }
         optional_axis_ids = {
+            "handPosition", "rearFootBenchFixture",
             "benchHeightCm",
             "railOrientationDegrees",
             "footOffsetFromBarCm",
@@ -11492,16 +11496,22 @@ class CatalogFoundationTests(unittest.TestCase):
                 "floor-supported-fixture-is-glute-bridge",
                 "glute-bridge-position-requires-floor",
             ],
-            "split-stance-squat": [
-                "floor-trail-support-has-no-elevation",
-                "elevated-trail-support-uses-patella-height",
-                "bench-top-of-foot-support-uses-paired-dumbbells",
-                "dumbbell-load-is-paired-per-implement",
-                "paired-beside-body-placement-identifies-dumbbells",
-                "straight-barbell-configuration-identifies-barbell-loading",
-                "upper-back-placement-identifies-floor-barbell-split-squat",
-                "high-bar-placement-identifies-elevated-barbell-split-squat",
-            ],
+            "split-stance-squat": ['floor-trail-support-has-no-elevation',
+                                   'elevated-trail-support-uses-patella-height',
+                                   'bench-top-of-foot-support-uses-paired-dumbbells',
+                                   'dumbbell-load-is-paired-per-implement',
+                                   'paired-beside-body-placement-identifies-dumbbells',
+                                   'straight-barbell-configuration-identifies-barbell-loading',
+                                   'upper-back-placement-identifies-floor-barbell-split-squat',
+                                   'high-bar-placement-identifies-elevated-barbell-split-squat',
+                                   'loaded-split-squat-requires-implement-control',
+                                   'paired-dumbbell-bench-split-squat-pins-fixture',
+                                   'non-bench-split-squat-omits-bench-fixture',
+                                   'bodyweight-bench-split-squat-pins-fixture',
+                                   'bodyweight-split-squat-has-no-implement',
+                                   'no-loadplacement-identifies-unloaded-split',
+                                   'no-implementconfiguration-identifies-unloaded-split',
+                                   'no-loadaccounting-identifies-unloaded-split'],
             "step-up": [
                 "bodyweight-fixture-pins-complete-twenty-one-centimeter-sequence",
                 "dumbbell-fixture-pins-paired-load-and-reported-unknowns",
@@ -11655,7 +11665,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "mutated Batch-5 stability requirement",
                             )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 169)
+        self.assertEqual(mutation_count, 243)
 
     def test_batch5_squat_shoulder_rules_are_minima_not_exclusive(self) -> None:
         family = copy.deepcopy(self.batch5_families["bilateral-squat"])
@@ -11769,8 +11779,8 @@ class CatalogFoundationTests(unittest.TestCase):
                             f"fails muscle requirement {requirement_index}",
                         )
                     demotion_count += 1
-        self.assertEqual(removal_count, 135)
-        self.assertEqual(demotion_count, 54)
+        self.assertEqual(removal_count, 146)
+        self.assertEqual(demotion_count, 64)
 
     def test_batch5_step_up_contract_mutates_every_invariant_directly(
         self,
@@ -12080,7 +12090,7 @@ class CatalogFoundationTests(unittest.TestCase):
             }
         for family in self.batch5_families.values():
             for exercise in family["exercises"]:
-                if exercise["catalogID"] in DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS:
+                if exercise["catalogID"] in (DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS | REQUESTED_GAPS_RECORD_IDS):
                     continue
                 assigned = {
                     item["muscle"] for item in exercise["involvement"]
@@ -12094,9 +12104,8 @@ class CatalogFoundationTests(unittest.TestCase):
                             "stabilizes"
                         ]
                     }
-                    for region in family["movementSignature"][
-                        "stabilityDemands"
-                    ]
+                    for region in (set(family["movementSignature"]["stabilityDemands"])
+                                   | (set(exercise["additionalStabilityDemands"]) if family["id"] == "split-stance-squat" else set()))
                 }
                 with self.subTest(exercise=exercise["catalogID"]):
                     self.assertEqual(actual, expected[exercise["catalogID"]])
@@ -15355,56 +15364,40 @@ class CatalogFoundationTests(unittest.TestCase):
 
     def test_batch6_hip_contracts_and_rosters_are_exact(self) -> None:
         expected_families = {
-            "hip-abduction": {
-                "name": "Hip Abduction",
-                "plane": "frontal",
-                "action": "hip.abduction",
-                "demands": ["hip", "pelvis", "knee"],
-                "policy": {
-                    "requirements": [
-                        {
-                            "anyOf": ["gluteMed"],
-                            "minimumRole": "primary",
-                        },
-                        {
-                            "anyOf": ["tensorFasciaeLatae"],
-                            "minimumRole": "secondary",
-                        },
-                    ],
-                    "allowedByRole": {
-                        "primary": ["gluteMed"],
-                        "secondary": ["tensorFasciaeLatae"],
-                        "stabilizer": [],
-                    },
-                },
-                "allowed": {
-                    "equipment": ["other", "machine", "bodyweight"],
-                    "modalities": ["dynamicStrength"],
-                    "trackingModes": ["reps"],
-                    "loadModes": ["external", "nonComparable"],
-                    "lateralities": ["unilateral", "bilateral"],
-                },
-                "reps": {
-                    "minimum": 10,
-                    "maximum": 20,
-                },
-                "evidence": [
-                    "arnold-2010-lower-limb",
-                    "mcbeth-2012-side-lying-hip-abduction",
-                    "brandt-2013-machine-hip-abduction-adduction",
-                    "ace-2026-side-lying-hip-abduction",
-                ],
-                "roster": [
-                    "pressure-biofeedback-side-lying-hip-abduction",
-                    "technogym-bilateral-seated-hip-abduction",
-                    "bodyweight-side-lying-hip-abduction",
-                ],
-                "rules": [
-                    "side-lying-abduction-pins-cuff-fixture",
-                    "seated-abduction-pins-technogym-fixture",
-                    "bodyweight-abduction-pins-floor-fixture",
-                ],
-            },
+            "hip-abduction": {'name': 'Hip Abduction',
+                              'plane': 'frontal',
+                              'action': 'hip.abduction',
+                              'demands': ['hip', 'pelvis', 'knee'],
+                              'policy': {'requirements': [{'anyOf': ['gluteMed'], 'minimumRole': 'primary'},
+                                                          {'anyOf': ['tensorFasciaeLatae'],
+                                                           'minimumRole': 'secondary'}],
+                                         'allowedByRole': {'primary': ['gluteMed'],
+                                                           'secondary': ['tensorFasciaeLatae'],
+                                                           'stabilizer': ['abs',
+                                                                          'obliques',
+                                                                          'gastrocnemius',
+                                                                          'soleus']}},
+                              'allowed': {'equipment': ['other', 'machine', 'bodyweight', 'cable'],
+                                          'modalities': ['dynamicStrength'],
+                                          'trackingModes': ['reps'],
+                                          'loadModes': ['external', 'nonComparable'],
+                                          'lateralities': ['unilateral', 'bilateral']},
+                              'reps': {'minimum': 10, 'maximum': 20},
+                              'evidence': ['arnold-2010-lower-limb',
+                                           'mcbeth-2012-side-lying-hip-abduction',
+                                           'brandt-2013-machine-hip-abduction-adduction',
+                                           'ace-2026-side-lying-hip-abduction',
+                                           'ace-2009-cable-crossover-lower-body'],
+                              'roster': ['pressure-biofeedback-side-lying-hip-abduction',
+                                         'technogym-bilateral-seated-hip-abduction',
+                                         'bodyweight-side-lying-hip-abduction',
+                                         'standing-cable-hip-abduction'],
+                              'rules': ['side-lying-abduction-pins-cuff-fixture',
+                                        'seated-abduction-pins-technogym-fixture',
+                                        'bodyweight-abduction-pins-floor-fixture',
+                                        'standing-cable-abduction-pins-fixture',
+                                        'standing-position-identifies-cable-abduction',
+                                        'cable-cuff-identifies-standing-abduction']},
             "hip-adduction": {'name': 'Hip Adduction',
                               'plane': 'frontal',
                               'action': 'hip.adduction',
@@ -15877,47 +15870,53 @@ class CatalogFoundationTests(unittest.TestCase):
             )
 
         expected = {
-            "hip-abduction": {
-                "kineticChain": enum("open"),
-                "bodyPosition": enum("sideLying", "seated"),
-                "torsoSupport": enum("table", "machineBackPad", "floor"),
-                "pelvisSupport": enum("table", "machineSeatAndBackPad", "floor"),
-                "supportLegPosture": enum(
-                    "flexedForStability", "notApplicableBilateralMachine", "extendedStacked"
-                ),
-                "pelvisMotion": enum("positionHeld"),
-                "spineMotion": enum("positionHeld"),
-                "hipMotion": enum("abducts"),
-                "hipSagittalPosture": enum("neutral", "flexed80Degrees"),
-                "hipStartAbductionDegrees": number(0),
-                "hipEndAbductionDegrees": number(35, 45),
-                "hipRotation": enum("neutral", "unreported"),
-                "trunkPositionFeedback": enum(
-                    "pressureBiofeedback35To45MmHg", "noneReported", "none"
-                ),
-                "abductionEndpointReference": enum(
-                    "horizontalContactBand", "machineApproximate45DegreeLimit", "pelvisControlLimit"
-                ),
-                "kneeMotion": enum("positionHeld"),
-                "kneePosture": enum(
-                    "extended", "flexedApproximately90Degrees"
-                ),
-                "movingSegment": enum("thigh"),
-                "loadInterface": enum("cuffJustAboveAnkle", "lateralThighPads", "none"),
-                "resistanceGeometry": enum(
-                    "gravityLoadedAnkleCuff", "selectorizedIsotonicLever", "limbSegmentGravity"
-                ),
-                "handSupport": enum("none", "machineHandles"),
-                "machineFixture": enum(
-                    "notApplicable",
-                    "technogymSeatedAbductorModelUnreported",
-                ),
-                "cadence": enum(
-                    "unreported", "oneSecondConcentricOneSecondEccentric"
-                ),
-                "fixedPath": ("boolean", (False, True)),
-                "lowerBodyContribution": enum("isolatedJointMotion"),
-            },
+            "hip-abduction": {'kineticChain': ('enum', ('open',)),
+                              'bodyPosition': ('enum', ('sideLying', 'seated', 'standing')),
+                              'torsoSupport': ('enum', ('table', 'machineBackPad', 'floor', 'none')),
+                              'pelvisSupport': ('enum',
+                                                ('table', 'machineSeatAndBackPad', 'floor', 'unsupportedStanding')),
+                              'supportLegPosture': ('enum',
+                                                    ('flexedForStability',
+                                                     'notApplicableBilateralMachine',
+                                                     'extendedStacked',
+                                                     'plantedStraight')),
+                              'pelvisMotion': ('enum', ('positionHeld',)),
+                              'spineMotion': ('enum', ('positionHeld',)),
+                              'hipMotion': ('enum', ('abducts',)),
+                              'hipSagittalPosture': ('enum', ('neutral', 'flexed80Degrees')),
+                              'hipStartAbductionDegrees': ('number', 0, 0),
+                              'hipEndAbductionDegrees': ('number', 35, 45),
+                              'hipRotation': ('enum', ('neutral', 'unreported')),
+                              'trunkPositionFeedback': ('enum',
+                                                        ('pressureBiofeedback35To45MmHg', 'noneReported', 'none')),
+                              'abductionEndpointReference': ('enum',
+                                                             ('horizontalContactBand',
+                                                              'machineApproximate45DegreeLimit',
+                                                              'pelvisControlLimit')),
+                              'kneeMotion': ('enum', ('positionHeld',)),
+                              'kneePosture': ('enum', ('extended', 'flexedApproximately90Degrees')),
+                              'movingSegment': ('enum', ('thigh',)),
+                              'loadInterface': ('enum',
+                                                ('cuffJustAboveAnkle',
+                                                 'lateralThighPads',
+                                                 'none',
+                                                 'cableCuffAtAnkle')),
+                              'resistanceGeometry': ('enum',
+                                                     ('gravityLoadedAnkleCuff',
+                                                      'selectorizedIsotonicLever',
+                                                      'limbSegmentGravity',
+                                                      'lateralLowPulley')),
+                              'handSupport': ('enum', ('none', 'machineHandles')),
+                              'machineFixture': ('enum',
+                                                 ('notApplicable', 'technogymSeatedAbductorModelUnreported')),
+                              'cadence': ('enum',
+                                          ('unreported',
+                                           'oneSecondConcentricOneSecondEccentric',
+                                           'controlledReturn')),
+                              'fixedPath': ('boolean', (False, True)),
+                              'lowerBodyContribution': ('enum', ('isolatedJointMotion',)),
+                              'hipStartPosition': ('enum', ('shoulderWidthStanceUnderCableTension',)),
+                              'loadAccounting': ('enum', ('enteredExternalLoadSameFixtureOnly',))},
             "hip-adduction": {
                 "kineticChain": enum("open"),
                 "bodyPosition": enum("standing", "seated"),
@@ -16029,7 +16028,7 @@ class CatalogFoundationTests(unittest.TestCase):
             for axis in family["variantAxes"]:
                 self.assertEqual(
                     axis["required"],
-                    not (family_id == "hip-abduction" and axis["id"] == "hipEndAbductionDegrees"),
+                    not (family_id == "hip-abduction" and axis["id"] in {"hipStartAbductionDegrees", "hipEndAbductionDegrees", "hipStartPosition", "loadAccounting"}),
                 )
                 observed = {
                     exercise["variant"][axis["id"]]
@@ -16516,8 +16515,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             10,
         )
-        self.assertEqual(len(self.real_families), 105)
-        self.assertEqual(len(self.foundation.evidence_ids), 289)
+        self.assertEqual(len(self.real_families), 107)
+        self.assertEqual(len(self.foundation.evidence_ids), 296)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -19061,9 +19060,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 105)
-        self.assertEqual(len(records), 252)
-        self.assertEqual(len(self.foundation.evidence_ids), 289)
+        self.assertEqual(len(self.real_families), 107)
+        self.assertEqual(len(records), 260)
+        self.assertEqual(len(self.foundation.evidence_ids), 296)
         self.assertEqual(
             {
                 key: upright[key]
@@ -20109,74 +20108,146 @@ class CatalogFoundationTests(unittest.TestCase):
     def test_lower_expansion_rule_maps_are_independently_pinned(self) -> None:
         family_by_id = {family["id"]: family for family in self.real_families}
         expected = {
-            "split-stance-squat": {
-                "floor-trail-support-has-no-elevation": {
-                    "when": (
-                        "variant.trailFootSupport", "equals", "forefootFloor"
-                    ),
-                    "then": {
-                        "variant.stanceLength": "approximatelyLegLength",
-                        "variant.rearSupportHeight": "floor",
-                        "variant.rangeOfMotion": "leadThighParallel",
-                        "variant.trunkOrientation": "erect",
-                    },
-                    "present": (),
-                    "absent": (),
-                },
-                "elevated-trail-support-uses-patella-height": {
-                    "when": (
-                        "variant.trailFootSupport",
-                        "equals",
-                        "elevatedBoxFootFixedAgainstPosteriorStop",
-                    ),
-                    "then": {
-                        "variant.rearSupportHeight": "baseOfPatellaToGround",
-                        "variant.stanceLength": (
-                            "individualizedPatellaOverLeadToeAtParallel"
-                        ),
-                        "variant.rangeOfMotion": (
-                            "leadKneeApproximatelyNinetyDegrees"
-                        ),
-                        "variant.loadPlacement": "highBarUpperBackBarbell",
-                        "variant.trunkOrientation": "nonstandardized",
-                        "variant.implementConfiguration": "straightBarbell",
-                        "variant.loadAccounting": "totalBarAndPlates",
-                    },
-                    "present": (),
-                    "absent": (),
-                },
-                "bench-top-of-foot-support-uses-paired-dumbbells": {
-                    "when": (
-                        "variant.trailFootSupport",
-                        "equals",
-                        "elevatedBenchTopOfFoot",
-                    ),
-                    "then": {
-                        "equipment": "dumbbell",
-                        "variant.rearSupportHeight": "sourceUnreported",
-                        "variant.stanceLength": "sourceUnreported",
-                        "variant.rangeOfMotion": "leadThighParallel",
-                        "variant.loadPlacement": "pairedBesideBody",
-                        "variant.gripOrientation": "neutral",
-                        "variant.trunkOrientation": "nonstandardized",
-                        "variant.implementConfiguration": "pairedDumbbells",
-                        "variant.loadAccounting": "perImplement",
-                    },
-                    "present": (),
-                    "absent": (),
-                },
-                "dumbbell-load-is-paired-per-implement": {
-                    "when": ("equipment", "equals", "dumbbell"),
-                    "then": {
-                        "variant.loadPlacement": "pairedBesideBody",
-                        "variant.gripOrientation": "neutral",
-                        "variant.implementConfiguration": "pairedDumbbells",
-                        "variant.loadAccounting": "perImplement",
-                    },
-                    "present": (),
-                    "absent": (),
-                },
-            },
+            "split-stance-squat": {'floor-trail-support-has-no-elevation': {'when': ('variant.trailFootSupport',
+                                                               'equals',
+                                                               'forefootFloor'),
+                                                      'then': {'variant.stanceLength': 'approximatelyLegLength',
+                                                               'variant.rearSupportHeight': 'floor',
+                                                               'variant.rangeOfMotion': 'leadThighParallel',
+                                                               'variant.trunkOrientation': 'erect'},
+                                                      'present': (),
+                                                      'absent': ()},
+             'elevated-trail-support-uses-patella-height': {'when': ('variant.trailFootSupport',
+                                                                     'equals',
+                                                                     'elevatedBoxFootFixedAgainstPosteriorStop'),
+                                                            'then': {'variant.rearSupportHeight': 'baseOfPatellaToGround',
+                                                                     'variant.stanceLength': 'individualizedPatellaOverLeadToeAtParallel',
+                                                                     'variant.rangeOfMotion': 'leadKneeApproximatelyNinetyDegrees',
+                                                                     'variant.loadPlacement': 'highBarUpperBackBarbell',
+                                                                     'variant.trunkOrientation': 'nonstandardized',
+                                                                     'variant.implementConfiguration': 'straightBarbell',
+                                                                     'variant.loadAccounting': 'totalBarAndPlates'},
+                                                            'present': (),
+                                                            'absent': ()},
+             'bench-top-of-foot-support-uses-paired-dumbbells': {'when': ('variant.trailFootSupport',
+                                                                          'equals',
+                                                                          'elevatedBenchTopOfFoot'),
+                                                                 'then': {'variant.rearSupportHeight': 'sourceUnreported',
+                                                                          'variant.stanceLength': 'sourceUnreported',
+                                                                          'variant.rangeOfMotion': 'leadThighParallel'},
+                                                                 'present': ('variant.rearFootBenchFixture',),
+                                                                 'absent': ()},
+             'dumbbell-load-is-paired-per-implement': {'when': ('equipment', 'equals', 'dumbbell'),
+                                                       'then': {'variant.loadPlacement': 'pairedBesideBody',
+                                                                'variant.gripOrientation': 'neutral',
+                                                                'variant.implementConfiguration': 'pairedDumbbells',
+                                                                'variant.loadAccounting': 'perImplement'},
+                                                       'present': (),
+                                                       'absent': ()},
+             'loaded-split-squat-requires-implement-control': {'when': ('equipment', 'notEquals', 'bodyweight'),
+                                                               'then': {},
+                                                               'present': (),
+                                                               'absent': ('variant.handPosition',)},
+             'paired-dumbbell-bench-split-squat-pins-fixture': {'when': ('variant.rearFootBenchFixture',
+                                                                         'equals',
+                                                                         'pairedDumbbells'),
+                                                                'then': {'equipment': 'dumbbell',
+                                                                         'loadMode': 'external',
+                                                                         'bodyweightFraction': 0,
+                                                                         'variant.kineticChain': 'closed',
+                                                                         'variant.bodyPosition': 'standing',
+                                                                         'variant.torsoSupport': 'none',
+                                                                         'variant.stanceConfiguration': 'splitSagittal',
+                                                                         'variant.stanceLength': 'sourceUnreported',
+                                                                         'variant.leadFootSupport': 'fullFootFloor',
+                                                                         'variant.trailFootSupport': 'elevatedBenchTopOfFoot',
+                                                                         'variant.rearSupportHeight': 'sourceUnreported',
+                                                                         'variant.interRepFootTransition': 'none',
+                                                                         'variant.loadPlacement': 'pairedBesideBody',
+                                                                         'variant.gripOrientation': 'neutral',
+                                                                         'variant.rangeOfMotion': 'leadThighParallel',
+                                                                         'variant.trunkOrientation': 'nonstandardized',
+                                                                         'variant.spineMotion': 'nonstandardized',
+                                                                         'variant.hipMotion': 'extends',
+                                                                         'variant.kneeMotion': 'extends',
+                                                                         'variant.ankleMotion': 'plantarflexes',
+                                                                         'variant.footMotion': 'positionHeld',
+                                                                         'variant.footContact': 'continuous',
+                                                                         'variant.interRepSupport': 'none',
+                                                                         'variant.fixedPath': False,
+                                                                         'variant.implementConfiguration': 'pairedDumbbells',
+                                                                         'variant.loadAccounting': 'perImplement',
+                                                                         'variant.lowerBodyContribution': 'compoundHipKneeAnkleExtension'},
+                                                                'present': (),
+                                                                'absent': ()},
+             'non-bench-split-squat-omits-bench-fixture': {'when': ('variant.trailFootSupport',
+                                                                    'notEquals',
+                                                                    'elevatedBenchTopOfFoot'),
+                                                           'then': {},
+                                                           'present': (),
+                                                           'absent': ('variant.rearFootBenchFixture',)},
+             'bodyweight-bench-split-squat-pins-fixture': {'when': ('variant.rearFootBenchFixture',
+                                                                    'equals',
+                                                                    'bodyweight'),
+                                                           'then': {'equipment': 'bodyweight',
+                                                                    'loadMode': 'nonComparable',
+                                                                    'bodyweightFraction': 0,
+                                                                    'variant.kineticChain': 'closed',
+                                                                    'variant.bodyPosition': 'standing',
+                                                                    'variant.torsoSupport': 'none',
+                                                                    'variant.stanceConfiguration': 'splitSagittal',
+                                                                    'variant.stanceLength': 'sourceUnreported',
+                                                                    'variant.leadFootSupport': 'fullFootFloor',
+                                                                    'variant.trailFootSupport': 'elevatedBenchTopOfFoot',
+                                                                    'variant.rearSupportHeight': 'sourceUnreported',
+                                                                    'variant.interRepFootTransition': 'none',
+                                                                    'variant.loadPlacement': 'none',
+                                                                    'variant.rangeOfMotion': 'leadThighParallel',
+                                                                    'variant.trunkOrientation': 'erect',
+                                                                    'variant.spineMotion': 'nonstandardized',
+                                                                    'variant.hipMotion': 'extends',
+                                                                    'variant.kneeMotion': 'extends',
+                                                                    'variant.ankleMotion': 'plantarflexes',
+                                                                    'variant.footMotion': 'positionHeld',
+                                                                    'variant.footContact': 'continuous',
+                                                                    'variant.interRepSupport': 'none',
+                                                                    'variant.fixedPath': False,
+                                                                    'variant.implementConfiguration': 'none',
+                                                                    'variant.loadAccounting': 'none',
+                                                                    'variant.lowerBodyContribution': 'compoundHipKneeAnkleExtension',
+                                                                    'variant.handPosition': 'hips',
+                                                                    'variant.gripOrientation': 'notApplicable'},
+                                                           'present': (),
+                                                           'absent': ()},
+             'bodyweight-split-squat-has-no-implement': {'when': ('equipment', 'equals', 'bodyweight'),
+                                                         'then': {'loadMode': 'nonComparable',
+                                                                  'bodyweightFraction': 0,
+                                                                  'variant.loadPlacement': 'none',
+                                                                  'variant.implementConfiguration': 'none',
+                                                                  'variant.loadAccounting': 'none',
+                                                                  'variant.gripOrientation': 'notApplicable',
+                                                                  'variant.handPosition': 'hips',
+                                                                  'variant.trunkOrientation': 'erect',
+                                                                  'variant.trailFootSupport': ('forefootFloor',
+                                                                                               'elevatedBenchTopOfFoot')},
+                                                         'present': (),
+                                                         'absent': ()},
+             'no-loadplacement-identifies-unloaded-split': {'when': ('variant.loadPlacement', 'equals', 'none'),
+                                                            'then': {'equipment': 'bodyweight'},
+                                                            'present': (),
+                                                            'absent': ()},
+             'no-implementconfiguration-identifies-unloaded-split': {'when': ('variant.implementConfiguration',
+                                                                              'equals',
+                                                                              'none'),
+                                                                     'then': {'equipment': 'bodyweight'},
+                                                                     'present': (),
+                                                                     'absent': ()},
+             'no-loadaccounting-identifies-unloaded-split': {'when': ('variant.loadAccounting',
+                                                                      'equals',
+                                                                      'none'),
+                                                             'then': {'equipment': 'bodyweight'},
+                                                             'present': (),
+                                                             'absent': ()}},
             "knee-flexion": {
                 "life-fitness-pins-unilateral-seated-fixture": {
                     "when": (
@@ -20254,82 +20325,116 @@ class CatalogFoundationTests(unittest.TestCase):
                     "absent": (),
                 },
             },
-            "hip-abduction": {
-                "side-lying-abduction-pins-cuff-fixture": {
-                    "when": ("equipment", "equals", "other"),
-                    "then": {
-                        "laterality": "unilateral",
-                        "variant.torsoSupport": "table",
-                        "variant.pelvisSupport": "table",
-                        "variant.supportLegPosture": "flexedForStability",
-                        "variant.hipSagittalPosture": "neutral",
-                        "variant.hipEndAbductionDegrees": 35,
-                        "variant.hipRotation": "neutral",
-                        "variant.trunkPositionFeedback": "pressureBiofeedback35To45MmHg",
-                        "variant.abductionEndpointReference": "horizontalContactBand",
-                        "variant.kneePosture": "extended",
-                        "variant.loadInterface": "cuffJustAboveAnkle",
-                        "variant.resistanceGeometry": "gravityLoadedAnkleCuff",
-                        "variant.handSupport": "none",
-                        "variant.machineFixture": "notApplicable",
-                        "variant.cadence": "unreported",
-                        "variant.fixedPath": False,
-                        "variant.bodyPosition": "sideLying",
-                        "loadMode": "external",
-                    },
-                    "present": ("variant.hipEndAbductionDegrees",),
-                    "absent": (),
-                },
-                "seated-abduction-pins-technogym-fixture": {
-                    "when": ("equipment", "equals", "machine"),
-                    "then": {
-                        "laterality": "bilateral",
-                        "variant.torsoSupport": "machineBackPad",
-                        "variant.pelvisSupport": "machineSeatAndBackPad",
-                        "variant.supportLegPosture": "notApplicableBilateralMachine",
-                        "variant.hipSagittalPosture": "flexed80Degrees",
-                        "variant.hipEndAbductionDegrees": 45,
-                        "variant.hipRotation": "unreported",
-                        "variant.trunkPositionFeedback": "noneReported",
-                        "variant.abductionEndpointReference": "machineApproximate45DegreeLimit",
-                        "variant.kneePosture": "flexedApproximately90Degrees",
-                        "variant.loadInterface": "lateralThighPads",
-                        "variant.resistanceGeometry": "selectorizedIsotonicLever",
-                        "variant.handSupport": "machineHandles",
-                        "variant.machineFixture": "technogymSeatedAbductorModelUnreported",
-                        "variant.cadence": "oneSecondConcentricOneSecondEccentric",
-                        "variant.fixedPath": True,
-                        "variant.bodyPosition": "seated",
-                        "loadMode": "external",
-                    },
-                    "present": ("variant.hipEndAbductionDegrees",),
-                    "absent": (),
-                },
-                "bodyweight-abduction-pins-floor-fixture": {
-                    "when": ("equipment", "equals", "bodyweight"),
-                    "then": {
-                        "laterality": "unilateral",
-                        "loadMode": "nonComparable",
-                        "variant.bodyPosition": "sideLying",
-                        "variant.torsoSupport": "floor",
-                        "variant.pelvisSupport": "floor",
-                        "variant.supportLegPosture": "extendedStacked",
-                        "variant.hipSagittalPosture": "neutral",
-                        "variant.hipRotation": "neutral",
-                        "variant.trunkPositionFeedback": "none",
-                        "variant.abductionEndpointReference": "pelvisControlLimit",
-                        "variant.kneePosture": "extended",
-                        "variant.loadInterface": "none",
-                        "variant.resistanceGeometry": "limbSegmentGravity",
-                        "variant.handSupport": "none",
-                        "variant.machineFixture": "notApplicable",
-                        "variant.cadence": "unreported",
-                        "variant.fixedPath": False,
-                    },
-                    "present": (),
-                    "absent": ("variant.hipEndAbductionDegrees",),
-                },
-            },
+            "hip-abduction": {'side-lying-abduction-pins-cuff-fixture': {'when': ('equipment', 'equals', 'other'),
+                                                        'then': {'variant.bodyPosition': 'sideLying',
+                                                                 'laterality': 'unilateral',
+                                                                 'variant.torsoSupport': 'table',
+                                                                 'variant.pelvisSupport': 'table',
+                                                                 'variant.supportLegPosture': 'flexedForStability',
+                                                                 'variant.hipSagittalPosture': 'neutral',
+                                                                 'variant.hipEndAbductionDegrees': 35,
+                                                                 'variant.hipRotation': 'neutral',
+                                                                 'variant.trunkPositionFeedback': 'pressureBiofeedback35To45MmHg',
+                                                                 'variant.abductionEndpointReference': 'horizontalContactBand',
+                                                                 'variant.kneePosture': 'extended',
+                                                                 'variant.loadInterface': 'cuffJustAboveAnkle',
+                                                                 'variant.resistanceGeometry': 'gravityLoadedAnkleCuff',
+                                                                 'variant.handSupport': 'none',
+                                                                 'variant.machineFixture': 'notApplicable',
+                                                                 'variant.cadence': 'unreported',
+                                                                 'variant.fixedPath': False,
+                                                                 'loadMode': 'external'},
+                                                        'present': ('variant.hipEndAbductionDegrees',
+                                                                    'variant.hipStartAbductionDegrees'),
+                                                        'absent': ('variant.hipStartPosition',
+                                                                   'variant.loadAccounting')},
+             'seated-abduction-pins-technogym-fixture': {'when': ('equipment', 'equals', 'machine'),
+                                                         'then': {'variant.bodyPosition': 'seated',
+                                                                  'laterality': 'bilateral',
+                                                                  'variant.torsoSupport': 'machineBackPad',
+                                                                  'variant.pelvisSupport': 'machineSeatAndBackPad',
+                                                                  'variant.supportLegPosture': 'notApplicableBilateralMachine',
+                                                                  'variant.hipSagittalPosture': 'flexed80Degrees',
+                                                                  'variant.hipEndAbductionDegrees': 45,
+                                                                  'variant.hipRotation': 'unreported',
+                                                                  'variant.trunkPositionFeedback': 'noneReported',
+                                                                  'variant.abductionEndpointReference': 'machineApproximate45DegreeLimit',
+                                                                  'variant.kneePosture': 'flexedApproximately90Degrees',
+                                                                  'variant.loadInterface': 'lateralThighPads',
+                                                                  'variant.resistanceGeometry': 'selectorizedIsotonicLever',
+                                                                  'variant.handSupport': 'machineHandles',
+                                                                  'variant.machineFixture': 'technogymSeatedAbductorModelUnreported',
+                                                                  'variant.cadence': 'oneSecondConcentricOneSecondEccentric',
+                                                                  'variant.fixedPath': True,
+                                                                  'loadMode': 'external'},
+                                                         'present': ('variant.hipEndAbductionDegrees',
+                                                                     'variant.hipStartAbductionDegrees'),
+                                                         'absent': ('variant.hipStartPosition',
+                                                                    'variant.loadAccounting')},
+             'bodyweight-abduction-pins-floor-fixture': {'when': ('equipment', 'equals', 'bodyweight'),
+                                                         'then': {'laterality': 'unilateral',
+                                                                  'loadMode': 'nonComparable',
+                                                                  'variant.bodyPosition': 'sideLying',
+                                                                  'variant.torsoSupport': 'floor',
+                                                                  'variant.pelvisSupport': 'floor',
+                                                                  'variant.supportLegPosture': 'extendedStacked',
+                                                                  'variant.hipSagittalPosture': 'neutral',
+                                                                  'variant.hipRotation': 'neutral',
+                                                                  'variant.trunkPositionFeedback': 'none',
+                                                                  'variant.abductionEndpointReference': 'pelvisControlLimit',
+                                                                  'variant.kneePosture': 'extended',
+                                                                  'variant.loadInterface': 'none',
+                                                                  'variant.resistanceGeometry': 'limbSegmentGravity',
+                                                                  'variant.handSupport': 'none',
+                                                                  'variant.machineFixture': 'notApplicable',
+                                                                  'variant.cadence': 'unreported',
+                                                                  'variant.fixedPath': False},
+                                                         'present': ('variant.hipStartAbductionDegrees',),
+                                                         'absent': ('variant.hipEndAbductionDegrees',
+                                                                    'variant.hipStartPosition',
+                                                                    'variant.loadAccounting')},
+             'standing-cable-abduction-pins-fixture': {'when': ('equipment', 'equals', 'cable'),
+                                                       'then': {'loadMode': 'external',
+                                                                'bodyweightFraction': 0,
+                                                                'variant.kineticChain': 'open',
+                                                                'variant.bodyPosition': 'standing',
+                                                                'variant.torsoSupport': 'none',
+                                                                'variant.pelvisSupport': 'unsupportedStanding',
+                                                                'variant.supportLegPosture': 'plantedStraight',
+                                                                'variant.pelvisMotion': 'positionHeld',
+                                                                'variant.spineMotion': 'positionHeld',
+                                                                'variant.hipMotion': 'abducts',
+                                                                'variant.hipSagittalPosture': 'neutral',
+                                                                'variant.hipStartPosition': 'shoulderWidthStanceUnderCableTension',
+                                                                'variant.hipRotation': 'neutral',
+                                                                'variant.trunkPositionFeedback': 'none',
+                                                                'variant.abductionEndpointReference': 'pelvisControlLimit',
+                                                                'variant.kneeMotion': 'positionHeld',
+                                                                'variant.kneePosture': 'extended',
+                                                                'variant.movingSegment': 'thigh',
+                                                                'variant.loadInterface': 'cableCuffAtAnkle',
+                                                                'variant.resistanceGeometry': 'lateralLowPulley',
+                                                                'variant.handSupport': 'none',
+                                                                'variant.machineFixture': 'notApplicable',
+                                                                'variant.cadence': 'controlledReturn',
+                                                                'variant.fixedPath': False,
+                                                                'variant.lowerBodyContribution': 'isolatedJointMotion',
+                                                                'variant.loadAccounting': 'enteredExternalLoadSameFixtureOnly'},
+                                                       'present': (),
+                                                       'absent': ('variant.hipStartAbductionDegrees',
+                                                                  'variant.hipEndAbductionDegrees')},
+             'standing-position-identifies-cable-abduction': {'when': ('variant.bodyPosition',
+                                                                       'equals',
+                                                                       'standing'),
+                                                              'then': {'equipment': 'cable'},
+                                                              'present': (),
+                                                              'absent': ()},
+             'cable-cuff-identifies-standing-abduction': {'when': ('variant.loadInterface',
+                                                                   'equals',
+                                                                   'cableCuffAtAnkle'),
+                                                          'then': {'equipment': 'cable'},
+                                                          'present': (),
+                                                          'absent': ()}},
             "hip-adduction": {'standing-adduction-pins-band-fixture': {'when': ('equipment', 'equals', 'band'),
                                                                        'then': {'equipment': 'band',
                                                                                 'loadMode': 'nonComparable',
@@ -22232,16 +22337,16 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_105_families_and_252_exercises(
+    def test_runtime_projection_is_exactly_107_families_and_260_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 252)
+        self.assertEqual(len(records), 260)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 105)
+        self.assertEqual(len({record["familyID"] for record in records}), 107)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -22377,7 +22482,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "shoulder-abduction-raise", "shoulder-flexion-raise",
                 "upper-arm-pad-chest-fly",
                 "upper-arm-pad-shoulder-abduction",
-                "vertical-press", "seated-dip-press",
+                "vertical-press", "seated-dip-press", "pike-push-up",
             },
             "pull": {
                 "active-dead-hang",
@@ -22410,6 +22515,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "bodyweight-glute-bridge", "glute-ham-raise",
                 "hang-power-clean", "lateral-lunge", "power-snatch",
                 "thruster", "belt-loaded-machine-glute-bridge",
+                "cable-pull-through",
             },
             "core": {
                 "anti-extension", "anti-lateral-flexion", "anti-rotation",
@@ -23291,9 +23397,9 @@ class CatalogFoundationTests(unittest.TestCase):
 
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
-        self.assertEqual(len(self.real_families), 105)
-        self.assertEqual(len(runtime), 252)
-        self.assertEqual(len(self.foundation.evidence_ids), 289)
+        self.assertEqual(len(self.real_families), 107)
+        self.assertEqual(len(runtime), 260)
+        self.assertEqual(len(self.foundation.evidence_ids), 296)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids
@@ -23891,7 +23997,7 @@ class CatalogFoundationTests(unittest.TestCase):
 
         expected_record_digests = {
             "single-dumbbell-goblet-squat": "c53012eb99ff4671ad0d6606df088f6aeda8ef8b194535f1430942f0174246e6",
-            "two-dumbbell-stationary-split-squat": "b46c4f5eb5293e4ee2ea71c8c55f336265bb71d0134251af02bba786e516e305",
+            "two-dumbbell-stationary-split-squat": '25b1757e8082e415f6f70e50270c8fdc89dc7517c050f3a016998de1ad49a6f7',
             "two-dumbbell-reverse-lunge": "9314f9f6173279ba6603d24f13550ed3a075bcfed51e5b592d92ec38ad29df09",
             "bilateral-dumbbell-shrug": "91ec8faddf96d84265f3655fb180aaf6b7debd680fb09f8bffde750b9d9c5b88",
             "scapular-pull-up": "5fca3d5c1bb8c831757adfdbe59e4049090886f58b06f7331ad3589d0a2876ff",

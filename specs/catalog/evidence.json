@@ -4690,6 +4690,84 @@
       "year": 2026,
       "url": "https://www.nasm.org/resource-center/exercise-library/dead-bug",
       "scope": "Undated official standard accessed 18 September 2026; year denotes retrieval. Supine arms toward ceiling, hips and knees at 90 degrees, opposite arm overhead and leg extending short of floor contact, return and alternate. Establishes fixture geometry and trunk-control intent; categorical limb roles are anatomy-and-mechanics inferences, not measured EMG or clinical claims."
+    },
+    {
+      "id": "crossfit-2008-assistance-bodyweight-exercises",
+      "url": "https://library.crossfit.com/free/pdf/24_04_Assist_Bodywt_Exerc.pdf",
+      "title": "Assistance for Bodyweight Exercises",
+      "sourceType": "officialTechnicalStandard",
+      "authors": [
+        "CrossFit Journal"
+      ],
+      "year": 2008,
+      "scope": "page 10 foot standing in loop hung over bar; strict geometry is existing pull-up transfer. Original publication August 2004; 2008 is the PDF reprint/copyright year."
+    },
+    {
+      "id": "nasm-2026-bulgarian-split-squat",
+      "url": "https://www.nasm.org/resource-center/exercise-library/bulgarian-split-squat",
+      "title": "Bulgarian Split Squat",
+      "sourceType": "officialTechnicalStandard",
+      "authors": [
+        "National Academy of Sports Medicine"
+      ],
+      "year": 2026,
+      "scope": "Explicit hands on hips unloaded option, shoelaces-down bench, upright, thigh parallel. Do not adopt medical claims or unrelated erroneous FAQ. Undated page; 2026 is retrieval year, not a claimed publication date."
+    },
+    {
+      "id": "ace-2009-cable-crossover-lower-body",
+      "url": "https://contentcdn.eacefitness.com/cp/pdfs/CertifiedNews/AugSept09Cert.pdf",
+      "title": "Take Advantage of the Versatility and Convenience of the Cable Crossover",
+      "sourceType": "officialTechnicalStandard",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2009,
+      "scope": "pages7-8 lowest ankle cuff, far ankle shoulderwidth standing, sideward raise, slow return; photo arms at sides."
+    },
+    {
+      "id": "sussex-undated-cable-pull-through",
+      "url": "https://www.sussex.ac.uk/sport/documents/cable-pull-throughs.pdf",
+      "title": "Level Three: Cable Pull Through",
+      "sourceType": "officialTechnicalStandard",
+      "authors": [
+        "Sussex Sport"
+      ],
+      "scope": "Undated official source registered with retrieval year 2026, not a claimed publication year. Conventional low-pulley rope fixture; trunk-still technique and role credits are bounded categorical anatomy/mechanics inference.",
+      "year": 2026
+    },
+    {
+      "id": "nasm-undated-pike-push-up",
+      "url": "https://www.nasm.org/resource-center/exercise-library/pike-push-up",
+      "title": "Pike Push-Up",
+      "sourceType": "officialTechnicalStandard",
+      "authors": [
+        "National Academy of Sports Medicine"
+      ],
+      "scope": "Undated official source registered with retrieval year 2026, not a claimed publication year. Exact floor-pike geometry/endpoints; not exact EMG or kinematics. Generic pectoralis statement does not establish head-specific roles.",
+      "year": 2026
+    },
+    {
+      "id": "ace-2011-triceps-kickback",
+      "url": "https://contentcdn.eacefitness.com/certifiednews/images/article/pdfs/ACETricepsStudy.pdf",
+      "title": "ACE-Sponsored Research: Best Triceps Exercises",
+      "sourceType": "officialTechnicalStandard",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2011,
+      "scope": "Published official split-stance opposite-hand-on-thigh kickback technical protocol. Sponsored EMG study summarized here does not establish universal ranking, force or hypertrophy."
+    },
+    {
+      "id": "nsca-2007-strength-training-ez-lying-extension",
+      "url": "https://studylib.net/doc/25824661/nsca---brown---strength-training",
+      "title": "Strength Training: Lying Triceps Extension, pp. 200-201",
+      "sourceType": "officialTechnicalStandard",
+      "authors": [
+        "National Strength and Conditioning Association",
+        "Lee E. Brown"
+      ],
+      "year": 2007,
+      "scope": "NSCA primary textbook content available via third-party text mirror; exact EZ-bar inside grip, five-point bench contact and bar-near-forehead endpoint."
     }
   ]
 }

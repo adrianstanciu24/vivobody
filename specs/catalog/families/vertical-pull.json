@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "vertical-pull",
   "name": "Vertical Pull",
-  "definition": "A strict compound pull in which the humerus travels down from an overhead position through shoulder adduction with a sagittal extension component, the scapula retracts, and the elbow flexes. The family covers front/scapular-path pull-ups, assisted pull-ups, cable pulldowns, and lever pulldowns without deliberate trunk or lower-body propulsion. Straight-arm pulldowns, scapular pull-ups, flared horizontal-abduction high rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, band-assisted pull-ups, and one-arm bodyweight pull-ups remain outside this contract. Flared high rows route to shoulder-horizontal-abduction-row; the measured 45-degree cable fixture routes to diagonal-pull; and product-named lever high rows remain excluded until their own geometry is reviewed. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. This correction applies only to the six suspended pull-up/chin-up fixtures, including platform-assisted variants; the seven seated pulldown rosters are unchanged. Assistance and grip orientation may change demand without implying equal activity. Radial and ulnar wrist flexors additionally receive stabilizer roles in the same six suspended fixtures. Mannella measured both during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Suspension, assistance, and grip orientation differ from that protocol; exact-fixture transfer is a categorical anatomy-and-mechanics inference, not direct phase recruitment, uniformly high activity, muscle force, or adaptation. Forman bounds this transfer because wrist-flexor activity varies with wrist-force direction and can be low. No dynamic wrist-flexion prime action is added; seated pulldown rosters remain unchanged.",
+  "definition": "A strict compound pull in which the humerus travels down from an overhead position through shoulder adduction with a sagittal extension component, the scapula retracts, and the elbow flexes. The family covers front/scapular-path pull-ups, assisted pull-ups, cable pulldowns, and lever pulldowns without deliberate trunk or lower-body propulsion. Straight-arm pulldowns, scapular pull-ups, flared horizontal-abduction high rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, and one-arm bodyweight pull-ups remain outside this contract. Flared high rows route to shoulder-horizontal-abduction-row; the measured 45-degree cable fixture routes to diagonal-pull; and product-named lever high rows remain excluded until their own geometry is reviewed. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. This correction applies only to the six suspended pull-up/chin-up fixtures, including platform-assisted variants; the seven seated pulldown rosters are unchanged. Assistance and grip orientation may change demand without implying equal activity. Radial and ulnar wrist flexors additionally receive stabilizer roles in the same six suspended fixtures. Mannella measured both during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Suspension, assistance, and grip orientation differ from that protocol; exact-fixture transfer is a categorical anatomy-and-mechanics inference, not direct phase recruitment, uniformly high activity, muscle force, or adaptation. Forman bounds this transfer because wrist-flexor activity varies with wrist-force direction and can be low. No dynamic wrist-flexion prime action is added; seated pulldown rosters remain unchanged. The foot-loop band-assisted pull-up uses variable elastic assistance and non-comparable resistance, without inventing a constant assistance mass or effective bodyweight fraction. Its strict suspended anatomy and grip-control roles transfer categorically from the reviewed pull-up fixtures.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "andersen-2014-lat-pulldown-width",
@@ -40,7 +40,8 @@
     "equipment": [
       "bodyweight",
       "cable",
-      "machine"
+      "machine",
+      "band"
     ],
     "modalities": [
       "dynamicStrength"
@@ -51,7 +52,8 @@
     "loadModes": [
       "external",
       "bodyweightAdded",
-      "assistanceSubtracted"
+      "assistanceSubtracted",
+      "nonComparable"
     ],
     "lateralities": [
       "bilateral",
@@ -225,7 +227,8 @@
       "allowedValues": [
         "none",
         "thighPad",
-        "assistancePlatform"
+        "assistancePlatform",
+        "elasticBandUnderFoot"
       ]
     },
     {
@@ -581,6 +584,136 @@
           "minimumRole": "stabilizer"
         }
       ]
+    },
+    {
+      "id": "band-pull-up-is-foot-loop-unquantified",
+      "description": "Preserve the reviewed support, implement and movement geometry of this fixture.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "band"
+      },
+      "then": [
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "nonComparable"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "closed"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "suspended"
+        },
+        {
+          "field": "variant.lowerBodySupport",
+          "value": "elasticBandUnderFoot"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
+          "field": "variant.relativeGripWidth",
+          "value": "shoulderWidth"
+        },
+        {
+          "field": "variant.pathConstraint",
+          "value": "free"
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.pullPath",
+          "value": "frontScapular"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "foot-loop-support-identifies-band-pull-up",
+      "description": "Preserve the reviewed support, implement and movement geometry of this fixture.",
+      "when": {
+        "field": "variant.lowerBodySupport",
+        "operator": "equals",
+        "value": "elasticBandUnderFoot"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "band"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "nonComparable"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "closed"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "suspended"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
+          "field": "variant.relativeGripWidth",
+          "value": "shoulderWidth"
+        },
+        {
+          "field": "variant.pathConstraint",
+          "value": "free"
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.pullPath",
+          "value": "frontScapular"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "recommended": {
@@ -1514,6 +1647,124 @@
           "Leaning the torso to move the lever turns the single-arm pulldown into a full-body heave."
         ],
         "sideOrDirection": "Complete the set with one arm, then repeat with the other arm."
+      }
+    },
+    {
+      "catalogID": "band-assisted-pull-up",
+      "name": "Band-Assisted Pull-Up",
+      "aliases": [
+        "Banded Pull-Up",
+        "Resistance-Band-Assisted Pull-Up"
+      ],
+      "equipment": "band",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "lats",
+          "role": "primary"
+        },
+        {
+          "muscle": "teresMajor",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "lowerBodySupport": "elasticBandUnderFoot",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "shoulderWidth",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "doma-2013-chinup-lat-pulldown",
+        "prinold-2016-pullup-scapular-kinematics",
+        "youdas-2010-pullup-chinup",
+        "crossfit-2008-assistance-bodyweight-exercises"
+      ],
+      "execution": {
+        "startingPosition": "Loop a resistance band securely over the fixed pull-up bar and place a foot in its lower loop. Take a shoulder-width overhand grip, hang with straight elbows and keep the torso and legs braced.",
+        "movement": "Pull the body upward by driving the elbows down until the chin clears the bar.",
+        "endpoint": "The chin clears the bar.",
+        "returnPhase": "Lower under control to a full hang.",
+        "controlledJoints": "Do not swing or use the hips or legs.",
+        "supportAndPosture": "Keep the supporting foot in the band and hold the legs still; the stretched band supplies variable assistance rather than a fixed assistance weight.",
+        "disqualifyingCompensations": [
+          "Swinging the hips or legs to gain momentum turns the strict pull-up into a kipping pull-up.",
+          "Stopping short of a full hang between repetitions turns the pull-up into a partial-range pull.",
+          "Bouncing or pushing the legs into the band adds propulsion."
+        ]
       }
     }
   ]

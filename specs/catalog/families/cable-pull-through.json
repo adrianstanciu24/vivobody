@@ -1,0 +1,466 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "cable-pull-through",
+  "name": "Cable Pull-Through",
+  "definition": "A bilateral feet-planted low-pulley rope hip hinge facing away from the cable station, with the cable passing between the legs. Sussex Sport establishes the cable/rope topology, wide stance, slight knee bend, hip-back descent and upright hip-extension endpoint. Spine position held and straight passive elbows narrow the authored fixture as technique targets, not measured kinematics. Gluteus maximus is primary and medial hamstrings secondary by Arnold anatomy and resistance mechanics; lumbar extensors and abdominal regions stabilize the held trunk. The unsplit visible biceps-femoris region receives knee-control stabilizer credit only. No exact-fixture EMG, ranking or hypertrophy claim is made. Good mornings with dynamic spinal extension, floor pulls, squat-pulls, swings, shoulder raises, unilateral ankle-cuff kickbacks and band variants remain outside. Product weights are editable seeds, not source prescriptions. Brachialis receives categorical held-elbow control credit, without a dynamic elbow-flexion action.",
+  "evidenceRefs": [
+    "sussex-undated-cable-pull-through",
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "cable"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension",
+      "spine.extension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMax"
+      ],
+      "secondary": [
+        "medialHamstrings"
+      ],
+      "stabilizer": [
+        "lumbarExtensors",
+        "abs",
+        "obliques",
+        "bicepsFemoris",
+        "gluteMed",
+        "gastrocnemius",
+        "soleus",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "trapeziusMiddle",
+        "brachialis"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "The kinetic chain that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The body position that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso support that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The stance configuration that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The stance width that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "justWiderThanShoulders"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The foot contact that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "cableSetup",
+      "valueType": "enum",
+      "required": true,
+      "description": "The cable setup that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "lowPulleyFacingAwayBetweenLegs"
+      ]
+    },
+    {
+      "id": "handleType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The handle type that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "rope"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hip motion that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The spine motion that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The knee motion that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "slightNondefiningExcursion"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The elbow motion that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "positionHeldExtended"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "The load accounting that distinguishes this cable pull-through fixture from neighboring movements.",
+      "allowedValues": [
+        "enteredExternalLoadSameFixtureOnly"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The fixed path that distinguishes this cable pull-through fixture from neighboring movements.",
+      "fixedValue": false
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "cable-pull-through",
+      "name": "Cable Pull-Through",
+      "aliases": [
+        "Cable Rope Pull-Through",
+        "Rope Pull-Through"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 30,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 90,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "secondary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "justWiderThanShoulders",
+        "footContact": "continuous",
+        "cableSetup": "lowPulleyFacingAwayBetweenLegs",
+        "handleType": "rope",
+        "hipMotion": "extends",
+        "spineMotion": "positionHeld",
+        "kneeMotion": "slightNondefiningExcursion",
+        "elbowMotion": "positionHeldExtended",
+        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "sussex-undated-cable-pull-through"
+      ],
+      "execution": {
+        "startingPosition": "Face away from a low pulley with a rope attachment passing between your legs. Hold one rope end in each hand and stand with feet just wider than your shoulders and knees slightly bent. Enter the selected cable load and compare it only on this same station and attachment.",
+        "movement": "Push your hips back while keeping your elbows straight and your trunk braced.",
+        "endpoint": "End the hinge before your back rounds or the cable pulls you off balance.",
+        "returnPhase": "Extend your hips to stand upright without leaning backward or pulling the rope with your arms.",
+        "controlledJoints": "Keep a small knee bend while moving chiefly at the hips; brace your spine and keep your arms straight.",
+        "supportAndPosture": "Keep both feet planted and distribute the task evenly between both legs.",
+        "disqualifyingCompensations": [
+          "Deep knee bending turns the hinge into a squat.",
+          "Pulling with the shoulders or elbows changes the hip-driven pull-through.",
+          "Leaning backward at the top changes the upright endpoint."
+        ]
+      }
+    }
+  ]
+}

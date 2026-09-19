@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "split-stance-squat",
   "name": "Stationary Split Squat",
-  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns floor-supported barbell and paired-dumbbell split squats using an approximately leg-length stance, lead thigh-parallel endpoint, erect torso, full lead-foot contact, and rear-forefoot floor support. It also owns two source-exact rear-foot-elevated fixtures: a high-bar setup with the rear foot fixed at patella height and a two-dumbbell setup with the top of the rear foot supported on a bench of unreported height. Each keeps its contacts fixed and returns through lead-side hip extension, knee extension, and ankle plantarflexion. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, kettlebell, bodyweight, and deficit branches remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the stationary and rear-foot-elevated split-squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. TFL receives stabilizer credit for hip, pelvic and knee alignment in the asymmetric fixed stance. Collings recorded TFL in a related two-dumbbell split squat; its modeled gluteal outcomes do not establish TFL force or ranking. Transfer to exact barbell, floor-supported and rear-foot-elevated fixtures is categorical anatomy and mechanics. Rear support, stance, load placement and depth retain their own source boundaries; no hip-extension or dynamic hip-flexion role is added.",
+  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns floor-supported barbell and paired-dumbbell split squats using an approximately leg-length stance, lead thigh-parallel endpoint, erect torso, full lead-foot contact, and rear-forefoot floor support. It also owns two source-exact rear-foot-elevated fixtures: a high-bar setup with the rear foot fixed at patella height and a two-dumbbell setup with the top of the rear foot supported on a bench of unreported height. Each keeps its contacts fixed and returns through lead-side hip extension, knee extension, and ankle plantarflexion. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, kettlebell, and deficit branches remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the stationary and rear-foot-elevated split-squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. TFL receives stabilizer credit for hip, pelvic and knee alignment in the asymmetric fixed stance. Collings recorded TFL in a related two-dumbbell split squat; its modeled gluteal outcomes do not establish TFL force or ranking. Transfer to exact barbell, floor-supported and rear-foot-elevated fixtures is categorical anatomy and mechanics. Rear support, stance, load placement and depth retain their own source boundaries; no hip-extension or dynamic hip-flexion role is added. The unloaded floor and Bulgarian bench fixtures share this stationary split-stance family. Hands stay on the hips, no implement-grip roles are credited, and resistance remains unquantified rather than assigning a bodyweight percentage. Floor geometry transfers categorically from reviewed split-squat standards and explicit unloaded warmups; the unloaded bench posture follows NASM. Bench height and stance length remain unreported for both top-of-foot bench fixtures.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "song-2023-split-squat-step-length",
@@ -13,7 +13,8 @@
     "mackey-2021-bulgarian-split-squat",
     "nsca-2016-division-i-basketball-injury-screening",
     "deforest-2014-single-double-leg-squat",
-    "collings-2023-gluteal-muscle-forces"
+    "collings-2023-gluteal-muscle-forces",
+    "nasm-2026-bulgarian-split-squat"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -33,7 +34,8 @@
   "allowed": {
     "equipment": [
       "barbell",
-      "dumbbell"
+      "dumbbell",
+      "bodyweight"
     ],
     "modalities": [
       "dynamicStrength"
@@ -42,7 +44,8 @@
       "reps"
     ],
     "loadModes": [
-      "external"
+      "external",
+      "nonComparable"
     ],
     "lateralities": [
       "unilateral"
@@ -101,11 +104,6 @@
       "foot.toeExtension"
     ],
     "stabilityDemands": [
-      "shoulder",
-      "scapula",
-      "elbow",
-      "wrist",
-      "hand",
       "spine",
       "pelvis",
       "hip",
@@ -161,37 +159,6 @@
       {
         "anyOf": [
           "gluteMed"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "fingerFlexors"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "extensorCarpiRadialis"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "externalRotators"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "trapeziusUpper"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "brachialis",
-          "triceps"
         ],
         "minimumRole": "stabilizer"
       },
@@ -295,7 +262,7 @@
       "id": "stanceLength",
       "valueType": "enum",
       "required": true,
-      "description": "The source-authored stance length; both floor fixtures preserve the reviewed leg-length method while the elevated dumbbell fixture preserves an unreported distance.",
+      "description": "Floor fixtures retain the reviewed leg-length stance; bench fixtures retain an unreported distance; the exact barbell box fixture uses its reviewed alignment criterion.",
       "allowedValues": [
         "approximatelyLegLength",
         "individualizedPatellaOverLeadToeAtParallel",
@@ -326,7 +293,7 @@
       "id": "rearSupportHeight",
       "valueType": "enum",
       "required": true,
-      "description": "The source-authored rear-contact height: floor for the split squat, base-of-patella height for the barbell elevated-box fixture, and source-unreported height for the dumbbell bench fixture.",
+      "description": "Floor, patella-height box, or source-unreported bench support height for the authored fixture.",
       "allowedValues": [
         "floor",
         "baseOfPatellaToGround",
@@ -350,17 +317,19 @@
       "allowedValues": [
         "upperBackBarbell",
         "highBarUpperBackBarbell",
-        "pairedBesideBody"
+        "pairedBesideBody",
+        "none"
       ]
     },
     {
       "id": "gripOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The source-authored grip orientation for the barbell or paired-dumbbell fixture.",
+      "description": "The grip used to hold the barbell or dumbbells; notApplicable when no implement is held.",
       "allowedValues": [
         "pronated",
-        "neutral"
+        "neutral",
+        "notApplicable"
       ]
     },
     {
@@ -460,7 +429,8 @@
       "description": "Whether the source-exact fixture uses one straight barbell or a matched dumbbell in each hand.",
       "allowedValues": [
         "straightBarbell",
-        "pairedDumbbells"
+        "pairedDumbbells",
+        "none"
       ]
     },
     {
@@ -470,7 +440,8 @@
       "description": "How the logged load maps to the physical implements.",
       "allowedValues": [
         "totalBarAndPlates",
-        "perImplement"
+        "perImplement",
+        "none"
       ]
     },
     {
@@ -480,6 +451,25 @@
       "description": "Which lower-body joint motions deliberately create the concentric repetition.",
       "allowedValues": [
         "compoundHipKneeAnkleExtension"
+      ]
+    },
+    {
+      "id": "handPosition",
+      "valueType": "enum",
+      "required": false,
+      "description": "Unloaded fixtures keep the hands on the hips without holding an implement.",
+      "allowedValues": [
+        "hips"
+      ]
+    },
+    {
+      "id": "rearFootBenchFixture",
+      "valueType": "enum",
+      "required": false,
+      "description": "The same top-of-foot bench support uses either paired side-held dumbbells or no external load; each retains its own reviewed trunk posture.",
+      "allowedValues": [
+        "pairedDumbbells",
+        "bodyweight"
       ]
     }
   ],
@@ -521,20 +511,29 @@
     },
     {
       "id": "bench-top-of-foot-support-uses-paired-dumbbells",
-      "description": "The reviewed dumbbell fixture places the top of the rear foot on a bench whose height and stance length were not reported.",
-      "when": {"field": "variant.trailFootSupport", "operator": "equals", "value": "elevatedBenchTopOfFoot"},
+      "description": "Both bench-supported fixtures retain source-unreported stance length and bench height with lead-thigh-parallel depth.",
+      "when": {
+        "field": "variant.trailFootSupport",
+        "operator": "equals",
+        "value": "elevatedBenchTopOfFoot"
+      },
       "then": [
-        {"field": "equipment", "value": "dumbbell"},
-        {"field": "variant.rearSupportHeight", "value": "sourceUnreported"},
-        {"field": "variant.stanceLength", "value": "sourceUnreported"},
-        {"field": "variant.rangeOfMotion", "value": "leadThighParallel"},
-        {"field": "variant.loadPlacement", "value": "pairedBesideBody"},
-        {"field": "variant.gripOrientation", "value": "neutral"},
-        {"field": "variant.trunkOrientation", "value": "nonstandardized"},
-        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"},
-        {"field": "variant.loadAccounting", "value": "perImplement"}
+        {
+          "field": "variant.rearSupportHeight",
+          "value": "sourceUnreported"
+        },
+        {
+          "field": "variant.stanceLength",
+          "value": "sourceUnreported"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "leadThighParallel"
+        }
       ],
-      "requirePresent": [],
+      "requirePresent": [
+        "variant.rearFootBenchFixture"
+      ],
       "requireAbsent": []
     },
     {
@@ -605,6 +604,423 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "loaded-split-squat-requires-implement-control",
+      "description": "Preserve the original upper-body control requirements only when an external implement is held.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "bodyweight"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.handPosition"
+      ],
+      "requireAdditionalStabilityDemands": [
+        "shoulder",
+        "scapula",
+        "elbow",
+        "wrist",
+        "hand"
+      ],
+      "requireMuscleRequirements": [
+        {
+          "anyOf": [
+            "fingerFlexors"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "extensorCarpiRadialis"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "externalRotators"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "trapeziusUpper"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "brachialis",
+            "triceps"
+          ],
+          "minimumRole": "stabilizer"
+        }
+      ]
+    },
+    {
+      "id": "paired-dumbbell-bench-split-squat-pins-fixture",
+      "description": "Keep the named support and load fixture separate from neighboring variants.",
+      "when": {
+        "field": "variant.rearFootBenchFixture",
+        "operator": "equals",
+        "value": "pairedDumbbells"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "closed"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.stanceConfiguration",
+          "value": "splitSagittal"
+        },
+        {
+          "field": "variant.stanceLength",
+          "value": "sourceUnreported"
+        },
+        {
+          "field": "variant.leadFootSupport",
+          "value": "fullFootFloor"
+        },
+        {
+          "field": "variant.trailFootSupport",
+          "value": "elevatedBenchTopOfFoot"
+        },
+        {
+          "field": "variant.rearSupportHeight",
+          "value": "sourceUnreported"
+        },
+        {
+          "field": "variant.interRepFootTransition",
+          "value": "none"
+        },
+        {
+          "field": "variant.loadPlacement",
+          "value": "pairedBesideBody"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "leadThighParallel"
+        },
+        {
+          "field": "variant.trunkOrientation",
+          "value": "nonstandardized"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "nonstandardized"
+        },
+        {
+          "field": "variant.hipMotion",
+          "value": "extends"
+        },
+        {
+          "field": "variant.kneeMotion",
+          "value": "extends"
+        },
+        {
+          "field": "variant.ankleMotion",
+          "value": "plantarflexes"
+        },
+        {
+          "field": "variant.footMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.footContact",
+          "value": "continuous"
+        },
+        {
+          "field": "variant.interRepSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.implementConfiguration",
+          "value": "pairedDumbbells"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "perImplement"
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "compoundHipKneeAnkleExtension"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-bench-split-squat-omits-bench-fixture",
+      "description": "Floor and source-exact barbell-box fixtures do not declare top-of-foot bench metadata.",
+      "when": {
+        "field": "variant.trailFootSupport",
+        "operator": "notEquals",
+        "value": "elevatedBenchTopOfFoot"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.rearFootBenchFixture"
+      ]
+    },
+    {
+      "id": "bodyweight-bench-split-squat-pins-fixture",
+      "description": "Keep the named support and load fixture separate from neighboring variants.",
+      "when": {
+        "field": "variant.rearFootBenchFixture",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "loadMode",
+          "value": "nonComparable"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "closed"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.stanceConfiguration",
+          "value": "splitSagittal"
+        },
+        {
+          "field": "variant.stanceLength",
+          "value": "sourceUnreported"
+        },
+        {
+          "field": "variant.leadFootSupport",
+          "value": "fullFootFloor"
+        },
+        {
+          "field": "variant.trailFootSupport",
+          "value": "elevatedBenchTopOfFoot"
+        },
+        {
+          "field": "variant.rearSupportHeight",
+          "value": "sourceUnreported"
+        },
+        {
+          "field": "variant.interRepFootTransition",
+          "value": "none"
+        },
+        {
+          "field": "variant.loadPlacement",
+          "value": "none"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "leadThighParallel"
+        },
+        {
+          "field": "variant.trunkOrientation",
+          "value": "erect"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "nonstandardized"
+        },
+        {
+          "field": "variant.hipMotion",
+          "value": "extends"
+        },
+        {
+          "field": "variant.kneeMotion",
+          "value": "extends"
+        },
+        {
+          "field": "variant.ankleMotion",
+          "value": "plantarflexes"
+        },
+        {
+          "field": "variant.footMotion",
+          "value": "positionHeld"
+        },
+        {
+          "field": "variant.footContact",
+          "value": "continuous"
+        },
+        {
+          "field": "variant.interRepSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.implementConfiguration",
+          "value": "none"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "none"
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "compoundHipKneeAnkleExtension"
+        },
+        {
+          "field": "variant.handPosition",
+          "value": "hips"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "notApplicable"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-split-squat-has-no-implement",
+      "description": "Unloaded stationary splits use no invented effective-load fraction or implement-control credit.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "nonComparable"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "variant.loadPlacement",
+          "value": "none"
+        },
+        {
+          "field": "variant.implementConfiguration",
+          "value": "none"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "none"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "notApplicable"
+        },
+        {
+          "field": "variant.handPosition",
+          "value": "hips"
+        },
+        {
+          "field": "variant.trunkOrientation",
+          "value": "erect"
+        },
+        {
+          "field": "variant.trailFootSupport",
+          "allowedValues": [
+            "forefootFloor",
+            "elevatedBenchTopOfFoot"
+          ]
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "no-loadplacement-identifies-unloaded-split",
+      "description": "A no-implement axis cannot be applied to an externally loaded split squat.",
+      "when": {
+        "field": "variant.loadPlacement",
+        "operator": "equals",
+        "value": "none"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "no-implementconfiguration-identifies-unloaded-split",
+      "description": "A no-implement axis cannot be applied to an externally loaded split squat.",
+      "when": {
+        "field": "variant.implementConfiguration",
+        "operator": "equals",
+        "value": "none"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "no-loadaccounting-identifies-unloaded-split",
+      "description": "A no-implement axis cannot be applied to an externally loaded split squat.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "none"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -625,22 +1041,70 @@
       "reps": 8,
       "searchPriority": 86,
       "involvement": [
-        { "muscle": "vasti", "role": "primary" },
-        { "muscle": "gluteMax", "role": "primary" },
-        { "muscle": "rectusFemoris", "role": "secondary" },
-        { "muscle": "gastrocnemius", "role": "secondary" },
-        { "muscle": "soleus", "role": "secondary" },
-        { "muscle": "medialHamstrings", "role": "stabilizer" },
-        { "muscle": "bicepsFemoris", "role": "stabilizer" },
-        { "muscle": "gluteMed", "role": "stabilizer" },
-        { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "externalRotators", "role": "stabilizer" },
-        { "muscle": "trapeziusUpper", "role": "stabilizer" },
-        { "muscle": "brachialis", "role": "stabilizer" },
-        { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
         {
           "muscle": "tibialisAnterior",
           "role": "stabilizer"
@@ -677,7 +1141,13 @@
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
+      "additionalStabilityDemands": [
+        "shoulder",
+        "scapula",
+        "elbow",
+        "wrist",
+        "hand"
+      ],
       "evidenceRefs": [
         "song-2023-split-squat-step-length",
         "deforest-2014-single-double-leg-squat"
@@ -700,7 +1170,11 @@
     {
       "catalogID": "two-dumbbell-stationary-split-squat",
       "name": "Two-Dumbbell Stationary Split Squat",
-      "aliases": ["Two-Dumbbell Split Squat", "Dumbbell Split Squat", "Stationary Dumbbell Split Squat"],
+      "aliases": [
+        "Two-Dumbbell Split Squat",
+        "Dumbbell Split Squat",
+        "Stationary Dumbbell Split Squat"
+      ],
       "equipment": "dumbbell",
       "laterality": "unilateral",
       "modality": "dynamicStrength",
@@ -712,12 +1186,70 @@
       "reps": 8,
       "searchPriority": 95,
       "involvement": [
-        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
-        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
-        {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
-        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
-        {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
         {
           "muscle": "tibialisAnterior",
           "role": "stabilizer"
@@ -728,17 +1260,46 @@
         }
       ],
       "variant": {
-        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "splitSagittal",
-        "stanceLength": "approximatelyLegLength", "leadFootSupport": "fullFootFloor", "trailFootSupport": "forefootFloor",
-        "rearSupportHeight": "floor", "interRepFootTransition": "none", "loadPlacement": "pairedBesideBody", "gripOrientation": "neutral",
-        "rangeOfMotion": "leadThighParallel", "trunkOrientation": "erect", "spineMotion": "nonstandardized",
-        "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "footMotion": "positionHeld",
-        "footContact": "continuous", "interRepSupport": "none", "fixedPath": false,
-        "implementConfiguration": "pairedDumbbells", "loadAccounting": "perImplement", "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "splitSagittal",
+        "stanceLength": "approximatelyLegLength",
+        "leadFootSupport": "fullFootFloor",
+        "trailFootSupport": "forefootFloor",
+        "rearSupportHeight": "floor",
+        "interRepFootTransition": "none",
+        "loadPlacement": "pairedBesideBody",
+        "gripOrientation": "neutral",
+        "rangeOfMotion": "leadThighParallel",
+        "trunkOrientation": "erect",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "implementConfiguration": "pairedDumbbells",
+        "loadAccounting": "perImplement",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": ["song-2023-split-squat-step-length", "usmc-2017-dumbbell-split-squat", "stastny-2015-split-squat-dumbbell-position", "nsca-2024-tsac-report-74-dumbbell-split-squat", "deforest-2014-single-double-leg-squat"],
+      "additionalStabilityDemands": [
+        "shoulder",
+        "scapula",
+        "elbow",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "song-2023-split-squat-step-length",
+        "usmc-2017-dumbbell-split-squat",
+        "stastny-2015-split-squat-dumbbell-position",
+        "nsca-2024-tsac-report-74-dumbbell-split-squat",
+        "deforest-2014-single-double-leg-squat"
+      ],
       "execution": {
         "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side and take a fixed split stance about as long as the distance from the outside of your hip to the outside of your ankle. Keep the lead foot flat and the rear forefoot on the floor.",
         "movement": "Keep both foot contacts fixed and lower with an erect torso until the lead thigh is approximately parallel to the floor.",
@@ -746,14 +1307,22 @@
         "returnPhase": "Push through the lead foot and extend the lead hip, knee, and ankle to return to the same split stance.",
         "controlledJoints": "Keep the lead knee tracking with the foot and both dumbbells hanging neutrally at your sides.",
         "supportAndPosture": "Keep the torso erect and use no rear-foot elevation or external support.",
-        "disqualifyingCompensations": ["Stepping between repetitions turns the movement into a lunge.", "Elevating the rear foot turns it into a rear-foot-elevated split squat.", "Holding one dumbbell or moving the pair away from the sides changes the reviewed load geometry."],
+        "disqualifyingCompensations": [
+          "Stepping between repetitions turns the movement into a lunge.",
+          "Elevating the rear foot turns it into a rear-foot-elevated split squat.",
+          "Holding one dumbbell or moving the pair away from the sides changes the reviewed load geometry."
+        ],
         "sideOrDirection": "Complete all repetitions with one lead leg, then repeat with the other leg."
       }
     },
     {
       "catalogID": "barbell-rear-foot-elevated-split-squat",
       "name": "Barbell Rear-Foot-Elevated Split Squat",
-      "aliases": ["Barbell Bulgarian Split Squat", "Barbell Bulgarian Squat", "Barbell RFESS"],
+      "aliases": [
+        "Barbell Bulgarian Split Squat",
+        "Barbell Bulgarian Squat",
+        "Barbell RFESS"
+      ],
       "equipment": "barbell",
       "laterality": "unilateral",
       "modality": "dynamicStrength",
@@ -765,12 +1334,70 @@
       "reps": 8,
       "searchPriority": 92,
       "involvement": [
-        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
-        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
-        {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
-        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
-        {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
         {
           "muscle": "tibialisAnterior",
           "role": "stabilizer"
@@ -781,19 +1408,44 @@
         }
       ],
       "variant": {
-        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "splitSagittal",
-        "stanceLength": "individualizedPatellaOverLeadToeAtParallel", "leadFootSupport": "fullFootFloor",
-        "trailFootSupport": "elevatedBoxFootFixedAgainstPosteriorStop", "rearSupportHeight": "baseOfPatellaToGround",
-        "interRepFootTransition": "none", "loadPlacement": "highBarUpperBackBarbell", "gripOrientation": "pronated",
-        "rangeOfMotion": "leadKneeApproximatelyNinetyDegrees", "trunkOrientation": "nonstandardized", "spineMotion": "nonstandardized",
-        "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "footMotion": "positionHeld",
-        "footContact": "continuous", "interRepSupport": "none", "fixedPath": false,
-        "implementConfiguration": "straightBarbell", "loadAccounting": "totalBarAndPlates",
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "splitSagittal",
+        "stanceLength": "individualizedPatellaOverLeadToeAtParallel",
+        "leadFootSupport": "fullFootFloor",
+        "trailFootSupport": "elevatedBoxFootFixedAgainstPosteriorStop",
+        "rearSupportHeight": "baseOfPatellaToGround",
+        "interRepFootTransition": "none",
+        "loadPlacement": "highBarUpperBackBarbell",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "leadKneeApproximatelyNinetyDegrees",
+        "trunkOrientation": "nonstandardized",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "implementConfiguration": "straightBarbell",
+        "loadAccounting": "totalBarAndPlates",
         "lowerBodyContribution": "compoundHipKneeAnkleExtension"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": ["arnold-2010-lower-limb", "mackey-2021-bulgarian-split-squat", "deforest-2014-single-double-leg-squat"],
+      "additionalStabilityDemands": [
+        "shoulder",
+        "scapula",
+        "elbow",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "mackey-2021-bulgarian-split-squat",
+        "deforest-2014-single-double-leg-squat"
+      ],
       "execution": {
         "startingPosition": "Set a stable rear box to the bottom-of-kneecap height, secure the rear foot against its posterior stop, place the lead leg in line with that hip, and hold the bar high on the upper back.",
         "movement": "Lower with both contacts fixed until the lead knee reaches approximately ninety degrees and the kneecap is aligned over the lead toe.",
@@ -801,14 +1453,21 @@
         "returnPhase": "Rise through the lead hip, knee, and ankle without stepping between repetitions.",
         "controlledJoints": "Keep the lead knee tracking with the foot and do not let the rear foot slide.",
         "supportAndPosture": "Maintain the high-bar position while the unreported trunk angle remains consistent across the set.",
-        "disqualifyingCompensations": ["Losing or sliding the rear-foot support changes the reviewed fixture.", "Stepping or drifting from the individualized stance changes the stationary split squat."],
+        "disqualifyingCompensations": [
+          "Losing or sliding the rear-foot support changes the reviewed fixture.",
+          "Stepping or drifting from the individualized stance changes the stationary split squat."
+        ],
         "sideOrDirection": "Complete the set with one lead leg, then repeat with the other leg leading."
       }
     },
     {
       "catalogID": "two-dumbbell-rear-foot-elevated-split-squat",
       "name": "Two-Dumbbell Rear-Foot-Elevated Split Squat",
-      "aliases": ["Dumbbell Bulgarian Split Squat", "Dumbbell Rear-Foot-Elevated Split Squat", "Dumbbell RFESS"],
+      "aliases": [
+        "Dumbbell Bulgarian Split Squat",
+        "Dumbbell Rear-Foot-Elevated Split Squat",
+        "Dumbbell RFESS"
+      ],
       "equipment": "dumbbell",
       "laterality": "unilateral",
       "modality": "dynamicStrength",
@@ -820,12 +1479,70 @@
       "reps": 8,
       "searchPriority": 94,
       "involvement": [
-        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
-        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
-        {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},
-        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"},
-        {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
         {
           "muscle": "tibialisAnterior",
           "role": "stabilizer"
@@ -836,17 +1553,45 @@
         }
       ],
       "variant": {
-        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "splitSagittal",
-        "stanceLength": "sourceUnreported", "leadFootSupport": "fullFootFloor", "trailFootSupport": "elevatedBenchTopOfFoot",
-        "rearSupportHeight": "sourceUnreported", "interRepFootTransition": "none", "loadPlacement": "pairedBesideBody", "gripOrientation": "neutral",
-        "rangeOfMotion": "leadThighParallel", "trunkOrientation": "nonstandardized", "spineMotion": "nonstandardized",
-        "hipMotion": "extends", "kneeMotion": "extends", "ankleMotion": "plantarflexes", "footMotion": "positionHeld",
-        "footContact": "continuous", "interRepSupport": "none", "fixedPath": false,
-        "implementConfiguration": "pairedDumbbells", "loadAccounting": "perImplement", "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "splitSagittal",
+        "stanceLength": "sourceUnreported",
+        "leadFootSupport": "fullFootFloor",
+        "trailFootSupport": "elevatedBenchTopOfFoot",
+        "rearSupportHeight": "sourceUnreported",
+        "interRepFootTransition": "none",
+        "loadPlacement": "pairedBesideBody",
+        "gripOrientation": "neutral",
+        "rangeOfMotion": "leadThighParallel",
+        "trunkOrientation": "nonstandardized",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "implementConfiguration": "pairedDumbbells",
+        "loadAccounting": "perImplement",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension",
+        "rearFootBenchFixture": "pairedDumbbells"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": ["mackey-2021-bulgarian-split-squat", "nsca-2016-division-i-basketball-injury-screening", "deforest-2014-single-double-leg-squat"],
+      "additionalStabilityDemands": [
+        "shoulder",
+        "scapula",
+        "elbow",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "mackey-2021-bulgarian-split-squat",
+        "nsca-2016-division-i-basketball-injury-screening",
+        "deforest-2014-single-double-leg-squat"
+      ],
       "execution": {
         "startingPosition": "Log one dumbbell's weight, not the pair total. Hold one matching dumbbell at each side, place the lead foot fully on the floor, and rest the top of the rear foot on a stable bench. The source did not report a bench height or numeric stance length.",
         "movement": "Lower with both foot contacts fixed until the lead thigh is approximately parallel to the floor.",
@@ -854,8 +1599,257 @@
         "returnPhase": "Push through the lead foot and extend the lead hip, knee, and ankle to return to the same split stance.",
         "controlledJoints": "Keep the lead knee tracking with the foot and both dumbbells moving together at your sides.",
         "supportAndPosture": "Keep the torso braced and use the bench only to support the top of the rear foot.",
-        "disqualifyingCompensations": ["Stepping between repetitions turns the movement into a lunge.", "Pushing deliberately through the rear foot changes the lead-leg fixture.", "Using a barbell or holding the dumbbells away from the sides changes the reviewed load placement."],
+        "disqualifyingCompensations": [
+          "Stepping between repetitions turns the movement into a lunge.",
+          "Pushing deliberately through the rear foot changes the lead-leg fixture.",
+          "Using a barbell or holding the dumbbells away from the sides changes the reviewed load placement."
+        ],
         "sideOrDirection": "Complete all repetitions with one lead leg, then repeat with the other leg."
+      }
+    },
+    {
+      "catalogID": "bodyweight-split-squat",
+      "name": "Bodyweight Split Squat",
+      "aliases": [
+        "Stationary Bodyweight Split Squat",
+        "Unloaded Split Squat"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "splitSagittal",
+        "stanceLength": "approximatelyLegLength",
+        "leadFootSupport": "fullFootFloor",
+        "trailFootSupport": "forefootFloor",
+        "rearSupportHeight": "floor",
+        "interRepFootTransition": "none",
+        "loadPlacement": "none",
+        "rangeOfMotion": "leadThighParallel",
+        "trunkOrientation": "erect",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "implementConfiguration": "none",
+        "loadAccounting": "none",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension",
+        "handPosition": "hips",
+        "gripOrientation": "notApplicable"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "stastny-2015-split-squat-dumbbell-position",
+        "song-2023-split-squat-step-length",
+        "deforest-2014-single-double-leg-squat",
+        "collings-2023-gluteal-muscle-forces",
+        "nasm-2026-bulgarian-split-squat"
+      ],
+      "execution": {
+        "startingPosition": "Take a fixed split stance about one leg-length long, with the lead foot flat and the rear forefoot on the floor. Place both hands on your hips and use no external weight.",
+        "movement": "Bend the lead hip and knee to lower until the lead thigh is approximately parallel to the floor.",
+        "endpoint": "Reach lead-thigh-parallel depth with both foot contacts unchanged.",
+        "returnPhase": "Push through the lead foot to extend the hip, knee and ankle and rise in the same stance.",
+        "controlledJoints": "Keep the lead knee tracking with the foot and avoid rotating the pelvis.",
+        "supportAndPosture": "Keep the torso erect and braced, with both hands resting on the hips.",
+        "disqualifyingCompensations": [
+          "Stepping between repetitions changes the stationary exercise into a lunge.",
+          "Using external weight or hand support changes the unloaded fixture.",
+          "Jumping or lifting either support contact changes the reviewed motion."
+        ],
+        "sideOrDirection": "Complete the set with one leg leading, then repeat with the other leg."
+      }
+    },
+    {
+      "catalogID": "bodyweight-bulgarian-split-squat",
+      "name": "Bodyweight Bulgarian Split Squat",
+      "aliases": [
+        "Bodyweight Rear-Foot-Elevated Split Squat",
+        "Unloaded Bulgarian Split Squat"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "splitSagittal",
+        "stanceLength": "sourceUnreported",
+        "leadFootSupport": "fullFootFloor",
+        "trailFootSupport": "elevatedBenchTopOfFoot",
+        "rearSupportHeight": "sourceUnreported",
+        "interRepFootTransition": "none",
+        "loadPlacement": "none",
+        "rangeOfMotion": "leadThighParallel",
+        "trunkOrientation": "erect",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "implementConfiguration": "none",
+        "loadAccounting": "none",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension",
+        "handPosition": "hips",
+        "gripOrientation": "notApplicable",
+        "rearFootBenchFixture": "bodyweight"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "stastny-2015-split-squat-dumbbell-position",
+        "song-2023-split-squat-step-length",
+        "deforest-2014-single-double-leg-squat",
+        "collings-2023-gluteal-muscle-forces",
+        "nasm-2026-bulgarian-split-squat"
+      ],
+      "execution": {
+        "startingPosition": "Stand facing away from a stable bench. Rest the top of the rear foot on it and place the lead foot flat on the floor. Place both hands on your hips and use no external weight.",
+        "movement": "Bend the lead hip and knee to lower until the lead thigh is approximately parallel to the floor.",
+        "endpoint": "Reach lead-thigh-parallel depth with both foot contacts unchanged.",
+        "returnPhase": "Push through the lead foot to extend the hip, knee and ankle and rise in the same stance.",
+        "controlledJoints": "Keep the lead knee tracking with the foot and avoid rotating the pelvis.",
+        "supportAndPosture": "Keep the torso erect and braced, with both hands resting on the hips.",
+        "disqualifyingCompensations": [
+          "Stepping between repetitions changes the stationary exercise into a lunge.",
+          "Using external weight or hand support changes the unloaded fixture.",
+          "Jumping or lifting either support contact changes the reviewed motion."
+        ],
+        "sideOrDirection": "Complete the set with one leg leading, then repeat with the other leg."
       }
     }
   ]

@@ -1,0 +1,67 @@
+{
+  "name": "catalog-requested-gaps-accessibility",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityXXXL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPush"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Pike Push-Up,"
+        },
+        "direction": "up",
+        "maxSwipes": 60
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Pike Push-Up,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Pike Push-Up"
+          },
+          {
+            "labelContains": "Muscles used by Pike Push-Up"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Pike Push-Up"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    }
+  ],
+  "forbidden": []
+}

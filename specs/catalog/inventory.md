@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 105 |
-| Exercises | 252 |
+| Reviewed families | 107 |
+| Exercises | 260 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 289 |
+| Evidence sources | 296 |
 
 ## Family roster
 
@@ -34,6 +34,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [bilateral-squat](families/bilateral-squat.json) | 6 |
 | [bird-dog](families/bird-dog.json) | 1 |
 | [bodyweight-glute-bridge](families/bodyweight-glute-bridge.json) | 1 |
+| [cable-pull-through](families/cable-pull-through.json) | 1 |
 | [chest-fly](families/chest-fly.json) | 4 |
 | [clean-and-jerk](families/clean-and-jerk.json) | 1 |
 | [conventional-deadlift](families/conventional-deadlift.json) | 1 |
@@ -43,7 +44,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [diagonal-pull](families/diagonal-pull.json) | 1 |
 | [dip](families/dip.json) | 3 |
 | [dynamic-lunge](families/dynamic-lunge.json) | 4 |
-| [elbow-extension](families/elbow-extension.json) | 11 |
+| [elbow-extension](families/elbow-extension.json) | 13 |
 | [elbow-flexion](families/elbow-flexion.json) | 13 |
 | [externally-rotating-face-pull](families/externally-rotating-face-pull.json) | 1 |
 | [farmer-carry](families/farmer-carry.json) | 2 |
@@ -55,7 +56,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hang-power-clean](families/hang-power-clean.json) | 1 |
 | [hang-power-snatch](families/hang-power-snatch.json) | 1 |
 | [hanging-leg-raise](families/hanging-leg-raise.json) | 2 |
-| [hip-abduction](families/hip-abduction.json) | 3 |
+| [hip-abduction](families/hip-abduction.json) | 4 |
 | [hip-adduction](families/hip-adduction.json) | 3 |
 | [hip-extension](families/hip-extension.json) | 3 |
 | [hip-external-rotation](families/hip-external-rotation.json) | 1 |
@@ -80,6 +81,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [nordic-curl](families/nordic-curl.json) | 1 |
 | [padded-machine-pullover](families/padded-machine-pullover.json) | 1 |
 | [passive-dead-hang](families/passive-dead-hang.json) | 1 |
+| [pike-push-up](families/pike-push-up.json) | 1 |
 | [power-clean](families/power-clean.json) | 1 |
 | [power-snatch](families/power-snatch.json) | 1 |
 | [push-jerk](families/push-jerk.json) | 1 |
@@ -108,7 +110,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [spine-lateral-flexion](families/spine-lateral-flexion.json) | 1 |
 | [spine-rotation](families/spine-rotation.json) | 1 |
 | [split-jerk](families/split-jerk.json) | 1 |
-| [split-stance-squat](families/split-stance-squat.json) | 4 |
+| [split-stance-squat](families/split-stance-squat.json) | 6 |
 | [squat-clean](families/squat-clean.json) | 1 |
 | [step-up](families/step-up.json) | 2 |
 | [straight-leg-sit-up](families/straight-leg-sit-up.json) | 1 |
@@ -121,7 +123,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [upper-arm-pad-shoulder-abduction](families/upper-arm-pad-shoulder-abduction.json) | 1 |
 | [upright-row](families/upright-row.json) | 1 |
 | [vertical-press](families/vertical-press.json) | 12 |
-| [vertical-pull](families/vertical-pull.json) | 13 |
+| [vertical-pull](families/vertical-pull.json) | 14 |
 | [walking-lunge](families/walking-lunge.json) | 1 |
 | [wall-sit](families/wall-sit.json) | 1 |
 | [wrist-extension](families/wrist-extension.json) | 1 |

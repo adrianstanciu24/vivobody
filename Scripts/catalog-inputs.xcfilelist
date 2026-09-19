@@ -15,6 +15,7 @@ $(SRCROOT)/specs/catalog/families/belt-loaded-machine-glute-bridge.json
 $(SRCROOT)/specs/catalog/families/bilateral-squat.json
 $(SRCROOT)/specs/catalog/families/bird-dog.json
 $(SRCROOT)/specs/catalog/families/bodyweight-glute-bridge.json
+$(SRCROOT)/specs/catalog/families/cable-pull-through.json
 $(SRCROOT)/specs/catalog/families/chest-fly.json
 $(SRCROOT)/specs/catalog/families/clean-and-jerk.json
 $(SRCROOT)/specs/catalog/families/conventional-deadlift.json
@@ -61,6 +62,7 @@ $(SRCROOT)/specs/catalog/families/mid-thigh-clean-pull.json
 $(SRCROOT)/specs/catalog/families/nordic-curl.json
 $(SRCROOT)/specs/catalog/families/padded-machine-pullover.json
 $(SRCROOT)/specs/catalog/families/passive-dead-hang.json
+$(SRCROOT)/specs/catalog/families/pike-push-up.json
 $(SRCROOT)/specs/catalog/families/power-clean.json
 $(SRCROOT)/specs/catalog/families/power-snatch.json
 $(SRCROOT)/specs/catalog/families/push-jerk.json

@@ -1,0 +1,524 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "pike-push-up",
+  "name": "Floor Pike Push-Up",
+  "definition": "A strict bilateral floor-supported closed-chain bodyweight shoulder-oriented press with hands and feet on the floor and the hips held flexed in an inverted V. NASM establishes the floor pike topology, slightly-wide hands, approximately 45-degree elbow path, head-near-floor endpoint and return short of elbow lockout. The shoulder/scapular actions and existing vertical-press mover hierarchy are transparent anatomy-and-mechanics transfer from Ackland and Seth, not pike-specific motion capture or EMG. Anterior deltoid is primary; triceps, scapular rotators and humeral elevators are secondary; clavicular pectoralis receives bounded secondary shoulder-flexion credit. NASM does not distinguish pectoralis regions, so no measured regional preference or comparative chest/shoulder loading is claimed. Hand/wrist and trunk stabilizer roles are categorical palm-support and posture-control inference. Load is non-comparable with no invented bodyweight percentage. Ordinary, decline, elevated-foot, wall-supported, freestanding, deficit, kipping and dynamic-hip pike variants remain outside. Gluteus maximus and vasti control the held lower-limb posture; gastrocnemius and soleus control the floor-supported ankle/foot. These are categorical support-mechanics inferences, not exact pike measurements.",
+  "evidenceRefs": [
+    "nasm-undated-pike-push-up",
+    "ackland-2008-shoulder-moment-arms",
+    "seth-2019-shoulder-work",
+    "holzbaur-2005-upper-extremity",
+    "arnold-2010-lower-limb"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.flexion",
+      "shoulder.abduction"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "scapula.upwardRotation",
+      "scapula.posteriorTilt",
+      "elbow.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "ankle.dorsiflexion",
+      "ankle.eversion",
+      "ankle.inversion",
+      "ankle.plantarflexion",
+      "elbow.flexion",
+      "foot.toeExtension",
+      "foot.toeFlexion",
+      "forearm.pronation",
+      "forearm.supination",
+      "hand.fingerExtension",
+      "hand.fingerFlexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.extension",
+      "hip.externalRotation",
+      "hip.flexion",
+      "hip.internalRotation",
+      "knee.extension",
+      "knee.flexion",
+      "scapula.anteriorTilt",
+      "scapula.depression",
+      "scapula.downwardRotation",
+      "scapula.elevation",
+      "scapula.protraction",
+      "scapula.retraction",
+      "shoulder.adduction",
+      "shoulder.extension",
+      "shoulder.externalRotation",
+      "shoulder.horizontalAbduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.internalRotation",
+      "spine.extension",
+      "spine.flexion",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "wrist.extension",
+      "wrist.flexion",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidLateral"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "supraspinatus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusLower"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidAnterior"
+      ],
+      "secondary": [
+        "triceps",
+        "serratus",
+        "deltoidLateral",
+        "supraspinatus",
+        "trapeziusUpper",
+        "trapeziusLower",
+        "pectoralisMajorClavicular"
+      ],
+      "stabilizer": [
+        "externalRotators",
+        "subscapularis",
+        "trapeziusMiddle",
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMax",
+        "vasti",
+        "gastrocnemius",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "The kinetic chain that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The body position that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "pike"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso support that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The scapular translation that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "handSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hand support that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "footSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The foot support that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "handSupportWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hand support width that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "slightlyWiderThanShoulders"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hip motion that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "positionHeldFlexed"
+      ]
+    },
+    {
+      "id": "pressPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The press path that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "pikeHeadTowardFloor"
+      ]
+    },
+    {
+      "id": "rangeBoundary",
+      "valueType": "enum",
+      "required": true,
+      "description": "The range boundary that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "headNearFloorThenElbowsShortOfLockout"
+      ]
+    },
+    {
+      "id": "elbowPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The elbow path that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "approximately45DegreesFromBody"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The fixed path that distinguishes this pike push-up fixture from neighboring movements.",
+      "fixedValue": false
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower body contribution that distinguishes this pike push-up fixture from neighboring movements.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "pike-push-up",
+      "name": "Pike Push-Up",
+      "aliases": [
+        "Floor Pike Push-Up",
+        "Pike Press-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 5,
+      "searchPriority": 90,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "pike",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "handSupport": "floor",
+        "footSupport": "floor",
+        "handSupportWidth": "slightlyWiderThanShoulders",
+        "hipMotion": "positionHeldFlexed",
+        "pressPath": "pikeHeadTowardFloor",
+        "rangeBoundary": "headNearFloorThenElbowsShortOfLockout",
+        "elbowPath": "approximately45DegreesFromBody",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "nasm-undated-pike-push-up"
+      ],
+      "execution": {
+        "startingPosition": "Place your hands slightly wider than shoulder width on the floor and keep your feet on the floor. Raise your hips to form an inverted V and brace your trunk.",
+        "movement": "Bend both elbows and lower your head toward the floor, keeping the elbows about 45 degrees from your body.",
+        "endpoint": "Stop with your head just above the floor.",
+        "returnPhase": "Press back up to the same pike position, stopping just short of elbow lockout.",
+        "controlledJoints": "Keep your hips raised and avoid using leg drive or changing the pike angle to finish a repetition.",
+        "supportAndPosture": "Keep the head aligned with the spine and maintain continuous hand and foot contact.",
+        "disqualifyingCompensations": [
+          "Dropping the hips changes the pike press into a regular push-up.",
+          "Elevating the feet or using a wall changes this floor-supported fixture.",
+          "Bouncing the head or using leg drive leaves the strict repetition."
+        ]
+      }
+    }
+  ]
+}

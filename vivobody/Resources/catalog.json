@@ -2032,6 +2032,113 @@
     ]
   },
   {
+    "familyID": "cable-pull-through",
+    "familyName": "Cable Pull-Through",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "cable-pull-through",
+    "name": "Cable Pull-Through",
+    "group": "legs",
+    "defaultWeight": 30,
+    "defaultWeightKg": 15,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Cable Rope Pull-Through",
+      "Rope Pull-Through"
+    ],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Face away from a low pulley with a rope attachment passing between your legs. Hold one rope end in each hand and stand with feet just wider than your shoulders and knees slightly bent. Enter the selected cable load and compare it only on this same station and attachment.",
+      "movement": "Push your hips back while keeping your elbows straight and your trunk braced.",
+      "endpoint": "End the hinge before your back rounds or the cable pulls you off balance.",
+      "returnPhase": "Extend your hips to stand upright without leaning backward or pulling the rope with your arms.",
+      "controlledJoints": "Keep a small knee bend while moving chiefly at the hips; brace your spine and keep your arms straight.",
+      "supportAndPosture": "Keep both feet planted and distribute the task evenly between both legs.",
+      "disqualifyingCompensations": [
+        "Deep knee bending turns the hinge into a squat.",
+        "Pulling with the shoulders or elbows changes the hip-driven pull-through.",
+        "Leaning backward at the top changes the upright endpoint."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "chest-fly",
     "familyName": "Chest Fly",
     "movementActions": [
@@ -5156,6 +5263,160 @@
     ]
   },
   {
+    "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "dumbbell-triceps-kickback",
+    "name": "Dumbbell Triceps Kickback",
+    "group": "arms",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Single-Arm Dumbbell Triceps Kickback",
+      "Dumbbell Kickback"
+    ],
+    "searchPriority": 75,
+    "bodyweightFraction": 0.0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Hold a dumbbell in one hand in a split stance with the opposite leg forward. Support the opposite hand on that thigh or knee, brace your trunk and lean forward. Hold the working upper arm parallel and close to your torso with the elbow bent about 90 degrees and the forearm hanging down.",
+      "movement": "Extend the working elbow while keeping the upper arm stationary beside your torso.",
+      "endpoint": "Finish with the elbow fully extended.",
+      "returnPhase": "Bend the elbow under control to the starting position without moving the upper arm.",
+      "controlledJoints": "Hold the wrist steady and keep the shoulder blade down and back.",
+      "supportAndPosture": "Keep your head aligned with your spine and your torso still. Log the mass of the working dumbbell.",
+      "disqualifyingCompensations": [
+        "Raising the upper arm or swinging the dumbbell changes the strict kickback.",
+        "Arching, sagging or rotating the torso changes the held posture."
+      ],
+      "sideOrDirection": "Complete the set with one arm, then switch arms and reverse the split stance."
+    },
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-extension",
+    "familyName": "Elbow Extension",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "ez-bar-skull-crusher",
+    "name": "EZ-Bar Skull Crusher",
+    "group": "arms",
+    "defaultWeight": 30,
+    "defaultWeightKg": 15,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "EZ-Bar Lying Triceps Extension",
+      "EZ Curl Bar Skull Crusher"
+    ],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Lie on a flat bench with your head, upper back and hips supported and both feet planted. Hold an EZ bar on its inside angled grips with the thumbs wrapped around the bar. Position the bar over your shoulders with the elbows extended; use a spotter for the transfer. Enter the total bar-and-plate mass.",
+      "movement": "Bend both elbows together to lower the bar in an arc toward your forehead while keeping the elbows above the shoulders.",
+      "endpoint": "Stop before the bar touches your forehead.",
+      "returnPhase": "Extend both elbows together to return the bar along the same path.",
+      "controlledJoints": "Keep the upper arms stationary and the wrists steady throughout the repetition.",
+      "supportAndPosture": "Maintain all five contact points without lifting your hips.",
+      "disqualifyingCompensations": [
+        "Moving the upper arms turns this into a press or pullover.",
+        "Letting the bar touch the forehead changes the reviewed endpoint.",
+        "Lifting the hips changes the supported fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "elbow-flexion",
     "familyName": "Elbow Flexion",
     "movementActions": [
@@ -7787,6 +8048,82 @@
       {
         "muscle": "tensorFasciaeLatae",
         "role": "secondary"
+      }
+    ]
+  },
+  {
+    "familyID": "hip-abduction",
+    "familyName": "Hip Abduction",
+    "movementActions": [
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "standing-cable-hip-abduction",
+    "name": "Standing Cable Hip Abduction",
+    "group": "legs",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Cable Hip Abduction",
+      "Cable Side Leg Raise"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand side-on to a cable stack with feet about shoulder-width apart. Attach the lowest cable to a cuff around the ankle farther from the stack and keep both arms at your sides. Log the selected stack setting and compare it only on this same cable station and ankle attachment.",
+      "movement": "Lift the cuffed leg directly out to the side against cable tension.",
+      "endpoint": "Stop before further travel would tilt the pelvis or require leaning the torso.",
+      "returnPhase": "Slowly lower the leg along the same path to the starting stance.",
+      "controlledJoints": "Keep the working knee straight, pelvis level and kneecap facing forward.",
+      "supportAndPosture": "Keep the stance foot planted and torso upright without holding an external support.",
+      "disqualifyingCompensations": [
+        "Leaning or hiking the pelvis adds trunk-driven motion.",
+        "Swinging forward or backward changes the isolated sideward path.",
+        "Bending the working knee or taking a step changes the reviewed fixture."
+      ],
+      "sideOrDirection": "Complete the set, turn to face the other way and repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMed",
+        "role": "primary"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
       }
     ]
   },
@@ -12164,6 +12501,161 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "pike-push-up",
+    "familyName": "Floor Pike Push-Up",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "pike-push-up",
+    "name": "Pike Push-Up",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Floor Pike Push-Up",
+      "Pike Press-Up"
+    ],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Place your hands slightly wider than shoulder width on the floor and keep your feet on the floor. Raise your hips to form an inverted V and brace your trunk.",
+      "movement": "Bend both elbows and lower your head toward the floor, keeping the elbows about 45 degrees from your body.",
+      "endpoint": "Stop with your head just above the floor.",
+      "returnPhase": "Press back up to the same pike position, stopping just short of elbow lockout.",
+      "controlledJoints": "Keep your hips raised and avoid using leg drive or changing the pike angle to finish a repetition.",
+      "supportAndPosture": "Keep the head aligned with the spine and maintain continuous hand and foot contact.",
+      "disqualifyingCompensations": [
+        "Dropping the hips changes the pike press into a regular push-up.",
+        "Elevating the feet or using a wall changes this floor-supported fixture.",
+        "Bouncing the head or using leg drive leaves the strict repetition."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
         "role": "stabilizer"
       }
     ]
@@ -19827,6 +20319,236 @@
     ]
   },
   {
+    "familyID": "split-stance-squat",
+    "familyName": "Stationary Split Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "bodyweight-split-squat",
+    "name": "Bodyweight Split Squat",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Stationary Bodyweight Split Squat",
+      "Unloaded Split Squat"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Take a fixed split stance about one leg-length long, with the lead foot flat and the rear forefoot on the floor. Place both hands on your hips and use no external weight.",
+      "movement": "Bend the lead hip and knee to lower until the lead thigh is approximately parallel to the floor.",
+      "endpoint": "Reach lead-thigh-parallel depth with both foot contacts unchanged.",
+      "returnPhase": "Push through the lead foot to extend the hip, knee and ankle and rise in the same stance.",
+      "controlledJoints": "Keep the lead knee tracking with the foot and avoid rotating the pelvis.",
+      "supportAndPosture": "Keep the torso erect and braced, with both hands resting on the hips.",
+      "disqualifyingCompensations": [
+        "Stepping between repetitions changes the stationary exercise into a lunge.",
+        "Using external weight or hand support changes the unloaded fixture.",
+        "Jumping or lifting either support contact changes the reviewed motion."
+      ],
+      "sideOrDirection": "Complete the set with one leg leading, then repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "split-stance-squat",
+    "familyName": "Stationary Split Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "bodyweight-bulgarian-split-squat",
+    "name": "Bodyweight Bulgarian Split Squat",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Bodyweight Rear-Foot-Elevated Split Squat",
+      "Unloaded Bulgarian Split Squat"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand facing away from a stable bench. Rest the top of the rear foot on it and place the lead foot flat on the floor. Place both hands on your hips and use no external weight.",
+      "movement": "Bend the lead hip and knee to lower until the lead thigh is approximately parallel to the floor.",
+      "endpoint": "Reach lead-thigh-parallel depth with both foot contacts unchanged.",
+      "returnPhase": "Push through the lead foot to extend the hip, knee and ankle and rise in the same stance.",
+      "controlledJoints": "Keep the lead knee tracking with the foot and avoid rotating the pelvis.",
+      "supportAndPosture": "Keep the torso erect and braced, with both hands resting on the hips.",
+      "disqualifyingCompensations": [
+        "Stepping between repetitions changes the stationary exercise into a lunge.",
+        "Using external weight or hand support changes the unloaded fixture.",
+        "Jumping or lifting either support contact changes the reviewed motion."
+      ],
+      "sideOrDirection": "Complete the set with one leg leading, then repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "squat-clean",
     "familyName": "Squat Clean",
     "movementActions": [
@@ -24868,6 +25590,139 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "band-assisted-pull-up",
+    "name": "Band-Assisted Pull-Up",
+    "group": "back",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Banded Pull-Up",
+      "Resistance-Band-Assisted Pull-Up"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Loop a resistance band securely over the fixed pull-up bar and place a foot in its lower loop. Take a shoulder-width overhand grip, hang with straight elbows and keep the torso and legs braced.",
+      "movement": "Pull the body upward by driving the elbows down until the chin clears the bar.",
+      "endpoint": "The chin clears the bar.",
+      "returnPhase": "Lower under control to a full hang.",
+      "controlledJoints": "Do not swing or use the hips or legs.",
+      "supportAndPosture": "Keep the supporting foot in the band and hold the legs still; the stretched band supplies variable assistance rather than a fixed assistance weight.",
+      "disqualifyingCompensations": [
+        "Swinging the hips or legs to gain momentum turns the strict pull-up into a kipping pull-up.",
+        "Stopping short of a full hang between repetitions turns the pull-up into a partial-range pull.",
+        "Bouncing or pushing the legs into the band adds propulsion."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]

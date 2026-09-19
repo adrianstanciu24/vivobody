@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "elbow-extension",
   "name": "Elbow Extension",
-  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. The roster admits reviewed cable, dumbbell, barbell, and exact Life Fitness Pro 2 PSTE selectorized fixtures. The PSTE supports both upper arms on a pad, aligns the elbows with the pivots, and guides self-adjusting handles; its manual does not report forearm orientation or wrist posture, so both remain unreported. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials. Other machine topologies remain outside this contract. The two-arm rope fixture uses a high pulley behind a split-stance athlete; the seated two-hand dumbbell fixture holds one head with both hands and counts that implement once. These exact additions transfer categorical muscle roles from established anatomy and held-posture mechanics.",
+  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. The roster admits reviewed cable, dumbbell, barbell, and exact Life Fitness Pro 2 PSTE selectorized fixtures. The PSTE supports both upper arms on a pad, aligns the elbows with the pivots, and guides self-adjusting handles; its manual does not report forearm orientation or wrist posture, so both remain unreported. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials. Other machine topologies remain outside this contract. The two-arm rope fixture uses a high pulley behind a split-stance athlete; the seated two-hand dumbbell fixture holds one head with both hands and counts that implement once. These exact additions transfer categorical muscle roles from established anatomy and held-posture mechanics. The exact single-arm kickback holds the upper arm alongside the inclined torso in a self-supported split stance while only the elbow moves. The exact EZ-bar skull crusher uses inside angled grips on a flat bench, lowers near but without touching the forehead, and logs the total bar-and-plate mass. Existing unreported-bar geometry remains a separate identity; these additions make no triceps-head ranking claim.",
   "evidenceRefs": [
     "holzbaur-2005-upper-extremity",
     "alves-2018-triceps-shoulder-position",
@@ -187,7 +187,8 @@
       "allowedValues": [
         "standing",
         "seated",
-        "supine"
+        "supine",
+        "standingBentOver"
       ]
     },
     {
@@ -244,7 +245,8 @@
         "atSide",
         "flexed90",
         "overhead",
-        "padSupportedPivotAligned"
+        "padSupportedPivotAligned",
+        "alongInclinedTorso"
       ]
     },
     {
@@ -310,7 +312,17 @@
       "valueType": "enum",
       "required": true,
       "description": "The reviewed load-to-hand interface used by the cable or dumbbell fixture.",
-      "allowedValues": ["singleCableHandle", "unreportedCableInterface", "dumbbellHandle", "straightCableBar", "rope", "barbellShapeUnreported", "selfAdjustingMachineHandles", "dumbbellHeadTwoHandHold"]
+      "allowedValues": [
+        "singleCableHandle",
+        "unreportedCableInterface",
+        "dumbbellHandle",
+        "straightCableBar",
+        "rope",
+        "barbellShapeUnreported",
+        "selfAdjustingMachineHandles",
+        "dumbbellHeadTwoHandHold",
+        "ezBarInsideGrip"
+      ]
     },
     {
       "id": "resistanceGeometry",
@@ -383,6 +395,24 @@
       "description": "Exact high-pulley-behind standing rope fixture: face away in a split stance with a held slight forward torso lean.",
       "allowedValues": [
         "highPulleyFacingAwaySplitStance"
+      ]
+    },
+    {
+      "id": "kickbackFixture",
+      "valueType": "enum",
+      "required": false,
+      "description": "The exact standing one-arm self-supported kickback fixture.",
+      "allowedValues": [
+        "splitStanceOppositeHandOnThigh"
+      ]
+    },
+    {
+      "id": "rangeBoundary",
+      "valueType": "enum",
+      "required": false,
+      "description": "EZ-bar skull-crusher endpoint.",
+      "allowedValues": [
+        "barNearForeheadNoContact"
       ]
     }
   ],
@@ -1194,6 +1224,283 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "bent-over-extension-is-dumbbell-kickback",
+      "description": "Preserve the reviewed support, implement and movement geometry of this fixture.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "standingBentOver"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0.0
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.forearmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.upperArmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.hipContact",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "alongInclinedTorso"
+        },
+        {
+          "field": "variant.elbowMotion",
+          "value": "extends"
+        },
+        {
+          "field": "variant.forearmMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.wristMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.wristPosture",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "staticImplementHold"
+        },
+        {
+          "field": "variant.handleType",
+          "value": "dumbbellHandle"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "gravityLoadedDumbbell"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.kickbackFixture",
+          "value": "splitStanceOppositeHandOnThigh"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "kickback-fixture-pins-bent-over-extension",
+      "description": "Preserve the reviewed support, implement and movement geometry of this fixture.",
+      "when": {
+        "field": "variant.kickbackFixture",
+        "operator": "equals",
+        "value": "splitStanceOppositeHandOnThigh"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standingBentOver"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "alongInclinedTorso"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "inclined-torso-upper-arm-identifies-kickback",
+      "description": "Preserve the reviewed support, implement and movement geometry of this fixture.",
+      "when": {
+        "field": "variant.upperArmPosition",
+        "operator": "equals",
+        "value": "alongInclinedTorso"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "standingBentOver"
+        },
+        {
+          "field": "variant.kickbackFixture",
+          "value": "splitStanceOppositeHandOnThigh"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "ez-bar-inside-grip-pins-skull-crusher",
+      "description": "Preserve the reviewed support, implement and movement geometry of this fixture.",
+      "when": {
+        "field": "variant.handleType",
+        "operator": "equals",
+        "value": "ezBarInsideGrip"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "supine"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "supportConstrained"
+        },
+        {
+          "field": "variant.forearmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.upperArmSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.hipContact",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "flexed90"
+        },
+        {
+          "field": "variant.elbowMotion",
+          "value": "extends"
+        },
+        {
+          "field": "variant.forearmMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.wristMotion",
+          "value": "angleHeld"
+        },
+        {
+          "field": "variant.wristPosture",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "staticImplementHold"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "gravityLoadedBarbell"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "totalBarAndPlates"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.rangeBoundary",
+          "value": "barNearForeheadNoContact"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "forehead-range-identifies-ez-skull-crusher",
+      "description": "Preserve the reviewed support, implement and movement geometry of this fixture.",
+      "when": {
+        "field": "variant.rangeBoundary",
+        "operator": "equals",
+        "value": "barNearForeheadNoContact"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "variant.handleType",
+          "value": "ezBarInsideGrip"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -1972,6 +2279,180 @@
           "Dropping the upper arms changes the overhead extension.",
           "Arching or swinging the torso to move the load changes the strict extension.",
           "Using one arm or two separate dumbbells changes this two-hand fixture."
+        ]
+      }
+    },
+    {
+      "catalogID": "dumbbell-triceps-kickback",
+      "name": "Dumbbell Triceps Kickback",
+      "aliases": [
+        "Single-Arm Dumbbell Triceps Kickback",
+        "Dumbbell Kickback"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 75,
+      "involvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standingBentOver",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
+        "upperArmPosition": "alongInclinedTorso",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "unreported",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "dumbbellHandle",
+        "resistanceGeometry": "gravityLoadedDumbbell",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "kickbackFixture": "splitStanceOppositeHandOnThigh"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ace-2011-triceps-kickback"
+      ],
+      "execution": {
+        "startingPosition": "Hold a dumbbell in one hand in a split stance with the opposite leg forward. Support the opposite hand on that thigh or knee, brace your trunk and lean forward. Hold the working upper arm parallel and close to your torso with the elbow bent about 90 degrees and the forearm hanging down.",
+        "movement": "Extend the working elbow while keeping the upper arm stationary beside your torso.",
+        "endpoint": "Finish with the elbow fully extended.",
+        "returnPhase": "Bend the elbow under control to the starting position without moving the upper arm.",
+        "controlledJoints": "Hold the wrist steady and keep the shoulder blade down and back.",
+        "supportAndPosture": "Keep your head aligned with your spine and your torso still. Log the mass of the working dumbbell.",
+        "disqualifyingCompensations": [
+          "Raising the upper arm or swinging the dumbbell changes the strict kickback.",
+          "Arching, sagging or rotating the torso changes the held posture."
+        ],
+        "sideOrDirection": "Complete the set with one arm, then switch arms and reverse the split stance."
+      }
+    },
+    {
+      "catalogID": "ez-bar-skull-crusher",
+      "name": "EZ-Bar Skull Crusher",
+      "aliases": [
+        "EZ-Bar Lying Triceps Extension",
+        "EZ Curl Bar Skull Crusher"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 30,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 92,
+      "involvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "supine",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
+        "upperArmPosition": "flexed90",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "unreported",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "ezBarInsideGrip",
+        "resistanceGeometry": "gravityLoadedBarbell",
+        "loadAccounting": "totalBarAndPlates",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "rangeBoundary": "barNearForeheadNoContact"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "nsca-2007-strength-training-ez-lying-extension"
+      ],
+      "execution": {
+        "startingPosition": "Lie on a flat bench with your head, upper back and hips supported and both feet planted. Hold an EZ bar on its inside angled grips with the thumbs wrapped around the bar. Position the bar over your shoulders with the elbows extended; use a spotter for the transfer. Enter the total bar-and-plate mass.",
+        "movement": "Bend both elbows together to lower the bar in an arc toward your forehead while keeping the elbows above the shoulders.",
+        "endpoint": "Stop before the bar touches your forehead.",
+        "returnPhase": "Extend both elbows together to return the bar along the same path.",
+        "controlledJoints": "Keep the upper arms stationary and the wrists steady throughout the repetition.",
+        "supportAndPosture": "Maintain all five contact points without lifting your hips.",
+        "disqualifyingCompensations": [
+          "Moving the upper arms turns this into a press or pullover.",
+          "Letting the bar touch the forehead changes the reviewed endpoint.",
+          "Lifting the hips changes the supported fixture."
         ]
       }
     }
