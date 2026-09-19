@@ -2,8 +2,10 @@
 //  TodayUpNextSection.swift
 //  vivobody
 //
-//  Today's navigable scheduled or repeat-workout preview. It renders an immutable
-//  TodayUpNextPresentation while the root supplies the navigation destination.
+//  Today's navigable scheduled or repeat-workout preview in the Insights
+//  instrument language: a readout heading, hairline-separated exercise rows
+//  with monospaced set structure, and a stat strip for the last matching
+//  workout. The root supplies the navigation destination.
 //
 
 import SwiftUI
@@ -26,26 +28,39 @@ struct TodayUpNextSection<Destination: View>: View {
 
     var body: some View {
         let preview = presentation.preview(accessibilityLayout: usesAccessibilityLayout)
-        VStack(alignment: .leading, spacing: Space.md) {
+        VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(title: "Up next", trailing: presentation.scheduleText)
+            VStack(alignment: .leading, spacing: Space.lg) {
+                NavigationLink { destination } label: { heading }
+                    .buttonStyle(.plain)
+                    .accessibilityHint("Opens this workout template")
+                    .accessibilityIdentifier("todayUpNextPreview")
 
-            NavigationLink {
-                destination
-            } label: {
-                VStack(alignment: .leading, spacing: Space.lg) {
-                    heading
-                    exercisePreview(preview)
-                    if let lastTime = presentation.lastTime {
-                        lastTimeReference(lastTime)
+                VStack(spacing: 0) {
+                    ForEach(Array(preview.rows.enumerated()), id: \.element.id) { index, row in
+                        if index > 0 { hairline }
+                        TodayUpNextExerciseRow(row: row, usesAccessibilityLayout: usesAccessibilityLayout)
+                            .padding(.vertical, Space.lg)
+                    }
+                    if preview.remainingCount > 0 {
+                        hairline
+                        moreRow(count: preview.remainingCount)
                     }
                 }
-                .padding(Space.lg)
-                .contentCard(bright: true)
+
+                hairline
+                lastTime
             }
-            .buttonStyle(.plain)
-            .accessibilityHint("Opens this workout template")
-            .accessibilityIdentifier("todayUpNextPreview")
+            .padding(Space.xl)
+            .contentCard()
         }
+    }
+
+    private var hairline: some View {
+        Rectangle()
+            .fill(Surface.edge)
+            .frame(height: 0.5)
+            .accessibilityHidden(true)
     }
 
     private var heading: some View {
@@ -54,142 +69,137 @@ struct TodayUpNextSection<Destination: View>: View {
                 Text(presentation.templateName)
                     .font(usesAccessibilityLayout ? Typography.title : Typography.display)
                     .foregroundStyle(Ink.primary)
-                    .lineLimit(usesAccessibilityLayout ? nil : 2)
                     .fixedSize(horizontal: false, vertical: true)
-
                 Spacer(minLength: Space.sm)
-
                 Image(systemName: "chevron.right")
-                    .font(Typography.sectionHeading)
+                    .font(Typography.headline)
+                    .foregroundStyle(Ink.tertiary)
+                    .accessibilityHidden(true)
+            }
+            Text(presentation.metadata)
+                .panelLegend()
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, minHeight: Space.tapMin, alignment: .leading)
+    }
+
+    private func moreRow(count: Int) -> some View {
+        NavigationLink { destination } label: {
+            HStack(spacing: Space.md) {
+                Text("+\(count) more")
+                    .font(Typography.body)
+                    .foregroundStyle(Ink.secondary)
+                Spacer(minLength: Space.sm)
+                Image(systemName: "chevron.right")
+                    .font(Typography.caption)
                     .foregroundStyle(Ink.quaternary)
                     .accessibilityHidden(true)
             }
+            .frame(maxWidth: .infinity, minHeight: Space.tapMin, alignment: .leading)
+            .padding(.vertical, Space.xs)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(count) more exercises")
+        .accessibilityHint("Opens this workout template")
+    }
 
-            Text(presentation.metadata)
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Text(presentation.muscleSummary)
+    private var lastTime: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            Text(presentation.lastTime.title)
                 .panelLegend()
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, Space.md)
-                .padding(.vertical, Space.sm)
-                .background(
-                    Surface.cardTintBright,
-                    in: RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
+            if !presentation.lastTime.columns.isEmpty {
+                StatStrip(
+                    stats: presentation.lastTime.columns.map { column in
+                        Stat(
+                            value: column.value,
+                            unit: column.unit,
+                            label: column.label,
+                            accessibilityLabel: column.accessibilityLabel
+                        )
+                    },
+                    valueFont: Typography.statValueCompact,
+                    columnWeights: presentation.lastTime.columns.count == 3 ? [3, 3, 4] : nil
                 )
-        }
-    }
-
-    private func exercisePreview(_ preview: TodayUpNextPresentation.Preview) -> some View {
-        VStack(spacing: Space.md) {
-            ForEach(Array(preview.rows.enumerated()), id: \.element.id) { index, row in
-                TodayUpNextExerciseRow(
-                    row: row,
-                    index: index + 1,
-                    usesAccessibilityLayout: usesAccessibilityLayout
-                )
+                .padding(.top, Space.xs)
             }
-            if preview.remainingCount > 0 {
-                Text("+\(preview.remainingCount) more")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, usesAccessibilityLayout ? 0 : 36)
-            }
-        }
-    }
-
-    private func lastTimeReference(_ reference: TodayLastTimePresentation) -> some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Divider()
-            Text("Last time · \(reference.dateText)")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-            Text(reference.exerciseName)
-                .font(Typography.headline)
-                .foregroundStyle(Ink.primary)
-            Text(reference.setsText)
-                .font(Typography.metricInline)
-                .foregroundStyle(Ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(reference.accessibilityLabel)
+        .accessibilityLabel(presentation.lastTime.accessibilityLabel)
+        .accessibilityIdentifier("todayUpNextLastTime")
     }
 }
 
 private struct TodayUpNextExerciseRow: View {
     let row: TodayUpNextPresentation.ExerciseRow
-    let index: Int
     let usesAccessibilityLayout: Bool
 
     var body: some View {
-        let stacked = usesAccessibilityLayout || row.scheme.loadReference != nil
-        let layout = stacked
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.sm))
-            : AnyLayout(HStackLayout(alignment: .center, spacing: Space.sm))
-        layout {
-            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                Text("\(index)")
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.secondary)
-                    .frame(width: 24, height: 24)
-                    .background(Surface.cardTintBright, in: Circle())
-
-                Text(row.name)
-                    .font(Typography.headline)
-                    .foregroundStyle(Ink.primary)
-                    .fixedSize(horizontal: false, vertical: true)
+        Group {
+            if usesAccessibilityLayout {
+                VStack(alignment: .leading, spacing: Space.xs) {
+                    group
+                    name
+                    scheme
+                }
+            } else {
+                // The scheme column is sized first at its single-line width;
+                // the greedy title frame then takes exactly the remaining
+                // width, so the row can never report a size wider than the
+                // card and a long name wraps only when it truly has to.
+                VStack(alignment: .leading, spacing: Space.xs) {
+                    group
+                    HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+                        name
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        scheme
+                            .lineLimit(1)
+                            .layoutPriority(1)
+                    }
+                }
             }
-
-            if !stacked {
-                Spacer(minLength: Space.sm)
-            }
-
-            schemeReadout
-                .padding(.leading, stacked ? 36 : 0)
         }
-        .padding(.vertical, Space.sm)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(row.accessibilityLabel)
     }
 
-    private var schemeReadout: some View {
-        let layout = usesAccessibilityLayout
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
-            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.sm))
-        return VStack(alignment: .leading, spacing: Space.xs) {
-            layout {
-                Text(row.scheme.count)
+    private var name: some View {
+        Text(row.name)
+            .font(Typography.headline)
+            .foregroundStyle(Ink.primary)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var group: some View {
+        Text(row.groupName)
+            .font(Typography.caption)
+            .foregroundStyle(Ink.tertiary)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    /// `3 × 12` reads as two figures joined by a quiet operator rather than
+    /// three equally heavy monospaced glyphs.
+    private var scheme: some View {
+        let parts = row.scheme.components(separatedBy: " × ")
+        return HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
+            if parts.count == 2 {
+                figure(parts[0])
+                Text("×")
                     .font(Typography.metricUnit)
                     .foregroundStyle(Ink.tertiary)
-                    .monospacedDigit()
-                    .fixedSize(horizontal: false, vertical: true)
-                if let load = row.scheme.load {
-                    HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        Text(load)
-                            .font(Typography.metricInline)
-                            .foregroundStyle(Ink.secondary)
-                            .monospacedDigit()
-                            .fixedSize(horizontal: false, vertical: true)
-                        if let loadUnit = row.scheme.loadUnit {
-                            Text(loadUnit)
-                                .font(Typography.metricMicro)
-                                .foregroundStyle(Ink.tertiary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                    }
-                }
-            }
-            if let reference = row.scheme.loadReference {
-                Text(reference)
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+                figure(parts[1])
+            } else {
+                figure(row.scheme)
             }
         }
+    }
+
+    private func figure(_ text: String) -> some View {
+        Text(text)
+            .font(Typography.statValueCompact)
+            .foregroundStyle(Ink.primary)
+            .monospacedDigit()
     }
 }

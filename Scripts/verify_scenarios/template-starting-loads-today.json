@@ -15,30 +15,81 @@
   },
   "steps": [
     {
-      "wait": {
-        "identifier": "todayUpNextPreview",
-        "labelContains": "Last used: Set 1: 155 lb \u00b7 Set 2: 150 lb \u00b7 Set 3: 150 lb"
-      }
-    },
-    {
       "scrollTo": {
         "selector": {
-          "identifier": "todayUpNextPreview"
+          "identifier": "todayUpNextLastTime"
         },
         "direction": "up"
       }
     },
     {
-      "swipe": {
-        "direction": "up",
-        "count": 1
+      "assert": {
+        "required": [
+          {
+            "identifier": "todayUpNextPreview"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Last used:"
+          },
+          {
+            "labelContains": "Fixed:"
+          },
+          {
+            "labelContains": "Starting load:"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayUpNextPreview"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Barbell Bench Press, Chest",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Last used:"
+          },
+          {
+            "labelContains": "Fixed:"
+          },
+          {
+            "labelContains": "Starting load:"
+          },
+          {
+            "labelContains": "3 × 8"
+          }
+        ]
       }
     }
   ],
   "required": [
     {
-      "identifier": "todayUpNextPreview",
-      "labelContains": "Last used: Set 1: 155 lb \u00b7 Set 2: 150 lb \u00b7 Set 3: 150 lb"
+      "label": "Barbell Bench Press, Chest",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Last used:"
+    },
+    {
+      "labelContains": "Fixed:"
+    },
+    {
+      "labelContains": "Starting load:"
+    },
+    {
+      "labelContains": "3 × 8"
     }
   ],
   "forbiddenLogs": [

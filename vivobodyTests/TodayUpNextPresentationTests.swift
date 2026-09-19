@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Deterministic characterization of Today's immutable Up Next formatting,
-//  preview limits, load semantics, schedule copy, and PR proximity gate.
+//  preview limits, last-time reference, schedule copy, and PR proximity gate.
 //
 
 import Foundation
@@ -117,20 +117,71 @@ struct TodayUpNextPresentationTests {
         #expect(presentation.scheduleText == "Tomorrow")
         #expect(presentation.metadata == "2 exercises  ·  ~15 min  ·  +1 more")
         #expect(presentation.muscleSummary == "Back · 3 sets   Chest · 2 sets")
-        let separator = Locale.current.decimalSeparator ?? "."
-        #expect(presentation.exerciseRows[0].scheme == .init(
-            count: "3 × 6–10",
-            load: "45\(separator)4–54\(separator)4 kg",
-            loadUnit: nil
-        ))
-        #expect(presentation.exerciseRows[1].scheme == .init(
-            count: "2 × 12",
-            load: nil,
-            loadUnit: nil
+        #expect(presentation.exerciseRows.map(\.scheme) == ["3 × 6–10", "2 × 12"])
+        #expect(presentation.lastTime == .init(
+            title: "First time with this workout",
+            columns: [],
+            accessibilityLabel: "First time with this workout"
         ))
     }
 
-    @Test func previewUsesFiveRowsNormallyAndThreeForAccessibility() {
+    @MainActor
+    @Test func realSessionAdapterSnapshotsSharedReceiptTotals() {
+        let bench = TemplateExercise(
+            name: "Bench Press",
+            group: .chest,
+            plannedSets: 3,
+            plannedReps: 8,
+            plannedWeight: 100,
+            loadMode: .external,
+            sortOrder: 0
+        )
+        let template = WorkoutTemplate(name: "Push", exercises: [bench])
+        template.lastUsedAt = Date(timeIntervalSince1970: 1_000_000)
+
+        let logged = Exercise(
+            name: "Bench Press",
+            group: .chest,
+            plannedSets: 3,
+            plannedReps: 8,
+            plannedWeight: 100,
+            sortOrder: 0
+        )
+        logged.sets.forEach { $0.isCompleted = true }
+        let session = WorkoutSession(exercises: [logged], restDuration: 90, startedAt: .now)
+        session.completedAt = .now
+
+        let source = Source(
+            template: template,
+            daysUntil: 0,
+            otherScheduledCount: 0,
+            shouldEaseOff: false,
+            outlook: StrengthOutlookBoard(stats: []),
+            lastSession: session,
+            unit: .lb
+        )
+        #expect(source.lastUsedAt == template.lastUsedAt)
+        #expect(source.lastSession?.totalSets == 3)
+        #expect(source.lastSession?.totalReps == 24)
+        #expect(source.lastSession?.receipt.kind == .volume(.complete))
+        #expect(source.lastSession?.receipt.value == "2,400")
+
+        let presentation = TodayUpNextPresentation(
+            source: source,
+            unit: .lb,
+            defaultRestSeconds: SettingsDefaults.defaultRestSeconds
+        )
+        #expect(presentation.lastTime.title == "Last time  ·  Today")
+        #expect(presentation.lastTime.columns == [
+            .init(value: "3", label: "Sets", accessibilityLabel: "3 sets"),
+            .init(value: "24", label: "Reps", accessibilityLabel: "24 reps"),
+            .init(value: "2,400", unit: "lb", label: "Volume", accessibilityLabel: "2400 pounds of volume"),
+        ])
+        #expect(presentation.lastTime.accessibilityLabel ==
+            "Last time, Today, 3 sets, 24 reps, 2400 pounds of volume")
+    }
+
+    @Test func previewUsesFourRowsNormallyAndThreeForAccessibility() {
         let exercises = (1 ... 6).map { index in
             exercise(name: "Exercise \(index)", plannedSets: 1)
         }
@@ -141,14 +192,111 @@ struct TodayUpNextPresentationTests {
 
         let standard = presentation.preview(accessibilityLayout: false)
         #expect(standard.rows.map(\.name) == [
-            "Exercise 1", "Exercise 2", "Exercise 3", "Exercise 4", "Exercise 5",
+            "Exercise 1", "Exercise 2", "Exercise 3", "Exercise 4",
         ])
-        #expect(standard.remainingCount == 1)
+        #expect(standard.remainingCount == 2)
 
         let accessibility = presentation.preview(accessibilityLayout: true)
         #expect(accessibility.rows.map(\.name) == ["Exercise 1", "Exercise 2", "Exercise 3"])
         #expect(accessibility.remainingCount == 3)
         #expect(presentation.metadata == "6 exercises  ·  ~15 min  ·  +2 more")
+    }
+
+    @Test func previewShowsASingleRemainingExerciseInsteadOfAMoreRow() {
+        let five = makePresentation(exercises: (1 ... 5).map { exercise(name: "Exercise \($0)") })
+        #expect(five.preview(accessibilityLayout: false).rows.count == 5)
+        #expect(five.preview(accessibilityLayout: false).remainingCount == 0)
+        #expect(five.preview(accessibilityLayout: true).rows.count == 3)
+        #expect(five.preview(accessibilityLayout: true).remainingCount == 2)
+
+        let four = makePresentation(exercises: (1 ... 4).map { exercise(name: "Exercise \($0)") })
+        #expect(four.preview(accessibilityLayout: true).rows.count == 4)
+        #expect(four.preview(accessibilityLayout: true).remainingCount == 0)
+    }
+
+    @Test func lastTimeSummarizesTheMatchingSessionAndFallsBackToLastUsed() throws {
+        let now = Date(timeIntervalSince1970: 1_757_800_000)
+        let calendar = Calendar(identifier: .gregorian)
+        let fourDaysAgo = try #require(calendar.date(byAdding: .day, value: -4, to: now))
+        let receipt = WorkoutReceiptMetric(
+            kind: .volume(.complete),
+            value: "3,240",
+            qualifier: nil,
+            unit: "kg",
+            label: "Volume",
+            accessibilityLabel: "3240 kilograms of volume"
+        )
+        let session = Source.LastSession(date: fourDaysAgo, totalSets: 15, totalReps: 142, receipt: receipt)
+
+        let withSession = makePresentation(lastSession: session, now: now, calendar: calendar)
+        #expect(withSession.lastTime.title == "Last time  ·  4 days ago")
+        #expect(withSession.lastTime.columns == [
+            .init(value: "15", label: "Sets", accessibilityLabel: "15 sets"),
+            .init(value: "142", label: "Reps", accessibilityLabel: "142 reps"),
+            .init(value: "3,240", unit: "kg", label: "Volume", accessibilityLabel: "3240 kilograms of volume"),
+        ])
+        #expect(withSession.lastTime.accessibilityLabel ==
+            "Last time, 4 days ago, 15 sets, 142 reps, 3240 kilograms of volume")
+
+        let partial = Source.LastSession(
+            date: fourDaysAgo,
+            totalSets: 6,
+            totalReps: 0,
+            receipt: WorkoutReceiptMetric(
+                kind: .volume(.partial),
+                value: "900",
+                qualifier: "+",
+                unit: "lb",
+                label: "Known volume · total unavailable",
+                accessibilityLabel: "900 pounds of known volume; total unavailable"
+            )
+        )
+        #expect(makePresentation(lastSession: partial, now: now, calendar: calendar).lastTime.columns == [
+            .init(value: "6", label: "Sets", accessibilityLabel: "6 sets"),
+            .init(
+                value: "900+",
+                unit: "lb",
+                label: "Known volume",
+                accessibilityLabel: "900 pounds of known volume; total unavailable"
+            ),
+        ])
+
+        let repsOnly = Source.LastSession(
+            date: fourDaysAgo,
+            totalSets: 3,
+            totalReps: 36,
+            receipt: WorkoutReceiptMetric(
+                kind: .reps, value: "36", qualifier: nil, unit: nil, label: "Reps", accessibilityLabel: "36 reps"
+            )
+        )
+        #expect(makePresentation(lastSession: repsOnly, now: now, calendar: calendar).lastTime.columns == [
+            .init(value: "3", label: "Sets", accessibilityLabel: "3 sets"),
+            .init(value: "36", label: "Reps", accessibilityLabel: "36 reps"),
+        ])
+
+        let lastUsed = makePresentation(lastUsedAt: fourDaysAgo, now: now, calendar: calendar).lastTime
+        #expect(lastUsed == .init(
+            title: "Last done  ·  4 days ago",
+            columns: [],
+            accessibilityLabel: "Last done, 4 days ago"
+        ))
+    }
+
+    @Test func relativeDayTextCoversTodayYesterdayDayCountsAndDates() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try #require(TimeZone(identifier: "UTC"))
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 9, day: 18, hour: 9)))
+        func text(daysAgo: Int) -> String {
+            let date = calendar.date(byAdding: .day, value: -daysAgo, to: now)!
+            return TodayUpNextPresentation.relativeDayText(date, now: now, calendar: calendar)
+        }
+
+        #expect(text(daysAgo: 0) == "Today")
+        #expect(text(daysAgo: 1) == "Yesterday")
+        #expect(text(daysAgo: 6) == "6 days ago")
+        #expect(text(daysAgo: 7).contains("11"))
+        #expect(text(daysAgo: 7).contains("2026") == false)
+        #expect(text(daysAgo: 300).contains("2025"))
     }
 
     @Test func durationEstimateUsesFiveMinuteGrainAndDefaultRestFallback() {
@@ -199,20 +347,12 @@ struct TodayUpNextPresentationTests {
             ),
         ])
 
-        #expect(presentation.exerciseRows[0].scheme == .init(
-            count: "3 × 8",
-            load: "135 lb",
-            loadUnit: nil
-        ))
-        #expect(presentation.exerciseRows[0].accessibilityLabel == "Bench Press, 3 × 8 135 lb")
-        #expect(presentation.exerciseRows[1].scheme == .init(
-            count: "3 × 8–12",
-            load: "100–120 lb",
-            loadUnit: nil
-        ))
+        #expect(presentation.exerciseRows[0].scheme == "3 × 8")
+        #expect(presentation.exerciseRows[0].accessibilityLabel == "Bench Press, 3 × 8, Chest")
+        #expect(presentation.exerciseRows[1].scheme == "3 × 8–12")
     }
 
-    @Test func durationSchemeLeadsWithTimeAndRetainsModalityAndLoadMeaning() {
+    @Test func durationSchemeLeadsWithTimeAndRetainsModalityLabel() {
         let presentation = makePresentation(exercises: [
             exercise(
                 name: "Band Hold",
@@ -224,18 +364,20 @@ struct TodayUpNextPresentationTests {
                     set(duration: 45, weight: 25),
                 ]
             ),
+            exercise(
+                name: "Plank",
+                trackingMode: .duration,
+                durationLabel: "hold",
+                plannedSets: 3,
+                plannedDuration: 60
+            ),
         ])
 
-        let row = presentation.exerciseRows[0]
-        #expect(row.scheme == .init(
-            count: "2 ×",
-            load: "0:30–0:45",
-            loadUnit: "hold · 20–25 lb resistance"
-        ))
-        #expect(row.accessibilityLabel == "Band Hold, 2 × 0:30–0:45 hold · 20–25 lb resistance")
+        #expect(presentation.exerciseRows.map(\.scheme) == ["2 × 0:30–0:45 hold", "3 × 1:00 hold"])
+        #expect(presentation.exerciseRows[0].accessibilityLabel == "Band Hold, 2 × 0:30–0:45 hold, Chest")
     }
 
-    @Test func loadWordingDistinguishesExternalBodyweightAssistanceAndResistance() {
+    @Test func rowsOmitLoadsRegardlessOfLoadMode() {
         let presentation = makePresentation(exercises: [
             exercise(name: "External", plannedWeight: 135),
             exercise(name: "Bodyweight", loadMode: .bodyweightAdded, plannedWeight: 0),
@@ -243,9 +385,7 @@ struct TodayUpNextPresentationTests {
             exercise(name: "Band", loadMode: .nonComparable, plannedWeight: 20),
         ])
 
-        #expect(presentation.exerciseRows.map(\.scheme.load) == [
-            "135 lb", "BW", "40 lb assist", "20 lb resistance",
-        ])
+        #expect(presentation.exerciseRows.map(\.scheme) == Array(repeating: "3 × 8", count: 4))
     }
 
     @Test func scheduleAndLoadGuidanceCopyCoverEveryBranch() {
@@ -313,24 +453,18 @@ struct TodayUpNextPresentationTests {
             "5 lb from an Overhead Press PR")
     }
 
-    @Test func rememberedStartingLoadsFormatInTheRequestedUnit() {
-        var lift = exercise(plannedSets: 3, plannedReps: 8)
-        lift.startingLoadResolution = TemplateLoadResolution(weights: [155, 150, 150], source: "Last used", date: nil)
-        let presentation = makePresentation(exercises: [lift], unit: .kg)
-        let reference = presentation.exerciseRows[0].scheme.loadReference
-        #expect(reference?.contains("kg") == true)
-        #expect(reference?.contains("lb") == false)
-        #expect(presentation.exerciseRows[0].scheme.count == "3 × 8")
-    }
-
     private func makePresentation(
         daysUntil: Int = 0,
         otherScheduledCount: Int = 0,
         shouldEaseOff: Bool = false,
         exercises: [ExerciseSource]? = nil,
         nearestPR: Source.NearestPR? = nil,
+        lastUsedAt: Date? = nil,
+        lastSession: Source.LastSession? = nil,
         unit: WeightUnit = .lb,
-        defaultRestSeconds: Int = SettingsDefaults.defaultRestSeconds
+        defaultRestSeconds: Int = SettingsDefaults.defaultRestSeconds,
+        now: Date = Date(),
+        calendar: Calendar = .current
     ) -> TodayUpNextPresentation {
         TodayUpNextPresentation(
             source: Source(
@@ -339,10 +473,14 @@ struct TodayUpNextPresentationTests {
                 otherScheduledCount: otherScheduledCount,
                 shouldEaseOff: shouldEaseOff,
                 exercises: exercises ?? [exercise()],
-                nearestPR: nearestPR
+                nearestPR: nearestPR,
+                lastUsedAt: lastUsedAt,
+                lastSession: lastSession
             ),
             unit: unit,
-            defaultRestSeconds: defaultRestSeconds
+            defaultRestSeconds: defaultRestSeconds,
+            now: now,
+            calendar: calendar
         )
     }
 

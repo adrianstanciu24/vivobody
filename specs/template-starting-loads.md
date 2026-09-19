@@ -27,10 +27,14 @@ progression recommendation. Completing a workout never rewrites a template.
 
 ## Presentation and startup
 
-Template editor rows, template detail, and Today use the same resolution as
-workout startup. Show target structure followed by **Last used**, **Fixed**, or
-**Starting load**. Last used includes its date. Mixed loads are listed in set
-order, with up to five entries and an explicit remaining-set count.
+Template editor rows use the same resolution as workout startup. Show target
+structure followed by **Last used**, **Fixed**, or **Starting load**. Last used
+includes its date. Mixed loads are listed in set order, with up to five entries
+and an explicit remaining-set count. Template detail is an identity-only
+overview: each row shows a quiet muscle-group caption and headline-weight
+exercise name, without set targets or load references. Selecting the row opens
+the exercise editor where its programming and resolved load live. The Today
+preview shows target structure but no load reference.
 
 An unresolved load reads **Set starting load**. Programmatically created plans
 may remain unset; starting one surfaces an error identifying the exercise to
@@ -54,8 +58,9 @@ The focused `template-starting-loads` scenario covers editing the policy,
 preview/startup agreement, preserved target reps, and relaunch persistence.
 Matching light and accessibility captures inspect the editor and preview.
 The `template-first-load` scenario checks explicit entry without compatible history.
-The `template-starting-loads-today` and `template-starting-loads-detail` scenarios
-cover the Today preview and its direct exercise editor.
+The `template-starting-loads-today` scenario checks that Today and template
+detail omit the load reference; the `template-starting-loads-detail` scenario
+covers the direct exercise editor where the reference remains visible.
 Migration and load-resolution boundary suites are user-run under the repository
 verification policy.
 

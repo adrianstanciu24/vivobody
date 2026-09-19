@@ -1,0 +1,10 @@
+{
+  "name": "tmp-template-detail",
+  "launch": {"reset": true, "tab": "today", "arguments": ["--seed-templates", "--static-body"]},
+  "steps": [
+    {"scrollTo": {"selector": {"identifier": "todayUpNextLastTime"}, "direction": "up"}},
+    {"tap": {"identifier": "todayUpNextPreview"}},
+    {"wait": {"labelContains": "Barbell Hip Thrust,"}}
+  ],
+  "required": [{"labelContains": "Barbell Hip Thrust, 3 × 8 ·"}]
+}

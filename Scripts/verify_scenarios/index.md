@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 152.
+Scenario files: 153.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -158,6 +158,7 @@ Scenario files: 152.
 | [template-starting-loads-light](template-starting-loads-light.json) | library | `--ui-test-template-starting-loads -settings.appearance light -settings.weightUnit lb` |
 | [template-starting-loads-today](template-starting-loads-today.json) | today | `--ui-test-template-starting-loads --ui-test-remembered-template-load --static-body -settings.appearance dark -settings.weightUnit lb` |
 | [template-starting-loads](template-starting-loads.json) | library | `--ui-test-template-starting-loads -settings.appearance dark -settings.weightUnit lb` |
+| [tmp-template-detail](tmp-template-detail.json) | today | `--seed-templates --static-body` |
 | [today-actions](today-actions.json) | today | `--static-body` |
 | [today-journal-accessibility](today-journal-accessibility.json) | today | `--seed-history --static-body` |
 | [today-up-next](today-up-next.json) | today | `--ui-test-scheduled-template --static-body` |

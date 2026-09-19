@@ -93,21 +93,34 @@ extension TodayScreen {
             otherScheduledCount: more,
             shouldEaseOff: shouldEaseOff,
             outlook: outlook,
-            history: appState.analytics.exerciseHistorySummaries
+            lastSession: lastSession(matching: template),
+            unit: unit
         )
         return (
             template,
             TodayUpNextPresentation(
                 source: source,
                 unit: unit,
-                defaultRestSeconds: defaultRestSeconds,
-                lastTime: TodayLastTimePresentation.make(
-                    template: template,
-                    history: appState.analytics.exerciseHistorySummaries,
-                    unit: unit
-                )
+                defaultRestSeconds: defaultRestSeconds
             )
         )
+    }
+
+    /// The newest recent-window session that performed at least half of the
+    /// template's exercises under the same identity and performance
+    /// signature. Sessions do not record their template, so exercise
+    /// coverage stands in for that link; the 45-day window keeps this a
+    /// cheap in-memory scan of already-queried sessions.
+    func lastSession(matching template: WorkoutTemplate) -> WorkoutSession? {
+        let templateKeys = Set(template.orderedExercises.map(\.historyKey))
+        guard !templateKeys.isEmpty else { return nil }
+        return recentSessions.first { session in
+            let covered = session.exercises.reduce(into: Set<String>()) { keys, exercise in
+                let key = exercise.historyKey
+                if templateKeys.contains(key) { keys.insert(key) }
+            }
+            return covered.count * 2 >= templateKeys.count
+        }
     }
 
     /// Frozen figure height with normal-size CTA and legend clearance.

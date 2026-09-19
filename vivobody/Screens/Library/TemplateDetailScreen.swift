@@ -35,13 +35,6 @@ struct TemplateDetailScreen: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    @AppStorage(SettingsKey.weightUnit)
-    private var unitRaw: String = SettingsDefaults.weightUnit
-
-    private var unit: WeightUnit {
-        WeightUnit(rawValue: unitRaw) ?? .lb
-    }
-
     @State private var pendingPick: ExerciseCatalogItem?
     @State private var configureTarget: ConfigureExerciseTarget?
     @State private var showPicker: Bool = false
@@ -189,7 +182,7 @@ struct TemplateDetailScreen: View {
                 }
             } header: {
                 Text("Exercises")
-                    .sectionLabelStyle(Opacity.medium)
+                    .panelLegend()
                     .padding(.leading, Space.gutter)
                     .padding(.top, Space.sm)
                     .padding(.bottom, Space.sm)
@@ -208,43 +201,29 @@ struct TemplateDetailScreen: View {
         )
     }
 
+    /// Identity-only exercise row. Programming details live in the editor
+    /// opened by the row, keeping this template overview visually quiet.
     private func exerciseRow(_ exercise: TemplateExercise) -> some View {
-        HStack(spacing: Space.md) {
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(spacing: Space.sm) {
-                    Text(exercise.name)
-                        .font(Typography.title)
-                        .foregroundStyle(Ink.primary)
-                        .fixedSize(horizontal: false, vertical: true)
-                    if exercise.hasPerSetData {
-                        Text("Per set")
-                            .font(Typography.caption)
-                            .foregroundStyle(Tint.inProgress)
-                    }
-                }
-                Text(exerciseSummary(exercise))
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.tertiary)
-            }
-
-            Spacer(minLength: Space.sm)
-
+        VStack(alignment: .leading, spacing: Space.xs) {
             Text(exercise.group.displayName)
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
+            exerciseName(exercise)
         }
         .frame(minHeight: Space.rowMin)
-        .padding(.vertical, Space.sm)
+        .padding(.vertical, Space.md)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(exercise.name), \(exercise.group.displayName)")
     }
 
-    private func exerciseSummary(_ exercise: TemplateExercise) -> String {
-        let target = ExerciseDraft(from: exercise).targetSummary
-        guard exercise.tracksResistance else { return target }
-        let resolution = exercise.resolveLoad(history: appState.analytics.exerciseHistorySummaries[exercise.historyKey])
-        return "\(target) · \(resolution.summary(loadMode: exercise.loadMode, unit: unit))"
+    private func exerciseName(_ exercise: TemplateExercise) -> some View {
+        Text(exercise.name)
+            .font(Typography.headline)
+            .foregroundStyle(Ink.primary)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     private func configureHistory(_ target: ConfigureExerciseTarget) -> ExerciseHistorySummary? {

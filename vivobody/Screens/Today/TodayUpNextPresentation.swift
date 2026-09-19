@@ -3,9 +3,10 @@
 //  vivobody
 //
 //  Immutable presentation for Today's scheduled or repeat-workout preview. A narrow
-//  MainActor adapter snapshots SwiftData templates and strength outlook into
-//  primitive values; all formatting, preview limits, and accessibility copy
-//  are then derived without store, environment, or UserDefaults access.
+//  MainActor adapter snapshots SwiftData templates, the matching archived session,
+//  and strength outlook into primitive values; all formatting, preview limits, and
+//  accessibility copy are then derived without store, environment, or UserDefaults
+//  access.
 //
 
 import Foundation
@@ -31,11 +32,19 @@ nonisolated struct TodayUpNextPresentation: Equatable {
             let plannedDuration: TimeInterval
             let plannedWeight: Double
             let sets: [SetPlan]
-            var startingLoadResolution: TemplateLoadResolution? = nil
 
             var effectiveSetCount: Int {
                 sets.isEmpty ? plannedSets : sets.count
             }
+        }
+
+        /// Totals of the most recent archived workout that covered this
+        /// template's exercises. Receipt semantics stay shared with History.
+        nonisolated struct LastSession: Equatable {
+            let date: Date
+            let totalSets: Int
+            let totalReps: Int
+            let receipt: WorkoutReceiptMetric
         }
 
         nonisolated struct NearestPR: Equatable {
@@ -52,28 +61,20 @@ nonisolated struct TodayUpNextPresentation: Equatable {
         let shouldEaseOff: Bool
         let exercises: [Exercise]
         let nearestPR: NearestPR?
-    }
-
-    nonisolated struct Scheme: Equatable {
-        let count: String
-        let load: String?
-        let loadUnit: String?
-        var loadReference: String? = nil
-
-        var accessibilityText: String {
-            [count, load, loadUnit, loadReference]
-                .compactMap(\.self)
-                .joined(separator: " ")
-        }
+        var lastUsedAt: Date? = nil
+        var lastSession: LastSession? = nil
     }
 
     nonisolated struct ExerciseRow: Equatable, Identifiable {
         let id: UUID
         let name: String
-        let scheme: Scheme
+        let groupName: String
+        /// Set structure only, such as `3 × 8` or `2 × 0:30 hold`. Loads are
+        /// resolved when the workout starts and belong to the template detail.
+        let scheme: String
 
         var accessibilityLabel: String {
-            "\(name), \(scheme.accessibilityText)"
+            "\(name), \(scheme), \(groupName)"
         }
     }
 
@@ -82,18 +83,37 @@ nonisolated struct TodayUpNextPresentation: Equatable {
         let remainingCount: Int
     }
 
+    /// The card's single logged reference. `columns` is empty when no
+    /// archived workout covered this template within Today's recent window.
+    nonisolated struct LastTime: Equatable {
+        nonisolated struct Column: Equatable {
+            let value: String
+            var unit: String? = nil
+            let label: String
+            let accessibilityLabel: String
+        }
+
+        let title: String
+        let columns: [Column]
+        let accessibilityLabel: String
+    }
+
     nonisolated struct LoadGuidance: Equatable {
         let text: String
         let accessibilityLabel: String
     }
 
-    let lastTime: TodayLastTimePresentation?
     let templateName: String
     let scheduleText: String
     let metadata: String
     let durationEstimate: String?
-    let muscleSummary: String
+    let muscleGroups: [String]
+    var muscleSummary: String {
+        muscleGroups.joined(separator: "   ")
+    }
+
     let exerciseRows: [ExerciseRow]
+    let lastTime: LastTime
     let prProximityText: String?
     let loadGuidance: LoadGuidance?
 
@@ -101,9 +121,9 @@ nonisolated struct TodayUpNextPresentation: Equatable {
         source: Source,
         unit: WeightUnit,
         defaultRestSeconds: Int,
-        lastTime: TodayLastTimePresentation? = nil
+        now: Date = Date(),
+        calendar: Calendar = .current
     ) {
-        self.lastTime = lastTime
         templateName = source.templateName
         scheduleText = Self.scheduleText(daysUntil: source.daysUntil)
         durationEstimate = Self.durationEstimate(
@@ -115,14 +135,21 @@ nonisolated struct TodayUpNextPresentation: Equatable {
             durationEstimate: durationEstimate,
             otherScheduledCount: source.otherScheduledCount
         )
-        muscleSummary = Self.muscleSummary(source.exercises)
+        muscleGroups = Self.muscleGroups(source.exercises)
         exerciseRows = source.exercises.map { exercise in
             ExerciseRow(
                 id: exercise.id,
                 name: exercise.name,
-                scheme: Self.scheme(for: exercise, unit: unit)
+                groupName: exercise.groupName,
+                scheme: Self.scheme(for: exercise)
             )
         }
+        lastTime = Self.lastTime(
+            session: source.lastSession,
+            lastUsedAt: source.lastUsedAt,
+            now: now,
+            calendar: calendar
+        )
         prProximityText = Self.prProximityText(
             source.nearestPR,
             exercises: source.exercises,
@@ -136,9 +163,13 @@ nonisolated struct TodayUpNextPresentation: Equatable {
             : nil
     }
 
+    /// Up to four rows normally and three at accessibility sizes. When exactly
+    /// one exercise would remain, show it instead of a "+1 more" row.
     func preview(accessibilityLayout: Bool) -> Preview {
-        let limit = accessibilityLayout ? 3 : 5
-        let rows = Array(exerciseRows.prefix(limit))
+        let limit = accessibilityLayout ? 3 : 4
+        let rows = exerciseRows.count <= limit + 1
+            ? exerciseRows
+            : Array(exerciseRows.prefix(limit))
         return Preview(
             rows: rows,
             remainingCount: exerciseRows.count - rows.count
@@ -184,7 +215,7 @@ nonisolated struct TodayUpNextPresentation: Equatable {
             : base
     }
 
-    private static func muscleSummary(_ exercises: [Source.Exercise]) -> String {
+    private static func muscleGroups(_ exercises: [Source.Exercise]) -> [String] {
         var counts: [String: Int] = [:]
         var order: [String] = []
         for exercise in exercises {
@@ -198,90 +229,132 @@ nonisolated struct TodayUpNextPresentation: Equatable {
                 let sets = counts[groupName] ?? 0
                 return "\(groupName) · \(sets) \(sets == 1 ? "set" : "sets")"
             }
-            .joined(separator: "   ")
     }
 
-    private static func scheme(
-        for exercise: Source.Exercise,
-        unit: WeightUnit
-    ) -> Scheme {
+    private static func scheme(for exercise: Source.Exercise) -> String {
         let trackingMode = TrackingMode(rawValue: exercise.trackingModeRaw) ?? .reps
-        let scheme: Scheme = switch trackingMode {
-        case .reps: repsScheme(for: exercise, unit: unit)
-        case .duration: durationScheme(for: exercise, unit: unit)
+        switch trackingMode {
+        case .reps: return repsScheme(for: exercise)
+        case .duration: return durationScheme(for: exercise)
         }
-        guard let resolution = exercise.startingLoadResolution else { return scheme }
-        let loadMode = ExerciseLoadMode(rawValue: exercise.loadModeRaw) ?? .external
-        let reference = resolution.summary(loadMode: loadMode, unit: unit)
-        return trackingMode == .duration
-            ? Scheme(count: scheme.count, load: scheme.load, loadUnit: exercise.durationLabel, loadReference: reference)
-            : Scheme(count: scheme.count, load: nil, loadUnit: nil, loadReference: reference)
     }
 
-    private static func repsScheme(
-        for exercise: Source.Exercise,
-        unit: WeightUnit
-    ) -> Scheme {
-        let loadMode = ExerciseLoadMode(rawValue: exercise.loadModeRaw) ?? .external
+    private static func repsScheme(for exercise: Source.Exercise) -> String {
         guard !exercise.sets.isEmpty else {
-            return Scheme(
-                count: "\(exercise.plannedSets) × \(exercise.plannedReps)",
-                load: loadMode.summaryLoadLabel(exercise.plannedWeight, unit: unit),
-                loadUnit: nil
-            )
+            return "\(exercise.plannedSets) × \(exercise.plannedReps)"
         }
-
         let reps = exercise.sets.map(\.reps)
-        let weights = exercise.sets.map(\.weight)
-        guard let lowerReps = reps.min(), let upperReps = reps.max(),
-              let lowerWeight = weights.min(), let upperWeight = weights.max()
-        else {
-            return Scheme(count: "\(exercise.sets.count) sets", load: nil, loadUnit: nil)
+        guard let lower = reps.min(), let upper = reps.max() else {
+            return "\(exercise.sets.count) sets"
         }
-        let count = lowerReps == upperReps
-            ? "\(exercise.sets.count) × \(lowerReps)"
-            : "\(exercise.sets.count) × \(lowerReps)–\(upperReps)"
-        let load = lowerWeight == upperWeight
-            ? loadMode.summaryLoadLabel(lowerWeight, unit: unit)
-            : loadMode.summaryLoadRangeLabel(lowerWeight, upperWeight, unit: unit)
-        return Scheme(count: count, load: load, loadUnit: nil)
+        return lower == upper
+            ? "\(exercise.sets.count) × \(lower)"
+            : "\(exercise.sets.count) × \(lower)–\(upper)"
     }
 
-    private static func durationScheme(
-        for exercise: Source.Exercise,
-        unit: WeightUnit
-    ) -> Scheme {
-        let loadMode = ExerciseLoadMode(rawValue: exercise.loadModeRaw) ?? .external
-        let count: String
+    private static func durationScheme(for exercise: Source.Exercise) -> String {
+        let count: Int
         let duration: String
-        let weights: [Double]
-
         if exercise.sets.isEmpty {
-            count = "\(exercise.plannedSets) ×"
+            count = exercise.plannedSets
             duration = DurationFormatter.string(exercise.plannedDuration)
-            weights = [exercise.plannedWeight]
         } else {
-            count = "\(exercise.sets.count) ×"
+            count = exercise.sets.count
             let durations = exercise.sets.map(\.duration)
             guard let lower = durations.min(), let upper = durations.max() else {
-                return Scheme(count: "\(exercise.sets.count) sets", load: nil, loadUnit: nil)
+                return "\(count) sets"
             }
             duration = lower == upper
                 ? DurationFormatter.string(lower)
                 : "\(DurationFormatter.string(lower))–\(DurationFormatter.string(upper))"
-            weights = exercise.sets.map(\.weight)
         }
+        return "\(count) × \(duration) \(exercise.durationLabel)"
+    }
 
-        let load: String? = if let lower = weights.min(), let upper = weights.max() {
-            lower == upper
-                ? loadMode.summaryLoadLabel(lower, unit: unit)
-                : loadMode.summaryLoadRangeLabel(lower, upper, unit: unit)
-        } else {
-            nil
+    private static func lastTime(
+        session: Source.LastSession?,
+        lastUsedAt: Date?,
+        now: Date,
+        calendar: Calendar
+    ) -> LastTime {
+        if let session {
+            let day = relativeDayText(session.date, now: now, calendar: calendar)
+            var columns = [LastTime.Column(
+                value: "\(session.totalSets)",
+                label: "Sets",
+                accessibilityLabel: "\(session.totalSets) \(session.totalSets == 1 ? "set" : "sets")"
+            )]
+            if session.totalReps > 0 {
+                columns.append(LastTime.Column(
+                    value: "\(session.totalReps)",
+                    label: "Reps",
+                    accessibilityLabel: "\(session.totalReps) \(session.totalReps == 1 ? "rep" : "reps")"
+                ))
+            }
+            let receipt = session.receipt
+            switch receipt.kind {
+            case .volume(.complete):
+                columns.append(LastTime.Column(
+                    value: receipt.value,
+                    unit: receipt.unit,
+                    label: receipt.label,
+                    accessibilityLabel: receipt.accessibilityLabel
+                ))
+            case .volume(.partial):
+                columns.append(LastTime.Column(
+                    value: receipt.value + (receipt.qualifier ?? ""),
+                    unit: receipt.unit,
+                    label: "Known volume",
+                    accessibilityLabel: receipt.accessibilityLabel
+                ))
+            case .timedWork:
+                columns.append(LastTime.Column(
+                    value: receipt.value,
+                    label: receipt.label,
+                    accessibilityLabel: receipt.accessibilityLabel
+                ))
+            case .volume(.unavailable), .reps:
+                break
+            }
+            return LastTime(
+                title: "Last time  ·  \(day)",
+                columns: columns,
+                accessibilityLabel: (["Last time", day] + columns.map(\.accessibilityLabel))
+                    .joined(separator: ", ")
+            )
         }
-        let details = ([exercise.durationLabel] + (load.map { ["·", $0] } ?? []))
-            .joined(separator: " ")
-        return Scheme(count: count, load: duration, loadUnit: details)
+        if let lastUsedAt {
+            let day = relativeDayText(lastUsedAt, now: now, calendar: calendar)
+            return LastTime(
+                title: "Last done  ·  \(day)",
+                columns: [],
+                accessibilityLabel: "Last done, \(day)"
+            )
+        }
+        return LastTime(
+            title: "First time with this workout",
+            columns: [],
+            accessibilityLabel: "First time with this workout"
+        )
+    }
+
+    /// Today, Yesterday, a small day count, then a month-and-day date. The
+    /// year appears only once the reference leaves the current year.
+    static func relativeDayText(_ date: Date, now: Date, calendar: Calendar) -> String {
+        let start = calendar.startOfDay(for: date)
+        let today = calendar.startOfDay(for: now)
+        let days = calendar.dateComponents([.day], from: start, to: today).day ?? 0
+        switch days {
+        case 0: return "Today"
+        case 1: return "Yesterday"
+        case 2 ... 6: return "\(days) days ago"
+        default:
+            let sameYear = calendar.component(.year, from: date) == calendar.component(.year, from: now)
+            let format: Date.FormatStyle = sameYear
+                ? .dateTime.month(.abbreviated).day()
+                : .dateTime.month(.abbreviated).day().year()
+            return date.formatted(format)
+        }
     }
 
     private static func prProximityText(
@@ -313,7 +386,8 @@ extension TodayUpNextPresentation.Source {
         otherScheduledCount: Int,
         shouldEaseOff: Bool,
         outlook: StrengthOutlookBoard,
-        history: [String: ExerciseHistorySummary] = [:]
+        lastSession: WorkoutSession? = nil,
+        unit: WeightUnit = .lb
     ) {
         let exercises = template.orderedExercises.map { exercise in
             Exercise(
@@ -334,10 +408,7 @@ extension TodayUpNextPresentation.Source {
                         duration: set.duration,
                         weight: exercise.trackedWeight(set.weight)
                     )
-                },
-                startingLoadResolution: exercise.tracksResistance
-                    ? exercise.resolveLoad(history: history[exercise.historyKey])
-                    : nil
+                }
             )
         }
         let nearestPR = outlook.nearestPR.map { stat in
@@ -355,7 +426,16 @@ extension TodayUpNextPresentation.Source {
             otherScheduledCount: otherScheduledCount,
             shouldEaseOff: shouldEaseOff,
             exercises: exercises,
-            nearestPR: nearestPR
+            nearestPR: nearestPR,
+            lastUsedAt: template.lastUsedAt,
+            lastSession: lastSession.map { session in
+                LastSession(
+                    date: session.completedAt ?? session.startedAt,
+                    totalSets: session.totalSets,
+                    totalReps: session.totalReps,
+                    receipt: session.primaryReceiptMetric(unit: unit, volumeDisplayStyle: .full)
+                )
+            }
         )
     }
 }
