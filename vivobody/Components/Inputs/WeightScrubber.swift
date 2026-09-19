@@ -52,6 +52,8 @@ struct WeightScrubber: View {
     var presentation: Presentation = .card
     var showsScrubHint: Bool = false
     var performsScrubNudge: Bool = false
+    /// Keeps the graduation rail visible as a persistent drag affordance.
+    var keepsRailVisible: Bool = false
     /// Keeps the shared scrubber's established leading alignment unless a
     /// quiet calibration surface explicitly asks to center the value.
     var centersValue: Bool = false
@@ -108,6 +110,7 @@ struct WeightScrubber: View {
                 tickTone: .deep,
                 hitSlop: 16,
                 showsRail: true,
+                keepsRailVisible: keepsRailVisible,
                 onScrubEnded: onScrubEnded
             )
         }

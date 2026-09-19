@@ -36,6 +36,8 @@ struct BareScrubber: View {
     var hitSlop: CGFloat = 0
     /// Shows the transient graduation rail on full-width hero scrubbers.
     var showsRail: Bool = false
+    /// Keeps the rail visible when a surface uses it as a first-use affordance.
+    var keepsRailVisible: Bool = false
     /// Rail space for non-full-width layouts; ignored by full-width heroes.
     var railClearance: CGFloat = 0
     /// Invalidates motion before completion, archive, and discard transitions.
@@ -93,7 +95,7 @@ struct BareScrubber: View {
                         value: value,
                         step: step,
                         spacing: max(pointsPerStep, 7),
-                        visible: isDragging || isCoasting
+                        visible: keepsRailVisible || isDragging || isCoasting
                     )
                 }
             }

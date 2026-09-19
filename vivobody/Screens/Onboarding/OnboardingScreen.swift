@@ -7,15 +7,16 @@
 //
 //  Deliberately NOT a wizard. workout-app-principles.md cuts
 //  onboarding wizards, tutorial carousels, and motivational hero copy,
-//  so this stays a single calm beat: brand, initial body weight, units,
-//  and one way in. Body weight is worth capturing here because it makes
-//  bodyweight-exercise load analytics accurate from the first workout.
+//  so this stays a single calm beat: brand, optional body weight, units,
+//  and one way in. Body weight improves bodyweight-exercise load analytics,
+//  but an untouched suggestion must never become a recorded measurement.
 //  Permissions (Health, notifications) remain contextual.
 //
-//  Tapping Start persists a real BodyWeightEntry before calling AppRoot,
-//  which sets the @AppStorage completion flag and dismisses the cover.
-//  The unit choice writes straight to SettingsKey.weightUnit; canonical
-//  body-weight storage remains pounds at the scrubber boundary.
+//  The user explicitly opts into body-weight entry before the scrubber is
+//  shown. Tapping Start persists it only in that state, then calls AppRoot,
+//  which sets the @AppStorage completion flag and dismisses the cover. The
+//  unit choice writes straight to SettingsKey.weightUnit; canonical storage
+//  remains pounds at the scrubber boundary.
 //
 
 import SwiftData
@@ -50,6 +51,7 @@ struct OnboardingScreen: View {
 
     /// Canonical pounds. The scrubber converts at its UI boundary.
     @State private var bodyWeight: Double = 180
+    @State private var includesBodyWeight = false
     /// Display-unit increment, local to this one-time setup surface.
     @State private var bodyWeightStep: Double = WeightUnit.lb.bodyWeightStep
     @State private var isSaving = false
@@ -94,14 +96,16 @@ struct OnboardingScreen: View {
             VStack(spacing: Space.section + Space.xl) {
                 bodyWeightPicker
 
-                unitPicker
+                if includesBodyWeight {
+                    unitPicker
+                }
             }
             .frame(maxWidth: 360)
             .settleIn(1)
 
             Spacer(minLength: Space.xl)
 
-            startButton
+            onboardingActions
                 .settleIn(2)
         }
         .padding(.horizontal, Space.gutter)
@@ -119,12 +123,14 @@ struct OnboardingScreen: View {
 
             VStack(spacing: Space.section) {
                 bodyWeightPicker
-                unitPicker
+                if includesBodyWeight {
+                    unitPicker
+                }
             }
             .frame(maxWidth: 360)
             .settleIn(1)
 
-            startButton
+            onboardingActions
                 .settleIn(2)
         }
         .padding(.horizontal, Space.gutter)
@@ -152,6 +158,7 @@ struct OnboardingScreen: View {
 
             Text("vivobody")
                 .font(Typography.display)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility1)
                 .foregroundStyle(Ink.primary)
         }
         .frame(maxWidth: .infinity)
@@ -162,49 +169,66 @@ struct OnboardingScreen: View {
     // MARK: - Body weight
 
     private var bodyWeightPicker: some View {
-        VStack(spacing: Space.sm) {
-            Text("Your body weight")
+        VStack(spacing: Space.md) {
+            Text("Body weight · Optional")
                 .panelLegend()
 
-            WeightScrubber(
-                canonicalWeight: $bodyWeight,
-                purpose: .body,
-                displayStep: bodyWeightStep,
-                label: nil,
-                pointsPerStep: 8,
-                valueFontSize: 88,
-                presentation: .bare,
-                showsScrubHint: true,
-                performsScrubNudge: true,
-                centersValue: true
-            )
+            if includesBodyWeight {
+                WeightScrubber(
+                    canonicalWeight: $bodyWeight,
+                    purpose: .body,
+                    displayStep: bodyWeightStep,
+                    label: nil,
+                    pointsPerStep: 8,
+                    valueFontSize: 88,
+                    presentation: .bare,
+                    showsScrubHint: true,
+                    performsScrubNudge: true,
+                    keepsRailVisible: true,
+                    centersValue: true
+                )
 
-            bodyWeightAdjustmentFooter
+                bodyWeightStepControl
+            } else {
+                bodyWeightEmptyState
+            }
         }
         .accessibilityElement(children: .contain)
     }
 
-    @ViewBuilder
-    private var bodyWeightAdjustmentFooter: some View {
-        if dynamicTypeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: Space.sm) {
-                Text("Drag to adjust")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                bodyWeightStepButton
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        } else {
-            HStack(spacing: Space.md) {
-                Text("Drag to adjust")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
+    private var bodyWeightEmptyState: some View {
+        VStack(spacing: Space.sm) {
+            Text("Not set")
+                .font(Typography.metricLg)
+                .foregroundStyle(Ink.primary)
 
-                Spacer(minLength: Space.md)
+            Text("Helps calculate bodyweight exercise load. You can add it later in the Me screen.")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: 280)
 
-                bodyWeightStepButton
+            Button {
+                Haptics.selection()
+                includesBodyWeight = true
+            } label: {
+                Label("Add body weight", systemImage: "plus")
+                    .font(Typography.headline)
+                    .foregroundStyle(Ink.primary)
+                    .padding(.horizontal, Space.lg)
+                    .frame(minHeight: Space.tapMin)
             }
+            .buttonStyle(.plain)
+            .coloredGlassControl(cornerRadius: Radius.pill)
+            .padding(.top, Space.lg)
+            .accessibilityHint("Shows an adjustable body weight")
         }
+    }
+
+    private var bodyWeightStepControl: some View {
+        bodyWeightStepButton
+            .frame(maxWidth: .infinity, alignment: .center)
     }
 
     /// The compact cycling increment control from Active Workout, tuned
@@ -224,11 +248,10 @@ struct OnboardingScreen: View {
                 .monospacedDigit()
                 .foregroundStyle(Ink.secondary)
                 .padding(.horizontal, Space.lg)
-                .padding(.vertical, Space.md)
-                .contentShape(Capsule())
+                .frame(minHeight: Space.tapMin)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .padding(4)
         .coloredGlassControl(cornerRadius: Radius.pill)
         .accessibilityLabel("Body weight increment")
         .accessibilityValue(label)
@@ -301,6 +324,28 @@ struct OnboardingScreen: View {
 
     // MARK: - Start
 
+    private var onboardingActions: some View {
+        VStack(spacing: Space.md) {
+            if includesBodyWeight {
+                Button {
+                    Haptics.selection()
+                    includesBodyWeight = false
+                } label: {
+                    Text("Not now")
+                        .font(Typography.headline)
+                        .foregroundStyle(Ink.secondary)
+                        .frame(maxWidth: .infinity, minHeight: Space.tapMin)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .coloredGlassControl(cornerRadius: Radius.chip)
+                .accessibilityHint("Continues setup without recording body weight")
+            }
+
+            startButton
+        }
+    }
+
     private var startButton: some View {
         // No extra softElevation: PrimaryButtonStyle already carries
         // its own accent-glow + black shadows, and this static screen
@@ -314,7 +359,11 @@ struct OnboardingScreen: View {
         }
         .disabled(isSaving)
         .opacity(isSaving ? Opacity.medium : 1)
-        .accessibilityHint("Finishes setup and opens the app")
+        .accessibilityHint(
+            includesBodyWeight
+                ? "Records body weight and opens the app"
+                : "Opens the app without recording body weight"
+        )
     }
 
     // MARK: - Setup state
@@ -322,6 +371,7 @@ struct OnboardingScreen: View {
     private func hydrate() {
         if let latest = bodyWeightEntries.first {
             bodyWeight = latest.weight
+            includesBodyWeight = true
         }
         bodyWeightStep = weightUnit.bodyWeightStep
         snapBodyWeight(to: bodyWeightStep, unit: weightUnit)
@@ -334,9 +384,15 @@ struct OnboardingScreen: View {
     }
 
     private func saveAndStart() {
-        guard !isSaving, bodyWeight.isFinite, bodyWeight > 0 else { return }
+        guard !isSaving else { return }
+        guard !includesBodyWeight || (bodyWeight.isFinite && bodyWeight > 0) else { return }
         isSaving = true
         Haptics.soft()
+
+        guard includesBodyWeight else {
+            onStart()
+            return
+        }
 
         let now = Date()
         if let existing = bodyWeightEntries.entry(on: now) {
