@@ -1,0 +1,13 @@
+{
+  "name": "catalog-trx-triceps-press-accessibility",
+  "launch": {"reset": true, "tab": "library", "arguments": ["--static-body", "-settings.appearance", "light", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityL"]},
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterPush"}},
+    {"scrollTo": {"selector": {"labelRegex": "^TRX Triceps Press,"}, "direction": "up", "maxSwipes": 80}},
+    {"tap": {"labelRegex": "^TRX Triceps Press,"}},
+    {"wait": {"label": "TRX Triceps Press"}}
+  ],
+  "required": [{"label": "TRX Triceps Press"}, {"label": "STRENGTH · REPS"}, {"labelContains": "Muscles used by TRX Triceps Press"}],
+  "forbidden": []
+}

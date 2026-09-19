@@ -1,0 +1,46 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "suspension-pike", "name": "Suspension Pike",
+  "definition": "A bilateral foot-suspended high-plank movement in which straight legs remain extended while hip flexion lifts the pelvis into an inverted V and the trunk resists extension. The knees and elbows remain fixed, separating the pike from knee tucks, mountain climbers, body saws, push-ups, and pike push-ups. The direct pike study measures abdominal, lumbar-erector, and rectus-femoris activity; iliopsoas and upper- and lower-limb support roles are bounded anatomy-and-mechanics transfers. The fixture is rep-tracked and non-comparable because strap geometry and excursion change effective load.",
+  "evidenceRefs": ["cugliari-boccia-2017-suspension-core", "snarr-2016-suspension-pike", "trx-2026-suspension-exercise-guide", "trx-2022-compound-movements-part-2"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["suspensionTrainer"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["hip.flexion"], "primeActions": ["hip.flexion"], "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.lateralFlexion", "spine.rotation", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "secondary"}, {"anyOf": ["iliopsoas", "rectusFemoris"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs"], "secondary": ["obliques", "iliopsoas", "rectusFemoris"], "stabilizer": ["serratus", "externalRotators", "triceps", "fingerFlexors", "extensorCarpiRadialis", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "Both hands remain on the floor while both feet stay suspended.", "allowedValues": ["mixedHandsFloorFeetSuspended"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed start and return posture.", "allowedValues": ["highPlankFacingAway"]},
+    {"id": "handSupport", "valueType": "enum", "required": true, "description": "Both palms remain on the floor.", "allowedValues": ["bilateralPalmsFloor"]},
+    {"id": "footSupport", "valueType": "enum", "required": true, "description": "Both feet use the suspension cradles.", "allowedValues": ["dualFootCradles"]},
+    {"id": "strapLength", "valueType": "enum", "required": true, "description": "The reviewed strap height.", "allowedValues": ["midCalf"]},
+    {"id": "kneePosition", "valueType": "enum", "required": true, "description": "Both knees remain straight to exclude a knee tuck.", "allowedValues": ["extendedAndHeld"]},
+    {"id": "hipPath", "valueType": "enum", "required": true, "description": "The pelvis rises into the source-defined pike and returns.", "allowedValues": ["invertedVAndReturn"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The torso stays controlled while the hips create the repetition.", "allowedValues": ["controlledWithoutDeliberateFlexion"]},
+    {"id": "elbowMotion", "valueType": "enum", "required": true, "description": "The elbows remain near straight.", "allowedValues": ["angleHeld"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "The straps do not create a guided path.", "fixedValue": false}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 5, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "trx-pike", "name": "TRX Pike", "aliases": ["Suspension Pike", "Suspended Pike"],
+    "equipment": "suspensionTrainer", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 8, "searchPriority": 99,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "secondary"}, {"muscle": "iliopsoas", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"kineticChain": "mixedHandsFloorFeetSuspended", "bodyPosition": "highPlankFacingAway", "handSupport": "bilateralPalmsFloor", "footSupport": "dualFootCradles", "strapLength": "midCalf", "kneePosition": "extendedAndHeld", "hipPath": "invertedVAndReturn", "spineMotion": "controlledWithoutDeliberateFlexion", "elbowMotion": "angleHeld", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["cugliari-boccia-2017-suspension-core", "snarr-2016-suspension-pike", "trx-2026-suspension-exercise-guide"],
+    "execution": {
+      "startingPosition": "Set the straps to mid-calf, place both feet in the cradles, and establish a straight high plank facing away from the anchor.",
+      "movement": "Keep both legs straight and lift the hips upward as the feet travel toward the hands.",
+      "endpoint": "Finish in the highest controlled inverted V that keeps the knees and elbows straight.",
+      "returnPhase": "Lower the hips under control and extend the body back to the straight high plank.",
+      "controlledJoints": "Create the repetition at the hips while keeping the knees and elbows steady.",
+      "supportAndPosture": "Keep both palms pressed into the floor, both feet seated in the cradles, and both straps evenly tensioned.",
+      "disqualifyingCompensations": ["Bending the knees toward the chest changes the exercise into a knee tuck.", "Bending the elbows into a press changes the exercise into a pike push-up.", "Rocking the straight body without lifting the hips changes the exercise into a body saw."]
+    }
+  }]
+}

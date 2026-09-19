@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "anti-lateral-flexion",
   "name": "Anti-Lateral Flexion",
-  "definition": "A strict unilateral isometric trunk family in which gravity tends to laterally flex the spine while the athlete maintains a straight side bridge between one forearm and both feet. The initial fixture is performed one side at a time and trained on both sides; spine.lateralFlexion is the external tendency being resisted, not a dynamic repetition. Obliques are primary. The newly exact, visibly mapped quadratusLumborum region is secondary through its reviewed lateral-flexion capability; it is not a proxy for the study's erector-spinae signal. Neither the action vocabulary nor the body mesh can encode loaded versus contralateral side. Abs, gluteus medius, and rectus femoris are directly measured stabilizers. The study reports an unheaded deltoid signal, so deltoidLateral receives mechanics-derived shoulder-abductor stabilizer credit rather than direct head-specific attribution. Serratus, triceps, and soleus conservatively close the materially loaded scapular, elbow, ankle, and foot support chain through anatomy and mechanics. Kneeling, elevated, unstable, suspended, weighted, rowing, hip-abduction, Copenhagen, and moving side-plank variants remain outside this contract.",
+  "definition": "A strict unilateral isometric trunk family in which gravity tends to laterally flex the spine while the athlete maintains a straight side bridge between one forearm and both feet. The stable fixture places both feet on the floor with the free hand on the opposite shoulder. The suspension fixture places both toes in mid-calf foot cradles with the top foot forward, keeps the supporting forearm on the floor, and raises the free arm. Each fixture is performed one side at a time and trained on both sides; spine.lateralFlexion is the external tendency being resisted, not a dynamic repetition. Obliques are primary. The exact, visibly mapped quadratusLumborum region is secondary through its reviewed lateral-flexion capability; it is not a proxy for the study's erector-spinae signal. Neither the action vocabulary nor the body mesh can encode loaded versus contralateral side. Abs, gluteus medius, and rectus femoris are directly measured stabilizers in the stable fixture and transfer categorically to the same suspended side-bridge task. The study reports an unheaded deltoid signal, so deltoidLateral receives mechanics-derived shoulder-abductor stabilizer credit rather than direct head-specific attribution. Serratus, triceps, and soleus conservatively close the materially loaded scapular, elbow, ankle, and foot support chain through anatomy and mechanics. Kneeling, elevated, weighted, rowing, hip-abduction, Copenhagen, reach-through, hip-dip, and other moving side-plank variants remain outside this contract.",
   "evidenceRefs": [
     "christophy-2012-lumbar-spine",
     "ackland-2008-shoulder-moment-arms",
@@ -11,7 +11,8 @@
     "holzbaur-2005-upper-extremity",
     "seth-2019-shoulder-work",
     "juan-recio-2022-side-bridge-endurance",
-    "cinarli-2025-anti-movement-training"
+    "cinarli-2025-anti-movement-training",
+    "trx-2022-full-body-side-plank"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -30,7 +31,8 @@
   },
   "allowed": {
     "equipment": [
-      "bodyweight"
+      "bodyweight",
+      "suspensionTrainer"
     ],
     "modalities": [
       "isometricStrength"
@@ -197,7 +199,7 @@
       "id": "kineticChain",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the supporting upper- and lower-body contacts remain fixed to the floor during the hold.",
+      "description": "Whether the supporting upper- and lower-body contacts remain fixed during the hold.",
       "allowedValues": [
         "closed"
       ]
@@ -215,9 +217,10 @@
       "id": "supportSurface",
       "valueType": "enum",
       "required": true,
-      "description": "The stable surface carrying the forearm and foot contacts.",
+      "description": "Whether the floor carries both contacts or the floor and suspension foot cradles divide them.",
       "allowedValues": [
-        "floor"
+        "floor",
+        "floorAndSuspensionTrainer"
       ]
     },
     {
@@ -251,9 +254,20 @@
       "id": "lowerBodySupport",
       "valueType": "enum",
       "required": true,
-      "description": "The lower-body contact completing the bodyweight bridge.",
+      "description": "The lower-body contact completing the side bridge.",
       "allowedValues": [
-        "feet"
+        "feet",
+        "toesInFootCradles"
+      ]
+    },
+    {
+      "id": "strapLength",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether straps are absent or adjusted to the reviewed mid-calf suspension length.",
+      "allowedValues": [
+        "notApplicable",
+        "midCalf"
       ]
     },
     {
@@ -280,7 +294,8 @@
       "required": true,
       "description": "The reviewed placement of the non-supporting arm.",
       "allowedValues": [
-        "handOnOppositeShoulder"
+        "handOnOppositeShoulder",
+        "raisedToCeiling"
       ]
     },
     {
@@ -361,7 +376,34 @@
       ]
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "floor-side-plank-pins-stable-support",
+      "description": "The bodyweight side plank keeps both feet on the floor, places the free hand on the opposite shoulder, and uses no straps.",
+      "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
+      "then": [
+        {"field": "variant.supportSurface", "value": "floor"},
+        {"field": "variant.lowerBodySupport", "value": "feet"},
+        {"field": "variant.strapLength", "value": "notApplicable"},
+        {"field": "variant.freeArmPosition", "value": "handOnOppositeShoulder"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "suspension-side-plank-pins-foot-cradles",
+      "description": "The suspension side plank keeps one forearm on the floor, places both toes in mid-calf foot cradles, and raises the free arm.",
+      "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [
+        {"field": "variant.supportSurface", "value": "floorAndSuspensionTrainer"},
+        {"field": "variant.lowerBodySupport", "value": "toesInFootCradles"},
+        {"field": "variant.strapLength", "value": "midCalf"},
+        {"field": "variant.freeArmPosition", "value": "raisedToCeiling"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "side-plank",
@@ -427,6 +469,7 @@
         "trainingSidePrescription": "bothSides",
         "upperBodySupport": "oneForearmAndElbow",
         "lowerBodySupport": "feet",
+        "strapLength": "notApplicable",
         "legPosture": "extended",
         "footStagger": "topFootInFront",
         "freeArmPosition": "handOnOppositeShoulder",
@@ -457,6 +500,78 @@
           "Rolling the torso forward or backward turns the side plank into an anti-rotation hold."
         ],
         "sideOrDirection": "Repeat the hold on the other side."
+      }
+    },
+    {
+      "catalogID": "trx-suspended-side-plank",
+      "name": "TRX Suspended Side Plank",
+      "aliases": [
+        "TRX Side Plank",
+        "Suspension Side Plank",
+        "Suspension Trainer Side Plank"
+      ],
+      "equipment": "suspensionTrainer",
+      "laterality": "unilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 30,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "obliques", "role": "primary"},
+        {"muscle": "quadratusLumborum", "role": "secondary"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "deltoidLateral", "role": "stabilizer"},
+        {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "serratus", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"},
+        {"muscle": "rectusFemoris", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "sideBridge",
+        "supportSurface": "floorAndSuspensionTrainer",
+        "supportSide": "oneSideAtATime",
+        "trainingSidePrescription": "bothSides",
+        "upperBodySupport": "oneForearmAndElbow",
+        "lowerBodySupport": "toesInFootCradles",
+        "strapLength": "midCalf",
+        "legPosture": "extended",
+        "footStagger": "topFootInFront",
+        "freeArmPosition": "raisedToCeiling",
+        "supportShoulderAngleDegrees": 90,
+        "supportElbowFlexionDegrees": 90,
+        "bodyAlignment": "shoulderHipFeetStraight",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "holdType": "timedIsometric",
+        "fixedPath": false,
+        "lowerBodyContribution": "staticSupportOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "juan-recio-2022-side-bridge-endurance",
+        "christophy-2012-lumbar-spine",
+        "trx-2022-full-body-side-plank"
+      ],
+      "execution": {
+        "startingPosition": "Set the straps to mid-calf, place both toes in the foot cradles with the top foot slightly forward, and lie on one side with the lower forearm on the floor and elbow below the shoulder.",
+        "movement": "Lift the hips into one straight line from shoulder through feet and raise the free arm toward the ceiling.",
+        "endpoint": "Hold the straight suspended side bridge for the set time without twisting or letting the straps swing.",
+        "controlledJoints": "Keep the shoulders and hips stacked, both legs straight, and the lower elbow below the shoulder.",
+        "supportAndPosture": "Press the lower forearm into the floor, keep both toes settled in the foot cradles, and repeat the same hold on the other side.",
+        "disqualifyingCompensations": [
+          "Dropping or repeatedly lifting the hips turns the hold into a hip-dip repetition.",
+          "Turning the chest toward the floor adds rotation and leaves the reviewed side plank.",
+          "Lifting the top leg changes the exercise into a raised-leg side plank."
+        ],
+        "sideOrDirection": "Hold for the set time on one side, then repeat the same duration on the other side."
       }
     }
   ]

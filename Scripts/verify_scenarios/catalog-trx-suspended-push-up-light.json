@@ -1,0 +1,13 @@
+{
+  "name": "catalog-trx-suspended-push-up-light",
+  "launch": {"reset": true, "tab": "library", "arguments": ["--static-body", "-settings.appearance", "light"]},
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterPush"}},
+    {"scrollTo": {"selector": {"labelRegex": "^TRX Suspended Push-Up,"}, "direction": "up", "maxSwipes": 80}},
+    {"tap": {"labelRegex": "^TRX Suspended Push-Up,"}},
+    {"wait": {"label": "TRX Suspended Push-Up"}}
+  ],
+  "required": [{"label": "TRX Suspended Push-Up"}, {"label": "STRENGTH · REPS"}, {"labelContains": "Muscles used by TRX Suspended Push-Up"}],
+  "forbidden": []
+}

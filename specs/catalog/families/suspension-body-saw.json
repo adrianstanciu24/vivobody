@@ -1,0 +1,48 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "suspension-body-saw", "name": "Suspension Body Saw",
+  "definition": "A bilateral foot-suspended forearm-plank movement in which a straight braced body rocks backward through shoulder flexion and returns through shoulder extension while the spine resists extension. The official fixture keeps the forearms planted; Cugliari and Boccia's related protocol includes elbow extension, so it supports identity and trunk demand rather than exact fixed-elbow geometry. The hips and knees remain fixed, making this distinct from a knee tuck, pike, mountain climber, static plank, rollout, or push-up. The fixture is rep-tracked and non-comparable because strap geometry and excursion change effective load.",
+  "evidenceRefs": ["cugliari-boccia-2017-suspension-core", "trx-2022-effective-core-body-saw", "holzbaur-2005-upper-extremity"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["suspensionTrainer"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.flexion"], "primeActions": ["shoulder.flexion"], "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "secondary"}, {"anyOf": ["deltoidAnterior", "pectoralisMajorClavicular"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs"], "secondary": ["obliques", "deltoidAnterior", "pectoralisMajorClavicular"], "stabilizer": ["serratus", "externalRotators", "triceps", "gluteMax", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "Both forearms remain on the floor while both feet stay suspended.", "allowedValues": ["mixedForearmsFloorFeetSuspended"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed start and return posture.", "allowedValues": ["forearmPlankFacingAway"]},
+    {"id": "footSupport", "valueType": "enum", "required": true, "description": "Both feet use the suspension cradles.", "allowedValues": ["dualFootCradles"]},
+    {"id": "strapLength", "valueType": "enum", "required": true, "description": "The reviewed strap height.", "allowedValues": ["midCalf"]},
+    {"id": "bodyPath", "valueType": "enum", "required": true, "description": "The braced body rocks backward and returns as one unit.", "allowedValues": ["straightBodyBackwardAndReturn"]},
+    {"id": "shoulderMotion", "valueType": "enum", "required": true, "description": "The shoulders flex during the backward rock and extend during the return.", "allowedValues": ["flexesThenExtends"]},
+    {"id": "elbowPosition", "valueType": "enum", "required": true, "description": "The elbow angle stays fixed on the floor.", "allowedValues": ["forearmsPlantedAngleHeld"]},
+    {"id": "hipPosition", "valueType": "enum", "required": true, "description": "The hips stay in the straight-body line.", "allowedValues": ["extendedAndHeld"]},
+    {"id": "kneePosition", "valueType": "enum", "required": true, "description": "The knees remain straight.", "allowedValues": ["extendedAndHeld"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The torso resists extension during the rock.", "allowedValues": ["heldAgainstExtension"]},
+    {"id": "rangeBoundary", "valueType": "enum", "required": true, "description": "The source does not prescribe a numeric travel distance.", "allowedValues": ["controlledSourceUnreported"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "The straps do not create a guided path.", "fixedValue": false}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 5, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "trx-body-saw", "name": "TRX Body Saw", "aliases": ["Suspension Body Saw", "Suspended Body Saw", "TRX Bodysaw"],
+    "equipment": "suspensionTrainer", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 8, "searchPriority": 99,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"kineticChain": "mixedForearmsFloorFeetSuspended", "bodyPosition": "forearmPlankFacingAway", "footSupport": "dualFootCradles", "strapLength": "midCalf", "bodyPath": "straightBodyBackwardAndReturn", "shoulderMotion": "flexesThenExtends", "elbowPosition": "forearmsPlantedAngleHeld", "hipPosition": "extendedAndHeld", "kneePosition": "extendedAndHeld", "spineMotion": "heldAgainstExtension", "rangeBoundary": "controlledSourceUnreported", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["cugliari-boccia-2017-suspension-core", "trx-2022-effective-core-body-saw", "holzbaur-2005-upper-extremity"],
+    "execution": {
+      "startingPosition": "Set the straps to mid-calf, place both feet in the cradles, and establish a straight forearm plank facing away from the anchor.",
+      "movement": "Keeping the elbows planted, let the straight body glide backward under control from the shoulders without bending the hips or knees.",
+      "endpoint": "Stop at the farthest controlled position that preserves the straight line from shoulders through heels.",
+      "returnPhase": "Pull the body forward from the shoulders until the elbows are again below the shoulders.",
+      "controlledJoints": "Keep the elbow, hip, and knee angles fixed while the shoulders create the forward-and-back rock.",
+      "supportAndPosture": "Brace the trunk and hips, keep both forearms pressed into the floor, and tension both straps evenly.",
+      "disqualifyingCompensations": ["Bending the knees toward the chest changes the exercise into a knee tuck.", "Lifting the hips changes the exercise into a pike.", "Holding still for time changes the exercise into a suspended plank."]
+    }
+  }]
+}

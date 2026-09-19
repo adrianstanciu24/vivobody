@@ -1,0 +1,13 @@
+{
+  "name": "catalog-trx-suspended-plank-dark",
+  "launch": {"reset": true, "tab": "library", "arguments": ["--static-body", "-settings.appearance", "dark"]},
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterCore"}},
+    {"scrollTo": {"selector": {"labelRegex": "^TRX Suspended Plank,"}, "direction": "up", "maxSwipes": 80}},
+    {"tap": {"labelRegex": "^TRX Suspended Plank,"}},
+    {"wait": {"label": "TRX Suspended Plank"}}
+  ],
+  "required": [{"label": "TRX Suspended Plank"}, {"label": "STRENGTH · HOLD"}, {"labelContains": "Muscles used by TRX Suspended Plank"}],
+  "forbidden": []
+}

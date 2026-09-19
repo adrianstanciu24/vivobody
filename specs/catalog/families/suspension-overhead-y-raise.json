@@ -1,0 +1,59 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "suspension-overhead-y-raise", "name": "Suspension Overhead Y Raise",
+  "definition": "A bilateral standing suspension-trainer Y fly performed while facing the anchor with mid-to-fully-lengthened straps, an offset stance, a straight inclined body, and nearly straight elbows held fixed. The return to upright raises both arms overhead into a Y through combined shoulder flexion and abduction; coupled shoulder-blade upward rotation and posterior tilt are explicit anatomy-and-kinematics inferences rather than claims measured in this suspension fixture. It is non-comparable because foot position and strap geometry change effective load. T flies, reverse flies, rows, face pulls, external-rotation drills, bent-elbow raises, and pressing movements remain outside this family.",
+  "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "gaffney-2014-trapezius-subdivisions", "seth-2019-shoulder-work", "trx-2023-y-fly"],
+  "fixed": {"mechanic": "isolation", "trainingRole": "pull", "pattern": null, "direction": null, "planes": ["sagittal", "frontal"]},
+  "groupPolicy": {"default": "shoulders", "allowed": ["shoulders"]},
+  "allowed": {"equipment": ["suspensionTrainer"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.flexion", "shoulder.abduction"],
+    "primeActions": ["shoulder.flexion", "shoulder.abduction", "scapula.upwardRotation", "scapula.posteriorTilt"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.downwardRotation", "scapula.anteriorTilt", "shoulder.extension", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["deltoidAnterior"], "minimumRole": "primary"}, {"anyOf": ["deltoidLateral"], "minimumRole": "primary"},
+      {"anyOf": ["serratus"], "minimumRole": "secondary"}, {"anyOf": ["trapeziusUpper", "trapeziusLower"], "minimumRole": "secondary"},
+      {"anyOf": ["supraspinatus"], "minimumRole": "secondary"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["deltoidAnterior", "deltoidLateral"],
+      "secondary": ["supraspinatus", "serratus", "trapeziusUpper", "trapeziusLower"],
+      "stabilizer": ["externalRotators", "subscapularis", "triceps", "fingerFlexors", "extensorCarpiRadialis", "abs", "obliques", "lumbarExtensors", "gluteMax", "vasti"]
+    }
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The hands stay attached to the suspension handles while the body moves.", "allowedValues": ["closed"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed standing body angle and anchor orientation.", "allowedValues": ["inclinedStandingFacingAnchor"]},
+    {"id": "stance", "valueType": "enum", "required": true, "description": "The reviewed lower-body base.", "allowedValues": ["offset"]},
+    {"id": "implement", "valueType": "enum", "required": true, "description": "The reviewed hand implement.", "allowedValues": ["independentSuspensionHandles"]},
+    {"id": "strapLength", "valueType": "enum", "required": true, "description": "The reviewed suspension-trainer length range.", "allowedValues": ["midToFullyLengthened"]},
+    {"id": "gripOrientation", "valueType": "enum", "required": true, "description": "The official source does not report hand orientation.", "allowedValues": ["sourceUnreported"]},
+    {"id": "elbowPosition", "valueType": "enum", "required": true, "description": "The elbows remain nearly straight to exclude a row or press.", "allowedValues": ["nearlyExtendedHeld"]},
+    {"id": "armPath", "valueType": "enum", "required": true, "description": "Both arms finish overhead in a Y.", "allowedValues": ["overheadY"]},
+    {"id": "bodyAngle", "valueType": "enum", "required": true, "description": "Foot position selects a controlled body inclination.", "allowedValues": ["selfSelectedControlledIncline"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "The straps do not create a guided machine path.", "fixedValue": false}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 8, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "trx-y-fly", "name": "TRX Y Fly", "aliases": ["TRX Y-Fly", "Suspension Y Fly", "Suspended Y Raise"],
+    "equipment": "suspensionTrainer", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 99,
+    "involvement": [
+      {"muscle": "deltoidAnterior", "role": "primary"}, {"muscle": "deltoidLateral", "role": "primary"},
+      {"muscle": "supraspinatus", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"}, {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "trapeziusLower", "role": "secondary"},
+      {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}
+    ],
+    "variant": {"kineticChain": "closed", "bodyPosition": "inclinedStandingFacingAnchor", "stance": "offset", "implement": "independentSuspensionHandles", "strapLength": "midToFullyLengthened", "gripOrientation": "sourceUnreported", "elbowPosition": "nearlyExtendedHeld", "armPath": "overheadY", "bodyAngle": "selfSelectedControlledIncline", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "seth-2019-shoulder-work", "trx-2023-y-fly"],
+    "execution": {
+      "startingPosition": "Set the straps between mid-length and fully lengthened, face the anchor in an offset stance, stand upright, and hold both straight arms overhead in a Y.",
+      "movement": "Bend the back knee and lower the straight body backward under control as the straight arms travel toward the anchor.",
+      "endpoint": "Stop at the deepest controlled lean that keeps the arms straight and the body braced.",
+      "returnPhase": "Drive both straight arms upward and outward to return the body to the upright Y.",
+      "controlledJoints": "Keep the elbows nearly straight and let the shoulder blades rotate naturally as the arms rise.",
+      "supportAndPosture": "Brace the trunk and hips, keep the offset stance planted, and tension both straps evenly.",
+      "disqualifyingCompensations": ["Bending the elbows to pull the handles changes the exercise into a row.", "Opening the arms at shoulder height changes the exercise into a T fly.", "Arching the low back or thrusting the hips changes the reviewed straight-body fixture."]
+    }
+  }]
+}

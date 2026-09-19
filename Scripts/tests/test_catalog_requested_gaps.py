@@ -32,7 +32,10 @@ TRX_SUSPENSION_RECORD_IDS = {
     "trx-squat", "trx-single-leg-squat", "trx-reverse-lunge",
     "trx-lateral-lunge", "trx-hamstring-curl", "trx-hip-press",
     "trx-low-row", "trx-high-row", "trx-reverse-fly",
-    "trx-biceps-curl", "trx-chest-press",
+    "trx-biceps-curl", "trx-chest-press", "trx-suspended-push-up",
+    "trx-triceps-press", "trx-y-fly", "trx-suspended-plank",
+    "trx-suspended-side-plank", "trx-body-saw", "trx-knee-tuck",
+    "trx-pike", "trx-mountain-climber",
 }
 
 

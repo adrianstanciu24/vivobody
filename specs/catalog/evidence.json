@@ -4863,7 +4863,86 @@
       ],
       "year": 2026,
       "url": "https://www.trxtraining.com/blogs/news/trx-exercises",
-      "scope": "TRX's official guide defines suspension training as bodyweight resistance through two straps sharing one anchor and explains angle- and foot-position scaling. It directly specifies the conventional bilateral squat and lateral-lunge handle-supported fixtures and the mid-length, palms-up Biceps Curl with a straight body, high stationary elbows, and hands finishing beside the face; it also lists chest press and hamstring curl in rep-counted strength sessions. It establishes apparatus identity, direction, support, repetition tracking, and variable-angle resistance; it does not establish a universal bodyweight fraction, joint kinetics, categorical whole-roster muscle rankings, hypertrophy, or medical benefits."
+      "scope": "TRX's official guide defines suspension training as bodyweight resistance through two straps sharing one anchor and explains angle- and foot-position scaling. It directly specifies the conventional bilateral squat and lateral-lunge handle-supported fixtures; the mid-length, palms-up Biceps Curl; the feet-suspended Push-Up with mid-calf straps, toes in the cradles, a high plank, and floor-supported hands; the facing-away Triceps Press with straight arms and palms down around eye level, elbow flexion until the head passes between the hands, and the hands finishing by the temples or crown; the mid-calf Pike with straight legs and a high hip endpoint; and the alternating mid-calf Mountain Climber. It also lists chest press and hamstring curl in rep-counted strength sessions. It establishes apparatus identity, direction, support, repetition tracking, and variable-angle resistance; it does not establish a universal bodyweight fraction, joint kinetics, categorical whole-roster muscle rankings, hypertrophy, or medical benefits."
+    },
+    {
+      "id": "trx-2026-beginner-core-plank",
+      "sourceType": "officialTechnicalStandard",
+      "title": "7 Core Exercises for Beginners to Try at Home: TRX Training Workout Guide",
+      "authors": ["TRX Training", "Tristan Zheng"],
+      "year": 2026,
+      "url": "https://www.trxtraining.com/blogs/news/core-exercises-for-beginners",
+      "scope": "TRX's current beginner-core standard directly defines the suspended forearm-plank fixture: overhead anchor, mid-calf straps, toes facing down in both foot cradles, elbows below the shoulders, braced straight-body hold, and 15-to-30-second duration. It establishes setup, support topology, posture, and duration tracking, not joint kinetics, a portable bodyweight fraction, quantitative muscle ranking, hypertrophy, or medical benefit."
+    },
+    {
+      "id": "trx-2022-full-body-side-plank",
+      "sourceType": "officialTechnicalStandard",
+      "title": "TRX Moves of the Week: Full-Body Burn at Home",
+      "authors": ["TRX Training"],
+      "year": 2022,
+      "url": "https://www.trxtraining.com/blogs/news/trx-moves-of-the-week-full-body-burn-at-home",
+      "scope": "TRX's official side-plank standard directly specifies both toes in the foot cradles, a tightrope stagger with the top foot forward relative to the planted forearm, the supporting forearm pressed into the floor, the top arm raised, and a 15-to-30-second hold. It anchors exact suspended-side-plank geometry and duration semantics, not joint kinetics, muscle activation, quantitative role ranking, hypertrophy, or medical benefit."
+    },
+    {
+      "id": "trx-2023-y-fly",
+      "sourceType": "officialTechnicalStandard",
+      "title": "4 Shoulder Supersets for More Intense Shoulder Workouts",
+      "authors": ["TRX Training", "Tristan Z"],
+      "year": 2023,
+      "url": "https://www.trxtraining.com/blogs/news/shoulder-supersets",
+      "scope": "TRX's official Y Fly instructions, dated May 25, 2023, specify mid-to-fully-lengthened straps, facing the anchor in an offset stance, an upright starting endpoint with straight arms held in a Y, a controlled backward body lean, and a return to the upright Y while keeping the arms straight. It anchors the standing suspension fixture, arm path, and held-elbow boundary, but does not report grip orientation; its marketing muscle language does not establish joint kinetics, quantitative muscle ranking, a portable resistance fraction, hypertrophy, or medical benefit."
+    },
+    {
+      "id": "cugliari-boccia-2017-suspension-core",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Core Muscle Activation in Suspension Training Exercises",
+      "authors": ["Giovanni Cugliari", "Gennaro Boccia"],
+      "year": 2017,
+      "doi": "10.1515/hukin-2017-0023",
+      "pmid": "28469744",
+      "pmcid": "PMC5384053",
+      "url": "https://doi.org/10.1515/hukin-2017-0023",
+      "scope": "Seventeen active men performed suspended body saw, knee tuck, and pike exercises while surface EMG recorded rectus abdominis, external oblique, internal oblique, and lumbar erector spinae. The study directly anchors these three foot-suspended dynamic core identities and supports a categorical abdominal and trunk-control envelope. Its body-saw protocol includes shoulder flexion and elbow extension and therefore is not identical to the catalog's fixed-elbow forearm fixture. It does not measure other upper-limb or hip muscles, establish joint kinetics, define every execution cue, support cross-muscle force ranking, or establish a portable load fraction."
+    },
+    {
+      "id": "snarr-2016-suspension-pike",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographical Comparison of Pike Variations Performed With and Without Instability Devices",
+      "authors": ["Ronald L. Snarr", "Ashleigh V. Hallmark", "Brett S. Nickerson", "Michael R. Esco"],
+      "year": 2016,
+      "doi": "10.1519/JSC.0000000000001436",
+      "pmid": "27191692",
+      "url": "https://doi.org/10.1519/JSC.0000000000001436",
+      "scope": "Twenty men and women performed five repetitions of pike variations on stable ground, a Swiss ball, a suspension trainer, a BOSU ball, and a Core Coaster while surface EMG recorded rectus abdominis, external oblique, lumbar erector spinae, and rectus femoris. It directly supports the suspension pike identity and categorical abdominal, trunk-control, and rectus-femoris roles, but does not establish unmeasured muscle roles, joint kinetics, a portable resistance fraction, hypertrophy, or medical benefit."
+    },
+    {
+      "id": "trx-2022-compound-movements-part-2",
+      "sourceType": "officialTechnicalStandard",
+      "title": "TRX Moves of the Week: Compound Movements, Part 2",
+      "authors": ["TRX Training"],
+      "year": 2022,
+      "url": "https://www.trxtraining.com/blogs/news/trx-moves-of-the-week-compound-movements-part-2",
+      "scope": "TRX's official technique article demonstrates the bilateral TRX Crunch, Frogger, and Pike with feet suspended, floor-supported hands, a braced plank start, and controlled returns. It anchors the Knee Tuck and Pike support topology and their bent-knee versus straight-leg boundaries; it does not describe the alternating Mountain Climber or establish quantitative joint kinetics, muscle ranking, portable load equivalence, hypertrophy, or medical benefit."
+    },
+    {
+      "id": "youdas-2020-feet-suspended-pushup",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Recruitment of Shoulder Prime Movers and Torso Stabilizers During Push-Up Exercises Using a Suspension Training System",
+      "authors": ["James W. Youdas", "Hannah E. Baartman", "Brian J. Gahlon", "Tyler J. Kohnen", "Robert J. Sparling", "John H. Hollman"],
+      "year": 2020,
+      "doi": "10.1123/jsr.2019-0381",
+      "pmid": "31910394",
+      "url": "https://doi.org/10.1123/jsr.2019-0381",
+      "scope": "Healthy adults performed conventional and suspension-system push-up conditions while surface EMG recorded shoulder prime movers and torso stabilizers. The suspension condition directly supports categorical chest, anterior-shoulder, triceps, and trunk-control roles for a feet-suspended push-up. It does not establish a forty-five-degree elbow path, a portable bodyweight fraction, joint kinetics, equal muscle contribution, hypertrophy, or medical benefit."
+    },
+    {
+      "id": "trx-2022-effective-core-body-saw",
+      "sourceType": "officialTechnicalStandard",
+      "title": "TRX Tips for Effective Core Training",
+      "authors": ["TRX Training"],
+      "year": 2022,
+      "url": "https://www.trxtraining.com/blogs/news/trx-tips-for-effective-core-training",
+      "scope": "TRX's official Body Saw instructions specify a plank on the elbows with the toes suspended and a backward push created at the shoulders before returning forward. It anchors the fixed-elbow forearm support and shoulder-driven rock, not a numeric travel distance, joint kinetics, muscle ranking, portable load equivalence, hypertrophy, or medical benefit."
     },
     {
       "id": "trx-2022-suspension-foundations",

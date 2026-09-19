@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "anti-extension",
   "name": "Anti-Extension",
-  "definition": "A strict isometric trunk family in which gravity tends to extend the neutral spine while the athlete maintains a straight prone bridge between bilateral forearm and foot contacts. The initial stable-floor fixture has no deliberate spinal, pelvic, hip, knee, shoulder, or elbow repetition: spine.extension is the external tendency being resisted, not a dynamic spine.flexion action. Stable-surface EMG measured greater mean external- and internal-oblique activity than rectus-abdominis activity. The abs-primary and obliques-secondary hierarchy is therefore a practical training-emphasis judgment grounded in the authors' description of rectus abdominis as a prime mover, not an EMG-amplitude ranking. The measured erector-spinae signal remains non-mapping context because it did not establish a categorical stabilizer-volume role; the new lumbarExtensors region represents that anatomy truthfully but remains deliberately unassigned here. Serratus, external rotators, triceps, gluteus maximus, vasti, and soleus receive conservative stabilizer credit because the forearm-and-foot bridge materially loads and controls the scapular, shoulder, elbow, hip, knee, ankle, and foot support chain. Those support roles are anatomy-and-mechanics-derived rather than Lehman EMG findings. High-plank, kneeling, unstable, suspended, weighted, long-lever, reaching, shoulder-tap, rowing, dragging, and leg-lift variants remain outside this contract.",
+  "definition": "A strict isometric trunk family in which gravity tends to extend the neutral spine while the athlete maintains a straight prone bridge between bilateral forearm and foot contacts. The floor fixture uses stable foot contact; the suspension fixture places both toes in mid-calf foot cradles beneath the anchor while preserving the same forearm support and timed hold. Neither fixture has a deliberate spinal, pelvic, hip, knee, shoulder, or elbow repetition: spine.extension is the external tendency being resisted, not a dynamic spine.flexion action. Stable-surface EMG measured greater mean external- and internal-oblique activity than rectus-abdominis activity. The abs-primary and obliques-secondary hierarchy is therefore a practical training-emphasis judgment grounded in the authors' description of rectus abdominis as a prime mover, not an EMG-amplitude ranking. Suspension-plank evidence supports retaining categorical abdominal involvement but does not justify cross-muscle force rankings. The measured erector-spinae signal remains non-mapping context because it did not establish a categorical stabilizer-volume role; the lumbarExtensors region represents that anatomy truthfully but remains deliberately unassigned here. Serratus, external rotators, triceps, gluteus maximus, vasti, and soleus receive conservative stabilizer credit because the forearm-and-foot bridge materially loads and controls the scapular, shoulder, elbow, hip, knee, ankle, and foot support chain. Those support roles are anatomy-and-mechanics-derived rather than Lehman EMG findings. High-plank, kneeling, weighted, long-lever, reaching, shoulder-tap, rowing, dragging, moving suspension, and leg-lift variants remain outside this contract.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "arnold-2010-lower-limb",
@@ -11,7 +11,9 @@
     "holzbaur-2005-upper-extremity",
     "seth-2019-shoulder-work",
     "lehman-2005-stable-prone-bridge",
-    "cinarli-2025-anti-movement-training"
+    "cinarli-2025-anti-movement-training",
+    "harris-2017-suspension-muscle-activation",
+    "trx-2026-beginner-core-plank"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -30,7 +32,8 @@
   },
   "allowed": {
     "equipment": [
-      "bodyweight"
+      "bodyweight",
+      "suspensionTrainer"
     ],
     "modalities": [
       "isometricStrength"
@@ -190,7 +193,7 @@
       "id": "kineticChain",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the distal upper- and lower-body contacts remain fixed to the floor during the hold.",
+      "description": "Whether the distal upper- and lower-body contacts remain fixed during the hold.",
       "allowedValues": [
         "closed"
       ]
@@ -208,9 +211,10 @@
       "id": "supportSurface",
       "valueType": "enum",
       "required": true,
-      "description": "The stable surface carrying both support contacts.",
+      "description": "Whether the floor carries both contacts or the floor and suspension foot cradles divide them.",
       "allowedValues": [
-        "floor"
+        "floor",
+        "floorAndSuspensionTrainer"
       ]
     },
     {
@@ -226,9 +230,20 @@
       "id": "lowerBodySupport",
       "valueType": "enum",
       "required": true,
-      "description": "The lower-body contact completing the bodyweight bridge.",
+      "description": "The lower-body contact completing the bridge.",
       "allowedValues": [
-        "feet"
+        "feet",
+        "toesInFootCradles"
+      ]
+    },
+    {
+      "id": "strapLength",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether straps are absent or adjusted to the reviewed mid-calf suspension length.",
+      "allowedValues": [
+        "notApplicable",
+        "midCalf"
       ]
     },
     {
@@ -320,7 +335,32 @@
       ]
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "floor-plank-pins-stable-support",
+      "description": "The bodyweight plank keeps both support contacts on the floor and uses no straps.",
+      "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
+      "then": [
+        {"field": "variant.supportSurface", "value": "floor"},
+        {"field": "variant.lowerBodySupport", "value": "feet"},
+        {"field": "variant.strapLength", "value": "notApplicable"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "suspension-plank-pins-foot-cradles",
+      "description": "The suspension plank keeps both forearms on the floor while the toes use mid-calf foot cradles.",
+      "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [
+        {"field": "variant.supportSurface", "value": "floorAndSuspensionTrainer"},
+        {"field": "variant.lowerBodySupport", "value": "toesInFootCradles"},
+        {"field": "variant.strapLength", "value": "midCalf"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "plank",
@@ -380,6 +420,7 @@
         "supportSurface": "floor",
         "upperBodySupport": "bilateralForearmSupport",
         "lowerBodySupport": "feet",
+        "strapLength": "notApplicable",
         "elbowAlignment": "belowShoulders",
         "upperArmPosition": "perpendicularToFloor",
         "bodyAlignment": "neutralStraightLine",
@@ -407,6 +448,71 @@
           "Letting the lower back sag turns the plank into an arched-back hold.",
           "Piking the hips upward turns the plank into a hip lift.",
           "Reaching or lifting a limb turns the plank into a moving-limb hold."
+        ]
+      }
+    },
+    {
+      "catalogID": "trx-suspended-plank",
+      "name": "TRX Suspended Plank",
+      "aliases": [
+        "TRX Plank",
+        "Suspension Plank",
+        "Suspension Trainer Plank"
+      ],
+      "equipment": "suspensionTrainer",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 30,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "abs", "role": "primary"},
+        {"muscle": "obliques", "role": "secondary"},
+        {"muscle": "serratus", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"},
+        {"muscle": "gluteMax", "role": "stabilizer"},
+        {"muscle": "vasti", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "proneHorizontal",
+        "supportSurface": "floorAndSuspensionTrainer",
+        "upperBodySupport": "bilateralForearmSupport",
+        "lowerBodySupport": "toesInFootCradles",
+        "strapLength": "midCalf",
+        "elbowAlignment": "belowShoulders",
+        "upperArmPosition": "perpendicularToFloor",
+        "bodyAlignment": "neutralStraightLine",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "kneeMotion": "positionHeld",
+        "holdType": "timedIsometric",
+        "fixedPath": false,
+        "lowerBodyContribution": "staticSupportOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "harris-2017-suspension-muscle-activation",
+        "trx-2026-beginner-core-plank"
+      ],
+      "execution": {
+        "startingPosition": "Set the straps to mid-calf, place both toes face down in the foot cradles beneath the anchor, and rest both forearms on the floor with elbows below the shoulders.",
+        "movement": "Lift the knees and hold one straight line from head through heels while bracing the trunk and squeezing the glutes.",
+        "endpoint": "Maintain the straight suspended hold for the set time while breathing without letting the straps swing.",
+        "controlledJoints": "Keep the elbows below the shoulders, knees straight, and hips level without creating a repetition.",
+        "supportAndPosture": "Keep both forearms pressed into the floor and both toes evenly settled in the foot cradles.",
+        "disqualifyingCompensations": [
+          "Sagging or arching the low back loses the anti-extension hold.",
+          "Raising the hips into a pike changes the exercise.",
+          "Rocking forward and back turns the hold into a body saw."
         ]
       }
     }

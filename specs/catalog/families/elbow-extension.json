@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "elbow-extension",
   "name": "Elbow Extension",
-  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. The roster admits reviewed cable, dumbbell, barbell, and exact Life Fitness Pro 2 PSTE selectorized fixtures. The PSTE supports both upper arms on a pad, aligns the elbows with the pivots, and guides self-adjusting handles; its manual does not report forearm orientation or wrist posture, so both remain unreported. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials. Other machine topologies remain outside this contract. The two-arm rope fixture uses a high pulley behind a split-stance athlete; the seated two-hand dumbbell fixture holds one head with both hands and counts that implement once. These exact additions transfer categorical muscle roles from established anatomy and held-posture mechanics. The exact single-arm kickback holds the upper arm alongside the inclined torso in a self-supported split stance while only the elbow moves. The exact EZ-bar skull crusher uses inside angled grips on a flat bench, lowers near but without touching the forehead, and logs the total bar-and-plate mass. Existing unreported-bar geometry remains a separate identity; these additions make no triceps-head ranking claim.",
+  "definition": "A strict elbow-extension isolation movement in which a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. Most fixtures are open-chain cable, dumbbell, barbell, or exact Life Fitness Pro 2 PSTE selectorized movements; the TRX Triceps Press is the one closed-chain fixture, using independent suspension handles and an inclined standing body while facing away from the anchor. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials. The exact rope, two-hand dumbbell, kickback, EZ-bar, and machine boundaries remain unchanged. These additions make no triceps-head ranking claim, and suspension chest presses or shoulder-moving extensions remain outside this family.",
   "evidenceRefs": [
     "holzbaur-2005-upper-extremity",
     "alves-2018-triceps-shoulder-position",
@@ -13,7 +13,8 @@
     "ace-2026-triceps-pushdown",
     "brandao-2020-exercise-order",
     "life-fitness-2007-pro2-series-manual",
-    "murray-1995-elbow-forearm-moment-arms"
+    "murray-1995-elbow-forearm-moment-arms",
+    "trx-2026-suspension-exercise-guide"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -35,7 +36,8 @@
       "cable",
       "dumbbell",
       "barbell",
-      "machine"
+      "machine",
+      "suspensionTrainer"
     ],
     "modalities": [
       "dynamicStrength"
@@ -44,7 +46,8 @@
       "reps"
     ],
     "loadModes": [
-      "external"
+      "external",
+      "nonComparable"
     ],
     "lateralities": [
       "unilateral",
@@ -165,7 +168,10 @@
         "externalRotators",
         "trapeziusMiddle",
         "trapeziusLower",
-        "obliques"
+        "obliques",
+        "abs",
+        "lumbarExtensors",
+        "gluteMax"
       ]
     }
   },
@@ -176,7 +182,8 @@
       "required": true,
       "description": "Whether the loaded hand moves freely or remains fixed to the environment.",
       "allowedValues": [
-        "open"
+      "open",
+      "closed"
       ]
     },
     {
@@ -188,7 +195,8 @@
         "standing",
         "seated",
         "supine",
-        "standingBentOver"
+        "standingBentOver",
+        "inclinedStandingFacingAway"
       ]
     },
     {
@@ -246,7 +254,8 @@
         "flexed90",
         "overhead",
         "padSupportedPivotAligned",
-        "alongInclinedTorso"
+        "alongInclinedTorso",
+        "eyeLevelStraightStart"
       ]
     },
     {
@@ -321,7 +330,8 @@
         "barbellShapeUnreported",
         "selfAdjustingMachineHandles",
         "dumbbellHeadTwoHandHold",
-        "ezBarInsideGrip"
+        "ezBarInsideGrip",
+        "independentSuspensionHandles"
       ]
     },
     {
@@ -329,7 +339,7 @@
       "valueType": "enum",
       "required": true,
       "description": "How the reviewed task creates elbow-extension resistance without implying a guided external path. highCablePushdown records Villalba's at-side pulley setup; overheadCableExtension identifies Maeo's 180-degree cable task but deliberately does not claim an unreported pulley height or cable angle; gravityLoadedDumbbell records the Alves fixtures.",
-      "allowedValues": ["highCablePushdown", "overheadCableExtension", "gravityLoadedDumbbell", "gravityLoadedBarbell", "selectorizedCamLever", "standingOverheadRopeCableExtension"]
+      "allowedValues": ["highCablePushdown", "overheadCableExtension", "gravityLoadedDumbbell", "gravityLoadedBarbell", "selectorizedCamLever", "standingOverheadRopeCableExtension", "bodyAngleSuspension"]
     },
     {
       "id": "loadAccounting",
@@ -414,6 +424,20 @@
       "allowedValues": [
         "barNearForeheadNoContact"
       ]
+    },
+    {
+      "id": "strapLength",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed suspension-trainer strap length.",
+      "allowedValues": ["midLength"]
+    },
+    {
+      "id": "bodyAngle",
+      "valueType": "enum",
+      "required": false,
+      "description": "The standing suspension incline selected by foot position.",
+      "allowedValues": ["selfSelectedControlledIncline"]
     }
   ],
   "recommended": {
@@ -561,7 +585,7 @@
     },
     {
       "id": "non-machine-extension-has-free-external-path",
-      "description": "The reviewed cable, dumbbell, and barbell fixtures do not constrain the implement to a lever path.",
+      "description": "The reviewed cable, dumbbell, barbell, and suspension fixtures do not constrain the implement to a lever path.",
       "when": {"field": "equipment", "operator": "notEquals", "value": "machine"},
       "then": [
         {"field": "variant.fixedPath", "value": false}, {"field": "variant.upperArmSupport", "value": "none"},
@@ -646,8 +670,8 @@
       "requireAbsent": []
     },
     {
-      "id": "pronated-extension-is-at-side-pushdown",
-      "description": "The pronated orientation is admitted only in the directly reviewed standing at-side cable pushdown.",
+      "id": "pronated-extension-is-reviewed-pushdown-or-suspension",
+      "description": "Pronated elbow extensions are limited to the reviewed at-side cable pushdown and eye-level suspension press branches.",
       "when": {
         "field": "variant.forearmOrientation",
         "operator": "equals",
@@ -656,15 +680,15 @@
       "then": [
         {
           "field": "variant.bodyPosition",
-          "value": "standing"
+          "allowedValues": ["standing", "inclinedStandingFacingAway"]
         },
         {
           "field": "equipment",
-          "value": "cable"
+          "allowedValues": ["cable", "suspensionTrainer"]
         },
         {
           "field": "variant.upperArmPosition",
-          "value": "atSide"
+          "allowedValues": ["atSide", "eyeLevelStraightStart"]
         }
       ],
       "requirePresent": [],
@@ -848,10 +872,7 @@
         },
         {
           "field": "variant.resistanceGeometry",
-          "allowedValues": [
-            "highCablePushdown",
-            "standingOverheadRopeCableExtension"
-          ]
+          "allowedValues": ["highCablePushdown", "standingOverheadRopeCableExtension"]
         }
       ],
       "requirePresent": [],
@@ -1500,6 +1521,55 @@
         }
       ],
       "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "suspension-triceps-press-pins-closed-chain-fixture",
+      "description": "The suspension branch is exactly the facing-away inclined triceps press with high stationary upper arms and elbow-only motion.",
+      "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [
+        {"field": "laterality", "value": "bilateral"},
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "bodyweightFraction", "value": 0},
+        {"field": "variant.kineticChain", "value": "closed"},
+        {"field": "variant.bodyPosition", "value": "inclinedStandingFacingAway"},
+        {"field": "variant.torsoSupport", "value": "none"},
+        {"field": "variant.scapularTranslation", "value": "free"},
+        {"field": "variant.forearmSupport", "value": "none"},
+        {"field": "variant.upperArmSupport", "value": "none"},
+        {"field": "variant.hipContact", "value": "unreported"},
+        {"field": "variant.upperArmPosition", "value": "eyeLevelStraightStart"},
+        {"field": "variant.elbowMotion", "value": "extends"},
+        {"field": "variant.forearmMotion", "value": "angleHeld"},
+        {"field": "variant.forearmOrientation", "value": "pronated"},
+        {"field": "variant.wristMotion", "value": "angleHeld"},
+        {"field": "variant.wristPosture", "value": "neutral"},
+        {"field": "variant.handTask", "value": "staticImplementHold"},
+        {"field": "variant.handleType", "value": "independentSuspensionHandles"},
+        {"field": "variant.resistanceGeometry", "value": "bodyAngleSuspension"},
+        {"field": "variant.strapLength", "value": "midLength"},
+        {"field": "variant.bodyAngle", "value": "selfSelectedControlledIncline"},
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.lowerBodyContribution", "value": "none"}
+      ],
+      "requirePresent": ["variant.strapLength", "variant.bodyAngle"],
+      "requireAbsent": ["variant.loadAccounting", "variant.seatedFixture", "variant.machineFixture", "variant.cableSetup", "variant.kickbackFixture", "variant.rangeBoundary", "variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth"],
+      "requireInvolvement": [
+        {"muscle": "triceps", "role": "primary"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "gluteMax", "role": "stabilizer"}
+      ],
+      "requireAdditionalPrimeActions": [],
+      "requireAdditionalStabilityDemands": ["spine", "pelvis", "hip"]
+    },
+    {
+      "id": "suspension-handle-identifies-triceps-press",
+      "description": "Independent suspension handles cannot be attached to another elbow-extension branch.",
+      "when": {"field": "variant.handleType", "operator": "equals", "value": "independentSuspensionHandles"},
+      "then": [{"field": "equipment", "value": "suspensionTrainer"}],
+      "requirePresent": ["variant.strapLength", "variant.bodyAngle"],
       "requireAbsent": []
     }
   ],
@@ -2454,6 +2524,66 @@
           "Letting the bar touch the forehead changes the reviewed endpoint.",
           "Lifting the hips changes the supported fixture."
         ]
+      }
+    },
+    {
+      "catalogID": "trx-triceps-press",
+      "name": "TRX Triceps Press",
+      "aliases": ["Suspension Triceps Press", "Suspended Triceps Extension"],
+      "equipment": "suspensionTrainer",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 99,
+      "involvement": [
+        {"muscle": "triceps", "role": "primary"},
+        {"muscle": "brachioradialis", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "trapeziusMiddle", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "gluteMax", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "inclinedStandingFacingAway",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "forearmSupport": "none",
+        "upperArmSupport": "none",
+        "hipContact": "unreported",
+        "upperArmPosition": "eyeLevelStraightStart",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "pronated",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "independentSuspensionHandles",
+        "resistanceGeometry": "bodyAngleSuspension",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "strapLength": "midLength",
+        "bodyAngle": "selfSelectedControlledIncline"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": ["spine", "pelvis", "hip"],
+      "evidenceRefs": ["trx-2026-suspension-exercise-guide", "holzbaur-2005-upper-extremity"],
+      "execution": {
+        "startingPosition": "Set the straps to mid-length, face away from the anchor with the palms down, step forward into a controlled lean, and begin with both arms straight at about eye level.",
+        "movement": "Bend both elbows to bring the hands toward the temples while keeping the upper arms still.",
+        "endpoint": "Bring the hands beside the temples or crown while keeping the upper arms at eye level and the body fixed.",
+        "returnPhase": "Straighten both elbows to press the body away without moving the upper arms.",
+        "controlledJoints": "Keep the wrists steady and make elbow motion the only action that creates the repetition.",
+        "supportAndPosture": "Keep the body in one straight inclined line with both straps tensioned evenly and both feet planted.",
+        "disqualifyingCompensations": ["Moving the shoulders or lowering the upper arms changes the strict triceps press.", "Bending at the hips to create momentum changes the reviewed fixture.", "Pressing the handles from chest height changes the exercise into a suspension chest press."]
       }
     }
   ]

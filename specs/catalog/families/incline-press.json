@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "incline-press",
   "name": "Incline Press",
-  "definition": "A chest-oriented compound press whose reviewed path is inclined relative to the torso. The family owns supported open-chain barbell, dumbbell, and machine fixtures at positive press angles plus one closed-chain bodyweight fixture with both feet on a 30.48-centimeter horizontal support. The concentric phase combines shoulder horizontal adduction, shoulder flexion, and elbow extension; the elevated push-up additionally allows free shoulder-blade travel through protraction. Its two pectoralis-major regions are co-primary as a generic push-up and anatomy transfer because the exact elevated-fixture evidence does not establish angle-specific regional emphasis. The 0.70 body-mass coefficient is an exact-fixture upper-limb force proxy, not constant equivalent external load. Flat, declined, vertical, fly, unilateral, knee-supported, differently elevated, and unsupported open-chain presses remain outside this family.",
+  "definition": "A chest-oriented compound press whose reviewed path is inclined relative to the torso. The family owns supported open-chain barbell, dumbbell, and machine fixtures at positive press angles plus two closed-chain feet-elevated push-up fixtures: one with both feet on a 30.48-centimeter horizontal support and one with both toes in mid-calf suspension foot cradles. The concentric phase combines shoulder horizontal adduction, shoulder flexion, and elbow extension; both elevated push-ups additionally allow free shoulder-blade travel through protraction. Their two pectoralis-major regions are co-primary because the exact fixtures do not establish angle-specific regional emphasis. The stable fixture's 0.70 body-mass coefficient is an exact-fixture upper-limb force proxy; the suspension fixture is non-comparable because strap geometry and body position change effective load. Flat, declined, vertical, fly, unilateral, knee-supported, differently elevated, hands-suspended, and unsupported open-chain presses remain outside this family.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "borges-2019-bench-machine-scapula",
@@ -15,7 +15,9 @@
     "rodriguez-ridao-2020-bench-inclinations",
     "ebben-2011-pushup-load",
     "suprak-2013-pushup-scapula",
-    "van-den-tillaar-2019-pushup-bench"
+    "van-den-tillaar-2019-pushup-bench",
+    "youdas-2020-feet-suspended-pushup",
+    "trx-2026-suspension-exercise-guide"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -38,7 +40,8 @@
       "barbell",
       "dumbbell",
       "machine",
-      "bodyweight"
+      "bodyweight",
+      "suspensionTrainer"
     ],
     "modalities": [
       "dynamicStrength"
@@ -48,7 +51,8 @@
     ],
     "loadModes": [
       "external",
-      "bodyweightAdded"
+      "bodyweightAdded",
+      "nonComparable"
     ],
     "lateralities": [
       "bilateral"
@@ -115,7 +119,11 @@
         "serratus",
         "trapeziusMiddle",
         "externalRotators",
-        "abs"
+        "abs",
+        "obliques",
+        "gluteMax",
+        "vasti",
+        "soleus"
       ]
     }
   },
@@ -198,14 +206,28 @@
       "valueType": "enum",
       "required": false,
       "description": "The body segment supported above floor height.",
-      "allowedValues": ["feet"]
+      "allowedValues": ["feet", "feetInFootCradles"]
     },
     {
       "id": "lowerBodySupport",
       "valueType": "enum",
       "required": true,
       "description": "The exact elevated lower-body contact.",
-      "allowedValues": ["none", "feet"]
+      "allowedValues": ["none", "feet", "feetInSuspensionCradles"]
+    },
+    {
+      "id": "strapLength",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed suspension-trainer strap length.",
+      "allowedValues": ["midCalf"]
+    },
+    {
+      "id": "handSupport",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed upper-body support for the feet-suspended fixture.",
+      "allowedValues": ["bilateralPalmsFloor"]
     }
   ],
   "exerciseRules": [
@@ -218,6 +240,8 @@
         "value": "machine"
       },
       "then": [
+        {"field": "loadMode", "value": "external"},
+        {"field": "bodyweightFraction", "value": 0},
         {
           "field": "variant.fixedPath",
           "value": true
@@ -256,6 +280,8 @@
         "value": "barbell"
       },
       "then": [
+        {"field": "loadMode", "value": "external"},
+        {"field": "bodyweightFraction", "value": 0},
         {
           "field": "variant.torsoSupport",
           "value": "bench"
@@ -277,6 +303,8 @@
         "value": "dumbbell"
       },
       "then": [
+        {"field": "loadMode", "value": "external"},
+        {"field": "bodyweightFraction", "value": 0},
         {
           "field": "variant.torsoSupport",
           "value": "bench"
@@ -350,9 +378,9 @@
       ]
     },
     {
-      "id": "non-bodyweight-is-supported-open-chain",
-      "description": "Every non-bodyweight incline fixture is a support-constrained open-chain press with a reviewed angle and no elevated-push-up axes.",
-      "when": {"field": "equipment", "operator": "notEquals", "value": "bodyweight"},
+      "id": "external-load-is-supported-open-chain",
+      "description": "Every externally loaded incline fixture is a support-constrained open-chain press with a reviewed angle and no elevated-push-up axes.",
+      "when": {"field": "loadMode", "operator": "equals", "value": "external"},
       "then": [
         {"field": "loadMode", "value": "external"},
         {"field": "bodyweightFraction", "value": 0},
@@ -361,7 +389,7 @@
         {"field": "variant.lowerBodySupport", "value": "none"}
       ],
       "requirePresent": ["variant.pressInclinationDegrees"],
-      "requireAbsent": ["variant.supportElevationCm", "variant.elevatedSegment"],
+      "requireAbsent": ["variant.supportElevationCm", "variant.elevatedSegment", "variant.strapLength", "variant.handSupport"],
       "requireInvolvement": [
         {"muscle": "pectoralisMajorClavicular", "role": "primary"},
         {"muscle": "pectoralisMajorSternocostal", "role": "secondary"}
@@ -370,18 +398,18 @@
       "requireAdditionalStabilityDemands": []
     },
     {
-      "id": "closed-chain-is-bodyweight-only",
-      "description": "Closed-chain incline vocabulary belongs only to the feet-elevated bodyweight fixture.",
+      "id": "closed-chain-is-feet-elevated-only",
+      "description": "Closed-chain incline vocabulary belongs only to the two reviewed feet-elevated fixtures.",
       "when": {"field": "variant.kineticChain", "operator": "equals", "value": "closed"},
-      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "then": [{"field": "equipment", "allowedValues": ["bodyweight", "suspensionTrainer"]}],
       "requirePresent": [],
       "requireAbsent": []
     },
     {
-      "id": "free-scapular-translation-is-bodyweight-only",
-      "description": "Free scapular translation belongs only to the feet-elevated bodyweight fixture.",
+      "id": "free-scapular-translation-is-feet-elevated-only",
+      "description": "Free scapular translation belongs only to the two reviewed feet-elevated fixtures.",
       "when": {"field": "variant.scapularTranslation", "operator": "equals", "value": "free"},
-      "then": [{"field": "equipment", "value": "bodyweight"}],
+      "then": [{"field": "equipment", "allowedValues": ["bodyweight", "suspensionTrainer"]}],
       "requirePresent": [],
       "requireAbsent": []
     },
@@ -418,7 +446,7 @@
         {"field": "variant.fixedPath", "value": false}
       ],
       "requirePresent": ["variant.supportElevationCm", "variant.elevatedSegment", "variant.lowerBodySupport"],
-      "requireAbsent": ["variant.pressInclinationDegrees", "variant.machineType"],
+      "requireAbsent": ["variant.pressInclinationDegrees", "variant.machineType", "variant.strapLength", "variant.handSupport"],
       "requireInvolvement": [
         {"muscle": "pectoralisMajorClavicular", "role": "primary"},
         {"muscle": "pectoralisMajorSternocostal", "role": "primary"},
@@ -427,6 +455,38 @@
       ],
       "requireAdditionalPrimeActions": ["scapula.protraction"],
       "requireAdditionalStabilityDemands": ["spine", "pelvis"]
+    },
+    {
+      "id": "suspension-feet-elevated-fixture",
+      "description": "The suspension branch is exactly the mid-calf toes-in-cradles push-up with both hands on the floor and no portable load scalar.",
+      "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "bodyweightFraction", "value": 0},
+        {"field": "variant.kineticChain", "value": "closed"},
+        {"field": "variant.torsoSupport", "value": "none"},
+        {"field": "variant.scapularTranslation", "value": "free"},
+        {"field": "variant.gripOrientation", "value": "pronated"},
+        {"field": "variant.elevatedSegment", "value": "feetInFootCradles"},
+        {"field": "variant.lowerBodySupport", "value": "feetInSuspensionCradles"},
+        {"field": "variant.strapLength", "value": "midCalf"},
+        {"field": "variant.handSupport", "value": "bilateralPalmsFloor"},
+        {"field": "variant.fixedPath", "value": false}
+      ],
+      "requirePresent": ["variant.elevatedSegment", "variant.lowerBodySupport", "variant.strapLength", "variant.handSupport"],
+      "requireAbsent": ["variant.pressInclinationDegrees", "variant.supportElevationCm", "variant.machineType"],
+      "requireInvolvement": [
+        {"muscle": "pectoralisMajorClavicular", "role": "primary"},
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"},
+        {"muscle": "serratus", "role": "secondary"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "gluteMax", "role": "stabilizer"},
+        {"muscle": "vasti", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"}
+      ],
+      "requireAdditionalPrimeActions": ["scapula.protraction"],
+      "requireAdditionalStabilityDemands": ["spine", "pelvis", "hip", "knee", "ankle", "foot"]
     }
   ],
   "recommended": {
@@ -777,6 +837,55 @@
           "Bending at the hips breaks the straight-body push-up position.",
           "Dropping to the knees changes the exercise into a knee-supported push-up."
         ]
+      }
+    },
+    {
+      "catalogID": "trx-suspended-push-up",
+      "name": "TRX Suspended Push-Up",
+      "aliases": ["Feet-Suspended Push-Up", "TRX Feet-Suspended Push-Up", "Suspension Trainer Push-Up"],
+      "equipment": "suspensionTrainer",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 99,
+      "involvement": [
+        {"muscle": "pectoralisMajorClavicular", "role": "primary"},
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"},
+        {"muscle": "deltoidAnterior", "role": "secondary"},
+        {"muscle": "triceps", "role": "secondary"},
+        {"muscle": "serratus", "role": "secondary"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "gluteMax", "role": "stabilizer"},
+        {"muscle": "vasti", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "elevatedSegment": "feetInFootCradles",
+        "lowerBodySupport": "feetInSuspensionCradles",
+        "strapLength": "midCalf",
+        "handSupport": "bilateralPalmsFloor",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": ["scapula.protraction"],
+      "additionalStabilityDemands": ["spine", "pelvis", "hip", "knee", "ankle", "foot"],
+      "evidenceRefs": ["trx-2026-suspension-exercise-guide", "youdas-2020-feet-suspended-pushup", "suprak-2013-pushup-scapula"],
+      "execution": {
+        "startingPosition": "Set the straps to mid-calf, place both toes in the foot cradles, and set both hands on the floor slightly wider than the shoulders in a straight high plank.",
+        "movement": "Bend both elbows and lower the chest toward the floor while keeping the legs and trunk aligned.",
+        "endpoint": "Reach the lowest controlled position that keeps the body straight and the shoulders supported.",
+        "returnPhase": "Press the floor away until the elbows are straight and the high-plank line is restored.",
+        "controlledJoints": "Let the shoulder blades move naturally while the elbows follow the same path on both sides.",
+        "supportAndPosture": "Keep both toes seated in the cradles, both palms on the floor, and the trunk braced without lifting or dropping the hips.",
+        "disqualifyingCompensations": ["Pulling the knees toward the chest changes the exercise into a knee tuck.", "Lifting the hips into an inverted V changes the exercise into a pike.", "Putting the hands in the suspension handles changes the requested feet-suspended fixture."]
       }
     }
   ]
