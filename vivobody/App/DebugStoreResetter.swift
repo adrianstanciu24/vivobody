@@ -25,6 +25,8 @@ import VivoKit
                 !request.shouldShowOnboarding,
                 forKey: SettingsKey.onboardingCompleted
             )
+            defaults.removeObject(forKey: SettingsKey.restNotificationsEnabled)
+            defaults.removeObject(forKey: SettingsKey.hasSeenRestNotificationPrimer)
             deleteAll(WorkoutSession.self, in: context)
             deleteAll(WorkoutTemplate.self, in: context)
             deleteAll(BodyWeightEntry.self, in: context)

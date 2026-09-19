@@ -10,11 +10,13 @@
 
 import SwiftData
 import SwiftUI
+import UIKit
 import VivoKit
 
 struct SettingsScreen: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
 
     @AppStorage(SettingsKey.hapticsEnabled)
     private var hapticsEnabled: Bool = SettingsDefaults.hapticsEnabled
@@ -24,6 +26,12 @@ struct SettingsScreen: View {
 
     @AppStorage(SettingsKey.defaultRestSeconds)
     private var defaultRestSeconds: Int = SettingsDefaults.defaultRestSeconds
+
+    @AppStorage(SettingsKey.restNotificationsEnabled)
+    private var restNotificationsEnabled: Bool = SettingsDefaults.restNotificationsEnabled
+
+    @AppStorage(SettingsKey.hasSeenRestNotificationPrimer)
+    private var hasSeenRestNotificationPrimer: Bool = SettingsDefaults.hasSeenRestNotificationPrimer
 
     @AppStorage(SettingsKey.weightUnit)
     private var weightUnitRaw: String = SettingsDefaults.weightUnit
@@ -42,6 +50,7 @@ struct SettingsScreen: View {
     @State private var showHealthKitPriming: Bool = false
     @State private var activePage: WebPage?
     @State private var isComposingSupportMail: Bool = false
+    @State private var restNotificationAuthorization: RestNotificationAuthorization?
 
     private var appearance: AppAppearance {
         AppAppearance(rawValue: appearanceRaw) ?? .system
@@ -65,8 +74,10 @@ struct SettingsScreen: View {
                     defaultRestSeconds: defaultRestBinding,
                     hapticsEnabled: hapticsBinding,
                     soundsEnabled: soundsBinding,
+                    restNotificationsEnabled: restNotificationsBinding,
                     healthKitEnabled: healthKitBinding,
                     restOptions: SettingsInteractionPolicy.restOptions,
+                    restNotificationsPresentation: restNotificationsPresentation,
                     healthKitPresentation: SettingsInteractionPolicy.healthKitPresentation(
                         isAvailable: HealthKitWorkoutService.isAvailable
                     ),
@@ -91,6 +102,13 @@ struct SettingsScreen: View {
         .screenBackground()
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await refreshRestNotificationAuthorization()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .active else { return }
+            Task { await refreshRestNotificationAuthorization() }
+        }
         .alert("Reset Exercise Catalog?", isPresented: $isConfirmingCatalogReset) {
             Button("Reset", role: .destructive) {
                 do {
@@ -186,6 +204,62 @@ struct SettingsScreen: View {
                 ))
             }
         )
+    }
+
+    private var restNotificationsBinding: Binding<Bool> {
+        Binding(
+            get: { restNotificationsEnabled },
+            set: { isEnabled in
+                guard isEnabled else {
+                    restNotificationsEnabled = false
+                    RestNotificationController.cancelPending()
+                    return
+                }
+                enableRestNotificationsFromSettings()
+            }
+        )
+    }
+
+    private var restNotificationsPresentation: SettingsRestNotificationsPresentation {
+        restNotificationAuthorization == .denied ? .denied : .available
+    }
+
+    private func enableRestNotificationsFromSettings() {
+        hasSeenRestNotificationPrimer = true
+        switch restNotificationAuthorization {
+        case .authorized:
+            restNotificationsEnabled = true
+        case .denied:
+            openSystemSettings()
+        case .notDetermined, nil:
+            Task { @MainActor in
+                restNotificationsEnabled = await RestNotificationController.requestAuthorization()
+                await refreshRestNotificationAuthorization()
+                if restNotificationsEnabled {
+                    Haptics.soft(playsSound: false)
+                }
+            }
+        }
+    }
+
+    private func refreshRestNotificationAuthorization() async {
+        let status = await RestNotificationController.authorizationStatus()
+        let hasStoredPreference = UserDefaults.standard.object(
+            forKey: SettingsKey.restNotificationsEnabled
+        ) != nil
+        restNotificationAuthorization = status
+        if status == .authorized, !hasStoredPreference {
+            // Preserve alerts for users who accepted the former automatic
+            // request before the app preference existed.
+            restNotificationsEnabled = true
+        } else if status != .authorized {
+            restNotificationsEnabled = false
+        }
+    }
+
+    private func openSystemSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        openURL(url)
     }
 
     private func requestCatalogReset() {

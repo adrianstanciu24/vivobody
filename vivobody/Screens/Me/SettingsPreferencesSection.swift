@@ -9,6 +9,11 @@
 import SwiftUI
 import VivoKit
 
+enum SettingsRestNotificationsPresentation: Equatable {
+    case available
+    case denied
+}
+
 struct SettingsPreferencesSection: View {
     @Binding var appearance: AppAppearance
     @Binding var bodyDriftSpeed: BodyDriftSpeed
@@ -16,9 +21,11 @@ struct SettingsPreferencesSection: View {
     @Binding var defaultRestSeconds: Int
     @Binding var hapticsEnabled: Bool
     @Binding var soundsEnabled: Bool
+    @Binding var restNotificationsEnabled: Bool
     @Binding var healthKitEnabled: Bool
 
     let restOptions: [Int]
+    let restNotificationsPresentation: SettingsRestNotificationsPresentation
     let healthKitPresentation: SettingsHealthKitPresentation
     let bundledExerciseCount: Int
     let onRequestCatalogReset: () -> Void
@@ -43,6 +50,8 @@ struct SettingsPreferencesSection: View {
                 hapticsRow
                 rowDivider
                 soundsRow
+                rowDivider
+                restNotificationsRow
                 if healthKitPresentation != .unavailable {
                     rowDivider
                     healthKitRow
@@ -269,6 +278,48 @@ struct SettingsPreferencesSection: View {
         }
         .padding(.horizontal, Space.lg)
         .padding(.vertical, Space.md)
+    }
+
+    private var restNotificationsRow: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text("Rest Alerts")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                Text(restNotificationsSubtitle)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: Space.md)
+
+            switch restNotificationsPresentation {
+            case .available:
+                Toggle("", isOn: $restNotificationsEnabled)
+                    .labelsHidden()
+                    .tint(Tint.inProgress)
+                    .accessibilityLabel("Rest alerts")
+            case .denied:
+                Button("Open Settings") {
+                    restNotificationsEnabled = true
+                }
+                .font(Typography.sectionLabel)
+                .foregroundStyle(Tint.primary)
+                .frame(minHeight: 44)
+                .accessibilityHint("Opens iOS Settings to allow notifications")
+            }
+        }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
+    }
+
+    private var restNotificationsSubtitle: String {
+        switch restNotificationsPresentation {
+        case .available:
+            "Notify you when rest ends while Vivobody is in the background"
+        case .denied:
+            "Notifications are turned off in iOS Settings"
+        }
     }
 
     @ViewBuilder

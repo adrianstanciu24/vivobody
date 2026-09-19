@@ -52,7 +52,6 @@ enum SessionSideEffects {
         case .started:
             WorkoutLiveActivityController.start(for: session)
             WidgetSnapshotWriter.writeAll(in: context)
-            RestNotificationController.requestAuthorizationIfNeeded()
 
         case .updated:
             WorkoutLiveActivityController.update(for: session)

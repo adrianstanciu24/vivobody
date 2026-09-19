@@ -19,7 +19,14 @@ struct RestTimerOverlay: View {
     @Environment(\.modelContext) private var modelContext
 
     @State private var saveError: SaveErrorBox? = nil
+    @State private var notificationAuthorization: RestNotificationAuthorization?
     @AccessibilityFocusState private var timerFocused: Bool
+
+    @AppStorage(SettingsKey.restNotificationsEnabled)
+    private var restNotificationsEnabled: Bool = SettingsDefaults.restNotificationsEnabled
+
+    @AppStorage(SettingsKey.hasSeenRestNotificationPrimer)
+    private var hasSeenNotificationPrimer: Bool = SettingsDefaults.hasSeenRestNotificationPrimer
 
     /// Bumped each time a rest begins so the BreathingTimer inside is
     /// reconstructed with a fresh `duration` rather than reusing its
@@ -52,6 +59,15 @@ struct RestTimerOverlay: View {
             )
             .id(instanceID)
             .accessibilityFocused($timerFocused)
+            .safeAreaInset(edge: .bottom, spacing: Space.sm) {
+                if shouldShowNotificationPrimer {
+                    RestNotificationPrimerCard(
+                        onNotNow: dismissNotificationPrimer,
+                        onTurnOn: enableRestNotifications
+                    )
+                    .padding(.horizontal, Space.gutter)
+                }
+            }
         }
         // Bump the instance whenever a brand new rest BEGINS
         // (restStartedAt becomes a non-nil value), so the
@@ -69,7 +85,46 @@ struct RestTimerOverlay: View {
                 }
             }
         }
+        .task(id: instanceID) {
+            await refreshNotificationAuthorization()
+        }
         .saveErrorAlert($saveError)
+    }
+
+    private var shouldShowNotificationPrimer: Bool {
+        !hasSeenNotificationPrimer &&
+            !restNotificationsEnabled &&
+            notificationAuthorization == .notDetermined
+    }
+
+    private func dismissNotificationPrimer() {
+        hasSeenNotificationPrimer = true
+        Haptics.soft(playsSound: false)
+    }
+
+    private func enableRestNotifications() {
+        hasSeenNotificationPrimer = true
+        Task { @MainActor in
+            restNotificationsEnabled = await RestNotificationController.requestAuthorization()
+            notificationAuthorization = await RestNotificationController.authorizationStatus()
+            if restNotificationsEnabled {
+                Haptics.soft(playsSound: false)
+            }
+        }
+    }
+
+    private func refreshNotificationAuthorization() async {
+        let status = await RestNotificationController.authorizationStatus()
+        notificationAuthorization = status
+        let defaults = UserDefaults.standard
+        if status == .authorized,
+           defaults.object(forKey: SettingsKey.restNotificationsEnabled) == nil
+        {
+            // Migrate users who accepted the former automatic request.
+            restNotificationsEnabled = true
+        } else if status != .authorized {
+            restNotificationsEnabled = false
+        }
     }
 
     private var nextSetLabel: String? {

@@ -13,23 +13,46 @@
 //  same synth voice as the in-app sounds, so the identity carries to
 //  the lock screen instead of falling back to the stock tri-tone.
 //
-//  Authorization is requested once, when the user starts their first
-//  workout — the moment "tell me when rest is over" makes obvious
-//  sense. If they decline, scheduling silently no-ops.
+//  Authorization is requested only after an explicit user action in
+//  the contextual first-rest primer or Settings. Fresh installs never
+//  receive a system permission prompt merely for starting a workout.
 //
 
 import UserNotifications
 
+nonisolated enum RestNotificationAuthorization: Equatable {
+    case notDetermined
+    case denied
+    case authorized
+}
+
 @MainActor
 enum RestNotificationController {
     private static let requestID = "rest-timer-done"
+    private static var schedulingTask: Task<Void, Never>?
 
-    /// Prompt for notification permission (first call only; the
-    /// system remembers the answer and later calls are no-ops).
-    static func requestAuthorizationIfNeeded() {
-        Task {
-            _ = try? await UNUserNotificationCenter.current()
+    static func authorizationStatus() async -> RestNotificationAuthorization {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        switch settings.authorizationStatus {
+        case .notDetermined:
+            return .notDetermined
+        case .denied:
+            return .denied
+        case .authorized, .provisional, .ephemeral:
+            return .authorized
+        @unknown default:
+            return .denied
+        }
+    }
+
+    /// Request permission only from a user-initiated consent action.
+    /// The caller owns the explanatory UI shown before this method.
+    static func requestAuthorization() async -> Bool {
+        do {
+            return try await UNUserNotificationCenter.current()
                 .requestAuthorization(options: [.alert, .sound])
+        } catch {
+            return false
         }
     }
 
@@ -45,27 +68,52 @@ enum RestNotificationController {
         let interval = endsAt.timeIntervalSinceNow
         guard interval > 1 else { return }
 
-        let content = UNMutableNotificationContent()
-        content.title = "Rest over"
-        content.body = "Time for your next set."
-        content.sound = UNNotificationSound(
-            named: UNNotificationSoundName("sfx-rest-done.caf")
-        )
+        schedulingTask = Task { @MainActor in
+            let status = await authorizationStatus()
+            guard !Task.isCancelled else { return }
+            let defaults = UserDefaults.standard
+            let hasStoredPreference = defaults.object(
+                forKey: SettingsKey.restNotificationsEnabled
+            ) != nil
+            let isEnabled: Bool
+            if hasStoredPreference {
+                isEnabled = defaults.bool(forKey: SettingsKey.restNotificationsEnabled)
+            } else {
+                // Preserve delivery for existing users who accepted the old
+                // automatic prompt before this explicit-consent preference
+                // existed. Fresh installs remain disabled.
+                isEnabled = status == .authorized
+                if isEnabled {
+                    defaults.set(true, forKey: SettingsKey.restNotificationsEnabled)
+                }
+            }
+            guard isEnabled, status == .authorized else { return }
+            guard !Task.isCancelled else { return }
 
-        let request = UNNotificationRequest(
-            identifier: requestID,
-            content: content,
-            trigger: UNTimeIntervalNotificationTrigger(
-                timeInterval: interval, repeats: false
+            let content = UNMutableNotificationContent()
+            content.title = "Rest over"
+            content.body = "Time for your next set."
+            content.sound = UNNotificationSound(
+                named: UNNotificationSoundName("sfx-rest-done.caf")
             )
-        )
-        UNUserNotificationCenter.current().add(request)
+
+            let request = UNNotificationRequest(
+                identifier: requestID,
+                content: content,
+                trigger: UNTimeIntervalNotificationTrigger(
+                    timeInterval: interval, repeats: false
+                )
+            )
+            try? await UNUserNotificationCenter.current().add(request)
+        }
     }
 
     /// Drop any scheduled chime and clear a delivered one from the
     /// notification center — once the user is back in the app, the
     /// banner is stale noise.
     static func cancelPending() {
+        schedulingTask?.cancel()
+        schedulingTask = nil
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: [requestID])
         center.removeDeliveredNotifications(withIdentifiers: [requestID])

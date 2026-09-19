@@ -18,6 +18,13 @@ nonisolated enum SettingsKey {
     /// silent switch still mutes sounds even when this is on.
     static let soundsEnabled = "settings.soundsEnabled"
     static let defaultRestSeconds = "settings.defaultRestSeconds"
+    /// Bool — whether Vivobody should schedule a local alert when a rest
+    /// finishes while the app is backgrounded. Fresh installs remain off
+    /// until the user explicitly enables the first-rest primer or Settings.
+    static let restNotificationsEnabled = "settings.restNotificationsEnabled"
+    /// Bool — whether the contextual first-rest explanation has been acted
+    /// on. The system permission prompt is never used as the explanation.
+    static let hasSeenRestNotificationPrimer = "settings.hasSeenRestNotificationPrimer"
     /// Stores `WeightUnit.rawValue` ("lb" or "kg"). Read via
     /// @AppStorage at every weight display + scrubber so flipping
     /// the toggle updates all surfaces synchronously.
@@ -83,6 +90,8 @@ nonisolated enum SettingsDefaults {
     static let hapticsEnabled = true
     static let soundsEnabled = true
     static let defaultRestSeconds = 120
+    static let restNotificationsEnabled = false
+    static let hasSeenRestNotificationPrimer = false
     static let weightUnit = WeightUnit.lb.rawValue
     static let appearance = AppAppearance.system.rawValue
     static let healthKitEnabled = false
