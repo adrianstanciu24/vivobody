@@ -99,6 +99,10 @@ $(SRCROOT)/specs/catalog/families/straight-leg-sit-up.json
 $(SRCROOT)/specs/catalog/families/suitcase-carry.json
 $(SRCROOT)/specs/catalog/families/sumo-deadlift.json
 $(SRCROOT)/specs/catalog/families/supine-pelvic-curl.json
+$(SRCROOT)/specs/catalog/families/suspension-assisted-single-leg-squat.json
+$(SRCROOT)/specs/catalog/families/suspension-hamstring-curl.json
+$(SRCROOT)/specs/catalog/families/suspension-hip-press.json
+$(SRCROOT)/specs/catalog/families/suspension-horizontal-abduction.json
 $(SRCROOT)/specs/catalog/families/thruster.json
 $(SRCROOT)/specs/catalog/families/trap-bar-deadlift.json
 $(SRCROOT)/specs/catalog/families/upper-arm-pad-chest-fly.json

@@ -1,0 +1,53 @@
+{
+  "name": "catalog-trx-hip-press-dark",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterLegs"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^TRX Hip Press,"
+        },
+        "direction": "up",
+        "maxSwipes": 80
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^TRX Hip Press,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "TRX Hip Press"
+    },
+    {
+      "labelContains": "Muscles used by TRX Hip Press"
+    }
+  ],
+  "forbidden": []
+}

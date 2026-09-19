@@ -206,6 +206,9 @@ Equipment identifies the implement geometry that materially defines the
 exercise. A trap bar is stored as `trapBar`, displayed as **Trap Bar**, and
 filtered independently from `barbell`; standing inside a frame with lateral
 parallel handles is not a straight-bar substitution or generic `other` gear.
+A suspension trainer is stored as `suspensionTrainer`, displayed as
+**Suspension Trainer**, and filtered independently because its anchored straps,
+handles, and foot cradles materially define support and resistance.
 
 ## Load semantics
 
@@ -226,12 +229,12 @@ comparisons, but does not scale the authored muscle-role and RIR inputs used by
 the 3D development model.
 
 During an active workout, `nonComparable` exercises using `bodyweight`,
-`abWheel`, or `gluteHamDeveloper` equipment omit the load control and show only
-repetitions or time. Other `nonComparable` exercises, including bands, label
-the editable field **Resistance**; zero is shown as **Not set**, not as a
-meaningful zero-unit load. An `external` custom GHD exercise still exposes
-Weight. This presentation does not make an entered resistance comparable or
-change its analytics use.
+`abWheel`, `gluteHamDeveloper`, or `suspensionTrainer` equipment omit the load
+control and show only repetitions or time. Other `nonComparable` exercises,
+including bands, label the editable field **Resistance**; zero is shown as
+**Not set**, not as a meaningful zero-unit load. An `external` custom GHD
+exercise still exposes Weight. This presentation does not make an entered
+resistance comparable or change its analytics use.
 
 `bodyweightFraction` is a coefficient used only by the two bodyweight load
 modes. It is zero for `external` and `nonComparable`. Reviewed band exercises

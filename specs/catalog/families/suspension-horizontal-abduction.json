@@ -1,0 +1,114 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "suspension-horizontal-abduction",
+  "name": "Suspension Horizontal Abduction",
+  "definition": "A bilateral standing suspension-trainer reverse fly performed with mid-length straps while facing the anchor, using an overhand grip, an inclined straight body, and a slight elbow bend held fixed. Shoulder horizontal abduction and deliberate scapular retraction open the arms to a shoulder-height T before a controlled return. This focused shoulder isolation keeps the elbow angle fixed, separating it from suspension rows, while shoulder external rotation is not the repetition-defining action. The fixture is rep-tracked and non-comparable because body angle and strap geometry change the effective load. Bent-over reverse flies without deliberate scapular retraction, high rows, face pulls, external-rotation drills, and elbow-flexing rows remain outside this family.",
+  "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "gaffney-2014-trapezius-subdivisions", "youdas-2021-suspension-row", "trx-2023-shoulder-exercises"],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": ["transverse"]
+  },
+  "groupPolicy": {"default": "shoulders", "allowed": ["shoulders"]},
+  "allowed": {
+    "equipment": ["suspensionTrainer"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.horizontalAbduction"],
+    "primeActions": ["shoulder.horizontalAbduction", "scapula.retraction"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["spine", "pelvis", "hip", "shoulder", "scapula", "elbow", "wrist", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["deltoidPosterior"], "minimumRole": "primary"},
+      {"anyOf": ["trapeziusMiddle"], "minimumRole": "primary"}
+    ],
+    "allowedByRole": {
+      "primary": ["deltoidPosterior", "trapeziusMiddle"],
+      "secondary": ["rhomboids", "trapeziusLower"],
+      "stabilizer": ["trapeziusUpper", "externalRotators", "triceps", "bicepsBrachii", "brachialis", "abs", "obliques", "lumbarExtensors", "gluteMax", "extensorCarpiRadialis", "fingerFlexors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The hands stay attached to the suspension handles while the body moves.", "allowedValues": ["closed"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed standing body angle.", "allowedValues": ["inclinedStandingFacingAnchor"]},
+    {"id": "implement", "valueType": "enum", "required": true, "description": "The reviewed hand implement.", "allowedValues": ["independentSuspensionHandles"]},
+    {"id": "strapLength", "valueType": "enum", "required": true, "description": "The reviewed suspension-trainer length.", "allowedValues": ["midLength"]},
+    {"id": "gripOrientation", "valueType": "enum", "required": true, "description": "The reviewed palm orientation.", "allowedValues": ["pronated"]},
+    {"id": "elbowPosition", "valueType": "enum", "required": true, "description": "A slight elbow bend stays fixed to exclude a row.", "allowedValues": ["slightFlexionHeld"]},
+    {"id": "armPath", "valueType": "enum", "required": true, "description": "The arms open at shoulder height.", "allowedValues": ["shoulderHeightT"]},
+    {"id": "scapularMotion", "valueType": "enum", "required": true, "description": "Retraction is part of the reviewed repetition.", "allowedValues": ["deliberateRetraction"]},
+    {"id": "bodyAngle", "valueType": "enum", "required": true, "description": "Foot position selects a controlled body inclination.", "allowedValues": ["selfSelectedControlledIncline"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "The straps do not constrain a machine path.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "trx-reverse-fly",
+      "name": "TRX Reverse Fly",
+      "aliases": ["Suspension Reverse Fly", "TRX T Fly"],
+      "equipment": "suspensionTrainer",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "deltoidPosterior", "role": "primary"},
+        {"muscle": "trapeziusMiddle", "role": "primary"},
+        {"muscle": "rhomboids", "role": "secondary"},
+        {"muscle": "trapeziusLower", "role": "secondary"},
+        {"muscle": "trapeziusUpper", "role": "stabilizer"},
+        {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"},
+        {"muscle": "bicepsBrachii", "role": "stabilizer"},
+        {"muscle": "brachialis", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "gluteMax", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "inclinedStandingFacingAnchor",
+        "implement": "independentSuspensionHandles",
+        "strapLength": "midLength",
+        "gripOrientation": "pronated",
+        "elbowPosition": "slightFlexionHeld",
+        "armPath": "shoulderHeightT",
+        "scapularMotion": "deliberateRetraction",
+        "bodyAngle": "selfSelectedControlledIncline",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "youdas-2021-suspension-row", "trx-2023-shoulder-exercises"],
+      "execution": {
+        "startingPosition": "Set the straps to mid-length, face the anchor with an overhand grip, walk the feet forward, and hold a straight inclined body with a slight elbow bend.",
+        "movement": "Open both arms out at shoulder height while drawing the shoulder blades together and holding the slight elbow bend.",
+        "endpoint": "Finish in a controlled T position with the chest lifted toward the handles and no elbow pull.",
+        "returnPhase": "Bring the hands back together under control while keeping the body in one straight line.",
+        "controlledJoints": "Move both arms outward at shoulder height and draw the shoulder blades together while holding the elbow angle and overhand grip.",
+        "supportAndPosture": "Brace the trunk and hips so the body moves as one unit, and keep both straps evenly tensioned.",
+        "disqualifyingCompensations": [
+          "Bending the elbows to pull the handles toward the body changes the exercise into a row.",
+          "Rotating the shoulders to finish changes the fixture into an external-rotation drill.",
+          "Arching the low back or losing the straight-body line changes the reviewed setup."
+        ]
+      }
+    }
+  ]
+}

@@ -3,8 +3,8 @@
   "schemaVersion": 1,
   "id": "lateral-lunge",
   "name": "Lateral Lunge",
-  "definition": "A bodyweight side-step lunge in which one foot travels laterally by 60 percent of body height, the lead leg descends to a self-selected depth, and the athlete drives back to bilateral standing. Hip abduction and adduction and the corresponding gluteus-medius and adductor-longus/brevis roles are transparent anatomy-and-mechanics inferences from the source-exact lateral displacement and Arnold capability map; Riemann et al. directly measured sagittal lower-limb mechanics but did not measure frontal-plane joint moments, muscle activity, or a relative muscle ranking. Adductor magnus, gracilis, and pectineus receive secondary credit specifically for the hip-adduction return through Arnold anatomy and Lovell resisted-adduction evidence; this transfer is not direct lateral-lunge EMG and does not grant magnus hip-extension credit. Forward, reverse, walking, Cossack, split-squat, lateral step-up, jumping, loaded, and differently standardized stride variants remain outside this family. TFL receives secondary credit specifically for the existing hip-abduction lateral-step phase, not the hip-extension return. Bouillon recorded TFL during a side-step lunge from shoulder-width standing with a leg-length-based stride; this feet-together, body-height-based fixture differs. Its role is an explicit anatomy-and-mechanics transfer through the unchanged abduction capability, not exact-protocol EMG, force, ranking or adaptation.",
-  "evidenceRefs": ["arnold-2010-lower-limb", "riemann-2013-forward-lateral-lunge", "lovell-2012-hip-adductor-tests", "bouillon-2012-unilateral-weight-bearing-emg"],
+  "definition": "A side-step lunge that starts and ends in bilateral standing. The bodyweight fixture uses a lateral step equal to 60 percent of body height; the suspension fixture faces the anchor, holds both handles for balance, and uses a self-selected controlled step and depth. Hip abduction and adduction and the corresponding gluteus-medius and adductor-longus/brevis roles are transparent anatomy-and-mechanics inferences from the lateral displacement and Arnold capability map; Riemann et al. directly measured sagittal lower-limb mechanics but did not measure frontal-plane joint moments, muscle activity, or a relative muscle ranking. Adductor magnus, gracilis, and pectineus receive secondary credit specifically for the hip-adduction return through Arnold anatomy and Lovell resisted-adduction evidence; this transfer is not direct lateral-lunge EMG and does not grant magnus hip-extension credit. Forward, reverse, walking, Cossack, split-squat, lateral step-up, jumping, loaded, and other stride variants remain outside this family. TFL receives secondary credit specifically for the hip-abduction lateral-step phase, not the hip-extension return. Bouillon recorded TFL during a side-step lunge from shoulder-width standing with a leg-length-based stride; transfer to these fixtures is an explicit anatomy-and-mechanics inference through the unchanged abduction capability, not exact-protocol EMG, force, ranking or adaptation.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "riemann-2013-forward-lateral-lunge", "lovell-2012-hip-adductor-tests", "bouillon-2012-unilateral-weight-bearing-emg", "trx-2026-suspension-exercise-guide"],
   "fixed": {
     "mechanic": "compound",
     "trainingRole": "legs",
@@ -14,7 +14,7 @@
   },
   "groupPolicy": {"default": "legs", "allowed": ["legs"]},
   "allowed": {
-    "equipment": ["bodyweight"],
+    "equipment": ["bodyweight", "suspensionTrainer"],
     "modalities": ["dynamicStrength"],
     "trackingModes": ["reps"],
     "loadModes": ["nonComparable"],
@@ -91,20 +91,48 @@
     "allowedByRole": {
       "primary": ["vasti"],
       "secondary": ["gluteMax", "gluteMed", "adductorLongusBrevis", "adductorMagnus", "gracilis", "pectineus", "rectusFemoris", "gastrocnemius", "soleus", "tensorFasciaeLatae"],
-      "stabilizer": ["medialHamstrings", "bicepsFemoris", "abs", "obliques", "lumbarExtensors"]
+      "stabilizer": ["medialHamstrings", "bicepsFemoris", "abs", "obliques", "lumbarExtensors", "deltoidAnterior", "trapeziusMiddle", "brachialis", "extensorCarpiRadialis", "fingerFlexors"]
     }
   },
   "variantAxes": [
     {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The lead foot remains fixed during the loaded stance.", "allowedValues": ["closed"]},
     {"id": "startPosition", "valueType": "enum", "required": true, "description": "The exact bilateral standing start.", "allowedValues": ["feetTogetherStanding"]},
     {"id": "travelDirection", "valueType": "enum", "required": true, "description": "The stepping foot travels directly to the side.", "allowedValues": ["lateral"]},
-    {"id": "stepLengthPercentBodyHeight", "valueType": "number", "required": true, "description": "The source-standardized lateral step length as a percentage of standing body height.", "minimum": 60, "maximum": 60},
+    {"id": "stepLengthBasis", "valueType": "enum", "required": true, "description": "Whether step length is source-standardized or selected for controlled suspension practice.", "allowedValues": ["sourceStandardizedSixtyPercentHeight", "selfSelectedControlled"]},
+    {"id": "stepLengthPercentBodyHeight", "valueType": "number", "required": false, "description": "The source-standardized lateral step length as a percentage of standing body height when reported.", "minimum": 60, "maximum": 60},
     {"id": "returnStrategy", "valueType": "enum", "required": true, "description": "The athlete pushes back to the original bilateral stance after every repetition.", "allowedValues": ["stepAndReturnToStart"]},
     {"id": "loadPlacement", "valueType": "enum", "required": true, "description": "No external load is held.", "allowedValues": ["none"]},
+    {"id": "supportMode", "valueType": "enum", "required": true, "description": "Whether the arms are unsupported or use both suspension handles only for balance.", "allowedValues": ["none", "dualHandlesBalanceAssistance"]},
     {"id": "torsoStrategy", "valueType": "enum", "required": true, "description": "The trunk remains controlled without deliberate side bending or rotation.", "allowedValues": ["controlledNoSideBendOrRotation"]},
     {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No machine constrains the body path.", "fixedValue": false}
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "source-standardized-step-requires-measured-length",
+      "description": "The original bodyweight fixture retains its measured 60-percent-height lateral step.",
+      "when": {"field": "variant.stepLengthBasis", "operator": "equals", "value": "sourceStandardizedSixtyPercentHeight"},
+      "then": [
+        {"field": "equipment", "value": "bodyweight"},
+        {"field": "variant.stepLengthPercentBodyHeight", "value": 60},
+        {"field": "variant.supportMode", "value": "none"}
+      ],
+      "requirePresent": ["variant.stepLengthPercentBodyHeight"],
+      "requireAbsent": []
+    },
+    {
+      "id": "suspension-lateral-lunge-fixture",
+      "description": "The suspension branch uses two handles for balance and a self-selected controlled side step without inventing a measured distance.",
+      "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "variant.stepLengthBasis", "value": "selfSelectedControlled"},
+        {"field": "variant.supportMode", "value": "dualHandlesBalanceAssistance"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.stepLengthPercentBodyHeight"],
+      "requireAdditionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"]
+    }
+  ],
   "exercises": [
     {
       "catalogID": "bodyweight-lateral-lunge-60-percent-height",
@@ -142,9 +170,11 @@
         "kineticChain": "closed",
         "startPosition": "feetTogetherStanding",
         "travelDirection": "lateral",
+        "stepLengthBasis": "sourceStandardizedSixtyPercentHeight",
         "stepLengthPercentBodyHeight": 60,
         "returnStrategy": "stepAndReturnToStart",
         "loadPlacement": "none",
+        "supportMode": "none",
         "torsoStrategy": "controlledNoSideBendOrRotation",
         "fixedPath": false
       },
@@ -163,6 +193,65 @@
           "Remaining in a wide stance changes the step-and-return fixture.",
           "Using a different standardized step length leaves the source-exact record."
         ],
+        "sideOrDirection": "Complete the prescribed repetitions to one side, then repeat to the other side."
+      }
+    },
+    {
+      "catalogID": "trx-lateral-lunge",
+      "name": "TRX Lateral Lunge",
+      "aliases": ["Suspension Lateral Lunge", "TRX Side Lunge"],
+      "equipment": "suspensionTrainer",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"},
+        {"muscle": "gluteMax", "role": "secondary"},
+        {"muscle": "adductorLongusBrevis", "role": "secondary"},
+        {"muscle": "adductorMagnus", "role": "secondary"},
+        {"muscle": "gracilis", "role": "secondary"},
+        {"muscle": "pectineus", "role": "secondary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gastrocnemius", "role": "secondary"},
+        {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "gluteMed", "role": "secondary"},
+        {"muscle": "tensorFasciaeLatae", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "deltoidAnterior", "role": "stabilizer"},
+        {"muscle": "trapeziusMiddle", "role": "stabilizer"},
+        {"muscle": "brachialis", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "startPosition": "feetTogetherStanding",
+        "travelDirection": "lateral",
+        "stepLengthBasis": "selfSelectedControlled",
+        "returnStrategy": "stepAndReturnToStart",
+        "loadPlacement": "none",
+        "supportMode": "dualHandlesBalanceAssistance",
+        "torsoStrategy": "controlledNoSideBendOrRotation",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
+      "evidenceRefs": ["trx-2026-suspension-exercise-guide", "arnold-2010-lower-limb"],
+      "execution": {
+        "startingPosition": "Face the anchor with one handle in each hand and stand with both feet together.",
+        "movement": "Step one foot directly to the side, sit into that hip and knee, and keep the other leg long while using the straps only for balance.",
+        "endpoint": "Reach a controlled side-lunge depth with the stepping foot planted and the trunk steady.",
+        "returnPhase": "Drive through the stepping foot and return to the original feet-together stance.",
+        "controlledJoints": "Track the working knee with the foot and let the working hip and knee create the return.",
+        "supportAndPosture": "Keep light even tension in both straps without deliberate trunk rotation or side bending.",
+        "disqualifyingCompensations": ["Stepping forward or backward changes the lunge direction.", "Remaining in a wide stance changes the step-and-return fixture.", "Pulling the body back with the arms changes the intended lower-body action."],
         "sideOrDirection": "Complete the prescribed repetitions to one side, then repeat to the other side."
       }
     }

@@ -11,7 +11,13 @@
     "cabral-2022-pectoralis-regions",
     "coratella-2020-bench-press-variations",
     "van-den-tillaar-2019-pushup-bench",
-    "saeterbakken-2021-bench-grip-width"
+    "saeterbakken-2021-bench-grip-width",
+    "trx-2022-suspension-foundations",
+    "usmc-2026-trx-strength-library",
+    "harris-2017-suspension-muscle-activation",
+    "mok-2015-core-suspension-exercises",
+    "snarr-esco-2013-suspension-pushup",
+    "trx-2024-chest-press-technique"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -34,7 +40,8 @@
       "dumbbell",
       "cable",
       "machine",
-      "bodyweight"
+      "bodyweight",
+      "suspensionTrainer"
     ],
     "modalities": [
       "dynamicStrength"
@@ -44,7 +51,8 @@
     ],
     "loadModes": [
       "external",
-      "bodyweightAdded"
+      "bodyweightAdded",
+      "nonComparable"
     ],
     "lateralities": [
       "bilateral",
@@ -104,7 +112,9 @@
         "trapeziusMiddle",
         "externalRotators",
         "abs",
-        "obliques"
+        "obliques",
+        "lumbarExtensors",
+        "gluteMax"
       ]
     }
   },
@@ -165,11 +175,12 @@
       "id": "rangeOfMotion",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the canonical lowering phase is unrestricted or stopped when the upper arm contacts the floor.",
+      "description": "Whether the lowering phase is unrestricted, floor-limited, machine-defined, or bounded by the reviewed suspension fixture.",
       "allowedValues": [
         "full",
         "floorLimited",
-        "machineDefined"
+        "machineDefined",
+        "selfSelectedControlled"
       ]
     },
     {
@@ -248,9 +259,40 @@
       "required": false,
       "description": "Both sides use equal selected stack values and the per-working-side value is entered once.",
       "allowedValues": ["equalSideSettingsEnterOnce"]
+    },
+    {
+      "id": "suspensionBodyPosition",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed standing body relationship to the anchor.",
+      "allowedValues": ["inclinedStandingFacingAway"]
+    },
+    {
+      "id": "suspensionApparatus",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed independently moving suspension handles.",
+      "allowedValues": ["independentHandlesSingleAnchor"]
+    },
+    {
+      "id": "upperArmPath",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed suspension press elbow path relative to the torso.",
+      "allowedValues": ["sourceUnquantifiedControlled"]
     }
   ],
   "exerciseRules": [
+    {
+      "id": "non-comparable-horizontal-press-is-suspension-only",
+      "description": "Only the suspension chest press uses a non-comparable load; bodyweight and external-load fixtures retain their authored load modes.",
+      "when": {"field": "loadMode", "operator": "equals", "value": "nonComparable"},
+      "then": [
+        {"field": "equipment", "value": "suspensionTrainer"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
     {
       "id": "bodyweight-closed-chain",
       "description": "Bodyweight horizontal presses use a closed kinetic chain, bodyweight-derived loading, free scapular translation, and an explicit lower-body support point.",
@@ -289,11 +331,11 @@
     },
     {
       "id": "external-implement-open-chain",
-      "description": "Non-bodyweight horizontal presses use external resistance in an open kinetic chain and explicitly declare that no lower-body contact changes effective bodyweight loading.",
+      "description": "Externally loaded horizontal presses use an open kinetic chain and explicitly declare that no lower-body contact changes effective bodyweight loading.",
       "when": {
-        "field": "equipment",
-        "operator": "notEquals",
-        "value": "bodyweight"
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "external"
       },
       "then": [
         {
@@ -311,6 +353,28 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "suspension-chest-press-fixture",
+      "description": "The suspension branch is a closed-chain forward-leaning standing chest press facing away from the anchor, with independent handles and no invented load value.",
+      "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "bodyweightFraction", "value": 0},
+        {"field": "variant.kineticChain", "value": "closed"},
+        {"field": "variant.torsoSupport", "value": "none"},
+        {"field": "variant.scapularTranslation", "value": "free"},
+        {"field": "variant.gripOrientation", "value": "pronated"},
+        {"field": "variant.rangeOfMotion", "value": "selfSelectedControlled"},
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.lowerBodySupport", "value": "feet"},
+        {"field": "variant.suspensionBodyPosition", "value": "inclinedStandingFacingAway"},
+        {"field": "variant.suspensionApparatus", "value": "independentHandlesSingleAnchor"},
+        {"field": "variant.upperArmPath", "value": "sourceUnquantifiedControlled"}
+      ],
+      "requirePresent": ["variant.suspensionBodyPosition", "variant.suspensionApparatus", "variant.upperArmPath"],
+      "requireAbsent": ["variant.pressInclinationDegrees", "variant.machineType", "variant.relativeGripWidth", "variant.gripWidthReference", "variant.machineFixture", "variant.leverArmConfiguration", "variant.armSequence", "variant.loadAccounting", "variant.sideLoadConvention"],
+      "requireAdditionalStabilityDemands": ["spine", "pelvis", "hip"]
     },
     {
       "id": "machine-requires-fixed-path-and-type",
@@ -1542,6 +1606,56 @@
         "controlledJoints": "Keep the non-working arm still and resist trunk rotation toward or away from the working side.",
         "supportAndPosture": "Keep the pelvis and torso against the machine support with both feet planted.",
         "disqualifyingCompensations": ["Moving both independent arms changes the one-arm history.", "Using unequal stack settings cannot be represented by this one-value history.", "Adding the two stack selections together changes the working-side load meaning.", "Rotating or lifting the torso from the pad adds momentum."]
+      }
+    },
+    {
+      "catalogID": "trx-chest-press",
+      "name": "TRX Chest Press",
+      "aliases": ["Suspension Chest Press", "Suspension Trainer Chest Press"],
+      "equipment": "suspensionTrainer",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "pectoralisMajorSternocostal", "role": "primary"},
+        {"muscle": "pectoralisMajorClavicular", "role": "secondary"},
+        {"muscle": "deltoidAnterior", "role": "secondary"},
+        {"muscle": "triceps", "role": "secondary"},
+        {"muscle": "serratus", "role": "secondary"},
+        {"muscle": "externalRotators", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "gluteMax", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "selfSelectedControlled",
+        "fixedPath": false,
+        "lowerBodySupport": "feet",
+        "suspensionBodyPosition": "inclinedStandingFacingAway",
+        "suspensionApparatus": "independentHandlesSingleAnchor",
+        "upperArmPath": "sourceUnquantifiedControlled"
+      },
+      "additionalPrimeActions": ["scapula.protraction"],
+      "additionalStabilityDemands": ["spine", "pelvis", "hip"],
+      "evidenceRefs": ["trx-2022-suspension-foundations", "trx-2024-chest-press-technique", "usmc-2026-trx-strength-library", "harris-2017-suspension-muscle-activation", "mok-2015-core-suspension-exercises", "snarr-esco-2013-suspension-pushup"],
+      "execution": {
+        "startingPosition": "Face away from the anchor with one handle in each hand at shoulder height, palms down, feet behind you, and the body straight and leaning forward.",
+        "movement": "Bend both elbows along a controlled path and lower the chest between the handles while the shoulder blades move naturally.",
+        "endpoint": "Stop when the chest reaches handle level without the handles or straps contacting the arms.",
+        "returnPhase": "Press through both handles, extend the elbows, and bring the hands forward while maintaining the straight-body line.",
+        "controlledJoints": "Bring the upper arms forward across the chest, extend the elbows, and let the shoulder blades move around the rib cage without turning the movement overhead.",
+        "supportAndPosture": "Brace the trunk and hips, keep both feet planted, and maintain even tension in both straps.",
+        "disqualifyingCompensations": ["Placing the feet in the cradles changes the exercise into a suspended push-up fixture.", "Opening the arms with nearly straight elbows changes the exercise into a suspension fly.", "Sagging or piking at the hips breaks the reviewed standing press position."]
       }
     }
   ]

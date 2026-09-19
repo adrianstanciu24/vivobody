@@ -179,13 +179,13 @@ nonisolated enum ExerciseLoad {
 
 extension Equipment {
     var requiresNonComparableLoad: Bool {
-        self == .band || self == .abWheel
+        self == .band || self == .abWheel || self == .suspensionTrainer
     }
 }
 
 /// Whether a fixture has a user-entered resistance axis. Bands remain editable,
-/// while unloaded bodyweight, ab-wheel, and GHD fixtures do not invent a pound
-/// value.
+/// while unloaded bodyweight, ab-wheel, GHD, and suspension-trainer fixtures do
+/// not invent a pound value.
 nonisolated enum ExerciseResistanceCapability {
     static func tracksResistance(
         loadMode: ExerciseLoadMode,
@@ -195,7 +195,8 @@ nonisolated enum ExerciseResistanceCapability {
             loadMode == .nonComparable
                 && (equipment == .bodyweight
                     || equipment == .abWheel
-                    || equipment == .gluteHamDeveloper)
+                    || equipment == .gluteHamDeveloper
+                    || equipment == .suspensionTrainer)
         )
     }
 

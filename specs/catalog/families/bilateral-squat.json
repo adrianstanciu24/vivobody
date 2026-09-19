@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "bilateral-squat",
   "name": "Bilateral Squat",
-  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures; NASM's single-dumbbell goblet fixture descending to approximately thigh parallel or deeper as mobility allows; and one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion. Those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply only to loaded branches. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and otherwise unbounded full-depth variants remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the free bilateral squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. Adductor magnus receives secondary credit only on the reviewed barbell-back-squat fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants. TFL receives stabilizer credit only in the five free fixtures for hip, pelvic and knee alignment. Selkowitz directly measured low TFL activity during an unloaded squat. Transfer across load placement, stance, foot orientation, depth and cadence is categorical anatomy and mechanics, not exact-fixture EMG or a strong TFL target. The guided Smith roster is outside this evidence slice; exclusion does not establish absent recruitment. No hip-flexion prime action or unrestricted rotation is added.",
+  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures; NASM's single-dumbbell goblet fixture descending to approximately thigh parallel or deeper as mobility allows; one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion; and one shoulder-width, handle-supported suspension fixture using self-selected controlled depth. Those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply to loaded branches, while the suspension branch authors only its balance-support chain. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and otherwise unbounded full-depth variants remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the free bilateral squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. Adductor magnus receives secondary credit only on the reviewed barbell-back-squat fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants. TFL receives stabilizer credit only in the free fixtures for hip, pelvic and knee alignment. Selkowitz directly measured low TFL activity during an unloaded squat. Transfer across load placement, stance, foot orientation, depth and cadence is categorical anatomy and mechanics, not exact-fixture EMG or a strong TFL target. The guided Smith roster is outside this evidence slice; exclusion does not establish absent recruitment. No hip-flexion prime action or unrestricted rotation is added.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "armstrong-2022-squat-movement-dynamics",
@@ -23,7 +23,9 @@
     "wu-2020-loading-devices-squat-lunge",
     "benn-2018-adductor-magnus-regional-emg",
     "collings-2026-hip-adductor-muscle-forces",
-    "selkowitz-2013-gluteal-tfl-fine-wire-emg"
+    "selkowitz-2013-gluteal-tfl-fine-wire-emg",
+    "trx-2022-suspension-foundations",
+    "trx-2024-squat-technique"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -46,7 +48,8 @@
       "kettlebell",
       "dumbbell",
       "machine",
-      "bodyweight"
+      "bodyweight",
+      "suspensionTrainer"
     ],
     "modalities": [
       "dynamicStrength"
@@ -232,7 +235,8 @@
       "required": true,
       "description": "Whether an external surface supports the torso during the repetition.",
       "allowedValues": [
-        "none"
+        "none",
+        "dualHandlesBalanceAssistance"
       ]
     },
     {
@@ -265,7 +269,8 @@
         "anteriorDeltoidClavicleBarbell",
         "kettlebellVerticalAtChestByHorns",
         "dumbbellVerticalAtChestCuppingTopHead",
-        "none"
+        "none",
+        "handSupportedNoExternalLoad"
       ]
     },
     {
@@ -278,7 +283,8 @@
         "cleanGrip",
         "hornGrip",
         "bothHandsCuppingTopHead",
-        "notApplicable"
+        "notApplicable",
+        "neutral"
       ]
     },
     {
@@ -289,7 +295,8 @@
       "allowedValues": [
         "thighParallel",
         "thighParallelOrDeeperAsMobilityAllows",
-        "approximately100DegreesKneeFlexion"
+        "approximately100DegreesKneeFlexion",
+        "selfSelectedControlledDepth"
       ]
     },
     {
@@ -371,7 +378,8 @@
         "singleKettlebell",
         "singleDumbbell",
         "verticalSmithBar",
-        "none"
+        "none",
+        "independentSuspensionHandles"
       ]
     },
     {
@@ -383,7 +391,8 @@
         "totalBarAndPlates",
         "totalSingleImplement",
         "enteredExternalLoadSameFixtureOnly",
-        "notApplicable"
+        "notApplicable",
+        "variableBodyAngleUntracked"
       ]
     },
     {
@@ -440,6 +449,16 @@
     }
   },
   "exerciseRules": [
+    {
+      "id": "non-comparable-squat-is-unloaded-only",
+      "description": "Only the bodyweight and suspension fixtures use non-comparable loads; loaded barbell, dumbbell, kettlebell, and machine fixtures remain external.",
+      "when": {"field": "loadMode", "operator": "equals", "value": "nonComparable"},
+      "then": [
+        {"field": "equipment", "allowedValues": ["bodyweight", "suspensionTrainer"]}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
     {
       "id": "upper-back-load-uses-back-squat-setup",
       "description": "An upper-back bar uses a pronated control grip; free-bar records do not fabricate an unreported high- versus low-bar site, while the Smith branch separately pins its rail geometry.",
@@ -525,6 +544,7 @@
       "description": "Free-bar squat records log total bar-and-plate load and have no Smith geometry.",
       "when": {"field": "equipment", "operator": "equals", "value": "barbell"},
       "then": [
+        {"field": "loadMode", "value": "external"},
         {"field": "variant.stanceWidth", "value": "hipWidth"},
         {"field": "variant.fixedPath", "value": false},
         {"field": "variant.implementConfiguration", "value": "straightBarbell"},
@@ -538,6 +558,7 @@
       "description": "The reviewed goblet squat holds one vertical kettlebell by its horns at the chest.",
       "when": {"field": "equipment", "operator": "equals", "value": "kettlebell"},
       "then": [
+        {"field": "loadMode", "value": "external"},
         {"field": "variant.stanceWidth", "value": "shoulderWidth"},
         {"field": "variant.loadPlacement", "value": "kettlebellVerticalAtChestByHorns"},
         {"field": "variant.gripOrientation", "value": "hornGrip"},
@@ -553,6 +574,7 @@
       "description": "NASM's reviewed dumbbell goblet squat cups the top head of one vertical dumbbell at the chest and descends to approximately parallel or deeper as mobility allows.",
       "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
       "then": [
+        {"field": "loadMode", "value": "external"},
         {"field": "variant.stanceWidth", "value": "hipWidth"},
         {"field": "variant.loadPlacement", "value": "dumbbellVerticalAtChestCuppingTopHead"},
         {"field": "variant.gripOrientation", "value": "bothHandsCuppingTopHead"},
@@ -569,6 +591,7 @@
       "description": "The reviewed Smith squat uses a vertical rail, zero horizontal foot offset from the bar line, and upper-back placement.",
       "when": {"field": "equipment", "operator": "equals", "value": "machine"},
       "then": [
+        {"field": "loadMode", "value": "external"},
         {"field": "variant.stanceWidth", "value": "shoulderWidth"},
         {"field": "variant.loadPlacement", "value": "upperBackBarbell"},
         {"field": "variant.gripOrientation", "value": "pronated"},
@@ -594,10 +617,9 @@
     },
     {
       "id": "loaded-squats-require-implement-support-contract",
-      "description": "Every loaded branch retains its hand and shoulder support-chain requirements, while the bodyweight fixture does not inherit them.",
-      "when": {"field": "equipment", "operator": "notEquals", "value": "bodyweight"},
+      "description": "Every externally loaded branch retains its hand and shoulder support-chain requirements, while non-comparable bodyweight and suspension fixtures use their own contracts.",
+      "when": {"field": "loadMode", "operator": "equals", "value": "external"},
       "then": [
-        {"field": "loadMode", "value": "external"},
         {"field": "variant.rangeOfMotion", "allowedValues": ["thighParallel", "thighParallelOrDeeperAsMobilityAllows"]}
       ],
       "requirePresent": [],
@@ -691,6 +713,26 @@
       "requirePresent": ["variant.footOrientation", "variant.supportSurface", "variant.cadenceProtocol"],
       "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"],
       "requireAdditionalStabilityDemands": []
+    },
+    {
+      "id": "suspension-squat-fixture",
+      "description": "The suspension branch is a lightly handle-supported bilateral squat facing the anchor, with variable angle and no invented resistance value.",
+      "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "bodyweightFraction", "value": 0},
+        {"field": "variant.torsoSupport", "value": "dualHandlesBalanceAssistance"},
+        {"field": "variant.stanceWidth", "value": "shoulderWidth"},
+        {"field": "variant.loadPlacement", "value": "handSupportedNoExternalLoad"},
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.rangeOfMotion", "value": "selfSelectedControlledDepth"},
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.implementConfiguration", "value": "independentSuspensionHandles"},
+        {"field": "variant.loadAccounting", "value": "variableBodyAngleUntracked"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm", "variant.footOrientation", "variant.cadenceProtocol"],
+      "requireAdditionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"]
     },
     {
       "id": "free-fixture-requires-tibialis-control",
@@ -1123,6 +1165,72 @@
         "controlledJoints": "Track both knees with the feet and avoid deliberately rounding or arching the back.",
         "supportAndPosture": "Use no implement, hand support, unstable surface, or external load.",
         "disqualifyingCompensations": ["Using one leg or a split stance leaves the two-leg fixture.", "Adding a jump changes the exercise into a squat jump.", "Stopping at a different knee-flexion endpoint leaves the source-exact record."]
+      }
+    },
+    {
+      "catalogID": "trx-squat",
+      "name": "TRX Squat",
+      "aliases": ["Suspension Squat", "Suspension Trainer Squat"],
+      "equipment": "suspensionTrainer",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"},
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gastrocnemius", "role": "secondary"},
+        {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "tibialisAnterior", "role": "stabilizer"},
+        {"muscle": "tensorFasciaeLatae", "role": "stabilizer"},
+        {"muscle": "deltoidAnterior", "role": "stabilizer"},
+        {"muscle": "trapeziusUpper", "role": "stabilizer"},
+        {"muscle": "brachialis", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "dualHandlesBalanceAssistance",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "shoulderWidth",
+        "loadPlacement": "handSupportedNoExternalLoad",
+        "gripOrientation": "neutral",
+        "rangeOfMotion": "selfSelectedControlledDepth",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "implementConfiguration": "independentSuspensionHandles",
+        "loadAccounting": "variableBodyAngleUntracked",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension",
+        "supportSurface": "floor"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
+      "evidenceRefs": ["trx-2022-suspension-foundations", "trx-2024-squat-technique", "arnold-2010-lower-limb"],
+      "execution": {
+        "startingPosition": "Set the straps to mid-length, face the anchor with one handle in each hand, and stand with both feet shoulder-width apart.",
+        "movement": "Sit the hips down and back as both knees bend, using light strap tension for balance.",
+        "endpoint": "Reach your deepest controlled squat while both feet stay planted and the trunk remains braced.",
+        "returnPhase": "Drive through both feet and extend the hips and knees to stand.",
+        "controlledJoints": "Let both hips, knees, and ankles move together; keep the arms supportive rather than pulling.",
+        "supportAndPosture": "Keep even tension in both straps, the knees tracking with the feet, and the spine controlled.",
+        "disqualifyingCompensations": ["Pulling the body upright with the arms changes the lower-body fixture.", "Lifting one foot changes the exercise into a single-leg squat.", "Turning away from the anchor or using the foot cradles leaves the reviewed setup."]
       }
     }
   ]

@@ -1919,6 +1919,132 @@
     ]
   },
   {
+    "familyID": "bilateral-squat",
+    "familyName": "Bilateral Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-squat",
+    "name": "TRX Squat",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Suspension Squat",
+      "Suspension Trainer Squat"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set the straps to mid-length, face the anchor with one handle in each hand, and stand with both feet shoulder-width apart.",
+      "movement": "Sit the hips down and back as both knees bend, using light strap tension for balance.",
+      "endpoint": "Reach your deepest controlled squat while both feet stay planted and the trunk remains braced.",
+      "returnPhase": "Drive through both feet and extend the hips and knees to stand.",
+      "controlledJoints": "Let both hips, knees, and ankles move together; keep the arms supportive rather than pulling.",
+      "supportAndPosture": "Keep even tension in both straps, the knees tracking with the feet, and the spine controlled.",
+      "disqualifyingCompensations": [
+        "Pulling the body upright with the arms changes the lower-body fixture.",
+        "Lifting one foot changes the exercise into a single-leg squat.",
+        "Turning away from the anchor or using the foot cradles leaves the reviewed setup."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "bird-dog",
     "familyName": "Bird Dog",
     "movementActions": [
@@ -4555,6 +4681,142 @@
     ]
   },
   {
+    "familyID": "dynamic-lunge",
+    "familyName": "Dynamic Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-reverse-lunge",
+    "name": "TRX Reverse Lunge",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "TRX Step-Back Lunge",
+      "Suspension Reverse Lunge",
+      "Suspension Step-Back Lunge"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set the straps to mid-length, face the anchor with one handle in each hand, stand tall with both feet together, and keep the elbows at the sides.",
+      "movement": "Step one foot far backward, lower the rear knee toward the floor with the chest lifted, and use the straps only for balance.",
+      "endpoint": "Reach a controlled lunge depth with the rear knee clear of the floor and the front foot fully planted.",
+      "returnPhase": "Drive through the front foot and bring the rear foot forward until both feet are together.",
+      "controlledJoints": "Let the front hip, knee, and ankle drive the return while the arms maintain light support.",
+      "supportAndPosture": "Keep the trunk upright, both handles evenly tensioned, and the selected front knee tracking with the foot.",
+      "disqualifyingCompensations": [
+        "Leaving the feet split between repetitions turns the movement into a split squat.",
+        "Placing the rear foot in a cradle changes the reviewed step-back fixture.",
+        "Pulling the body upright with the arms changes the intended lower-body action."
+      ],
+      "sideOrDirection": "Return to standing with both feet together after each repetition and alternate which foot steps backward."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "elbow-extension",
     "familyName": "Elbow Extension",
     "movementActions": [
@@ -6592,6 +6854,96 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "elbow-flexion",
+    "familyName": "Elbow Flexion",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-biceps-curl",
+    "name": "TRX Biceps Curl",
+    "group": "arms",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Suspension Biceps Curl",
+      "Suspension Trainer Curl"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Face the anchor with one handle in each hand, palms up, feet forward, body straight and inclined, and upper arms held in front of the torso.",
+      "movement": "Keep the upper arms still and bend both elbows to bring the handles toward the temples or forehead.",
+      "endpoint": "Reach your controlled elbow-flexion limit without letting the elbows drop or the shoulders move.",
+      "returnPhase": "Extend both elbows under control and lower the body back along the same straight line.",
+      "controlledJoints": "Create the repetition only at the elbows while keeping the palms up and the wrists steady.",
+      "supportAndPosture": "Brace the trunk and hips, keep both feet planted, and maintain even strap tension.",
+      "disqualifyingCompensations": [
+        "Dropping or swinging the upper arms adds shoulder motion.",
+        "Rotating the palms changes the reviewed palms-up fixture.",
+        "Bending at the hips or arching the low back breaks the straight-body position."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "brachialis",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "primary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
         "role": "stabilizer"
       }
     ]
@@ -10720,6 +11072,102 @@
     ]
   },
   {
+    "familyID": "horizontal-press",
+    "familyName": "Horizontal Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-chest-press",
+    "name": "TRX Chest Press",
+    "group": "chest",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Suspension Chest Press",
+      "Suspension Trainer Chest Press"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Face away from the anchor with one handle in each hand at shoulder height, palms down, feet behind you, and the body straight and leaning forward.",
+      "movement": "Bend both elbows along a controlled path and lower the chest between the handles while the shoulder blades move naturally.",
+      "endpoint": "Stop when the chest reaches handle level without the handles or straps contacting the arms.",
+      "returnPhase": "Press through both handles, extend the elbows, and bring the hands forward while maintaining the straight-body line.",
+      "controlledJoints": "Bring the upper arms forward across the chest, extend the elbows, and let the shoulder blades move around the rib cage without turning the movement overhead.",
+      "supportAndPosture": "Brace the trunk and hips, keep both feet planted, and maintain even tension in both straps.",
+      "disqualifyingCompensations": [
+        "Placing the feet in the cradles changes the exercise into a suspended push-up fixture.",
+        "Opening the arms with nearly straight elbows changes the exercise into a suspension fly.",
+        "Sagging or piking at the hips breaks the reviewed standing press position."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "incline-press",
     "familyName": "Incline Press",
     "movementActions": [
@@ -12461,6 +12909,176 @@
       {
         "muscle": "tensorFasciaeLatae",
         "role": "secondary"
+      }
+    ]
+  },
+  {
+    "familyID": "lateral-lunge",
+    "familyName": "Lateral Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
+    "catalogID": "trx-lateral-lunge",
+    "name": "TRX Lateral Lunge",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Suspension Lateral Lunge",
+      "TRX Side Lunge"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Face the anchor with one handle in each hand and stand with both feet together.",
+      "movement": "Step one foot directly to the side, sit into that hip and knee, and keep the other leg long while using the straps only for balance.",
+      "endpoint": "Reach a controlled side-lunge depth with the stepping foot planted and the trunk steady.",
+      "returnPhase": "Drive through the stepping foot and return to the original feet-together stance.",
+      "controlledJoints": "Track the working knee with the foot and let the working hip and knee create the return.",
+      "supportAndPosture": "Keep light even tension in both straps without deliberate trunk rotation or side bending.",
+      "disqualifyingCompensations": [
+        "Stepping forward or backward changes the lunge direction.",
+        "Remaining in a wide stance changes the step-and-return fixture.",
+        "Pulling the body back with the arms changes the intended lower-body action."
+      ],
+      "sideOrDirection": "Complete the prescribed repetitions to one side, then repeat to the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorLongusBrevis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorMagnus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gracilis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectineus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "secondary"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
       }
     ]
   },
@@ -18152,6 +18770,132 @@
     ]
   },
   {
+    "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-low-row",
+    "name": "TRX Low Row",
+    "group": "back",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "horizontal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Suspension Low Row",
+      "TRX Tucked-Elbow Row"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Face the anchor with one handle in each hand, palms facing, feet forward, arms long, and the body straight and inclined.",
+      "movement": "Pull the handles toward the lower chest and ribs while keeping both elbows tucked beside the torso.",
+      "endpoint": "Finish with the chest near the handles and the shoulder blades drawn together without changing the straight-body line.",
+      "returnPhase": "Extend the elbows under control and lower the body back along the same line.",
+      "controlledJoints": "Move the upper arms behind the torso, draw the shoulder blades together, and bend the elbows without driving through the hips.",
+      "supportAndPosture": "Brace the trunk and hips, keep both feet planted, and maintain even tension in the straps.",
+      "disqualifyingCompensations": [
+        "Flaring the upper arms to shoulder height changes the exercise into a high row.",
+        "Opening straight arms into a T changes the exercise into a reverse fly.",
+        "Bending at the hips or arching the low back breaks the reviewed straight-body fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "shoulder-external-rotation",
     "familyName": "Shoulder External Rotation",
     "movementActions": [
@@ -19208,6 +19952,128 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "shoulder-horizontal-abduction-row",
+    "familyName": "Shoulder-Height Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-high-row",
+    "name": "TRX High Row",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Suspension High Row",
+      "TRX Flared-Elbow Row"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Face the anchor with one handle in each hand, palms facing, feet forward, body straight and inclined, and arms reaching toward the anchor.",
+      "movement": "Pull the upper arms out at shoulder height and bend the elbows to about 90 degrees while drawing the shoulder blades together.",
+      "endpoint": "Finish with the elbows flared at shoulder height and the handles near the sides of the face or upper chest.",
+      "returnPhase": "Extend the arms under control and lower the body back along the same straight line.",
+      "controlledJoints": "Move the upper arms out and back at shoulder height, draw the shoulder blades together, and bend the elbows without deliberately rotating the arms.",
+      "supportAndPosture": "Brace the trunk and hips, keep both feet planted, and maintain even strap tension.",
+      "disqualifyingCompensations": [
+        "Tucking the elbows toward the ribs changes the exercise into a low row.",
+        "Keeping the elbows straight and opening into a T changes the exercise into a reverse fly.",
+        "Rotating the forearms or shoulders to finish changes the reviewed high-row action."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidPosterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
         "role": "stabilizer"
       }
     ]
@@ -21891,6 +22757,417 @@
       },
       {
         "muscle": "rectusFemoris",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "suspension-assisted-single-leg-squat",
+    "familyName": "Suspension-Assisted Single-Leg Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-single-leg-squat",
+    "name": "TRX Single-Leg Squat",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Suspension Single-Leg Squat",
+      "TRX Assisted Single-Leg Squat"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Face the anchor, hold both handles, balance on one foot, and extend the free leg straight forward without touching the floor.",
+      "movement": "Sit the hips down and back as the working knee bends, using the straps for controlled balance and only as much ascent assistance as needed.",
+      "endpoint": "Reach your deepest controlled single-leg squat while keeping the planted foot stable and the free leg extended forward off the floor.",
+      "returnPhase": "Drive through the planted foot to extend the hip and knee and return to standing.",
+      "controlledJoints": "Let the working hip, knee, and ankle move together while the arms provide controlled assistance without replacing the planted-leg drive.",
+      "supportAndPosture": "Keep the trunk controlled, the working knee tracking with the foot, and light even tension in both straps.",
+      "disqualifyingCompensations": [
+        "Touching the nonworking foot down changes the single-leg fixture.",
+        "Pulling the body upright with the arms changes the intended lower-body action.",
+        "Turning away from the anchor or placing a foot in a cradle leaves the reviewed fixture."
+      ],
+      "sideOrDirection": "Complete the prescribed repetitions on one working leg, then repeat on the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "suspension-hamstring-curl",
+    "familyName": "Suspension Hamstring Curl",
+    "movementActions": [
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-hamstring-curl",
+    "name": "TRX Hamstring Curl",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Suspension Hamstring Curl",
+      "TRX Leg Curl"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with both heels in the foot cradles, legs long, arms on the floor, and the straps set around mid-calf height.",
+      "movement": "Lift the hips and hold them elevated, then bend both knees to draw the heels toward the hips.",
+      "endpoint": "Stop at your controlled knee-flexion limit while the pelvis remains lifted and level.",
+      "returnPhase": "Extend both knees slowly until the legs are long, keeping the hips elevated.",
+      "controlledJoints": "Create the repetition at the knees; hold the hip position instead of repeatedly bridging.",
+      "supportAndPosture": "Keep the head, shoulders, and arms supported and maintain even pressure through both heels.",
+      "disqualifyingCompensations": [
+        "Dropping and re-lifting the hips turns the repetition into a bridge-dominant action.",
+        "Using one leg changes the two-leg fixture.",
+        "Placing the feet on the floor or a slider leaves the suspension-trainer fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "primary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "suspension-hip-press",
+    "familyName": "Suspension Hip Press",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-hip-press",
+    "name": "TRX Hip Press",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Suspension Hip Press",
+      "TRX Hip Bridge"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with both heels in the foot cradles, both knees bent, arms on the floor, and the straps set around mid-calf height.",
+      "movement": "Press through both heels and extend the hips to lift the pelvis while holding the knee angles steady.",
+      "endpoint": "Stop when the hips reach neutral and the trunk and thighs form a straight line without the low back arching.",
+      "returnPhase": "Lower the pelvis under control while keeping both knees bent and both heels in the cradles.",
+      "controlledJoints": "Create the repetition at the hips; do not curl or straighten the knees to move the body.",
+      "supportAndPosture": "Keep the head, shoulders, and arms supported, the pelvis level, and pressure even through both heels.",
+      "disqualifyingCompensations": [
+        "Bending and straightening the knees turns the repetition into a hamstring curl.",
+        "Overarching the low back instead of extending the hips leaves the reviewed bridge.",
+        "Using one leg changes the two-leg fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "suspension-horizontal-abduction",
+    "familyName": "Suspension Horizontal Abduction",
+    "movementActions": [
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "trx-reverse-fly",
+    "name": "TRX Reverse Fly",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Suspension Reverse Fly",
+      "TRX T Fly"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set the straps to mid-length, face the anchor with an overhand grip, walk the feet forward, and hold a straight inclined body with a slight elbow bend.",
+      "movement": "Open both arms out at shoulder height while drawing the shoulder blades together and holding the slight elbow bend.",
+      "endpoint": "Finish in a controlled T position with the chest lifted toward the handles and no elbow pull.",
+      "returnPhase": "Bring the hands back together under control while keeping the body in one straight line.",
+      "controlledJoints": "Move both arms outward at shoulder height and draw the shoulder blades together while holding the elbow angle and overhand grip.",
+      "supportAndPosture": "Brace the trunk and hips so the body moves as one unit, and keep both straps evenly tensioned.",
+      "disqualifyingCompensations": [
+        "Bending the elbows to pull the handles toward the body changes the exercise into a row.",
+        "Rotating the shoulders to finish changes the fixture into an external-rotation drill.",
+        "Arching the low back or losing the straight-body line changes the reviewed setup."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidPosterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "primary"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
         "role": "stabilizer"
       }
     ]

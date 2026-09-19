@@ -17,7 +17,9 @@
     "wattanaprakornkul-2011-rotator-cuff-bench-press-and-row",
     "youdas-2016-inverted-row",
     "youdas-2021-suspension-row",
-    "lincoln-2022-landmine-row"
+    "lincoln-2022-landmine-row",
+    "trx-2022-suspension-foundations",
+    "giancotti-2021-suspension-load"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -40,7 +42,8 @@
       "dumbbell",
       "cable",
       "machine",
-      "bodyweight"
+      "bodyweight",
+      "suspensionTrainer"
     ],
     "modalities": [
       "dynamicStrength"
@@ -50,7 +53,8 @@
     ],
     "loadModes": [
       "external",
-      "bodyweightAdded"
+      "bodyweightAdded",
+      "nonComparable"
     ],
     "lateralities": [
       "bilateral",
@@ -215,7 +219,8 @@
         "hipHinged",
         "seated",
         "prone",
-        "supineSuspended"
+        "supineSuspended",
+        "inclinedStandingFacingAnchor"
       ]
     },
     {
@@ -381,9 +386,33 @@
         "freeBar",
         "landmine"
       ]
+    },
+    {
+      "id": "suspensionApparatus",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed independently moving suspension handles.",
+      "allowedValues": ["independentHandlesSingleAnchor"]
+    },
+    {
+      "id": "bodyInclination",
+      "valueType": "enum",
+      "required": false,
+      "description": "The standing body angle selected by foot position.",
+      "allowedValues": ["selfSelectedControlled"]
     }
   ],
   "exerciseRules": [
+    {
+      "id": "non-comparable-row-is-suspension-only",
+      "description": "Only the suspension low row uses a non-comparable load; external and fixed-bar bodyweight rows retain their authored load modes.",
+      "when": {"field": "loadMode", "operator": "equals", "value": "nonComparable"},
+      "then": [
+        {"field": "equipment", "value": "suspensionTrainer"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
     {
       "id": "bodyweight-uses-closed-chain-load-semantics",
       "description": "Bodyweight rows use a closed chain, feet-supported suspended body, and explicit apparatus and leverage without pinning grip or upper-arm path.",
@@ -444,12 +473,11 @@
       "id": "non-bodyweight-uses-open-chain-external-load",
       "description": "Every externally loaded row is open chain, has no bodyweight leverage support, and uses zero bodyweight fraction.",
       "when": {
-        "field": "equipment",
-        "operator": "notEquals",
-        "value": "bodyweight"
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "external"
       },
       "then": [
-        { "field": "loadMode", "value": "external" },
         { "field": "bodyweightFraction", "value": 0 },
         { "field": "variant.kineticChain", "value": "open" },
         { "field": "variant.lowerBodySupport", "value": "none" }
@@ -457,8 +485,35 @@
       "requirePresent": [],
       "requireAbsent": [
         "variant.bodyweightApparatus",
-        "variant.bodyLeverage"
+        "variant.bodyLeverage",
+        "variant.suspensionApparatus",
+        "variant.bodyInclination"
       ]
+    },
+    {
+      "id": "suspension-low-row-fixture",
+      "description": "The suspension branch is a closed-chain inclined standing row with neutral independent handles, tucked elbows, and no invented load value.",
+      "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [
+        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "bodyweightFraction", "value": 0},
+        {"field": "variant.kineticChain", "value": "closed"},
+        {"field": "variant.bodyPosition", "value": "inclinedStandingFacingAnchor"},
+        {"field": "variant.lowerBodySupport", "value": "feet"},
+        {"field": "variant.torsoSupport", "value": "none"},
+        {"field": "variant.gripOrientation", "value": "neutral"},
+        {"field": "variant.relativeGripWidth", "value": "shoulderWidth"},
+        {"field": "variant.upperArmPath", "value": "tucked"},
+        {"field": "variant.fixedPath", "value": false},
+        {"field": "variant.interRepSupport", "value": "none"},
+        {"field": "variant.contralateralSupport", "value": "none"},
+        {"field": "variant.externalPath", "value": "free"},
+        {"field": "variant.suspensionApparatus", "value": "independentHandlesSingleAnchor"},
+        {"field": "variant.bodyInclination", "value": "selfSelectedControlled"}
+      ],
+      "requirePresent": ["variant.suspensionApparatus", "variant.bodyInclination"],
+      "requireAbsent": ["variant.bodyweightApparatus", "variant.bodyLeverage", "variant.machineType", "variant.barbellSetup"],
+      "requireAdditionalStabilityDemands": ["spine", "pelvis", "hip"]
     },
     {
       "id": "machine-requires-fixed-path-and-type",
@@ -556,6 +611,7 @@
         "value": "barbell"
       },
       "then": [
+        { "field": "loadMode", "value": "external" },
         {
           "field": "variant.bodyPosition",
           "value": "hipHinged"
@@ -581,6 +637,7 @@
         "value": "dumbbell"
       },
       "then": [
+        { "field": "loadMode", "value": "external" },
         { "field": "variant.bodyPosition", "allowedValues": ["hipHinged", "prone"] },
         { "field": "variant.gripOrientation", "value": "neutral" },
         { "field": "variant.fixedPath", "value": false }
@@ -613,6 +670,7 @@
         "value": "cable"
       },
       "then": [
+        { "field": "loadMode", "value": "external" },
         { "field": "variant.bodyPosition", "value": "seated" },
         { "field": "variant.torsoSupport", "value": "none" },
         { "field": "variant.gripOrientation", "allowedValues": ["neutral", "pronated"] },
@@ -887,6 +945,7 @@
         "value": "machine"
       },
       "then": [
+        { "field": "loadMode", "value": "external" },
         {
           "field": "variant.externalPath",
           "value": "machineConstrained"
@@ -2057,6 +2116,67 @@
           "Flaring the elbows changes the reviewed shoulder-extension path.",
           "Using a chest pad changes this unsupported fixture."
         ]
+      }
+    },
+    {
+      "catalogID": "trx-low-row",
+      "name": "TRX Low Row",
+      "aliases": ["Suspension Low Row", "TRX Tucked-Elbow Row"],
+      "equipment": "suspensionTrainer",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "lats", "role": "primary"},
+        {"muscle": "teresMajor", "role": "secondary"},
+        {"muscle": "deltoidPosterior", "role": "secondary"},
+        {"muscle": "bicepsBrachii", "role": "secondary"},
+        {"muscle": "brachialis", "role": "secondary"},
+        {"muscle": "brachioradialis", "role": "secondary"},
+        {"muscle": "trapeziusMiddle", "role": "secondary"},
+        {"muscle": "rhomboids", "role": "secondary"},
+        {"muscle": "trapeziusLower", "role": "secondary"},
+        {"muscle": "subscapularis", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "gluteMax", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "inclinedStandingFacingAnchor",
+        "lowerBodySupport": "feet",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "shoulderWidth",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none",
+        "externalPath": "free",
+        "suspensionApparatus": "independentHandlesSingleAnchor",
+        "bodyInclination": "selfSelectedControlled"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": ["spine", "pelvis", "hip"],
+      "evidenceRefs": ["trx-2022-suspension-foundations", "youdas-2021-suspension-row", "giancotti-2021-suspension-load"],
+      "execution": {
+        "startingPosition": "Face the anchor with one handle in each hand, palms facing, feet forward, arms long, and the body straight and inclined.",
+        "movement": "Pull the handles toward the lower chest and ribs while keeping both elbows tucked beside the torso.",
+        "endpoint": "Finish with the chest near the handles and the shoulder blades drawn together without changing the straight-body line.",
+        "returnPhase": "Extend the elbows under control and lower the body back along the same line.",
+        "controlledJoints": "Move the upper arms behind the torso, draw the shoulder blades together, and bend the elbows without driving through the hips.",
+        "supportAndPosture": "Brace the trunk and hips, keep both feet planted, and maintain even tension in the straps.",
+        "disqualifyingCompensations": ["Flaring the upper arms to shoulder height changes the exercise into a high row.", "Opening straight arms into a T changes the exercise into a reverse fly.", "Bending at the hips or arching the low back breaks the reviewed straight-body fixture."]
       }
     }
   ]

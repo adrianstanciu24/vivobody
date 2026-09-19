@@ -1,0 +1,103 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "suspension-hip-press",
+  "name": "Suspension Hip Press",
+  "definition": "A bilateral supine suspension-trainer bridge with both heels in the foot cradles and both knees held bent. Hip extension raises the pelvis to a controlled neutral endpoint before a controlled return; the knees do not curl and extend to create the repetition. The fixture is rep-tracked and non-comparable because strap length, body position, and technique change the effective load. Suspension hamstring curls, straight-leg hip lifts, single-leg bridges, floor bridges, and externally loaded hip thrusts remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "usmc-2026-trx-strength-library", "harris-2017-suspension-muscle-activation", "ace-2026-trx-hip-press", "trx-2022-tennis-hip-press"],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {
+    "equipment": ["suspensionTrainer"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension"],
+    "forbiddenPrimeActions": ["spine.extension", "knee.flexion", "knee.extension", "ankle.plantarflexion"],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}
+    ],
+    "allowedByRole": {
+      "primary": ["gluteMax"],
+      "secondary": ["medialHamstrings"],
+      "stabilizer": ["bicepsFemoris", "abs", "obliques", "lumbarExtensors", "gluteMed", "soleus", "tibialisAnterior"]
+    }
+  },
+  "variantAxes": [
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed floor posture.", "allowedValues": ["supineOnFloor"]},
+    {"id": "upperBodySupport", "valueType": "enum", "required": true, "description": "The upper body remains floor supported.", "allowedValues": ["headShouldersArmsOnFloor"]},
+    {"id": "footSupport", "valueType": "enum", "required": true, "description": "Both heels are carried by the suspension trainer.", "allowedValues": ["bothHeelsInFootCradles"]},
+    {"id": "kneePosition", "valueType": "enum", "required": true, "description": "The knees stay bent instead of curling through the repetition.", "allowedValues": ["flexedAndHeld"]},
+    {"id": "hipMotion", "valueType": "enum", "required": true, "description": "The hips create the bridge repetition.", "allowedValues": ["extendsThenReturns"]},
+    {"id": "endpoint", "valueType": "enum", "required": true, "description": "The reviewed top position.", "allowedValues": ["hipsNeutral"]},
+    {"id": "strapPosition", "valueType": "enum", "required": true, "description": "The reviewed suspension-trainer length.", "allowedValues": ["midCalf"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "The straps do not constrain the body to a machine path.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "trx-hip-press",
+      "name": "TRX Hip Press",
+      "aliases": ["Suspension Hip Press", "TRX Hip Bridge"],
+      "equipment": "suspensionTrainer",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "medialHamstrings", "role": "secondary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"},
+        {"muscle": "tibialisAnterior", "role": "stabilizer"}
+      ],
+      "variant": {
+        "bodyPosition": "supineOnFloor",
+        "upperBodySupport": "headShouldersArmsOnFloor",
+        "footSupport": "bothHeelsInFootCradles",
+        "kneePosition": "flexedAndHeld",
+        "hipMotion": "extendsThenReturns",
+        "endpoint": "hipsNeutral",
+        "strapPosition": "midCalf",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["usmc-2026-trx-strength-library", "harris-2017-suspension-muscle-activation", "ace-2026-trx-hip-press", "trx-2022-tennis-hip-press"],
+      "execution": {
+        "startingPosition": "Lie on your back with both heels in the foot cradles, both knees bent, arms on the floor, and the straps set around mid-calf height.",
+        "movement": "Press through both heels and extend the hips to lift the pelvis while holding the knee angles steady.",
+        "endpoint": "Stop when the hips reach neutral and the trunk and thighs form a straight line without the low back arching.",
+        "returnPhase": "Lower the pelvis under control while keeping both knees bent and both heels in the cradles.",
+        "controlledJoints": "Create the repetition at the hips; do not curl or straighten the knees to move the body.",
+        "supportAndPosture": "Keep the head, shoulders, and arms supported, the pelvis level, and pressure even through both heels.",
+        "disqualifyingCompensations": [
+          "Bending and straightening the knees turns the repetition into a hamstring curl.",
+          "Overarching the low back instead of extending the hips leaves the reviewed bridge.",
+          "Using one leg changes the two-leg fixture."
+        ]
+      }
+    }
+  ]
+}

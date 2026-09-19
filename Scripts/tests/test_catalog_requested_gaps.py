@@ -28,6 +28,13 @@ SECOND_WAVE_RECORD_IDS = {
     "simultaneous-bilateral-dumbbell-front-raise",
 }
 
+TRX_SUSPENSION_RECORD_IDS = {
+    "trx-squat", "trx-single-leg-squat", "trx-reverse-lunge",
+    "trx-lateral-lunge", "trx-hamstring-curl", "trx-hip-press",
+    "trx-low-row", "trx-high-row", "trx-reverse-fly",
+    "trx-biceps-curl", "trx-chest-press",
+}
+
 
 class RequestedCatalogGapTests(unittest.TestCase):
     @classmethod
@@ -68,7 +75,9 @@ class RequestedCatalogGapTests(unittest.TestCase):
     def test_existing_runtime_records_are_preserved(self):
         families = [catalog.load_json(p) for p in catalog.FAMILIES_ROOT.glob("*.json")]
         records = [r for r in catalog.compile_runtime_catalog(families)
-                   if r["catalogID"] not in set(OWNERS) | SECOND_WAVE_RECORD_IDS]
+                   if r["catalogID"] not in (
+                       set(OWNERS) | SECOND_WAVE_RECORD_IDS | TRX_SUSPENSION_RECORD_IDS
+                   )]
         self.assertEqual(len(records), 254)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()
         # Reviewed runtime after later catalog additions; source-only support

@@ -686,7 +686,7 @@
       "doi": "10.1177/1941738120945986",
       "pmid": "32940548",
       "url": "https://doi.org/10.1177/1941738120945986",
-      "scope": "Surface EMG in 28 participants across low, high, and horizontal-abduction suspension rows. Distinct excitation profiles support separating shoulder-extension rows from flared horizontal-abduction rows; the article appeared online in 2020 and in the 2021 journal issue."
+      "scope": "Surface EMG in 28 participants across low, high, and horizontal-abduction suspension rows performed from a fixed 45-degree body angle. The low row combined shoulder extension and adduction with scapular retraction, depression, and downward rotation; the high row ended near 90 degrees of shoulder horizontal abduction and elbow flexion; the horizontal-abduction row kept the elbow extended. Distinct excitation profiles support separating these fixtures, but the study does not establish self-selected-angle load equivalence, rhomboid or cuff rankings, or hypertrophy. The article appeared online in 2020 and in the 2021 journal issue."
     },
     {
       "id": "fennell-2016-shoulder-retractor-row",
@@ -4852,6 +4852,189 @@
       "year": 2026,
       "url": "https://library.theprehabguys.com/vimeo-video/single-leg-bridge-pelvic-floor-contraction/",
       "scope": "Undated Prehab exercise-library standard registered with retrieval year 2026, not a claimed publication year. It directly instructs a floor single-leg bridge with the suspended hip and knee each bent to ninety degrees, an abdominal brace that avoids low-back arching, hip elevation, and a controlled return. It anchors the requested free-leg geometry but adds a pelvic-floor breathing emphasis and does not report working-knee angle, pelvic kinematics, cadence, muscle activity, load contribution, comparative outcomes, or a both-sides prescription."
+    },
+    {
+      "id": "trx-2026-suspension-exercise-guide",
+      "sourceType": "officialTechnicalStandard",
+      "title": "20 TRX Exercises to Do With a Suspension Trainer + Workouts",
+      "authors": [
+        "TRX Training",
+        "Tristan Z"
+      ],
+      "year": 2026,
+      "url": "https://www.trxtraining.com/blogs/news/trx-exercises",
+      "scope": "TRX's official guide defines suspension training as bodyweight resistance through two straps sharing one anchor and explains angle- and foot-position scaling. It directly specifies the conventional bilateral squat and lateral-lunge handle-supported fixtures and the mid-length, palms-up Biceps Curl with a straight body, high stationary elbows, and hands finishing beside the face; it also lists chest press and hamstring curl in rep-counted strength sessions. It establishes apparatus identity, direction, support, repetition tracking, and variable-angle resistance; it does not establish a universal bodyweight fraction, joint kinetics, categorical whole-roster muscle rankings, hypertrophy, or medical benefits."
+    },
+    {
+      "id": "trx-2022-suspension-foundations",
+      "sourceType": "officialTechnicalStandard",
+      "title": "What Is Suspension Training?",
+      "authors": [
+        "TRX Training"
+      ],
+      "year": 2022,
+      "url": "https://www.trxtraining.com/blogs/news/what-is-suspension-training",
+      "scope": "TRX's official foundation guide specifies a single overhead anchor, independent handles or foot cradles, angle-based progression, a neutral-grip tucked-elbow row, a forward-leaning bilateral chest press, a lightly handle-supported bilateral squat, and a supine hips-elevated hamstring curl. It anchors conventional fixture geometry and controlled repetitions, not a portable resistance fraction, measured joint actions, quantitative muscle rankings, hypertrophy, or medical outcomes."
+    },
+    {
+      "id": "usmc-2026-trx-strength-library",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Exercise Video Links: Strength and Power",
+      "authors": [
+        "United States Marine Corps Human Performance Branch"
+      ],
+      "year": 2026,
+      "url": "https://www.fitness.marines.mil/Strength-and-Power-Copy-Light/",
+      "scope": "The current Marine Corps HITT strength index recognizes distinct TRX Biceps Curl, Chest Press, Hamstring Curl, High Row, Hip Press, Low Row, Single-Leg Squat, Squat, and Step-Back Lunge names. It supports fixture identity only: the linked demonstrations are not relied on for auditable geometry, load equivalence, complete three-dimensional kinematics, muscle force, or categorical role rankings."
+    },
+    {
+      "id": "harris-2017-suspension-muscle-activation",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Muscle Activation Patterns During Suspension Training Exercises",
+      "authors": [
+        "Sean Harris",
+        "Elise Ruffin",
+        "Wayne Brewer",
+        "Alexis Ortiz"
+      ],
+      "year": 2017,
+      "pmid": "28217415",
+      "pmcid": "PMC5294946",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5294946/",
+      "scope": "Twenty-five healthy adults performed suspension bridge, push-up, inverted-row, and plank conditions while surface EMG recorded selected trunk, shoulder, chest, and gluteal regions. It supports suspension-specific trunk control and the broad press, row, and bridge role envelopes. It does not measure every authored muscle, establish force or hypertrophy, or make the tested horizontal push-up and inverted-row setups identical to the requested adjustable standing fixtures."
+    },
+    {
+      "id": "mok-2015-core-suspension-exercises",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Core Muscle Activity During Suspension Exercises",
+      "authors": [
+        "Nicola W. Mok",
+        "Ella W. Yeung",
+        "Jeran C. Cho",
+        "Samson C. Hui",
+        "Kimee C. Liu",
+        "Coleman H. Pang"
+      ],
+      "year": 2015,
+      "doi": "10.1016/j.jsams.2014.01.002",
+      "pmid": "24556020",
+      "url": "https://doi.org/10.1016/j.jsams.2014.01.002",
+      "scope": "Young healthy adults performed suspension hamstring curl, chest press, hip-abduction plank, and forty-five-degree row holds while surface EMG recorded abdominal and superficial lumbar multifidus regions. It directly supports trunk-control demands in the named suspension fixtures, not dynamic prime-mover rankings, load equivalence, medical claims, or every requested execution detail."
+    },
+    {
+      "id": "snarr-esco-2013-suspension-pushup",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographic Comparison of Traditional and Suspension Push-Ups",
+      "authors": [
+        "Ronald L. Snarr",
+        "Michael R. Esco"
+      ],
+      "year": 2013,
+      "doi": "10.2478/hukin-2013-0070",
+      "pmid": "24511343",
+      "pmcid": "PMC3916913",
+      "url": "https://doi.org/10.2478/hukin-2013-0070",
+      "scope": "Twenty-one adults performed a horizontal TRX suspension push-up with hands in independent handles while surface EMG recorded pectoralis major, anterior deltoid, and triceps brachii. It directly supports the suspension horizontal-press prime-mover envelope and independent-handle instability, but its foot-height handles and horizontal body position are more demanding than the requested adjustable standing chest press and do not establish a universal load fraction."
+    },
+    {
+      "id": "giancotti-2021-suspension-load",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Evaluation of Training Load During Suspension Exercise",
+      "authors": [
+        "Giuseppe Francesco Giancotti",
+        "Andrea Fusco",
+        "Carlo Varalda",
+        "Giovanni Capelli",
+        "Cristina Cortis"
+      ],
+      "year": 2021,
+      "doi": "10.1519/JSC.0000000000003100",
+      "pmid": "30893278",
+      "url": "https://doi.org/10.1519/JSC.0000000000003100",
+      "scope": "Thirty adults performed static suspension rows at seven strap lengths and flexed or extended elbow positions. Ground-reaction force and body inclination changed with strap length and elbow position, directly supporting fixture-variable loading and rejection of a universal suspension bodyweight fraction. The static back-row equations are not portable to presses, lower-body exercises, dynamic phases, or unrecorded setups."
+    },
+    {
+      "id": "trx-2024-chest-press-technique",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Exercise Tutorial: TRX Chest Press",
+      "authors": [
+        "TRX Training",
+        "Tristan Z"
+      ],
+      "year": 2024,
+      "url": "https://www.trxtraining.com/blogs/news/trx-chest-press",
+      "scope": "TRX's official chest-press technique guide specifies fully lengthened straps, a facing-away forward lean, handles at shoulder height, a straight braced body, and a descent until the chest reaches handle level before pressing away. It establishes the requested standing fixture and endpoint, but does not report a fixed elbow angle, universal body inclination, portable load fraction, comparative muscle ranking, or medical outcome."
+    },
+    {
+      "id": "trx-2023-shoulder-exercises",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Try These 8 TRX Shoulder Exercises for Muscle & Strength",
+      "authors": [
+        "TRX Training",
+        "Tristan Z"
+      ],
+      "year": 2023,
+      "url": "https://www.trxtraining.com/blogs/news/trx-shoulder-exercises",
+      "scope": "TRX's official shoulder guide specifies the T Delt Fly with mid-length straps, facing the anchor, an overhand grip, a slight held elbow bend, a straight braced body, and an outward shoulder-height T path. It describes the fixture as focused rear-deltoid isolation and anchors the requested suspension reverse-fly setup and endpoint, but does not quantify a portable resistance fraction, joint kinetics, categorical whole-roster muscle rankings, hypertrophy, or medical outcomes."
+    },
+    {
+      "id": "trx-2024-squat-technique",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Exercise Tutorial: TRX Squat",
+      "authors": [
+        "TRX Training",
+        "Tristan Z"
+      ],
+      "year": 2024,
+      "url": "https://www.trxtraining.com/blogs/news/trx-squat",
+      "scope": "TRX's official squat tutorial specifies mid-length straps, standing facing the anchor, shoulder-width feet, a neutral handle grip with elbows initially at the sides, a braced chest-up descent with knees tracking over the toes, balance support without hanging from the straps, and a heel-driven return. It anchors this exact fixture but does not define a universal squat depth, portable resistance fraction, joint kinetics, categorical muscle rankings, or medical outcomes."
+    },
+    {
+      "id": "trx-2026-single-leg-balance-guide",
+      "sourceType": "officialTechnicalStandard",
+      "title": "12 Single Leg Balance Exercises for Stronger Stability",
+      "authors": [
+        "TRX Training",
+        "Tristan Zheng"
+      ],
+      "year": 2026,
+      "url": "https://www.trxtraining.com/blogs/news/single-balance-leg-exercises",
+      "scope": "TRX's official assisted-pistol instructions specify an overhead anchor, both handles held while facing the anchor, one leg extended straight forward, a controlled single-leg descent, and a heel-driven ascent with arm assistance reduced as ability improves. It anchors the forward free-leg position and permitted assistance, but not a universal depth, portable resistance fraction, joint kinetics, categorical muscle rankings, or medical outcomes."
+    },
+    {
+      "id": "trx-2022-step-back-lunge",
+      "sourceType": "officialTechnicalStandard",
+      "title": "TRX Moves of the Week: TRX For Fun",
+      "authors": [
+        "TRX Training",
+        "Britny Fowler"
+      ],
+      "year": 2022,
+      "url": "https://www.trxtraining.com/blogs/news/trx-moves-of-the-week-trx-for-fun",
+      "scope": "TRX's official Step Back Lunge instructions specify mid-length straps, standing tall facing the anchor with elbows at the sides, a large rearward step, the rear knee lowering toward the floor, a chest-up return through the standing heel, and alternating sides. It anchors the requested reverse-lunge fixture but does not define a universal stride length, portable resistance fraction, joint kinetics, categorical muscle rankings, or medical outcomes."
+    },
+    {
+      "id": "ace-2026-trx-hip-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "TRX Hip Press",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/90/trx-reg-hip-press/",
+      "scope": "Undated ACE exercise-library guidance registered with retrieval year 2026, not a claimed publication year. It specifies heels in the cradles, a floor-supported face-up setup, hamstring curling to establish the bent-knee start, and hip-only repetitions that press the pelvis toward the ceiling before returning to the bent-knee position while the torso remains rigid. It anchors the owner-approved pure hip-press repetition after setup, including neutral-spine control, but does not establish a portable resistance fraction, muscle-force ranking, or medical outcome."
+    },
+    {
+      "id": "trx-2022-tennis-hip-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Top 5 TRX Exercises to Improve Your Tennis Game",
+      "authors": [
+        "TRX Training",
+        "Jessica Schwab"
+      ],
+      "year": 2022,
+      "url": "https://www.trxtraining.com/blogs/news/d",
+      "scope": "TRX's official Hip Press instructions specify mid-calf straps, heels in the foot cradles, legs initially extended below the anchor, a knees-over-hips ninety-degree setup, and repeated hip presses toward the ceiling while that knee geometry stays aligned. It anchors the owner-approved hip-only repetition and strap length but does not establish a portable resistance fraction, muscle-force ranking, or medical outcome."
     }
   ]
 }

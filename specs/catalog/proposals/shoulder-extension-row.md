@@ -600,8 +600,8 @@ otherwise it must not be registered because unused evidence fails validation.
 
 ## Review status
 
-All 12 discovery decisions were reviewed and accepted. The family contract,
-its 12-exercise coverage roster, and its evidence records are now active
+All discovery decisions were reviewed and accepted. The family contract,
+its 13-exercise coverage roster, and its evidence records are now active
 validator input:
 
 1. The explicit `shoulder-extension-row` boundary is active; flared rows now
@@ -621,19 +621,18 @@ validator input:
    done.
 6. Bench and machine-pad support reduce trunk demand while leaving
    `scapularTranslation: free` — done.
-7. Five equipment classes plus `leverRow|smith` machine mechanisms are active;
+7. Six equipment classes plus `leverRow|smith` machine mechanisms are active;
    lever rows declare shared `linked|independent` arm configuration while Smith
-   rails omit it. T-bar/landmine, kettlebell, band, and suspension-handle rows
-   remain out — done.
+   rails omit it. The suspension low row is active as a non-comparable fixture;
+   T-bar/landmine, kettlebell, and band rows remain out — done.
 8. `lowerBodyContribution: none` is enforced; momentum and renegade rows do
    not enter as ordinary variants — done.
 9. The fixed-bar inverted row is pinned to `parallelFeetFloor` and a disclosed
    `0.73` authoring anchor — done.
 10. Conditional `requireMuscleRequirements` enforces visible unsupported-row
     trunk involvement without forcing one universal trunk muscle — done.
-11. The 12-record roster covers every admitted axis value without expanding to
+11. The 13-record roster covers every admitted axis value without expanding to
     a Cartesian product — done.
-12. All 24 JSON rules have real matching and contrasting exercises. Tests
-    independently reject mutations of all 89 enforced consequences, including
-    every `then` assertion, presence/absence constraint, exact involvement,
-    conditional muscle requirement, and additional stability demand — done.
+12. Every JSON rule has real matching and contrasting exercises. Tests reject
+    boundary mutations across assertions, presence/absence constraints, exact
+    involvement, conditional muscle requirements, and stability demands — done.

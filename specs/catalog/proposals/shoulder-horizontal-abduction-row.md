@@ -494,8 +494,8 @@ later convenience alias cannot silently collide with another family.
 | Chest-supported dumbbell rear-delt row | Own | Same signature with anterior torso support and free scapular translation. |
 | Horizontal-path lever rear-delt row | Own | Same signature with a guided external path. |
 | Single-arm cable or lever rear-delt row | Own with disclosure | Same upper-body signature plus asymmetric trunk/pelvic control; no condition-matched study. |
-| Suspension high row with elbow flexion | Defer | Mechanically belongs, but the reviewed setup does not establish a transferable effective-bodyweight fraction. |
-| Suspension “horizontal abduction row” with straight elbows | Exclude | No dynamic elbow flexion; future reverse-fly/isolation family. |
+| Suspension high row with elbow flexion | Own | The exact 45-degree setup matches the compound signature and remains non-comparable rather than inheriting a bodyweight fraction. |
+| Suspension “horizontal abduction row” with straight elbows | Exclude to sibling | No dynamic elbow flexion; the active `suspension-horizontal-abduction` isolation family owns the TRX Reverse Fly. |
 | Dumbbell reverse fly or reverse pec deck | Exclude | Elbow angle remains essentially fixed; future shoulder-horizontal-abduction isolation family. |
 | Rope face pull with deliberate external rotation | Exclude | Adds a forbidden shoulder external-rotation prime action. A face-height row without deliberate rotation is routed by its actual path, not its name. |
 | 60-degree flared cable row | Defer | Directly studied but mechanically mixed under the current family-wide exact-plane model. |
@@ -509,9 +509,9 @@ later convenience alias cannot silently collide with another family.
 | Chest-supported barbell rear-delt row | Defer | The active barbell branch is unsupported and hip-hinged; a bench-supported bar path needs its own setup review. |
 | Kipping, cheat, or momentum high row | Exclude | Hip, spine, or lower-body propulsion is part of the repetition. |
 
-The suspension high row must not inherit the active inverted row’s `0.73`
+The suspension high row does not inherit the active inverted row’s `0.73`
 bodyweight fraction. That anchor belongs to a different geometry and distal
-setup. A missing load estimate is a reason to defer the record, not to guess.
+setup, so the active suspension fixture is explicitly non-comparable.
 
 ## Evidence limitations and taxonomy gaps
 
@@ -634,7 +634,7 @@ All activation gates are closed:
 1. The stable ID, display name, strict three-action signature, transverse
    basis, exact 90-degree authoring convention, dual-primary emphasis, and
    **Shoulders** product grouping are active.
-2. Six exercises cover the reviewed equipment, support, grip, laterality, and
+2. Seven exercises cover the reviewed equipment, support, grip, laterality, and
    path surface. The five non-direct anchors—four non-cable records plus the
    unilateral cable row—remain explicitly disclosed as mechanics-derived
    rather than condition-matched.
@@ -647,9 +647,10 @@ All activation gates are closed:
    now describe the sibling-family boundary without laundering evidence across
    setups.
 5. The shared READMEs and shoulder-extension-row proposal record the active
-   handoff. Suspension, 60-degree mixed paths, diagonal high rows, reverse
-   flies, face pulls, and the additional unsupported/support variants remain
-   named deferrals or exclusions.
+   handoff. The suspension high row is active and non-comparable; straight-arm
+   suspension reverse flies route to their active isolation sibling. Sixty-degree
+   mixed paths, diagonal high rows, face pulls, and additional support variants
+   remain named deferrals or exclusions.
 6. Exact roster, axis coverage, global alias uniqueness, every rule branch,
    every rule consequence, and the important biomechanical boundary mutations
    are enforced in `Scripts/tests/test_catalog.py`.

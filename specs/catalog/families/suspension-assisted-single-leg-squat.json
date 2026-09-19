@@ -1,0 +1,115 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "suspension-assisted-single-leg-squat",
+  "name": "Suspension-Assisted Single-Leg Squat",
+  "definition": "A unilateral suspension-trainer assisted pistol squat performed facing the anchor while holding both handles. One foot remains planted, the free leg stays extended forward off the floor, and the working hip, knee, and ankle flex together before the athlete returns by hip and knee extension with ankle plantarflexion. The straps may assist balance and ascent, but the planted leg remains the working side and the free foot does not support the body. The authored fixture is rep-tracked and non-comparable because strap length, body angle, assistance, and technique change the effective load. Pistol squats without handles, split squats, rear-foot-supported squats, step-ups, and two-leg suspension squats remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "usmc-2026-trx-strength-library", "trx-2026-single-leg-balance-guide"],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {
+    "equipment": ["suspensionTrainer"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["unilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["hip.extension"],
+    "primeActions": ["hip.extension", "knee.extension", "ankle.plantarflexion"],
+    "forbiddenPrimeActions": ["shoulder.extension", "elbow.flexion", "spine.extension", "hip.abduction", "hip.adduction"],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee", "ankle", "foot", "shoulder", "elbow", "wrist", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["vasti"], "minimumRole": "primary"},
+      {"anyOf": ["gluteMax"], "minimumRole": "primary"}
+    ],
+    "allowedByRole": {
+      "primary": ["vasti", "gluteMax"],
+      "secondary": ["rectusFemoris", "gastrocnemius", "soleus"],
+      "stabilizer": ["medialHamstrings", "gluteMed", "tibialisAnterior", "abs", "obliques", "lumbarExtensors", "deltoidAnterior", "brachialis", "extensorCarpiRadialis", "fingerFlexors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The working foot remains fixed to the floor.", "allowedValues": ["closed"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed whole-body posture.", "allowedValues": ["standingFacingAnchor"]},
+    {"id": "workingFootSupport", "valueType": "enum", "required": true, "description": "The working foot contact.", "allowedValues": ["fullFootOnFloor"]},
+    {"id": "nonworkingLegPosition", "valueType": "enum", "required": true, "description": "The free leg stays straight in front without floor support.", "allowedValues": ["forwardExtendedOffFloor"]},
+    {"id": "handSupport", "valueType": "enum", "required": true, "description": "The reviewed suspension-trainer hand support.", "allowedValues": ["bothHandles"]},
+    {"id": "supportIntent", "valueType": "enum", "required": true, "description": "The straps may assist balance and the ascent while the planted leg remains the working side.", "allowedValues": ["balanceAndAscentAssistance"]},
+    {"id": "hipMotion", "valueType": "enum", "required": true, "description": "The working hip extends during ascent.", "allowedValues": ["extends"]},
+    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "The working knee extends during ascent.", "allowedValues": ["extends"]},
+    {"id": "ankleMotion", "valueType": "enum", "required": true, "description": "The working ankle plantarflexes during ascent.", "allowedValues": ["plantarflexes"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No machine fixes the body path.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "trx-single-leg-squat",
+      "name": "TRX Single-Leg Squat",
+      "aliases": ["Suspension Single-Leg Squat", "TRX Assisted Single-Leg Squat"],
+      "equipment": "suspensionTrainer",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "vasti", "role": "primary"},
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "gastrocnemius", "role": "secondary"},
+        {"muscle": "soleus", "role": "secondary"},
+        {"muscle": "medialHamstrings", "role": "stabilizer"},
+        {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "tibialisAnterior", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "deltoidAnterior", "role": "stabilizer"},
+        {"muscle": "brachialis", "role": "stabilizer"},
+        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standingFacingAnchor",
+        "workingFootSupport": "fullFootOnFloor",
+        "nonworkingLegPosition": "forwardExtendedOffFloor",
+        "handSupport": "bothHandles",
+        "supportIntent": "balanceAndAscentAssistance",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["arnold-2010-lower-limb", "usmc-2026-trx-strength-library", "trx-2026-single-leg-balance-guide"],
+      "execution": {
+        "startingPosition": "Face the anchor, hold both handles, balance on one foot, and extend the free leg straight forward without touching the floor.",
+        "movement": "Sit the hips down and back as the working knee bends, using the straps for controlled balance and only as much ascent assistance as needed.",
+        "endpoint": "Reach your deepest controlled single-leg squat while keeping the planted foot stable and the free leg extended forward off the floor.",
+        "returnPhase": "Drive through the planted foot to extend the hip and knee and return to standing.",
+        "controlledJoints": "Let the working hip, knee, and ankle move together while the arms provide controlled assistance without replacing the planted-leg drive.",
+        "supportAndPosture": "Keep the trunk controlled, the working knee tracking with the foot, and light even tension in both straps.",
+        "disqualifyingCompensations": [
+          "Touching the nonworking foot down changes the single-leg fixture.",
+          "Pulling the body upright with the arms changes the intended lower-body action.",
+          "Turning away from the anchor or placing a foot in a cradle leaves the reviewed fixture."
+        ],
+        "sideOrDirection": "Complete the prescribed repetitions on one working leg, then repeat on the other side."
+      }
+    }
+  ]
+}

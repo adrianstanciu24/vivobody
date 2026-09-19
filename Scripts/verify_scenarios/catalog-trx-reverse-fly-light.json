@@ -1,0 +1,53 @@
+{
+  "name": "catalog-trx-reverse-fly-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPull"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^TRX Reverse Fly,"
+        },
+        "direction": "up",
+        "maxSwipes": 80
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^TRX Reverse Fly,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "TRX Reverse Fly"
+    },
+    {
+      "labelContains": "Muscles used by TRX Reverse Fly"
+    }
+  ],
+  "forbidden": []
+}

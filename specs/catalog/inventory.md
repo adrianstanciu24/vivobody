@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 108 |
-| Exercises | 265 |
+| Reviewed families | 112 |
+| Exercises | 276 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 302 |
+| Evidence sources | 316 |
 
 ## Family roster
 
@@ -32,7 +32,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [anti-rotation](families/anti-rotation.json) | 1 |
 | [belt-loaded-machine-glute-bridge](families/belt-loaded-machine-glute-bridge.json) | 1 |
 | [bicycle-crunch](families/bicycle-crunch.json) | 1 |
-| [bilateral-squat](families/bilateral-squat.json) | 6 |
+| [bilateral-squat](families/bilateral-squat.json) | 7 |
 | [bird-dog](families/bird-dog.json) | 1 |
 | [bodyweight-glute-bridge](families/bodyweight-glute-bridge.json) | 2 |
 | [cable-pull-through](families/cable-pull-through.json) | 1 |
@@ -44,9 +44,9 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [decline-press](families/decline-press.json) | 5 |
 | [diagonal-pull](families/diagonal-pull.json) | 1 |
 | [dip](families/dip.json) | 3 |
-| [dynamic-lunge](families/dynamic-lunge.json) | 4 |
+| [dynamic-lunge](families/dynamic-lunge.json) | 5 |
 | [elbow-extension](families/elbow-extension.json) | 13 |
-| [elbow-flexion](families/elbow-flexion.json) | 13 |
+| [elbow-flexion](families/elbow-flexion.json) | 14 |
 | [externally-rotating-face-pull](families/externally-rotating-face-pull.json) | 1 |
 | [farmer-carry](families/farmer-carry.json) | 2 |
 | [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |
@@ -67,7 +67,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hip-thrust-bridge](families/hip-thrust-bridge.json) | 2 |
 | [hollow-hold](families/hollow-hold.json) | 1 |
 | [horizontal-leg-press](families/horizontal-leg-press.json) | 1 |
-| [horizontal-press](families/horizontal-press.json) | 14 |
+| [horizontal-press](families/horizontal-press.json) | 15 |
 | [incline-press](families/incline-press.json) | 5 |
 | [inclined-leg-press](families/inclined-leg-press.json) | 2 |
 | [kettlebell-swing](families/kettlebell-swing.json) | 1 |
@@ -76,7 +76,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [kneeling-ab-wheel-rollout](families/kneeling-ab-wheel-rollout.json) | 1 |
 | [landmine-press](families/landmine-press.json) | 2 |
 | [lateral-band-walk](families/lateral-band-walk.json) | 1 |
-| [lateral-lunge](families/lateral-lunge.json) | 1 |
+| [lateral-lunge](families/lateral-lunge.json) | 2 |
 | [machine-hack-squat](families/machine-hack-squat.json) | 1 |
 | [mid-thigh-clean-pull](families/mid-thigh-clean-pull.json) | 1 |
 | [nordic-curl](families/nordic-curl.json) | 1 |
@@ -100,10 +100,10 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [seated-machine-back-extension](families/seated-machine-back-extension.json) | 1 |
 | [shoulder-abduction-raise](families/shoulder-abduction-raise.json) | 3 |
 | [shoulder-extension-isolation](families/shoulder-extension-isolation.json) | 4 |
-| [shoulder-extension-row](families/shoulder-extension-row.json) | 13 |
+| [shoulder-extension-row](families/shoulder-extension-row.json) | 14 |
 | [shoulder-external-rotation](families/shoulder-external-rotation.json) | 3 |
 | [shoulder-flexion-raise](families/shoulder-flexion-raise.json) | 2 |
-| [shoulder-horizontal-abduction-row](families/shoulder-horizontal-abduction-row.json) | 6 |
+| [shoulder-horizontal-abduction-row](families/shoulder-horizontal-abduction-row.json) | 7 |
 | [shoulder-internal-rotation](families/shoulder-internal-rotation.json) | 2 |
 | [single-leg-deadlift](families/single-leg-deadlift.json) | 3 |
 | [spine-extension](families/spine-extension.json) | 1 |
@@ -118,6 +118,10 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [suitcase-carry](families/suitcase-carry.json) | 1 |
 | [sumo-deadlift](families/sumo-deadlift.json) | 1 |
 | [supine-pelvic-curl](families/supine-pelvic-curl.json) | 1 |
+| [suspension-assisted-single-leg-squat](families/suspension-assisted-single-leg-squat.json) | 1 |
+| [suspension-hamstring-curl](families/suspension-hamstring-curl.json) | 1 |
+| [suspension-hip-press](families/suspension-hip-press.json) | 1 |
+| [suspension-horizontal-abduction](families/suspension-horizontal-abduction.json) | 1 |
 | [thruster](families/thruster.json) | 1 |
 | [trap-bar-deadlift](families/trap-bar-deadlift.json) | 2 |
 | [upper-arm-pad-chest-fly](families/upper-arm-pad-chest-fly.json) | 1 |

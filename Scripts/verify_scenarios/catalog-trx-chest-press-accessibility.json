@@ -1,0 +1,55 @@
+{
+  "name": "catalog-trx-chest-press-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPush"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^TRX Chest Press,"
+        },
+        "direction": "up",
+        "maxSwipes": 80
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^TRX Chest Press,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "TRX Chest Press"
+    },
+    {
+      "labelContains": "Muscles used by TRX Chest Press"
+    }
+  ],
+  "forbidden": []
+}

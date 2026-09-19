@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 146.
+Scenario files: 149.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -70,6 +70,9 @@ Scenario files: 146.
 | [catalog-six-standing-dumbbell-calf-raise](catalog-six-standing-dumbbell-calf-raise.json) | library | `--static-body -settings.appearance light` |
 | [catalog-tfl-compound-development](catalog-tfl-compound-development.json) | today | `--ui-test-tfl-development --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-tfl-coverage](catalog-tfl-coverage.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-trx-chest-press-accessibility](catalog-trx-chest-press-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-trx-hip-press-dark](catalog-trx-hip-press-dark.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-trx-reverse-fly-light](catalog-trx-reverse-fly-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-upper-body-curls](catalog-upper-body-curls.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-upper-body-flyes](catalog-upper-body-flyes.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-upper-body-triceps](catalog-upper-body-triceps.json) | library | `--static-body -settings.appearance light` |

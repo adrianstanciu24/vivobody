@@ -1,0 +1,102 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "suspension-hamstring-curl",
+  "name": "Suspension Hamstring Curl",
+  "definition": "A bilateral supine suspension-trainer curl with both heels in the foot cradles. The athlete first holds the pelvis elevated, then flexes both knees to draw the heels toward the hips and extends the knees under control without turning the repetition into repeated hip extension. The fixture is rep-tracked and non-comparable because strap length, body position, and technique change the effective load. Floor sliders, machine curls, single-leg curls, and bridge repetitions in which the knees remain fixed remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "trx-2022-suspension-foundations", "usmc-2026-trx-strength-library", "mok-2015-core-suspension-exercises"],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "legs", "allowed": ["legs"]},
+  "allowed": {
+    "equipment": ["suspensionTrainer"],
+    "modalities": ["dynamicStrength"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["knee.flexion"],
+    "primeActions": ["knee.flexion"],
+    "forbiddenPrimeActions": ["spine.extension", "hip.extension", "hip.flexion", "ankle.plantarflexion"],
+    "stabilityDemands": ["spine", "pelvis", "hip", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["medialHamstrings"], "minimumRole": "primary"},
+      {"anyOf": ["bicepsFemoris"], "minimumRole": "primary"}
+    ],
+    "allowedByRole": {
+      "primary": ["medialHamstrings", "bicepsFemoris"],
+      "secondary": ["gastrocnemius"],
+      "stabilizer": ["gluteMax", "abs", "obliques", "lumbarExtensors", "tibialisAnterior", "soleus"]
+    }
+  },
+  "variantAxes": [
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed floor posture.", "allowedValues": ["supineOnFloor"]},
+    {"id": "upperBodySupport", "valueType": "enum", "required": true, "description": "The upper body remains floor supported.", "allowedValues": ["headShouldersArmsOnFloor"]},
+    {"id": "footSupport", "valueType": "enum", "required": true, "description": "Both heels are carried by the suspension trainer.", "allowedValues": ["bothHeelsInFootCradles"]},
+    {"id": "hipPosition", "valueType": "enum", "required": true, "description": "The hips remain elevated rather than cycling through a bridge repetition.", "allowedValues": ["elevatedAndHeld"]},
+    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "The knees create the repetition.", "allowedValues": ["flexesThenExtends"]},
+    {"id": "strapPosition", "valueType": "enum", "required": true, "description": "The reviewed suspension-trainer length.", "allowedValues": ["midCalf"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "The straps do not constrain the feet to a machine path.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "trx-hamstring-curl",
+      "name": "TRX Hamstring Curl",
+      "aliases": ["Suspension Hamstring Curl", "TRX Leg Curl"],
+      "equipment": "suspensionTrainer",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "medialHamstrings", "role": "primary"},
+        {"muscle": "bicepsFemoris", "role": "primary"},
+        {"muscle": "gastrocnemius", "role": "secondary"},
+        {"muscle": "gluteMax", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "lumbarExtensors", "role": "stabilizer"},
+        {"muscle": "tibialisAnterior", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"}
+      ],
+      "variant": {
+        "bodyPosition": "supineOnFloor",
+        "upperBodySupport": "headShouldersArmsOnFloor",
+        "footSupport": "bothHeelsInFootCradles",
+        "hipPosition": "elevatedAndHeld",
+        "kneeMotion": "flexesThenExtends",
+        "strapPosition": "midCalf",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["trx-2022-suspension-foundations", "usmc-2026-trx-strength-library", "mok-2015-core-suspension-exercises"],
+      "execution": {
+        "startingPosition": "Lie on your back with both heels in the foot cradles, legs long, arms on the floor, and the straps set around mid-calf height.",
+        "movement": "Lift the hips and hold them elevated, then bend both knees to draw the heels toward the hips.",
+        "endpoint": "Stop at your controlled knee-flexion limit while the pelvis remains lifted and level.",
+        "returnPhase": "Extend both knees slowly until the legs are long, keeping the hips elevated.",
+        "controlledJoints": "Create the repetition at the knees; hold the hip position instead of repeatedly bridging.",
+        "supportAndPosture": "Keep the head, shoulders, and arms supported and maintain even pressure through both heels.",
+        "disqualifyingCompensations": [
+          "Dropping and re-lifting the hips turns the repetition into a bridge-dominant action.",
+          "Using one leg changes the two-leg fixture.",
+          "Placing the feet on the floor or a slider leaves the suspension-trainer fixture."
+        ]
+      }
+    }
+  ]
+}

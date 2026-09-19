@@ -417,6 +417,10 @@ struct BiomechanicsDomainTests {
             records: [record(equipment: .abWheel, loadMode: .external)]
         )
         expectValidationError(
+            .comparableSuspensionTrainerLoad("test"),
+            records: [record(equipment: .suspensionTrainer, loadMode: .external)]
+        )
+        expectValidationError(
             .invalidModalityTracking("test"),
             records: [record(trackingMode: .duration, defaultDuration: 30, modality: .dynamicStrength)]
         )

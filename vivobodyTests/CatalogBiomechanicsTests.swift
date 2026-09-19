@@ -412,7 +412,7 @@ struct CatalogBiomechanicsTests {
                 #expect(record.bodyweightFraction > 0 && record.bodyweightFraction <= 1)
             }
 
-            if record.equipment == .band {
+            if record.equipment == .band || record.equipment == .abWheel || record.equipment == .suspensionTrainer {
                 #expect(record.loadMode == .nonComparable)
             }
 
@@ -560,6 +560,21 @@ struct CatalogBiomechanicsTests {
             loadMode: .external,
             equipment: .gluteHamDeveloper
         ))
+    }
+
+    @Test func suspensionTrainerHasNoInventedResistanceAxis() {
+        #expect(Equipment.suspensionTrainer.rawValue == "suspensionTrainer")
+        #expect(Equipment.suspensionTrainer.displayName == "Suspension Trainer")
+        #expect(Equipment.suspensionTrainer.requiresNonComparableLoad)
+        #expect(!ExerciseResistanceCapability.tracksResistance(
+            loadMode: .nonComparable,
+            equipment: .suspensionTrainer
+        ))
+        #expect(ExerciseResistanceCapability.normalizedWeight(
+            45,
+            loadMode: .nonComparable,
+            equipment: .suspensionTrainer
+        ) == 0)
     }
 
     @Test func sumoDeadliftKeepsThreeJointCompoundRuntimeSignature() throws {
