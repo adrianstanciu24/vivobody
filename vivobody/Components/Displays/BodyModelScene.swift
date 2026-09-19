@@ -72,11 +72,12 @@ enum BodyModelScene {
         defer { GraphicsPerformanceSignposts.end("BodyModelScene.apply", interval) }
 
         if let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) {
-            SCNTransaction.begin()
-            SCNTransaction.animationDuration = transition
-            SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            applyMaterials(pivot: pivot, channels: channels, theme: theme)
-            SCNTransaction.commit()
+            applyMaterials(
+                pivot: pivot,
+                channels: channels,
+                theme: theme,
+                transition: transition
+            )
         }
         configureLighting(scene: scene, theme: theme)
     }
@@ -200,6 +201,8 @@ enum BodyModelScene {
     /// replaced rather than mutated — tinting one in place would tint
     /// every mesh that shares it.
     private static let managedMaterialName = "vivobody.bodyModel"
+    private static let tintAnimationKey = "vivobody.tint"
+    private static let roughnessAnimationKey = "vivobody.roughness"
 
     /// Channels for a muscle without data or anatomy context.
     private static let untrainedChannels = MuscleMapChannels.noData
@@ -240,7 +243,8 @@ enum BodyModelScene {
     private static func applyMaterials(
         pivot: SCNNode,
         channels: [String: MuscleMapChannels],
-        theme: BodyModelTheme
+        theme: BodyModelTheme,
+        transition: TimeInterval
     ) {
         let interval = GraphicsPerformanceSignposts.begin("BodyModelScene.applyMaterials")
         defer { GraphicsPerformanceSignposts.end("BodyModelScene.applyMaterials", interval) }
@@ -256,27 +260,54 @@ enum BodyModelScene {
             node.opacity = 1
             let tone = toneFor(name: name, channels: channels, theme: theme, bone: bone, tissue: tissue)
             // Once a mesh carries our material, re-tints mutate it in
-            // place so the diffuse rides the enclosing SCNTransaction
-            // and cross-fades; swapping in a new material would snap.
+            // place and explicitly animate its color; swapping in a new
+            // material would snap.
             if geometry.materials.count == 1,
                let material = geometry.materials.first,
                material.name == managedMaterialName
             {
-                set(tone, on: material)
+                set(tone, on: material, transition: transition)
             } else {
                 let material = SCNMaterial()
                 material.name = managedMaterialName
                 material.metalness.contents = 0.12
                 material.lightingModel = .physicallyBased
-                set(tone, on: material)
+                set(tone, on: material, transition: 0)
                 geometry.materials = [material]
             }
         }
     }
 
-    private static func set(_ tone: Tone, on material: SCNMaterial) {
+    private static func set(
+        _ tone: Tone,
+        on material: SCNMaterial,
+        transition: TimeInterval
+    ) {
+        let previousColor = material.diffuse.contents
+        let previousRoughness = material.roughness.contents
+
         material.diffuse.contents = tone.color
         material.roughness.contents = tone.roughness
+
+        guard transition > 0 else { return }
+
+        let timing = CAMediaTimingFunction(name: .easeInEaseOut)
+        let colorAnimation = CABasicAnimation(keyPath: "contents")
+        colorAnimation.fromValue = previousColor
+        colorAnimation.toValue = tone.color
+        colorAnimation.duration = transition
+        colorAnimation.timingFunction = timing
+        material.diffuse.addAnimation(colorAnimation, forKey: tintAnimationKey)
+
+        let roughnessAnimation = CABasicAnimation(keyPath: "contents")
+        roughnessAnimation.fromValue = previousRoughness
+        roughnessAnimation.toValue = tone.roughness
+        roughnessAnimation.duration = transition
+        roughnessAnimation.timingFunction = timing
+        material.roughness.addAnimation(
+            roughnessAnimation,
+            forKey: roughnessAnimationKey
+        )
     }
 
     private static func toneFor(

@@ -60,8 +60,11 @@ the existing content when the shared analytics cache becomes available; they
 must not be recomputed from a truncated history and presented as all-time facts.
 Full-archive snapshot preparation yields between small batches so it does not
 hold the UI thread for the entire archive. The static Training development legend appears without an entrance delay.
-Only the 3D visualization uses the body entrance animation; its full-history
-calculation remains unchanged.
+The 3D model is visible from its first rendered frame, without an entrance
+fade or loading overlay. Geometry does not wait for the full-history development
+calculation: available development colors are applied initially, and later
+analytics updates cross-fade the existing scene to its new muscle colors over
+1.2 seconds.
 
 ## Evidence
 
