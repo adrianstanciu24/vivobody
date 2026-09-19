@@ -100,14 +100,17 @@ with candidate paths and semantic values in `actions.log`.
 
 ## Today action contract
 
-`today-actions` exercises the pinned start/active states and both chooser
-hierarchies in one deterministic run. Its Today taps are intentional uniqueness
+`today-actions` exercises the direct fresh path plus the pinned chooser and
+active states in one deterministic run. Its Today taps are intentional uniqueness
 assertions: an accidental second matching action makes the scenario fail before
 interaction. The existing `start-complete-rest` flow chooses the featured plan
 and proves the scheduled start through set completion.
 
-- Empty, unscheduled Today exposes one generic `Start Workout`, with no
-  scheduled or active action and no empty Consistency / Last workout journal.
+- Empty, unscheduled Today exposes one `Start Fresh Workout` action that opens
+  the exercise picker directly, with no redundant chooser, scheduled or active
+  action, or empty Consistency / Last workout journal.
+- History without templates restores `Start Workout`; its chooser offers both
+  `Repeat Last Workout` and `Start Fresh`.
 - A due template keeps the same single `Start Workout` action. Its chooser
   features `Start Today's Plan` first, then Fresh, Repeat, and other saved
   templates without duplicating the featured plan.

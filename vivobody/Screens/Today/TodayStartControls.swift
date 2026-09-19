@@ -3,27 +3,40 @@
 //  vivobody
 //
 //  Today’s persistent workout controls. One prominent action reflects the
-//  current state: resume an active session or open the workout chooser. The
-//  chooser owns scheduled, repeat, fresh, and saved-template decisions.
+//  current state: resume an active session, start the sole fresh path, or open
+//  the workout chooser for scheduled, repeat, and saved-template decisions.
 //
 
 import SwiftUI
 import VivoKit
 
 extension TodayScreen {
-    /// The stable start action. The sheet owns scheduled, Repeat, Fresh,
-    /// and saved-template choices so Today never grows competing controls.
+    /// The stable start position adapts only when Fresh is the sole path.
+    /// Once history or a saved template provides a real choice, the chooser
+    /// owns scheduled, Repeat, Fresh, and saved-template decisions.
     var startCTA: some View {
-        PrimaryActionButton(
-            title: "Start Workout",
-            icon: "chevron.up",
-            inputLabels: ["Start Workout", "Start", "Begin"],
+        let startsFreshDirectly = latestSession == nil && templates.isEmpty
+
+        return PrimaryActionButton(
+            title: startsFreshDirectly ? "Start Fresh Workout" : "Start Workout",
+            icon: startsFreshDirectly ? "plus" : "chevron.up",
+            inputLabels: startsFreshDirectly
+                ? ["Start Fresh Workout", "Start Fresh", "New Workout"]
+                : ["Start Workout", "Start", "Begin"],
             sound: .commit
         ) {
-            showStartSheet = true
+            if startsFreshDirectly {
+                showFreshExercisePicker = true
+            } else {
+                showStartSheet = true
+            }
         }
         .accessibilityIdentifier("todayStartWorkoutButton")
-        .accessibilityHint("Opens workout options")
+        .accessibilityHint(
+            startsFreshDirectly
+                ? "Opens the exercise picker for a fresh workout"
+                : "Opens workout options"
+        )
         .accessibilitySortPriority(100)
     }
 
@@ -92,8 +105,8 @@ extension TodayScreen {
         appState.workout.isDiscardPending ? nil : appState.workout.activeSession
     }
 
-    /// An active workout always wins; otherwise one stable action opens the
-    /// chooser, where schedule and alternate paths receive their hierarchy.
+    /// An active workout always wins; otherwise one stable action either opens
+    /// the sole fresh path or the chooser, where multiple paths get hierarchy.
     var pinnedStartBar: some View {
         Group {
             if let session = barSession {

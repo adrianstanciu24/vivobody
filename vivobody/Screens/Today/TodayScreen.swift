@@ -96,7 +96,7 @@ struct TodayScreen: View {
     /// an empty active-workout canvas. The selected item is likewise
     /// deferred until the picker dismisses, so the active workout
     /// never competes with an outgoing sheet presentation.
-    @State private var showFreshExercisePicker = false
+    @State var showFreshExercisePicker = false
     @State private var pendingFreshStart: (() -> Void)?
 
     var body: some View {

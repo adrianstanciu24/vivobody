@@ -11,7 +11,7 @@
     {
       "wait": {
         "identifier": "todayStartWorkoutButton",
-        "label": "Start Workout",
+        "label": "Start Fresh Workout",
         "role": "AXButton"
       }
     },
@@ -20,7 +20,7 @@
         "required": [
           {
             "identifier": "todayStartWorkoutButton",
-            "label": "Start Workout",
+            "label": "Start Fresh Workout",
             "role": "AXButton"
           }
         ],
@@ -42,7 +42,7 @@
         "required": [
           {
             "identifier": "todayStartWorkoutButton",
-            "label": "Start Workout",
+            "label": "Start Fresh Workout",
             "role": "AXButton"
           }
         ],
@@ -64,19 +64,7 @@
     {
       "tap": {
         "identifier": "todayStartWorkoutButton",
-        "label": "Start Workout",
-        "role": "AXButton"
-      }
-    },
-    {
-      "wait": {
-        "label": "Start Fresh",
-        "role": "AXButton"
-      }
-    },
-    {
-      "tap": {
-        "label": "Start Fresh",
+        "label": "Start Fresh Workout",
         "role": "AXButton"
       }
     },
@@ -84,6 +72,36 @@
       "wait": {
         "identifier": "Add Exercise",
         "role": "AXGroup"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": true,
+        "tab": "today",
+        "arguments": [
+          "--seed-history",
+          "--static-body"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Repeat Last Workout",
+        "role": "AXButton"
       }
     },
     {
