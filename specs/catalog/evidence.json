@@ -3465,7 +3465,7 @@
       ],
       "year": 2012,
       "url": "https://www.nsca.com/contentassets/48a12160221541acbdc048498d77192d/basics_of_strength_and_conditioning_manual.pdf",
-      "scope": "The NSCA manual provides source-exact technical descriptions for the top-start Romanian deadlift, a continuous alternating walking lunge with dumbbells at the sides, and simultaneous bilateral dumbbell lateral raises to shoulder height. It supports those setup and sequence boundaries, not universal loads, muscle-magnitude rankings, or unreported stride dimensions."
+      "scope": "The NSCA manual provides source-exact technical descriptions for the top-start Romanian deadlift, a continuous alternating walking lunge with dumbbells at the sides, simultaneous bilateral dumbbell lateral raises, and a simultaneous two-dumbbell front raise from in front of the thighs to shoulder height with a stable body, palms facing the ground, and a controlled lowering phase. It supports those setup and sequence boundaries, not universal loads, muscle-magnitude rankings, unreported stride dimensions, or the catalog's combined neutral-rotation front-raise fixture."
     },
     {
       "id": "nsca-2016-division-i-basketball-injury-screening",
@@ -4810,6 +4810,48 @@
       "year": 2016,
       "url": "https://www.nsca.com/education/articles/nsca-coach/the-landmine-pressimplementation-and-variation/",
       "scope": "NSCA Coach technique article presents the landmine press as a fixed-base barbell exercise used for strength, stability, and power. It supports an everyday strength application and repeated controlled pressing, but does not establish the catalog's exact Zhao split stance, human joint kinematics, muscle hierarchy, or a plate-only resistance measure. Added-plate logging is an authored same-bar, same-pivot, same-setup convention and is not comparable across unlike landmine fixtures."
+    },
+    {
+      "id": "ace-2026-supine-bicycle-crunch",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Supine Bicycle Crunches",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/241/supine-bicycle-crunches/",
+      "scope": "Undated ACE exercise standard registered with retrieval year 2026, not a claimed publication year. It defines a floor-supported alternating bicycle crunch from ninety-degree hips and knees: one knee moves toward the chest as the other leg extends without touching down, the opposite shoulder lifts as the trunk flexes and rotates toward the flexed knee, the low back stays pressed to the floor, and sides alternate under control. It anchors the exact fixture and repetition sequence, not segmental spinal angles, bodyweight fraction, muscle force, quantitative role rankings, hypertrophy, or medical outcomes."
+    },
+    {
+      "id": "lehecka-2017-single-leg-bridge",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Building a Better Gluteal Bridge: Electromyographic Analysis of Hip Muscle Activity During Modified Single-Leg Bridges",
+      "authors": [
+        "B. J. Lehecka",
+        "Michael Edwards",
+        "Ryan Haverkamp",
+        "Lani Martin",
+        "Kambry Porter",
+        "Kailey Thach",
+        "Richard J. Sack",
+        "Nils A. Hakansson"
+      ],
+      "year": 2017,
+      "pmid": "28900560",
+      "pmcid": "PMC5534144",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5534144/",
+      "scope": "Twenty-eight healthy adults performed five single-leg bridge positions while surface EMG measured working-side gluteus maximus, gluteus medius, rectus femoris, and biceps femoris plus contralateral rectus femoris. Position C started with a flat dominant working foot, ninety-degree working-knee flexion, the opposite femur held vertical with the suspended knee passively flexed, arms folded across the chest, and hip extension to neutral. It supports the unilateral topology and categorical gluteal and hamstring participation. It tested only the dominant bridge leg and did not measure pelvic alignment or knee kinematics, so it does not establish a held working-knee angle, level pelvis, exact suspended-knee angle, mirrored-side performance, universal cadence, cross-muscle force ranking, percentages of training contribution, hypertrophy, or medical outcomes."
+    },
+    {
+      "id": "prehab-2026-single-leg-bridge-pelvic-floor",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Single Leg Bridge – Pelvic Floor Contraction",
+      "authors": [
+        "The Prehab Guys"
+      ],
+      "year": 2026,
+      "url": "https://library.theprehabguys.com/vimeo-video/single-leg-bridge-pelvic-floor-contraction/",
+      "scope": "Undated Prehab exercise-library standard registered with retrieval year 2026, not a claimed publication year. It directly instructs a floor single-leg bridge with the suspended hip and knee each bent to ninety degrees, an abdominal brace that avoids low-back arching, hip elevation, and a controlled return. It anchors the requested free-leg geometry but adds a pelvic-floor breathing emphasis and does not report working-knee angle, pelvic kinematics, cadence, muscle activity, load contribution, comparative outcomes, or a both-sides prescription."
     }
   ]
 }

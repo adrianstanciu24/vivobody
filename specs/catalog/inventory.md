@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 107 |
-| Exercises | 262 |
+| Reviewed families | 108 |
+| Exercises | 265 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 299 |
+| Evidence sources | 302 |
 
 ## Family roster
 
@@ -31,9 +31,10 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [anti-rotation-press](families/anti-rotation-press.json) | 1 |
 | [anti-rotation](families/anti-rotation.json) | 1 |
 | [belt-loaded-machine-glute-bridge](families/belt-loaded-machine-glute-bridge.json) | 1 |
+| [bicycle-crunch](families/bicycle-crunch.json) | 1 |
 | [bilateral-squat](families/bilateral-squat.json) | 6 |
 | [bird-dog](families/bird-dog.json) | 1 |
-| [bodyweight-glute-bridge](families/bodyweight-glute-bridge.json) | 1 |
+| [bodyweight-glute-bridge](families/bodyweight-glute-bridge.json) | 2 |
 | [cable-pull-through](families/cable-pull-through.json) | 1 |
 | [chest-fly](families/chest-fly.json) | 4 |
 | [clean-and-jerk](families/clean-and-jerk.json) | 1 |
@@ -101,7 +102,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [shoulder-extension-isolation](families/shoulder-extension-isolation.json) | 4 |
 | [shoulder-extension-row](families/shoulder-extension-row.json) | 13 |
 | [shoulder-external-rotation](families/shoulder-external-rotation.json) | 3 |
-| [shoulder-flexion-raise](families/shoulder-flexion-raise.json) | 1 |
+| [shoulder-flexion-raise](families/shoulder-flexion-raise.json) | 2 |
 | [shoulder-horizontal-abduction-row](families/shoulder-horizontal-abduction-row.json) | 6 |
 | [shoulder-internal-rotation](families/shoulder-internal-rotation.json) | 2 |
 | [single-leg-deadlift](families/single-leg-deadlift.json) | 3 |

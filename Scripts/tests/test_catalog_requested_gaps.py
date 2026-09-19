@@ -22,6 +22,12 @@ OWNERS = {
     "pike-push-up": "pike-push-up",
 }
 
+SECOND_WAVE_RECORD_IDS = {
+    "alternating-supine-bicycle-crunch",
+    "single-leg-bodyweight-glute-bridge",
+    "simultaneous-bilateral-dumbbell-front-raise",
+}
+
 
 class RequestedCatalogGapTests(unittest.TestCase):
     @classmethod
@@ -62,7 +68,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
     def test_existing_runtime_records_are_preserved(self):
         families = [catalog.load_json(p) for p in catalog.FAMILIES_ROOT.glob("*.json")]
         records = [r for r in catalog.compile_runtime_catalog(families)
-                   if r["catalogID"] not in OWNERS]
+                   if r["catalogID"] not in set(OWNERS) | SECOND_WAVE_RECORD_IDS]
         self.assertEqual(len(records), 254)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()
         # Reviewed runtime after later catalog additions; source-only support

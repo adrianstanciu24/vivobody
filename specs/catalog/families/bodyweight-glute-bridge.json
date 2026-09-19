@@ -3,8 +3,8 @@
   "schemaVersion": 1,
   "id": "bodyweight-glute-bridge",
   "name": "Bodyweight Glute Bridge",
-  "definition": "A floor-supported bodyweight bridge in which both feet remain planted, the knees hold the reviewed 90-degree setup, and the hips reach each lifter's maximum controlled extension before returning under control. The exact roster owns only the two-leg, arms-down, 90-degree fixture. The source model's biceps-femoris long-head and adductor-magnus findings remain stabilizer-only because Vivobody's merged regions cannot honestly receive hip-extension credit. Loaded hip thrusts and bridges that deliberately extend the knees, single-leg bridges, feet-elevated bridges, articulated spinal bridges, and externally loaded variants remain outside this family.",
-  "evidenceRefs": ["arnold-2010-lower-limb", "takeshita-2022-bridge-knee-angle"],
+  "definition": "A floor-supported bodyweight bridge in which one or both working feet remain planted, each working knee begins at the reviewed 90-degree setup, and hip extension raises the pelvis before a controlled return. The bilateral fixture rests the head, shoulders, and arms on the floor and reaches the source-selected maximum controlled hip-extension angle using a two-up, one-hold, two-down cadence. The unilateral fixture keeps the same head, shoulder, and arm support, holds the suspended hip and knee at 90 degrees, and raises the working hip to neutral. Its free-leg geometry combines Prehab's direct 90/90 instruction with Lehecka's working-leg and hip-neutral bridge evidence; arms on the floor are a requested near-fixture adaptation from Lehecka's folded-arm protocol, while holding the working-knee angle and keeping the pelvis level are catalog-authored control cues rather than measured Lehecka kinematics. Repeating the fixture on the other side is a mirrored training adaptation because Lehecka tested only the dominant bridge leg. Gluteus maximus is primary. Gluteus medius, biceps femoris, abdominal regions, lumbar extensors, adductor magnus, and soleus remain conservative stabilizers because the source EMG and existing anatomy do not establish comparable regional training contribution or justify crediting merged regions as hip-extension movers. Loaded, staggered-stance, straight-free-leg, feet-elevated, articulated-spine, and externally loaded bridges remain outside this family.",
+  "evidenceRefs": ["arnold-2010-lower-limb", "takeshita-2022-bridge-knee-angle", "lehecka-2017-single-leg-bridge", "prehab-2026-single-leg-bridge-pelvic-floor"],
   "fixed": {
     "mechanic": "isolation",
     "trainingRole": "legs",
@@ -18,7 +18,7 @@
     "modalities": ["dynamicStrength"],
     "trackingModes": ["reps"],
     "loadModes": ["nonComparable"],
-    "lateralities": ["bilateral"]
+    "lateralities": ["bilateral", "unilateral"]
   },
   "movementSignature": {
     "planeBasisActions": ["hip.extension"],
@@ -81,17 +81,66 @@
     }
   },
   "variantAxes": [
+    {"id": "bridgeFixture", "valueType": "enum", "required": true, "description": "The exact reviewed bilateral or unilateral bodyweight bridge branch.", "allowedValues": ["bilateralArmsDownNinetyDegree", "singleLegOppositeFemurVertical"]},
     {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed floor-supported posture.", "allowedValues": ["backOnFloor"]},
-    {"id": "upperBodySupport", "valueType": "enum", "required": true, "description": "The reviewed upper-body contact with the floor.", "allowedValues": ["headShouldersArmsOnFloor"]},
-    {"id": "footSupport", "valueType": "enum", "required": true, "description": "Both bare feet remain planted on the floor.", "allowedValues": ["bothFeetFlatOnFloor"]},
-    {"id": "kneeFlexionDegrees", "valueType": "number", "required": true, "description": "The reviewed starting knee-flexion setup held through the repetition.", "minimum": 90, "maximum": 90},
-    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "The knees hold their setup rather than creating the bridge.", "allowedValues": ["positionHeld"]},
+    {"id": "upperBodySupport", "valueType": "enum", "required": true, "description": "The reviewed head, shoulder, and arm contact with the floor.", "allowedValues": ["headShouldersArmsOnFloor"]},
+    {"id": "footSupport", "valueType": "enum", "required": true, "description": "Whether both feet or only the working foot remain planted on the floor.", "allowedValues": ["bothFeetFlatOnFloor", "oneWorkingFootFlatOnFloor"]},
+    {"id": "kneeFlexionDegrees", "valueType": "number", "required": true, "description": "The reviewed starting flexion of each working knee.", "minimum": 90, "maximum": 90},
+    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "The catalog-authored control cue holds the working-knee setup rather than using knee motion to create the bridge.", "allowedValues": ["positionHeld"]},
+    {"id": "freeLegPosition", "valueType": "enum", "required": false, "description": "The Prehab-defined suspended hip-and-knee posture for the unilateral fixture.", "allowedValues": ["oppositeHipAndKneeNinetyDegrees"]},
+    {"id": "trainingSidePrescription", "valueType": "enum", "required": false, "description": "The source-defined fixture is mirrored as a catalog training adaptation so each working leg is trained.", "allowedValues": ["bothSidesMirroredAdaptation"]},
     {"id": "hipMotion", "valueType": "enum", "required": true, "description": "The hips extend to raise the pelvis.", "allowedValues": ["extendsThenReturns"]},
-    {"id": "endpoint", "valueType": "enum", "required": true, "description": "The source-selected maximum controlled hip-extension angle.", "allowedValues": ["maximumControlledHipExtensionSourceSelected"]},
-    {"id": "cadence", "valueType": "enum", "required": true, "description": "The exact phase timing used in the source.", "allowedValues": ["twoUpOneHoldTwoDown"]},
+    {"id": "endpoint", "valueType": "enum", "required": true, "description": "The source-defined controlled hip-extension endpoint.", "allowedValues": ["maximumControlledHipExtensionSourceSelected", "workingHipNeutral"]},
+    {"id": "cadence", "valueType": "enum", "required": true, "description": "The source-defined phase timing, or an explicit unreported cadence.", "allowedValues": ["twoUpOneHoldTwoDown", "controlledSourceUnreported"]},
     {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No machine constrains the body path.", "fixedValue": false}
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bilateral-bodyweight-bridge-fixture",
+      "description": "Pins the original two-foot, arms-down bodyweight bridge and excludes unilateral-only fields.",
+      "when": {"field": "variant.bridgeFixture", "operator": "equals", "value": "bilateralArmsDownNinetyDegree"},
+      "then": [
+        {"field": "laterality", "value": "bilateral"},
+        {"field": "variant.upperBodySupport", "value": "headShouldersArmsOnFloor"},
+        {"field": "variant.footSupport", "value": "bothFeetFlatOnFloor"},
+        {"field": "variant.endpoint", "value": "maximumControlledHipExtensionSourceSelected"},
+        {"field": "variant.cadence", "value": "twoUpOneHoldTwoDown"}
+      ],
+      "requirePresent": [],
+      "requireAbsent": ["variant.freeLegPosition", "variant.trainingSidePrescription"],
+      "requireInvolvement": [
+        {"muscle": "gluteMax", "role": "primary"}
+      ],
+      "requireAdditionalPrimeActions": [],
+      "requireAdditionalStabilityDemands": []
+    },
+    {
+      "id": "single-leg-bodyweight-bridge-fixture",
+      "description": "Pins the source-near one-foot bridge, suspended-leg posture, neutral endpoint, and both-side prescription.",
+      "when": {"field": "variant.bridgeFixture", "operator": "equals", "value": "singleLegOppositeFemurVertical"},
+      "then": [
+        {"field": "laterality", "value": "unilateral"},
+        {"field": "variant.upperBodySupport", "value": "headShouldersArmsOnFloor"},
+        {"field": "variant.footSupport", "value": "oneWorkingFootFlatOnFloor"},
+        {"field": "variant.freeLegPosition", "value": "oppositeHipAndKneeNinetyDegrees"},
+        {"field": "variant.trainingSidePrescription", "value": "bothSidesMirroredAdaptation"},
+        {"field": "variant.endpoint", "value": "workingHipNeutral"},
+        {"field": "variant.cadence", "value": "controlledSourceUnreported"}
+      ],
+      "requirePresent": ["variant.freeLegPosition", "variant.trainingSidePrescription"],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"},
+        {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}
+      ],
+      "requireAdditionalPrimeActions": [],
+      "requireAdditionalStabilityDemands": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "bodyweight-supine-glute-bridge-90-degrees",
@@ -116,6 +165,7 @@
         {"muscle": "obliques", "role": "stabilizer"}
       ],
       "variant": {
+        "bridgeFixture": "bilateralArmsDownNinetyDegree",
         "bodyPosition": "backOnFloor",
         "upperBodySupport": "headShouldersArmsOnFloor",
         "footSupport": "bothFeetFlatOnFloor",
@@ -141,6 +191,59 @@
           "Lifting one foot changes the exercise into a single-leg bridge.",
           "Overarching the lower back instead of extending the hips leaves the reviewed fixture."
         ]
+      }
+    },
+    {
+      "catalogID": "single-leg-bodyweight-glute-bridge",
+      "name": "Single-Leg Bodyweight Glute Bridge",
+      "aliases": ["Single-Leg Glute Bridge", "One-Leg Glute Bridge"],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "gluteMax", "role": "primary"},
+        {"muscle": "bicepsFemoris", "role": "stabilizer"},
+        {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "soleus", "role": "stabilizer"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "obliques", "role": "stabilizer"}
+      ],
+      "variant": {
+        "bridgeFixture": "singleLegOppositeFemurVertical",
+        "bodyPosition": "backOnFloor",
+        "upperBodySupport": "headShouldersArmsOnFloor",
+        "footSupport": "oneWorkingFootFlatOnFloor",
+        "kneeFlexionDegrees": 90,
+        "kneeMotion": "positionHeld",
+        "freeLegPosition": "oppositeHipAndKneeNinetyDegrees",
+        "trainingSidePrescription": "bothSidesMirroredAdaptation",
+        "hipMotion": "extendsThenReturns",
+        "endpoint": "workingHipNeutral",
+        "cadence": "controlledSourceUnreported",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["lehecka-2017-single-leg-bridge", "prehab-2026-single-leg-bridge-pelvic-floor"],
+      "execution": {
+        "startingPosition": "Lie on your back with your head, shoulders, and arms resting on the floor. Plant one foot with that knee bent to 90 degrees, then lift the other leg and hold both its hip and knee at 90 degrees.",
+        "movement": "Press through the planted foot and extend the working hip while keeping the other foot off the floor.",
+        "endpoint": "Stop when your trunk and working thigh form a straight line while the pelvis stays level, before the low back begins to arch.",
+        "returnPhase": "Lower the pelvis to the floor under control without changing the planted knee angle.",
+        "controlledJoints": "Keep the planted knee near its starting angle and hold the suspended hip and knee at 90 degrees rather than swinging the leg.",
+        "supportAndPosture": "Keep your head, shoulders, and arms supported on the floor and your pelvis level throughout the repetition.",
+        "disqualifyingCompensations": [
+          "Placing the suspended foot on the floor turns the repetition into a two-leg bridge.",
+          "Straightening or swinging the suspended leg leaves the reviewed right-angle hip-and-knee fixture.",
+          "Arching the low back to lift higher replaces the working-hip endpoint with spinal extension."
+        ],
+        "sideOrDirection": "Finish the set on one working leg, then use the same setup on the other side for equal training. The second side is a mirrored training adaptation."
       }
     }
   ]

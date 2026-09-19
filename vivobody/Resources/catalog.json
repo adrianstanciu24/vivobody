@@ -1091,6 +1091,97 @@
     ]
   },
   {
+    "familyID": "bicycle-crunch",
+    "familyName": "Bicycle Crunch",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "alternating-supine-bicycle-crunch",
+    "name": "Alternating Supine Bicycle Crunch",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Bicycle Crunch",
+      "Supine Bicycle Crunch",
+      "Alternating Bicycle Crunch"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with your hands lightly supporting your head, both thighs above your hips, and both knees bent to 90 degrees.",
+      "movement": "Curl and turn one shoulder toward the opposite knee as that knee moves toward your chest and the other leg straightens above the floor.",
+      "endpoint": "Stop when the shoulder and opposite knee are close without pulling your head forward or lifting your low back.",
+      "returnPhase": "Reverse under control and continue directly into the mirrored side.",
+      "controlledJoints": "Keep your low back pressed to the floor and let the turn come from your trunk rather than swinging the hips.",
+      "supportAndPosture": "Keep both feet off the floor and support your head lightly without pulling on your neck.",
+      "disqualifyingCompensations": [
+        "Keeping the trunk still turns the repetition into a cycling leg drill rather than a bicycle crunch.",
+        "Moving both legs together leaves the alternating fixture.",
+        "Resting the extending foot on the floor leaves the continuous source-defined sequence."
+      ],
+      "sideOrDirection": "Alternate sides. Count each completed shoulder-to-opposite-knee curl as one repetition and use an even total for equal work."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "secondary"
+      }
+    ]
+  },
+  {
     "familyID": "bilateral-squat",
     "familyName": "Bilateral Squat",
     "movementActions": [
@@ -2011,6 +2102,81 @@
       },
       {
         "muscle": "adductorMagnus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "bodyweight-glute-bridge",
+    "familyName": "Bodyweight Glute Bridge",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "single-leg-bodyweight-glute-bridge",
+    "name": "Single-Leg Bodyweight Glute Bridge",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Single-Leg Glute Bridge",
+      "One-Leg Glute Bridge"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with your head, shoulders, and arms resting on the floor. Plant one foot with that knee bent to 90 degrees, then lift the other leg and hold both its hip and knee at 90 degrees.",
+      "movement": "Press through the planted foot and extend the working hip while keeping the other foot off the floor.",
+      "endpoint": "Stop when your trunk and working thigh form a straight line while the pelvis stays level, before the low back begins to arch.",
+      "returnPhase": "Lower the pelvis to the floor under control without changing the planted knee angle.",
+      "controlledJoints": "Keep the planted knee near its starting angle and hold the suspended hip and knee at 90 degrees rather than swinging the leg.",
+      "supportAndPosture": "Keep your head, shoulders, and arms supported on the floor and your pelvis level throughout the repetition.",
+      "disqualifyingCompensations": [
+        "Placing the suspended foot on the floor turns the repetition into a two-leg bridge.",
+        "Straightening or swinging the suspended leg leaves the reviewed right-angle hip-and-knee fixture.",
+        "Arching the low back to lift higher replaces the working-hip endpoint with spinal extension."
+      ],
+      "sideOrDirection": "Finish the set on one working leg, then use the same setup on the other side for equal training. The second side is a mirrored training adaptation."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsFemoris",
         "role": "stabilizer"
       },
       {
@@ -18245,6 +18411,118 @@
         "Bending the elbow to lift the dumbbell turns the front raise into an upright row."
       ],
       "sideOrDirection": "Finish all repetitions on one side before switching arms."
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "shoulder-flexion-raise",
+    "familyName": "Front Raise",
+    "movementActions": [
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "simultaneous-bilateral-dumbbell-front-raise",
+    "name": "Simultaneous Bilateral Dumbbell Front Raise",
+    "group": "shoulders",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "trainingRole": "push",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Bilateral Dumbbell Front Raise",
+      "Two-Dumbbell Front Raise"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Log one dumbbell's weight, not the pair total. Stand upright with one matching dumbbell beside each thigh, palms facing inward, and elbows nearly straight.",
+      "movement": "Raise both upper arms together directly forward from your sides.",
+      "endpoint": "Stop when both upper arms reach shoulder height.",
+      "returnPhase": "Lower both dumbbells together under control.",
+      "controlledJoints": "Keep both elbows nearly straight, palms facing inward, and the lower body still.",
+      "supportAndPosture": "Stand upright with your torso braced and without external support.",
+      "disqualifyingCompensations": [
+        "Alternating the arms leaves the simultaneous two-arm fixture.",
+        "Swinging the dumbbells with leg drive turns the front raise into a momentum swing.",
+        "Raising the arms out to the sides turns the front raise into a lateral raise.",
+        "Bending the elbows to lift the dumbbells turns the raise into an upright-row or curl pattern."
+      ]
     },
     "involvement": [
       {

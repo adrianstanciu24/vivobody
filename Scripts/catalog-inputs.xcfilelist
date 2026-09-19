@@ -12,6 +12,7 @@ $(SRCROOT)/specs/catalog/families/anti-lateral-flexion.json
 $(SRCROOT)/specs/catalog/families/anti-rotation-press.json
 $(SRCROOT)/specs/catalog/families/anti-rotation.json
 $(SRCROOT)/specs/catalog/families/belt-loaded-machine-glute-bridge.json
+$(SRCROOT)/specs/catalog/families/bicycle-crunch.json
 $(SRCROOT)/specs/catalog/families/bilateral-squat.json
 $(SRCROOT)/specs/catalog/families/bird-dog.json
 $(SRCROOT)/specs/catalog/families/bodyweight-glute-bridge.json

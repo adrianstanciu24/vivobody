@@ -1,0 +1,361 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "bicycle-crunch",
+  "name": "Bicycle Crunch",
+  "definition": "A floor-supported alternating core exercise in which the trunk flexes and rotates toward one knee while the other leg extends without touching down, then the mirrored side repeats. The ACE standard directly anchors the ninety-degree hip-and-knee start, opposite shoulder-to-knee pairing, elevated extending leg, low-back contact, controlled tempo, and continuous alternating sequence. Spine flexion and rotation are the training-defining actions. Hip flexion and knee extension describe the concurrent leg cycle using the same conservative action convention as the active dead-bug family; lowering the opposite leg is not relabeled as hip-extension training, and the returning knee-flexion motion does not earn a separate hamstring role. Abs and obliques are non-ranked co-primary core regions, while iliopsoas, rectus femoris, and vasti are secondary dynamic contributors by existing anatomy and the source-defined limb motion. Surface position and motion do not establish a bodyweight fraction, numeric contribution, hypertrophy ranking, or side-specific oblique credit. Symmetric curl-ups, one-sided oblique crunches, reverse crunches, straight-leg sit-ups, dead bugs with a still spine, heel taps, resting feet, and externally loaded variants remain outside this family.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "ace-2026-supine-bicycle-crunch"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.flexion",
+      "spine.rotation"
+    ],
+    "primeActions": [
+      "spine.flexion",
+      "spine.rotation",
+      "hip.flexion",
+      "knee.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "iliopsoas"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "abs",
+        "obliques"
+      ],
+      "secondary": [
+        "iliopsoas",
+        "rectusFemoris",
+        "vasti"
+      ],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The stable floor or mat supporting the trunk.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-defined face-up body position.",
+      "allowedValues": [
+        "supine"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The trunk curls and rotates toward the opposite knee before the mirrored side repeats.",
+      "allowedValues": [
+        "flexesAndRotatesTowardOppositeKnee"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The low back remains pressed to the support rather than the pelvis creating the repetition.",
+      "allowedValues": [
+        "positionHeldLowBackPressed"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both mirrored shoulder-to-knee pairings are trained in one alternating set.",
+      "allowedValues": [
+        "bothSides"
+      ]
+    },
+    {
+      "id": "limbPairing",
+      "valueType": "enum",
+      "required": true,
+      "description": "One shoulder approaches the opposite knee while the other leg extends.",
+      "allowedValues": [
+        "contralateralAlternating"
+      ]
+    },
+    {
+      "id": "startHipAngle",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both thighs begin vertically above the hips.",
+      "allowedValues": [
+        "ninetyDegrees"
+      ]
+    },
+    {
+      "id": "startKneeAngle",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both knees begin bent at ninety degrees.",
+      "allowedValues": [
+        "ninetyDegrees"
+      ]
+    },
+    {
+      "id": "approachingLegMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The knee moves toward the chest as the hip and knee bend further.",
+      "allowedValues": [
+        "hipAndKneeFlexTogether"
+      ]
+    },
+    {
+      "id": "oppositeLegMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The opposite knee straightens while the leg remains above the floor.",
+      "allowedValues": [
+        "kneeExtendsWhileLegRemainsElevated"
+      ]
+    },
+    {
+      "id": "handPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hands support the head lightly without pulling it forward.",
+      "allowedValues": [
+        "lightlySupportsHead"
+      ]
+    },
+    {
+      "id": "limbContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The cycling feet remain off the floor through the set.",
+      "allowedValues": [
+        "remainOffFloor"
+      ]
+    },
+    {
+      "id": "repetitionCounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each completed shoulder-to-opposite-knee curl counts as one repetition.",
+      "allowedValues": [
+        "eachContralateralCurl"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "No machine constrains the body path.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 20
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "alternating-supine-bicycle-crunch",
+      "name": "Alternating Supine Bicycle Crunch",
+      "aliases": [
+        "Bicycle Crunch",
+        "Supine Bicycle Crunch",
+        "Alternating Bicycle Crunch"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "iliopsoas",
+          "role": "secondary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "supportSurface": "floor",
+        "bodyPosition": "supine",
+        "spineMotion": "flexesAndRotatesTowardOppositeKnee",
+        "pelvisMotion": "positionHeldLowBackPressed",
+        "trainingSidePrescription": "bothSides",
+        "limbPairing": "contralateralAlternating",
+        "startHipAngle": "ninetyDegrees",
+        "startKneeAngle": "ninetyDegrees",
+        "approachingLegMotion": "hipAndKneeFlexTogether",
+        "oppositeLegMotion": "kneeExtendsWhileLegRemainsElevated",
+        "handPosition": "lightlySupportsHead",
+        "limbContact": "remainOffFloor",
+        "repetitionCounting": "eachContralateralCurl",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ace-2026-supine-bicycle-crunch"
+      ],
+      "execution": {
+        "startingPosition": "Lie on your back with your hands lightly supporting your head, both thighs above your hips, and both knees bent to 90 degrees.",
+        "movement": "Curl and turn one shoulder toward the opposite knee as that knee moves toward your chest and the other leg straightens above the floor.",
+        "endpoint": "Stop when the shoulder and opposite knee are close without pulling your head forward or lifting your low back.",
+        "returnPhase": "Reverse under control and continue directly into the mirrored side.",
+        "controlledJoints": "Keep your low back pressed to the floor and let the turn come from your trunk rather than swinging the hips.",
+        "supportAndPosture": "Keep both feet off the floor and support your head lightly without pulling on your neck.",
+        "disqualifyingCompensations": [
+          "Keeping the trunk still turns the repetition into a cycling leg drill rather than a bicycle crunch.",
+          "Moving both legs together leaves the alternating fixture.",
+          "Resting the extending foot on the floor leaves the continuous source-defined sequence."
+        ],
+        "sideOrDirection": "Alternate sides. Count each completed shoulder-to-opposite-knee curl as one repetition and use an even total for equal work."
+      }
+    }
+  ]
+}
