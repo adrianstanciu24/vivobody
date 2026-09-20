@@ -17,13 +17,9 @@
 //  without touching the other.
 //
 //  Concurrency: CSSearchableItem and CSSearchableItemAttributeSet are
-//  @MainActor-isolated non-Sendable types under Swift 6, so the whole
-//  indexer is @MainActor — model reads, item construction, and the
-//  CoreSpotlight calls all run on the main actor. The async
-//  index/delete calls still suspend (yielding the main actor) and the
-//  system dispatches the real indexing work off-main internally, so
-//  the UI is not blocked. Call sites (UI screens, AppRoot.onAppear)
-//  are already on the main actor.
+//  @MainActor-isolated non-Sendable types under Swift 6, so system object
+//  construction stays here. Launch-time SwiftData reads and searchable-value
+//  projection run separately in SpotlightIndexStore.
 //
 
 import CoreSpotlight
@@ -31,13 +27,13 @@ import UniformTypeIdentifiers
 
 @MainActor
 enum SpotlightIndexer {
-    static let templateDomain = "astanciu.vivobody.templates"
-    static let exerciseDomain = "astanciu.vivobody.exercises"
-    static func templateIdentifier(_ id: UUID) -> String {
+    nonisolated static let templateDomain = "astanciu.vivobody.templates"
+    nonisolated static let exerciseDomain = "astanciu.vivobody.exercises"
+    nonisolated static func templateIdentifier(_ id: UUID) -> String {
         "template:\(id.uuidString)"
     }
 
-    static func exerciseIdentifier(_ id: UUID) -> String {
+    nonisolated static func exerciseIdentifier(_ id: UUID) -> String {
         "exercise:\(id.uuidString)"
     }
 
@@ -59,11 +55,9 @@ enum SpotlightIndexer {
 
     // MARK: - Reindex all (launch backstop)
 
-    /// Wipe both domains and re-index the current store. Called on
-    /// app launch so the Spotlight index always matches SwiftData
-    /// even if items were added or removed while the app wasn't
-    /// running (or before indexing was wired). Idempotent; safe to
-    /// call on every appear.
+    /// Wipe both domains and re-index the supplied models after an explicit
+    /// catalog/template mutation. Launch uses SpotlightIndexStore instead so
+    /// model traversal does not occupy MainActor.
     static func reindexAll(templates: [WorkoutTemplate], items: [ExerciseCatalogItem]) {
         let all = templates.map { searchableItem(for: $0) }
             + items.map { searchableItem(for: $0) }
@@ -76,18 +70,55 @@ enum SpotlightIndexer {
         }
     }
 
-    /// Fingerprint-throttled reindex: runs when either the app version or the
-    /// generated catalog changes. That keeps additions and authored metadata
-    /// edits searchable during pre-production without rebuilding on every
-    /// launch.
-    static func reindexAllIfNeeded(templates: [WorkoutTemplate], items: [ExerciseCatalogItem]) {
-        let defaults = UserDefaults.standard
-        let previous = defaults.string(forKey: SettingsKey.spotlightReindexFingerprint)
-        let marketingVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
-        let current = "\(marketingVersion)|catalog:\(CatalogData.sourceFingerprint)"
-        guard previous != current else { return }
-        reindexAll(templates: templates, items: items)
-        defaults.set(current, forKey: SettingsKey.spotlightReindexFingerprint)
+    /// Apply launch maintenance prepared by SpotlightIndexStore. Item creation
+    /// yields in bounded batches so a catalog update cannot monopolize the main
+    /// actor, while CoreSpotlight's async calls perform their work out of process.
+    static func applyLaunchMaintenance(
+        removing identifiers: [UUID],
+        reindex payload: SpotlightReindexPayload?
+    ) async {
+        let index = CSSearchableIndex.default()
+        if !identifiers.isEmpty {
+            try? await index.deleteSearchableItems(
+                withIdentifiers: identifiers.map(exerciseIdentifier)
+            )
+        }
+
+        guard let payload else { return }
+        var searchableItems: [CSSearchableItem] = []
+        searchableItems.reserveCapacity(payload.items.count)
+        for (index, snapshot) in payload.items.enumerated() {
+            let attributes = CSSearchableItemAttributeSet(contentType: UTType.item)
+            attributes.title = snapshot.title
+            attributes.contentDescription = snapshot.contentDescription
+            attributes.keywords = snapshot.keywords
+            if let rankingHint = snapshot.rankingHint {
+                attributes.rankingHint = NSNumber(value: rankingHint)
+            }
+            searchableItems.append(
+                CSSearchableItem(
+                    uniqueIdentifier: snapshot.uniqueIdentifier,
+                    domainIdentifier: snapshot.domainIdentifier,
+                    attributeSet: attributes
+                )
+            )
+            if index > 0, index.isMultiple(of: 48) {
+                await Task.yield()
+            }
+        }
+
+        do {
+            try await index.deleteSearchableItems(
+                withDomainIdentifiers: [templateDomain, exerciseDomain]
+            )
+            try await index.indexSearchableItems(searchableItems)
+            UserDefaults.standard.set(
+                payload.fingerprint,
+                forKey: SettingsKey.spotlightReindexFingerprint
+            )
+        } catch {
+            AppDiagnostics.spotlightReindexFailed(error: error)
+        }
     }
 
     // MARK: - Delete

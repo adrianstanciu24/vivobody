@@ -566,6 +566,55 @@ class ScenarioRunner:
             f"{height:.3f}",
         ])
 
+    def relaunch_tap(self, configuration: Mapping[str, Any]) -> None:
+        selector = configuration["selector"]
+        delay = float(configuration["delaySeconds"])
+        tree, match = self.wait_for_stable_selector(selector)
+        if match.node.get("enabled") is False:
+            raise ScenarioFailure(f"Matched element is disabled: {describe_node(match)}")
+        x, y = element_midpoint(match.node, tree)
+        root_frame = node_frame(tree)
+        if root_frame is None:
+            raise ScenarioFailure("Application accessibility root has no usable frame.")
+        _, _, width, height = root_frame
+        launch = self.scenario.get("launch", {})
+        if not isinstance(launch, Mapping):
+            raise ScenarioFailure("Scenario launch must be an object.")
+        arguments = self.launch_arguments(launch)
+        self.command(
+            ["xcrun", "simctl", "terminate", self.udid, self.bundle_id],
+            check=False,
+        )
+        if launch.get("resetPermissions", False):
+            self.command([
+                "xcrun", "simctl", "privacy", self.udid,
+                "reset", "all", self.bundle_id,
+            ])
+        self.command(
+            ["xcrun", "simctl", "launch", self.udid, self.bundle_id, *arguments]
+        )
+        launch_completed_at = time.monotonic()
+        time.sleep(delay)
+        elapsed = time.monotonic() - launch_completed_at
+        self.log(
+            f"RELAUNCH TAP {describe_node(match)} at ({x:.2f}, {y:.2f}) "
+            f"{elapsed:.3f}s after launch returned"
+        )
+        self.command([
+            self.baguette,
+            "tap",
+            "--udid",
+            self.udid,
+            "--x",
+            f"{x:.3f}",
+            "--y",
+            f"{y:.3f}",
+            "--width",
+            f"{width:.3f}",
+            "--height",
+            f"{height:.3f}",
+        ])
+
     def tap_at(self, configuration: Mapping[str, Any]) -> None:
         tree = self.describe_tree()
         root_frame = node_frame(tree)
@@ -700,6 +749,12 @@ class ScenarioRunner:
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} tap payload must be a selector object.")
             self.tap(payload)
+        elif action == "relaunchTap":
+            if not isinstance(payload, Mapping):
+                raise ScenarioFailure(
+                    f"Step {index} relaunchTap payload must be an object."
+                )
+            self.relaunch_tap(payload)
         elif action == "tapAt":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} tapAt payload must be an object.")
@@ -892,6 +947,30 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} {action} payload must be a selector object.")
             validate_selector(payload)
+        elif action == "relaunchTap":
+            if not isinstance(payload, Mapping):
+                raise ScenarioFailure(f"Step {index} relaunchTap payload must be an object.")
+            unknown_relaunch_tap = set(payload) - {"selector", "delaySeconds"}
+            if unknown_relaunch_tap:
+                raise ScenarioFailure(
+                    f"Step {index} relaunchTap has unsupported field(s): "
+                    f"{', '.join(sorted(unknown_relaunch_tap))}."
+                )
+            selector = payload.get("selector")
+            if not isinstance(selector, Mapping):
+                raise ScenarioFailure(
+                    f"Step {index} relaunchTap.selector must be an object."
+                )
+            validate_selector(selector)
+            delay = payload.get("delaySeconds")
+            if (
+                not isinstance(delay, (int, float))
+                or isinstance(delay, bool)
+                or not 0 <= delay <= 5
+            ):
+                raise ScenarioFailure(
+                    f"Step {index} relaunchTap.delaySeconds must be a number from 0 through 5."
+                )
         elif action == "tapAt":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} tapAt payload must be an object.")

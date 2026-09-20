@@ -24,7 +24,7 @@ launch arguments, including fixture, appearance, and text-size flags.
 
 | Feature | Starting flows | Additional states to consider | Focused logic suites |
 |---|---|---|---|
-| First run | [Onboarding to first workout](onboarding-first-workout.json) | [Light](onboarding-first-workout-light.json) and [Accessibility Large](onboarding-first-workout-accessibility.json); the flow must reach the active workout without an automatic permission interruption | [DebugSeedRoutingTests](../../vivobodyTests/DebugSeedRoutingTests.swift) |
+| First run | [Onboarding to first workout](onboarding-first-workout.json) | [Early relaunch Start](onboarding-immediate-start.json), [Light](onboarding-first-workout-light.json), and [Accessibility Large](onboarding-first-workout-accessibility.json); the flow must reach the active workout without an automatic permission interruption | [DebugSeedRoutingTests](../../vivobodyTests/DebugSeedRoutingTests.swift) |
 | Today and start/resume | [today-actions](today-actions.json), [today-up-next](today-up-next.json) | Empty, scheduled, active, and restored states in `today-actions`; [journal semantic grouping](today-journal-accessibility.json) | [TodayUpNextPresentationTests](../../vivobodyTests/TodayUpNextPresentationTests.swift), [UpNextTests](../../vivobodyTests/UpNextTests.swift) |
 | Active sets and rest | [start-complete-rest](start-complete-rest.json), [superset completion](active-superset-completion.json), [add superset partner](active-superset-add-partner.json) | [Restoration](active-completion-restoration.json), [zero-set recovery](active-zero-set-recovery.json), `active-*` tracking variants in the directory; save-failure paths are unit contracts | [ActiveSetCompletionTests](../../vivobodyTests/ActiveSetCompletionTests.swift), [WorkoutSessionArchiveFailureTests](../../vivobodyTests/WorkoutSessionArchiveFailureTests.swift) |
 | Active exercise replacement | [replacement](replace-active-exercise.json), [substitution sheet](exercise-substitution-sheet.json), [removal](active-remove-exercise.json) | [Blocked replacement](replace-active-exercise-blocked.json) | [WorkoutExerciseReplacementTests](../../vivobodyTests/WorkoutExerciseReplacementTests.swift), [ExerciseSubstitutionTests](../../vivobodyTests/ExerciseSubstitutionTests.swift) |
@@ -76,6 +76,12 @@ framework chatter or user-owned values.
 - `wait`: poll until at least one visible element matches a selector.
 - `waitAbsent`: poll until no visible element matches a selector.
 - `tap`: require one visible match and tap its on-screen midpoint.
+- `relaunchTap`: resolve its semantic `selector` on the current deterministic
+  screen, terminate and relaunch with the scenario's original launch options,
+  then tap the calibrated position after `delaySeconds` without querying the
+  relaunched UI. Reserve it for launch-responsiveness probes. It avoids a
+  hardcoded coordinate but cannot prove the control was visibly drawn by that
+  deadline or reproduce physical-device haptic timing.
 - `tapAt`: tap a normalized application coordinate. Reserve this for native
   system chrome that the Baguette accessibility snapshot omits; resume semantic
   selectors immediately after the tap.

@@ -18,6 +18,12 @@ import WidgetKit
 
 @MainActor
 enum WidgetSnapshotWriter {
+    private enum WriteOutcome: Equatable {
+        case written
+        case unchanged
+        case failed
+    }
+
     /// The app's central analytics coordinator. AppRoot wires it once
     /// before any production snapshot request; keeping a weak reference
     /// avoids giving this process-wide bridge ownership of AppState.
@@ -108,18 +114,23 @@ enum WidgetSnapshotWriter {
             guard !Task.isCancelled else { return }
             let unit = WeightUnit.current
             mirrorPreferences(unit: unit)
-            let didWrite = write(
+            let writeOutcome = write(
                 activeWorkoutSnapshot(
                     session: fetchActiveSession(in: context),
                     unit: unit
                 ),
                 key: WidgetShared.activeWorkoutSnapshotKey
             )
+            let diagnosticOutcome = switch writeOutcome {
+            case .written: "success"
+            case .unchanged: "unchanged"
+            case .failed: "failure"
+            }
             AppDiagnostics.snapshotWrite(
                 kind: "active_workout",
-                outcome: didWrite ? "success" : "failure"
+                outcome: diagnosticOutcome
             )
-            guard reload else { return }
+            guard reload, writeOutcome == .written else { return }
             WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
         }
     }
@@ -539,13 +550,24 @@ enum WidgetSnapshotWriter {
 
     // MARK: - Persistence
 
-    private static func write(_ snapshot: some Codable, key: String) -> Bool {
+    /// Avoid asking WidgetKit to reload when the encoded payload already
+    /// matches the App Group. This removes the duplicate empty-state reload
+    /// produced by onboarding publication followed by session restoration.
+    private static func write<Snapshot: Codable & Equatable>(
+        _ snapshot: Snapshot,
+        key: String
+    ) -> WriteOutcome {
         guard
             let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
             let data = WidgetSnapshotCodec.encode(snapshot)
-        else { return false }
+        else { return .failed }
+        let previous = WidgetSnapshotCodec.decode(
+            Snapshot.self,
+            from: defaults.data(forKey: key)
+        )
+        guard previous != snapshot else { return .unchanged }
         defaults.set(data, forKey: key)
-        return true
+        return .written
     }
 
     private static func encode(_ snapshot: some Codable) -> Data? {

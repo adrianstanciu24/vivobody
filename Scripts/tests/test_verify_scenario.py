@@ -176,6 +176,43 @@ class VerifyScenarioTests(unittest.TestCase):
         with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "non-empty strings"):
             verify_scenario.validate_scenario_definition(scenario)
 
+    def test_relaunch_tap_accepts_semantic_calibration_and_delay(self) -> None:
+        scenario = {
+            "name": "relaunch-tap",
+            "launch": {},
+            "steps": [
+                {
+                    "relaunchTap": {
+                        "selector": {"identifier": "onboardingStartButton"},
+                        "delaySeconds": 0.5,
+                    }
+                },
+            ],
+            "required": [],
+            "forbidden": [],
+        }
+
+        verify_scenario.validate_scenario_definition(scenario)
+
+    def test_relaunch_tap_rejects_out_of_range_delay(self) -> None:
+        scenario = {
+            "name": "invalid-relaunch-delay",
+            "launch": {},
+            "steps": [
+                {
+                    "relaunchTap": {
+                        "selector": {"identifier": "onboardingStartButton"},
+                        "delaySeconds": 6,
+                    }
+                },
+            ],
+            "required": [],
+            "forbidden": [],
+        }
+
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "from 0 through 5"):
+            verify_scenario.validate_scenario_definition(scenario)
+
     def test_every_checked_in_scenario_is_valid(self) -> None:
         paths = sorted(verify_scenario.DEFAULT_SCENARIOS_DIR.glob("*.json"))
         self.assertGreater(len(paths), 0)

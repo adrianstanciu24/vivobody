@@ -214,11 +214,7 @@ struct TodayScreen: View {
             // since the value only grows).
             if newHeight > heroHeight { heroHeight = newHeight }
         }
-        .onAppear {
-            Haptics.prepare()
-            // A silent "powered-on" haptic as the screen settles in.
-            Haptics.soft(playsSound: false)
-        }
+        .onAppear { Haptics.prepare() }
         .sheet(isPresented: $showStartSheet, onDismiss: runPendingStart) {
             StartWorkoutSheet(
                 lastSession: latestSession,

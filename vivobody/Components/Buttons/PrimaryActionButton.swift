@@ -11,9 +11,10 @@
 //  — title, optional subtitle, optional arrow, single action closure.
 //
 //  Behavior:
-//    • Crescendo haptic fires on tap (same beat as SetCompleteButton's
-//      "this is a deliberate action" feedback). `sound` swaps the voice
-//      that rides along — Today's START WORKOUT uses its own.
+//    • Crescendo haptic is queued on tap without delaying the action (same
+//      beat as SetCompleteButton's "this is a deliberate action" feedback).
+//      `sound` swaps the voice that rides along — Today's START WORKOUT uses
+//      its own.
 //    • The tinted Liquid Glass surface, padding, shadows, and press-scale
 //      feedback all come from `PrimaryButtonStyle` — this view just supplies
 //      the label content and the accent color.
@@ -46,8 +47,8 @@ struct PrimaryActionButton: View {
 
     var body: some View {
         Button {
-            Haptics.crescendo(sound: sound)
             action()
+            Haptics.crescendo(sound: sound)
         } label: {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: Self.labelSpacing) {

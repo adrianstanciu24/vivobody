@@ -393,7 +393,6 @@ struct OnboardingScreen: View {
         guard !isSaving else { return }
         guard !includesBodyWeight || (bodyWeight.isFinite && bodyWeight > 0) else { return }
         isSaving = true
-        Haptics.soft()
 
         guard includesBodyWeight else {
             onStart()

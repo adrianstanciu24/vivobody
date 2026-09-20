@@ -6,7 +6,8 @@
 //
 //  Two layers:
 //    • UIFeedbackGenerator — sub-frame latency atoms (tick, thunk, slam).
-//    • CHHapticEngine     — custom patterns (crescendo, breath, swell).
+//    • HapticPatternEngine — actor-owned custom patterns (crescendo, breath,
+//      swell) that never delay the user action associated with a tap.
 //
 //  Every atom carries sound by default, and it is always the same
 //  sound: the app's single button click (`Sounds.playButton()`).
@@ -23,7 +24,6 @@
 //  Me-tab toggles remain independent.
 //
 
-import CoreHaptics
 import UIKit
 
 @MainActor
@@ -38,14 +38,9 @@ enum Haptics {
     private static let selectionGen = UISelectionFeedbackGenerator()
     private static let notification = UINotificationFeedbackGenerator()
 
-    // MARK: - Core Haptics engine
+    // MARK: - Custom patterns
 
-    private static var engine: CHHapticEngine?
-    private static var engineNeedsStart = true
-
-    static var supportsHaptics: Bool {
-        CHHapticEngine.capabilitiesForHardware().supportsHaptics
-    }
+    private static let patternEngine = HapticPatternEngine()
 
     /// Master mute. Reflects the Me-tab Haptics toggle. Read fresh on
     /// every emission so toggling takes effect immediately without
@@ -58,51 +53,15 @@ enum Haptics {
 
     // MARK: - Lifecycle
 
-    /// Call at app launch and on every foreground transition.
+    /// Queue custom haptic and sound engines for preparation. UIKit's
+    /// generators are intentionally prepared only after actual feedback,
+    /// when Apple says another nearby interaction can benefit.
     static func prepare() {
-        lightImpact.prepare()
-        mediumImpact.prepare()
-        heavyImpact.prepare()
-        rigidImpact.prepare()
-        softImpact.prepare()
-        selectionGen.prepare()
-        notification.prepare()
-        startEngineIfNeeded()
+        let patternEngine = patternEngine
+        Task(priority: .utility) {
+            await patternEngine.prepare()
+        }
         Sounds.prepare()
-    }
-
-    private static func startEngineIfNeeded() {
-        guard supportsHaptics else { return }
-
-        if engine == nil {
-            do {
-                let e = try CHHapticEngine()
-                // Engine can stop on backgrounding, AirPlay route changes, etc.
-                // Re-flag for start; don't auto-restart here to avoid loops.
-                e.stoppedHandler = { _ in
-                    Task { @MainActor in engineNeedsStart = true }
-                }
-                // System reset (e.g. media services reset) requires fresh start.
-                e.resetHandler = {
-                    Task { @MainActor in
-                        engineNeedsStart = true
-                        startEngineIfNeeded()
-                    }
-                }
-                engine = e
-            } catch {
-                engine = nil
-                return
-            }
-        }
-
-        guard engineNeedsStart, let engine else { return }
-        do {
-            try engine.start()
-            engineNeedsStart = false
-        } catch {
-            // Will retry on next pattern play.
-        }
     }
 
     // MARK: - Atoms
@@ -226,21 +185,14 @@ enum Haptics {
     static func crescendo(sound: Sounds.Effect = .crescendo) {
         Sounds.play(sound)
         guard isEnabled else { return }
-        play(events: [
-            transient(intensity: 0.40, sharpness: 0.35, at: 0.00),
-            transient(intensity: 0.70, sharpness: 0.60, at: 0.10),
-            transient(intensity: 1.00, sharpness: 0.90, at: 0.22),
-        ])
+        playPattern(.crescendo)
     }
 
     /// A gentle two-pulse — rest timer warning ("you're almost up").
     static func breath() {
         Sounds.play(.breath)
         guard isEnabled else { return }
-        play(events: [
-            transient(intensity: 0.5, sharpness: 0.2, at: 0.00),
-            transient(intensity: 0.5, sharpness: 0.2, at: 0.18),
-        ])
+        playPattern(.breath)
     }
 
     /// A rising rumble that ends in a slam — finishing a heavy set.
@@ -255,41 +207,7 @@ enum Haptics {
     static func swell(sound: Sounds.Effect = .swell) {
         Sounds.play(sound)
         guard isEnabled else { return }
-        let continuous = CHHapticEvent(
-            eventType: .hapticContinuous,
-            parameters: [
-                .init(parameterID: .hapticIntensity, value: 1.0),
-                .init(parameterID: .hapticSharpness, value: 0.4),
-            ],
-            relativeTime: 0.0,
-            duration: 0.35
-        )
-        let intensityCurve = CHHapticParameterCurve(
-            parameterID: .hapticIntensityControl,
-            controlPoints: [
-                .init(relativeTime: 0.00, value: 0.35),
-                .init(relativeTime: 0.20, value: 0.70),
-                .init(relativeTime: 0.35, value: 1.00),
-            ],
-            relativeTime: 0.0
-        )
-        let sharpnessCurve = CHHapticParameterCurve(
-            parameterID: .hapticSharpnessControl,
-            controlPoints: [
-                .init(relativeTime: 0.00, value: 0.2),
-                .init(relativeTime: 0.35, value: 0.7),
-            ],
-            relativeTime: 0.0
-        )
-        let slam = CHHapticEvent(
-            eventType: .hapticTransient,
-            parameters: [
-                .init(parameterID: .hapticIntensity, value: 1.0),
-                .init(parameterID: .hapticSharpness, value: 0.75),
-            ],
-            relativeTime: 0.38
-        )
-        playPattern(events: [continuous, slam], curves: [intensityCurve, sharpnessCurve])
+        playPattern(.swell)
     }
 
     /// The workout-done finale. Reserved for the summary card's Done
@@ -298,46 +216,18 @@ enum Haptics {
     static func finale() {
         Sounds.play(.finale)
         guard isEnabled else { return }
-        play(events: [
-            transient(intensity: 0.30, sharpness: 0.40, at: 0.00),
-            transient(intensity: 0.40, sharpness: 0.45, at: 0.06),
-            transient(intensity: 0.50, sharpness: 0.50, at: 0.12),
-            transient(intensity: 0.60, sharpness: 0.55, at: 0.18),
-            transient(intensity: 0.75, sharpness: 0.60, at: 0.26),
-            transient(intensity: 1.00, sharpness: 0.80, at: 0.34),
-        ])
+        playPattern(.finale)
     }
 
     // MARK: - Pattern helpers
 
-    private static func transient(intensity: Float, sharpness: Float, at time: TimeInterval) -> CHHapticEvent {
-        CHHapticEvent(
-            eventType: .hapticTransient,
-            parameters: [
-                .init(parameterID: .hapticIntensity, value: intensity),
-                .init(parameterID: .hapticSharpness, value: sharpness),
-            ],
-            relativeTime: time
-        )
-    }
-
-    private static func play(events: [CHHapticEvent]) {
-        playPattern(events: events, curves: [])
-    }
-
-    private static func playPattern(events: [CHHapticEvent], curves: [CHHapticParameterCurve]) {
-        guard supportsHaptics else {
+    private static func playPattern(_ pattern: HapticPatternKind) {
+        let patternEngine = patternEngine
+        Task {
+            let didPlay = await patternEngine.playIfReady(pattern)
+            guard !didPlay, isEnabled else { return }
             mediumImpact.impactOccurred()
-            return
-        }
-        startEngineIfNeeded()
-        guard let engine else { return }
-        do {
-            let pattern = try CHHapticPattern(events: events, parameterCurves: curves)
-            let player = try engine.makePlayer(with: pattern)
-            try player.start(atTime: 0)
-        } catch {
-            mediumImpact.impactOccurred()
+            mediumImpact.prepare()
         }
     }
 }

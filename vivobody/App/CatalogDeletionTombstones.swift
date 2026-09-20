@@ -9,7 +9,7 @@
 
 import Foundation
 
-enum CatalogDeletionTombstones {
+nonisolated enum CatalogDeletionTombstones {
     static func ids(in defaults: UserDefaults = .standard) -> Set<String> {
         Set(defaults.stringArray(forKey: SettingsKey.hiddenBundledCatalogIDs) ?? [])
     }

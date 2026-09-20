@@ -14,6 +14,8 @@ struct VivobodyApp: App {
     private struct Dependencies {
         let container: ModelContainer
         let analyticsSnapshotStore: AnalyticsSnapshotStore
+        let catalogReconciliationStore: CatalogReconciliationStore
+        let spotlightIndexStore: SpotlightIndexStore
     }
 
     /// The SwiftData container. Holds every archived workout. The
@@ -36,6 +38,12 @@ struct VivobodyApp: App {
                 container: container,
                 analyticsSnapshotStore: AnalyticsSnapshotStore(
                     modelContainer: container
+                ),
+                catalogReconciliationStore: CatalogReconciliationStore(
+                    modelContainer: container
+                ),
+                spotlightIndexStore: SpotlightIndexStore(
+                    modelContainer: container
                 )
             )
         } catch {
@@ -54,6 +62,12 @@ struct VivobodyApp: App {
                 return Dependencies(
                     container: memory,
                     analyticsSnapshotStore: AnalyticsSnapshotStore(
+                        modelContainer: memory
+                    ),
+                    catalogReconciliationStore: CatalogReconciliationStore(
+                        modelContainer: memory
+                    ),
+                    spotlightIndexStore: SpotlightIndexStore(
                         modelContainer: memory
                     )
                 )
@@ -82,15 +96,17 @@ struct VivobodyApp: App {
             if let dependencies {
                 #if DEBUG
                     DebugLaunchRoot(
-                        analyticsSnapshotStore: dependencies.analyticsSnapshotStore
+                        analyticsSnapshotStore: dependencies.analyticsSnapshotStore,
+                        catalogReconciliationStore: dependencies.catalogReconciliationStore,
+                        spotlightIndexStore: dependencies.spotlightIndexStore
                     )
-                    .warmUpKeyboardOnce()
                     .modelContainer(dependencies.container)
                 #else
                     AppRoot(
-                        analyticsSnapshotStore: dependencies.analyticsSnapshotStore
+                        analyticsSnapshotStore: dependencies.analyticsSnapshotStore,
+                        catalogReconciliationStore: dependencies.catalogReconciliationStore,
+                        spotlightIndexStore: dependencies.spotlightIndexStore
                     )
-                    .warmUpKeyboardOnce()
                     .modelContainer(dependencies.container)
                 #endif
             } else {
@@ -107,14 +123,22 @@ struct VivobodyApp: App {
     /// already-visible onboarding or tab interaction.
     private struct DebugLaunchRoot: View {
         let analyticsSnapshotStore: AnalyticsSnapshotStore
+        let catalogReconciliationStore: CatalogReconciliationStore
+        let spotlightIndexStore: SpotlightIndexStore
 
         @Environment(\.modelContext) private var modelContext
         @State private var isPrepared: Bool
 
         private let route: UITestRoute
 
-        init(analyticsSnapshotStore: AnalyticsSnapshotStore) {
+        init(
+            analyticsSnapshotStore: AnalyticsSnapshotStore,
+            catalogReconciliationStore: CatalogReconciliationStore,
+            spotlightIndexStore: SpotlightIndexStore
+        ) {
             self.analyticsSnapshotStore = analyticsSnapshotStore
+            self.catalogReconciliationStore = catalogReconciliationStore
+            self.spotlightIndexStore = spotlightIndexStore
             let route = UITestSupport.route()
             self.route = route
             _isPrepared = State(initialValue: route.resetRequest == nil && route.manualFixture == nil)
@@ -123,7 +147,11 @@ struct VivobodyApp: App {
         var body: some View {
             Group {
                 if isPrepared {
-                    AppRoot(analyticsSnapshotStore: analyticsSnapshotStore)
+                    AppRoot(
+                        analyticsSnapshotStore: analyticsSnapshotStore,
+                        catalogReconciliationStore: catalogReconciliationStore,
+                        spotlightIndexStore: spotlightIndexStore
+                    )
                 } else {
                     bootstrapPlaceholder
                 }

@@ -68,6 +68,12 @@ never rewrite an older fixture to make migration pass.
 All user mutations stay in the app and save through the error-reporting helper
 in `vivobody/App/SaveError.swift`. The active workout is restored from the
 canonical store; UI presentation state is not a substitute for session state.
+Bundled exercise reconciliation runs through `CatalogReconciliationStore`, a
+long-lived `ModelActor` with its own context, so decoding, validation, and the
+save transaction stay serialized. `AppRoot` invokes it from an explicitly
+detached task: the model actor alone does not guarantee off-main-thread
+execution. Only the Sendable reconciliation result returns to the main actor;
+the atomic save and fingerprint update finish before catalog-dependent UI opens.
 
 ### Workout lifecycle
 
@@ -147,6 +153,8 @@ The authoritative import and call-site allowlists live in
 | Live Activity app control | `vivobody/App/WorkoutLiveActivityController.swift` |
 | Spotlight indexing and parsing | `vivobody/App/SpotlightIndexer.swift` and `vivobody/App/IncomingAction.swift` |
 | Widget snapshot publication | `vivobody/App/WidgetSnapshotWriter.swift` |
+| Interaction audio engine | `vivobody/Components/Haptics/SoundEngine.swift` |
+| Custom haptic engine | `vivobody/Components/Haptics/HapticPatternEngine.swift` |
 | Privacy-safe unified logging | `vivobody/App/AppDiagnostics.swift` |
 
 Do not duplicate the checker’s exact allowlists here. If ownership changes,
@@ -164,10 +172,19 @@ maintainability and accessibility bar lives in
 ## Launch path
 
 Only work required for first paint belongs on the synchronous launch path.
-Catalog reconciliation, active-session restoration, and pending action
-consumption are coordinated in `AppRoot`. Non-critical indexing and snapshot
-refreshes are deferred or throttled. Any new launch work must state why it is
-critical and how often it runs.
+`AppRoot` starts catalog reconciliation through its model actor while onboarding
+remains interactive; a matching generated fingerprint skips the actor entirely.
+When reconciliation is required, catalog-dependent main UI appears only after
+the transaction commits. Active-session restoration and pending action
+consumption remain coordinated in `AppRoot`. Non-critical indexing and snapshot
+refreshes are deferred or throttled. `SpotlightIndexStore` performs launch-time
+SwiftData reads and searchable-value projection on its `ModelActor`; the main
+actor only creates the CoreSpotlight system objects in bounded, yielding batches.
+Unchanged active-workout widget payloads do not request another WidgetKit reload.
+Interaction feedback is best-effort: `SoundEngine` and `HapticPatternEngine`
+own their system engines on dedicated actors, and cold preparation may drop the
+first sound or custom pattern rather than delay the associated control action.
+Any new launch work must state why it is critical and how often it runs.
 
 ## Architecture changes
 

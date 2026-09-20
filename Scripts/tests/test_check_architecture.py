@@ -147,6 +147,19 @@ SessionSideEffects.handle(.updated, session: session, in: modelContext)
         self.assertIn("ARCH012", rejected)
         self.assertNotIn("ARCH012", accepted)
 
+    def test_feedback_engines_must_remain_actor_owned_and_off_main_actor(self) -> None:
+        rejected = self.rules_for(
+            "vivobody/Components/Haptics/SoundEngine.swift",
+            "import AVFoundation\n@MainActor enum SoundEngine {}\n",
+        )
+        accepted = self.rules_for(
+            "vivobody/Components/Haptics/SoundEngine.swift",
+            "import AVFoundation\nactor SoundEngine {}\n",
+        )
+
+        self.assertIn("ARCH014", rejected)
+        self.assertNotIn("ARCH014", accepted)
+
     def test_debug_wrapper_may_precede_header(self) -> None:
         source = """#if DEBUG
 //

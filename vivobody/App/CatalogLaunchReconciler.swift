@@ -10,7 +10,7 @@
 import Foundation
 import SwiftData
 
-struct CatalogReconciliationResult: Equatable {
+nonisolated struct CatalogReconciliationResult: Equatable {
     let didReconcile: Bool
     let removedItemIDs: [UUID]
     let insertedItemCount: Int
@@ -24,8 +24,18 @@ struct CatalogReconciliationResult: Equatable {
     )
 }
 
-@MainActor
-enum CatalogLaunchReconciler {
+nonisolated enum CatalogLaunchReconciler {
+    /// The fixed-size bundled fingerprint makes this check cheap enough to use
+    /// while constructing AppRoot. A match means no JSON decode, fetch, or save
+    /// is needed and the main app can render immediately.
+    static func requiresReconciliation(
+        defaults: UserDefaults = .standard,
+        catalogFingerprint: String = CatalogData.sourceFingerprint
+    ) -> Bool {
+        defaults.string(forKey: SettingsKey.catalogReconciliationFingerprint)
+            != catalogFingerprint
+    }
+
     /// Reconcile bundled rows in one rollback-safe transaction. The typed
     /// result lets AppRoot defer Spotlight cleanup until after this returns,
     /// which means no search side effect can precede the successful commit.
@@ -38,9 +48,10 @@ enum CatalogLaunchReconciler {
             try context.saveOrRollback()
         }
     ) throws -> CatalogReconciliationResult {
-        guard defaults.string(forKey: SettingsKey.catalogReconciliationFingerprint)
-            != catalogFingerprint
-        else {
+        guard requiresReconciliation(
+            defaults: defaults,
+            catalogFingerprint: catalogFingerprint
+        ) else {
             return .unchanged
         }
 
@@ -107,6 +118,16 @@ enum CatalogLaunchReconciler {
     /// one.
     static func invalidate(in defaults: UserDefaults = .standard) {
         defaults.removeObject(forKey: SettingsKey.catalogReconciliationFingerprint)
+    }
+}
+
+/// Owns the context used for launch reconciliation. AppRoot invokes it from
+/// a detached task so the synchronous transaction stays off the main thread.
+@ModelActor
+actor CatalogReconciliationStore {
+    func reconcile() throws -> CatalogReconciliationResult {
+        assert(!Thread.isMainThread, "Catalog reconciliation must run off the main thread.")
+        return try CatalogLaunchReconciler.reconcile(in: modelContext)
     }
 }
 

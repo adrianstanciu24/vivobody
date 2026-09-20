@@ -19,11 +19,27 @@ nonisolated enum AppDiagnostics {
     private static let snapshot = Logger(subsystem: subsystem, category: "snapshot")
     private static let healthKit = Logger(subsystem: subsystem, category: "healthkit")
     private static let audio = Logger(subsystem: subsystem, category: "audio")
+    private static let catalog = Logger(subsystem: subsystem, category: "catalog")
+    private static let spotlight = Logger(subsystem: subsystem, category: "spotlight")
 
     static func audioFailed(event: String, error: any Error) {
         let error = error as NSError
         audio.error(
             "event=audio.\(event, privacy: .public) outcome=failure error_domain=\(error.domain, privacy: .private) error_code=\(error.code, privacy: .public)"
+        )
+    }
+
+    static func catalogReconciliationFailed(error: any Error) {
+        let error = error as NSError
+        catalog.error(
+            "event=catalog.reconciliation outcome=failure error_domain=\(error.domain, privacy: .private) error_code=\(error.code, privacy: .public)"
+        )
+    }
+
+    static func spotlightReindexFailed(error: any Error) {
+        let error = error as NSError
+        spotlight.error(
+            "event=spotlight.reindex outcome=failure error_domain=\(error.domain, privacy: .private) error_code=\(error.code, privacy: .public)"
         )
     }
 
@@ -65,9 +81,9 @@ nonisolated enum AppDiagnostics {
     }
 
     static func snapshotWrite(kind: String, outcome: String) {
-        if outcome == "success" {
+        if outcome == "success" || outcome == "unchanged" {
             snapshot.notice(
-                "event=snapshot.write kind=\(kind, privacy: .public) outcome=success"
+                "event=snapshot.write kind=\(kind, privacy: .public) outcome=\(outcome, privacy: .public)"
             )
         } else {
             snapshot.error(

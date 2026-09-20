@@ -37,6 +37,12 @@ SWIFT_HEADER_ROOTS = (
 # Frameworks with exactly one or two repository-wide owners. Adding another
 # target or concern is possible, but it must be an explicit architecture edit.
 GLOBAL_FRAMEWORK_BOUNDARIES: dict[str, frozenset[str]] = {
+    "AVFoundation": frozenset({
+        "vivobody/Components/Haptics/SoundEngine.swift",
+    }),
+    "CoreHaptics": frozenset({
+        "vivobody/Components/Haptics/HapticPatternEngine.swift",
+    }),
     "HealthKit": frozenset({
         "vivobody/HealthKit/HealthKitWorkoutService.swift",
     }),
@@ -71,6 +77,10 @@ SWIFTDATA_FORBIDDEN_ROOTS = (
 ACTIVE_EXERCISE_CARD_PREFIX = (
     "vivobody/Screens/ActiveWorkout/ActiveExerciseCard"
 )
+FEEDBACK_ENGINE_ACTORS = {
+    "vivobody/Components/Haptics/SoundEngine.swift": "actor SoundEngine",
+    "vivobody/Components/Haptics/HapticPatternEngine.swift": "actor HapticPatternEngine",
+}
 
 RAW_GLASS_BOUNDARIES = frozenset({
     "vivobody/App/GlassStyle.swift",
@@ -449,6 +459,17 @@ def check_swift_file(path: str, source: str) -> list[Violation]:
                     "ARCH007",
                     f"Route {concern} through SessionSideEffects instead of calling the system boundary directly.",
                 ))
+
+    expected_actor = FEEDBACK_ENGINE_ACTORS.get(path)
+    if expected_actor is not None and (
+        expected_actor not in masked.code or "@MainActor" in masked.code
+    ):
+        violations.append(Violation(
+            path,
+            1,
+            "ARCH014",
+            "Keep feedback engine construction, preparation, and playback on its dedicated actor, never MainActor.",
+        ))
 
     if path != LOGGER_BOUNDARY:
         for match in DIRECT_LOGGER_PATTERN.finditer(masked.code):

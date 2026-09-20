@@ -1,0 +1,47 @@
+{
+  "name": "onboarding-immediate-start",
+  "launch": {
+    "reset": true,
+    "resetPermissions": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-onboarding",
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "relaunchTap": {
+        "selector": {
+          "identifier": "onboardingStartButton",
+          "label": "Start",
+          "role": "AXButton"
+        },
+        "delaySeconds": 0.5
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Fresh Workout",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "todayStartWorkoutButton",
+      "label": "Start Fresh Workout",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "onboardingStartButton",
+      "visible": true
+    }
+  ]
+}

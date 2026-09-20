@@ -36,11 +36,25 @@ import SwiftData
 import SwiftUI
 import VivoKit
 
+private enum CatalogPreparationState {
+    case preparing
+    case ready
+    case failed
+}
+
 struct AppRoot: View {
     let analyticsSnapshotStore: AnalyticsSnapshotStore
+    let catalogReconciliationStore: CatalogReconciliationStore
+    let spotlightIndexStore: SpotlightIndexStore
 
-    init(analyticsSnapshotStore: AnalyticsSnapshotStore) {
+    init(
+        analyticsSnapshotStore: AnalyticsSnapshotStore,
+        catalogReconciliationStore: CatalogReconciliationStore,
+        spotlightIndexStore: SpotlightIndexStore
+    ) {
         self.analyticsSnapshotStore = analyticsSnapshotStore
+        self.catalogReconciliationStore = catalogReconciliationStore
+        self.spotlightIndexStore = spotlightIndexStore
     }
 
     #if DEBUG
@@ -48,10 +62,20 @@ struct AppRoot: View {
             analyticsSnapshotStore = AnalyticsSnapshotStore(
                 modelContainer: previewContainer
             )
+            catalogReconciliationStore = CatalogReconciliationStore(
+                modelContainer: previewContainer
+            )
+            spotlightIndexStore = SpotlightIndexStore(
+                modelContainer: previewContainer
+            )
         }
     #endif
 
     @State private var appState = AppState()
+    @State private var catalogPreparationState: CatalogPreparationState =
+        CatalogLaunchReconciler.requiresReconciliation() ? .preparing : .ready
+    @State private var catalogPreparationAttempt = 0
+    @State private var removedCatalogItemIDs: [UUID] = []
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
 
@@ -73,15 +97,25 @@ struct AppRoot: View {
 
     var body: some View {
         Group {
-            if onboardingCompleted {
-                mainApp
-            } else {
+            if !onboardingCompleted {
                 OnboardingScreen(onStart: { onboardingCompleted = true })
+            } else {
+                switch catalogPreparationState {
+                case .preparing:
+                    CatalogPreparationView(hasFailed: false, onRetry: retryCatalogPreparation)
+                case .ready:
+                    mainApp
+                case .failed:
+                    CatalogPreparationView(hasFailed: true, onRetry: retryCatalogPreparation)
+                }
             }
         }
         .preferredColorScheme(appearance.colorScheme)
         .tint(Tint.primary)
         .environment(\.sessionAnalytics, appState.analytics)
+        .task(id: catalogPreparationAttempt) {
+            await prepareCatalogIfNeeded()
+        }
     }
 
     private var mainApp: some View {
@@ -119,10 +153,9 @@ struct AppRoot: View {
                 }
             }
             .onAppear {
-                // Critical path — must complete before first paint:
-                // wire the model context, reconcile the bundled catalog,
-                // restore any in-flight workout (MiniBar), and drain
-                // pending deep links.
+                // Wire the UI context, restore any in-flight workout (MiniBar),
+                // and drain pending deep links. Catalog reconciliation has
+                // already committed through CatalogReconciliationStore.
                 appState.storageFallbackActive = StorageHealth.shared.didFallbackToInMemory
                 WidgetSnapshotWriter.configure(analytics: appState.analytics)
                 WidgetSnapshotWriter.configure(
@@ -134,10 +167,6 @@ struct AppRoot: View {
                 #if DEBUG
                     let debugRoute = UITestSupport.route()
                 #endif
-                let catalogReconciliation = try? CatalogLaunchReconciler.reconcile(
-                    in: modelContext
-                )
-                let removedCatalogItemIDs = catalogReconciliation?.removedItemIDs ?? []
                 #if DEBUG
                     DebugSeedCoordinator.seedLaunchFixtures(
                         debugRoute.launchSteps,
@@ -157,19 +186,13 @@ struct AppRoot: View {
                 AppearanceSideEffects.sync(appearance)
                 consumeIncomingActions()
 
-                // Non-critical path — defer to a low-priority Task so
-                // SwiftUI's first render isn't blocked by catalog
-                // Spotlight indexing or widget snapshot
-                // writes.
-                Task(priority: .utility) { @MainActor in
-                    for id in removedCatalogItemIDs {
-                        SpotlightIndexer.removeExercise(id: id)
-                    }
-                    let templates = (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
-                    let items = (try? modelContext.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
-                    SpotlightIndexer.reindexAllIfNeeded(templates: templates, items: items)
-                    WidgetSnapshotWriter.writeAllIfStale(in: modelContext)
-                }
+                let catalogItemIDsToRemove = removedCatalogItemIDs
+                removedCatalogItemIDs.removeAll()
+
+                // This call only performs its cheap fingerprint check and
+                // schedules the writer's existing coalesced publication.
+                WidgetSnapshotWriter.writeAllIfStale(in: modelContext)
+                scheduleSpotlightMaintenance(removing: catalogItemIDsToRemove)
             }
             .onChange(of: scenePhase) { oldPhase, phase in
                 if phase == .active {
@@ -282,6 +305,44 @@ struct AppRoot: View {
                 }
                 .presentationDragIndicator(.visible)
             }
+    }
+
+    private func prepareCatalogIfNeeded() async {
+        guard catalogPreparationState != .ready else { return }
+
+        do {
+            let store = catalogReconciliationStore
+            // The model actor serializes its context, but a direct await can
+            // still execute its synchronous transaction on the calling thread.
+            let result = try await Task.detached(priority: .userInitiated) {
+                try await store.reconcile()
+            }.value
+            removedCatalogItemIDs = result.removedItemIDs
+            catalogPreparationState = .ready
+        } catch {
+            AppDiagnostics.catalogReconciliationFailed(error: error)
+            catalogPreparationState = .failed
+        }
+    }
+
+    private func retryCatalogPreparation() {
+        catalogPreparationState = .preparing
+        catalogPreparationAttempt &+= 1
+    }
+
+    private func scheduleSpotlightMaintenance(removing identifiers: [UUID]) {
+        let store = spotlightIndexStore
+        Task.detached(priority: .utility) {
+            do {
+                let payload = try await store.prepareReindexIfNeeded()
+                await SpotlightIndexer.applyLaunchMaintenance(
+                    removing: identifiers,
+                    reindex: payload
+                )
+            } catch {
+                AppDiagnostics.spotlightReindexFailed(error: error)
+            }
+        }
     }
 
     /// The session the accessory pill should render, if any. Today owns
