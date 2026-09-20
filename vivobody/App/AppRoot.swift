@@ -491,16 +491,18 @@ private struct StorageFallbackBanner: View {
     }
 }
 
-#Preview {
-    let configuration = ModelConfiguration(
-        schema: VivobodyStore.schema,
-        isStoredInMemoryOnly: true
-    )
-    let container = try! ModelContainer(
-        for: VivobodyStore.schema,
-        configurations: [configuration]
-    )
-    AppRoot(previewContainer: container)
-        .modelContainer(container)
-        .preferredColorScheme(.dark)
-}
+#if DEBUG
+    #Preview {
+        let configuration = ModelConfiguration(
+            schema: VivobodyStore.schema,
+            isStoredInMemoryOnly: true
+        )
+        let container = try! ModelContainer(
+            for: VivobodyStore.schema,
+            configurations: [configuration]
+        )
+        AppRoot(previewContainer: container)
+            .modelContainer(container)
+            .preferredColorScheme(.dark)
+    }
+#endif
