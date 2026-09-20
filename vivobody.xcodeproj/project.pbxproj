@@ -474,6 +474,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Vivobody;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.health-and-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Vivobody uses HealthKit only to save completed workouts and does not read data from the Health app";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "vivobody saves your finished workouts to the Health app so they appear in your workout history.";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -514,6 +515,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Vivobody;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.health-and-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Vivobody uses HealthKit only to save completed workouts and does not read data from the Health app";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "vivobody saves your finished workouts to the Health app so they appear in your workout history.";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
