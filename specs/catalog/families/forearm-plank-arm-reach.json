@@ -1,0 +1,36 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "forearm-plank-arm-reach", "name": "Forearm-Plank Arm Reach",
+  "definition": "A dynamic low-plank drill that begins on both forearms and toes, lifts one forearm, extends that elbow while reaching the arm straight forward, returns it to support, and alternates while resisting spinal extension and rotation. Shoulder flexion, scapular upward rotation, and elbow extension describe the reach; they do not turn the exercise into a shoulder raise or press. The ACE standard owns the forearm support and forward reach. High-plank reaches, shoulder taps, rows, drags, leg lifts, and timed-only three-point holds remain outside this family.",
+  "evidenceRefs": ["ace-2026-plank-arm-reach", "lehman-2005-stable-prone-bridge", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal", "transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension", "spine.rotation"], "primeActions": ["shoulder.flexion", "scapula.upwardRotation", "elbow.extension"], "resistedActions": ["spine.extension", "spine.rotation"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "primary"}, {"anyOf": ["deltoidAnterior"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "secondary"}, {"anyOf": ["triceps"], "minimumRole": "secondary"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs", "obliques"], "secondary": ["deltoidAnterior", "serratus", "triceps"], "stabilizer": ["externalRotators", "gluteMax", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "startSupport", "valueType": "enum", "required": true, "description": "The repetition begins on both forearms and toes.", "allowedValues": ["bilateralForearmsAndToes"]},
+    {"id": "reachSupport", "valueType": "enum", "required": true, "description": "One forearm and both feet support the reach.", "allowedValues": ["singleForearmAndBothFeet"]},
+    {"id": "armPath", "valueType": "enum", "required": true, "description": "The free arm reaches straight forward.", "allowedValues": ["forwardToTorsoHeight"]},
+    {"id": "elbowPosition", "valueType": "enum", "required": true, "description": "The reaching elbow remains extended.", "allowedValues": ["extended"]},
+    {"id": "trunkMotion", "valueType": "enum", "required": true, "description": "The trunk stays square rather than rotating with the reach.", "allowedValues": ["heldAgainstExtensionAndRotation"]},
+    {"id": "limbSequence", "valueType": "enum", "required": true, "description": "Arms alternate one at a time.", "allowedValues": ["alternatingOneAtATime"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "Each reach and return counts once.", "allowedValues": ["eachArmReach"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the reach."}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 6, "maximum": 16}},
+  "exercises": [{
+    "catalogID": "alternating-forearm-plank-arm-reach", "name": "Alternating Forearm-Plank Arm Reach", "aliases": ["Plank with Arm Reach", "Plank and Reach"],
+    "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"startSupport": "bilateralForearmsAndToes", "reachSupport": "singleForearmAndBothFeet", "armPath": "forwardToTorsoHeight", "elbowPosition": "extended", "trunkMotion": "heldAgainstExtensionAndRotation", "limbSequence": "alternatingOneAtATime", "repetitionCounting": "eachArmReach", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ace-2026-plank-arm-reach", "lehman-2005-stable-prone-bridge", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity"],
+    "execution": {"startingPosition": "Set a straight forearm plank with elbows below the shoulders and both feet on the floor.", "movement": "Lift one forearm and reach that arm straight forward while keeping the shoulders and hips square.", "endpoint": "Reach to about torso height only while the trunk remains controlled.", "returnPhase": "Place the forearm back below the shoulder before reaching with the other arm.", "controlledJoints": "Keep the reaching elbow straight and resist both low-back sag and trunk rotation.", "supportAndPosture": "Press the supporting forearm and both feet into the floor.", "sideOrDirection": "Alternate arms; count each reach and return as one repetition and use an even total.", "disqualifyingCompensations": ["Rotating open toward the reaching arm changes the exercise to a rotational plank.", "Starting from the palms changes the support fixture.", "Holding one arm forward for time changes the repetition semantics."]}
+  }]
+}

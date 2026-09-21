@@ -55,6 +55,20 @@ ROTATIONAL_STRENGTH_RECORD_IDS = {
     "standing-two-hand-landmine-rotation",
 }
 
+CORE_STRENGTH_EXPANSION_RECORD_IDS = {
+    "alternating-forearm-plank-arm-reach",
+    "alternating-forearm-plank-hip-drop",
+    "alternating-high-plank-t-spine-rotation",
+    "dumbbell-high-plank-drag",
+    "kettlebell-high-plank-drag",
+    "kneeling-barbell-rollout",
+    "medicine-ball-straight-leg-sit-up",
+    "medicine-ball-weighted-leg-lower",
+    "standing-band-torso-twist",
+    "straight-arm-straight-leg-sit-up",
+    "trx-standing-rollout",
+}
+
 
 class RequestedCatalogGapTests(unittest.TestCase):
     @classmethod
@@ -99,6 +113,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
                        set(OWNERS) | SECOND_WAVE_RECORD_IDS
                        | TRX_SUSPENSION_RECORD_IDS | MEDICINE_BALL_RECORD_IDS
                        | ROTATIONAL_STRENGTH_RECORD_IDS
+                       | CORE_STRENGTH_EXPANSION_RECORD_IDS
                    )]
         self.assertEqual(len(records), 254)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()

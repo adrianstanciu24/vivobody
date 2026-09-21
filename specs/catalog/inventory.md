@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 126 |
-| Exercises | 296 |
+| Reviewed families | 136 |
+| Exercises | 307 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 336 |
+| Evidence sources | 349 |
 
 ## Family roster
 
@@ -50,6 +50,8 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [externally-rotating-face-pull](families/externally-rotating-face-pull.json) | 1 |
 | [farmer-carry](families/farmer-carry.json) | 2 |
 | [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |
+| [forearm-plank-arm-reach](families/forearm-plank-arm-reach.json) | 1 |
+| [forearm-plank-hip-drop](families/forearm-plank-hip-drop.json) | 1 |
 | [forearm-pronation](families/forearm-pronation.json) | 1 |
 | [forearm-supination](families/forearm-supination.json) | 1 |
 | [full-snatch](families/full-snatch.json) | 1 |
@@ -57,6 +59,8 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hang-power-clean](families/hang-power-clean.json) | 1 |
 | [hang-power-snatch](families/hang-power-snatch.json) | 1 |
 | [hanging-leg-raise](families/hanging-leg-raise.json) | 2 |
+| [high-plank-crossbody-drag](families/high-plank-crossbody-drag.json) | 2 |
+| [high-plank-rotation](families/high-plank-rotation.json) | 1 |
 | [hip-abduction](families/hip-abduction.json) | 4 |
 | [hip-adduction](families/hip-adduction.json) | 3 |
 | [hip-extension](families/hip-extension.json) | 3 |
@@ -74,6 +78,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [knee-extension](families/knee-extension.json) | 3 |
 | [knee-flexion](families/knee-flexion.json) | 4 |
 | [kneeling-ab-wheel-rollout](families/kneeling-ab-wheel-rollout.json) | 1 |
+| [kneeling-barbell-rollout](families/kneeling-barbell-rollout.json) | 1 |
 | [landmine-press](families/landmine-press.json) | 2 |
 | [landmine-rotation](families/landmine-rotation.json) | 1 |
 | [lateral-band-walk](families/lateral-band-walk.json) | 1 |
@@ -85,6 +90,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [medicine-ball-rotational-slam](families/medicine-ball-rotational-slam.json) | 1 |
 | [medicine-ball-standing-overhead-slam](families/medicine-ball-standing-overhead-slam.json) | 1 |
 | [medicine-ball-stationary-rotational-throw](families/medicine-ball-stationary-rotational-throw.json) | 3 |
+| [medicine-ball-straight-leg-sit-up](families/medicine-ball-straight-leg-sit-up.json) | 1 |
 | [medicine-ball-tall-kneeling-overhead-slam](families/medicine-ball-tall-kneeling-overhead-slam.json) | 1 |
 | [mid-thigh-clean-pull](families/mid-thigh-clean-pull.json) | 1 |
 | [nordic-curl](families/nordic-curl.json) | 1 |
@@ -122,10 +128,14 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [split-jerk](families/split-jerk.json) | 1 |
 | [split-stance-squat](families/split-stance-squat.json) | 6 |
 | [squat-clean](families/squat-clean.json) | 1 |
+| [standing-band-trunk-rotation](families/standing-band-trunk-rotation.json) | 1 |
+| [standing-suspension-rollout](families/standing-suspension-rollout.json) | 1 |
 | [step-up](families/step-up.json) | 2 |
+| [straight-leg-hip-flexion-sit-up](families/straight-leg-hip-flexion-sit-up.json) | 1 |
 | [straight-leg-sit-up](families/straight-leg-sit-up.json) | 1 |
 | [suitcase-carry](families/suitcase-carry.json) | 1 |
 | [sumo-deadlift](families/sumo-deadlift.json) | 1 |
+| [supine-medicine-ball-limb-lowering](families/supine-medicine-ball-limb-lowering.json) | 1 |
 | [supine-pelvic-curl](families/supine-pelvic-curl.json) | 1 |
 | [suspension-assisted-single-leg-squat](families/suspension-assisted-single-leg-squat.json) | 1 |
 | [suspension-body-saw](families/suspension-body-saw.json) | 1 |

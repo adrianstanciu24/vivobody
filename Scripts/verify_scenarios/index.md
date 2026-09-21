@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 161.
+Scenario files: 164.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -37,6 +37,9 @@ Scenario files: 161.
 | [catalog-common-machines-light](catalog-common-machines-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-common-machines](catalog-common-machines.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-comprehensive-expansion](catalog-comprehensive-expansion.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-core-strength-expansion-accessibility](catalog-core-strength-expansion-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-core-strength-expansion-light](catalog-core-strength-expansion-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-core-strength-expansion](catalog-core-strength-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-default-candidate-follow-up](catalog-default-candidate-follow-up.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-essential-hold](catalog-essential-hold.json) | library | None declared |
 | [catalog-essential-power](catalog-essential-power.json) | library | None declared |

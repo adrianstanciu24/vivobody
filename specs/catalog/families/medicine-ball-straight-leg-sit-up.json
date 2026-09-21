@@ -1,0 +1,64 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "medicine-ball-straight-leg-sit-up",
+  "name": "Medicine-Ball Straight-Leg Sit-Up",
+  "definition": "A loaded straight-leg sit-up performed with one medicine ball held firmly against the chest. Both legs stay extended and press against the floor while the torso lowers slowly with a slight upper-back curl held as posture, then returns to upright sitting through hip flexion. The abdominal wall resists further spinal extension as the torso lowers; the source does not establish dynamic spinal flexion as the repetition driver. The Boxing Science exercise-library fixture owns the chest-held implement, straight legs, slow descent, and four-to-five-second repetition. Abdominal and hip-flexor roles combine that fixture with broader sit-up evidence; upper-limb and grip roles are bounded anatomy-and-mechanics inferences rather than exact-fixture recruitment measurements. Straight-arm loaded sit-ups, bodyweight sit-ups, bent-knee or anchored sit-ups, V-ups, throws, rotations, and kipping repetitions remain outside this family.",
+  "evidenceRefs": ["boxing-science-exercise-library-med-ball-sit-up", "andersson-1997-abdominal-hip-flexor-exercises", "cordo-2003-straight-leg-sit-up", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["medicineBall"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension"],
+    "primeActions": ["hip.flexion"],
+    "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["spine", "pelvis", "hip", "knee", "shoulder", "elbow", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["iliopsoas"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "secondary"}, {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["bicepsBrachii"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs", "iliopsoas"], "secondary": ["obliques", "rectusFemoris"], "stabilizer": ["vasti", "bicepsBrachii", "fingerFlexors"]}
+  },
+  "variantAxes": [
+    {"id": "legConfiguration", "valueType": "enum", "required": true, "description": "Both legs remain straight and together against the floor.", "allowedValues": ["straightTogetherPressedToFloor"]},
+    {"id": "footAnchor", "valueType": "enum", "required": true, "description": "The feet are not held by a person or object.", "allowedValues": ["none"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "A slight upper-back curl is held as posture while the torso lowers and rises; it is not authored as the dynamic driver.", "allowedValues": ["slightUpperFlexionMaintained"]},
+    {"id": "hipMotion", "valueType": "enum", "required": true, "description": "Hip extension lowers the torso and hip flexion returns it to sitting.", "allowedValues": ["extendsThenFlexes"]},
+    {"id": "endpoint", "valueType": "enum", "required": true, "description": "The repetition returns to the upright sit-up position.", "allowedValues": ["uprightSitting"]},
+    {"id": "armTask", "valueType": "enum", "required": true, "description": "One medicine ball remains held tightly against the chest.", "allowedValues": ["medicineBallHeldAtChest"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "Log the complete medicine ball once.", "allowedValues": ["totalImplement"]},
+    {"id": "tempo", "valueType": "enum", "required": true, "description": "The source prescribes a controlled four-to-five-second repetition.", "allowedValues": ["fourToFiveSecondsPerRep"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the torso."}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "medicine-ball-straight-leg-sit-up",
+    "name": "Medicine-Ball Straight-Leg Sit-Up",
+    "aliases": ["Straight-Leg Sit-Ups with Med Ball", "Med Ball Straight-Leg Sit-Up"],
+    "equipment": "medicineBall",
+    "laterality": "bilateral",
+    "modality": "dynamicStrength",
+    "trackingMode": "reps",
+    "loadMode": "external",
+    "bodyweightFraction": 0,
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "searchPriority": 95,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "iliopsoas", "role": "primary"}, {"muscle": "obliques", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "bicepsBrachii", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}],
+    "variant": {"legConfiguration": "straightTogetherPressedToFloor", "footAnchor": "none", "spineMotion": "slightUpperFlexionMaintained", "hipMotion": "extendsThenFlexes", "endpoint": "uprightSitting", "armTask": "medicineBallHeldAtChest", "loadAccounting": "totalImplement", "tempo": "fourToFiveSecondsPerRep", "fixedPath": false},
+    "additionalPrimeActions": [],
+    "additionalStabilityDemands": [],
+    "evidenceRefs": ["boxing-science-exercise-library-med-ball-sit-up", "andersson-1997-abdominal-hip-flexor-exercises", "cordo-2003-straight-leg-sit-up", "holzbaur-2005-upper-extremity"],
+    "execution": {
+      "startingPosition": "Sit upright with both legs straight and together, feet unanchored, and one medicine ball held tightly against the chest. Log the ball's full mass once.",
+      "movement": "Lower the torso slowly while keeping tension against the ball and maintaining a slight curl through the upper back.",
+      "endpoint": "Reach the lowest controlled position that preserves the straight-leg fixture and secure chest hold.",
+      "returnPhase": "Flex at the hips to return slowly to upright sitting while preserving the slight upper-back curl and pressing the straight legs against the floor; complete the full repetition in about four to five seconds.",
+      "controlledJoints": "Keep both knees straight and avoid rotating, throwing, or pressing the ball away from the chest.",
+      "supportAndPosture": "Keep the legs together, feet unanchored, and the ball held firmly against the chest throughout.",
+      "disqualifyingCompensations": ["Reaching the ball overhead changes the fixture to a straight-arm loaded sit-up.", "Bending or anchoring the legs changes the reviewed setup.", "Swinging or throwing the ball uses momentum outside the controlled repetition."]
+    }
+  }]
+}

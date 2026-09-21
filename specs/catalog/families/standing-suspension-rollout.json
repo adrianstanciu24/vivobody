@@ -1,0 +1,37 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "standing-suspension-rollout", "name": "Standing Suspension Rollout",
+  "definition": "A standing suspension-trainer rollout performed facing away from the anchor with both feet planted and both hands in the handles. The straight braced body inclines forward as the arms travel overhead, then returns through shoulder extension while the trunk resists spinal extension. Body angle and distance from the anchor change difficulty, so no portable resistance value is recorded. Kneeling suspension rollouts, feet-suspended body saws, wheel or barbell rollouts, bent-elbow presses, and timed holds remain outside this family.",
+  "evidenceRefs": ["trx-2026-standing-rollout", "trx-2023-standing-rollout", "holzbaur-2005-upper-extremity", "christophy-2012-lumbar-spine"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["suspensionTrainer"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension"], "primeActions": ["shoulder.extension"], "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "secondary"}, {"anyOf": ["lats", "teresMajor"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs"], "secondary": ["obliques", "lats", "teresMajor"], "stabilizer": ["serratus", "externalRotators", "triceps", "fingerFlexors", "extensorCarpiRadialis", "gluteMax", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The athlete stands facing away from the anchor.", "allowedValues": ["standingFacingAway"]},
+    {"id": "supportTopology", "valueType": "enum", "required": true, "description": "Feet remain on the floor while both hands use the handles.", "allowedValues": ["feetFloorHandsSuspensionHandles"]},
+    {"id": "strapLength", "valueType": "enum", "required": true, "description": "The reviewed strap setting.", "allowedValues": ["midLength"]},
+    {"id": "bodyPath", "valueType": "enum", "required": true, "description": "The braced body inclines forward and returns.", "allowedValues": ["straightBodyForwardAndReturn"]},
+    {"id": "armPath", "valueType": "enum", "required": true, "description": "Both arms travel forward and overhead.", "allowedValues": ["bilateralOverheadAndReturn"]},
+    {"id": "elbowPosition", "valueType": "enum", "required": true, "description": "Elbows stay near extension.", "allowedValues": ["angleHeld"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The spine is held against extension.", "allowedValues": ["heldAgainstExtension"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "Body angle is not a portable resistance scalar.", "allowedValues": ["none"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "The straps do not guide a fixed path."}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "trx-standing-rollout", "name": "TRX Standing Rollout", "aliases": ["TRX Rollout", "TRX Rollouts", "TRX Standing Roll Out", "Suspension Trainer Standing Rollout"],
+    "equipment": "suspensionTrainer", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 8, "searchPriority": 95,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "secondary"}, {"muscle": "lats", "role": "secondary"}, {"muscle": "teresMajor", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"bodyPosition": "standingFacingAway", "supportTopology": "feetFloorHandsSuspensionHandles", "strapLength": "midLength", "bodyPath": "straightBodyForwardAndReturn", "armPath": "bilateralOverheadAndReturn", "elbowPosition": "angleHeld", "spineMotion": "heldAgainstExtension", "loadAccounting": "none", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["trx-2026-standing-rollout", "trx-2023-standing-rollout", "holzbaur-2005-upper-extremity"],
+    "execution": {"startingPosition": "Set the straps to mid-length, stand facing away from the anchor, and hold both handles with the hands below the shoulders.", "movement": "Keep a straight braced body as you lean forward and let both arms travel overhead.", "endpoint": "Stop at the farthest controlled position before the lower back sags.", "returnPhase": "Pull the handles back through shoulder extension until you return to the standing incline.", "controlledJoints": "Keep the elbows nearly straight and hold the hips, knees, and spine in one braced line.", "supportAndPosture": "Keep both feet planted and continuous tension in both straps.", "disqualifyingCompensations": ["Placing the feet in the cradles changes the exercise to a suspended plank or body saw.", "Kneeling changes the reviewed support geometry.", "Bending the elbows into a press changes the exercise."]}
+  }]
+}

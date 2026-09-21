@@ -7603,6 +7603,209 @@
     ]
   },
   {
+    "familyID": "forearm-plank-arm-reach",
+    "familyName": "Forearm-Plank Arm Reach",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "alternating-forearm-plank-arm-reach",
+    "name": "Alternating Forearm-Plank Arm Reach",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Plank with Arm Reach",
+      "Plank and Reach"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set a straight forearm plank with elbows below the shoulders and both feet on the floor.",
+      "movement": "Lift one forearm and reach that arm straight forward while keeping the shoulders and hips square.",
+      "endpoint": "Reach to about torso height only while the trunk remains controlled.",
+      "returnPhase": "Place the forearm back below the shoulder before reaching with the other arm.",
+      "controlledJoints": "Keep the reaching elbow straight and resist both low-back sag and trunk rotation.",
+      "supportAndPosture": "Press the supporting forearm and both feet into the floor.",
+      "disqualifyingCompensations": [
+        "Rotating open toward the reaching arm changes the exercise to a rotational plank.",
+        "Starting from the palms changes the support fixture.",
+        "Holding one arm forward for time changes the repetition semantics."
+      ],
+      "sideOrDirection": "Alternate arms; count each reach and return as one repetition and use an even total."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "forearm-plank-hip-drop",
+    "familyName": "Forearm-Plank Hip Drop",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "alternating-forearm-plank-hip-drop",
+    "name": "Alternating Forearm-Plank Hip Drop",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Plank Twists",
+      "Plank Hip Twists",
+      "Plank Hip Drops"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set a straight forearm plank with elbows below the shoulders and both feet on the floor.",
+      "movement": "Rotate through the feet and lower one hip toward the floor, then return through center and repeat to the other side.",
+      "endpoint": "Stop each side before contact or loss of the braced trunk position.",
+      "returnPhase": "Rotate back to the centered forearm plank under control.",
+      "controlledJoints": "Keep both forearms planted and prevent the lower back from sagging as the pelvis turns.",
+      "supportAndPosture": "Maintain shoulder support through both forearms and keep the legs long.",
+      "disqualifyingCompensations": [
+        "Lifting a forearm changes the exercise to a rotational plank.",
+        "Holding one side for time changes the task to a side plank.",
+        "Sagging the low back loses the anti-extension component."
+      ],
+      "sideOrDirection": "Alternate sides; count each side endpoint as one repetition and use an even total."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "forearm-pronation",
     "familyName": "Forearm Pronation",
     "movementActions": [
@@ -8649,6 +8852,313 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "high-plank-crossbody-drag",
+    "familyName": "High-Plank Crossbody Drag",
+    "movementActions": [
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "dumbbell-high-plank-drag",
+    "name": "Dumbbell High-Plank Drag",
+    "group": "core",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "DB Plank Drag",
+      "Dumbbell Plank Pull-Through",
+      "Dumbbell Cross-Body Drag"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set a high plank with palms down, elbows straight, and one dumbbell just behind one hand. Log the single dumbbell mass once.",
+      "movement": "Shift support toward the hand beside the dumbbell, lift the opposite hand, and pull the dumbbell across toward the lifting arm's shoulder.",
+      "endpoint": "Set the dumbbell down with the hips and shoulders still parallel to the floor.",
+      "returnPhase": "Replace the dragging hand to re-establish high plank before repeating with the other arm.",
+      "controlledJoints": "Resist low-back sag and trunk rotation throughout the pull-through.",
+      "supportAndPosture": "Keep the supporting palm and both feet firmly planted.",
+      "disqualifyingCompensations": [
+        "Rowing the dumbbell off the floor changes the exercise.",
+        "Using two dumbbells changes the single-implement topology.",
+        "Turning the hips toward the load loses the anti-rotation task."
+      ],
+      "sideOrDirection": "Alternate sides; count each completed pull-through as one repetition and use an even total."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "high-plank-crossbody-drag",
+    "familyName": "High-Plank Crossbody Drag",
+    "movementActions": [
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "kettlebell-high-plank-drag",
+    "name": "Kettlebell High-Plank Drag",
+    "group": "core",
+    "defaultWeight": 25,
+    "defaultWeightKg": 12.5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "kettlebell",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "KB Plank Drag",
+      "Kettlebell Plank Pull-Through",
+      "Kettlebell Cross-Body Drag"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set a high plank with one kettlebell beneath the chest. Log the single kettlebell mass once.",
+      "movement": "Shift support to one side, use the opposite hand to grasp the kettlebell, and slide it across toward that arm.",
+      "endpoint": "Finish at the farthest comfortable point that preserves the high-plank position.",
+      "returnPhase": "Replace the dragging hand, then use the other hand to drag the kettlebell back in the opposite direction.",
+      "controlledJoints": "Resist low-back sag and trunk rotation throughout the pull-through.",
+      "supportAndPosture": "Keep the supporting palm and both feet firmly planted.",
+      "disqualifyingCompensations": [
+        "Rowing the kettlebell off the floor changes the exercise.",
+        "Using two kettlebells changes the single-implement topology.",
+        "Turning the hips toward the load loses the anti-rotation task."
+      ],
+      "sideOrDirection": "Alternate sides; count each completed pull-through as one repetition and use an even total."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "high-plank-rotation",
+    "familyName": "High-Plank Rotation",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "alternating-high-plank-t-spine-rotation",
+    "name": "Alternating High-Plank T-Spine Rotation",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Rotational Plank",
+      "Plank Rotation",
+      "T Plank"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Start in a high plank with both palms below the shoulders and both feet on the floor.",
+      "movement": "Shift onto one palm, pivot through the feet, and rotate the shoulders and hips outward as the free arm reaches toward the ceiling.",
+      "endpoint": "Finish in a controlled open-side position without letting the hips drop.",
+      "returnPhase": "Lower the free hand to the floor and return to the high plank before changing sides.",
+      "controlledJoints": "Keep the supporting elbow extended and the trunk braced against sagging.",
+      "supportAndPosture": "Maintain firm palm and foot contact while the body rotates as a controlled unit.",
+      "disqualifyingCompensations": [
+        "Keeping both forearms planted and dropping the hips changes the exercise to a plank hip drop.",
+        "Holding the open side for time changes the task to a side plank.",
+        "Adding a push-up changes the reviewed repetition."
+      ],
+      "sideOrDirection": "Alternate sides; count each open-side endpoint as one repetition and use an even total."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "abs",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
         "role": "stabilizer"
       }
     ]
@@ -12790,6 +13300,118 @@
     ]
   },
   {
+    "familyID": "kneeling-barbell-rollout",
+    "familyName": "Kneeling Barbell Rollout",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "kneeling-barbell-rollout",
+    "name": "Kneeling Barbell Rollout",
+    "group": "core",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Barbell Rollout",
+      "Barbell Rollouts",
+      "Barbell Ab Rollout"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Kneel on the floor and take a two-hand grip on a barbell loaded with round plates. Log the complete bar-and-plate mass once.",
+      "movement": "Roll the bar forward as the shoulders flex and hips extend while keeping the torso braced against spinal extension.",
+      "endpoint": "Reach only the farthest position that preserves the braced torso.",
+      "returnPhase": "Roll the bar back under control through shoulder extension and hip flexion to the kneeling start.",
+      "controlledJoints": "Keep the elbows nearly straight and prevent the low back from sagging.",
+      "supportAndPosture": "Keep both knees on the floor and both hands on the bar.",
+      "disqualifyingCompensations": [
+        "Standing on the feet changes the fixture.",
+        "Using square plates that cannot roll changes the movement.",
+        "Attaching a band changes the resistance topology."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lats",
+        "role": "secondary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "landmine-press",
     "familyName": "Landmine Press",
     "movementActions": [
@@ -14270,6 +14892,91 @@
       },
       {
         "muscle": "lats",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-straight-leg-sit-up",
+    "familyName": "Medicine-Ball Straight-Leg Sit-Up",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "medicine-ball-straight-leg-sit-up",
+    "name": "Medicine-Ball Straight-Leg Sit-Up",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Straight-Leg Sit-Ups with Med Ball",
+      "Med Ball Straight-Leg Sit-Up"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit upright with both legs straight and together, feet unanchored, and one medicine ball held tightly against the chest. Log the ball's full mass once.",
+      "movement": "Lower the torso slowly while keeping tension against the ball and maintaining a slight curl through the upper back.",
+      "endpoint": "Reach the lowest controlled position that preserves the straight-leg fixture and secure chest hold.",
+      "returnPhase": "Flex at the hips to return slowly to upright sitting while preserving the slight upper-back curl and pressing the straight legs against the floor; complete the full repetition in about four to five seconds.",
+      "controlledJoints": "Keep both knees straight and avoid rotating, throwing, or pressing the ball away from the chest.",
+      "supportAndPosture": "Keep the legs together, feet unanchored, and the ball held firmly against the chest throughout.",
+      "disqualifyingCompensations": [
+        "Reaching the ball overhead changes the fixture to a straight-arm loaded sit-up.",
+        "Bending or anchoring the legs changes the reviewed setup.",
+        "Swinging or throwing the ball uses momentum outside the controlled repetition."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsBrachii",
         "role": "stabilizer"
       },
       {
@@ -23374,6 +24081,176 @@
     ]
   },
   {
+    "familyID": "standing-band-trunk-rotation",
+    "familyName": "Standing Band Trunk Rotation",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "standing-band-torso-twist",
+    "name": "Standing Band Torso Twist",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Banded Rotations",
+      "Band Trunk Rotation",
+      "Standing Band Rotation"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "For the source-owned set, stand with feet shoulder-width apart, the band anchored on the left starting side and stretched to twice its resting length, and both arms extended horizontally while the torso is rotated left.",
+      "movement": "Rotate the torso from left to right against increasing band resistance while keeping the hips, legs, and feet in position.",
+      "endpoint": "Complete the controlled rightward rotation without stepping, pivoting, or turning the pelvis.",
+      "returnPhase": "Return to the left-rotated starting position under control.",
+      "controlledJoints": "Keep the elbows extended and avoid leaning or bending the spine.",
+      "supportAndPosture": "Keep both feet and legs in their starting positions throughout the repetition.",
+      "disqualifyingCompensations": [
+        "Pivoting the feet or driving through the hips changes the fixture.",
+        "Holding the trunk still changes the exercise to an anti-rotation hold.",
+        "Moving the hands diagonally changes the exercise to a chop."
+      ],
+      "sideOrDirection": "Count each left-to-right rotation and return as one repetition. For balanced programming, mirror the setup and motion in a separate set; that mirrored direction is a catalog adaptation rather than a measured study condition."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "standing-suspension-rollout",
+    "familyName": "Standing Suspension Rollout",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "trx-standing-rollout",
+    "name": "TRX Standing Rollout",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "suspensionTrainer",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "TRX Rollout",
+      "TRX Rollouts",
+      "TRX Standing Roll Out",
+      "Suspension Trainer Standing Rollout"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set the straps to mid-length, stand facing away from the anchor, and hold both handles with the hands below the shoulders.",
+      "movement": "Keep a straight braced body as you lean forward and let both arms travel overhead.",
+      "endpoint": "Stop at the farthest controlled position before the lower back sags.",
+      "returnPhase": "Pull the handles back through shoulder extension until you return to the standing incline.",
+      "controlledJoints": "Keep the elbows nearly straight and hold the hips, knees, and spine in one braced line.",
+      "supportAndPosture": "Keep both feet planted and continuous tension in both straps.",
+      "disqualifyingCompensations": [
+        "Placing the feet in the cradles changes the exercise to a suspended plank or body saw.",
+        "Kneeling changes the reviewed support geometry.",
+        "Bending the elbows into a press changes the exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lats",
+        "role": "secondary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "step-up",
     "familyName": "Forward Step-Up",
     "movementActions": [
@@ -23611,6 +24488,94 @@
       },
       {
         "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "straight-leg-hip-flexion-sit-up",
+    "familyName": "Straight-Leg Hip-Flexion Sit-Up",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "straight-arm-straight-leg-sit-up",
+    "name": "Straight-Arm Straight-Leg Sit-Up",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Straight-Arm Straight-Leg Sit-Ups",
+      "Straight Arm Straight Leg Sit-Ups"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with legs straight and together, feet unanchored, and both straight arms reaching toward the ceiling.",
+      "movement": "Keep the spine neutral as you flex at the hips and raise the torso to upright sitting with the arms remaining straight.",
+      "endpoint": "Finish upright with the legs straight and the hands still reaching upward.",
+      "returnPhase": "Lower to the floor for about three seconds without swinging the arms.",
+      "controlledJoints": "Keep the knees straight and resist arching or deliberately curling the spine.",
+      "supportAndPosture": "Keep the legs together and the feet unanchored.",
+      "disqualifyingCompensations": [
+        "Curling the trunk changes the exercise to the conventional straight-leg sit-up.",
+        "Bending or anchoring the legs changes the fixture.",
+        "Swinging the arms creates momentum outside the reviewed repetition."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
         "role": "stabilizer"
       }
     ]
@@ -23958,6 +24923,108 @@
       },
       {
         "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "supine-medicine-ball-limb-lowering",
+    "familyName": "Supine Medicine-Ball Limb Lowering",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "medicine-ball-weighted-leg-lower",
+    "name": "Medicine-Ball Weighted Leg Lower",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Weighted Leg Lowers",
+      "Weighted Leg Lower",
+      "Med Ball Leg Lower"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Lie on your back with the lower back against the floor, hips and knees flexed, and one medicine ball held in both hands above the torso. Log the ball's full mass once.",
+      "movement": "Slowly lower both arms and both legs away from the torso at the same time while keeping the lower back down.",
+      "endpoint": "Pause with arms and legs straight just above the floor, stopping earlier if the lower back begins to lift.",
+      "returnPhase": "Bring the ball, hips, and knees back to the starting position together under control.",
+      "controlledJoints": "Keep the elbows straight during the arm path and prevent the lumbar spine from arching.",
+      "supportAndPosture": "Keep the lower back pressed into the floor while the hands and feet remain off it; upper-trunk contact is not required.",
+      "disqualifyingCompensations": [
+        "Letting the lower back lift loses the anti-extension task.",
+        "Touching the ball or feet to the floor changes the reviewed endpoint.",
+        "Moving one arm and opposite leg at a time changes the exercise to a dead bug."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lats",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
         "role": "stabilizer"
       }
     ]

@@ -31,6 +31,8 @@ $(SRCROOT)/specs/catalog/families/elbow-flexion.json
 $(SRCROOT)/specs/catalog/families/externally-rotating-face-pull.json
 $(SRCROOT)/specs/catalog/families/farmer-carry.json
 $(SRCROOT)/specs/catalog/families/finger-flexion-grip.json
+$(SRCROOT)/specs/catalog/families/forearm-plank-arm-reach.json
+$(SRCROOT)/specs/catalog/families/forearm-plank-hip-drop.json
 $(SRCROOT)/specs/catalog/families/forearm-pronation.json
 $(SRCROOT)/specs/catalog/families/forearm-supination.json
 $(SRCROOT)/specs/catalog/families/full-snatch.json
@@ -38,6 +40,8 @@ $(SRCROOT)/specs/catalog/families/glute-ham-raise.json
 $(SRCROOT)/specs/catalog/families/hang-power-clean.json
 $(SRCROOT)/specs/catalog/families/hang-power-snatch.json
 $(SRCROOT)/specs/catalog/families/hanging-leg-raise.json
+$(SRCROOT)/specs/catalog/families/high-plank-crossbody-drag.json
+$(SRCROOT)/specs/catalog/families/high-plank-rotation.json
 $(SRCROOT)/specs/catalog/families/hip-abduction.json
 $(SRCROOT)/specs/catalog/families/hip-adduction.json
 $(SRCROOT)/specs/catalog/families/hip-extension.json
@@ -55,6 +59,7 @@ $(SRCROOT)/specs/catalog/families/kettlebell-swing.json
 $(SRCROOT)/specs/catalog/families/knee-extension.json
 $(SRCROOT)/specs/catalog/families/knee-flexion.json
 $(SRCROOT)/specs/catalog/families/kneeling-ab-wheel-rollout.json
+$(SRCROOT)/specs/catalog/families/kneeling-barbell-rollout.json
 $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/landmine-rotation.json
 $(SRCROOT)/specs/catalog/families/lateral-band-walk.json
@@ -66,6 +71,7 @@ $(SRCROOT)/specs/catalog/families/medicine-ball-reactive-half-kneeling-wall-thro
 $(SRCROOT)/specs/catalog/families/medicine-ball-rotational-slam.json
 $(SRCROOT)/specs/catalog/families/medicine-ball-standing-overhead-slam.json
 $(SRCROOT)/specs/catalog/families/medicine-ball-stationary-rotational-throw.json
+$(SRCROOT)/specs/catalog/families/medicine-ball-straight-leg-sit-up.json
 $(SRCROOT)/specs/catalog/families/medicine-ball-tall-kneeling-overhead-slam.json
 $(SRCROOT)/specs/catalog/families/mid-thigh-clean-pull.json
 $(SRCROOT)/specs/catalog/families/nordic-curl.json
@@ -103,10 +109,14 @@ $(SRCROOT)/specs/catalog/families/spine-rotation.json
 $(SRCROOT)/specs/catalog/families/split-jerk.json
 $(SRCROOT)/specs/catalog/families/split-stance-squat.json
 $(SRCROOT)/specs/catalog/families/squat-clean.json
+$(SRCROOT)/specs/catalog/families/standing-band-trunk-rotation.json
+$(SRCROOT)/specs/catalog/families/standing-suspension-rollout.json
 $(SRCROOT)/specs/catalog/families/step-up.json
+$(SRCROOT)/specs/catalog/families/straight-leg-hip-flexion-sit-up.json
 $(SRCROOT)/specs/catalog/families/straight-leg-sit-up.json
 $(SRCROOT)/specs/catalog/families/suitcase-carry.json
 $(SRCROOT)/specs/catalog/families/sumo-deadlift.json
+$(SRCROOT)/specs/catalog/families/supine-medicine-ball-limb-lowering.json
 $(SRCROOT)/specs/catalog/families/supine-pelvic-curl.json
 $(SRCROOT)/specs/catalog/families/suspension-assisted-single-leg-squat.json
 $(SRCROOT)/specs/catalog/families/suspension-body-saw.json

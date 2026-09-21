@@ -1,0 +1,35 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "forearm-plank-hip-drop", "name": "Forearm-Plank Hip Drop",
+  "definition": "A dynamic forearm-plank variation in which both forearms and both feet remain on the floor while the athlete rotates through the feet, lowers one hip toward the floor, returns through center, and alternates sides. Deliberate trunk rotation creates each repetition while the trunk also resists uncontrolled extension. The ACE standard owns the exact low-plank support and alternating topology; categorical roles are bounded anatomy-and-mechanics inferences. High-plank T rotations, side-plank holds, thread-the-needle reaches, shoulder taps, loaded drags, and timed-only planks remain outside this family.",
+  "evidenceRefs": ["ace-2014-plank-hip-drop", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal", "transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension", "spine.rotation"], "primeActions": ["spine.rotation"], "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["obliques"], "minimumRole": "primary"}, {"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs", "obliques"], "secondary": [], "stabilizer": ["serratus", "externalRotators", "triceps", "gluteMax", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "supportSurface", "valueType": "enum", "required": true, "description": "The stable support surface.", "allowedValues": ["floor"]},
+    {"id": "upperBodySupport", "valueType": "enum", "required": true, "description": "Both forearms remain planted.", "allowedValues": ["bilateralForearms"]},
+    {"id": "lowerBodySupport", "valueType": "enum", "required": true, "description": "Both feet remain in floor contact while rolling through their edges.", "allowedValues": ["bothFeetPivot"]},
+    {"id": "hipPath", "valueType": "enum", "required": true, "description": "The pelvis alternates toward the floor through center.", "allowedValues": ["alternatingHipDrop"]},
+    {"id": "trainingDirectionPrescription", "valueType": "enum", "required": true, "description": "Both directions are trained.", "allowedValues": ["bothDirectionsAlternating"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "Each side endpoint counts once.", "allowedValues": ["eachSideEndpoint"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the body path."}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 8, "maximum": 20}},
+  "exercises": [{
+    "catalogID": "alternating-forearm-plank-hip-drop", "name": "Alternating Forearm-Plank Hip Drop", "aliases": ["Plank Twists", "Plank Hip Twists", "Plank Hip Drops"],
+    "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 12, "searchPriority": 94,
+    "involvement": [{"muscle": "obliques", "role": "primary"}, {"muscle": "abs", "role": "primary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"supportSurface": "floor", "upperBodySupport": "bilateralForearms", "lowerBodySupport": "bothFeetPivot", "hipPath": "alternatingHipDrop", "trainingDirectionPrescription": "bothDirectionsAlternating", "repetitionCounting": "eachSideEndpoint", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ace-2014-plank-hip-drop", "lehman-2005-stable-prone-bridge"],
+    "execution": {"startingPosition": "Set a straight forearm plank with elbows below the shoulders and both feet on the floor.", "movement": "Rotate through the feet and lower one hip toward the floor, then return through center and repeat to the other side.", "endpoint": "Stop each side before contact or loss of the braced trunk position.", "returnPhase": "Rotate back to the centered forearm plank under control.", "controlledJoints": "Keep both forearms planted and prevent the lower back from sagging as the pelvis turns.", "supportAndPosture": "Maintain shoulder support through both forearms and keep the legs long.", "sideOrDirection": "Alternate sides; count each side endpoint as one repetition and use an even total.", "disqualifyingCompensations": ["Lifting a forearm changes the exercise to a rotational plank.", "Holding one side for time changes the task to a side plank.", "Sagging the low back loses the anti-extension component."]}
+  }]
+}

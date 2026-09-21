@@ -1,0 +1,21 @@
+{
+  "name": "catalog-core-strength-expansion-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "light"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterCore"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Medicine-Ball Weighted Leg Lower,"}, "direction": "up", "maxSwipes": 80}},
+    {"tap": {"labelRegex": "^Medicine-Ball Weighted Leg Lower,"}},
+    {"wait": {"label": "STRENGTH · REPS"}},
+    {"assert": {"required": [{"label": "Medicine-Ball Weighted Leg Lower"}, {"labelContains": "Muscles used by Medicine-Ball Weighted Leg Lower"}]}}
+  ],
+  "required": [
+    {"label": "Medicine-Ball Weighted Leg Lower"},
+    {"label": "STRENGTH · REPS"}
+  ],
+  "forbidden": []
+}

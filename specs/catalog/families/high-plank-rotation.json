@@ -1,0 +1,35 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "high-plank-rotation", "name": "High-Plank Rotation",
+  "definition": "A dynamic high-plank rotation that begins with both palms and toes on the floor, transfers support to one arm, rotates the shoulders and hips outward, reaches the free arm toward the ceiling, and returns before alternating. The exercise produces controlled trunk rotation while resisting uncontrolled extension. The ACE standard owns the high-plank geometry. Forearm rotational planks, forearm hip drops, static side planks, thread-the-needle reaches, push-ups, and loaded drags remain outside this family.",
+  "evidenceRefs": ["ace-2026-high-plank-rotation", "christophy-2012-lumbar-spine"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal", "transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension", "spine.rotation"], "primeActions": ["spine.rotation"], "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["obliques"], "minimumRole": "primary"}, {"anyOf": ["abs"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["obliques"], "secondary": ["abs"], "stabilizer": ["serratus", "externalRotators", "triceps", "fingerFlexors", "extensorCarpiRadialis", "gluteMax", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "startSupport", "valueType": "enum", "required": true, "description": "The repetition begins in a push-up-position plank.", "allowedValues": ["bilateralPalmsAndToes"]},
+    {"id": "rotatedSupport", "valueType": "enum", "required": true, "description": "One palm and both pivoting feet support the rotated endpoint.", "allowedValues": ["singlePalmAndBothFeet"]},
+    {"id": "freeArmPath", "valueType": "enum", "required": true, "description": "The free arm reaches upward with the body rotation.", "allowedValues": ["towardCeiling"]},
+    {"id": "torsoPath", "valueType": "enum", "required": true, "description": "Shoulders and hips rotate outward and return.", "allowedValues": ["highPlankToOpenSideAndReturn"]},
+    {"id": "trainingDirectionPrescription", "valueType": "enum", "required": true, "description": "Both directions are trained.", "allowedValues": ["bothDirectionsAlternating"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "Each rotated-side endpoint counts once.", "allowedValues": ["eachSideEndpoint"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the body path."}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 6, "maximum": 16}},
+  "exercises": [{
+    "catalogID": "alternating-high-plank-t-spine-rotation", "name": "Alternating High-Plank T-Spine Rotation", "aliases": ["Rotational Plank", "Plank Rotation", "T Plank"],
+    "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
+    "involvement": [{"muscle": "obliques", "role": "primary"}, {"muscle": "abs", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"startSupport": "bilateralPalmsAndToes", "rotatedSupport": "singlePalmAndBothFeet", "freeArmPath": "towardCeiling", "torsoPath": "highPlankToOpenSideAndReturn", "trainingDirectionPrescription": "bothDirectionsAlternating", "repetitionCounting": "eachSideEndpoint", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ace-2026-high-plank-rotation"],
+    "execution": {"startingPosition": "Start in a high plank with both palms below the shoulders and both feet on the floor.", "movement": "Shift onto one palm, pivot through the feet, and rotate the shoulders and hips outward as the free arm reaches toward the ceiling.", "endpoint": "Finish in a controlled open-side position without letting the hips drop.", "returnPhase": "Lower the free hand to the floor and return to the high plank before changing sides.", "controlledJoints": "Keep the supporting elbow extended and the trunk braced against sagging.", "supportAndPosture": "Maintain firm palm and foot contact while the body rotates as a controlled unit.", "sideOrDirection": "Alternate sides; count each open-side endpoint as one repetition and use an even total.", "disqualifyingCompensations": ["Keeping both forearms planted and dropping the hips changes the exercise to a plank hip drop.", "Holding the open side for time changes the task to a side plank.", "Adding a push-up changes the reviewed repetition."]}
+  }]
+}

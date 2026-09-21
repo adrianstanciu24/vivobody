@@ -2048,7 +2048,7 @@
       "doi": "10.1155/2015/403068",
       "pmid": "26557405",
       "url": "https://doi.org/10.1155/2015/403068",
-      "scope": "Seventeen healthy untrained men performed three controlled left-to-right torso-twist repetitions at individually determined ten-repetition-maximum loads using elastic resistance and a horizontal seated Technogym machine. The machine condition directly anchors the left-rotated start, feet behind ankle rollers, hands on shoulder-height handles, the photographed shoulder-pad lever interface, controlled maximal rightward torso-rotation endpoint, return, and rectus-abdominis, bilateral external-oblique, and bilateral erector-spinae EMG context. Machine-condition pelvic kinematics were neither stated as stationary nor measured, so the source does not prove zero pelvic motion, internal-oblique activity, a universal range or stack load, chronic training outcomes, upper-limb roles, a mirrored record, or another topology."
+      "scope": "Seventeen healthy untrained men performed three controlled left-to-right torso-twist repetitions at individually determined ten-repetition-maximum loads using elastic resistance and a horizontal seated Technogym machine. The standing elastic condition used shoulder-width feet, horizontally extended arms, and a side-anchored band prestretched to twice its resting length; participants rotated from left to right while keeping the hips, legs, and feet in position, then returned to the left-rotated start. It directly supports that active one-direction standing-band fixture and measured external-oblique, rectus-abdominis, and erector-spinae participation. The machine condition directly anchors the seated record's ankle rollers, hands on shoulder-height handles, photographed shoulder-pad lever interface, and controlled rightward endpoint. Machine-condition pelvic kinematics were neither stated as stationary nor measured. The standing condition prescribed held hips but likewise did not measure pelvic kinematics or internal-oblique activity. The study does not establish a universal range, portable resistance value, chronic outcome, upper- or lower-limb muscle ranking, or mirrored-direction equivalence."
     },
     {
       "id": "stevens-2007-seated-axial-rotation",
@@ -5283,6 +5283,124 @@
       "year": 2020,
       "url": "https://h2f.army.mil/Portals/141/pdfs/unit/ATP%207-22.02.pdf",
       "scope": "The Army's 180-Degree Landmine standard specifies a standing straddle stance, two hands on the moving bar end, a start in front of one shoulder, movement to the opposite shoulder, return to the starting shoulder, and feet adjusting as needed. Its four-count repetition repeats that out-and-back sequence once more before one Army repetition is complete, for five to ten Army repetitions. It anchors the active shoulder-to-shoulder fixture and both-direction topology, but the catalog deliberately adapts one out-and-back cycle to one logged repetition. The standard permits different trunk-following strategies and does not establish isolated lumbar rotation, measured pelvis contribution, categorical muscle ranking, universal load, or medical outcomes."
+    },
+    {
+      "id": "ace-2014-plank-hip-drop",
+      "sourceType": "officialTechnicalStandard",
+      "title": "What Comes After Planks?",
+      "authors": ["American Council on Exercise"],
+      "year": 2014,
+      "url": "https://www.acefitness.org/continuing-education/prosource/may-2014/3797/what-comes-after-planks/",
+      "scope": "ACE's plank-with-hip-drop progression specifies a forearm-and-toe plank with elbows below the shoulders, rotation through the feet, one hip lowering toward the floor, return through center, and repetition to the other side. It establishes the alternating low-plank fixture and dynamic hip-drop boundary, not segmental spinal kinematics, quantitative muscle ranking, a universal floor-touch endpoint, or medical benefit."
+    },
+    {
+      "id": "ace-2026-high-plank-rotation",
+      "sourceType": "officialTechnicalStandard",
+      "title": "High Plank T-Spine Rotation",
+      "authors": ["American Council on Exercise"],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/exercise-library/330/high-plank-t-spine-rotation/",
+      "scope": "Undated ACE exercise guidance registered with retrieval year 2026. It specifies a push-up-position high plank, weight transfer to one supporting arm, rotation of the shoulders and hips as the free arm reaches toward the ceiling, controlled return, and repetition on the other side. It establishes the alternating high-plank fixture, not isolated thoracic-only motion, a muscle-force ranking, or a universal range."
+    },
+    {
+      "id": "ace-2026-plank-arm-reach",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Youth Fitness: Choice and Order of Exercise",
+      "authors": ["American Council on Exercise"],
+      "year": 2026,
+      "url": "https://www.acefitness.org/resources/everyone/blog/5066/youth-fitness-choice-and-order-of-exercise/",
+      "scope": "Undated ACE guidance registered with retrieval year 2026. Its plank-with-arm-reach drill begins from a forearm-and-toe plank, extends one arm forward, holds briefly while resisting trunk rotation, returns the forearm, and alternates. It establishes the low-plank support and alternating reach boundary, not quantitative recruitment, a mandatory hold duration, or a high-plank version."
+    },
+    {
+      "id": "trx-2026-standing-rollout",
+      "sourceType": "officialTechnicalStandard",
+      "title": "TRX Standing Roll Out",
+      "authors": ["TRX Training"],
+      "year": 2026,
+      "url": "https://www.trxtraining.com/blogs/news/standing-ab-exercises",
+      "scope": "TRX's current standing-rollout guidance specifies standing facing away from the anchor with both hands in the handles, a straight braced body, arms traveling forward and overhead without lumbar sag, and a controlled return. It establishes the standing suspension fixture and body-angle resistance boundary, not a portable bodyweight fraction, numeric muscle ranking, kneeling geometry, or equivalence to the feet-suspended body saw."
+    },
+    {
+      "id": "trx-2023-standing-rollout",
+      "sourceType": "officialTechnicalStandard",
+      "title": "TRX Warm Up Exercises for Snow Sports",
+      "authors": ["TRX Training"],
+      "year": 2023,
+      "url": "https://www.trxtraining.com/blogs/news/exercises-for-snow-sports",
+      "scope": "TRX's standing-rollout standard specifies a mid-length adjustment, standing facing away, hands beneath the shoulders, an aligned plank without sagging, hands rolling to slightly above eyebrow height, and a braced return through the handles. It directly supports the active strap setting and standing fixture, not a universal endpoint, portable resistance value, or kneeling variation."
+    },
+    {
+      "id": "ace-2016-kneeling-barbell-rollout",
+      "sourceType": "officialTechnicalStandard",
+      "title": "One Weight Workout Series: The Barbell",
+      "authors": ["American Council on Exercise"],
+      "year": 2016,
+      "url": "https://www.acefitness.org/resources/pros/expert-articles/6215/one-weight-workout-series-the-barbell/",
+      "scope": "ACE's barbell-rollout standard specifies a kneeling start, both hands on a barbell with round plates, a forward roll while maintaining trunk control, and a controlled return. It establishes the free-rolling barbell fixture, not standing rollouts, a universal distance, a comparable effective resistance value, or quantitative muscle roles."
+    },
+    {
+      "id": "nsca-2020-crossbody-drag",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Evidence-Based Exercise for Structural Firefighters: A Brief Review",
+      "authors": ["National Strength and Conditioning Association"],
+      "year": 2020,
+      "url": "https://www.nsca.com/globalassets/education/tsac-report/tsac-report-57.pdf",
+      "scope": "The NSCA programming table lists plank with crossbody drags and separately lists Halligan tools, sandbags, kettlebells, and dumbbells as applicable equipment. It supports the exercise category and implement availability only. It does not establish high-plank support, one-implement topology, hand path, endpoints, alternation, repetition counting, joint actions, effective resistance, or categorical muscle rankings."
+    },
+    {
+      "id": "nsca-2020-bridge-pull-through",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Practical Exercise Programming for Wildland Fire Suppression Aids",
+      "authors": ["Megan McGuire", "Matthew Moreno", "Robert Lockie"],
+      "year": 2020,
+      "url": "https://www.nsca.com/globalassets/education/tsac-report/tsac-report-54.pdf",
+      "scope": "The NSCA bridge pull-through standard begins in a high plank with palms down and elbows straight, places one dumbbell behind a hand, shifts support to that side, uses the opposite hand to pull the dumbbell toward the lifting arm's shoulder, returns to high plank, and repeats with the opposite arm while keeping shoulders and hips parallel to the floor. It directly supports the dumbbell fixture and alternating anti-rotation task, not kettlebell identity, a portable effective resistance, exact drag distance, or categorical muscle rankings."
+    },
+    {
+      "id": "prehab-2020-kettlebell-pull-through",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Kettlebell Pull Through",
+      "authors": ["The Prehab Guys"],
+      "year": 2020,
+      "url": "https://library.theprehabguys.com/vimeo-video/kettlebell-pull-through/",
+      "scope": "The professional exercise guide begins in a high plank with a kettlebell under the chest, shifts weight to one side, uses the opposite hand to slide the implement toward that arm, and alternates hands and directions while the core and lower body maintain the plank. It directly supports the kettlebell fixture and alternating drag topology, not a prescribed outside-shoulder endpoint, portable effective resistance, exact drag distance, or categorical muscle rankings."
+    },
+    {
+      "id": "boxing-science-2020-punch-harder",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Punch Harder",
+      "authors": ["Boxing Science"],
+      "year": 2020,
+      "url": "https://boxingscience.co.uk/app/uploads/2021/09/Punch-Harder-by-Boxing-Science-2020.pdf",
+      "scope": "Page 20 specifies straight-arm straight-leg sit-ups with feet together, hands toward the ceiling, a neutral-spine cue, and a controlled three-second descent, and its photographs show the loaded progression holding one medicine ball in both straight arms. The same page specifies simultaneous arm-and-leg lowering with the lower back held against the floor and photographs one medicine ball held in both hands as the limbs move away and return. It directly establishes both active medicine-ball fixtures and total-implement identity, not a universal load, exact floor-clearance endpoint, quantitative muscle ranking, or clinical outcome."
+    },
+    {
+      "id": "shields-1997-double-leg-lowering",
+      "sourceType": "experimentalEMGStudy",
+      "title": "An Electromyographic Comparison of Abdominal Muscle Synergies during Curl and Double Straight Leg Lowering Exercises with Control of the Pelvic Position",
+      "authors": ["Richard K. Shields", "Deborah G. Heiss"],
+      "year": 1997,
+      "pmid": "9280023",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9280023/",
+      "scope": "Fifteen male participants performed the double straight-leg lowering exercise with controlled pelvic position. The study reported greater abdominal-muscle activation and coactivation than the compared bent-knee curl, directly supporting abdominal and oblique participation during bilateral leg lowering. It does not establish the medicine-ball arm path, a categorical complete-body role hierarchy, or a universal endpoint."
+    },
+    {
+      "id": "boxing-science-2021-punch-harder",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Punch Harder: The Blueprint to Elite Performance",
+      "authors": ["Boxing Science"],
+      "year": 2021,
+      "url": "https://boxingscience.co.uk/app/uploads/woocommerce_uploads/2020/03/Punch-Harder-2021-mh7b8g.pdf",
+      "scope": "The Boxing Science handbook directly demonstrates a forearm rotational plank that pivots through the feet into a side-facing position with the free arm raised, plus straight-arm straight-leg sit-ups performed with feet together, arms toward the ceiling, a neutral-spine cue, and a controlled three-second descent. It also presents simultaneous arm-and-leg lowering with the lower back held against the floor. The source establishes those movement boundaries, not segmental spinal motion, exact muscle recruitment, a universal load, or implement identity."
+    },
+    {
+      "id": "boxing-science-exercise-library-med-ball-sit-up",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Exercise Library: Boxing Science Strength and Conditioning Program",
+      "authors": ["Boxing Science"],
+      "year": 2026,
+      "url": "https://www.scribd.com/document/965522663/EXERCISE-LIBRARY-Boxing-Science-Strength-and-Conditioning-Program-Vwtlck",
+      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. Its Straight Leg Sit Ups with Med Ball entry specifies extended legs, one medicine ball held tightly against the chest, a slow lowering phase with slight upper-back flexion, a slow return with the legs pressed against the floor, and a four-to-five-second repetition. It directly anchors that exact fixture and tempo, not a universal load, precise range, lumbar kinematics, categorical muscle ranking, or outcome."
     }
   ]
 }

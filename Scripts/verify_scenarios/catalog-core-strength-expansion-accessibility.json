@@ -1,0 +1,20 @@
+{
+  "name": "catalog-core-strength-expansion-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityL"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Dumbbell High-Plank Drag,"}, "direction": "up", "maxSwipes": 100}},
+    {"tap": {"labelRegex": "^Dumbbell High-Plank Drag,"}},
+    {"wait": {"label": "STRENGTH · REPS"}},
+    {"assert": {"required": [{"label": "Dumbbell High-Plank Drag"}, {"labelContains": "Muscles used by Dumbbell High-Plank Drag"}]}}
+  ],
+  "required": [
+    {"label": "Dumbbell High-Plank Drag"},
+    {"label": "STRENGTH · REPS"}
+  ],
+  "forbidden": []
+}

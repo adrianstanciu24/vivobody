@@ -1,0 +1,25 @@
+{
+  "name": "catalog-core-strength-expansion",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterCore"}},
+    {"scrollTo": {"selector": {"labelRegex": "^TRX Standing Rollout,"}, "direction": "up", "maxSwipes": 80}},
+    {"tap": {"labelRegex": "^TRX Standing Rollout,"}},
+    {"wait": {"label": "STRENGTH · REPS"}},
+    {"assert": {"required": [{"label": "TRX Standing Rollout"}, {"labelContains": "Muscles used by TRX Standing Rollout"}]}},
+    {"scrollTo": {"selector": {"identifier": "exercise-how-to-perform"}, "direction": "up", "maxSwipes": 12}},
+    {"swipe": {"direction": "up", "count": 1}},
+    {"tap": {"identifier": "exercise-how-to-perform"}},
+    {"wait": {"identifier": "exercise-execution-movement"}}
+  ],
+  "required": [
+    {"identifier": "exercise-execution-starting-position", "labelContains": "stand facing away from the anchor"},
+    {"identifier": "exercise-execution-movement", "labelContains": "both arms travel overhead"}
+  ],
+  "forbidden": []
+}

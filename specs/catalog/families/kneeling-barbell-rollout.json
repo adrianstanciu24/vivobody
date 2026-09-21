@@ -1,0 +1,38 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "kneeling-barbell-rollout", "name": "Kneeling Barbell Rollout",
+  "definition": "A kneeling rollout in which both hands roll a barbell on round plates forward from the knees while the shoulders flex and hips extend, then return through shoulder extension and hip flexion while the trunk resists spinal extension. The total bar-and-plate mass may be logged once, but it is not a comparable effective load because body geometry and rollout distance dominate the task. Ab wheels, standing rollouts, band-assisted or resisted rollouts, fixed rails, partial wall rollouts, and timed holds remain outside this family.",
+  "evidenceRefs": ["ace-2016-kneeling-barbell-rollout", "hildenbrand-2004-abslide", "holzbaur-2005-upper-extremity", "arnold-2010-lower-limb"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["barbell"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension"], "primeActions": ["shoulder.extension", "hip.flexion"], "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "secondary"}, {"anyOf": ["lats", "teresMajor"], "minimumRole": "secondary"}, {"anyOf": ["iliopsoas"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs"], "secondary": ["obliques", "lats", "teresMajor", "iliopsoas"], "stabilizer": ["serratus", "externalRotators", "triceps", "fingerFlexors", "extensorCarpiRadialis", "gluteMax", "vasti"]}
+  },
+  "variantAxes": [
+    {"id": "kineticChain", "valueType": "enum", "required": true, "description": "The bar rolls while both knees remain supported.", "allowedValues": ["mixedKneelingBarContact"]},
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The repetition begins and ends kneeling.", "allowedValues": ["kneeling"]},
+    {"id": "kneeSupport", "valueType": "enum", "required": true, "description": "Both knees remain on the floor.", "allowedValues": ["bilateralFloor"]},
+    {"id": "handInterface", "valueType": "enum", "required": true, "description": "Both hands hold the bar shaft.", "allowedValues": ["bilateralBarbellGrip"]},
+    {"id": "rollingInterface", "valueType": "enum", "required": true, "description": "Round plates roll on the floor.", "allowedValues": ["roundPlatesOnFloor"]},
+    {"id": "barPath", "valueType": "enum", "required": true, "description": "The bar rolls forward and returns.", "allowedValues": ["forwardAndReturn"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The torso resists extension.", "allowedValues": ["heldAgainstExtension"]},
+    {"id": "elbowMotion", "valueType": "enum", "required": true, "description": "Elbows stay near extension.", "allowedValues": ["angleHeld"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "Log the complete bar and plate mass once.", "allowedValues": ["totalBarAndPlates"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "The bar rolls freely."}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 5, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "kneeling-barbell-rollout", "name": "Kneeling Barbell Rollout", "aliases": ["Barbell Rollout", "Barbell Rollouts", "Barbell Ab Rollout"],
+    "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 8, "searchPriority": 95,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "secondary"}, {"muscle": "lats", "role": "secondary"}, {"muscle": "teresMajor", "role": "secondary"}, {"muscle": "iliopsoas", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}],
+    "variant": {"kineticChain": "mixedKneelingBarContact", "bodyPosition": "kneeling", "kneeSupport": "bilateralFloor", "handInterface": "bilateralBarbellGrip", "rollingInterface": "roundPlatesOnFloor", "barPath": "forwardAndReturn", "spineMotion": "heldAgainstExtension", "elbowMotion": "angleHeld", "loadAccounting": "totalBarAndPlates", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ace-2016-kneeling-barbell-rollout", "hildenbrand-2004-abslide"],
+    "execution": {"startingPosition": "Kneel on the floor and take a two-hand grip on a barbell loaded with round plates. Log the complete bar-and-plate mass once.", "movement": "Roll the bar forward as the shoulders flex and hips extend while keeping the torso braced against spinal extension.", "endpoint": "Reach only the farthest position that preserves the braced torso.", "returnPhase": "Roll the bar back under control through shoulder extension and hip flexion to the kneeling start.", "controlledJoints": "Keep the elbows nearly straight and prevent the low back from sagging.", "supportAndPosture": "Keep both knees on the floor and both hands on the bar.", "disqualifyingCompensations": ["Standing on the feet changes the fixture.", "Using square plates that cannot roll changes the movement.", "Attaching a band changes the resistance topology."]}
+  }]
+}

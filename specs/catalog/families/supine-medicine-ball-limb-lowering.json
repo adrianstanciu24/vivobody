@@ -1,0 +1,64 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "supine-medicine-ball-limb-lowering",
+  "name": "Supine Medicine-Ball Limb Lowering",
+  "definition": "A supine anti-extension repetition performed with one medicine ball held in both hands. From flexed hips and knees with the ball above the torso, both arms and both legs travel away together, pause above the floor while the lower back remains down, and return together. Shoulder extension, hip flexion, and knee flexion describe the return against gravity; lowering the limbs is not relabeled as concentric strengthening in the opposite directions. Boxing Science owns the exact medicine-ball and simultaneous-limb fixture. Abdominal and oblique roles come from bilateral leg-lowering evidence; hip-, knee-, shoulder-, and grip-muscle roles are bounded anatomy-and-mechanics inferences, not an exact-fixture recruitment hierarchy. Alternating dead bugs, unloaded double-leg lowers, straight-leg raises, hollow holds, sit-ups, floor-touching repetitions, and single-limb variants remain outside this family.",
+  "evidenceRefs": ["boxing-science-2020-punch-harder", "shields-1997-double-leg-lowering", "andersson-1997-abdominal-hip-flexor-exercises", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity", "christophy-2012-lumbar-spine"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["medicineBall"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension"],
+    "primeActions": ["shoulder.extension", "hip.flexion", "knee.flexion"],
+    "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["shoulder", "elbow", "hand", "spine", "pelvis", "hip", "knee"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "secondary"}, {"anyOf": ["iliopsoas"], "minimumRole": "secondary"}, {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"}, {"anyOf": ["bicepsFemoris", "medialHamstrings"], "minimumRole": "secondary"}, {"anyOf": ["lats", "teresMajor"], "minimumRole": "secondary"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs"], "secondary": ["obliques", "iliopsoas", "rectusFemoris", "bicepsFemoris", "medialHamstrings", "lats", "teresMajor"], "stabilizer": ["triceps", "fingerFlexors"]}
+  },
+  "variantAxes": [
+    {"id": "lumbarSupport", "valueType": "enum", "required": true, "description": "The lower back stays against the floor; head and shoulder-blade contact are not prescribed.", "allowedValues": ["lowerBackAgainstFloor"]},
+    {"id": "startLimbPosition", "valueType": "enum", "required": true, "description": "Hips and knees begin flexed with the ball above the torso.", "allowedValues": ["hipsAndKneesFlexedBallAboveTorso"]},
+    {"id": "limbSequence", "valueType": "enum", "required": true, "description": "Both arms and both legs move away and return together.", "allowedValues": ["allFourLimbsSimultaneous"]},
+    {"id": "implementPosition", "valueType": "enum", "required": true, "description": "One complete medicine ball stays in both hands.", "allowedValues": ["oneBallBothHands"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The lower back stays against the floor while the limbs move.", "allowedValues": ["lumbarHeldAgainstFloor"]},
+    {"id": "endpoint", "valueType": "enum", "required": true, "description": "Straight limbs pause above the floor before lumbar control is lost.", "allowedValues": ["straightLimbsAboveFloor"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "Log the one complete medicine ball once.", "allowedValues": ["totalImplement"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "One simultaneous lower and return counts once.", "allowedValues": ["outAndReturn"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the limbs."}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "medicine-ball-weighted-leg-lower",
+    "name": "Medicine-Ball Weighted Leg Lower",
+    "aliases": ["Weighted Leg Lowers", "Weighted Leg Lower", "Med Ball Leg Lower"],
+    "equipment": "medicineBall",
+    "laterality": "bilateral",
+    "modality": "dynamicStrength",
+    "trackingMode": "reps",
+    "loadMode": "external",
+    "bodyweightFraction": 0,
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "searchPriority": 95,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "secondary"}, {"muscle": "iliopsoas", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "secondary"}, {"muscle": "lats", "role": "secondary"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}],
+    "variant": {"lumbarSupport": "lowerBackAgainstFloor", "startLimbPosition": "hipsAndKneesFlexedBallAboveTorso", "limbSequence": "allFourLimbsSimultaneous", "implementPosition": "oneBallBothHands", "spineMotion": "lumbarHeldAgainstFloor", "endpoint": "straightLimbsAboveFloor", "loadAccounting": "totalImplement", "repetitionCounting": "outAndReturn", "fixedPath": false},
+    "additionalPrimeActions": [],
+    "additionalStabilityDemands": [],
+    "evidenceRefs": ["boxing-science-2020-punch-harder", "shields-1997-double-leg-lowering", "andersson-1997-abdominal-hip-flexor-exercises", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity"],
+    "execution": {
+      "startingPosition": "Lie on your back with the lower back against the floor, hips and knees flexed, and one medicine ball held in both hands above the torso. Log the ball's full mass once.",
+      "movement": "Slowly lower both arms and both legs away from the torso at the same time while keeping the lower back down.",
+      "endpoint": "Pause with arms and legs straight just above the floor, stopping earlier if the lower back begins to lift.",
+      "returnPhase": "Bring the ball, hips, and knees back to the starting position together under control.",
+      "controlledJoints": "Keep the elbows straight during the arm path and prevent the lumbar spine from arching.",
+      "supportAndPosture": "Keep the lower back pressed into the floor while the hands and feet remain off it; upper-trunk contact is not required.",
+      "disqualifyingCompensations": ["Letting the lower back lift loses the anti-extension task.", "Touching the ball or feet to the floor changes the reviewed endpoint.", "Moving one arm and opposite leg at a time changes the exercise to a dead bug."]
+    }
+  }]
+}

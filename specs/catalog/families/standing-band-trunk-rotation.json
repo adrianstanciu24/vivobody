@@ -1,0 +1,38 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "standing-band-trunk-rotation", "name": "Standing Band Trunk Rotation",
+  "definition": "A strict standing elastic-resistance torso twist performed with shoulder-width feet, extended arms held horizontally, and a side-anchored band prestretched to twice its resting length. Vinstrup et al. directly measured left-to-right rotations while hips, legs, and feet remained in position and measured external-oblique, rectus-abdominis, and erector-spinae activity. Training the mirrored direction in a separate set is an explicit catalog symmetry adaptation, not a second studied condition. The source did not measure internal oblique or pelvic kinematics. Weight-shifting, pivoting, stepping, explosive, cable, seated-machine, chopping, and anti-rotation variants remain outside this family.",
+  "evidenceRefs": ["vinstrup-2015-torso-twist", "sugaya-2016-trunk-rotation", "christophy-2012-lumbar-spine"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["band"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.rotation"], "primeActions": ["spine.rotation"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["spine", "pelvis"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["obliques"], "minimumRole": "primary"}, {"anyOf": ["abs"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["obliques"], "secondary": [], "stabilizer": ["abs", "lumbarExtensors"]}
+  },
+  "variantAxes": [
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The athlete remains standing.", "allowedValues": ["standing"]},
+    {"id": "stance", "valueType": "enum", "required": true, "description": "The reviewed stance width.", "allowedValues": ["shoulderWidthParallel"]},
+    {"id": "anchor", "valueType": "enum", "required": true, "description": "The side-anchored band begins at twice its resting length.", "allowedValues": ["sideAnchoredTwiceRestingLength"]},
+    {"id": "armPosition", "valueType": "enum", "required": true, "description": "Both arms remain extended and horizontal.", "allowedValues": ["bilateralExtendedHorizontal"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The trunk rotates one direction and returns.", "allowedValues": ["rotatesOneDirectionThenReturns"]},
+    {"id": "pelvisMotion", "valueType": "enum", "required": true, "description": "The source instructs the hips to remain in position without claiming measured zero motion.", "allowedValues": ["positionHeldSourceInstruction"]},
+    {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "description": "Feet and legs remain in position without a weight shift or pivot.", "allowedValues": ["staticSupportOnly"]},
+    {"id": "trainingDirectionPrescription", "valueType": "enum", "required": true, "description": "The source-owned left-to-right set is mirrored for the other direction as a catalog programming adaptation.", "allowedValues": ["sourceLeftToRightPlusMirroredSet"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "One outward rotation and return counts once.", "allowedValues": ["outAndReturn"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "Elastic resistance does not constrain a guided path."}
+  ],
+  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [{
+    "catalogID": "standing-band-torso-twist", "name": "Standing Band Torso Twist", "aliases": ["Banded Rotations", "Band Trunk Rotation", "Standing Band Rotation"],
+    "equipment": "band", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 95,
+    "involvement": [{"muscle": "obliques", "role": "primary"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}],
+    "variant": {"bodyPosition": "standing", "stance": "shoulderWidthParallel", "anchor": "sideAnchoredTwiceRestingLength", "armPosition": "bilateralExtendedHorizontal", "spineMotion": "rotatesOneDirectionThenReturns", "pelvisMotion": "positionHeldSourceInstruction", "lowerBodyContribution": "staticSupportOnly", "trainingDirectionPrescription": "sourceLeftToRightPlusMirroredSet", "repetitionCounting": "outAndReturn", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["vinstrup-2015-torso-twist", "sugaya-2016-trunk-rotation"],
+    "execution": {"startingPosition": "For the source-owned set, stand with feet shoulder-width apart, the band anchored on the left starting side and stretched to twice its resting length, and both arms extended horizontally while the torso is rotated left.", "movement": "Rotate the torso from left to right against increasing band resistance while keeping the hips, legs, and feet in position.", "endpoint": "Complete the controlled rightward rotation without stepping, pivoting, or turning the pelvis.", "returnPhase": "Return to the left-rotated starting position under control.", "controlledJoints": "Keep the elbows extended and avoid leaning or bending the spine.", "supportAndPosture": "Keep both feet and legs in their starting positions throughout the repetition.", "sideOrDirection": "Count each left-to-right rotation and return as one repetition. For balanced programming, mirror the setup and motion in a separate set; that mirrored direction is a catalog adaptation rather than a measured study condition.", "disqualifyingCompensations": ["Pivoting the feet or driving through the hips changes the fixture.", "Holding the trunk still changes the exercise to an anti-rotation hold.", "Moving the hands diagonally changes the exercise to a chop."]}
+  }]
+}

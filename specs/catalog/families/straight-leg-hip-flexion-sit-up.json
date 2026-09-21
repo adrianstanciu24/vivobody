@@ -1,0 +1,40 @@
+{
+  "$schema": "../family.schema.json", "schemaVersion": 1, "id": "straight-leg-hip-flexion-sit-up", "name": "Straight-Leg Hip-Flexion Sit-Up",
+  "definition": "A bodyweight straight-leg, unanchored, hip-flexion-led sit-up performed with the spine held neutral rather than deliberately curled. Both legs stay straight and together on the floor while the torso rises to upright and returns slowly, and both straight arms continue reaching toward the ceiling. This differs from the active straight-leg-sit-up family, whose reviewed arms-crossed repetition deliberately curls the trunk before completing hip flexion, and from the separately owned chest-held medicine-ball fixture. Bent-knee, anchored, V-up, externally loaded, throwing, rotating, arm-swing, and trunk-curl variants remain outside this family.",
+  "evidenceRefs": ["boxing-science-2020-punch-harder", "boxing-science-2021-punch-harder", "andersson-1997-abdominal-hip-flexor-exercises", "cordo-2003-straight-leg-sit-up", "arnold-2010-lower-limb"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension"], "primeActions": ["hip.flexion"], "resistedActions": ["spine.extension"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "spine", "pelvis", "hip", "knee", "shoulder", "elbow"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["iliopsoas"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "secondary"}, {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs", "iliopsoas"], "secondary": ["obliques", "rectusFemoris"], "stabilizer": ["vasti", "deltoidAnterior", "serratus", "triceps"]}
+  },
+  "variantAxes": [
+    {"id": "legConfiguration", "valueType": "enum", "required": true, "description": "Both legs remain straight and together.", "allowedValues": ["straightTogether"]},
+    {"id": "footAnchor", "valueType": "enum", "required": true, "description": "The feet are not anchored.", "allowedValues": ["none"]},
+    {"id": "spineMotion", "valueType": "enum", "required": true, "description": "The spine stays neutral rather than deliberately curling.", "allowedValues": ["neutralHeldAgainstExtension"]},
+    {"id": "hipMotion", "valueType": "enum", "required": true, "description": "Hip flexion raises the torso and reverses under control.", "allowedValues": ["flexesThenReturns"]},
+    {"id": "endpoint", "valueType": "enum", "required": true, "description": "The torso reaches upright sitting.", "allowedValues": ["uprightSitting"]},
+    {"id": "armTask", "valueType": "enum", "required": true, "description": "Both straight arms reach toward the ceiling and remain extended.", "allowedValues": ["straightTowardCeiling"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "No external mass is logged.", "allowedValues": ["none"]},
+    {"id": "momentum", "valueType": "enum", "required": true, "description": "No arm swing or kip creates the repetition.", "allowedValues": ["controlledNoKip"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the torso."}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
+  "exercises": [
+    {
+      "catalogID": "straight-arm-straight-leg-sit-up", "name": "Straight-Arm Straight-Leg Sit-Up", "aliases": ["Straight-Arm Straight-Leg Sit-Ups", "Straight Arm Straight Leg Sit-Ups"],
+      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 95,
+      "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "iliopsoas", "role": "primary"}, {"muscle": "obliques", "role": "secondary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}],
+      "variant": {"legConfiguration": "straightTogether", "footAnchor": "none", "spineMotion": "neutralHeldAgainstExtension", "hipMotion": "flexesThenReturns", "endpoint": "uprightSitting", "armTask": "straightTowardCeiling", "loadAccounting": "none", "momentum": "controlledNoKip", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["boxing-science-2021-punch-harder", "andersson-1997-abdominal-hip-flexor-exercises", "cordo-2003-straight-leg-sit-up"],
+      "execution": {"startingPosition": "Lie on your back with legs straight and together, feet unanchored, and both straight arms reaching toward the ceiling.", "movement": "Keep the spine neutral as you flex at the hips and raise the torso to upright sitting with the arms remaining straight.", "endpoint": "Finish upright with the legs straight and the hands still reaching upward.", "returnPhase": "Lower to the floor for about three seconds without swinging the arms.", "controlledJoints": "Keep the knees straight and resist arching or deliberately curling the spine.", "supportAndPosture": "Keep the legs together and the feet unanchored.", "disqualifyingCompensations": ["Curling the trunk changes the exercise to the conventional straight-leg sit-up.", "Bending or anchoring the legs changes the fixture.", "Swinging the arms creates momentum outside the reviewed repetition."]}
+    }
+  ]
+}
