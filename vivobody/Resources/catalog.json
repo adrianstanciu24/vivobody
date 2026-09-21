@@ -13041,6 +13041,86 @@
     ]
   },
   {
+    "familyID": "landmine-rotation",
+    "familyName": "Landmine Rotation",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "standing-two-hand-landmine-rotation",
+    "name": "Standing Two-Hand Landmine Rotation",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Landmine Rotation",
+      "Landmine 180",
+      "180-Degree Landmine"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Fix one end of an Olympic bar in a landmine pivot. Stand astride the bar's line with a balanced stance and hold the moving sleeve in both hands in front of one shoulder. Log only the added plates and compare progress on the same bar, pivot, grip, endpoints, and setup.",
+      "movement": "Guide the sleeve through its pivoted rising arc from the starting shoulder to the opposite shoulder. Let the feet and pelvis turn naturally while rotating the torso relative to the pelvis; do not move as one rigid block.",
+      "endpoint": "Stop with the sleeve controlled in front of the opposite shoulder without squatting, lunging, pressing, or leaning sideways.",
+      "returnPhase": "Reverse the same controlled arc to the starting shoulder to complete one logged repetition. This catalog count is one out-and-back cycle; the Army four-count repetition repeats the cycle once more.",
+      "controlledJoints": "Keep the elbows controlled and let the feet adjust only enough to accommodate the turn; do not add a squat, lunge, jump, or deliberate leg drive.",
+      "supportAndPosture": "Stay balanced through both feet and keep the bar under two-hand control throughout the arc.",
+      "disqualifyingCompensations": [
+        "Pressing the sleeve away from the shoulder turns the movement into a landmine press.",
+        "Dropping the sleeve toward the hip or knee leaves the reviewed shoulder-to-shoulder fixture.",
+        "Using a squat, jump, or explosive release turns the repetition into a different power exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "lats",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "lateral-band-walk",
     "familyName": "Lateral Band Walk",
     "movementActions": [
@@ -16785,6 +16865,74 @@
       },
       {
         "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "russian-twist",
+    "familyName": "Russian Twist",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "seated-medicine-ball-russian-twist",
+    "name": "Seated Medicine Ball Russian Twist",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "isolation",
+    "trainingRole": "core",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Medicine Ball Russian Twist",
+      "Med Ball Russian Twist"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Sit on the floor with your knees bent and both feet flat. Hold one medicine ball in both hands at chest level, then lean back slightly while keeping a long, controlled trunk. Log the ball's full stated weight once.",
+      "movement": "Turn your shoulders, torso, and ball together toward one side while keeping the pelvis, hips, and feet still.",
+      "endpoint": "Stop at a comfortable controlled rotation without leaning sideways or moving the ball independently with your arms.",
+      "returnPhase": "Rotate through center under control and continue toward the opposite side.",
+      "controlledJoints": "Keep the pelvis and hips still, both feet planted, and the spine free of added flexion or side bending.",
+      "supportAndPosture": "Maintain the slight recline and keep the ball close to your chest in both hands.",
+      "disqualifyingCompensations": [
+        "Lifting the feet changes the lower-body support and leaves this fixture.",
+        "Sweeping the ball with the arms while the torso stays still is not a Russian-twist repetition.",
+        "Throwing or releasing the ball turns the exercise into a medicine-ball power drill."
+      ],
+      "sideOrDirection": "Alternate sides. Count each completed side as one repetition and use an even total for equal work."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
         "role": "stabilizer"
       }
     ]

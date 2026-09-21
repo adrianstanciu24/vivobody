@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 124 |
-| Exercises | 294 |
+| Reviewed families | 126 |
+| Exercises | 296 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 332 |
+| Evidence sources | 336 |
 
 ## Family roster
 
@@ -75,6 +75,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [knee-flexion](families/knee-flexion.json) | 4 |
 | [kneeling-ab-wheel-rollout](families/kneeling-ab-wheel-rollout.json) | 1 |
 | [landmine-press](families/landmine-press.json) | 2 |
+| [landmine-rotation](families/landmine-rotation.json) | 1 |
 | [lateral-band-walk](families/lateral-band-walk.json) | 1 |
 | [lateral-lunge](families/lateral-lunge.json) | 2 |
 | [machine-hack-squat](families/machine-hack-squat.json) | 1 |
@@ -97,6 +98,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [reverse-fly](families/reverse-fly.json) | 6 |
 | [roman-chair-hip-extension](families/roman-chair-hip-extension.json) | 1 |
 | [romanian-deadlift](families/romanian-deadlift.json) | 5 |
+| [russian-twist](families/russian-twist.json) | 1 |
 | [scapular-depression](families/scapular-depression.json) | 1 |
 | [scapular-elevation](families/scapular-elevation.json) | 4 |
 | [scapular-protraction](families/scapular-protraction.json) | 1 |

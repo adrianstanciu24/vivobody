@@ -5230,6 +5230,59 @@
       "doi": "10.15561/20755279.2024.0306",
       "url": "https://doi.org/10.15561/20755279.2024.0306",
       "scope": "The year-long university physical-education study publishes a medicine-ball exercise table that directly specifies standing straight and rotational floor slams, a fixed forward-lunge split-stance two-hand side toss to a wall performed in both directions, side-step throws, and kneeling rotational throws. It supports those fixture boundaries and ballistic intent, but does not establish categorical muscle rankings, a reactive catch-and-release topology for every stance, an exact crossover sequence, universal ball mass, or medical outcomes."
+    },
+    {
+      "id": "nasm-2026-russian-twist",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Russian Twist",
+      "authors": [
+        "National Academy of Sports Medicine"
+      ],
+      "year": 2026,
+      "url": "https://www.nasm.org/resource-center/exercise-library/russian-twist",
+      "scope": "Undated NASM exercise guidance registered with retrieval year 2026, not a claimed publication year. It specifies a seated Russian twist with bent knees, an optional feet-flat support, a slight torso recline, a weight or medicine ball held in both hands at chest level, controlled torso-led rotation, and alternating sides. The active catalog fixture narrows the optional foot position to both feet planted. The source does not establish segmental spinal angles, a muscle-force ranking, a universal load or repetition count, hypertrophy, or medical outcomes."
+    },
+    {
+      "id": "sugaya-2016-trunk-rotation",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Relationship between spinal range of motion and trunk muscle activity during trunk rotation",
+      "authors": [
+        "Tomoaki Sugaya",
+        "Masaaki Sakamoto",
+        "Rie Nakazawa",
+        "Naoki Wada"
+      ],
+      "year": 2016,
+      "doi": "10.1589/jpts.28.589",
+      "pmid": "27065549",
+      "pmcid": "PMC4793016",
+      "url": "https://doi.org/10.1589/jpts.28.589",
+      "scope": "Eleven healthy men performed controlled seated trunk rotations in both directions while three-dimensional motion analysis measured thoracic and lumbar segment rotation and surface EMG measured external oblique, internal oblique, transversus abdominis, rectus abdominis, latissimus dorsi, and lumbar multifidus. The source directly supports multi-segment spinal rotation and direction-sensitive oblique participation. Its upright, unloaded, thigh-restrained fixture does not establish the active Russian-twist recline, medicine-ball interface, exact role hierarchy, universal range, load, or training outcome."
+    },
+    {
+      "id": "allen-2025-landmine-rotation",
+      "sourceType": "peerReviewedTechniqueArticle",
+      "title": "The Landmine Rotation",
+      "authors": [
+        "Charles R. Allen",
+        "Devin R. Mantei",
+        "Zack T. Wallace"
+      ],
+      "year": 2025,
+      "doi": "10.1519/SSC.0000000000000845",
+      "url": "https://doi.org/10.1519/SSC.0000000000000845",
+      "scope": "The peer-reviewed technique article identifies the landmine rotation as a total-body rotational exercise usable for strength and power and documents technique, variations, and programming. It supports a distinct controlled strength fixture rather than treating every landmine arc as a press. It is not an experimental kinematics or EMG study and does not by itself establish segmental spine-versus-pelvis contribution, categorical muscle ranking, load equivalence, or one universal endpoint across its variants."
+    },
+    {
+      "id": "army-2020-landmine-180",
+      "sourceType": "officialTechnicalStandard",
+      "title": "ATP 7-22.02 Holistic Health and Fitness Drills and Exercises: 180-Degree Landmine",
+      "authors": [
+        "Headquarters, Department of the Army"
+      ],
+      "year": 2020,
+      "url": "https://h2f.army.mil/Portals/141/pdfs/unit/ATP%207-22.02.pdf",
+      "scope": "The Army's 180-Degree Landmine standard specifies a standing straddle stance, two hands on the moving bar end, a start in front of one shoulder, movement to the opposite shoulder, return to the starting shoulder, and feet adjusting as needed. Its four-count repetition repeats that out-and-back sequence once more before one Army repetition is complete, for five to ten Army repetitions. It anchors the active shoulder-to-shoulder fixture and both-direction topology, but the catalog deliberately adapts one out-and-back cycle to one logged repetition. The standard permits different trunk-following strategies and does not establish isolated lumbar rotation, measured pelvis contribution, categorical muscle ranking, universal load, or medical outcomes."
     }
   ]
 }

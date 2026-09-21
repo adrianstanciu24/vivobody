@@ -50,6 +50,11 @@ MEDICINE_BALL_RECORD_IDS = {
     "crossover-to-medicine-ball-rotational-throw",
 }
 
+ROTATIONAL_STRENGTH_RECORD_IDS = {
+    "seated-medicine-ball-russian-twist",
+    "standing-two-hand-landmine-rotation",
+}
+
 
 class RequestedCatalogGapTests(unittest.TestCase):
     @classmethod
@@ -93,6 +98,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
                    if r["catalogID"] not in (
                        set(OWNERS) | SECOND_WAVE_RECORD_IDS
                        | TRX_SUSPENSION_RECORD_IDS | MEDICINE_BALL_RECORD_IDS
+                       | ROTATIONAL_STRENGTH_RECORD_IDS
                    )]
         self.assertEqual(len(records), 254)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()

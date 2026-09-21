@@ -1,0 +1,386 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "landmine-rotation",
+  "name": "Landmine Rotation",
+  "definition": "A controlled standing two-hand Landmine 180 performed from a straddle stance. One end of an Olympic bar is fixed in a landmine pivot; the moving sleeve travels from in front of one shoulder through a rising arc to the opposite shoulder and returns. The catalog counts that out-and-back cycle as one logged repetition; this is an explicit product adaptation from the Army's four-count repetition, which repeats the cycle once more. The feet may adjust and the pelvis turns naturally, while the torso must rotate relative to the turning pelvis so a rigid whole-body turn does not qualify. No squat, lunge, press, release, or explosive throw creates the repetition. The Army standard directly anchors the stance, two-hand grip, shoulder-to-shoulder path, and natural foot adjustment. Allen identifies the landmine rotation as a total-body rotational strength and power exercise; the active record narrows that domain to controlled dynamic strength. Spine rotation and its relation to the turning pelvis are explicit catalog mechanics interpretations because the Army standard permits more than one trunk strategy and no exact human-segment kinematics or EMG were found. Obliques are primary; lats stabilize the shoulder and spine, triceps stabilize the elbow angle, gluteus maximus and rectus femoris stabilize the pelvis and lower-limb turn, gastrocnemius stabilizes the knee, ankle, and foot, and finger flexors secure the sleeve. Log added plates only and compare performance only on the same bar, pivot, grip, endpoints, and setup. Hip-height, knee-height, rigid whole-body, fixed-feet, one-hand, kneeling, anti-rotation, press, squat-to-press, throw, and explosive variants remain outside this contract.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity",
+    "arnold-2010-lower-limb",
+    "zhao-2026-landmine-press-kinematics",
+    "allen-2025-landmine-rotation",
+    "army-2020-landmine-180"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.rotation"
+    ],
+    "primeActions": [
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "elbow",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "lats"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "gastrocnemius",
+        "gluteMax",
+        "lats",
+        "rectusFemoris",
+        "triceps",
+        "fingerFlexors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body standing posture in the Army fixture.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The athlete stands astride the bar's line of travel with a balanced base.",
+      "allowedValues": [
+        "straddle"
+      ]
+    },
+    {
+      "id": "barbellConstraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "One end of the Olympic bar is fixed to a stationary landmine pivot.",
+      "allowedValues": [
+        "landminePivot"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both hands retain the moving sleeve throughout the repetition.",
+      "allowedValues": [
+        "twoHandsOnMovingSleeve"
+      ]
+    },
+    {
+      "id": "barPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The moving sleeve travels from one shoulder to the opposite shoulder through the pivoted arc.",
+      "allowedValues": [
+        "shoulderToShoulderRisingArc"
+      ]
+    },
+    {
+      "id": "trainingDirectionPrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each repetition contains both mirrored directions.",
+      "allowedValues": [
+        "bothDirectionsWithinEachRep"
+      ]
+    },
+    {
+      "id": "repetitionCounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "As a catalog counting adaptation, travel to the opposite shoulder and return to the starting shoulder counts as one logged repetition; the Army four-count repetition repeats that cycle once more.",
+      "allowedValues": [
+        "completeOutAndBackCycle"
+      ]
+    },
+    {
+      "id": "footPivot",
+      "valueType": "enum",
+      "required": true,
+      "description": "The feet may adjust naturally to accommodate the shoulder-to-shoulder arc.",
+      "allowedValues": [
+        "adjustsNaturally"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The pelvis turns with the naturally adjusting feet as an explicit catalog interpretation of the Army allowance.",
+      "allowedValues": [
+        "turnsWithFeetCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso rotates relative to the naturally turning pelvis; isolated lumbar rotation is not claimed, and a rigid whole-body turn does not qualify.",
+      "allowedValues": [
+        "rotatesRelativeToTurningPelvisCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The elbows remain controlled without a deliberate press or pull action.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower body accommodates the pivot without a squat, lunge, jump, or deliberate leg drive.",
+      "allowedValues": [
+        "pivotOnlyNoSquatOrLunge"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Log added plates only and compare performance on the same bar, pivot, grip, endpoints, and setup.",
+      "allowedValues": [
+        "addedPlatesSameLandmineOnly"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": true,
+      "description": "The landmine pivot constrains the external bar to a rotational arc."
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "standing-two-hand-landmine-rotation",
+      "name": "Standing Two-Hand Landmine Rotation",
+      "aliases": [
+        "Landmine Rotation",
+        "Landmine 180",
+        "180-Degree Landmine"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "lats",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "bodyPosition": "standing",
+        "stanceConfiguration": "straddle",
+        "barbellConstraint": "landminePivot",
+        "handTask": "twoHandsOnMovingSleeve",
+        "barPath": "shoulderToShoulderRisingArc",
+        "trainingDirectionPrescription": "bothDirectionsWithinEachRep",
+        "repetitionCounting": "completeOutAndBackCycle",
+        "footPivot": "adjustsNaturally",
+        "pelvisMotion": "turnsWithFeetCatalogAdaptation",
+        "spineMotion": "rotatesRelativeToTurningPelvisCatalogAdaptation",
+        "elbowMotion": "angleHeld",
+        "lowerBodyContribution": "pivotOnlyNoSquatOrLunge",
+        "loadAccounting": "addedPlatesSameLandmineOnly",
+        "fixedPath": true
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "allen-2025-landmine-rotation",
+        "army-2020-landmine-180",
+        "zhao-2026-landmine-press-kinematics"
+      ],
+      "execution": {
+        "startingPosition": "Fix one end of an Olympic bar in a landmine pivot. Stand astride the bar's line with a balanced stance and hold the moving sleeve in both hands in front of one shoulder. Log only the added plates and compare progress on the same bar, pivot, grip, endpoints, and setup.",
+        "movement": "Guide the sleeve through its pivoted rising arc from the starting shoulder to the opposite shoulder. Let the feet and pelvis turn naturally while rotating the torso relative to the pelvis; do not move as one rigid block.",
+        "endpoint": "Stop with the sleeve controlled in front of the opposite shoulder without squatting, lunging, pressing, or leaning sideways.",
+        "returnPhase": "Reverse the same controlled arc to the starting shoulder to complete one logged repetition. This catalog count is one out-and-back cycle; the Army four-count repetition repeats the cycle once more.",
+        "controlledJoints": "Keep the elbows controlled and let the feet adjust only enough to accommodate the turn; do not add a squat, lunge, jump, or deliberate leg drive.",
+        "supportAndPosture": "Stay balanced through both feet and keep the bar under two-hand control throughout the arc.",
+        "disqualifyingCompensations": [
+          "Pressing the sleeve away from the shoulder turns the movement into a landmine press.",
+          "Dropping the sleeve toward the hip or knee leaves the reviewed shoulder-to-shoulder fixture.",
+          "Using a squat, jump, or explosive release turns the repetition into a different power exercise."
+        ]
+      }
+    }
+  ]
+}

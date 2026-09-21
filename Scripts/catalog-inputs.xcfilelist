@@ -56,6 +56,7 @@ $(SRCROOT)/specs/catalog/families/knee-extension.json
 $(SRCROOT)/specs/catalog/families/knee-flexion.json
 $(SRCROOT)/specs/catalog/families/kneeling-ab-wheel-rollout.json
 $(SRCROOT)/specs/catalog/families/landmine-press.json
+$(SRCROOT)/specs/catalog/families/landmine-rotation.json
 $(SRCROOT)/specs/catalog/families/lateral-band-walk.json
 $(SRCROOT)/specs/catalog/families/lateral-lunge.json
 $(SRCROOT)/specs/catalog/families/machine-hack-squat.json
@@ -78,6 +79,7 @@ $(SRCROOT)/specs/catalog/families/push-press.json
 $(SRCROOT)/specs/catalog/families/reverse-fly.json
 $(SRCROOT)/specs/catalog/families/roman-chair-hip-extension.json
 $(SRCROOT)/specs/catalog/families/romanian-deadlift.json
+$(SRCROOT)/specs/catalog/families/russian-twist.json
 $(SRCROOT)/specs/catalog/families/scapular-depression.json
 $(SRCROOT)/specs/catalog/families/scapular-elevation.json
 $(SRCROOT)/specs/catalog/families/scapular-protraction.json

@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 158.
+Scenario files: 161.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -47,6 +47,7 @@ Scenario files: 158.
 | [catalog-forearm-development](catalog-forearm-development.json) | today | `--ui-test-forearm-development --static-body -settings.appearance dark` |
 | [catalog-forearm-stabilizers](catalog-forearm-stabilizers.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-horizontal-leg-press](catalog-horizontal-leg-press.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-landmine-rotation-light](catalog-landmine-rotation-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-machine-expansion](catalog-machine-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-first-wave-assisted-dip](catalog-machine-first-wave-assisted-dip.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-first-wave-pec-fly-accessibility](catalog-machine-first-wave-pec-fly-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
@@ -60,6 +61,8 @@ Scenario files: 158.
 | [catalog-requested-gaps-accessibility](catalog-requested-gaps-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [catalog-requested-gaps-light](catalog-requested-gaps-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-requested-gaps](catalog-requested-gaps.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-russian-twist-accessibility](catalog-russian-twist-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-russian-twist](catalog-russian-twist.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-second-wave-bicycle-crunch](catalog-second-wave-bicycle-crunch.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-second-wave-front-raise-accessibility](catalog-second-wave-front-raise-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [catalog-second-wave-glute-bridge-light](catalog-second-wave-glute-bridge-light.json) | library | `--static-body -settings.appearance light` |

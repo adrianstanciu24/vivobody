@@ -1,0 +1,50 @@
+{
+  "name": "catalog-russian-twist-accessibility",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Seated Medicine Ball Russian Twist,"
+        },
+        "direction": "up",
+        "maxSwipes": 100
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Seated Medicine Ball Russian Twist,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Seated Medicine Ball Russian Twist"
+    },
+    {
+      "labelContains": "Muscles used by Seated Medicine Ball Russian Twist"
+    }
+  ],
+  "forbidden": []
+}

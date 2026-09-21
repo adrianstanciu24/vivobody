@@ -1,0 +1,348 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "russian-twist",
+  "name": "Russian Twist",
+  "definition": "A controlled seated medicine-ball trunk rotation performed from a slight recline with both feet planted, the pelvis and hips held, and the ball retained at chest level in both hands. The torso and ball turn together to alternating sides while the lower body stays still. The NASM standard directly supports the bent-knee seated setup, feet-flat option, slight recline, two-hand chest-level implement position, and controlled alternating rotation; the active record deliberately narrows the optional foot position to both feet planted. Sugaya directly supports multi-segment spinal rotation and direction-sensitive oblique participation in controlled seated rotation, while Stevens supports oblique participation during resisted seated axial rotation. Transfer to the exact retained-ball fixture is a bounded anatomy-and-mechanics inference rather than exercise-specific EMG. This is an isolation family because spine rotation is the only produced joint action; the loaded arms and reclined pelvis are held rather than used to create the repetition. Obliques are primary; abs stabilize the reclined spine and pelvis, biceps brachii stabilize the loaded shoulder and elbow position, and finger flexors retain the ball. The logged external load is the medicine ball's stated mass only; bodyweight and postural demand are unquantified. Feet-elevated, bodyweight, plate, dumbbell, machine, cable, band, throwing, slamming, flexion-rotation, one-direction-only, and hip-driven variants remain outside this contract.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity",
+    "stevens-2007-seated-axial-rotation",
+    "sugaya-2016-trunk-rotation",
+    "nasm-2026-russian-twist"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "core",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "medicineBall"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.rotation"
+    ],
+    "primeActions": [
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "bicepsBrachii"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "abs",
+        "bicepsBrachii",
+        "fingerFlexors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The stable floor or mat supporting the seated athlete.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed seated posture with a small controlled torso recline.",
+      "allowedValues": [
+        "seatedSlightlyReclined"
+      ]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both bent-knee feet remain planted instead of lifting from the floor.",
+      "allowedValues": [
+        "bothFeetFlatKneesBent"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The pelvis remains position-held while the torso turns.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hips do not create or follow the alternating repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The trunk rotates under control to alternating sides without adding flexion or lateral flexion.",
+      "allowedValues": [
+        "alternatesRotationBothDirections"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both hands retain one medicine ball close to the chest.",
+      "allowedValues": [
+        "twoHandsHoldBallAtChest"
+      ]
+    },
+    {
+      "id": "implementPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The retained ball travels with the torso rather than being swept independently by the arms.",
+      "allowedValues": [
+        "carriedWithTorso"
+      ]
+    },
+    {
+      "id": "implementRelease",
+      "valueType": "enum",
+      "required": true,
+      "description": "The ball remains in both hands through every repetition.",
+      "allowedValues": [
+        "retained"
+      ]
+    },
+    {
+      "id": "trainingDirectionPrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both directions are trained by alternating sides within the set.",
+      "allowedValues": [
+        "bothDirectionsAlternating"
+      ]
+    },
+    {
+      "id": "repetitionCounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each controlled rotation to one side counts as one repetition.",
+      "allowedValues": [
+        "eachSideEndpoint"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Log the medicine ball's complete stated mass once.",
+      "allowedValues": [
+        "totalImplement"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "No machine or rail constrains the ball or torso path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The planted feet and held hips support the posture without propelling the turn.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "seated-medicine-ball-russian-twist",
+      "name": "Seated Medicine Ball Russian Twist",
+      "aliases": [
+        "Medicine Ball Russian Twist",
+        "Med Ball Russian Twist"
+      ],
+      "equipment": "medicineBall",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "supportSurface": "floor",
+        "bodyPosition": "seatedSlightlyReclined",
+        "lowerBodySupport": "bothFeetFlatKneesBent",
+        "pelvisMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "spineMotion": "alternatesRotationBothDirections",
+        "handTask": "twoHandsHoldBallAtChest",
+        "implementPath": "carriedWithTorso",
+        "implementRelease": "retained",
+        "trainingDirectionPrescription": "bothDirectionsAlternating",
+        "repetitionCounting": "eachSideEndpoint",
+        "loadAccounting": "totalImplement",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "nasm-2026-russian-twist",
+        "sugaya-2016-trunk-rotation",
+        "stevens-2007-seated-axial-rotation"
+      ],
+      "execution": {
+        "startingPosition": "Sit on the floor with your knees bent and both feet flat. Hold one medicine ball in both hands at chest level, then lean back slightly while keeping a long, controlled trunk. Log the ball's full stated weight once.",
+        "movement": "Turn your shoulders, torso, and ball together toward one side while keeping the pelvis, hips, and feet still.",
+        "endpoint": "Stop at a comfortable controlled rotation without leaning sideways or moving the ball independently with your arms.",
+        "returnPhase": "Rotate through center under control and continue toward the opposite side.",
+        "controlledJoints": "Keep the pelvis and hips still, both feet planted, and the spine free of added flexion or side bending.",
+        "supportAndPosture": "Maintain the slight recline and keep the ball close to your chest in both hands.",
+        "disqualifyingCompensations": [
+          "Lifting the feet changes the lower-body support and leaves this fixture.",
+          "Sweeping the ball with the arms while the torso stays still is not a Russian-twist repetition.",
+          "Throwing or releasing the ball turns the exercise into a medicine-ball power drill."
+        ],
+        "sideOrDirection": "Alternate sides. Count each completed side as one repetition and use an even total for equal work."
+      }
+    }
+  ]
+}
