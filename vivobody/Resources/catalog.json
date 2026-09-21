@@ -13524,6 +13524,767 @@
     ]
   },
   {
+    "familyID": "medicine-ball-carioca-throw",
+    "familyName": "Crossover to Medicine Ball Rotational Throw",
+    "movementActions": [
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced",
+        "conditionID": "towardExternalTarget",
+        "conditionName": "Toward the target"
+      }
+    ],
+    "catalogID": "crossover-to-medicine-ball-rotational-throw",
+    "name": "Crossover to Medicine Ball Rotational Throw",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 4,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Carioca to Med Ball Throw",
+      "Carioca Medicine Ball Throw",
+      "Crossover to MB Rotational Throw"
+    ],
+    "searchPriority": 89,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand side-on to a medicine-ball-safe rebound wall or prepared partner in a shallow athletic stance with the ball held in both hands at the midline.",
+      "movement": "Use a short crossover approach toward the target, regain a planted two-foot stance, rotate through the hips and torso, and release the ball immediately.",
+      "endpoint": "The repetition ends when the ball leaves both hands toward the target around mid-torso height.",
+      "returnPhase": "Retrieve the ball or receive it after the repetition, walk back to the marked start, and rebuild the same stance before the next approach.",
+      "controlledJoints": "Keep the crossing knee and foot aligned, uncross into a stable plant, and do not release while the feet remain tangled.",
+      "supportAndPosture": "Keep the travel lane clear and regain balance before the forceful turn and release.",
+      "disqualifyingCompensations": [
+        "Using only non-crossing side steps changes the approach into a lateral shuffle.",
+        "Continuing the crossover run without regaining a plant removes the reviewed release base.",
+        "Catching and immediately returning the ball changes the repetition topology."
+      ],
+      "sideOrDirection": "Complete approaches from one side, then mirror the start and perform equal repetitions from the other direction."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorLongusBrevis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lats",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-lateral-shuffle-throw",
+    "familyName": "Lateral Shuffle to Medicine Ball Throw",
+    "movementActions": [
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced",
+        "conditionID": "towardExternalTarget",
+        "conditionName": "Toward the target"
+      }
+    ],
+    "catalogID": "lateral-shuffle-to-medicine-ball-throw",
+    "name": "Lateral Shuffle to Medicine Ball Throw",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 4,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Lateral Shuffle + Med Ball Throw",
+      "Lateral Shuffle Med Ball Throw",
+      "Shuffle to Rotational Medicine Ball Throw"
+    ],
+    "searchPriority": 90,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand side-on to a medicine-ball-safe rebound wall or prepared partner in a shallow athletic stance with the ball in both hands near the hip away from the target.",
+      "movement": "Take a short, quick sideways shuffle toward the target without crossing the feet, load the ball near the outside hip, plant both feet, rotate, and release immediately.",
+      "endpoint": "The repetition ends when the ball leaves both hands toward the target around mid-torso height.",
+      "returnPhase": "Retrieve the ball or receive it after the repetition, walk back to the marked start, and rebuild the same stance before the next approach.",
+      "controlledJoints": "Keep the knees aligned with the feet through the shuffle and establish the two-foot plant before releasing.",
+      "supportAndPosture": "Stay low enough to change direction under control and keep the travel lane clear.",
+      "disqualifyingCompensations": [
+        "Crossing one foot behind the other changes the approach into the crossover variation.",
+        "Continuing to shuffle through the release removes the planted throw base.",
+        "Catching and immediately returning the ball changes the repetition topology."
+      ],
+      "sideOrDirection": "Complete approaches from one side, then mirror the start and perform equal repetitions from the other direction."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorLongusBrevis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lats",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-reactive-half-kneeling-wall-throw",
+    "familyName": "Reactive Half-Kneeling Rotational Medicine Ball Throw",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced",
+        "conditionID": "towardExternalTarget",
+        "conditionName": "Toward the target"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "yielding",
+        "conditionID": "awayFromExternalTarget",
+        "conditionName": "Away from the target"
+      }
+    ],
+    "catalogID": "half-kneeling-rotational-medicine-ball-throw",
+    "name": "Half-Kneeling Rotational Medicine Ball Throw",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "½ Kneeling Rotational Med Ball Throws",
+      "Half-Kneeling Rotational Med Ball Throw",
+      "Kneeling Side-Arm Throw"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set up side-on to a medicine-ball-safe rebound wall or prepared partner with the knee closest to the target down, the outside foot planted, and the ball in both hands near the outside hip. Use one uncounted opening throw or feed to start the cycle.",
+      "movement": "Receive the return between waist and mid-torso height, let the arms and torso turn slightly away, then reverse quickly and release the ball once toward the same target.",
+      "endpoint": "One counted repetition ends as that single return throw leaves both hands toward the target.",
+      "returnPhase": "Catch the next rebound or prepared partner return to begin the next counted repetition, absorbing it into the small turn away while keeping the same support position.",
+      "controlledJoints": "Keep the hips mostly forward, the planted knee aligned with the foot, and the down knee stable on the pad.",
+      "supportAndPosture": "Stay tall through the torso and keep the same knee and foot contacts throughout the set.",
+      "disqualifyingCompensations": [
+        "Counting the opening feed creates two releases in the first repetition.",
+        "Lifting the down knee changes the exercise into a split-stance throw.",
+        "Using both knees changes the support to tall-kneeling.",
+        "Slamming into the floor changes the target and family."
+      ],
+      "sideOrDirection": "Complete the set with one side facing the target, then turn around, mirror the support, and repeat equally in the other direction."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "lats",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-rotational-slam",
+    "familyName": "Medicine Ball Rotational Slam",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "rotational-medicine-ball-slam",
+    "name": "Rotational Medicine Ball Slam",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Rotational Med Ball Slams",
+      "Rotational Med Ball Slam",
+      "Medicine Ball Rotational Slam"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand about hip-width, hold a low-bounce medicine ball in both hands near one hip, and keep the floor clear around both feet.",
+      "movement": "Sweep the ball up and around overhead as you turn away, then reverse hard, turn through the feet and torso, and release the ball into the floor outside the opposite foot.",
+      "endpoint": "The repetition ends when the released ball strikes the direction-specific floor target beside the opposite foot.",
+      "returnPhase": "Let the ball settle, retrieve it safely, and reset at the starting hip before the next repetition.",
+      "controlledJoints": "Keep the knees tracking with the feet, pivot the back foot, and keep the elbows from becoming the main source of the throw.",
+      "supportAndPosture": "Use both hands, stay balanced on both feet, and complete equal work in the mirrored direction.",
+      "disqualifyingCompensations": [
+        "Slamming straight down at the midline changes the exercise into a standing overhead slam.",
+        "Throwing into a wall changes the target and family.",
+        "Keeping the back foot fixed while twisting through the knee removes the reviewed pivot."
+      ],
+      "sideOrDirection": "Complete the set toward one floor target, then mirror the start and complete equal repetitions toward the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-standing-overhead-slam",
+    "familyName": "Standing Medicine Ball Overhead Slam",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "standing-medicine-ball-slam",
+    "name": "Standing Medicine Ball Slam",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Standing Med Ball Slams",
+      "Standing Med Ball Slam",
+      "Medicine Ball Overhead Slam"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand about hip-width with soft knees and hold a low-bounce medicine ball in both hands in front of your torso.",
+      "movement": "Raise the ball overhead without leaning backward, then drive it down and release it forcefully into the floor directly in front of you.",
+      "endpoint": "The repetition ends when the released ball strikes the floor in front of your stance.",
+      "returnPhase": "Let the ball settle, pick it up safely, and reset at the same standing start before the next repetition.",
+      "controlledJoints": "Keep the ribs controlled, the knees aligned with the feet, and the arms long without turning the slam into an elbow throw.",
+      "supportAndPosture": "Keep both feet planted on a clear, stable surface and use a ball designed for repeated floor slams.",
+      "disqualifyingCompensations": [
+        "Throwing diagonally beside one foot changes the exercise into a rotational slam.",
+        "Dropping into a deep squat changes the exercise into a squat-to-slam combination.",
+        "Catching a partner feed overhead changes the exercise into a reactive slam."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-stationary-rotational-throw",
+    "familyName": "Stationary Rotational Medicine Ball Throw",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "split-stance-rotational-medicine-ball-throw",
+    "name": "Split-Stance Rotational Medicine Ball Throw",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Split-Stance Rotational Throws",
+      "Split-Stance Rotational Throw",
+      "Split-Stance Med Ball Side Throw"
+    ],
+    "searchPriority": 93,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand side-on to a medicine-ball-safe wall, prepared partner, or clear throwing area in a comfortable forward split stance with soft knees and the ball in both hands near the hip away from the target.",
+      "movement": "Keep the chosen split stance, turn the hips and torso away to load the ball, then reverse forcefully and release it once toward the target.",
+      "endpoint": "One repetition ends when the ball leaves both hands toward the target.",
+      "returnPhase": "Retrieve the ball or receive it after the repetition, then rebuild the same split stance before the next throw.",
+      "controlledJoints": "Keep both knees aligned with the feet and do not step during the counted throw.",
+      "supportAndPosture": "Use a stance you can hold without wobbling and keep the travel and landing area clear.",
+      "disqualifyingCompensations": [
+        "Stepping during the repetition changes it into an approach throw.",
+        "Dropping the rear knee changes the support to half-kneeling.",
+        "Slamming into the floor changes the target and family."
+      ],
+      "sideOrDirection": "Complete the set toward one side, then mirror the stance and perform equal repetitions in the other direction."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "lats",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-stationary-rotational-throw",
+    "familyName": "Stationary Rotational Medicine Ball Throw",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "standing-rotational-medicine-ball-throw",
+    "name": "Standing Rotational Medicine Ball Throw",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Standing Rotational Throw",
+      "Standing Rotational Med Ball Throw",
+      "Parallel-Stance Medicine Ball Side Throw"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand side-on to a medicine-ball-safe wall, prepared partner, or clear throwing area with parallel feet about hip-width, soft knees, and the ball in both hands near the hip away from the target.",
+      "movement": "Turn the hips and torso away to load the ball, reverse forcefully through the feet and trunk, and release it once toward the target.",
+      "endpoint": "One repetition ends when the ball leaves both hands toward the target.",
+      "returnPhase": "Retrieve the ball or receive it after the repetition, then reset the same parallel stance before the next throw.",
+      "controlledJoints": "Keep the knees tracking with the feet and turn through the feet and hips instead of twisting through fixed knees.",
+      "supportAndPosture": "Maintain balance through the release and keep the receiving area clear.",
+      "disqualifyingCompensations": [
+        "Stepping toward the target changes it into an approach throw.",
+        "Using a split stance changes the reviewed support.",
+        "Slamming into the floor changes the target and family."
+      ],
+      "sideOrDirection": "Complete the set toward one side, then turn around and perform equal repetitions in the other direction."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "lats",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-stationary-rotational-throw",
+    "familyName": "Stationary Rotational Medicine Ball Throw",
+    "movementActions": [
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "tall-kneeling-rotational-medicine-ball-throw",
+    "name": "Tall-Kneeling Rotational Medicine Ball Throw",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Kneeling Rotational Throw",
+      "Kneeling Rotational Med Ball Throw",
+      "Tall-Kneeling Medicine Ball Side Throw"
+    ],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Kneel tall on both knees and shins, side-on to a prepared partner or clear throwing area, with the ball in both hands near the hip away from the target.",
+      "movement": "Keep the hips extended, turn the torso and ball away, then reverse forcefully and release the ball once toward the target.",
+      "endpoint": "One repetition ends when the ball leaves both hands toward the target.",
+      "returnPhase": "Retrieve the ball or receive it after the repetition, then reset tall on both knees before the next throw.",
+      "controlledJoints": "Rotate without sitting back, lifting either knee, or arching through the low back.",
+      "supportAndPosture": "Stay upright on both knees and shins and keep the receiving area clear.",
+      "disqualifyingCompensations": [
+        "Planting one foot changes the exercise into half-kneeling.",
+        "Sitting toward the heels removes the tall-kneeling support.",
+        "Slamming into the floor changes the target and family."
+      ],
+      "sideOrDirection": "Complete the set toward one side, then turn around and perform equal repetitions in the other direction."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "lats",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-tall-kneeling-overhead-slam",
+    "familyName": "Tall-Kneeling Medicine Ball Slam",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "tall-kneeling-medicine-ball-slam",
+    "name": "Tall-Kneeling Medicine Ball Slam",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Kneeling Med Ball Slams",
+      "Kneeling Med Ball Slam",
+      "Kneeling Medicine Ball Slam"
+    ],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Kneel upright on both knees and shins on a pad, hold a low-bounce medicine ball in both hands in front of the torso, and clear the slam area in front.",
+      "movement": "Raise the ball overhead without leaning backward, then drive it down and release it forcefully into the floor directly in front of the knees.",
+      "endpoint": "One repetition ends when the released ball strikes the floor in front of the knees.",
+      "returnPhase": "Let the ball settle, retrieve it safely, and reset upright with the ball at the torso before the next repetition.",
+      "controlledJoints": "Keep the ribs over the pelvis, the hips extended, and both knees grounded while the arms stay long through the slam.",
+      "supportAndPosture": "Use a padded kneeling surface, a low-bounce ball designed for repeated slams, and a clear slam-safe floor.",
+      "disqualifyingCompensations": [
+        "Catching an overhead partner feed changes the exercise into a reactive slam.",
+        "Placing one foot forward changes the support to half-kneeling.",
+        "Arching backward to lift the ball removes the controlled trunk position."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "mid-thigh-clean-pull",
     "familyName": "Mid-Thigh Clean Pull",
     "movementActions": [

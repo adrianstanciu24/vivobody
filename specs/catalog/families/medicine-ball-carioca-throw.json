@@ -1,0 +1,82 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "medicine-ball-carioca-throw",
+  "name": "Crossover to Medicine Ball Rotational Throw",
+  "definition": "A unilateral power repetition that begins side-on to a medicine-ball-safe rebound wall or prepared partner, uses a short crossover approach toward the target, regains a planted athletic stance, and immediately releases a two-hand rotational medicine-ball throw. The repetition ends at release. A continuous carioca run, non-crossing shuffle, stationary throw, floor slam, and chest pass remain outside this family.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "kuntze-2009-lateral-crossover-steps",
+    "ikeda-2009-side-medicine-ball-throw"
+  ],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["medicineBall"], "modalities": ["power"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.rotation"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "crossover", "name": "Crossover", "primeActions": ["hip.adduction", "hip.abduction"]},
+      {"id": "throw", "name": "Throw", "primeActions": [{"action": "spine.rotation", "condition": "towardExternalTarget"}]}
+    ],
+    "stabilityDemands": ["shoulder", "spine", "pelvis", "hip", "knee", "ankle", "foot", "wrist", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["obliques"], "minimumRole": "primary"},
+      {"anyOf": ["gluteMed"], "minimumRole": "secondary"},
+      {"anyOf": ["adductorLongusBrevis"], "minimumRole": "secondary"},
+      {"anyOf": ["lats"], "minimumRole": "stabilizer"},
+      {"anyOf": ["gastrocnemius"], "minimumRole": "stabilizer"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["obliques"],
+      "secondary": ["gluteMed", "adductorLongusBrevis"],
+      "stabilizer": ["lats", "vasti", "gastrocnemius", "fingerFlexors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "approach", "valueType": "enum", "required": true, "description": "The reviewed locomotor entry without a fixed step count.", "allowedValues": ["shortCrossoverApproach"]},
+    {"id": "approachDirection", "valueType": "enum", "required": true, "description": "The relationship between travel and target.", "allowedValues": ["laterallyTowardTarget"]},
+    {"id": "releaseBase", "valueType": "enum", "required": true, "description": "The planted stance regained before release.", "allowedValues": ["athleticTwoFootPlant"]},
+    {"id": "target", "valueType": "enum", "required": true, "description": "The external throw target.", "allowedValues": ["medicineBallSafeReboundWallOrPreparedPartner"]},
+    {"id": "repEndpoint", "valueType": "enum", "required": true, "description": "What completes one repetition.", "allowedValues": ["releaseWithoutCatch"]},
+    {"id": "trainingDirectionPrescription", "valueType": "enum", "required": true, "description": "The mirrored-direction requirement.", "allowedValues": ["bothDirections"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the ball.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 3, "maximum": 6}},
+  "exercises": [
+    {
+      "catalogID": "crossover-to-medicine-ball-rotational-throw",
+      "name": "Crossover to Medicine Ball Rotational Throw",
+      "aliases": ["Carioca to Med Ball Throw", "Carioca Medicine Ball Throw", "Crossover to MB Rotational Throw"],
+      "equipment": "medicineBall", "laterality": "unilateral", "modality": "power", "trackingMode": "reps", "loadMode": "nonComparable",
+      "bodyweightFraction": 0, "defaultWeight": 10, "defaultWeightKg": 5, "reps": 4, "searchPriority": 89,
+      "involvement": [
+        {"muscle": "obliques", "role": "primary"},
+        {"muscle": "gluteMed", "role": "secondary"},
+        {"muscle": "adductorLongusBrevis", "role": "secondary"},
+        {"muscle": "lats", "role": "stabilizer"},
+        {"muscle": "vasti", "role": "stabilizer"},
+        {"muscle": "gastrocnemius", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}
+      ],
+      "variant": {"approach": "shortCrossoverApproach", "approachDirection": "laterallyTowardTarget", "releaseBase": "athleticTwoFootPlant", "target": "medicineBallSafeReboundWallOrPreparedPartner", "repEndpoint": "releaseWithoutCatch", "trainingDirectionPrescription": "bothDirections", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["kuntze-2009-lateral-crossover-steps", "ikeda-2009-side-medicine-ball-throw"],
+      "execution": {
+        "startingPosition": "Stand side-on to a medicine-ball-safe rebound wall or prepared partner in a shallow athletic stance with the ball held in both hands at the midline.",
+        "movement": "Use a short crossover approach toward the target, regain a planted two-foot stance, rotate through the hips and torso, and release the ball immediately.",
+        "endpoint": "The repetition ends when the ball leaves both hands toward the target around mid-torso height.",
+        "returnPhase": "Retrieve the ball or receive it after the repetition, walk back to the marked start, and rebuild the same stance before the next approach.",
+        "controlledJoints": "Keep the crossing knee and foot aligned, uncross into a stable plant, and do not release while the feet remain tangled.",
+        "supportAndPosture": "Keep the travel lane clear and regain balance before the forceful turn and release.",
+        "disqualifyingCompensations": ["Using only non-crossing side steps changes the approach into a lateral shuffle.", "Continuing the crossover run without regaining a plant removes the reviewed release base.", "Catching and immediately returning the ball changes the repetition topology."],
+        "sideOrDirection": "Complete approaches from one side, then mirror the start and perform equal repetitions from the other direction."
+      }
+    }
+  ]
+}

@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 117 |
-| Exercises | 285 |
+| Reviewed families | 124 |
+| Exercises | 294 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 324 |
+| Evidence sources | 332 |
 
 ## Family roster
 
@@ -78,6 +78,13 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [lateral-band-walk](families/lateral-band-walk.json) | 1 |
 | [lateral-lunge](families/lateral-lunge.json) | 2 |
 | [machine-hack-squat](families/machine-hack-squat.json) | 1 |
+| [medicine-ball-carioca-throw](families/medicine-ball-carioca-throw.json) | 1 |
+| [medicine-ball-lateral-shuffle-throw](families/medicine-ball-lateral-shuffle-throw.json) | 1 |
+| [medicine-ball-reactive-half-kneeling-wall-throw](families/medicine-ball-reactive-half-kneeling-wall-throw.json) | 1 |
+| [medicine-ball-rotational-slam](families/medicine-ball-rotational-slam.json) | 1 |
+| [medicine-ball-standing-overhead-slam](families/medicine-ball-standing-overhead-slam.json) | 1 |
+| [medicine-ball-stationary-rotational-throw](families/medicine-ball-stationary-rotational-throw.json) | 3 |
+| [medicine-ball-tall-kneeling-overhead-slam](families/medicine-ball-tall-kneeling-overhead-slam.json) | 1 |
 | [mid-thigh-clean-pull](families/mid-thigh-clean-pull.json) | 1 |
 | [nordic-curl](families/nordic-curl.json) | 1 |
 | [padded-machine-pullover](families/padded-machine-pullover.json) | 1 |

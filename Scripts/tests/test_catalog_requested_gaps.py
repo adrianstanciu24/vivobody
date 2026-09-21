@@ -38,6 +38,18 @@ TRX_SUSPENSION_RECORD_IDS = {
     "trx-pike", "trx-mountain-climber",
 }
 
+MEDICINE_BALL_RECORD_IDS = {
+    "standing-medicine-ball-slam",
+    "tall-kneeling-medicine-ball-slam",
+    "rotational-medicine-ball-slam",
+    "half-kneeling-rotational-medicine-ball-throw",
+    "split-stance-rotational-medicine-ball-throw",
+    "standing-rotational-medicine-ball-throw",
+    "tall-kneeling-rotational-medicine-ball-throw",
+    "lateral-shuffle-to-medicine-ball-throw",
+    "crossover-to-medicine-ball-rotational-throw",
+}
+
 
 class RequestedCatalogGapTests(unittest.TestCase):
     @classmethod
@@ -79,7 +91,8 @@ class RequestedCatalogGapTests(unittest.TestCase):
         families = [catalog.load_json(p) for p in catalog.FAMILIES_ROOT.glob("*.json")]
         records = [r for r in catalog.compile_runtime_catalog(families)
                    if r["catalogID"] not in (
-                       set(OWNERS) | SECOND_WAVE_RECORD_IDS | TRX_SUSPENSION_RECORD_IDS
+                       set(OWNERS) | SECOND_WAVE_RECORD_IDS
+                       | TRX_SUSPENSION_RECORD_IDS | MEDICINE_BALL_RECORD_IDS
                    )]
         self.assertEqual(len(records), 254)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()

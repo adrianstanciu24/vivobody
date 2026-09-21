@@ -6957,6 +6957,13 @@ class CatalogFoundationTests(unittest.TestCase):
             *REQUESTED_GAPS_FAMILY_IDS,
             *SECOND_WAVE_FAMILY_IDS,
             *TRX_SUSPENSION_FAMILY_IDS,
+            "medicine-ball-standing-overhead-slam",
+            "medicine-ball-tall-kneeling-overhead-slam",
+            "medicine-ball-rotational-slam",
+            "medicine-ball-reactive-half-kneeling-wall-throw",
+            "medicine-ball-stationary-rotational-throw",
+            "medicine-ball-lateral-shuffle-throw",
+            "medicine-ball-carioca-throw",
             "copenhagen-adduction", "anti-rotation-press", "dead-bug", "bird-dog",
         }
         self.assertEqual(
@@ -6965,7 +6972,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            285,
+            294,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -7966,6 +7973,13 @@ class CatalogFoundationTests(unittest.TestCase):
             *REQUESTED_GAPS_FAMILY_IDS,
             *SECOND_WAVE_FAMILY_IDS,
             *TRX_SUSPENSION_FAMILY_IDS,
+            "medicine-ball-standing-overhead-slam",
+            "medicine-ball-tall-kneeling-overhead-slam",
+            "medicine-ball-rotational-slam",
+            "medicine-ball-reactive-half-kneeling-wall-throw",
+            "medicine-ball-stationary-rotational-throw",
+            "medicine-ball-lateral-shuffle-throw",
+            "medicine-ball-carioca-throw",
         }
         actual_family_ids = set()
         for original in self.real_families:
@@ -16892,7 +16906,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 324)
+        self.assertEqual(len(source_by_id), 332)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -17047,8 +17061,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             10,
         )
-        self.assertEqual(len(self.real_families), 117)
-        self.assertEqual(len(self.foundation.evidence_ids), 324)
+        self.assertEqual(len(self.real_families), 124)
+        self.assertEqual(len(self.foundation.evidence_ids), 332)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -18473,7 +18487,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 285 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 294 |", self.catalog_inventory)
         self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
@@ -19615,9 +19629,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 117)
-        self.assertEqual(len(records), 285)
-        self.assertEqual(len(self.foundation.evidence_ids), 324)
+        self.assertEqual(len(self.real_families), 124)
+        self.assertEqual(len(records), 294)
+        self.assertEqual(len(self.foundation.evidence_ids), 332)
         self.assertEqual(
             {
                 key: upright[key]
@@ -19964,7 +19978,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 285 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 294 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -22891,7 +22905,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 285 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 294 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
@@ -22900,12 +22914,12 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 285)
+        self.assertEqual(len(records), 294)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 117)
+        self.assertEqual(len({record["familyID"] for record in records}), 124)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -23091,6 +23105,13 @@ class CatalogFoundationTests(unittest.TestCase):
                 "seated-machine-abdominal-crunch", "seated-machine-back-extension",
                 "suspension-body-saw", "suspension-knee-tuck",
                 "suspension-mountain-climber", "suspension-pike",
+                "medicine-ball-standing-overhead-slam",
+                "medicine-ball-tall-kneeling-overhead-slam",
+                "medicine-ball-rotational-slam",
+                "medicine-ball-reactive-half-kneeling-wall-throw",
+                "medicine-ball-stationary-rotational-throw",
+                "medicine-ball-lateral-shuffle-throw",
+                "medicine-ball-carioca-throw",
             },
             "other": {
                 "farmer-carry", "finger-flexion-grip", "forearm-pronation",
@@ -23319,7 +23340,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 285)
+            self.assertEqual(len(emitted), 294)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -23571,7 +23592,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_ids), 324)
+        self.assertEqual(len(source_ids), 332)
         self.assertTrue(COMPREHENSIVE_EXPANSION_EVIDENCE_IDS <= source_ids)
 
     def test_must_have_expansion_is_source_exact_and_runtime_visible(self) -> None:
@@ -23966,9 +23987,9 @@ class CatalogFoundationTests(unittest.TestCase):
 
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
-        self.assertEqual(len(self.real_families), 117)
-        self.assertEqual(len(runtime), 285)
-        self.assertEqual(len(self.foundation.evidence_ids), 324)
+        self.assertEqual(len(self.real_families), 124)
+        self.assertEqual(len(runtime), 294)
+        self.assertEqual(len(self.foundation.evidence_ids), 332)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids
@@ -25474,6 +25495,228 @@ class CatalogFoundationTests(unittest.TestCase):
         exercise["additionalStabilityDemands"] = []
         with self.assertRaises(catalog.ValidationFailure):
             catalog.validate_family(family, self.foundation)
+
+    def test_medicine_ball_power_roster_and_shared_semantics_are_exact(self):
+        family_ids = {
+            "medicine-ball-standing-overhead-slam",
+            "medicine-ball-tall-kneeling-overhead-slam",
+            "medicine-ball-rotational-slam",
+            "medicine-ball-reactive-half-kneeling-wall-throw",
+            "medicine-ball-stationary-rotational-throw",
+            "medicine-ball-lateral-shuffle-throw",
+            "medicine-ball-carioca-throw",
+        }
+        families = {
+            family["id"]: family
+            for family in self.real_families
+            if family["id"] in family_ids
+        }
+        self.assertEqual(set(families), family_ids)
+
+        expected_records = {
+            "standing-medicine-ball-slam",
+            "tall-kneeling-medicine-ball-slam",
+            "rotational-medicine-ball-slam",
+            "half-kneeling-rotational-medicine-ball-throw",
+            "split-stance-rotational-medicine-ball-throw",
+            "standing-rotational-medicine-ball-throw",
+            "tall-kneeling-rotational-medicine-ball-throw",
+            "lateral-shuffle-to-medicine-ball-throw",
+            "crossover-to-medicine-ball-rotational-throw",
+        }
+        exercises = {
+            exercise["catalogID"]: exercise
+            for family in families.values()
+            for exercise in family["exercises"]
+        }
+        self.assertEqual(set(exercises), expected_records)
+        for exercise in exercises.values():
+            with self.subTest(catalog_id=exercise["catalogID"]):
+                self.assertEqual(
+                    (
+                        exercise["equipment"], exercise["modality"],
+                        exercise["trackingMode"], exercise["loadMode"],
+                        exercise["bodyweightFraction"],
+                    ),
+                    ("medicineBall", "power", "reps", "nonComparable", 0),
+                )
+
+        conditions = {
+            condition["id"]: condition
+            for condition in self.foundation.joint_actions["actionConditions"]
+        }
+        self.assertEqual(
+            {
+                key: conditions[key]
+                for key in {"awayFromExternalTarget", "towardExternalTarget"}
+            },
+            {
+                "awayFromExternalTarget": {
+                    "id": "awayFromExternalTarget",
+                    "displayName": "Away from the target",
+                    "definition": (
+                        "The direction-aggregated spinal-rotation action moves "
+                        "away from the exercise's fixed wall, partner, or floor "
+                        "target during a reviewed receiving or countermovement phase."
+                    ),
+                    "appliesTo": ["spine.rotation"],
+                    "familyIDs": [
+                        "medicine-ball-reactive-half-kneeling-wall-throw",
+                        "medicine-ball-stationary-rotational-throw",
+                        "medicine-ball-rotational-slam",
+                        "medicine-ball-lateral-shuffle-throw",
+                        "medicine-ball-carioca-throw",
+                    ],
+                    "oppositeCondition": "towardExternalTarget",
+                },
+                "towardExternalTarget": {
+                    "id": "towardExternalTarget",
+                    "displayName": "Toward the target",
+                    "definition": (
+                        "The direction-aggregated spinal-rotation action moves "
+                        "toward the exercise's fixed wall, partner, or floor "
+                        "target during a reviewed propulsion phase."
+                    ),
+                    "appliesTo": ["spine.rotation"],
+                    "familyIDs": [
+                        "medicine-ball-reactive-half-kneeling-wall-throw",
+                        "medicine-ball-stationary-rotational-throw",
+                        "medicine-ball-rotational-slam",
+                        "medicine-ball-lateral-shuffle-throw",
+                        "medicine-ball-carioca-throw",
+                    ],
+                    "oppositeCondition": "awayFromExternalTarget",
+                },
+            },
+        )
+
+        reactive = families["medicine-ball-reactive-half-kneeling-wall-throw"]
+        self.assertEqual(
+            reactive["movementSignature"]["movementPhases"],
+            [
+                {
+                    "id": "receive",
+                    "name": "Receive",
+                    "primeActions": [],
+                    "yieldingActions": [{
+                        "action": "spine.rotation",
+                        "condition": "awayFromExternalTarget",
+                    }],
+                },
+                {
+                    "id": "release",
+                    "name": "Release",
+                    "primeActions": [{
+                        "action": "spine.rotation",
+                        "condition": "towardExternalTarget",
+                    }],
+                },
+            ],
+        )
+
+        runtime = {
+            record["catalogID"]: record
+            for record in catalog.compile_runtime_catalog(self.real_families)
+            if record["catalogID"] in expected_records
+        }
+        reactive_actions = runtime[
+            "half-kneeling-rotational-medicine-ball-throw"
+        ]["movementActions"]
+        self.assertEqual(
+            {(item["kind"], item.get("conditionID")) for item in reactive_actions},
+            {
+                ("yielding", "awayFromExternalTarget"),
+                ("produced", "towardExternalTarget"),
+            },
+        )
+
+    def test_medicine_ball_family_boundaries_are_mutation_guarded(self):
+        families = {
+            family["id"]: family
+            for family in self.real_families
+            if family["id"].startswith("medicine-ball-")
+        }
+        self.assertEqual(len(families), 7)
+        for family_id, original in families.items():
+            mutated = copy.deepcopy(original)
+            axis_id = mutated["variantAxes"][0]["id"]
+            mutated["exercises"][0]["variant"].pop(axis_id)
+            with self.subTest(family=family_id, missing_axis=axis_id):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(mutated, self.foundation)
+
+        reactive = copy.deepcopy(
+            families["medicine-ball-reactive-half-kneeling-wall-throw"]
+        )
+        reactive["movementSignature"]["movementPhases"][0][
+            "yieldingActions"
+        ][0]["condition"] = "towardExternalTarget"
+        with self.assertRaisesRegex(
+            catalog.ValidationFailure,
+            "both yielding and another action mode",
+        ):
+            catalog.validate_family(reactive, self.foundation)
+
+        stationary = copy.deepcopy(
+            families["medicine-ball-stationary-rotational-throw"]
+        )
+        support_mutations = {
+            "split-stance-rotational-medicine-ball-throw": "twoFeetParallel",
+            "standing-rotational-medicine-ball-throw": "bothKneesAndShins",
+            "tall-kneeling-rotational-medicine-ball-throw": "forwardSplitStance",
+        }
+        for catalog_id, wrong_support in support_mutations.items():
+            mutated = copy.deepcopy(stationary)
+            exercise = next(
+                item for item in mutated["exercises"]
+                if item["catalogID"] == catalog_id
+            )
+            exercise["variant"]["lowerBodySupport"] = wrong_support
+            with self.subTest(catalog_id=catalog_id, wrong_support=wrong_support):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(mutated, self.foundation)
+
+        unrelated = copy.deepcopy(
+            next(
+                family for family in self.real_families
+                if family["id"] == "spine-rotation"
+            )
+        )
+        unrelated["movementSignature"]["primeActions"] = [{
+            "action": "spine.rotation",
+            "condition": "towardExternalTarget",
+        }]
+        with self.assertRaisesRegex(
+            catalog.ValidationFailure,
+            "is not allowed for family spine-rotation",
+        ):
+            catalog.validate_family(unrelated, self.foundation)
+
+        joint_actions = copy.deepcopy(self.foundation.joint_actions)
+        for condition in joint_actions["actionConditions"]:
+            if condition["id"] in {
+                "awayFromExternalTarget", "towardExternalTarget",
+            }:
+                condition["oppositeCondition"] = condition["id"]
+        with self.assertRaisesRegex(
+            catalog.ValidationFailure,
+            "cannot be its own opposite condition",
+        ):
+            catalog.validate_joint_actions(
+                joint_actions,
+                set(self.foundation.muscle_by_id),
+                self.foundation.evidence_ids,
+            )
+
+        standing = copy.deepcopy(
+            families["medicine-ball-standing-overhead-slam"]
+        )
+        source = copy.deepcopy(
+            families["medicine-ball-rotational-slam"]["exercises"][0]
+        )
+        standing["exercises"].append(source)
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(standing, self.foundation)
 
 class TRXSuspensionCatalogTests(unittest.TestCase):
     @classmethod

@@ -1,0 +1,116 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "medicine-ball-rotational-slam",
+  "name": "Medicine Ball Rotational Slam",
+  "definition": "A unilateral standing power repetition that winds a two-hand slam-safe medicine ball from one hip up and around overhead, then reverses through trunk rotation and flexion to release it into the floor outside the opposite foot. Both mirrored directions are prescribed. Straight overhead slams, wall throws, retained-ball chops, seated twists, and repetitions without a back-foot pivot remain outside this family.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity",
+    "uksca-2021-rotating-medicine-ball-slam"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": ["sagittal", "transverse"]
+  },
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {
+    "equipment": ["medicineBall"],
+    "modalities": ["power"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["unilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["spine.flexion", "spine.rotation"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "wind-up", "name": "Wind Up", "primeActions": ["shoulder.flexion", {"action": "spine.rotation", "condition": "awayFromExternalTarget"}]},
+      {"id": "slam", "name": "Slam", "primeActions": ["shoulder.extension", "spine.flexion", {"action": "spine.rotation", "condition": "towardExternalTarget"}]}
+    ],
+    "stabilityDemands": ["shoulder", "spine", "pelvis", "hip", "knee", "ankle", "foot", "wrist", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["obliques"], "minimumRole": "primary"},
+      {"anyOf": ["abs"], "minimumRole": "primary"},
+      {"anyOf": ["lats"], "minimumRole": "primary"},
+      {"anyOf": ["deltoidAnterior"], "minimumRole": "secondary"},
+      {"anyOf": ["gluteMed"], "minimumRole": "stabilizer"},
+      {"anyOf": ["gastrocnemius"], "minimumRole": "stabilizer"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["obliques", "abs", "lats"],
+      "secondary": ["deltoidAnterior", "pectoralisMajorClavicular", "teresMajor", "deltoidPosterior", "triceps"],
+      "stabilizer": ["gluteMed", "vasti", "gastrocnemius", "fingerFlexors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed standing support.", "allowedValues": ["standingHipWidth"]},
+    {"id": "windUpPath", "valueType": "enum", "required": true, "description": "The reviewed path into the overhead position.", "allowedValues": ["outsideHipAroundOverhead"]},
+    {"id": "floorTarget", "valueType": "enum", "required": true, "description": "The direction-specific floor target.", "allowedValues": ["outsideOppositeFoot"]},
+    {"id": "footStrategy", "valueType": "enum", "required": true, "description": "The lower-body rotational boundary.", "allowedValues": ["backFootPivots"]},
+    {"id": "trainingDirectionPrescription", "valueType": "enum", "required": true, "description": "The mirrored-direction requirement.", "allowedValues": ["bothDirections"]},
+    {"id": "ballConstruction", "valueType": "enum", "required": true, "description": "The floor-impact equipment boundary.", "allowedValues": ["slamSafeLowBounce"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the ball.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 3, "maximum": 8}},
+  "exercises": [
+    {
+      "catalogID": "rotational-medicine-ball-slam",
+      "name": "Rotational Medicine Ball Slam",
+      "aliases": ["Rotational Med Ball Slams", "Rotational Med Ball Slam", "Medicine Ball Rotational Slam"],
+      "equipment": "medicineBall",
+      "laterality": "unilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 5,
+      "searchPriority": 95,
+      "involvement": [
+        {"muscle": "obliques", "role": "primary"},
+        {"muscle": "abs", "role": "primary"},
+        {"muscle": "lats", "role": "primary"},
+        {"muscle": "deltoidAnterior", "role": "secondary"},
+        {"muscle": "pectoralisMajorClavicular", "role": "secondary"},
+        {"muscle": "teresMajor", "role": "secondary"},
+        {"muscle": "deltoidPosterior", "role": "secondary"},
+        {"muscle": "triceps", "role": "secondary"},
+        {"muscle": "gluteMed", "role": "stabilizer"},
+        {"muscle": "vasti", "role": "stabilizer"},
+        {"muscle": "gastrocnemius", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "bodyPosition": "standingHipWidth",
+        "windUpPath": "outsideHipAroundOverhead",
+        "floorTarget": "outsideOppositeFoot",
+        "footStrategy": "backFootPivots",
+        "trainingDirectionPrescription": "bothDirections",
+        "ballConstruction": "slamSafeLowBounce",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["uksca-2021-rotating-medicine-ball-slam"],
+      "execution": {
+        "startingPosition": "Stand about hip-width, hold a low-bounce medicine ball in both hands near one hip, and keep the floor clear around both feet.",
+        "movement": "Sweep the ball up and around overhead as you turn away, then reverse hard, turn through the feet and torso, and release the ball into the floor outside the opposite foot.",
+        "endpoint": "The repetition ends when the released ball strikes the direction-specific floor target beside the opposite foot.",
+        "returnPhase": "Let the ball settle, retrieve it safely, and reset at the starting hip before the next repetition.",
+        "controlledJoints": "Keep the knees tracking with the feet, pivot the back foot, and keep the elbows from becoming the main source of the throw.",
+        "supportAndPosture": "Use both hands, stay balanced on both feet, and complete equal work in the mirrored direction.",
+        "disqualifyingCompensations": ["Slamming straight down at the midline changes the exercise into a standing overhead slam.", "Throwing into a wall changes the target and family.", "Keeping the back foot fixed while twisting through the knee removes the reviewed pivot."],
+        "sideOrDirection": "Complete the set toward one floor target, then mirror the start and complete equal repetitions toward the other side."
+      }
+    }
+  ]
+}

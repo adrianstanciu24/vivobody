@@ -194,7 +194,7 @@ EXPECTED_SPLIT_MESHES = {
 EQUIPMENT = {
     "barbell", "dumbbell", "cable", "machine", "bodyweight",
     "kettlebell", "band", "gripTrainer", "trapBar", "abWheel",
-    "gluteHamDeveloper", "suspensionTrainer", "other",
+    "gluteHamDeveloper", "suspensionTrainer", "medicineBall", "other",
 }
 MECHANICS = {"compound", "isolation"}
 TRAINING_ROLES = {"push", "pull", "legs", "core", "other"}
@@ -247,6 +247,8 @@ class Foundation:
     plane_by_action: dict[str, str]
     condition_actions: dict[str, frozenset[str]]
     condition_variant_constraints: dict[str, tuple[str, Any]]
+    condition_family_ids: dict[str, frozenset[str]]
+    opposing_condition_by_condition: dict[str, str]
     opposing_action_by_action: dict[str, str]
     region_ids: frozenset[str]
     evidence_ids: frozenset[str]
@@ -438,18 +440,16 @@ def validate_movement_phases(
             phase_prime_actions or phase_resisted_actions or phase_yielding_actions,
             f"{phase_context} requires at least one prime, resisted, or yielding action",
         )
-        prime_ids = {action for action, _ in phase_prime_actions}
-        resisted_ids = {action for action, _ in phase_resisted_actions}
-        yielding_ids = {action for action, _ in phase_yielding_actions}
         phase_conflicts = sorted(
-            (prime_ids & resisted_ids)
-            | (prime_ids & yielding_ids)
-            | (resisted_ids & yielding_ids)
+            (phase_prime_actions & phase_resisted_actions)
+            | (phase_prime_actions & phase_yielding_actions)
+            | (phase_resisted_actions & phase_yielding_actions),
+            key=action_requirement_label,
         )
         require(
             not phase_conflicts,
             f"{phase_context} assigns actions to more than one action mode: "
-            + ", ".join(phase_conflicts),
+            + ", ".join(action_requirement_label(item) for item in phase_conflicts),
         )
         prime_actions.update(phase_prime_actions)
         resisted_actions.update(phase_resisted_actions)
@@ -715,6 +715,8 @@ def validate_joint_actions(
     dict[str, str],
     dict[str, frozenset[str]],
     dict[str, tuple[str, Any]],
+    dict[str, frozenset[str]],
+    dict[str, str],
     dict[str, str],
     frozenset[str],
 ]:
@@ -815,13 +817,15 @@ def validate_joint_actions(
     conditions = require_list(data["actionConditions"], f"{context}.actionConditions", allow_empty=True)
     condition_actions: dict[str, frozenset[str]] = {}
     condition_variant_constraints: dict[str, tuple[str, Any]] = {}
+    condition_family_ids: dict[str, frozenset[str]] = {}
+    opposing_condition_by_condition: dict[str, str] = {}
     for index, condition_value in enumerate(conditions):
         item_context = f"{context}.actionConditions[{index}]"
         require(isinstance(condition_value, dict), f"{item_context} must be an object")
         require_keys(
             condition_value,
             required={"id", "displayName", "definition", "appliesTo"},
-            optional={"variantConstraint"},
+            optional={"variantConstraint", "familyIDs", "oppositeCondition"},
             context=item_context,
         )
         condition_id = require_non_empty_string(condition_value["id"], f"{item_context}.id")
@@ -856,12 +860,49 @@ def validate_joint_actions(
                 f"{constraint_context}.equals must be a non-empty scalar",
             )
             condition_variant_constraints[condition_id] = (axis_id, expected)
+        if "familyIDs" in condition_value:
+            family_ids = require_list(
+                condition_value["familyIDs"],
+                f"{item_context}.familyIDs",
+            )
+            require_unique(family_ids, f"{item_context}.familyIDs")
+            for family_id in family_ids:
+                require(
+                    isinstance(family_id, str)
+                    and STABLE_ID.fullmatch(family_id) is not None,
+                    f"{item_context}.familyIDs contains invalid family ID {family_id!r}",
+                )
+            condition_family_ids[condition_id] = frozenset(family_ids)
+        if "oppositeCondition" in condition_value:
+            opposing_condition_by_condition[condition_id] = require_non_empty_string(
+                condition_value["oppositeCondition"],
+                f"{item_context}.oppositeCondition",
+            )
+
+    for condition_id, opposite_id in opposing_condition_by_condition.items():
+        require(
+            opposite_id != condition_id,
+            f"action condition {condition_id} cannot be its own opposite condition",
+        )
+        require(
+            opposite_id in condition_actions,
+            f"action condition {condition_id} references unknown opposite condition {opposite_id}",
+        )
+        require(
+            opposing_condition_by_condition.get(opposite_id) == condition_id,
+            f"action condition {condition_id} must have a reciprocal opposite condition",
+        )
+        require(
+            condition_actions[condition_id] == condition_actions[opposite_id],
+            f"opposite action conditions {condition_id} and {opposite_id} must apply to the same actions",
+        )
 
     profiles = require_list(data["muscleProfiles"], f"{context}.muscleProfiles")
     profile_by_muscle: dict[str, dict[str, Any]] = {}
     capabilities_by_muscle: dict[str, frozenset[ActionRequirement]] = {}
     produced_actions: set[str] = set()
     referenced_conditions: set[str] = set()
+    family_scoped_conditions = set(condition_family_ids)
 
     for index, profile in enumerate(profiles):
         item_context = f"{context}.muscleProfiles[{index}]"
@@ -923,7 +964,11 @@ def validate_joint_actions(
     require(not missing_profiles and not extra_profiles, f"joint-action profiles mismatch taxonomy; missing={missing_profiles}, extra={extra_profiles}")
     unproduced_actions = sorted(action_ids - produced_actions)
     require(not unproduced_actions, f"joint-action vocabulary contains actions no muscle can produce: {', '.join(unproduced_actions)}")
-    unused_conditions = sorted(condition_actions.keys() - referenced_conditions)
+    unused_conditions = sorted(
+        condition_actions.keys()
+        - referenced_conditions
+        - family_scoped_conditions
+    )
     require(not unused_conditions, f"joint-action vocabulary contains unused conditions: {', '.join(unused_conditions)}")
     return (
         profile_by_muscle,
@@ -932,6 +977,8 @@ def validate_joint_actions(
         plane_by_action,
         condition_actions,
         condition_variant_constraints,
+        condition_family_ids,
+        opposing_condition_by_condition,
         opposing_action_by_action,
         region_ids,
     )
@@ -1117,6 +1164,8 @@ def validate_foundation(body_model_path: Path = BODY_MODEL_PATH) -> Foundation:
         plane_by_action,
         condition_actions,
         condition_variant_constraints,
+        condition_family_ids,
+        opposing_condition_by_condition,
         opposing_action_by_action,
         region_ids,
     ) = validate_joint_actions(
@@ -1138,6 +1187,8 @@ def validate_foundation(body_model_path: Path = BODY_MODEL_PATH) -> Foundation:
         plane_by_action=plane_by_action,
         condition_actions=condition_actions,
         condition_variant_constraints=condition_variant_constraints,
+        condition_family_ids=condition_family_ids,
+        opposing_condition_by_condition=opposing_condition_by_condition,
         opposing_action_by_action=opposing_action_by_action,
         region_ids=region_ids,
         evidence_ids=evidence_ids,
@@ -2254,6 +2305,14 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
         if not has_movement_phases
         else f"{context}.movementSignature ordered phases require at least one action",
     )
+    signature_actions = prime_actions | resisted_actions | yielding_actions
+    for action_id, condition_id in signature_actions:
+        if condition_id is None or condition_id not in foundation.condition_family_ids:
+            continue
+        require(
+            family_id in foundation.condition_family_ids[condition_id],
+            f"{context} action condition {condition_id} is not allowed for family {family_id}",
+        )
     forbidden_prime_actions = require_list(
         signature.get("forbiddenPrimeActions", []),
         f"{context}.movementSignature.forbiddenPrimeActions",
@@ -2277,22 +2336,41 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
     declared_resisted_action_ids = {action for action, _ in resisted_actions}
     declared_yielding_action_ids = {action for action, _ in yielding_actions}
     action_mode_conflicts = sorted(
-        declared_prime_action_ids & declared_resisted_action_ids
+        prime_actions & resisted_actions,
+        key=action_requirement_label,
     )
     require(
         not action_mode_conflicts,
         f"{context} both declares prime and resisted actions: "
-        + ", ".join(action_mode_conflicts),
+        + ", ".join(action_requirement_label(item) for item in action_mode_conflicts),
     )
     yielding_mode_conflicts = sorted(
-        (declared_prime_action_ids & declared_yielding_action_ids)
-        | (declared_resisted_action_ids & declared_yielding_action_ids)
+        (prime_actions & yielding_actions)
+        | (resisted_actions & yielding_actions),
+        key=action_requirement_label,
     )
     require(
         not yielding_mode_conflicts,
         f"{context} declares actions in both yielding and another action mode: "
-        + ", ".join(yielding_mode_conflicts),
+        + ", ".join(action_requirement_label(item) for item in yielding_mode_conflicts),
     )
+    for left_name, left_actions, right_name, right_actions in (
+        ("prime", prime_actions, "resisted", resisted_actions),
+        ("prime", prime_actions, "yielding", yielding_actions),
+        ("resisted", resisted_actions, "yielding", yielding_actions),
+    ):
+        for action_id, left_condition in left_actions:
+            for right_action_id, right_condition in right_actions:
+                if action_id != right_action_id or left_condition == right_condition:
+                    continue
+                require(
+                    left_condition is not None
+                    and right_condition is not None
+                    and foundation.opposing_condition_by_condition.get(left_condition)
+                    == right_condition,
+                    f"{context} uses non-opposing conditions for {action_id} across "
+                    f"{left_name} and {right_name} action modes",
+                )
     conflicts = sorted(declared_prime_action_ids & forbidden_prime_action_ids)
     require(
         not conflicts,
@@ -2312,6 +2390,13 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
             allow_empty=True,
         )
         additional_prime_actions_by_exercise.append(additional_prime_actions)
+        for _, condition_id in additional_prime_actions:
+            if condition_id is None or condition_id not in foundation.condition_family_ids:
+                continue
+            require(
+                family_id in foundation.condition_family_ids[condition_id],
+                f"{exercise_context} action condition {condition_id} is not allowed for family {family_id}",
+            )
         roster_additional_prime_actions.update(additional_prime_actions)
     if has_movement_phases:
         require(
@@ -2325,20 +2410,22 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
     roster_resisted_action_ids = {action for action, _ in resisted_actions}
     roster_yielding_action_ids = {action for action, _ in yielding_actions}
     roster_action_mode_conflicts = sorted(
-        roster_prime_action_ids & roster_resisted_action_ids
+        roster_prime_actions & resisted_actions,
+        key=action_requirement_label,
     )
     require(
         not roster_action_mode_conflicts,
         f"{context} family roster declares actions as both prime and resisted: "
-        + ", ".join(roster_action_mode_conflicts),
+        + ", ".join(action_requirement_label(item) for item in roster_action_mode_conflicts),
     )
     roster_yielding_conflicts = sorted(
-        roster_prime_action_ids & roster_yielding_action_ids
+        roster_prime_actions & yielding_actions,
+        key=action_requirement_label,
     )
     require(
         not roster_yielding_conflicts,
         f"{context} family roster declares actions as both prime and yielding: "
-        + ", ".join(roster_yielding_conflicts),
+        + ", ".join(action_requirement_label(item) for item in roster_yielding_conflicts),
     )
     plane_basis_values = require_list(
         signature["planeBasisActions"],
@@ -2633,9 +2720,17 @@ def canonical_foundation_digest(foundation: Foundation) -> str:
 
 
 def runtime_movement_actions(
-    family: dict[str, Any], actions: dict[str, dict[str, Any]]
+    family: dict[str, Any],
+    actions: dict[str, dict[str, Any]],
+    conditions: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, str]]:
     """Keep produced, resisted, and yielding actions distinct; omit stabilizers."""
+    if conditions is None:
+        joint_actions = json.loads(JOINT_ACTIONS_PATH.read_text(encoding="utf-8"))
+        conditions = {
+            condition["id"]: condition
+            for condition in joint_actions["actionConditions"]
+        }
     signature = family["movementSignature"]
     sources = [signature, *signature.get("movementPhases", [])]
     result = []
@@ -2644,18 +2739,35 @@ def runtime_movement_actions(
         ("resistedActions", "resisted"),
         ("yieldingActions", "yielding"),
     ):
-        action_ids = {
-            a if isinstance(a, str) else a["action"]
-            for source in sources for a in source.get(field, [])
-        }
-        for action_id in sorted(action_ids):
+        conditions_by_action: dict[str, set[str | None]] = {}
+        for source in sources:
+            for requirement in source.get(field, []):
+                action_id, condition_id = (
+                    (requirement, None)
+                    if isinstance(requirement, str)
+                    else (requirement["action"], requirement["condition"])
+                )
+                conditions_by_action.setdefault(action_id, set()).add(condition_id)
+        for action_id in sorted(conditions_by_action):
+            authored_conditions = conditions_by_action[action_id]
+            condition_id = (
+                next(iter(authored_conditions))
+                if len(authored_conditions) == 1
+                else None
+            )
             action = actions[action_id]
-            result.append({
+            record = {
                 "actionID": action_id,
                 "name": action["displayName"],
                 "plane": action["plane"],
                 "kind": kind,
-            })
+            }
+            if condition_id is not None:
+                condition = conditions[condition_id]
+                if "familyIDs" in condition:
+                    record["conditionID"] = condition_id
+                    record["conditionName"] = condition["displayName"]
+            result.append(record)
     return result
 
 
@@ -2666,15 +2778,20 @@ def compile_runtime_catalog(families: Iterable[dict[str, Any]]) -> list[dict[str
     Family file order is deterministic and exercise order remains authored.
     """
     records: list[dict[str, Any]] = []
+    joint_actions = json.loads(JOINT_ACTIONS_PATH.read_text(encoding="utf-8"))
     actions = {
         action["id"]: action
-        for action in json.loads(JOINT_ACTIONS_PATH.read_text(encoding="utf-8"))["actions"]
+        for action in joint_actions["actions"]
+    }
+    conditions = {
+        condition["id"]: condition
+        for condition in joint_actions["actionConditions"]
     }
     canonical_planes = ("sagittal", "frontal", "transverse")
     for family in sorted(families, key=lambda value: value["id"]):
         fixed = family["fixed"]
         group_default = family["groupPolicy"]["default"]
-        movement_actions = runtime_movement_actions(family, actions)
+        movement_actions = runtime_movement_actions(family, actions, conditions)
         for exercise in family["exercises"]:
             record: dict[str, Any] = {
                 "familyID": family["id"],

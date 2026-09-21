@@ -1,0 +1,87 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "medicine-ball-reactive-half-kneeling-wall-throw",
+  "name": "Reactive Half-Kneeling Rotational Medicine Ball Throw",
+  "definition": "A unilateral two-hand rotational power throw performed half-kneeling and side-on to a medicine-ball-safe rebound wall or prepared partner. An uncounted opening feed establishes the cycle; each logged repetition receives the return, yields through a small trunk rotation away from the target, and releases once toward the same target. Standing, tall-kneeling, split-stance, locomotor, floor-slam, free-distance, chest-pass, and one-hand throws remain outside this family.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "army-2020-kneeling-side-arm-throw",
+    "ikeda-2009-side-medicine-ball-throw"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": ["transverse"]
+  },
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {
+    "equipment": ["medicineBall"],
+    "modalities": ["power"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["unilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["spine.rotation"],
+    "primeActions": [],
+    "movementPhases": [
+      {"id": "receive", "name": "Receive", "primeActions": [], "yieldingActions": [{"action": "spine.rotation", "condition": "awayFromExternalTarget"}]},
+      {"id": "release", "name": "Release", "primeActions": [{"action": "spine.rotation", "condition": "towardExternalTarget"}]}
+    ],
+    "stabilityDemands": ["shoulder", "spine", "pelvis", "wrist", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["obliques"], "minimumRole": "primary"},
+      {"anyOf": ["lats"], "minimumRole": "stabilizer"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["obliques"],
+      "secondary": [],
+      "stabilizer": ["lats", "fingerFlexors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed stationary support posture.", "allowedValues": ["halfKneeling"]},
+    {"id": "lowerBodySupport", "valueType": "enum", "required": true, "description": "The exact floor contacts retained through the repetition.", "allowedValues": ["insideKneeOutsideFoot"]},
+    {"id": "target", "valueType": "enum", "required": true, "description": "The external rebound target.", "allowedValues": ["medicineBallSafeReboundWallOrPreparedPartner"]},
+    {"id": "targetHeight", "valueType": "enum", "required": true, "description": "The reviewed release and return height.", "allowedValues": ["waistToMidTorso"]},
+    {"id": "grip", "valueType": "enum", "required": true, "description": "The reviewed ball contact.", "allowedValues": ["twoHand"]},
+    {"id": "responseStrategy", "valueType": "enum", "required": true, "description": "The reactive repetition topology.", "allowedValues": ["uncountedFeedThenCatchCounterRotateRelease"]},
+    {"id": "trainingDirectionPrescription", "valueType": "enum", "required": true, "description": "The mirrored-direction requirement.", "allowedValues": ["bothDirections"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the ball.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 3, "maximum": 8}},
+  "exercises": [
+    {
+      "catalogID": "half-kneeling-rotational-medicine-ball-throw",
+      "name": "Half-Kneeling Rotational Medicine Ball Throw",
+      "aliases": ["½ Kneeling Rotational Med Ball Throws", "Half-Kneeling Rotational Med Ball Throw", "Kneeling Side-Arm Throw"],
+      "equipment": "medicineBall", "laterality": "unilateral", "modality": "power", "trackingMode": "reps", "loadMode": "nonComparable",
+      "bodyweightFraction": 0, "defaultWeight": 10, "defaultWeightKg": 5, "reps": 5, "searchPriority": 94,
+      "involvement": [
+        {"muscle": "obliques", "role": "primary"},
+        {"muscle": "lats", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}
+      ],
+      "variant": {"bodyPosition": "halfKneeling", "lowerBodySupport": "insideKneeOutsideFoot", "target": "medicineBallSafeReboundWallOrPreparedPartner", "targetHeight": "waistToMidTorso", "grip": "twoHand", "responseStrategy": "uncountedFeedThenCatchCounterRotateRelease", "trainingDirectionPrescription": "bothDirections", "fixedPath": false},
+      "additionalPrimeActions": [], "additionalStabilityDemands": [],
+      "evidenceRefs": ["army-2020-kneeling-side-arm-throw", "ikeda-2009-side-medicine-ball-throw"],
+      "execution": {
+        "startingPosition": "Set up side-on to a medicine-ball-safe rebound wall or prepared partner with the knee closest to the target down, the outside foot planted, and the ball in both hands near the outside hip. Use one uncounted opening throw or feed to start the cycle.",
+        "movement": "Receive the return between waist and mid-torso height, let the arms and torso turn slightly away, then reverse quickly and release the ball once toward the same target.",
+        "endpoint": "One counted repetition ends as that single return throw leaves both hands toward the target.",
+        "returnPhase": "Catch the next rebound or prepared partner return to begin the next counted repetition, absorbing it into the small turn away while keeping the same support position.",
+        "controlledJoints": "Keep the hips mostly forward, the planted knee aligned with the foot, and the down knee stable on the pad.",
+        "supportAndPosture": "Stay tall through the torso and keep the same knee and foot contacts throughout the set.",
+        "disqualifyingCompensations": ["Counting the opening feed creates two releases in the first repetition.", "Lifting the down knee changes the exercise into a split-stance throw.", "Using both knees changes the support to tall-kneeling.", "Slamming into the floor changes the target and family."],
+        "sideOrDirection": "Complete the set with one side facing the target, then turn around, mirror the support, and repeat equally in the other direction."
+      }
+    }
+  ]
+}

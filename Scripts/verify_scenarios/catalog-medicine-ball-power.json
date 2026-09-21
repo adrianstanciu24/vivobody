@@ -1,0 +1,56 @@
+{
+  "name": "catalog-medicine-ball-power",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterCore"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Standing Medicine Ball Slam,"
+        },
+        "direction": "up",
+        "maxSwipes": 65
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Standing Medicine Ball Slam,"
+      }
+    },
+    {
+      "wait": {
+        "label": "POWER / EXPLOSIVE"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Standing Medicine Ball Slam"
+    },
+    {
+      "label": "POWER / EXPLOSIVE"
+    },
+    {
+      "labelContains": "Muscles used by Standing Medicine Ball Slam"
+    }
+  ],
+  "forbidden": []
+}

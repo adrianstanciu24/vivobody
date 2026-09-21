@@ -18,16 +18,20 @@ nonisolated struct CatalogMovementAction: Decodable, Hashable, Identifiable {
     let name: String
     let plane: MovementPlane
     let kind: Kind
+    let conditionID: String?
+    let conditionName: String?
 
     var id: String {
-        "\(kind.rawValue):\(actionID)"
+        let baseID = "\(kind.rawValue):\(actionID)"
+        return conditionID.map { "\(baseID):\($0)" } ?? baseID
     }
 
     var displayName: String {
+        let qualifiedName = conditionName.map { "\(name) \($0.lowercased())" } ?? name
         switch kind {
-        case .produced: name
-        case .resisted: "Resisting \(name.lowercased())"
-        case .yielding: "Yielding through \(name.lowercased())"
+        case .produced: return qualifiedName
+        case .resisted: return "Resisting \(qualifiedName.lowercased())"
+        case .yielding: return "Yielding through \(qualifiedName.lowercased())"
         }
     }
 }

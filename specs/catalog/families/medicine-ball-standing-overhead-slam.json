@@ -1,0 +1,105 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "medicine-ball-standing-overhead-slam",
+  "name": "Standing Medicine Ball Overhead Slam",
+  "definition": "A self-start bilateral power throw in which the athlete raises a two-hand medicine ball overhead, controls backward trunk arching, and releases it forcefully into the floor directly in front. The repetition ends at floor impact and the ball is retrieved for the next repetition. Reactive partner feeds, rebound catches, squat-to-slam combinations, diagonal rotational slams, backward throws, and retained-ball chops remain outside this family.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity",
+    "shi-2026-upper-limb-plyometric-training",
+    "mocanu-2024-ballistic-medicine-ball-exercises"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": ["sagittal"]
+  },
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {
+    "equipment": ["medicineBall"],
+    "modalities": ["power"],
+    "trackingModes": ["reps"],
+    "loadModes": ["nonComparable"],
+    "lateralities": ["bilateral"]
+  },
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.extension"],
+    "primeActions": ["shoulder.extension"],
+    "resistedActions": ["spine.extension"],
+    "stabilityDemands": ["shoulder", "spine", "pelvis", "knee", "ankle", "foot", "wrist", "hand"]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["abs"], "minimumRole": "primary"},
+      {"anyOf": ["lats"], "minimumRole": "primary"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"},
+      {"anyOf": ["gastrocnemius"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": ["abs", "lats"],
+      "secondary": ["teresMajor", "deltoidPosterior", "triceps"],
+      "stabilizer": ["obliques", "vasti", "gastrocnemius", "fingerFlexors"]
+    }
+  },
+  "variantAxes": [
+    {"id": "startPosition", "valueType": "enum", "required": true, "description": "The reviewed standing start with the ball held at the torso.", "allowedValues": ["standingBallAtMidline"]},
+    {"id": "overheadStrategy", "valueType": "enum", "required": true, "description": "How the ball reaches its release start.", "allowedValues": ["twoHandsRiseOverhead"]},
+    {"id": "floorTarget", "valueType": "enum", "required": true, "description": "The reviewed impact point.", "allowedValues": ["directlyInFront"]},
+    {"id": "responseStrategy", "valueType": "enum", "required": true, "description": "What ends one repetition.", "allowedValues": ["releaseImpactRetrieveReset"]},
+    {"id": "ballConstruction", "valueType": "enum", "required": true, "description": "The floor-impact equipment boundary.", "allowedValues": ["slamSafeLowBounce"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an external guide constrains the ball.", "fixedValue": false}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 3, "maximum": 8}},
+  "exercises": [
+    {
+      "catalogID": "standing-medicine-ball-slam",
+      "name": "Standing Medicine Ball Slam",
+      "aliases": ["Standing Med Ball Slams", "Standing Med Ball Slam", "Medicine Ball Overhead Slam"],
+      "equipment": "medicineBall",
+      "laterality": "bilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 5,
+      "searchPriority": 96,
+      "involvement": [
+        {"muscle": "abs", "role": "primary"},
+        {"muscle": "lats", "role": "primary"},
+        {"muscle": "teresMajor", "role": "secondary"},
+        {"muscle": "deltoidPosterior", "role": "secondary"},
+        {"muscle": "triceps", "role": "secondary"},
+        {"muscle": "obliques", "role": "stabilizer"},
+        {"muscle": "vasti", "role": "stabilizer"},
+        {"muscle": "gastrocnemius", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"}
+      ],
+      "variant": {
+        "startPosition": "standingBallAtMidline",
+        "overheadStrategy": "twoHandsRiseOverhead",
+        "floorTarget": "directlyInFront",
+        "responseStrategy": "releaseImpactRetrieveReset",
+        "ballConstruction": "slamSafeLowBounce",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": ["shi-2026-upper-limb-plyometric-training", "mocanu-2024-ballistic-medicine-ball-exercises"],
+      "execution": {
+        "startingPosition": "Stand about hip-width with soft knees and hold a low-bounce medicine ball in both hands in front of your torso.",
+        "movement": "Raise the ball overhead without leaning backward, then drive it down and release it forcefully into the floor directly in front of you.",
+        "endpoint": "The repetition ends when the released ball strikes the floor in front of your stance.",
+        "returnPhase": "Let the ball settle, pick it up safely, and reset at the same standing start before the next repetition.",
+        "controlledJoints": "Keep the ribs controlled, the knees aligned with the feet, and the arms long without turning the slam into an elbow throw.",
+        "supportAndPosture": "Keep both feet planted on a clear, stable surface and use a ball designed for repeated floor slams.",
+        "disqualifyingCompensations": ["Throwing diagonally beside one foot changes the exercise into a rotational slam.", "Dropping into a deep squat changes the exercise into a squat-to-slam combination.", "Catching a partner feed overhead changes the exercise into a reactive slam."]
+      }
+    }
+  ]
+}

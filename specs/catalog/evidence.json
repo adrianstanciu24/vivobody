@@ -5114,6 +5114,122 @@
       "year": 2022,
       "url": "https://www.trxtraining.com/blogs/news/d",
       "scope": "TRX's official Hip Press instructions specify mid-calf straps, heels in the foot cradles, legs initially extended below the anchor, a knees-over-hips ninety-degree setup, and repeated hip presses toward the ceiling while that knee geometry stays aligned. It anchors the owner-approved hip-only repetition and strap length but does not establish a portable resistance fraction, muscle-force ranking, or medical outcome."
+    },
+    {
+      "id": "army-2020-kneeling-side-arm-throw",
+      "sourceType": "officialTechnicalStandard",
+      "title": "ATP 7-22.02 Holistic Health and Fitness Drills and Exercises",
+      "authors": [
+        "Headquarters, Department of the Army"
+      ],
+      "year": 2020,
+      "url": "https://h2f.army.mil/Portals/141/pdfs/physical/ATP%207-22.02.pdf",
+      "scope": "The Army's MB2.2 Kneeling Side-Arm Throw specifies a side-on half-kneeling medicine-ball throw to a wall or partner, a waist-height start, rebound catch absorbed through the arms, shoulders, and trunk, and repetitions on both sides. It anchors the half-kneeling support and reactive target topology, not a tall-kneeling record, quantitative muscle ranking, universal ball mass, or medical outcome."
+    },
+    {
+      "id": "sell-2015-medicine-ball-toss",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Reliability and validity of medicine ball toss tests as clinical measures of core strength",
+      "authors": [
+        "Mallory A. Sell",
+        "John P. Abt",
+        "Timothy C. Sell",
+        "Karen A. Keenan",
+        "Katelyn F. Allison",
+        "Mita T. Lovalekar",
+        "Scott M. Lephart"
+      ],
+      "year": 2015,
+      "doi": "10.3233/IES-150575",
+      "url": "https://doi.org/10.3233/IES-150575",
+      "scope": "Twenty healthy active adults performed forward, backward, and bilateral rotational medicine-ball toss tests. The rotational protocol directly establishes a two-knee tall-kneeling posture and two-hand rotational release. It supports the tall-kneeling fixture and mirrored directions, but its free distance throw is not a reactive wall return and its lack of correlation with isokinetic strength forbids treating the drill as a validated core-strength measure."
+    },
+    {
+      "id": "ikeda-2009-side-medicine-ball-throw",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Analysis of trunk muscle activity in the side medicine-ball throw",
+      "authors": [
+        "Yusuke Ikeda",
+        "Kazutaka Miyatsuji",
+        "Koichi Kawabata",
+        "Takafumi Fuchimoto",
+        "Akira Ito"
+      ],
+      "year": 2009,
+      "doi": "10.1519/JSC.0b013e3181b8676f",
+      "pmid": "19826303",
+      "url": "https://doi.org/10.1519/JSC.0b013e3181b8676f",
+      "scope": "Trained throwers performed maximal two-hand side medicine-ball throws with multiple ball masses while trunk-muscle activity and throw performance were measured. It directly supports dynamic trunk rotation and categorical oblique participation in a standing side throw. The protocol was not a reactive catch-and-return sequence, kneeling throw, locomotor approach, floor slam, or universal upper-body muscle ranking."
+    },
+    {
+      "id": "uksca-2021-rotating-medicine-ball-slam",
+      "sourceType": "officialTechnicalStandard",
+      "title": "ASCC Physical Assessment Standard Technical Model 1.2: Rotating Medicine Ball Slam",
+      "authors": [
+        "UK Strength and Conditioning Association"
+      ],
+      "year": 2021,
+      "url": "https://cdn.uksca.org.uk/assets/pdfs/UkscaIqPdfs/ascc-assessment-pas-technical-model-scenario-1-637672394042677573.pdf",
+      "scope": "The UKSCA technical model specifies a hip-width standing medicine-ball rotational slam with a two-hand grip, overhead circular path, opposite-side floor target, lower-limb and trunk rotation, back-foot pivot, minimal elbow motion, and maximal-intent release. It anchors the diagonal rotational floor-slam fixture, not a straight overhead slam, universal load, categorical muscle ranking, training outcome, or medical claim."
+    },
+    {
+      "id": "nsca-rotational-power-shuffle-throw",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Practical Applications for Rotational Power Training",
+      "authors": [
+        "Aaron Otey",
+        "National Strength and Conditioning Association"
+      ],
+      "year": 2017,
+      "url": "https://www.nsca.com/contentassets/6791dc5307374a4cb28464dffd417af6/ptq-4.4.7-practical-applications-for-rotational-power-training.pdf",
+      "scope": "The NSCA article's photographic medicine-ball sequence establishes a side-on lateral-shuffle approach that ends in a planted rotational wall throw. It supports the approach-to-throw boundary and wall target, but does not quantify joint kinetics, prescribe the requested crossover topology, establish categorical muscle rankings, or prove a training outcome."
+    },
+    {
+      "id": "kuntze-2009-lateral-crossover-steps",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Bilateral ground reaction forces and joint moments for lateral sidestepping and crossover stepping tasks",
+      "authors": [
+        "Gregor Kuntze",
+        "William I. Sellers",
+        "Neil Mansfield"
+      ],
+      "year": 2009,
+      "pmid": "24150549",
+      "pmcid": "PMC3737798",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3737798/",
+      "scope": "Nine experienced male badminton players performed lateral sidestepping and crossover stepping at controlled speed while bilateral ground-reaction forces and three-dimensional joint kinetics were recorded. It establishes that non-crossing shuffle and crossover approaches have distinct lead- and trail-limb mechanics. It does not include a medicine ball or terminal throw and therefore supports family separation, not throw anatomy or a quantitative load claim."
+    },
+    {
+      "id": "shi-2026-upper-limb-plyometric-training",
+      "sourceType": "randomizedClinicalTrial",
+      "title": "The role of maturation in upper-limb plyometric vs. technical plyometric training for youth badminton players",
+      "authors": [
+        "Yujie Shi",
+        "Mingbing Yi",
+        "Ruibao Cai",
+        "Han Li",
+        "Danni Luo",
+        "Mengjie Yu"
+      ],
+      "year": 2026,
+      "doi": "10.3389/fphys.2026.1765643",
+      "url": "https://doi.org/10.3389/fphys.2026.1765643",
+      "scope": "A six-week youth-badminton intervention directly lists two-kilogram standing two-hand overhead floor slams and standing trunk-rotation medicine-ball throws as maximal-repetition upper-limb plyometric drills. It supports power modality, repetition tracking, and the standing floor-slam fixture, but gives sparse execution detail and no exercise-specific joint kinetics or muscle measurements."
+    },
+    {
+      "id": "mocanu-2024-ballistic-medicine-ball-exercises",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Effectiveness of ballistic exercises for increasing upper body explosive power in physical education lessons for university students",
+      "authors": [
+        "George Mocanu",
+        "Carmen Parvu",
+        "Gabriel Murariu",
+        "Dan Szabo"
+      ],
+      "year": 2024,
+      "doi": "10.15561/20755279.2024.0306",
+      "url": "https://doi.org/10.15561/20755279.2024.0306",
+      "scope": "The year-long university physical-education study publishes a medicine-ball exercise table that directly specifies standing straight and rotational floor slams, a fixed forward-lunge split-stance two-hand side toss to a wall performed in both directions, side-step throws, and kneeling rotational throws. It supports those fixture boundaries and ballistic intent, but does not establish categorical muscle rankings, a reactive catch-and-release topology for every stance, an exact crossover sequence, universal ball mass, or medical outcomes."
     }
   ]
 }

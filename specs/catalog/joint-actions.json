@@ -487,6 +487,38 @@
         "axis": "hipFlexionDegrees",
         "equals": 90
       }
+    },
+    {
+      "id": "awayFromExternalTarget",
+      "displayName": "Away from the target",
+      "definition": "The direction-aggregated spinal-rotation action moves away from the exercise's fixed wall, partner, or floor target during a reviewed receiving or countermovement phase.",
+    "appliesTo": [
+      "spine.rotation"
+    ],
+    "familyIDs": [
+      "medicine-ball-reactive-half-kneeling-wall-throw",
+      "medicine-ball-stationary-rotational-throw",
+      "medicine-ball-rotational-slam",
+      "medicine-ball-lateral-shuffle-throw",
+      "medicine-ball-carioca-throw"
+    ],
+    "oppositeCondition": "towardExternalTarget"
+    },
+    {
+      "id": "towardExternalTarget",
+      "displayName": "Toward the target",
+      "definition": "The direction-aggregated spinal-rotation action moves toward the exercise's fixed wall, partner, or floor target during a reviewed propulsion phase.",
+    "appliesTo": [
+      "spine.rotation"
+    ],
+    "familyIDs": [
+      "medicine-ball-reactive-half-kneeling-wall-throw",
+      "medicine-ball-stationary-rotational-throw",
+      "medicine-ball-rotational-slam",
+      "medicine-ball-lateral-shuffle-throw",
+      "medicine-ball-carioca-throw"
+    ],
+    "oppositeCondition": "awayFromExternalTarget"
     }
   ],
   "muscleProfiles": [

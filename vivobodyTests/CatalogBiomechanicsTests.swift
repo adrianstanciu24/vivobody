@@ -577,6 +577,23 @@ struct CatalogBiomechanicsTests {
         ) == 0)
     }
 
+    @Test func medicineBallIsFirstClassNonComparablePowerEquipment() throws {
+        #expect(Equipment.medicineBall.rawValue == "medicineBall")
+        #expect(Equipment.medicineBall.displayName == "Medicine Ball")
+        #expect(!Equipment.medicineBall.requiresNonComparableLoad)
+
+        let medicineBallRecords = CatalogData.records.filter {
+            $0.equipment == .medicineBall
+        }
+        #expect(medicineBallRecords.count == 9)
+        for record in medicineBallRecords {
+            #expect(record.modality == .power)
+            #expect(record.trackingMode == .reps)
+            #expect(record.loadMode == .nonComparable)
+            #expect(record.group == .core)
+        }
+    }
+
     @Test func sumoDeadliftKeepsThreeJointCompoundRuntimeSignature() throws {
         let sumo = try #require(
             CatalogData.record(forCatalogID: "barefoot-dead-stop-sumo-barbell-deadlift")

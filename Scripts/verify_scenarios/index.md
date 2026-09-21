@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 157.
+Scenario files: 158.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -54,6 +54,7 @@ Scenario files: 157.
 | [catalog-machine-preacher-curl](catalog-machine-preacher-curl.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-second-wave](catalog-machine-second-wave.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-magnus-extension](catalog-magnus-extension.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-medicine-ball-power](catalog-medicine-ball-power.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-must-have-expansion](catalog-must-have-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
 | [catalog-requested-gaps-accessibility](catalog-requested-gaps-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |

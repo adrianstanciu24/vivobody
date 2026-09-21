@@ -59,6 +59,13 @@ $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/lateral-band-walk.json
 $(SRCROOT)/specs/catalog/families/lateral-lunge.json
 $(SRCROOT)/specs/catalog/families/machine-hack-squat.json
+$(SRCROOT)/specs/catalog/families/medicine-ball-carioca-throw.json
+$(SRCROOT)/specs/catalog/families/medicine-ball-lateral-shuffle-throw.json
+$(SRCROOT)/specs/catalog/families/medicine-ball-reactive-half-kneeling-wall-throw.json
+$(SRCROOT)/specs/catalog/families/medicine-ball-rotational-slam.json
+$(SRCROOT)/specs/catalog/families/medicine-ball-standing-overhead-slam.json
+$(SRCROOT)/specs/catalog/families/medicine-ball-stationary-rotational-throw.json
+$(SRCROOT)/specs/catalog/families/medicine-ball-tall-kneeling-overhead-slam.json
 $(SRCROOT)/specs/catalog/families/mid-thigh-clean-pull.json
 $(SRCROOT)/specs/catalog/families/nordic-curl.json
 $(SRCROOT)/specs/catalog/families/padded-machine-pullover.json

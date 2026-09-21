@@ -209,6 +209,9 @@ parallel handles is not a straight-bar substitution or generic `other` gear.
 A suspension trainer is stored as `suspensionTrainer`, displayed as
 **Suspension Trainer**, and filtered independently because its anchored straps,
 handles, and foot cradles materially define support and resistance.
+A medicine ball is stored as `medicineBall`, displayed as **Medicine Ball**,
+and filtered independently because a freely released, catchable or slam-safe
+ball defines the path and safety boundary of ballistic throws and slams.
 
 ## Load semantics
 
