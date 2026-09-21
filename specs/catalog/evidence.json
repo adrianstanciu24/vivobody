@@ -5394,13 +5394,62 @@
       "scope": "The Boxing Science handbook directly demonstrates a forearm rotational plank that pivots through the feet into a side-facing position with the free arm raised, plus straight-arm straight-leg sit-ups performed with feet together, arms toward the ceiling, a neutral-spine cue, and a controlled three-second descent. It also presents simultaneous arm-and-leg lowering with the lower back held against the floor. The source establishes those movement boundaries, not segmental spinal motion, exact muscle recruitment, a universal load, or implement identity."
     },
     {
-      "id": "boxing-science-exercise-library-med-ball-sit-up",
+      "id": "boxing-science-exercise-library",
       "sourceType": "officialTechnicalStandard",
       "title": "Exercise Library: Boxing Science Strength and Conditioning Program",
       "authors": ["Boxing Science"],
       "year": 2026,
       "url": "https://www.scribd.com/document/965522663/EXERCISE-LIBRARY-Boxing-Science-Strength-and-Conditioning-Program-Vwtlck",
-      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. Its Straight Leg Sit Ups with Med Ball entry specifies extended legs, one medicine ball held tightly against the chest, a slow lowering phase with slight upper-back flexion, a slow return with the legs pressed against the floor, and a four-to-five-second repetition. It directly anchors that exact fixture and tempo, not a universal load, precise range, lumbar kinematics, categorical muscle ranking, or outcome."
+      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. It specifies the straight-leg medicine-ball sit-up plus five plank fixtures: alternating opposite-shoulder taps from high plank under the idiosyncratic Plank Row name; opposite hand and knee lifted with the knee brought to hip level, for which the exact hand-to-knee contact is owner-selected because the source sentence is incomplete; a mirrored four-contact lateral high-plank shuffle; bilateral forearms circling a Swiss ball in both directions; and high-plank clockface taps against a loop outside the hands. It anchors those stated setup, path, support, and instruction boundaries, not universal loads, joint moments, categorical muscle rankings, medical outcomes, or equivalence to renegade rows, toe touches, static ball planks, and other same-name variants."
+    },
+    {
+      "id": "boxing-science-2019-core-library",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Core Exercise Library",
+      "authors": ["Boxing Science"],
+      "year": 2019,
+      "url": "https://boxingscience.co.uk/courses/core/",
+      "scope": "The public Boxing Science core-library index, published September 27, 2019 and reviewed in its May 22, 2026 revision, identifies Plank Row and Plank with Knee Touch as separate bodyweight core drills used in its athlete-development programs. It corroborates the branded source identity and separation of the two fixtures, but the index alone does not supply their complete execution, muscle roles, loading, or repetition semantics."
+    },
+    {
+      "id": "boxing-science-2021-boxer-warmup",
+      "sourceType": "officialTechnicalStandard",
+      "title": "The Boxer's Warm Up",
+      "authors": ["Boxing Science"],
+      "year": 2021,
+      "url": "https://boxingscience.co.uk/the-boxers-warm-up/",
+      "scope": "The Boxing Science warm-up standard, published March 2, 2021 and modified July 13, 2022, includes lateral plank walks and plank clockface work before strength sessions and prescribes three to five lateral-plank steps in each direction. It supports the bidirectional lateral-travel prescription and use of the clockface pattern, not exact muscle recruitment, a training outcome, or interchangeability with forearm walking planks."
+    },
+    {
+      "id": "can-2024-high-plank-support-emg",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Shoulder and Scapular Muscle Activity During Low and High Plank Variations With Different Body-Weight-Bearing Statuses",
+      "authors": ["Ezgi Nur Can", "Gulcan Harput", "Elif Turgut"],
+      "year": 2024,
+      "doi": "10.1519/JSC.0000000000004622",
+      "pmid": "37815235",
+      "url": "https://doi.org/10.1519/JSC.0000000000004622",
+      "scope": "Twenty-one healthy men performed ten low- and high-plank variations spanning four-point, three-point, and diagonal two-point bodyweight support while surface EMG measured lower, middle, and upper trapezius, biceps, triceps, infraspinatus, and serratus anterior. It directly supports categorical shoulder-girdle participation during shoulder taps and nearby reduced-support plank tasks, not the five active fixtures' exact loads, spinal moments, unmeasured lower-body roles, between-muscle force ranking, adaptation, or medical benefit."
+    },
+    {
+      "id": "youdas-2018-fitness-ball-plank",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Magnitudes of Muscle Activation of Spine Stabilizers in Healthy Adults During Prone on Elbow Planking Exercises With and Without a Fitness Ball",
+      "authors": ["James W. Youdas", "Kendra C. Coleman", "Erin E. Holstad", "Stephanie D. Long", "Nicole L. Veldkamp", "John H. Hollman"],
+      "year": 2018,
+      "doi": "10.1080/09593985.2017.1377792",
+      "pmid": "28922049",
+      "url": "https://doi.org/10.1080/09593985.2017.1377792",
+      "scope": "Thirteen women and thirteen men performed floor prone-on-elbow plank, fitness-ball prone-on-elbow plank, clockwise stir-the-pot, and fitness-ball plank with hip extension while surface EMG measured muscles including rectus abdominis, internal and external obliques, multifidus, and serratus anterior. The stir-the-pot protocol directly supports the bilateral forearm-on-ball circular fixture and categorical trunk and serratus participation. It does not directly test counterclockwise repetitions, every support-chain muscle, joint moments, a universal circle size, clinical benefit, or hypertrophy."
+    },
+    {
+      "id": "pfp-2022-tall-plank-clock",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Functionally Fit: Tall Plank Resisted Scapular Clock",
+      "authors": ["Brian Schiff"],
+      "year": 2022,
+      "url": "https://fit-pro.com/article-4672-Functionally-Fit-Tall-Plank-Resisted-Scapular-Clock.html",
+      "scope": "The professional technique article specifies a tall plank with a light loop, right-hand taps toward one, three, and five o'clock with a return to center after each tap, and a mirrored left-side set. It directly supports the three-position clock path and return semantics. Its loop sits around the wrists rather than Boxing Science's outside-of-hands interface, so it does not establish that the two band contacts are interchangeable or support a universal resistance, muscle ranking, or medical outcome."
     }
   ]
 }

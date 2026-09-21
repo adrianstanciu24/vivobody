@@ -11,6 +11,7 @@ $(SRCROOT)/specs/catalog/families/anti-extension.json
 $(SRCROOT)/specs/catalog/families/anti-lateral-flexion.json
 $(SRCROOT)/specs/catalog/families/anti-rotation-press.json
 $(SRCROOT)/specs/catalog/families/anti-rotation.json
+$(SRCROOT)/specs/catalog/families/banded-high-plank-clockface-tap.json
 $(SRCROOT)/specs/catalog/families/belt-loaded-machine-glute-bridge.json
 $(SRCROOT)/specs/catalog/families/bicycle-crunch.json
 $(SRCROOT)/specs/catalog/families/bilateral-squat.json
@@ -40,8 +41,10 @@ $(SRCROOT)/specs/catalog/families/glute-ham-raise.json
 $(SRCROOT)/specs/catalog/families/hang-power-clean.json
 $(SRCROOT)/specs/catalog/families/hang-power-snatch.json
 $(SRCROOT)/specs/catalog/families/hanging-leg-raise.json
+$(SRCROOT)/specs/catalog/families/high-plank-contralateral-knee-touch.json
 $(SRCROOT)/specs/catalog/families/high-plank-crossbody-drag.json
 $(SRCROOT)/specs/catalog/families/high-plank-rotation.json
+$(SRCROOT)/specs/catalog/families/high-plank-shoulder-tap.json
 $(SRCROOT)/specs/catalog/families/hip-abduction.json
 $(SRCROOT)/specs/catalog/families/hip-adduction.json
 $(SRCROOT)/specs/catalog/families/hip-extension.json
@@ -63,6 +66,7 @@ $(SRCROOT)/specs/catalog/families/kneeling-barbell-rollout.json
 $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/landmine-rotation.json
 $(SRCROOT)/specs/catalog/families/lateral-band-walk.json
+$(SRCROOT)/specs/catalog/families/lateral-high-plank-walk.json
 $(SRCROOT)/specs/catalog/families/lateral-lunge.json
 $(SRCROOT)/specs/catalog/families/machine-hack-squat.json
 $(SRCROOT)/specs/catalog/families/medicine-ball-carioca-throw.json
@@ -127,6 +131,7 @@ $(SRCROOT)/specs/catalog/families/suspension-knee-tuck.json
 $(SRCROOT)/specs/catalog/families/suspension-mountain-climber.json
 $(SRCROOT)/specs/catalog/families/suspension-overhead-y-raise.json
 $(SRCROOT)/specs/catalog/families/suspension-pike.json
+$(SRCROOT)/specs/catalog/families/swiss-ball-stir-the-pot.json
 $(SRCROOT)/specs/catalog/families/thruster.json
 $(SRCROOT)/specs/catalog/families/trap-bar-deadlift.json
 $(SRCROOT)/specs/catalog/families/upper-arm-pad-chest-fly.json

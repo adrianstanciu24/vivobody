@@ -1,0 +1,54 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "high-plank-shoulder-tap",
+  "name": "High-Plank Shoulder Tap",
+  "definition": "A dynamic bodyweight high-plank drill that begins with both palms and toes on the floor, transfers support to one palm and both feet, touches the free hand to the opposite shoulder, and returns before alternating. The branded Boxing Science standard calls this fixture Plank Row, but no rowing resistance or shoulder-extension pull occurs. The free arm performs a short horizontal-adduction and elbow-flexion path while the trunk resists extension and rotation. Abs and obliques are primary through that anti-motion task; moving-arm and support-chain roles are conservative evidence-and-mechanics assignments rather than a quantitative recruitment ranking. Dumbbell renegade rows, push-ups, forearm reaches, loaded drags, same-side taps, timed three-point holds, and deliberate trunk rotation remain outside this contract.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "boxing-science-2019-core-library",
+    "can-2024-high-plank-support-emg",
+    "lehman-2005-stable-prone-bridge",
+    "christophy-2012-lumbar-spine",
+    "seth-2019-shoulder-work",
+    "holzbaur-2005-upper-extremity",
+    "arnold-2010-lower-limb"
+  ],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal", "transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension", "spine.rotation"],
+    "primeActions": ["shoulder.horizontalAdduction", "elbow.flexion"],
+    "resistedActions": ["spine.extension", "spine.rotation"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "primary"}, {"anyOf": ["deltoidAnterior"], "minimumRole": "secondary"}, {"anyOf": ["bicepsBrachii"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMed"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs", "obliques"], "secondary": ["deltoidAnterior", "bicepsBrachii"], "stabilizer": ["serratus", "externalRotators", "triceps", "fingerFlexors", "extensorCarpiRadialis", "gluteMax", "gluteMed", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "startSupport", "valueType": "enum", "required": true, "description": "The repetition begins on both palms and toes.", "allowedValues": ["bilateralPalmsAndToes"]},
+    {"id": "tapSupport", "valueType": "enum", "required": true, "description": "One palm and both feet support the shoulder touch.", "allowedValues": ["singlePalmAndBothFeet"]},
+    {"id": "footSpacing", "valueType": "enum", "required": true, "description": "The feet begin at hip width and may widen only enough to preserve the source task.", "allowedValues": ["hipWidthOrWiderForControl"]},
+    {"id": "handTarget", "valueType": "enum", "required": true, "description": "The free hand crosses to the opposite shoulder.", "allowedValues": ["oppositeShoulder"]},
+    {"id": "trunkMotion", "valueType": "enum", "required": true, "description": "The shoulders and hips remain square against extension and rotation.", "allowedValues": ["heldAgainstExtensionAndRotation"]},
+    {"id": "limbSequence", "valueType": "enum", "required": true, "description": "The arms alternate after support is restored.", "allowedValues": ["alternatingOneAtATime"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "Each touch and return counts once.", "allowedValues": ["eachTouchAndReturn"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the hand or body path."}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 8, "maximum": 20}},
+  "exercises": [{
+    "catalogID": "alternating-high-plank-shoulder-tap",
+    "name": "Alternating High-Plank Shoulder Tap",
+    "aliases": ["Plank Row", "High-Plank Shoulder Tap", "Plank Shoulder Tap"],
+    "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 16, "searchPriority": 95,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"startSupport": "bilateralPalmsAndToes", "tapSupport": "singlePalmAndBothFeet", "footSpacing": "hipWidthOrWiderForControl", "handTarget": "oppositeShoulder", "trunkMotion": "heldAgainstExtensionAndRotation", "limbSequence": "alternatingOneAtATime", "repetitionCounting": "eachTouchAndReturn", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [],
+    "evidenceRefs": ["boxing-science-exercise-library", "boxing-science-2019-core-library", "can-2024-high-plank-support-emg", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity", "arnold-2010-lower-limb"],
+    "execution": {"startingPosition": "Set a high plank with both palms below the shoulders and the feet about hip-width apart; widen the feet only as needed to keep the body still.", "movement": "Shift onto one palm and both feet, then slowly lift the free hand across the chest toward the opposite shoulder.", "endpoint": "Touch the opposite shoulder without turning the shoulders or hips.", "returnPhase": "Place the hand back below its shoulder before repeating with the other arm.", "controlledJoints": "Keep the supporting elbow extended and resist low-back sag and trunk rotation throughout the touch.", "supportAndPosture": "Press the supporting palm and both feet into the floor while maintaining one straight line through the trunk and legs.", "sideOrDirection": "Alternate arms; count each shoulder touch and return as one repetition and use an even total.", "disqualifyingCompensations": ["Rowing a dumbbell changes the exercise into a renegade-row fixture.", "Rotating the hips or shoulders toward the free arm loses the anti-rotation task.", "Adding a push-up changes the reviewed repetition."]}
+  }]
+}

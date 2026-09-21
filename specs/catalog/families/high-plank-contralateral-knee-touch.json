@@ -1,0 +1,46 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "high-plank-contralateral-knee-touch",
+  "name": "High-Plank Contralateral Knee Touch",
+  "definition": "A dynamic bodyweight high-plank drill that simultaneously lifts one hand and the opposite foot, flexes that hip and knee until the free hand meets the opposite knee at about hip level, then restores four-point support before alternating. The owner-selected knee-touch endpoint resolves the branded source's incomplete sentence and excludes its separately named toe-touch progression. The free arm uses shoulder extension and horizontal adduction, the moving thigh uses hip flexion, and the bent-knee path is represented by knee flexion while the diagonal support base challenges anti-extension and anti-rotation control. Categorical roles are bounded evidence-and-mechanics assignments rather than exact-fixture recruitment measurements. Shoulder taps with both feet planted, toe touches, mountain climbers, bird dogs, renegade rows, same-side contacts, and rotating knee-to-elbow planks remain outside this contract.",
+  "evidenceRefs": ["boxing-science-exercise-library", "boxing-science-2019-core-library", "can-2024-high-plank-support-emg", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity", "arnold-2010-lower-limb"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal", "transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension", "spine.rotation"],
+    "primeActions": ["shoulder.extension", "shoulder.horizontalAdduction", "hip.flexion", "knee.flexion"],
+    "resistedActions": ["spine.extension", "spine.rotation"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "primary"}, {"anyOf": ["deltoidAnterior"], "minimumRole": "secondary"}, {"anyOf": ["deltoidPosterior"], "minimumRole": "secondary"}, {"anyOf": ["iliopsoas"], "minimumRole": "secondary"}, {"anyOf": ["sartorius"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMed"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs", "obliques"], "secondary": ["deltoidAnterior", "deltoidPosterior", "iliopsoas", "sartorius"], "stabilizer": ["serratus", "externalRotators", "triceps", "fingerFlexors", "extensorCarpiRadialis", "gluteMax", "gluteMed", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "startSupport", "valueType": "enum", "required": true, "description": "The repetition begins on both palms and toes.", "allowedValues": ["bilateralPalmsAndToes"]},
+    {"id": "touchSupport", "valueType": "enum", "required": true, "description": "One palm and the opposite-side foot remain as the diagonal support pair.", "allowedValues": ["singlePalmAndOppositeFoot"]},
+    {"id": "limbPairing", "valueType": "enum", "required": true, "description": "The free hand meets the opposite knee.", "allowedValues": ["contralateralHandAndKnee"]},
+    {"id": "kneePath", "valueType": "enum", "required": true, "description": "The free leg flexes forward until the knee reaches about hip level.", "allowedValues": ["flexedForwardToHipLevel"]},
+    {"id": "touchTarget", "valueType": "enum", "required": true, "description": "The hand and opposite knee meet rather than continuing to a toe.", "allowedValues": ["freeHandToOppositeKnee"]},
+    {"id": "trunkMotion", "valueType": "enum", "required": true, "description": "The trunk stays square against extension and rotation.", "allowedValues": ["heldAgainstExtensionAndRotation"]},
+    {"id": "limbSequence", "valueType": "enum", "required": true, "description": "Both contacts return before the opposite pair moves.", "allowedValues": ["alternatingAfterFourPointReset"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "Each hand-knee touch and return counts once.", "allowedValues": ["eachTouchAndReturn"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the limb or body path."}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 16}},
+  "exercises": [{
+    "catalogID": "alternating-high-plank-contralateral-knee-touch",
+    "name": "Alternating High-Plank Contralateral Knee Touch",
+    "aliases": ["Plank Row w/ Knee Touch", "Plank Row with Knee Touch", "Plank with Knee Touch", "Contralateral Plank Knee Touch"],
+    "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "deltoidPosterior", "role": "secondary"}, {"muscle": "iliopsoas", "role": "secondary"}, {"muscle": "sartorius", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"startSupport": "bilateralPalmsAndToes", "touchSupport": "singlePalmAndOppositeFoot", "limbPairing": "contralateralHandAndKnee", "kneePath": "flexedForwardToHipLevel", "touchTarget": "freeHandToOppositeKnee", "trunkMotion": "heldAgainstExtensionAndRotation", "limbSequence": "alternatingAfterFourPointReset", "repetitionCounting": "eachTouchAndReturn", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [],
+    "evidenceRefs": ["boxing-science-exercise-library", "boxing-science-2019-core-library", "can-2024-high-plank-support-emg", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity", "arnold-2010-lower-limb"],
+    "execution": {"startingPosition": "Set a high plank with both palms below the shoulders and both feet about hip-width apart.", "movement": "Lift one hand and the opposite foot together, bend that knee forward toward hip level, and bring the free hand toward it while keeping the trunk square.", "endpoint": "Touch the free hand to the opposite knee at about hip level without twisting or sagging.", "returnPhase": "Return the hand and foot to the floor to restore four-point high plank before changing sides.", "controlledJoints": "Keep the supporting elbow and grounded knee extended while the moving hip and knee flex under control.", "supportAndPosture": "Balance on the remaining diagonal palm-and-foot pair with the shoulders and hips parallel to the floor.", "sideOrDirection": "Alternate contralateral pairs; count each knee touch and four-point return as one repetition and use an even total.", "disqualifyingCompensations": ["Reaching to the toe changes the source-selected knee endpoint.", "Keeping both hands down turns the movement into a mountain-climber variation.", "Opening the hips or shoulders changes the anti-rotation task."]}
+  }]
+}

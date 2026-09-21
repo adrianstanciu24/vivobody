@@ -1,0 +1,20 @@
+{
+  "name": "catalog-swiss-ball-stir-the-pot-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "light"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterCore"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Swiss-Ball Stir the Pot,"}, "direction": "up", "maxSwipes": 100}},
+    {"tap": {"labelRegex": "^Swiss-Ball Stir the Pot,"}},
+    {"wait": {"label": "STRENGTH · REPS"}}
+  ],
+  "required": [
+    {"label": "Swiss-Ball Stir the Pot"},
+    {"labelContains": "Muscles used by Swiss-Ball Stir the Pot"}
+  ],
+  "forbidden": []
+}

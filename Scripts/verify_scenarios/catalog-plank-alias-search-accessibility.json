@@ -1,0 +1,29 @@
+{
+  "name": "catalog-plank-alias-search-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "Lateral Plank Walks"},
+    {"wait": {"labelRegex": "^Lateral High-Plank Walk, Bodyweight · Core"}},
+    {"tap": {"labelRegex": "^Lateral High-Plank Walk, Bodyweight · Core"}},
+    {"wait": {"label": "STRENGTH · REPS"}}
+  ],
+  "required": [
+    {"label": "Lateral High-Plank Walk"},
+    {"labelContains": "Muscles used by Lateral High-Plank Walk"}
+  ],
+  "forbidden": []
+}

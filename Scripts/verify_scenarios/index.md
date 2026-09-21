@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 164.
+Scenario files: 170.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -32,6 +32,7 @@ Scenario files: 164.
 | [catalog-active-dead-hang](catalog-active-dead-hang.json) | library | `--static-body` |
 | [catalog-adductor-coverage](catalog-adductor-coverage.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-adductor-machine-light](catalog-adductor-machine-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-banded-plank-clockface-dark](catalog-banded-plank-clockface-dark.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-cable-expansion](catalog-cable-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-common-machines-accessibility](catalog-common-machines-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-common-machines-light](catalog-common-machines-light.json) | library | `--static-body -settings.appearance light` |
@@ -51,6 +52,7 @@ Scenario files: 164.
 | [catalog-forearm-stabilizers](catalog-forearm-stabilizers.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-horizontal-leg-press](catalog-horizontal-leg-press.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-landmine-rotation-light](catalog-landmine-rotation-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-lateral-plank-walk-light](catalog-lateral-plank-walk-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-machine-expansion](catalog-machine-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-first-wave-assisted-dip](catalog-machine-first-wave-assisted-dip.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-first-wave-pec-fly-accessibility](catalog-machine-first-wave-pec-fly-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
@@ -61,6 +63,9 @@ Scenario files: 164.
 | [catalog-medicine-ball-power](catalog-medicine-ball-power.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-must-have-expansion](catalog-must-have-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
+| [catalog-plank-alias-search-accessibility](catalog-plank-alias-search-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-plank-knee-touch-dark](catalog-plank-knee-touch-dark.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-plank-shoulder-tap-light](catalog-plank-shoulder-tap-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-requested-gaps-accessibility](catalog-requested-gaps-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [catalog-requested-gaps-light](catalog-requested-gaps-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-requested-gaps](catalog-requested-gaps.json) | library | `--static-body -settings.appearance dark` |
@@ -75,6 +80,7 @@ Scenario files: 164.
 | [catalog-six-landmine-t-bar-row](catalog-six-landmine-t-bar-row.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-six-leg-press-calf-raise](catalog-six-leg-press-calf-raise.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-six-standing-dumbbell-calf-raise](catalog-six-standing-dumbbell-calf-raise.json) | library | `--static-body -settings.appearance light` |
+| [catalog-swiss-ball-stir-the-pot-light](catalog-swiss-ball-stir-the-pot-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-tfl-compound-development](catalog-tfl-compound-development.json) | today | `--ui-test-tfl-development --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-tfl-coverage](catalog-tfl-coverage.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-trx-chest-press-accessibility](catalog-trx-chest-press-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |

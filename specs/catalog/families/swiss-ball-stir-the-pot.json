@@ -1,0 +1,45 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "swiss-ball-stir-the-pot",
+  "name": "Swiss-Ball Stir the Pot",
+  "definition": "A dynamic forearm-plank drill performed with both forearms on a stability ball and the toes on the floor while the forearms trace controlled circles in both directions. The circular shift of the upper-body support is authored as a support transition rather than a separately credited prime joint action; the training-defining task is resisting spinal extension, rotation, and lateral flexion. Youdas et al. directly measured rectus-abdominis, oblique, multifidus, and serratus-anterior activity during a clockwise fitness-ball stir-the-pot; the counterclockwise direction is the mirrored programming prescription from the Boxing Science fixture. Muscle roles outside the measured set are conservative anatomy-and-support assignments. Static ball planks, floor planks, pikes, rollouts, knee-supported circles, single-arm circles, and hip-extension planks remain outside this contract.",
+  "evidenceRefs": ["boxing-science-exercise-library", "youdas-2018-fitness-ball-plank", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine", "seth-2019-shoulder-work", "arnold-2010-lower-limb"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal", "frontal", "transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["stabilityBall"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension", "spine.lateralFlexion", "spine.rotation"],
+    "primeActions": [],
+    "resistedActions": ["spine.extension", "spine.lateralFlexion", "spine.rotation"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "primary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer"}, {"anyOf": ["deltoidAnterior"], "minimumRole": "stabilizer"}, {"anyOf": ["deltoidLateral"], "minimumRole": "stabilizer"}, {"anyOf": ["deltoidPosterior"], "minimumRole": "stabilizer"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs", "obliques"], "secondary": [], "stabilizer": ["serratus", "lumbarExtensors", "deltoidAnterior", "deltoidLateral", "deltoidPosterior", "externalRotators", "triceps", "gluteMax", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "supportSurface", "valueType": "enum", "required": true, "description": "Both forearms rest on the stability ball while the toes remain on the floor.", "allowedValues": ["bilateralForearmsOnBallAndToes"]},
+    {"id": "elbowPosition", "valueType": "enum", "required": true, "description": "The elbows remain flexed in forearm support.", "allowedValues": ["flexedForearmSupport"]},
+    {"id": "circleDriver", "valueType": "enum", "required": true, "description": "Both forearms move together to trace each circle on the ball.", "allowedValues": ["bilateralForearmsTogether"]},
+    {"id": "circlePath", "valueType": "enum", "required": true, "description": "The forearms trace controlled circles without turning the drill into a rollout.", "allowedValues": ["controlledCircularSupportShift"]},
+    {"id": "circleDirection", "valueType": "enum", "required": true, "description": "The programmed set includes equal clockwise and counterclockwise circles.", "allowedValues": ["clockwiseAndCounterclockwise"]},
+    {"id": "trunkMotion", "valueType": "enum", "required": true, "description": "The trunk stays aligned against extension, rotation, and lateral flexion.", "allowedValues": ["heldAgainstExtensionRotationAndLateralFlexion"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "Each complete circle counts once.", "allowedValues": ["eachCompleteCircle"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "The ball does not mechanically guide the circular path."}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 16}},
+  "exercises": [{
+    "catalogID": "swiss-ball-stir-the-pot",
+    "name": "Swiss-Ball Stir the Pot",
+    "aliases": ["Plank Circles on Swiss Ball", "Swiss-Ball Stir-the-Pot", "Swiss-Ball Plank Circles", "Stability-Ball Plank Circles"],
+    "equipment": "stabilityBall", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 96,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}, {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "deltoidLateral", "role": "stabilizer"}, {"muscle": "deltoidPosterior", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"supportSurface": "bilateralForearmsOnBallAndToes", "elbowPosition": "flexedForearmSupport", "circleDriver": "bilateralForearmsTogether", "circlePath": "controlledCircularSupportShift", "circleDirection": "clockwiseAndCounterclockwise", "trunkMotion": "heldAgainstExtensionRotationAndLateralFlexion", "repetitionCounting": "eachCompleteCircle", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [],
+    "evidenceRefs": ["boxing-science-exercise-library", "youdas-2018-fitness-ball-plank", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine", "seth-2019-shoulder-work", "arnold-2010-lower-limb"],
+    "execution": {"startingPosition": "Place both forearms on a stability ball with elbows below the shoulders, extend both legs to the toes, and form a straight forearm plank.", "movement": "Move both forearms together to roll the ball through one controlled circular path while the trunk stays aligned.", "endpoint": "Complete the circle without letting the low back sag, the hips pike, or the torso turn.", "returnPhase": "Pass through the starting point to complete one repetition, and perform equal clockwise and counterclockwise circles.", "controlledJoints": "Keep the elbows flexed in support while the shoulders guide the ball and the spine resists extension, rotation, and side bending.", "supportAndPosture": "Maintain pressure through both forearms and both feet with the glutes engaged and the head, trunk, and legs aligned.", "disqualifyingCompensations": ["Rolling only forward and backward changes the movement into a stability-ball rollout.", "Resting the knees on the floor changes the reviewed support fixture.", "Moving one forearm at a time changes the two-arm circle driver."]}
+  }]
+}

@@ -213,6 +213,22 @@ class VerifyScenarioTests(unittest.TestCase):
         with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "from 0 through 5"):
             verify_scenario.validate_scenario_definition(scenario)
 
+    def test_type_text_accepts_ascii_and_rejects_empty_or_non_ascii_text(self) -> None:
+        scenario = {
+            "name": "type-search",
+            "launch": {},
+            "steps": [{"typeText": "Lateral Plank Walks"}],
+            "required": [],
+            "forbidden": [],
+        }
+        verify_scenario.validate_scenario_definition(scenario)
+
+        for invalid in ("", "Plank–Walk"):
+            scenario["steps"] = [{"typeText": invalid}]
+            with self.subTest(value=invalid):
+                with self.assertRaises(verify_scenario.ScenarioFailure):
+                    verify_scenario.validate_scenario_definition(scenario)
+
     def test_every_checked_in_scenario_is_valid(self) -> None:
         paths = sorted(verify_scenario.DEFAULT_SCENARIOS_DIR.glob("*.json"))
         self.assertGreater(len(paths), 0)

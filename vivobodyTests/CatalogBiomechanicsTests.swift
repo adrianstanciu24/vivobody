@@ -15,8 +15,8 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 262)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 107)
+        #expect(CatalogData.records.count == 312)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 141)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
@@ -412,7 +412,10 @@ struct CatalogBiomechanicsTests {
                 #expect(record.bodyweightFraction > 0 && record.bodyweightFraction <= 1)
             }
 
-            if record.equipment == .band || record.equipment == .abWheel || record.equipment == .suspensionTrainer {
+            if record.equipment == .band || record.equipment == .abWheel
+                || record.equipment == .stabilityBall
+                || record.equipment == .suspensionTrainer
+            {
                 #expect(record.loadMode == .nonComparable)
             }
 
@@ -577,7 +580,30 @@ struct CatalogBiomechanicsTests {
         ) == 0)
     }
 
-    @Test func medicineBallIsFirstClassNonComparablePowerEquipment() throws {
+    @Test func stabilityBallIsFirstClassNoResistanceEquipment() throws {
+        #expect(Equipment.stabilityBall.rawValue == "stabilityBall")
+        #expect(Equipment.stabilityBall.displayName == "Stability Ball")
+        #expect(Equipment.stabilityBall.requiresNonComparableLoad)
+        #expect(!ExerciseResistanceCapability.tracksResistance(
+            loadMode: .nonComparable,
+            equipment: .stabilityBall
+        ))
+        #expect(ExerciseResistanceCapability.normalizedWeight(
+            45,
+            loadMode: .nonComparable,
+            equipment: .stabilityBall
+        ) == 0)
+
+        let record = try #require(
+            CatalogData.record(forCatalogID: "swiss-ball-stir-the-pot")
+        )
+        #expect(record.equipment == .stabilityBall)
+        #expect(record.loadMode == .nonComparable)
+        #expect(record.defaultWeight == 0)
+        #expect(!ExerciseCatalogItem(record: record, createdAt: .distantPast).tracksResistance)
+    }
+
+    @Test func medicineBallIsFirstClassNonComparablePowerEquipment() {
         #expect(Equipment.medicineBall.rawValue == "medicineBall")
         #expect(Equipment.medicineBall.displayName == "Medicine Ball")
         #expect(!Equipment.medicineBall.requiresNonComparableLoad)

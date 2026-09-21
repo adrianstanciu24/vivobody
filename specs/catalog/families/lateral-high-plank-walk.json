@@ -1,0 +1,45 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "lateral-high-plank-walk",
+  "name": "Lateral High-Plank Walk",
+  "definition": "A dynamic bodyweight high-plank locomotion drill in which straight arms and wide-set feet maintain the prone bridge while the athlete shuffles sideways through the branded four-contact sequence, restores a stable high plank one position over, and trains both directions. The moving contacts are authored as support transitions rather than unsupported prime joint actions; the training-defining task is resisting spinal extension, rotation, and lateral flexion as the support base shifts. Abs and obliques are primary, and the upper- and lower-body support-chain roles are conservative anatomy-and-mechanics assignments. Upright lateral-band walks, forearm walking planks, bear crawls, push-ups, loaded drags, crossing steps, and forward or backward travel remain outside this contract.",
+  "evidenceRefs": ["boxing-science-exercise-library", "boxing-science-2021-boxer-warmup", "can-2024-high-plank-support-emg", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity", "arnold-2010-lower-limb"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal", "frontal", "transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["spine.extension", "spine.lateralFlexion", "spine.rotation"],
+    "primeActions": [],
+    "resistedActions": ["spine.extension", "spine.lateralFlexion", "spine.rotation"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "primary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMed"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs", "obliques"], "secondary": [], "stabilizer": ["serratus", "externalRotators", "triceps", "fingerFlexors", "extensorCarpiRadialis", "gluteMax", "gluteMed", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "startSupport", "valueType": "enum", "required": true, "description": "The repetition begins on both palms and toes.", "allowedValues": ["bilateralPalmsAndToes"]},
+    {"id": "elbowPosition", "valueType": "enum", "required": true, "description": "Both elbows remain extended during travel.", "allowedValues": ["extended"]},
+    {"id": "footSpacing", "valueType": "enum", "required": true, "description": "The feet begin slightly wider than hip width.", "allowedValues": ["slightlyWiderThanHipWidth"]},
+    {"id": "contactSequence", "valueType": "enum", "required": true, "description": "The lead leg moves first, followed by the opposite hand, then the lead hand and trailing leg.", "allowedValues": ["leadLegOppositeHandLeadHandTrailingLeg"]},
+    {"id": "travelDirection", "valueType": "enum", "required": true, "description": "Both lateral directions use mirrored contact sequences.", "allowedValues": ["bothDirectionsMirrored"]},
+    {"id": "trunkMotion", "valueType": "enum", "required": true, "description": "The trunk stays square against extension, rotation, and lateral flexion.", "allowedValues": ["heldAgainstExtensionRotationAndLateralFlexion"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "One four-contact shuffle that restores high plank counts once.", "allowedValues": ["eachFourContactLateralStep"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the lateral path."}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 16}},
+  "exercises": [{
+    "catalogID": "lateral-high-plank-walk",
+    "name": "Lateral High-Plank Walk",
+    "aliases": ["Lateral Plank Walk", "Lateral Plank Walks", "Sideways High-Plank Walk"],
+    "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 8, "searchPriority": 93,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"startSupport": "bilateralPalmsAndToes", "elbowPosition": "extended", "footSpacing": "slightlyWiderThanHipWidth", "contactSequence": "leadLegOppositeHandLeadHandTrailingLeg", "travelDirection": "bothDirectionsMirrored", "trunkMotion": "heldAgainstExtensionRotationAndLateralFlexion", "repetitionCounting": "eachFourContactLateralStep", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [],
+    "evidenceRefs": ["boxing-science-exercise-library", "boxing-science-2021-boxer-warmup", "can-2024-high-plank-support-emg", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity", "arnold-2010-lower-limb"],
+    "execution": {"startingPosition": "Set a high plank with straight arms, hands shoulder-width apart, and feet slightly wider than hip-width.", "movement": "To travel left, step the left leg left, move the right hand left, then move the left hand and right leg left to restore the wide high plank.", "endpoint": "Finish one position sideways with both palms and both feet grounded and the shoulders and hips still square.", "returnPhase": "Repeat the mirrored four-contact sequence to the right when training the opposite direction.", "controlledJoints": "Keep both elbows extended and resist low-back sag, trunk rotation, and side bending while contacts move.", "supportAndPosture": "Keep the glutes engaged and maintain a straight line from shoulders through hips while the support base travels.", "sideOrDirection": "Perform equal repetitions left and right; count each complete four-contact lateral step as one repetition.", "disqualifyingCompensations": ["Crossing the hands or feet changes the reviewed shuffle sequence.", "Dropping to the forearms changes the high-plank support fixture.", "Travelling forward or backward changes the exercise direction."]}
+  }]
+}

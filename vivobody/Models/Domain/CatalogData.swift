@@ -328,6 +328,8 @@ nonisolated enum CatalogData {
             throw ValidationError.comparableAbWheelLoad(record.catalogID)
         case .suspensionTrainer where record.loadMode != .nonComparable:
             throw ValidationError.comparableSuspensionTrainerLoad(record.catalogID)
+        case .stabilityBall where record.loadMode != .nonComparable:
+            throw ValidationError.comparableStabilityBallLoad(record.catalogID)
         default:
             break
         }
@@ -421,6 +423,7 @@ nonisolated enum CatalogData {
         case comparableBandLoad(String)
         case comparableAbWheelLoad(String)
         case comparableSuspensionTrainerLoad(String)
+        case comparableStabilityBallLoad(String)
         case invalidMechanicPattern(String)
         case invalidTrainingRole(String)
         case emptyInvolvement(String)
@@ -452,6 +455,7 @@ nonisolated enum CatalogData {
             case let .comparableBandLoad(id): "band record '\(id)' claims a comparable load"
             case let .comparableAbWheelLoad(id): "ab-wheel record '\(id)' claims a comparable load"
             case let .comparableSuspensionTrainerLoad(id): "suspension-trainer record '\(id)' claims a comparable load"
+            case let .comparableStabilityBallLoad(id): "stability-ball record '\(id)' claims a comparable load"
             case let .invalidMechanicPattern(id): "record '\(id)' has mechanic-incompatible movement pattern"
             case let .invalidTrainingRole(id): "record '\(id)' has a training role incompatible with its compound pattern"
             case let .emptyInvolvement(id): "record '\(id)' has no muscle involvement"

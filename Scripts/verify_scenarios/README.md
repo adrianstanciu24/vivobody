@@ -90,6 +90,8 @@ framework chatter or user-owned values.
 - `swipe`: perform `count` blind swipes in the declared `direction` with no
   selector. Use it to nudge content clear of the tab bar before tapping a
   row that `scrollTo` leaves half-covered at the screen edge.
+- `typeText`: type a non-empty US-ASCII string into the currently focused
+  field. Tap the field semantically before using it.
 - `assert`: poll `required` and `forbidden` selector arrays together.
 - `relaunch`: terminate and launch again with a new launch object. State is
   preserved unless `reset` is true.

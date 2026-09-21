@@ -1,0 +1,46 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "banded-high-plank-clockface-tap",
+  "name": "Banded High-Plank Clockface Tap",
+  "definition": "A dynamic high-plank drill with a loop band outside the hands in which one hand at a time taps three clockface positions against elastic resistance, returns to center after every tap, and then repeats the mirrored sequence on the other side. The Boxing Science fixture owns the outside-of-hands band interface; Schiff's professional technique standard supports right-hand taps toward one, three, and five o'clock and mirrored left-hand taps toward eleven, nine, and seven. In prone high plank, the moving shoulder traverses flexion, horizontal abduction, and extension paths while the three-point support challenges anti-extension and anti-rotation control. Categorical roles are evidence-and-mechanics assignments rather than a quantitative recruitment ranking. Wrist-loop scapular clocks, unbanded taps, floor slides, shoulder taps, static holds, push-ups, and continuous sweeps remain outside this contract.",
+  "evidenceRefs": ["boxing-science-exercise-library", "boxing-science-2021-boxer-warmup", "pfp-2022-tall-plank-clock", "can-2024-high-plank-support-emg", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity", "arnold-2010-lower-limb"],
+  "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal", "transverse"]},
+  "groupPolicy": {"default": "core", "allowed": ["core"]},
+  "allowed": {"equipment": ["band"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "movementSignature": {
+    "planeBasisActions": ["shoulder.flexion", "shoulder.horizontalAbduction"],
+    "primeActions": ["shoulder.flexion", "shoulder.extension", "shoulder.horizontalAbduction"],
+    "resistedActions": ["spine.extension", "spine.rotation"],
+    "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
+    "stabilityDemands": ["scapula", "shoulder", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"]
+  },
+  "musclePolicy": {
+    "requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "primary"}, {"anyOf": ["deltoidAnterior"], "minimumRole": "secondary"}, {"anyOf": ["deltoidPosterior"], "minimumRole": "secondary"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["externalRotators"], "minimumRole": "stabilizer"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"}, {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}, {"anyOf": ["gluteMed"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}, {"anyOf": ["soleus"], "minimumRole": "stabilizer"}],
+    "allowedByRole": {"primary": ["abs", "obliques"], "secondary": ["deltoidAnterior", "deltoidPosterior"], "stabilizer": ["serratus", "externalRotators", "triceps", "fingerFlexors", "extensorCarpiRadialis", "gluteMax", "gluteMed", "vasti", "soleus"]}
+  },
+  "variantAxes": [
+    {"id": "startSupport", "valueType": "enum", "required": true, "description": "The repetition begins on both palms and toes.", "allowedValues": ["bilateralPalmsAndToes"]},
+    {"id": "tapSupport", "valueType": "enum", "required": true, "description": "One palm and both feet support each tap.", "allowedValues": ["singlePalmAndBothFeet"]},
+    {"id": "bandInterface", "valueType": "enum", "required": true, "description": "The loop sits outside the hands rather than around the wrists.", "allowedValues": ["loopOutsideHands"]},
+    {"id": "rightHandPositions", "valueType": "enum", "required": true, "description": "The right hand taps the forward-diagonal, lateral, and rearward-diagonal clock positions.", "allowedValues": ["oneThreeAndFiveOClock"]},
+    {"id": "leftHandPositions", "valueType": "enum", "required": true, "description": "The left hand uses the mirrored clock positions.", "allowedValues": ["elevenNineAndSevenOClock"]},
+    {"id": "tapReturn", "valueType": "enum", "required": true, "description": "The moving hand returns to its centered plank position after every tap.", "allowedValues": ["centerAfterEveryTap"]},
+    {"id": "trunkMotion", "valueType": "enum", "required": true, "description": "The shoulders and hips remain square against extension and rotation.", "allowedValues": ["heldAgainstExtensionAndRotation"]},
+    {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "Each resisted tap and return counts once.", "allowedValues": ["eachTapAndReturn"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "The elastic loop does not constrain a guided hand path."}
+  ],
+  "exerciseRules": [],
+  "recommended": {"defaultReps": {"minimum": 6, "maximum": 18}},
+  "exercises": [{
+    "catalogID": "banded-high-plank-clockface-tap",
+    "name": "Banded High-Plank Clockface Tap",
+    "aliases": ["Plank Clockface with Bands", "Banded Plank Clockface", "Plank Clockface"],
+    "equipment": "band", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 12, "searchPriority": 95,
+    "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "deltoidPosterior", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
+    "variant": {"startSupport": "bilateralPalmsAndToes", "tapSupport": "singlePalmAndBothFeet", "bandInterface": "loopOutsideHands", "rightHandPositions": "oneThreeAndFiveOClock", "leftHandPositions": "elevenNineAndSevenOClock", "tapReturn": "centerAfterEveryTap", "trunkMotion": "heldAgainstExtensionAndRotation", "repetitionCounting": "eachTapAndReturn", "fixedPath": false},
+    "additionalPrimeActions": [], "additionalStabilityDemands": [],
+    "evidenceRefs": ["boxing-science-exercise-library", "boxing-science-2021-boxer-warmup", "pfp-2022-tall-plank-clock", "can-2024-high-plank-support-emg", "lehman-2005-stable-prone-bridge", "christophy-2012-lumbar-spine", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity", "arnold-2010-lower-limb"],
+    "execution": {"startingPosition": "Place a light loop outside both hands and set a high plank with palms below the shoulders and feet wide enough to keep the trunk square.", "movement": "Lift the right hand against the band to tap toward one o'clock, return to center, then tap three and five o'clock with a center return after each; repeat the mirrored sequence with the left hand.", "endpoint": "Reach each clock position without turning the shoulders or hips or shifting the supporting hand.", "returnPhase": "Return the moving hand below its shoulder after every tap before beginning the next position.", "controlledJoints": "Keep the supporting elbow extended while the moving shoulder follows the clock path and the spine resists extension and rotation.", "supportAndPosture": "Press the supporting palm and both feet into the floor, keep the glutes engaged, and maintain one straight line through the trunk and legs.", "sideOrDirection": "Use one, three, and five o'clock with the right hand and eleven, nine, and seven with the left; count each tap and center return as one repetition and program a multiple of six for complete mirrored sequences.", "disqualifyingCompensations": ["Placing the loop around the wrists changes the reviewed Boxing Science band interface.", "Sweeping continuously between clock positions removes the required center return.", "Rotating the hips or shoulders toward the moving hand loses the anti-rotation task."]}
+  }]
+}

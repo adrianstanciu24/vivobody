@@ -115,12 +115,12 @@ class RequestedCatalogGapTests(unittest.TestCase):
                        | ROTATIONAL_STRENGTH_RECORD_IDS
                        | CORE_STRENGTH_EXPANSION_RECORD_IDS
                    )]
-        self.assertEqual(len(records), 254)
+        self.assertEqual(len(records), 259)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()
         # Reviewed runtime after later catalog additions; source-only support
         # metadata may change without changing product records or muscle credit.
         self.assertEqual(hashlib.sha256(encoded).hexdigest(),
-                         "918c60bc17a9f3a7fdbd3d2841afb376c2e6492c51e24466e28710fab61746e0")
+                         "ff1b2becb43daf2421746a680ade7d8f94f850eab06acecd497ae1d6be585cdc")
 
     def test_unloaded_splits_do_not_credit_an_implement_hold(self):
         for catalog_id in ("bodyweight-split-squat", "bodyweight-bulgarian-split-squat"):

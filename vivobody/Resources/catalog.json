@@ -1178,6 +1178,135 @@
     ]
   },
   {
+    "familyID": "banded-high-plank-clockface-tap",
+    "familyName": "Banded High-Plank Clockface Tap",
+    "movementActions": [
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "banded-high-plank-clockface-tap",
+    "name": "Banded High-Plank Clockface Tap",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Plank Clockface with Bands",
+      "Banded Plank Clockface",
+      "Plank Clockface"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Place a light loop outside both hands and set a high plank with palms below the shoulders and feet wide enough to keep the trunk square.",
+      "movement": "Lift the right hand against the band to tap toward one o'clock, return to center, then tap three and five o'clock with a center return after each; repeat the mirrored sequence with the left hand.",
+      "endpoint": "Reach each clock position without turning the shoulders or hips or shifting the supporting hand.",
+      "returnPhase": "Return the moving hand below its shoulder after every tap before beginning the next position.",
+      "controlledJoints": "Keep the supporting elbow extended while the moving shoulder follows the clock path and the spine resists extension and rotation.",
+      "supportAndPosture": "Press the supporting palm and both feet into the floor, keep the glutes engaged, and maintain one straight line through the trunk and legs.",
+      "disqualifyingCompensations": [
+        "Placing the loop around the wrists changes the reviewed Boxing Science band interface.",
+        "Sweeping continuously between clock positions removes the required center return.",
+        "Rotating the hips or shoulders toward the moving hand loses the anti-rotation task."
+      ],
+      "sideOrDirection": "Use one, three, and five o'clock with the right hand and eleven, nine, and seven with the left; count each tap and center return as one repetition and program a multiple of six for complete mirrored sequences."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "belt-loaded-machine-glute-bridge",
     "familyName": "Belt-Loaded Machine Glute Bridge",
     "movementActions": [
@@ -8857,6 +8986,150 @@
     ]
   },
   {
+    "familyID": "high-plank-contralateral-knee-touch",
+    "familyName": "High-Plank Contralateral Knee Touch",
+    "movementActions": [
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "alternating-high-plank-contralateral-knee-touch",
+    "name": "Alternating High-Plank Contralateral Knee Touch",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Plank Row w/ Knee Touch",
+      "Plank Row with Knee Touch",
+      "Plank with Knee Touch",
+      "Contralateral Plank Knee Touch"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set a high plank with both palms below the shoulders and both feet about hip-width apart.",
+      "movement": "Lift one hand and the opposite foot together, bend that knee forward toward hip level, and bring the free hand toward it while keeping the trunk square.",
+      "endpoint": "Touch the free hand to the opposite knee at about hip level without twisting or sagging.",
+      "returnPhase": "Return the hand and foot to the floor to restore four-point high plank before changing sides.",
+      "controlledJoints": "Keep the supporting elbow and grounded knee extended while the moving hip and knee flex under control.",
+      "supportAndPosture": "Balance on the remaining diagonal palm-and-foot pair with the shoulders and hips parallel to the floor.",
+      "disqualifyingCompensations": [
+        "Reaching to the toe changes the source-selected knee endpoint.",
+        "Keeping both hands down turns the movement into a mountain-climber variation.",
+        "Opening the hips or shoulders changes the anti-rotation task."
+      ],
+      "sideOrDirection": "Alternate contralateral pairs; count each knee touch and four-point return as one repetition and use an even total."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "secondary"
+      },
+      {
+        "muscle": "sartorius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "high-plank-crossbody-drag",
     "familyName": "High-Plank Crossbody Drag",
     "movementActions": [
@@ -9151,6 +9424,129 @@
       },
       {
         "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "high-plank-shoulder-tap",
+    "familyName": "High-Plank Shoulder Tap",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "alternating-high-plank-shoulder-tap",
+    "name": "Alternating High-Plank Shoulder Tap",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 16,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Plank Row",
+      "High-Plank Shoulder Tap",
+      "Plank Shoulder Tap"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set a high plank with both palms below the shoulders and the feet about hip-width apart; widen the feet only as needed to keep the body still.",
+      "movement": "Shift onto one palm and both feet, then slowly lift the free hand across the chest toward the opposite shoulder.",
+      "endpoint": "Touch the opposite shoulder without turning the shoulders or hips.",
+      "returnPhase": "Place the hand back below its shoulder before repeating with the other arm.",
+      "controlledJoints": "Keep the supporting elbow extended and resist low-back sag and trunk rotation throughout the touch.",
+      "supportAndPosture": "Press the supporting palm and both feet into the floor while maintaining one straight line through the trunk and legs.",
+      "disqualifyingCompensations": [
+        "Rowing a dumbbell changes the exercise into a renegade-row fixture.",
+        "Rotating the hips or shoulders toward the free arm loses the anti-rotation task.",
+        "Adding a push-up changes the reviewed repetition."
+      ],
+      "sideOrDirection": "Alternate arms; count each shoulder touch and return as one repetition and use an even total."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
         "role": "stabilizer"
       },
       {
@@ -13820,6 +14216,116 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "lateral-high-plank-walk",
+    "familyName": "Lateral High-Plank Walk",
+    "movementActions": [
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.lateralFlexion",
+        "name": "Spinal lateral flexion",
+        "plane": "frontal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "lateral-high-plank-walk",
+    "name": "Lateral High-Plank Walk",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Lateral Plank Walk",
+      "Lateral Plank Walks",
+      "Sideways High-Plank Walk"
+    ],
+    "searchPriority": 93,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set a high plank with straight arms, hands shoulder-width apart, and feet slightly wider than hip-width.",
+      "movement": "To travel left, step the left leg left, move the right hand left, then move the left hand and right leg left to restore the wide high plank.",
+      "endpoint": "Finish one position sideways with both palms and both feet grounded and the shoulders and hips still square.",
+      "returnPhase": "Repeat the mirrored four-contact sequence to the right when training the opposite direction.",
+      "controlledJoints": "Keep both elbows extended and resist low-back sag, trunk rotation, and side bending while contacts move.",
+      "supportAndPosture": "Keep the glutes engaged and maintain a straight line from shoulders through hips while the support base travels.",
+      "disqualifyingCompensations": [
+        "Crossing the hands or feet changes the reviewed shuffle sequence.",
+        "Dropping to the forearms changes the high-plank support fixture.",
+        "Travelling forward or backward changes the exercise direction."
+      ],
+      "sideOrDirection": "Perform equal repetitions left and right; count each complete four-contact lateral step as one repetition."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
         "role": "stabilizer"
       },
       {
@@ -24704,6 +25210,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
+      "Unilateral Farmer Walk",
+      "Unilateral Farmer Walks",
       "Unilateral Dumbbell Suitcase Carry",
       "Single-Dumbbell Suitcase Walk"
     ],
@@ -26073,6 +26581,120 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "swiss-ball-stir-the-pot",
+    "familyName": "Swiss-Ball Stir the Pot",
+    "movementActions": [
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.lateralFlexion",
+        "name": "Spinal lateral flexion",
+        "plane": "frontal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "swiss-ball-stir-the-pot",
+    "name": "Swiss-Ball Stir the Pot",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "stabilityBall",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal",
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Plank Circles on Swiss Ball",
+      "Swiss-Ball Stir-the-Pot",
+      "Swiss-Ball Plank Circles",
+      "Stability-Ball Plank Circles"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Place both forearms on a stability ball with elbows below the shoulders, extend both legs to the toes, and form a straight forearm plank.",
+      "movement": "Move both forearms together to roll the ball through one controlled circular path while the trunk stays aligned.",
+      "endpoint": "Complete the circle without letting the low back sag, the hips pike, or the torso turn.",
+      "returnPhase": "Pass through the starting point to complete one repetition, and perform equal clockwise and counterclockwise circles.",
+      "controlledJoints": "Keep the elbows flexed in support while the shoulders guide the ball and the spine resists extension, rotation, and side bending.",
+      "supportAndPosture": "Maintain pressure through both forearms and both feet with the glutes engaged and the head, trunk, and legs aligned.",
+      "disqualifyingCompensations": [
+        "Rolling only forward and backward changes the movement into a stability-ball rollout.",
+        "Resting the knees on the floor changes the reviewed support fixture.",
+        "Moving one forearm at a time changes the two-arm circle driver."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
         "role": "stabilizer"
       },
       {

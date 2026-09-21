@@ -1,0 +1,20 @@
+{
+  "name": "catalog-lateral-plank-walk-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "light"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterCore"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Lateral High-Plank Walk,"}, "direction": "up", "maxSwipes": 100}},
+    {"tap": {"labelRegex": "^Lateral High-Plank Walk,"}},
+    {"wait": {"label": "STRENGTH · REPS"}}
+  ],
+  "required": [
+    {"label": "Lateral High-Plank Walk"},
+    {"labelContains": "Muscles used by Lateral High-Plank Walk"}
+  ],
+  "forbidden": []
+}

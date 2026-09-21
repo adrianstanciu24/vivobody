@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 136 |
-| Exercises | 307 |
+| Reviewed families | 141 |
+| Exercises | 312 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 349 |
+| Evidence sources | 354 |
 
 ## Family roster
 
@@ -30,6 +30,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [anti-lateral-flexion](families/anti-lateral-flexion.json) | 2 |
 | [anti-rotation-press](families/anti-rotation-press.json) | 1 |
 | [anti-rotation](families/anti-rotation.json) | 1 |
+| [banded-high-plank-clockface-tap](families/banded-high-plank-clockface-tap.json) | 1 |
 | [belt-loaded-machine-glute-bridge](families/belt-loaded-machine-glute-bridge.json) | 1 |
 | [bicycle-crunch](families/bicycle-crunch.json) | 1 |
 | [bilateral-squat](families/bilateral-squat.json) | 7 |
@@ -59,8 +60,10 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hang-power-clean](families/hang-power-clean.json) | 1 |
 | [hang-power-snatch](families/hang-power-snatch.json) | 1 |
 | [hanging-leg-raise](families/hanging-leg-raise.json) | 2 |
+| [high-plank-contralateral-knee-touch](families/high-plank-contralateral-knee-touch.json) | 1 |
 | [high-plank-crossbody-drag](families/high-plank-crossbody-drag.json) | 2 |
 | [high-plank-rotation](families/high-plank-rotation.json) | 1 |
+| [high-plank-shoulder-tap](families/high-plank-shoulder-tap.json) | 1 |
 | [hip-abduction](families/hip-abduction.json) | 4 |
 | [hip-adduction](families/hip-adduction.json) | 3 |
 | [hip-extension](families/hip-extension.json) | 3 |
@@ -82,6 +85,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [landmine-press](families/landmine-press.json) | 2 |
 | [landmine-rotation](families/landmine-rotation.json) | 1 |
 | [lateral-band-walk](families/lateral-band-walk.json) | 1 |
+| [lateral-high-plank-walk](families/lateral-high-plank-walk.json) | 1 |
 | [lateral-lunge](families/lateral-lunge.json) | 2 |
 | [machine-hack-squat](families/machine-hack-squat.json) | 1 |
 | [medicine-ball-carioca-throw](families/medicine-ball-carioca-throw.json) | 1 |
@@ -146,6 +150,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [suspension-mountain-climber](families/suspension-mountain-climber.json) | 1 |
 | [suspension-overhead-y-raise](families/suspension-overhead-y-raise.json) | 1 |
 | [suspension-pike](families/suspension-pike.json) | 1 |
+| [swiss-ball-stir-the-pot](families/swiss-ball-stir-the-pot.json) | 1 |
 | [thruster](families/thruster.json) | 1 |
 | [trap-bar-deadlift](families/trap-bar-deadlift.json) | 2 |
 | [upper-arm-pad-chest-fly](families/upper-arm-pad-chest-fly.json) | 1 |

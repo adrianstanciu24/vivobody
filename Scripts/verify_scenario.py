@@ -732,6 +732,17 @@ class ScenarioRunner:
             ])
             time.sleep(POLL_INTERVAL)
 
+    def type_text(self, value: str) -> None:
+        self.log(f"TYPE {value!r}")
+        self.command([
+            self.baguette,
+            "type",
+            "--udid",
+            self.udid,
+            "--text",
+            value,
+        ])
+
     def run_step(self, index: int, step: Mapping[str, Any]) -> None:
         if len(step) != 1:
             raise ScenarioFailure(f"Step {index} must contain exactly one action.")
@@ -767,6 +778,12 @@ class ScenarioRunner:
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} swipe payload must be an object.")
             self.swipe(payload)
+        elif action == "typeText":
+            if not isinstance(payload, str) or not payload:
+                raise ScenarioFailure(
+                    f"Step {index} typeText payload must be a non-empty string."
+                )
+            self.type_text(payload)
         elif action == "assert":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} assert payload must be an object.")
@@ -1034,6 +1051,15 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
             swipe_count = payload.get("count", 1)
             if not isinstance(swipe_count, int) or isinstance(swipe_count, bool) or swipe_count < 1:
                 raise ScenarioFailure(f"Step {index} swipe.count must be a positive integer.")
+        elif action == "typeText":
+            if not isinstance(payload, str) or not payload:
+                raise ScenarioFailure(
+                    f"Step {index} typeText payload must be a non-empty string."
+                )
+            if not payload.isascii():
+                raise ScenarioFailure(
+                    f"Step {index} typeText payload must contain US-ASCII text."
+                )
         else:
             raise ScenarioFailure(f"Step {index} uses unsupported action {action!r}.")
 

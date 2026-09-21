@@ -4,7 +4,7 @@
   "id": "medicine-ball-straight-leg-sit-up",
   "name": "Medicine-Ball Straight-Leg Sit-Up",
   "definition": "A loaded straight-leg sit-up performed with one medicine ball held firmly against the chest. Both legs stay extended and press against the floor while the torso lowers slowly with a slight upper-back curl held as posture, then returns to upright sitting through hip flexion. The abdominal wall resists further spinal extension as the torso lowers; the source does not establish dynamic spinal flexion as the repetition driver. The Boxing Science exercise-library fixture owns the chest-held implement, straight legs, slow descent, and four-to-five-second repetition. Abdominal and hip-flexor roles combine that fixture with broader sit-up evidence; upper-limb and grip roles are bounded anatomy-and-mechanics inferences rather than exact-fixture recruitment measurements. Straight-arm loaded sit-ups, bodyweight sit-ups, bent-knee or anchored sit-ups, V-ups, throws, rotations, and kipping repetitions remain outside this family.",
-  "evidenceRefs": ["boxing-science-exercise-library-med-ball-sit-up", "andersson-1997-abdominal-hip-flexor-exercises", "cordo-2003-straight-leg-sit-up", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity"],
+  "evidenceRefs": ["boxing-science-exercise-library", "andersson-1997-abdominal-hip-flexor-exercises", "cordo-2003-straight-leg-sit-up", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity"],
   "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
   "groupPolicy": {"default": "core", "allowed": ["core"]},
   "allowed": {"equipment": ["medicineBall"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
@@ -50,7 +50,7 @@
     "variant": {"legConfiguration": "straightTogetherPressedToFloor", "footAnchor": "none", "spineMotion": "slightUpperFlexionMaintained", "hipMotion": "extendsThenFlexes", "endpoint": "uprightSitting", "armTask": "medicineBallHeldAtChest", "loadAccounting": "totalImplement", "tempo": "fourToFiveSecondsPerRep", "fixedPath": false},
     "additionalPrimeActions": [],
     "additionalStabilityDemands": [],
-    "evidenceRefs": ["boxing-science-exercise-library-med-ball-sit-up", "andersson-1997-abdominal-hip-flexor-exercises", "cordo-2003-straight-leg-sit-up", "holzbaur-2005-upper-extremity"],
+    "evidenceRefs": ["boxing-science-exercise-library", "andersson-1997-abdominal-hip-flexor-exercises", "cordo-2003-straight-leg-sit-up", "holzbaur-2005-upper-extremity"],
     "execution": {
       "startingPosition": "Sit upright with both legs straight and together, feet unanchored, and one medicine ball held tightly against the chest. Log the ball's full mass once.",
       "movement": "Lower the torso slowly while keeping tension against the ball and maintaining a slight curl through the upper back.",
