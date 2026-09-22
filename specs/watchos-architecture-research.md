@@ -284,8 +284,8 @@ differs. Domain models (e.g., workout templates) can be shared the same way.
 ### Current versions
 - **watchOS 26** shipped (requires Xcode 26 SDK). Apple Watch Series 11 is the
   latest hardware (Sept 2025). watchOS 27 is in beta (Xcode 27, WWDC 2026).
-- The vivobody project uses Xcode 17 / iOS 26.5 per AGENTS.md, so the matching
-  watchOS SDK is watchOS 26.x.
+- The Vivobody verification workflow uses Xcode 27 / iOS 27, so the matching
+  watchOS SDK is watchOS 27.x.
 
 ### Minimum watchOS version recommendations
 - **Single-target architecture requires watchOS 7+** (the practical floor).

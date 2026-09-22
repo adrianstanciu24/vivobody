@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Records a deterministic four-beat Vivobody demo from an iPhone 17 Pro
+# Records a deterministic four-beat Vivobody demo from an iPhone 18 Pro
 # simulator, then turns the captures into a web-ready, silent H.264 loop.
 
 set -euo pipefail
@@ -36,14 +36,14 @@ fi
 if [[ -n "${SIMULATOR_UDID:-}" ]]; then
   UDID="$SIMULATOR_UDID"
 else
-  UDID="$($BAGUETTE_BIN list --json | jq -r '.running[] | select(.name == "iPhone 17 Pro") | .udid' | head -n 1)"
+  UDID="$($BAGUETTE_BIN list --json | jq -r '.running[] | select(.name == "iPhone 18 Pro") | .udid' | head -n 1)"
   if [[ -z "$UDID" ]]; then
     UDID="$($BAGUETTE_BIN list --json | jq -r '.running[0].udid // empty')"
   fi
 fi
 
 if [[ -z "$UDID" ]]; then
-  echo "Boot an iPhone 17 Pro simulator first (Scripts/verify.sh will do this)." >&2
+  echo "Boot an iPhone 18 Pro simulator first (Scripts/verify.sh will do this)." >&2
   exit 1
 fi
 

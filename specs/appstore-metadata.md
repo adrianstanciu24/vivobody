@@ -127,6 +127,6 @@ purchase review screenshot is needed. The exact price is not yet selected.
 7. Upload the build: Xcode > Product > Archive > Distribute App >
    App Store Connect (or `xcodebuild -exportArchive`).
 8. Add screenshots (6.9" required; candidates in .verify/ or shoot via
-   `SIMULATOR_NAME='iPhone 17 Pro Max' LAUNCH_ARGS='--seed-showcase' Scripts/verify.sh`).
+   `SIMULATOR_NAME='iPhone 18 Pro Max' LAUNCH_ARGS='--seed-showcase' Scripts/verify.sh`).
 9. Paste description/keywords/promo text and the review notes, then submit.
 10. Recommended: TestFlight the build on your own device first.

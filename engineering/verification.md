@@ -146,8 +146,8 @@ TAB=insights Scripts/verify.sh
 CAPTURE_ONLY=1 Scripts/verify.sh
 CLEAN_BUILD=1 Scripts/verify.sh
 RESET_STATE=0 Scripts/verify.sh
-SIMULATOR_NAME='iPhone 16e' Scripts/verify.sh
-SIMULATOR_OS=26.2 Scripts/verify.sh
+SIMULATOR_NAME='iPhone 17e' Scripts/verify.sh
+SIMULATOR_OS=27.0 Scripts/verify.sh
 LAUNCH_ARGS='--seed-history' Scripts/verify.sh
 RESET_STATE=0 LAUNCH_ARGS='-debug' TAB=library Scripts/verify.sh
 SCENARIO=active-restoration Scripts/verify.sh
@@ -248,12 +248,12 @@ run these commands unless the user explicitly requests them.
 ```bash
 # Targeted suite, preferred
 xcodebuild -scheme vivobody \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+  -destination 'platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0' \
   test -only-testing:vivobodyTests/TrainingLoadTests
 
 # SchemaV1 store reopen contract
 xcodebuild -scheme vivobody \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+  -destination 'platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0' \
   -parallel-testing-enabled NO \
   test -only-testing:vivobodyTests/PersistenceStoreContractTests
 

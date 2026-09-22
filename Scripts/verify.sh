@@ -11,18 +11,18 @@
 #   CLEAN_BUILD=1 Scripts/verify.sh  # discard the build cache before building
 #   RESET_STATE=0 Scripts/verify.sh  # preserve the simulator's app data
 #   SCENARIO=active-restoration Scripts/verify.sh
-#   SIMULATOR_NAME='iPhone 16e' Scripts/verify.sh
-#   SIMULATOR_OS=26.2 Scripts/verify.sh
+#   SIMULATOR_NAME='iPhone 17e' Scripts/verify.sh
+#   SIMULATOR_OS=27.0 Scripts/verify.sh
 #
-# Requires: baguette (brew install baguette), Xcode 17+ with iOS 26.x simulators.
+# Requires: baguette (brew install baguette), Xcode 27+ with an iOS 27 simulator.
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-SIMULATOR_NAME="${SIMULATOR_NAME:-iPhone 17 Pro}"
-SIMULATOR_OS="${SIMULATOR_OS:-26.5}"
+SIMULATOR_NAME="${SIMULATOR_NAME:-iPhone 18 Pro}"
+SIMULATOR_OS="${SIMULATOR_OS:-27.0}"
 SCHEME="vivobody"
 BUNDLE_ID="astanciu.vivobody.app"
 OUT_DIR="$ROOT/.verify"
