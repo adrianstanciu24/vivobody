@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "vertical-press",
   "name": "Vertical Press",
-  "definition": "A shoulder-oriented compound press whose strict concentric phase elevates the humerus in a front or scapular path through shoulder flexion and abduction, scapular upward rotation and posterior tilt, and elbow extension. Open-chain presses move an external implement 75 to 90 degrees superior to horizontal; the reviewed closed-chain branch is a strict wall-supported handstand push-up that moves the body between a fifteen-centimeter head target and full elbow-and-shoulder extension. Li et al. directly establish its inversion-stand spacing, feet-only wall contact, forty-second maximum-repetition test, and no-waist-collapse or bent-leg validity rules, but do not measure joint, scapular, or muscle actions. The existing vertical-press signature and mover hierarchy are therefore an explicit mechanics transfer, while Kinoshita et al. support only the static handstand stability environment. The five-repetition product seed is not a source prescription. High-incline, landmine, rotating Arnold, behind-neck, leg-driven push-press or jerk, cable, pike, freestanding, parallettes, deficit, and kipping variants remain outside this family. The reviewed external-load fixtures additionally credit finger flexors, radial and ulnar wrist extensors, and finger extensors as distinct secure-grip and wrist-stiffness co-contributors. Forman measured these regions during combined grip and wrist-force tasks; transfer to overhead pressing is categorical anatomy and mechanics, not press-specific EMG or resistance against gravity by every contributor. Palm loading, bell-on-forearm contact, rails, and levers can alter or reduce wrist demand without immobilizing the authored hand grip; van Elk documents reduced extensor activity with extension assistance. No equal involvement, extensor dominance, whole-aggregate loading, or measured adaptation is claimed. Source-unreported grip orientation remains unreported. The separate handstand fixture retains its existing reviewed roster. Radial and ulnar wrist flexors also receive stabilizer roles as distinct hand/wrist-control co-contributors in the eleven reviewed external-load fixtures. Padovan directly measured flexor carpi ulnaris in standing bilateral barbell and standard-kettlebell overhead presses, including bells contacting the forearms; radial wrist flexors were not measured. Transfer to seated, dumbbell, unilateral kettlebell, rail-guided, and lever-guided fixtures is categorical anatomy and mechanics. Torso support and guided paths do not immobilize the authored wrist grip, but may change or reduce demand. Source-unreported grip orientation and wrist moments remain unreported. Forman directly measured both wrist flexors in supported grip/wrist-force tasks and shows direction-dependent activity that can be low. No free-weight equivalence, uniform recruitment, dynamic wrist flexion, or measured adaptation is claimed; handstand roles remain unchanged.",
+  "definition": "A shoulder-oriented compound press whose strict concentric phase elevates the humerus in a front or scapular path through shoulder flexion and abduction, scapular upward rotation and posterior tilt, and elbow extension. Open-chain presses move an external implement 75 to 90 degrees superior to horizontal; the reviewed closed-chain branch is a strict wall-supported handstand push-up that moves the body between a fifteen-centimeter head target and full elbow-and-shoulder extension. Li et al. directly establish its inversion-stand spacing, feet-only wall contact, forty-second maximum-repetition test, and no-waist-collapse or bent-leg validity rules, but do not measure joint, scapular, or muscle actions. The existing vertical-press signature and mover hierarchy are therefore an explicit mechanics transfer, while Kinoshita et al. support only the static handstand stability environment. The five-repetition product seed is not a source prescription. High-incline, landmine, rotating Arnold, behind-neck, leg-driven push-press or jerk, cable, pike, freestanding, parallettes, deficit, and kipping variants remain outside this family. The reviewed external-load fixtures additionally credit finger flexors, radial and ulnar wrist extensors, and finger extensors as distinct secure-grip and wrist-stiffness co-contributors. Forman measured these regions during combined grip and wrist-force tasks; transfer to overhead pressing is categorical anatomy and mechanics, not press-specific EMG or resistance against gravity by every contributor. Palm loading, bell-on-forearm contact, rails, and levers can alter or reduce wrist demand without immobilizing the authored hand grip; van Elk documents reduced extensor activity with extension assistance. No equal involvement, extensor dominance, whole-aggregate loading, or measured adaptation is claimed. Source-unreported grip orientation remains unreported. The separate handstand fixture retains its existing reviewed roster. Radial and ulnar wrist flexors also receive stabilizer roles as distinct hand/wrist-control co-contributors in the eleven reviewed external-load fixtures. Padovan directly measured flexor carpi ulnaris in standing bilateral barbell and standard-kettlebell overhead presses, including bells contacting the forearms; radial wrist flexors were not measured. Transfer to seated, dumbbell, unilateral kettlebell, rail-guided, and lever-guided fixtures is categorical anatomy and mechanics. Torso support and guided paths do not immobilize the authored wrist grip, but may change or reduce demand. Source-unreported grip orientation and wrist moments remain unreported. Forman directly measured both wrist flexors in supported grip/wrist-force tasks and shows direction-dependent activity that can be low. No free-weight equivalence, uniform recruitment, dynamic wrist flexion, or measured adaptation is claimed; handstand roles remain unchanged. The half-kneeling single-arm dumbbell fixture uses the same strict overhead action set from the working-side knee and shin with the opposite foot forward, retains a neutral grip from shoulder to lockout, and excludes leg drive, trunk extension, and trunk rotation.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "balsalobre-fernandez-2018-smith-military-press",
@@ -17,7 +17,9 @@
     "saeterbakken-2013-shoulder-press-position",
     "seth-2019-shoulder-work",
     "forman-2019-handgrip-wrist-force",
-    "van-elk-2004-grip-extension-assistance"
+    "van-elk-2004-grip-extension-assistance",
+    "opex-2020-half-kneeling-single-arm-dumbbell-press",
+    "boxing-science-vertical-press-course"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -183,11 +185,12 @@
       "id": "bodyPosition",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the press is performed standing, seated, or inverted.",
+      "description": "Whether the press is performed standing, seated, half-kneeling, or inverted.",
       "allowedValues": [
         "standing",
         "seated",
-        "inverted"
+        "inverted",
+        "halfKneeling"
       ]
     },
     {
@@ -223,7 +226,7 @@
       "id": "gripOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "Canonical forearm and hand orientation through the working range.",
+      "description": "The held grip orientation reported by the reviewed fixture.",
       "allowedValues": [
         "pronated",
         "neutral",
@@ -350,35 +353,54 @@
       "valueType": "enum",
       "required": false,
       "description": "The exact machine fixture when a record owns model-specific unilateral history.",
-      "allowedValues": ["hammerStrengthMTSSP"]
+      "allowedValues": [
+        "hammerStrengthMTSSP"
+      ]
     },
     {
       "id": "leverArmConfiguration",
       "valueType": "enum",
       "required": false,
       "description": "Whether the exact machine arms operate independently.",
-      "allowedValues": ["independent"]
+      "allowedValues": [
+        "independent"
+      ]
     },
     {
       "id": "armSequence",
       "valueType": "enum",
       "required": false,
       "description": "The exact unilateral record presses one machine arm at a time.",
-      "allowedValues": ["oneArmAtATime"]
+      "allowedValues": [
+        "oneArmAtATime"
+      ]
     },
     {
       "id": "loadAccounting",
       "valueType": "enum",
       "required": false,
       "description": "The selected load on the working-side stack, comparable only on the same fixture and side convention.",
-      "allowedValues": ["workingSideStackSameFixtureOnly"]
+      "allowedValues": [
+        "workingSideStackSameFixtureOnly"
+      ]
     },
     {
       "id": "sideLoadConvention",
       "valueType": "enum",
       "required": false,
       "description": "Both sides use equal selected stack values and the per-working-side value is entered once.",
-      "allowedValues": ["equalSideSettingsEnterOnce"]
+      "allowedValues": [
+        "equalSideSettingsEnterOnce"
+      ]
+    },
+    {
+      "id": "kneelingSupport",
+      "valueType": "enum",
+      "required": false,
+      "description": "The source-specified support relationship for the reviewed half-kneeling dumbbell fixture.",
+      "allowedValues": [
+        "workingSideKneeDownOppositeFootForward"
+      ]
     }
   ],
   "recommended": {
@@ -630,7 +652,10 @@
         },
         {
           "field": "variant.machineType",
-          "allowedValues": ["convergingShoulderPress", "independentMTSShoulderPress"]
+          "allowedValues": [
+            "convergingShoulderPress",
+            "independentMTSShoulderPress"
+          ]
         }
       ],
       "requirePresent": [],
@@ -664,79 +689,228 @@
     {
       "id": "mts-independent-machine-pins-unilateral-history",
       "description": "The exact MTSSP record uses one independent arm and its working-side stack; its source identifies a shoulder-press path but does not report grip orientation or a numeric inclination.",
-      "when": {"field": "variant.machineType", "operator": "equals", "value": "independentMTSShoulderPress"},
-      "then": [{"field": "laterality", "value": "unilateral"}, {"field": "variant.bodyPosition", "value": "seated"}, {"field": "variant.torsoSupport", "value": "machinePad"}, {"field": "variant.gripOrientation", "value": "sourceUnreported"}, {"field": "variant.pressPath", "value": "manufacturerShoulderPressPath"}, {"field": "variant.machineFixture", "value": "hammerStrengthMTSSP"}, {"field": "variant.leverArmConfiguration", "value": "independent"}, {"field": "variant.armSequence", "value": "oneArmAtATime"}, {"field": "variant.loadAccounting", "value": "workingSideStackSameFixtureOnly"}, {"field": "variant.sideLoadConvention", "value": "equalSideSettingsEnterOnce"}],
-      "requirePresent": ["variant.machineFixture", "variant.leverArmConfiguration", "variant.armSequence", "variant.loadAccounting", "variant.sideLoadConvention"],
-      "requireAbsent": ["variant.pressInclinationDegrees"]
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "independentMTSShoulderPress"
+      },
+      "then": [
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "machinePad"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "sourceUnreported"
+        },
+        {
+          "field": "variant.pressPath",
+          "value": "manufacturerShoulderPressPath"
+        },
+        {
+          "field": "variant.machineFixture",
+          "value": "hammerStrengthMTSSP"
+        },
+        {
+          "field": "variant.leverArmConfiguration",
+          "value": "independent"
+        },
+        {
+          "field": "variant.armSequence",
+          "value": "oneArmAtATime"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "workingSideStackSameFixtureOnly"
+        },
+        {
+          "field": "variant.sideLoadConvention",
+          "value": "equalSideSettingsEnterOnce"
+        }
+      ],
+      "requirePresent": [
+        "variant.machineFixture",
+        "variant.leverArmConfiguration",
+        "variant.armSequence",
+        "variant.loadAccounting",
+        "variant.sideLoadConvention"
+      ],
+      "requireAbsent": [
+        "variant.pressInclinationDegrees"
+      ]
     },
     {
       "id": "mts-fixture-reverses-to-independent-machine",
       "description": "The MTSSP fixture identity cannot be attached to a generic or linked shoulder press.",
-      "when": {"field": "variant.machineFixture", "operator": "equals", "value": "hammerStrengthMTSSP"},
-      "then": [{"field": "variant.machineType", "value": "independentMTSShoulderPress"}],
-      "requirePresent": [], "requireAbsent": []
+      "when": {
+        "field": "variant.machineFixture",
+        "operator": "equals",
+        "value": "hammerStrengthMTSSP"
+      },
+      "then": [
+        {
+          "field": "variant.machineType",
+          "value": "independentMTSShoulderPress"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     },
     {
       "id": "non-mts-records-omit-mts-history-fields",
       "description": "Records outside the exact independent MTS mechanism cannot carry its fixture or load-history axes.",
-      "when": {"field": "variant.machineType", "operator": "notEquals", "value": "independentMTSShoulderPress"},
+      "when": {
+        "field": "variant.machineType",
+        "operator": "notEquals",
+        "value": "independentMTSShoulderPress"
+      },
       "then": [],
       "requirePresent": [],
-      "requireAbsent": ["variant.machineFixture", "variant.leverArmConfiguration", "variant.armSequence", "variant.loadAccounting", "variant.sideLoadConvention"]
+      "requireAbsent": [
+        "variant.machineFixture",
+        "variant.leverArmConfiguration",
+        "variant.armSequence",
+        "variant.loadAccounting",
+        "variant.sideLoadConvention"
+      ]
     },
     {
       "id": "front-scapular-path-requires-numeric-inclination",
       "description": "Existing front and scapular press records retain their explicit numeric geometry.",
-      "when": {"field": "variant.pressPath", "operator": "equals", "value": "frontScapular"},
-      "then": [], "requirePresent": ["variant.pressInclinationDegrees"], "requireAbsent": []
+      "when": {
+        "field": "variant.pressPath",
+        "operator": "equals",
+        "value": "frontScapular"
+      },
+      "then": [],
+      "requirePresent": [
+        "variant.pressInclinationDegrees"
+      ],
+      "requireAbsent": []
     },
     {
       "id": "inverted-path-requires-numeric-inclination",
       "description": "The inverted press record retains its explicit numeric geometry.",
-      "when": {"field": "variant.pressPath", "operator": "equals", "value": "invertedHeadLimited"},
-      "then": [], "requirePresent": ["variant.pressInclinationDegrees"], "requireAbsent": []
+      "when": {
+        "field": "variant.pressPath",
+        "operator": "equals",
+        "value": "invertedHeadLimited"
+      },
+      "then": [],
+      "requirePresent": [
+        "variant.pressInclinationDegrees"
+      ],
+      "requireAbsent": []
     },
     {
       "id": "source-unreported-grip-reverses-to-mts",
       "description": "The source-unreported grip marker belongs only to the exact MTSSP record.",
-      "when": {"field": "variant.gripOrientation", "operator": "equals", "value": "sourceUnreported"},
-      "then": [{"field": "variant.machineType", "value": "independentMTSShoulderPress"}],
-      "requirePresent": [], "requireAbsent": []
+      "when": {
+        "field": "variant.gripOrientation",
+        "operator": "equals",
+        "value": "sourceUnreported"
+      },
+      "then": [
+        {
+          "field": "variant.machineType",
+          "value": "independentMTSShoulderPress"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     },
     {
       "id": "manufacturer-shoulder-path-reverses-to-mts",
       "description": "The manufacturer shoulder-press path marker belongs only to the exact MTSSP record.",
-      "when": {"field": "variant.pressPath", "operator": "equals", "value": "manufacturerShoulderPressPath"},
-      "then": [{"field": "variant.machineType", "value": "independentMTSShoulderPress"}],
-      "requirePresent": [], "requireAbsent": []
+      "when": {
+        "field": "variant.pressPath",
+        "operator": "equals",
+        "value": "manufacturerShoulderPressPath"
+      },
+      "then": [
+        {
+          "field": "variant.machineType",
+          "value": "independentMTSShoulderPress"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     },
     {
       "id": "mts-lever-arm-reverses-to-machine",
       "description": "The independent-arm marker belongs only to the MTSSP mechanism.",
-      "when": {"field": "variant.leverArmConfiguration", "operator": "equals", "value": "independent"},
-      "then": [{"field": "variant.machineType", "value": "independentMTSShoulderPress"}],
-      "requirePresent": [], "requireAbsent": []
+      "when": {
+        "field": "variant.leverArmConfiguration",
+        "operator": "equals",
+        "value": "independent"
+      },
+      "then": [
+        {
+          "field": "variant.machineType",
+          "value": "independentMTSShoulderPress"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     },
     {
       "id": "mts-arm-sequence-reverses-to-machine",
       "description": "The one-arm sequence marker belongs only to the MTSSP mechanism.",
-      "when": {"field": "variant.armSequence", "operator": "equals", "value": "oneArmAtATime"},
-      "then": [{"field": "variant.machineType", "value": "independentMTSShoulderPress"}],
-      "requirePresent": [], "requireAbsent": []
+      "when": {
+        "field": "variant.armSequence",
+        "operator": "equals",
+        "value": "oneArmAtATime"
+      },
+      "then": [
+        {
+          "field": "variant.machineType",
+          "value": "independentMTSShoulderPress"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     },
     {
       "id": "mts-load-accounting-reverses-to-machine",
       "description": "The working-side stack convention belongs only to the MTSSP mechanism.",
-      "when": {"field": "variant.loadAccounting", "operator": "equals", "value": "workingSideStackSameFixtureOnly"},
-      "then": [{"field": "variant.machineType", "value": "independentMTSShoulderPress"}],
-      "requirePresent": [], "requireAbsent": []
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "workingSideStackSameFixtureOnly"
+      },
+      "then": [
+        {
+          "field": "variant.machineType",
+          "value": "independentMTSShoulderPress"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     },
     {
       "id": "mts-side-load-convention-reverses-to-machine",
       "description": "The equal per-side stack convention belongs only to the MTSSP mechanism.",
-      "when": {"field": "variant.sideLoadConvention", "operator": "equals", "value": "equalSideSettingsEnterOnce"},
-      "then": [{"field": "variant.machineType", "value": "independentMTSShoulderPress"}],
-      "requirePresent": [], "requireAbsent": []
+      "when": {
+        "field": "variant.sideLoadConvention",
+        "operator": "equals",
+        "value": "equalSideSettingsEnterOnce"
+      },
+      "then": [
+        {
+          "field": "variant.machineType",
+          "value": "independentMTSShoulderPress"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     },
     {
       "id": "bodyweight-fixture-is-strict-wall-supported-handstand-push-up",
@@ -747,25 +921,82 @@
         "value": "bodyweight"
       },
       "then": [
-        { "field": "laterality", "value": "bilateral" },
-        { "field": "loadMode", "value": "nonComparable" },
-        { "field": "variant.kineticChain", "value": "closed" },
-        { "field": "variant.bodyPosition", "value": "inverted" },
-        { "field": "variant.torsoSupport", "value": "none" },
-        { "field": "variant.scapularTranslation", "value": "free" },
-        { "field": "variant.pressInclinationDegrees", "value": 90 },
-        { "field": "variant.gripOrientation", "value": "pronated" },
-        { "field": "variant.fixedPath", "value": false },
-        { "field": "variant.lowerBodyContribution", "value": "none" },
-        { "field": "variant.pressPath", "value": "invertedHeadLimited" },
-        { "field": "variant.bodyweightApparatus", "value": "inversionStand" },
-        { "field": "variant.wallContact", "value": "feetGentleOnly" },
-        { "field": "variant.handSupportWidth", "value": "twentyCentimetersWiderThanShoulders" },
-        { "field": "variant.wallDistanceCm", "value": 10 },
-        { "field": "variant.headTargetHeightCm", "value": 15 },
-        { "field": "variant.rangeBoundary", "value": "headToSpongeThenFullElbowAndShoulderExtension" },
-        { "field": "variant.trunkAndLegStandard", "value": "noWaistCollapseKneesExtended" },
-        { "field": "variant.sourceTestDurationSeconds", "value": 40 }
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "loadMode",
+          "value": "nonComparable"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "closed"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "inverted"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.pressInclinationDegrees",
+          "value": 90
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.pressPath",
+          "value": "invertedHeadLimited"
+        },
+        {
+          "field": "variant.bodyweightApparatus",
+          "value": "inversionStand"
+        },
+        {
+          "field": "variant.wallContact",
+          "value": "feetGentleOnly"
+        },
+        {
+          "field": "variant.handSupportWidth",
+          "value": "twentyCentimetersWiderThanShoulders"
+        },
+        {
+          "field": "variant.wallDistanceCm",
+          "value": 10
+        },
+        {
+          "field": "variant.headTargetHeightCm",
+          "value": 15
+        },
+        {
+          "field": "variant.rangeBoundary",
+          "value": "headToSpongeThenFullElbowAndShoulderExtension"
+        },
+        {
+          "field": "variant.trunkAndLegStandard",
+          "value": "noWaistCollapseKneesExtended"
+        },
+        {
+          "field": "variant.sourceTestDurationSeconds",
+          "value": 40
+        }
       ],
       "requirePresent": [
         "variant.bodyweightApparatus",
@@ -779,15 +1010,60 @@
       ],
       "requireAbsent": [],
       "requireMuscleRequirements": [
-        { "anyOf": ["fingerFlexors"], "minimumRole": "stabilizer" },
-        { "anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer" },
-        { "anyOf": ["abs"], "minimumRole": "stabilizer" },
-        { "anyOf": ["obliques"], "minimumRole": "stabilizer" },
-        { "anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer" },
-        { "anyOf": ["gluteMax"], "minimumRole": "stabilizer" },
-        { "anyOf": ["vasti"], "minimumRole": "stabilizer" },
-        { "anyOf": ["gastrocnemius"], "minimumRole": "stabilizer" },
-        { "anyOf": ["soleus"], "minimumRole": "stabilizer" }
+        {
+          "anyOf": [
+            "fingerFlexors"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "extensorCarpiRadialis"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "abs"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "obliques"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "lumbarExtensors"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "gluteMax"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "vasti"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "gastrocnemius"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "soleus"
+          ],
+          "minimumRole": "stabilizer"
+        }
       ],
       "requireAdditionalStabilityDemands": [
         "elbow",
@@ -810,8 +1086,14 @@
         "value": "bodyweight"
       },
       "then": [
-        { "field": "variant.kineticChain", "value": "open" },
-        { "field": "loadMode", "value": "external" }
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": [
@@ -878,6 +1160,152 @@
         "wrist",
         "hand"
       ]
+    },
+    {
+      "id": "half-kneeling-position-pins-reviewed-dumbbell-fixture",
+      "description": "Half kneeling position pins reviewed dumbbell fixture.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "halfKneeling"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "modality",
+          "value": "dynamicStrength"
+        },
+        {
+          "field": "trackingMode",
+          "value": "reps"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "halfKneeling"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.pressInclinationDegrees",
+          "value": 90
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.pressPath",
+          "value": "frontScapular"
+        },
+        {
+          "field": "variant.kneelingSupport",
+          "value": "workingSideKneeDownOppositeFootForward"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "kneeling-support-pins-half-kneeling-dumbbell-fixture",
+      "description": "Kneeling support pins half kneeling dumbbell fixture.",
+      "when": {
+        "field": "variant.kneelingSupport",
+        "operator": "equals",
+        "value": "workingSideKneeDownOppositeFootForward"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "modality",
+          "value": "dynamicStrength"
+        },
+        {
+          "field": "trackingMode",
+          "value": "reps"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "halfKneeling"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.pressInclinationDegrees",
+          "value": 90
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.lowerBodyContribution",
+          "value": "none"
+        },
+        {
+          "field": "variant.pressPath",
+          "value": "frontScapular"
+        },
+        {
+          "field": "variant.kneelingSupport",
+          "value": "workingSideKneeDownOppositeFootForward"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -1378,7 +1806,10 @@
         "pressPath": "frontScapular"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": ["wrist", "hand"],
+      "additionalStabilityDemands": [
+        "wrist",
+        "hand"
+      ],
       "evidenceRefs": [
         "ichihashi-2014-military-press-kinematics",
         "luczak-2013-dumbbell-press-inclinations",
@@ -1494,7 +1925,10 @@
         "pressPath": "frontScapular"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": ["wrist", "hand"],
+      "additionalStabilityDemands": [
+        "wrist",
+        "hand"
+      ],
       "evidenceRefs": [
         "coratella-2022-overhead-press-variants",
         "ichihashi-2014-military-press-kinematics",
@@ -2007,7 +2441,10 @@
         "pressPath": "frontScapular"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": ["wrist", "hand"],
+      "additionalStabilityDemands": [
+        "wrist",
+        "hand"
+      ],
       "evidenceRefs": [
         "balsalobre-fernandez-2018-smith-military-press",
         "ichihashi-2014-military-press-kinematics"
@@ -2122,7 +2559,10 @@
         "pressPath": "frontScapular"
       },
       "additionalPrimeActions": [],
-      "additionalStabilityDemands": ["wrist", "hand"],
+      "additionalStabilityDemands": [
+        "wrist",
+        "hand"
+      ],
       "evidenceRefs": [
         "coratella-2022-overhead-press-variants",
         "ichihashi-2014-military-press-kinematics"
@@ -2143,12 +2583,127 @@
     {
       "catalogID": "hammer-strength-mtssp-single-arm-shoulder-press",
       "name": "Hammer Strength MTSSP Single-Arm Shoulder Press",
-      "aliases": ["Independent-Arm Machine Shoulder Press", "Single-Arm MTS Shoulder Press", "Unilateral Machine Shoulder Press"],
-      "equipment": "machine", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 96,
-      "involvement": [{"muscle": "deltoidAnterior", "role": "primary"}, {"muscle": "deltoidLateral", "role": "secondary"}, {"muscle": "supraspinatus", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"}, {"muscle": "trapeziusUpper", "role": "secondary"}, {"muscle": "trapeziusLower", "role": "secondary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "subscapularis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "extensorCarpiUlnaris", "role": "stabilizer"}, {"muscle": "fingerExtensors", "role": "stabilizer"}, {"muscle": "flexorCarpiRadialis", "role": "stabilizer"}, {"muscle": "flexorCarpiUlnaris", "role": "stabilizer"}],
-      "variant": {"kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "machinePad", "scapularTranslation": "supportConstrained", "gripOrientation": "sourceUnreported", "fixedPath": true, "machineType": "independentMTSShoulderPress", "lowerBodyContribution": "none", "pressPath": "manufacturerShoulderPressPath", "machineFixture": "hammerStrengthMTSSP", "leverArmConfiguration": "independent", "armSequence": "oneArmAtATime", "loadAccounting": "workingSideStackSameFixtureOnly", "sideLoadConvention": "equalSideSettingsEnterOnce"},
-      "additionalPrimeActions": [], "additionalStabilityDemands": ["spine", "pelvis", "wrist", "hand"],
-      "evidenceRefs": ["life-fitness-2026-mts-shoulder-press", "ackland-2008-shoulder-moment-arms", "ichihashi-2014-military-press-kinematics"],
+      "aliases": [
+        "Independent-Arm Machine Shoulder Press",
+        "Single-Arm MTS Shoulder Press",
+        "Unilateral Machine Shoulder Press"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "machinePad",
+        "scapularTranslation": "supportConstrained",
+        "gripOrientation": "sourceUnreported",
+        "fixedPath": true,
+        "machineType": "independentMTSShoulderPress",
+        "lowerBodyContribution": "none",
+        "pressPath": "manufacturerShoulderPressPath",
+        "machineFixture": "hammerStrengthMTSSP",
+        "leverArmConfiguration": "independent",
+        "armSequence": "oneArmAtATime",
+        "loadAccounting": "workingSideStackSameFixtureOnly",
+        "sideLoadConvention": "equalSideSettingsEnterOnce"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "life-fitness-2026-mts-shoulder-press",
+        "ackland-2008-shoulder-moment-arms",
+        "ichihashi-2014-military-press-kinematics"
+      ],
       "execution": {
         "sideOrDirection": "Use the same selected stack value on both sides, enter that per-working-side value once, complete all repetitions with one arm, then repeat on the other side.",
         "startingPosition": "On the Hammer Strength MTSSP only, adjust the seat and select the equal per-side load. Let the unused pivot-away grip remain clear and compare history only on this fixture.",
@@ -2157,7 +2712,12 @@
         "returnPhase": "Return the working arm alone under control through its diverging path.",
         "controlledJoints": "Keep the non-working arm still and resist trunk rotation or lateral lean.",
         "supportAndPosture": "Keep the pelvis and torso against the machine support with both feet planted and no leg drive.",
-        "disqualifyingCompensations": ["Moving both independent arms changes the one-arm history.", "Using unequal stack settings cannot be represented by this one-value history.", "Adding the two stack selections together changes the working-side load meaning.", "Leaning or lifting from the pad adds trunk momentum."]
+        "disqualifyingCompensations": [
+          "Moving both independent arms changes the one-arm history.",
+          "Using unequal stack settings cannot be represented by this one-value history.",
+          "Adding the two stack selections together changes the working-side load meaning.",
+          "Leaning or lifting from the pad adds trunk momentum."
+        ]
       }
     },
     {
@@ -2178,24 +2738,78 @@
       "reps": 5,
       "searchPriority": 84,
       "involvement": [
-        { "muscle": "deltoidAnterior", "role": "primary" },
-        { "muscle": "deltoidLateral", "role": "secondary" },
-        { "muscle": "supraspinatus", "role": "secondary" },
-        { "muscle": "triceps", "role": "secondary" },
-        { "muscle": "serratus", "role": "secondary" },
-        { "muscle": "trapeziusUpper", "role": "secondary" },
-        { "muscle": "trapeziusLower", "role": "secondary" },
-        { "muscle": "externalRotators", "role": "stabilizer" },
-        { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" },
-        { "muscle": "gluteMax", "role": "stabilizer" },
-        { "muscle": "vasti", "role": "stabilizer" },
-        { "muscle": "gastrocnemius", "role": "stabilizer" },
-        { "muscle": "soleus", "role": "stabilizer" }
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -2244,6 +2858,142 @@
           "Bending the knees or swinging turns the strict repetition into a kipping push-up.",
           "Pushing off the wall turns the wall-supported repetition into a wall-assisted climb."
         ]
+      }
+    },
+    {
+      "catalogID": "half-kneeling-single-arm-dumbbell-press",
+      "name": "Half-Kneeling Single-Arm Dumbbell Press",
+      "aliases": [
+        "½ Kneeling Dumbbell Press",
+        "Half-Kneeling Dumbbell Press",
+        "Half-Kneeling One-Arm Dumbbell Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 8,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "halfKneeling",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "pressInclinationDegrees": 90,
+        "gripOrientation": "neutral",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular",
+        "kneelingSupport": "workingSideKneeDownOppositeFootForward"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "opex-2020-half-kneeling-single-arm-dumbbell-press",
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "boxing-science-vertical-press-course"
+      ],
+      "execution": {
+        "startingPosition": "Kneel on the same side as the working arm with the opposite foot planted in front. Hold one dumbbell at the working shoulder with a neutral grip.",
+        "movement": "Keep the lower body still and press the dumbbell overhead to elbow lockout without leaning or twisting.",
+        "endpoint": "Finish with the working elbow fully extended and the weight controlled overhead.",
+        "returnPhase": "Lower the dumbbell under control to the shoulder.",
+        "controlledJoints": "Keep the front knee aligned with the foot and do not use the hips or legs to drive the weight.",
+        "supportAndPosture": "Keep the ribs stacked over the pelvis and prevent trunk extension or rotation.",
+        "disqualifyingCompensations": [
+          "Driving from the legs changes the strict press into an assisted press.",
+          "Arching the low back changes the torso position.",
+          "Turning the trunk changes the exercise into a rotational press."
+        ],
+        "sideOrDirection": "Complete the repetitions on one arm, then mirror the kneeling setup and perform equal repetitions on the other side. One logged set includes both sides; enter the dumbbell load once."
       }
     }
   ]

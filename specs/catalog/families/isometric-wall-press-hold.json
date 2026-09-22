@@ -1,0 +1,277 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "isometric-wall-press-hold",
+  "name": "Isometric Wall Press Hold",
+  "definition": "A bilateral upper-body isometric wall push performed standing about arm's length from a solid wall with the feet shoulder-width apart and both hands placed at shoulder height. The athlete applies forward force while maintaining arm alignment and holds without visible motion. Wall sits, dynamic wall push-ups, single-arm punch holds, wall handstands, and yielding plank holds remain outside this family.",
+  "evidenceRefs": [
+    "hendri-2025-isometric-wall-push",
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "boxing-science-isometric-training"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.extension"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "shoulder.extension",
+      "elbow.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidAnterior"
+      ],
+      "secondary": [
+        "pectoralisMajorClavicular",
+        "triceps"
+      ],
+      "stabilizer": [
+        "serratus",
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "gluteMax"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body support.",
+      "allowedValues": [
+        "standingShoulderWidthStance"
+      ]
+    },
+    {
+      "id": "wallInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The specified hand-to-wall interface.",
+      "allowedValues": [
+        "palmsOnSolidWallAtShoulderHeight"
+      ]
+    },
+    {
+      "id": "handSpacing",
+      "valueType": "enum",
+      "required": true,
+      "description": "The specified bilateral hand spacing.",
+      "allowedValues": [
+        "shoulderWidth"
+      ]
+    },
+    {
+      "id": "elbowPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The held elbow relationship.",
+      "allowedValues": [
+        "armAlignmentMaintained"
+      ]
+    },
+    {
+      "id": "effortIntent",
+      "valueType": "enum",
+      "required": true,
+      "description": "The prescribed isometric intent.",
+      "allowedValues": [
+        "sustainedPush"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The hands remain in contact with the wall, but no rail or lever guides an external load path.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 5,
+      "maximum": 30
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "isometric-wall-press-hold",
+      "name": "Isometric Wall Press Hold",
+      "aliases": [
+        "Isometric Wall Holds",
+        "Isometric Wall Hold",
+        "Wall Press Hold",
+        "Upper-Body Isometric Wall Hold"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "bodyPosition": "standingShoulderWidthStance",
+        "wallInterface": "palmsOnSolidWallAtShoulderHeight",
+        "handSpacing": "shoulderWidth",
+        "elbowPosition": "armAlignmentMaintained",
+        "effortIntent": "sustainedPush",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "hendri-2025-isometric-wall-push",
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "boxing-science-isometric-training"
+      ],
+      "execution": {
+        "startingPosition": "Stand facing a solid wall about arm's length away with your feet shoulder-width apart. Place both palms on the wall at shoulder height.",
+        "movement": "Brace your trunk and apply forward force into the wall while keeping your arms aligned and your body still.",
+        "endpoint": "Hold the same position for the prescribed duration.",
+        "controlledJoints": "Maintain the same arm alignment without bending and straightening the elbows.",
+        "supportAndPosture": "Keep your feet planted, ribs controlled, and body aligned without leaning or twisting.",
+        "disqualifyingCompensations": [
+          "Sliding the hands or bending and straightening the elbows changes it into a dynamic press.",
+          "Sitting the hips down changes it into a wall sit.",
+          "Turning away from the wall changes the resistance direction."
+        ]
+      },
+      "defaultDuration": 5
+    }
+  ]
+}

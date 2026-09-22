@@ -1,0 +1,318 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "landmine-punch",
+  "name": "Landmine Punch",
+  "definition": "A unilateral rotational landmine power press from a split boxing stance. The athlete holds the moving sleeve in the rear hand at the shoulder, pivots the rear foot and rotates the hips and trunk while forcefully extending the arm along the bar's constrained diagonal arc, retains the sleeve at the endpoint, and returns under control. Strict landmine presses, free-release landmine throws, medicine-ball throws, squat-to-presses, and non-rotational presses remain outside this family.",
+  "evidenceRefs": [
+    "boxing-science-landmine-punch",
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "christophy-2012-lumbar-spine"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.flexion"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "elbow.extension",
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidAnterior",
+        "obliques"
+      ],
+      "secondary": [
+        "triceps",
+        "pectoralisMajorClavicular"
+      ],
+      "stabilizer": [
+        "serratus",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMax",
+        "gluteMed",
+        "abs",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "stance",
+      "valueType": "enum",
+      "required": true,
+      "description": "The fixed boxing support.",
+      "allowedValues": [
+        "splitBoxingStance"
+      ]
+    },
+    {
+      "id": "barbellConstraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "The fixed bar endpoint.",
+      "allowedValues": [
+        "landminePivot"
+      ]
+    },
+    {
+      "id": "sleevePosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The starting sleeve position.",
+      "allowedValues": [
+        "rearHandAtShoulder"
+      ]
+    },
+    {
+      "id": "rearFootAction",
+      "valueType": "enum",
+      "required": true,
+      "description": "The rotational foot action.",
+      "allowedValues": [
+        "pivotsDuringPress"
+      ]
+    },
+    {
+      "id": "implementOutcome",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the bar is released.",
+      "allowedValues": [
+        "retainedAtEndpoint"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Landmine comparison boundary.",
+      "allowedValues": [
+        "addedPlatesSameLandmineOnly"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "The mirrored-side prescription.",
+      "allowedValues": [
+        "bothSides"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The landmine constrains the bar arc.",
+      "fixedValue": true
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 3,
+      "maximum": 8
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "landmine-punch",
+      "name": "Landmine Punch",
+      "aliases": [
+        "Rotational Landmine Punch",
+        "Landmine Straight Punch"
+      ],
+      "equipment": "barbell",
+      "laterality": "unilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 25,
+      "defaultWeightKg": 10,
+      "reps": 5,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "stance": "splitBoxingStance",
+        "barbellConstraint": "landminePivot",
+        "sleevePosition": "rearHandAtShoulder",
+        "rearFootAction": "pivotsDuringPress",
+        "implementOutcome": "retainedAtEndpoint",
+        "loadAccounting": "addedPlatesSameLandmineOnly",
+        "trainingSidePrescription": "bothSides",
+        "fixedPath": true
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-landmine-punch",
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "christophy-2012-lumbar-spine"
+      ],
+      "execution": {
+        "startingPosition": "Anchor one end of a bar in a landmine. Stand in a split boxing stance with the moving sleeve held in the rear hand at the shoulder. Log only added plates and compare loads only on the same bar, pivot, and setup.",
+        "movement": "Pivot the rear foot and rotate the hips and trunk while forcefully pressing the sleeve forward and upward through the landmine arc.",
+        "endpoint": "Finish with the working elbow extended while keeping hold of the sleeve.",
+        "returnPhase": "Brace and guide the sleeve back to the rear shoulder under control, then reset the stance.",
+        "controlledJoints": "Let the rear foot turn with the hips instead of twisting through a fixed knee.",
+        "supportAndPosture": "Remain balanced and keep the bar path clear.",
+        "disqualifyingCompensations": [
+          "Keeping the trunk square changes it into a strict landmine press.",
+          "Releasing the sleeve changes it into a landmine punch throw.",
+          "Adding a squat changes the task into a squat-to-press."
+        ],
+        "sideOrDirection": "Complete equal repetitions from each mirrored stance; one set includes both sides."
+      }
+    }
+  ]
+}

@@ -13203,6 +13203,88 @@
     ]
   },
   {
+    "familyID": "isometric-wall-press-hold",
+    "familyName": "Isometric Wall Press Hold",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "isometric-wall-press-hold",
+    "name": "Isometric Wall Press Hold",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 5,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Isometric Wall Holds",
+      "Isometric Wall Hold",
+      "Wall Press Hold",
+      "Upper-Body Isometric Wall Hold"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand facing a solid wall about arm's length away with your feet shoulder-width apart. Place both palms on the wall at shoulder height.",
+      "movement": "Brace your trunk and apply forward force into the wall while keeping your arms aligned and your body still.",
+      "endpoint": "Hold the same position for the prescribed duration.",
+      "controlledJoints": "Maintain the same arm alignment without bending and straightening the elbows.",
+      "supportAndPosture": "Keep your feet planted, ribs controlled, and body aligned without leaning or twisting.",
+      "disqualifyingCompensations": [
+        "Sliding the hands or bending and straightening the elbows changes it into a dynamic press.",
+        "Sitting the hips down changes it into a wall sit.",
+        "Turning away from the wall changes the resistance direction."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "kettlebell-swing",
     "familyName": "Kettlebell Swing",
     "movementActions": [
@@ -14133,7 +14215,6 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Landmine Press",
       "Single-Arm Landmine Press",
       "Split-Stance Landmine Press"
     ],
@@ -14221,6 +14302,359 @@
       },
       {
         "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "landmine-press",
+    "familyName": "Landmine Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "half-kneeling-single-arm-landmine-press",
+    "name": "Half-Kneeling Single-Arm Landmine Press",
+    "group": "shoulders",
+    "defaultWeight": 25,
+    "defaultWeightKg": 10,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "½ Kneeling Landmine Press",
+      "Half-Kneeling Landmine Press",
+      "Half-Kneeling One-Arm Landmine Press"
+    ],
+    "searchPriority": 97,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Anchor one end of a bar in a landmine. Kneel on the same side as the working arm, place the opposite foot flat in front, and hold the moving sleeve at the working shoulder with the elbow tucked. Log only added plates and compare loads only on the same setup.",
+      "movement": "Keep the ribs and pelvis square and press the sleeve forward and upward through the pivoted arc.",
+      "endpoint": "Finish at a controlled end range with the working elbow extended.",
+      "returnPhase": "Lower the sleeve under control to the working shoulder.",
+      "controlledJoints": "Keep the front knee aligned with the foot and do not drive from the hips or legs.",
+      "supportAndPosture": "Prevent low-back extension and trunk rotation.",
+      "disqualifyingCompensations": [
+        "Driving from the legs changes the strict press into an assisted press.",
+        "Rotating the trunk changes it into a landmine punch.",
+        "Standing up changes the support position."
+      ],
+      "sideOrDirection": "Complete the repetitions on one arm, then mirror the kneeling setup and repeat on the other side with the same added-plate load. One logged set includes both sides; enter the added-plate load once."
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "landmine-press",
+    "familyName": "Landmine Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "standing-two-hand-landmine-press",
+    "name": "Standing Two-Hand Landmine Press",
+    "group": "shoulders",
+    "defaultWeight": 25,
+    "defaultWeightKg": 10,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Standing Landmine Press",
+      "Landmine Press",
+      "Two-Hand Landmine Press"
+    ],
+    "searchPriority": 99,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Anchor one end of a bar in a landmine. Stand square with parallel feet about hip-width apart and cup the moving sleeve in both hands at the center of your chest. Log only added plates and compare loads only on the same setup.",
+      "movement": "Keep the hips and torso square and press the sleeve forward and upward through the pivoted arc with both arms.",
+      "endpoint": "Finish at a controlled end range with both elbows extended.",
+      "returnPhase": "Lower the sleeve under control to the center of your chest.",
+      "controlledJoints": "Keep the hips, knees, and ankles quiet without a preparatory dip.",
+      "supportAndPosture": "Brace the trunk without leaning, side-shifting, or rotating.",
+      "disqualifyingCompensations": [
+        "Using one hand changes it into a single-arm landmine press.",
+        "Driving with the legs changes it into a push press.",
+        "Rotating the torso changes it into a landmine punch."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "landmine-punch",
+    "familyName": "Landmine Punch",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "landmine-punch",
+    "name": "Landmine Punch",
+    "group": "shoulders",
+    "defaultWeight": 25,
+    "defaultWeightKg": 10,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Rotational Landmine Punch",
+      "Landmine Straight Punch"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Anchor one end of a bar in a landmine. Stand in a split boxing stance with the moving sleeve held in the rear hand at the shoulder. Log only added plates and compare loads only on the same bar, pivot, and setup.",
+      "movement": "Pivot the rear foot and rotate the hips and trunk while forcefully pressing the sleeve forward and upward through the landmine arc.",
+      "endpoint": "Finish with the working elbow extended while keeping hold of the sleeve.",
+      "returnPhase": "Brace and guide the sleeve back to the rear shoulder under control, then reset the stance.",
+      "controlledJoints": "Let the rear foot turn with the hips instead of twisting through a fixed knee.",
+      "supportAndPosture": "Remain balanced and keep the bar path clear.",
+      "disqualifyingCompensations": [
+        "Keeping the trunk square changes it into a strict landmine press.",
+        "Releasing the sleeve changes it into a landmine punch throw.",
+        "Adding a squat changes the task into a squat-to-press."
+      ],
+      "sideOrDirection": "Complete equal repetitions from each mirrored stance; one set includes both sides."
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
         "role": "stabilizer"
       }
     ]
@@ -15089,6 +15523,96 @@
     ]
   },
   {
+    "familyID": "medicine-ball-punch-throw",
+    "familyName": "Medicine Ball Punch Throw",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "medicine-ball-punch-throw",
+    "name": "Medicine Ball Punch Throw",
+    "group": "core",
+    "defaultWeight": 5,
+    "defaultWeightKg": 2.5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Med Ball Punch Throw",
+      "Medicine Ball Straight Punch Throw"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand in a balanced split boxing stance with your knees and hips slightly flexed, your weight biased toward the rear leg, and a medicine ball held in the rear hand near the shoulder.",
+      "movement": "Pivot the rear foot, rotate the rear hip and trunk toward the target, and forcefully extend the rear arm to release the ball like a straight punch.",
+      "endpoint": "The repetition ends when the ball leaves the rear hand toward the clear target.",
+      "returnPhase": "Retrieve the ball or receive it from a prepared partner, then rebuild the same stance before the next repetition.",
+      "controlledJoints": "Let the rear foot turn with the hips instead of twisting through a fixed knee.",
+      "supportAndPosture": "Stay balanced through the release and keep the throwing area clear.",
+      "disqualifyingCompensations": [
+        "Stepping during the throw changes it into an approach throw.",
+        "Using both hands changes it into a chest or rotational throw.",
+        "Retaining the implement changes it into a landmine punch."
+      ],
+      "sideOrDirection": "Complete equal repetitions from each mirrored stance; one set includes both sides."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "medicine-ball-reactive-half-kneeling-wall-throw",
     "familyName": "Reactive Half-Kneeling Rotational Medicine Ball Throw",
     "movementActions": [
@@ -15654,6 +16178,99 @@
       },
       {
         "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "medicine-ball-supine-chest-pass",
+    "familyName": "Supine Medicine Ball Chest Pass",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.horizontalAdduction",
+        "name": "Shoulder horizontal adduction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "shoulder.horizontalAbduction",
+        "name": "Shoulder horizontal abduction",
+        "plane": "transverse",
+        "kind": "yielding"
+      }
+    ],
+    "catalogID": "supine-medicine-ball-chest-pass",
+    "name": "Supine Medicine Ball Chest Pass",
+    "group": "chest",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "medicineBall",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Supine Med Ball Chest Pass",
+      "Lying Medicine Ball Chest Pass"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie face up on the floor while a prepared trainer or partner stands securely above you holding a medicine ball.",
+      "movement": "Have the partner drop the ball toward your chest. Catch it with both hands around chest level and immediately return it explosively with a two-hand chest pass.",
+      "endpoint": "The repetition ends when the ball leaves both hands.",
+      "returnPhase": "Let the partner catch the return pass and prepare the next controlled drop.",
+      "controlledJoints": "Absorb the drop through the arms and reverse it without sitting up to add trunk momentum.",
+      "supportAndPosture": "Keep your torso and head supported on the floor throughout the pass.",
+      "disqualifyingCompensations": [
+        "Starting from a paused ball on the chest removes the specified reactive drop-and-return phase.",
+        "Throwing toward a wall changes the receiving environment.",
+        "Curling the torso off the floor adds a sit-up action."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
         "role": "stabilizer"
       }
     ]
@@ -17137,6 +17754,176 @@
         "Dipping under the bar to receive it turns the push press into a push jerk.",
         "Squatting deeply before the drive turns the push press into a thruster.",
         "Pressing the bar without the leg drive turns the push press into a strict overhead press."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "push-press",
+    "familyName": "Push Press",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "dumbbell-push-press",
+    "name": "Dumbbell Push Press",
+    "group": "shoulders",
+    "defaultWeight": 15,
+    "defaultWeightKg": 7.5,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Paired Dumbbell Push Press",
+      "DB Push Press"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with your feet about hip-width apart and hold one dumbbell just above each shoulder with your palms facing forward. Enter the weight of one dumbbell, not the pair's total.",
+      "movement": "Slightly bend the knees, press your feet into the floor, and push both dumbbells overhead as you straighten your legs and torso.",
+      "endpoint": "Finish standing with both elbows extended and no second receiving dip.",
+      "returnPhase": "Lower both dumbbells under control to the palms-forward shoulder position.",
+      "controlledJoints": "Keep both feet in contact with the floor through the dip and drive.",
+      "supportAndPosture": "Brace the trunk and keep the dumbbells controlled independently.",
+      "disqualifyingCompensations": [
+        "Dipping under the dumbbells to receive them changes the movement into a push jerk.",
+        "Squatting deeply changes it into a dumbbell thruster.",
+        "Removing the leg drive changes it into a strict dumbbell press."
       ]
     },
     "involvement": [
@@ -29654,6 +30441,160 @@
       },
       {
         "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "vertical-press",
+    "familyName": "Vertical Press",
+    "movementActions": [
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "half-kneeling-single-arm-dumbbell-press",
+    "name": "Half-Kneeling Single-Arm Dumbbell Press",
+    "group": "shoulders",
+    "defaultWeight": 15,
+    "defaultWeightKg": 7.5,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "½ Kneeling Dumbbell Press",
+      "Half-Kneeling Dumbbell Press",
+      "Half-Kneeling One-Arm Dumbbell Press"
+    ],
+    "searchPriority": 97,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Kneel on the same side as the working arm with the opposite foot planted in front. Hold one dumbbell at the working shoulder with a neutral grip.",
+      "movement": "Keep the lower body still and press the dumbbell overhead to elbow lockout without leaning or twisting.",
+      "endpoint": "Finish with the working elbow fully extended and the weight controlled overhead.",
+      "returnPhase": "Lower the dumbbell under control to the shoulder.",
+      "controlledJoints": "Keep the front knee aligned with the foot and do not use the hips or legs to drive the weight.",
+      "supportAndPosture": "Keep the ribs stacked over the pelvis and prevent trunk extension or rotation.",
+      "disqualifyingCompensations": [
+        "Driving from the legs changes the strict press into an assisted press.",
+        "Arching the low back changes the torso position.",
+        "Turning the trunk changes the exercise into a rotational press."
+      ],
+      "sideOrDirection": "Complete the repetitions on one arm, then mirror the kneeling setup and perform equal repetitions on the other side. One logged set includes both sides; enter the dumbbell load once."
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]

@@ -3,13 +3,16 @@
   "schemaVersion": 1,
   "id": "landmine-press",
   "name": "Landmine Press",
-  "definition": "A narrow unilateral standing split-stance press using an Olympic bar whose far end is fixed to a landmine pivot. The moving sleeve begins close to the working-side deltoid and follows the bar's constrained rotational arc while the shoulder flexes and the elbow extends. Zhao et al. directly establish the apparatus, right-arm left-foot-forward stance, total bar-plus-plate load accounting, twenty-to-thirty-five-kilogram test range, and three-repetition power-test topology. The everyday strength record preserves that strict geometry but uses controlled repetitions and an added-plates-only value that is comparable only on the same bar, pivot, and setup; Szelog supports landmine pressing for strength while the logging convention is an explicit product adaptation rather than a measure of total resistance. Zhao's system tracks bar endpoints rather than human segments, so the sagittal shoulder-flexion model, diagonal push classification, strict no-leg-drive execution, mirrored left-arm prescription, and muscle hierarchy remain disclosed catalog adaptations. No scapular prime action is inferred: serratus and the trapezius regions receive stability credit only. Half-kneeling, tall-kneeling, bilateral, two-hand, rotational, squat-to-press, explosive throw, Viking-press, free-bar, cable, machine, and torso-lean variants remain outside this contract.",
+  "definition": "A strict press using one end of an Olympic bar fixed to a landmine pivot. The moving sleeve travels through the bar's constrained diagonal arc while the shoulder flexes and the elbow extends without deliberate leg drive or trunk rotation. The reviewed branches are a unilateral standing split-stance press, a unilateral half-kneeling press with the working-side knee down, and a bilateral standing two-hand press from a square stance. Zhao et al. directly establish the apparatus and standing unilateral power-test topology; Szelog establishes the half-kneeling same-side-knee setup; ACE establishes a two-arm landmine press. Added-plate training loads are comparable only on the same bar, pivot, and setup. The two-hand branch owns the unqualified Landmine Press identity; the original unilateral record remains explicitly Single-Arm. No scapular prime action is inferred. Tall-kneeling, rotational punch, squat-to-press, explosive throw, Viking-press, free-bar, cable, machine, torso-lean, and leg-driven variants remain outside this contract.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "holzbaur-2005-upper-extremity",
     "murray-1995-elbow-forearm-moment-arms",
     "zhao-2026-landmine-press-kinematics",
-    "nsca-2016-landmine-press"
+    "nsca-2016-landmine-press",
+    "boxing-science-exercise-library",
+    "ace-2025-two-arm-landmine-press",
+    "boxing-science-vertical-press-course"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -41,7 +44,8 @@
       "external"
     ],
     "lateralities": [
-      "unilateral"
+      "unilateral",
+      "bilateral"
     ]
   },
   "movementSignature": {
@@ -255,16 +259,17 @@
       "allowedValues": [
         "open"
       ],
-      "description": "The hand and moving sleeve travel through space while the athlete remains standing."
+      "description": "The hand or hands and moving sleeve travel while the athlete remains standing or half-kneeling."
     },
     {
       "id": "bodyPosition",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "standing"
+        "standing",
+        "halfKneeling"
       ],
-      "description": "The directly reviewed whole-body posture."
+      "description": "The reviewed standing and half-kneeling postures."
     },
     {
       "id": "torsoSupport",
@@ -280,16 +285,19 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "contralateralFootForwardSplit"
+        "contralateralFootForwardSplit",
+        "workingSideKneeDownFrontFootForward",
+        "parallelHipWidth"
       ],
-      "description": "The source's right-arm left-foot-forward stance is mirrored for the opposite arm as a disclosed catalog adaptation."
+      "description": "The unilateral standing split stance, same-side-knee-down half-kneeling base, or bilateral parallel stance."
     },
     {
       "id": "footOrientation",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "bothToesForward"
+        "bothToesForward",
+        "frontFootForwardRearShinGrounded"
       ],
       "description": "The directly reviewed orientation of both feet."
     },
@@ -298,18 +306,20 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "oneArmAtATime"
+        "oneArmAtATime",
+        "bothArmsTogether"
       ],
-      "description": "One arm presses the moving sleeve per set."
+      "description": "One arm presses at a time or both arms press the same sleeve together."
     },
     {
       "id": "trainingSidePrescription",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "bothSidesMirrored"
+        "bothSidesMirrored",
+        "notApplicableBilateral"
       ],
-      "description": "The source directly tested the right arm; equal left-arm work is a product adaptation and is logged separately."
+      "description": "Unilateral records prescribe mirrored work; the bilateral record uses both arms together."
     },
     {
       "id": "barbellConstraint",
@@ -325,18 +335,20 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "movingSleeveNearDeltoid"
+        "movingSleeveNearDeltoid",
+        "movingSleeveAtCenterChest"
       ],
-      "description": "The source-defined starting location of the moving bar end."
+      "description": "The moving sleeve begins near the working shoulder or centered at the chest."
     },
     {
       "id": "handTask",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "fullGripMovingSleeve"
+        "fullGripMovingSleeve",
+        "twoHandsCupMovingSleeve"
       ],
-      "description": "The working hand fully grips the moving end of the bar."
+      "description": "One hand fully grips the sleeve or two hands cup the same sleeve."
     },
     {
       "id": "resistanceGeometry",
@@ -398,18 +410,21 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "nonstandardized"
+        "nonstandardized",
+        "rotationPrevented"
       ],
-      "description": "The source did not track or numerically standardize trunk motion."
+      "description": "The original power-test source left trunk motion unstandardized; the strict strength branches prevent deliberate trunk rotation."
     },
     {
       "id": "pelvisMotion",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "nonstandardized"
+        "nonstandardized",
+        "levelAndSquare",
+        "centeredAndSquare"
       ],
-      "description": "The source did not track or numerically standardize pelvic motion."
+      "description": "The original power-test source left pelvic motion unstandardized; strict strength branches keep the pelvis square."
     },
     {
       "id": "fixedPath",
@@ -438,8 +453,14 @@
         "value": "power"
       },
       "then": [
-        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"},
-        {"field": "reps", "value": 3}
+        {
+          "field": "variant.loadAccounting",
+          "value": "totalBarAndPlates"
+        },
+        {
+          "field": "reps",
+          "value": 3
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -453,8 +474,364 @@
         "value": "dynamicStrength"
       },
       "then": [
-        {"field": "variant.loadAccounting", "value": "addedPlatesSameLandmineOnly"},
-        {"field": "reps", "value": 8}
+        {
+          "field": "variant.loadAccounting",
+          "value": "addedPlatesSameLandmineOnly"
+        },
+        {
+          "field": "reps",
+          "value": 8
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "split-stance-pins-standing-unilateral-topology",
+      "description": "Split stance pins standing unilateral topology.",
+      "when": {
+        "field": "variant.stanceConfiguration",
+        "operator": "equals",
+        "value": "contralateralFootForwardSplit"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.stanceConfiguration",
+          "value": "contralateralFootForwardSplit"
+        },
+        {
+          "field": "variant.footOrientation",
+          "value": "bothToesForward"
+        },
+        {
+          "field": "variant.workingSide",
+          "value": "oneArmAtATime"
+        },
+        {
+          "field": "variant.trainingSidePrescription",
+          "value": "bothSidesMirrored"
+        },
+        {
+          "field": "variant.barStartPosition",
+          "value": "movingSleeveNearDeltoid"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "fullGripMovingSleeve"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "half-kneeling-stance-pins-reviewed-topology",
+      "description": "Half kneeling stance pins reviewed topology.",
+      "when": {
+        "field": "variant.stanceConfiguration",
+        "operator": "equals",
+        "value": "workingSideKneeDownFrontFootForward"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "halfKneeling"
+        },
+        {
+          "field": "variant.stanceConfiguration",
+          "value": "workingSideKneeDownFrontFootForward"
+        },
+        {
+          "field": "variant.footOrientation",
+          "value": "frontFootForwardRearShinGrounded"
+        },
+        {
+          "field": "variant.workingSide",
+          "value": "oneArmAtATime"
+        },
+        {
+          "field": "variant.trainingSidePrescription",
+          "value": "bothSidesMirrored"
+        },
+        {
+          "field": "variant.barStartPosition",
+          "value": "movingSleeveNearDeltoid"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "fullGripMovingSleeve"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "rotationPrevented"
+        },
+        {
+          "field": "variant.pelvisMotion",
+          "value": "levelAndSquare"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "addedPlatesSameLandmineOnly"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "modality",
+          "value": "dynamicStrength"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "half-kneeling-position-pins-reviewed-topology",
+      "description": "Half kneeling position pins reviewed topology.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "halfKneeling"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "halfKneeling"
+        },
+        {
+          "field": "variant.stanceConfiguration",
+          "value": "workingSideKneeDownFrontFootForward"
+        },
+        {
+          "field": "variant.footOrientation",
+          "value": "frontFootForwardRearShinGrounded"
+        },
+        {
+          "field": "variant.workingSide",
+          "value": "oneArmAtATime"
+        },
+        {
+          "field": "variant.trainingSidePrescription",
+          "value": "bothSidesMirrored"
+        },
+        {
+          "field": "variant.barStartPosition",
+          "value": "movingSleeveNearDeltoid"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "fullGripMovingSleeve"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "rotationPrevented"
+        },
+        {
+          "field": "variant.pelvisMotion",
+          "value": "levelAndSquare"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "addedPlatesSameLandmineOnly"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "modality",
+          "value": "dynamicStrength"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "parallel-stance-pins-two-hand-topology",
+      "description": "Parallel stance pins two hand topology.",
+      "when": {
+        "field": "variant.stanceConfiguration",
+        "operator": "equals",
+        "value": "parallelHipWidth"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.stanceConfiguration",
+          "value": "parallelHipWidth"
+        },
+        {
+          "field": "variant.footOrientation",
+          "value": "bothToesForward"
+        },
+        {
+          "field": "variant.workingSide",
+          "value": "bothArmsTogether"
+        },
+        {
+          "field": "variant.trainingSidePrescription",
+          "value": "notApplicableBilateral"
+        },
+        {
+          "field": "variant.barStartPosition",
+          "value": "movingSleeveAtCenterChest"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "twoHandsCupMovingSleeve"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "rotationPrevented"
+        },
+        {
+          "field": "variant.pelvisMotion",
+          "value": "centeredAndSquare"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "addedPlatesSameLandmineOnly"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "modality",
+          "value": "dynamicStrength"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "two-arm-task-pins-two-hand-topology",
+      "description": "Two arm task pins two hand topology.",
+      "when": {
+        "field": "variant.workingSide",
+        "operator": "equals",
+        "value": "bothArmsTogether"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.stanceConfiguration",
+          "value": "parallelHipWidth"
+        },
+        {
+          "field": "variant.footOrientation",
+          "value": "bothToesForward"
+        },
+        {
+          "field": "variant.workingSide",
+          "value": "bothArmsTogether"
+        },
+        {
+          "field": "variant.trainingSidePrescription",
+          "value": "notApplicableBilateral"
+        },
+        {
+          "field": "variant.barStartPosition",
+          "value": "movingSleeveAtCenterChest"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "twoHandsCupMovingSleeve"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "rotationPrevented"
+        },
+        {
+          "field": "variant.pelvisMotion",
+          "value": "centeredAndSquare"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "addedPlatesSameLandmineOnly"
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "modality",
+          "value": "dynamicStrength"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "total-system-accounting-pins-power-test",
+      "description": "Total system accounting pins power test.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "totalBarAndPlates"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.stanceConfiguration",
+          "value": "contralateralFootForwardSplit"
+        },
+        {
+          "field": "variant.footOrientation",
+          "value": "bothToesForward"
+        },
+        {
+          "field": "variant.workingSide",
+          "value": "oneArmAtATime"
+        },
+        {
+          "field": "variant.trainingSidePrescription",
+          "value": "bothSidesMirrored"
+        },
+        {
+          "field": "variant.barStartPosition",
+          "value": "movingSleeveNearDeltoid"
+        },
+        {
+          "field": "variant.handTask",
+          "value": "fullGripMovingSleeve"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "totalBarAndPlates"
+        },
+        {
+          "field": "variant.spineMotion",
+          "value": "nonstandardized"
+        },
+        {
+          "field": "variant.pelvisMotion",
+          "value": "nonstandardized"
+        },
+        {
+          "field": "laterality",
+          "value": "unilateral"
+        },
+        {
+          "field": "modality",
+          "value": "power"
+        },
+        {
+          "field": "reps",
+          "value": 3
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -479,23 +856,74 @@
       "reps": 3,
       "searchPriority": 72,
       "involvement": [
-        { "muscle": "deltoidAnterior", "role": "primary" },
-        { "muscle": "triceps", "role": "secondary" },
-        { "muscle": "pectoralisMajorClavicular", "role": "secondary" },
-        { "muscle": "serratus", "role": "stabilizer" },
-        { "muscle": "trapeziusUpper", "role": "stabilizer" },
-        { "muscle": "trapeziusLower", "role": "stabilizer" },
-        { "muscle": "externalRotators", "role": "stabilizer" },
-        { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" },
-        { "muscle": "gluteMed", "role": "stabilizer" },
-        { "muscle": "vasti", "role": "stabilizer" },
-        { "muscle": "gastrocnemius", "role": "stabilizer" },
-        { "muscle": "soleus", "role": "stabilizer" }
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "open",
@@ -542,7 +970,6 @@
       "catalogID": "standing-single-arm-landmine-press",
       "name": "Standing Single-Arm Landmine Press",
       "aliases": [
-        "Landmine Press",
         "Single-Arm Landmine Press",
         "Split-Stance Landmine Press"
       ],
@@ -557,23 +984,74 @@
       "reps": 8,
       "searchPriority": 97,
       "involvement": [
-        { "muscle": "deltoidAnterior", "role": "primary" },
-        { "muscle": "triceps", "role": "secondary" },
-        { "muscle": "pectoralisMajorClavicular", "role": "secondary" },
-        { "muscle": "serratus", "role": "stabilizer" },
-        { "muscle": "trapeziusUpper", "role": "stabilizer" },
-        { "muscle": "trapeziusLower", "role": "stabilizer" },
-        { "muscle": "externalRotators", "role": "stabilizer" },
-        { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" },
-        { "muscle": "gluteMed", "role": "stabilizer" },
-        { "muscle": "vasti", "role": "stabilizer" },
-        { "muscle": "gastrocnemius", "role": "stabilizer" },
-        { "muscle": "soleus", "role": "stabilizer" }
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
       ],
       "variant": {
         "kineticChain": "open",
@@ -592,8 +1070,8 @@
         "shoulderMotion": "flexesCatalogAdaptation",
         "elbowMotion": "extendsCatalogAdaptation",
         "scapularMotion": "unmeasuredNoPrime",
-        "spineMotion": "nonstandardized",
-        "pelvisMotion": "nonstandardized",
+        "spineMotion": "rotationPrevented",
+        "pelvisMotion": "levelAndSquare",
         "fixedPath": true,
         "lowerBodyContribution": "noneCatalogAdaptation"
       },
@@ -615,6 +1093,271 @@
           "Twisting the torso into the press turns it into a rotational landmine press."
         ],
         "sideOrDirection": "Complete the prescribed repetitions with one arm, then mirror the stance and repeat on the other side with the same load. Enter the added-plate load once."
+      }
+    },
+    {
+      "catalogID": "half-kneeling-single-arm-landmine-press",
+      "name": "Half-Kneeling Single-Arm Landmine Press",
+      "aliases": [
+        "½ Kneeling Landmine Press",
+        "Half-Kneeling Landmine Press",
+        "Half-Kneeling One-Arm Landmine Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 25,
+      "defaultWeightKg": 10,
+      "reps": 8,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "halfKneeling",
+        "torsoSupport": "none",
+        "stanceConfiguration": "workingSideKneeDownFrontFootForward",
+        "footOrientation": "frontFootForwardRearShinGrounded",
+        "workingSide": "oneArmAtATime",
+        "trainingSidePrescription": "bothSidesMirrored",
+        "barbellConstraint": "landminePivot",
+        "barStartPosition": "movingSleeveNearDeltoid",
+        "handTask": "fullGripMovingSleeve",
+        "resistanceGeometry": "pivotedBarRotationalArc",
+        "loadAccounting": "addedPlatesSameLandmineOnly",
+        "pressDirection": "diagonalCatalogAdaptation",
+        "shoulderMotion": "flexesCatalogAdaptation",
+        "elbowMotion": "extendsCatalogAdaptation",
+        "scapularMotion": "unmeasuredNoPrime",
+        "spineMotion": "rotationPrevented",
+        "pelvisMotion": "levelAndSquare",
+        "fixedPath": true,
+        "lowerBodyContribution": "noneCatalogAdaptation"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "nsca-2016-landmine-press",
+        "boxing-science-exercise-library",
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "boxing-science-vertical-press-course"
+      ],
+      "execution": {
+        "startingPosition": "Anchor one end of a bar in a landmine. Kneel on the same side as the working arm, place the opposite foot flat in front, and hold the moving sleeve at the working shoulder with the elbow tucked. Log only added plates and compare loads only on the same setup.",
+        "movement": "Keep the ribs and pelvis square and press the sleeve forward and upward through the pivoted arc.",
+        "endpoint": "Finish at a controlled end range with the working elbow extended.",
+        "returnPhase": "Lower the sleeve under control to the working shoulder.",
+        "controlledJoints": "Keep the front knee aligned with the foot and do not drive from the hips or legs.",
+        "supportAndPosture": "Prevent low-back extension and trunk rotation.",
+        "disqualifyingCompensations": [
+          "Driving from the legs changes the strict press into an assisted press.",
+          "Rotating the trunk changes it into a landmine punch.",
+          "Standing up changes the support position."
+        ],
+        "sideOrDirection": "Complete the repetitions on one arm, then mirror the kneeling setup and repeat on the other side with the same added-plate load. One logged set includes both sides; enter the added-plate load once."
+      }
+    },
+    {
+      "catalogID": "standing-two-hand-landmine-press",
+      "name": "Standing Two-Hand Landmine Press",
+      "aliases": [
+        "Standing Landmine Press",
+        "Landmine Press",
+        "Two-Hand Landmine Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 25,
+      "defaultWeightKg": 10,
+      "reps": 8,
+      "searchPriority": 99,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "parallelHipWidth",
+        "footOrientation": "bothToesForward",
+        "workingSide": "bothArmsTogether",
+        "trainingSidePrescription": "notApplicableBilateral",
+        "barbellConstraint": "landminePivot",
+        "barStartPosition": "movingSleeveAtCenterChest",
+        "handTask": "twoHandsCupMovingSleeve",
+        "resistanceGeometry": "pivotedBarRotationalArc",
+        "loadAccounting": "addedPlatesSameLandmineOnly",
+        "pressDirection": "diagonalCatalogAdaptation",
+        "shoulderMotion": "flexesCatalogAdaptation",
+        "elbowMotion": "extendsCatalogAdaptation",
+        "scapularMotion": "unmeasuredNoPrime",
+        "spineMotion": "rotationPrevented",
+        "pelvisMotion": "centeredAndSquare",
+        "fixedPath": true,
+        "lowerBodyContribution": "noneCatalogAdaptation"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ace-2025-two-arm-landmine-press",
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ],
+      "execution": {
+        "startingPosition": "Anchor one end of a bar in a landmine. Stand square with parallel feet about hip-width apart and cup the moving sleeve in both hands at the center of your chest. Log only added plates and compare loads only on the same setup.",
+        "movement": "Keep the hips and torso square and press the sleeve forward and upward through the pivoted arc with both arms.",
+        "endpoint": "Finish at a controlled end range with both elbows extended.",
+        "returnPhase": "Lower the sleeve under control to the center of your chest.",
+        "controlledJoints": "Keep the hips, knees, and ankles quiet without a preparatory dip.",
+        "supportAndPosture": "Brace the trunk without leaning, side-shifting, or rotating.",
+        "disqualifyingCompensations": [
+          "Using one hand changes it into a single-arm landmine press.",
+          "Driving with the legs changes it into a push press.",
+          "Rotating the torso changes it into a landmine punch."
+        ]
       }
     }
   ]

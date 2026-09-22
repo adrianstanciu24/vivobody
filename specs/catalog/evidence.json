@@ -4809,7 +4809,7 @@
       ],
       "year": 2016,
       "url": "https://www.nsca.com/education/articles/nsca-coach/the-landmine-pressimplementation-and-variation/",
-      "scope": "NSCA Coach technique article presents the landmine press as a fixed-base barbell exercise used for strength, stability, and power. It supports an everyday strength application and repeated controlled pressing, but does not establish the catalog's exact Zhao split stance, human joint kinematics, muscle hierarchy, or a plate-only resistance measure. Added-plate logging is an authored same-bar, same-pivot, same-setup convention and is not comparable across unlike landmine fixtures."
+      "scope": "NSCA Coach technique article presents the landmine press as a fixed-base barbell exercise used for strength, stability, and power. Its half-kneeling variation directly places the working arm on the same side as the kneeling leg and supports repeated controlled pressing. It does not establish the catalog's exact Zhao split stance, human joint kinematics, muscle hierarchy, or a plate-only resistance measure. Added-plate logging is an authored same-bar, same-pivot, same-setup convention and is not comparable across unlike landmine fixtures."
     },
     {
       "id": "ace-2026-supine-bicycle-crunch",
@@ -4869,7 +4869,10 @@
       "id": "trx-2026-beginner-core-plank",
       "sourceType": "officialTechnicalStandard",
       "title": "7 Core Exercises for Beginners to Try at Home: TRX Training Workout Guide",
-      "authors": ["TRX Training", "Tristan Zheng"],
+      "authors": [
+        "TRX Training",
+        "Tristan Zheng"
+      ],
       "year": 2026,
       "url": "https://www.trxtraining.com/blogs/news/core-exercises-for-beginners",
       "scope": "TRX's current beginner-core standard directly defines the suspended forearm-plank fixture: overhead anchor, mid-calf straps, toes facing down in both foot cradles, elbows below the shoulders, braced straight-body hold, and 15-to-30-second duration. It establishes setup, support topology, posture, and duration tracking, not joint kinetics, a portable bodyweight fraction, quantitative muscle ranking, hypertrophy, or medical benefit."
@@ -4878,7 +4881,9 @@
       "id": "trx-2022-full-body-side-plank",
       "sourceType": "officialTechnicalStandard",
       "title": "TRX Moves of the Week: Full-Body Burn at Home",
-      "authors": ["TRX Training"],
+      "authors": [
+        "TRX Training"
+      ],
       "year": 2022,
       "url": "https://www.trxtraining.com/blogs/news/trx-moves-of-the-week-full-body-burn-at-home",
       "scope": "TRX's official side-plank standard directly specifies both toes in the foot cradles, a tightrope stagger with the top foot forward relative to the planted forearm, the supporting forearm pressed into the floor, the top arm raised, and a 15-to-30-second hold. It anchors exact suspended-side-plank geometry and duration semantics, not joint kinetics, muscle activation, quantitative role ranking, hypertrophy, or medical benefit."
@@ -4887,7 +4892,10 @@
       "id": "trx-2023-y-fly",
       "sourceType": "officialTechnicalStandard",
       "title": "4 Shoulder Supersets for More Intense Shoulder Workouts",
-      "authors": ["TRX Training", "Tristan Z"],
+      "authors": [
+        "TRX Training",
+        "Tristan Z"
+      ],
       "year": 2023,
       "url": "https://www.trxtraining.com/blogs/news/shoulder-supersets",
       "scope": "TRX's official Y Fly instructions, dated May 25, 2023, specify mid-to-fully-lengthened straps, facing the anchor in an offset stance, an upright starting endpoint with straight arms held in a Y, a controlled backward body lean, and a return to the upright Y while keeping the arms straight. It anchors the standing suspension fixture, arm path, and held-elbow boundary, but does not report grip orientation; its marketing muscle language does not establish joint kinetics, quantitative muscle ranking, a portable resistance fraction, hypertrophy, or medical benefit."
@@ -4896,7 +4904,10 @@
       "id": "cugliari-boccia-2017-suspension-core",
       "sourceType": "experimentalEMGStudy",
       "title": "Core Muscle Activation in Suspension Training Exercises",
-      "authors": ["Giovanni Cugliari", "Gennaro Boccia"],
+      "authors": [
+        "Giovanni Cugliari",
+        "Gennaro Boccia"
+      ],
       "year": 2017,
       "doi": "10.1515/hukin-2017-0023",
       "pmid": "28469744",
@@ -4908,7 +4919,12 @@
       "id": "snarr-2016-suspension-pike",
       "sourceType": "experimentalEMGStudy",
       "title": "Electromyographical Comparison of Pike Variations Performed With and Without Instability Devices",
-      "authors": ["Ronald L. Snarr", "Ashleigh V. Hallmark", "Brett S. Nickerson", "Michael R. Esco"],
+      "authors": [
+        "Ronald L. Snarr",
+        "Ashleigh V. Hallmark",
+        "Brett S. Nickerson",
+        "Michael R. Esco"
+      ],
       "year": 2016,
       "doi": "10.1519/JSC.0000000000001436",
       "pmid": "27191692",
@@ -4919,7 +4935,9 @@
       "id": "trx-2022-compound-movements-part-2",
       "sourceType": "officialTechnicalStandard",
       "title": "TRX Moves of the Week: Compound Movements, Part 2",
-      "authors": ["TRX Training"],
+      "authors": [
+        "TRX Training"
+      ],
       "year": 2022,
       "url": "https://www.trxtraining.com/blogs/news/trx-moves-of-the-week-compound-movements-part-2",
       "scope": "TRX's official technique article demonstrates the bilateral TRX Crunch, Frogger, and Pike with feet suspended, floor-supported hands, a braced plank start, and controlled returns. It anchors the Knee Tuck and Pike support topology and their bent-knee versus straight-leg boundaries; it does not describe the alternating Mountain Climber or establish quantitative joint kinetics, muscle ranking, portable load equivalence, hypertrophy, or medical benefit."
@@ -4928,7 +4946,14 @@
       "id": "youdas-2020-feet-suspended-pushup",
       "sourceType": "experimentalEMGStudy",
       "title": "Recruitment of Shoulder Prime Movers and Torso Stabilizers During Push-Up Exercises Using a Suspension Training System",
-      "authors": ["James W. Youdas", "Hannah E. Baartman", "Brian J. Gahlon", "Tyler J. Kohnen", "Robert J. Sparling", "John H. Hollman"],
+      "authors": [
+        "James W. Youdas",
+        "Hannah E. Baartman",
+        "Brian J. Gahlon",
+        "Tyler J. Kohnen",
+        "Robert J. Sparling",
+        "John H. Hollman"
+      ],
       "year": 2020,
       "doi": "10.1123/jsr.2019-0381",
       "pmid": "31910394",
@@ -4939,7 +4964,9 @@
       "id": "trx-2022-effective-core-body-saw",
       "sourceType": "officialTechnicalStandard",
       "title": "TRX Tips for Effective Core Training",
-      "authors": ["TRX Training"],
+      "authors": [
+        "TRX Training"
+      ],
       "year": 2022,
       "url": "https://www.trxtraining.com/blogs/news/trx-tips-for-effective-core-training",
       "scope": "TRX's official Body Saw instructions specify a plank on the elbows with the toes suspended and a backward push created at the shoulders before returning forward. It anchors the fixed-elbow forearm support and shoulder-driven rock, not a numeric travel distance, joint kinetics, muscle ranking, portable load equivalence, hypertrophy, or medical benefit."
@@ -5288,7 +5315,9 @@
       "id": "ace-2014-plank-hip-drop",
       "sourceType": "officialTechnicalStandard",
       "title": "What Comes After Planks?",
-      "authors": ["American Council on Exercise"],
+      "authors": [
+        "American Council on Exercise"
+      ],
       "year": 2014,
       "url": "https://www.acefitness.org/continuing-education/prosource/may-2014/3797/what-comes-after-planks/",
       "scope": "ACE's plank-with-hip-drop progression specifies a forearm-and-toe plank with elbows below the shoulders, rotation through the feet, one hip lowering toward the floor, return through center, and repetition to the other side. It establishes the alternating low-plank fixture and dynamic hip-drop boundary, not segmental spinal kinematics, quantitative muscle ranking, a universal floor-touch endpoint, or medical benefit."
@@ -5297,7 +5326,9 @@
       "id": "ace-2026-high-plank-rotation",
       "sourceType": "officialTechnicalStandard",
       "title": "High Plank T-Spine Rotation",
-      "authors": ["American Council on Exercise"],
+      "authors": [
+        "American Council on Exercise"
+      ],
       "year": 2026,
       "url": "https://www.acefitness.org/resources/everyone/exercise-library/330/high-plank-t-spine-rotation/",
       "scope": "Undated ACE exercise guidance registered with retrieval year 2026. It specifies a push-up-position high plank, weight transfer to one supporting arm, rotation of the shoulders and hips as the free arm reaches toward the ceiling, controlled return, and repetition on the other side. It establishes the alternating high-plank fixture, not isolated thoracic-only motion, a muscle-force ranking, or a universal range."
@@ -5306,7 +5337,9 @@
       "id": "ace-2026-plank-arm-reach",
       "sourceType": "officialTechnicalStandard",
       "title": "Youth Fitness: Choice and Order of Exercise",
-      "authors": ["American Council on Exercise"],
+      "authors": [
+        "American Council on Exercise"
+      ],
       "year": 2026,
       "url": "https://www.acefitness.org/resources/everyone/blog/5066/youth-fitness-choice-and-order-of-exercise/",
       "scope": "Undated ACE guidance registered with retrieval year 2026. Its plank-with-arm-reach drill begins from a forearm-and-toe plank, extends one arm forward, holds briefly while resisting trunk rotation, returns the forearm, and alternates. It establishes the low-plank support and alternating reach boundary, not quantitative recruitment, a mandatory hold duration, or a high-plank version."
@@ -5315,7 +5348,9 @@
       "id": "trx-2026-standing-rollout",
       "sourceType": "officialTechnicalStandard",
       "title": "TRX Standing Roll Out",
-      "authors": ["TRX Training"],
+      "authors": [
+        "TRX Training"
+      ],
       "year": 2026,
       "url": "https://www.trxtraining.com/blogs/news/standing-ab-exercises",
       "scope": "TRX's current standing-rollout guidance specifies standing facing away from the anchor with both hands in the handles, a straight braced body, arms traveling forward and overhead without lumbar sag, and a controlled return. It establishes the standing suspension fixture and body-angle resistance boundary, not a portable bodyweight fraction, numeric muscle ranking, kneeling geometry, or equivalence to the feet-suspended body saw."
@@ -5324,7 +5359,9 @@
       "id": "trx-2023-standing-rollout",
       "sourceType": "officialTechnicalStandard",
       "title": "TRX Warm Up Exercises for Snow Sports",
-      "authors": ["TRX Training"],
+      "authors": [
+        "TRX Training"
+      ],
       "year": 2023,
       "url": "https://www.trxtraining.com/blogs/news/exercises-for-snow-sports",
       "scope": "TRX's standing-rollout standard specifies a mid-length adjustment, standing facing away, hands beneath the shoulders, an aligned plank without sagging, hands rolling to slightly above eyebrow height, and a braced return through the handles. It directly supports the active strap setting and standing fixture, not a universal endpoint, portable resistance value, or kneeling variation."
@@ -5333,7 +5370,9 @@
       "id": "ace-2016-kneeling-barbell-rollout",
       "sourceType": "officialTechnicalStandard",
       "title": "One Weight Workout Series: The Barbell",
-      "authors": ["American Council on Exercise"],
+      "authors": [
+        "American Council on Exercise"
+      ],
       "year": 2016,
       "url": "https://www.acefitness.org/resources/pros/expert-articles/6215/one-weight-workout-series-the-barbell/",
       "scope": "ACE's barbell-rollout standard specifies a kneeling start, both hands on a barbell with round plates, a forward roll while maintaining trunk control, and a controlled return. It establishes the free-rolling barbell fixture, not standing rollouts, a universal distance, a comparable effective resistance value, or quantitative muscle roles."
@@ -5342,7 +5381,9 @@
       "id": "nsca-2020-crossbody-drag",
       "sourceType": "officialTechnicalStandard",
       "title": "Evidence-Based Exercise for Structural Firefighters: A Brief Review",
-      "authors": ["National Strength and Conditioning Association"],
+      "authors": [
+        "National Strength and Conditioning Association"
+      ],
       "year": 2020,
       "url": "https://www.nsca.com/globalassets/education/tsac-report/tsac-report-57.pdf",
       "scope": "The NSCA programming table lists plank with crossbody drags and separately lists Halligan tools, sandbags, kettlebells, and dumbbells as applicable equipment. It supports the exercise category and implement availability only. It does not establish high-plank support, one-implement topology, hand path, endpoints, alternation, repetition counting, joint actions, effective resistance, or categorical muscle rankings."
@@ -5351,7 +5392,11 @@
       "id": "nsca-2020-bridge-pull-through",
       "sourceType": "officialTechnicalStandard",
       "title": "Practical Exercise Programming for Wildland Fire Suppression Aids",
-      "authors": ["Megan McGuire", "Matthew Moreno", "Robert Lockie"],
+      "authors": [
+        "Megan McGuire",
+        "Matthew Moreno",
+        "Robert Lockie"
+      ],
       "year": 2020,
       "url": "https://www.nsca.com/globalassets/education/tsac-report/tsac-report-54.pdf",
       "scope": "The NSCA bridge pull-through standard begins in a high plank with palms down and elbows straight, places one dumbbell behind a hand, shifts support to that side, uses the opposite hand to pull the dumbbell toward the lifting arm's shoulder, returns to high plank, and repeats with the opposite arm while keeping shoulders and hips parallel to the floor. It directly supports the dumbbell fixture and alternating anti-rotation task, not kettlebell identity, a portable effective resistance, exact drag distance, or categorical muscle rankings."
@@ -5360,7 +5405,9 @@
       "id": "prehab-2020-kettlebell-pull-through",
       "sourceType": "officialTechnicalStandard",
       "title": "Kettlebell Pull Through",
-      "authors": ["The Prehab Guys"],
+      "authors": [
+        "The Prehab Guys"
+      ],
       "year": 2020,
       "url": "https://library.theprehabguys.com/vimeo-video/kettlebell-pull-through/",
       "scope": "The professional exercise guide begins in a high plank with a kettlebell under the chest, shifts weight to one side, uses the opposite hand to slide the implement toward that arm, and alternates hands and directions while the core and lower body maintain the plank. It directly supports the kettlebell fixture and alternating drag topology, not a prescribed outside-shoulder endpoint, portable effective resistance, exact drag distance, or categorical muscle rankings."
@@ -5369,7 +5416,9 @@
       "id": "boxing-science-2020-punch-harder",
       "sourceType": "officialTechnicalStandard",
       "title": "Punch Harder",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2020,
       "url": "https://boxingscience.co.uk/app/uploads/2021/09/Punch-Harder-by-Boxing-Science-2020.pdf",
       "scope": "Page 20 specifies straight-arm straight-leg sit-ups with feet together, hands toward the ceiling, a neutral-spine cue, and a controlled three-second descent, and its photographs show the loaded progression holding one medicine ball in both straight arms. The same page specifies simultaneous arm-and-leg lowering with the lower back held against the floor and photographs one medicine ball held in both hands as the limbs move away and return. It directly establishes both active medicine-ball fixtures and total-implement identity, not a universal load, exact floor-clearance endpoint, quantitative muscle ranking, or clinical outcome."
@@ -5378,7 +5427,10 @@
       "id": "shields-1997-double-leg-lowering",
       "sourceType": "experimentalEMGStudy",
       "title": "An Electromyographic Comparison of Abdominal Muscle Synergies during Curl and Double Straight Leg Lowering Exercises with Control of the Pelvic Position",
-      "authors": ["Richard K. Shields", "Deborah G. Heiss"],
+      "authors": [
+        "Richard K. Shields",
+        "Deborah G. Heiss"
+      ],
       "year": 1997,
       "pmid": "9280023",
       "url": "https://pubmed.ncbi.nlm.nih.gov/9280023/",
@@ -5388,25 +5440,31 @@
       "id": "boxing-science-2021-punch-harder",
       "sourceType": "officialTechnicalStandard",
       "title": "Punch Harder: The Blueprint to Elite Performance",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2021,
       "url": "https://boxingscience.co.uk/app/uploads/woocommerce_uploads/2020/03/Punch-Harder-2021-mh7b8g.pdf",
-      "scope": "The Boxing Science handbook directly demonstrates a forearm rotational plank that pivots through the feet into a side-facing position with the free arm raised, plus straight-arm straight-leg sit-ups performed with feet together, arms toward the ceiling, a neutral-spine cue, and a controlled three-second descent. It also presents simultaneous arm-and-leg lowering with the lower back held against the floor. The source establishes those movement boundaries, not segmental spinal motion, exact muscle recruitment, a universal load, or implement identity."
+      "scope": "The Boxing Science handbook directly demonstrates a forearm rotational plank that pivots through the feet into a side-facing position with the free arm raised, plus straight-arm straight-leg sit-ups performed with feet together, arms toward the ceiling, a neutral-spine cue, and a controlled three-second descent. It also presents simultaneous arm-and-leg lowering with the lower back held against the floor. The source establishes those movement boundaries, not segmental spinal motion, exact muscle recruitment, a universal load, or implement identity. Page 23 also specifies a rear-hand medicine-ball punch from a boxing stance with the ball close to the shoulder, fixed feet, floor drive, foot/hip/torso rotation, and arm extension; the publisher-hosted photographs corroborate the fixture identity but do not resolve a three-dimensional humeral path."
     },
     {
       "id": "boxing-science-exercise-library",
       "sourceType": "officialTechnicalStandard",
       "title": "Exercise Library: Boxing Science Strength and Conditioning Program",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2026,
       "url": "https://www.scribd.com/document/965522663/EXERCISE-LIBRARY-Boxing-Science-Strength-and-Conditioning-Program-Vwtlck",
-      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. It specifies the straight-leg medicine-ball sit-up; the 45-degree partner-anchored supine hold; the partner-anchored lateral bench hold; the hands-elevated dumbbell plank; the weighted supine hold without identifying its implement; the standing manual-resistance hold; the single-arm medicine-ball plank; and five previously cataloged plank fixtures. It anchors the stated setup, support, path, and instruction boundaries of those exact fixtures, not universal loads, joint moments, categorical muscle rankings, medical outcomes, or equivalence to similarly named exercises."
+      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. It specifies the setup and repetition boundaries for the Supine Med Ball Chest Pass, Medicine Ball Punch Throw, half-kneeling dumbbell and landmine presses, Dumbbell Push Press, Landmine Punch, Isometric Wall Hold, and the previously cataloged trunk and plank fixtures. It anchors those exact named fixtures' setup, support, path, reset, and side prescription, not universal loads, joint moments, categorical muscle rankings, medical outcomes, or equipment variants whose topology the text leaves unspecified."
     },
     {
       "id": "boxing-science-2021-core-training",
       "sourceType": "officialTechnicalStandard",
       "title": "Core Training for Boxing",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2021,
       "url": "https://boxingscience.co.uk/core-training-for-boxing/",
       "scope": "The Boxing Science technical article directly describes a partner-anchored 60-degree trunk-hold assessment and a lateral trunk-hold assessment performed with the hips at the bench edge and the lower body fixed. It supports the partner-anchored bench fixtures and their no-movement endurance intent, but it does not make the 60-degree assessment identical to the exercise library's separately named 45-degree training hold or establish the catalog's complete muscle hierarchy."
@@ -5415,7 +5473,9 @@
       "id": "boxing-science-manual-core-holds-video",
       "sourceType": "officialTechnicalStandard",
       "title": "Manual Core Holds",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2020,
       "url": "https://www.youtube.com/watch?v=2TiIZZdTYSI",
       "scope": "The official Boxing Science demonstration shows an athlete standing with clasped hands extended while a partner applies brief manual perturbations from changing directions. It establishes the standing bilateral support, extended-arm hand contact, changing-direction partner resistance, and static trunk-control intent; it does not quantify partner force or establish an exact muscle-activation ranking."
@@ -5424,7 +5484,9 @@
       "id": "boxing-science-weighted-supine-core-hold-video",
       "sourceType": "officialTechnicalStandard",
       "title": "Supine Core Holds",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2020,
       "url": "https://www.youtube.com/watch?v=bF80SPRr_64",
       "scope": "The official Boxing Science demonstration, published June 19, 2020, shows one round-head dumbbell held in both hands, a staged start with the knees bent and dumbbell near the shoulders, and a long-lever hold with the arms overhead, head and shoulder-blade region raised, straight legs elevated, and lower back controlled against the floor. It establishes that exact implement and geometry, not a universal dumbbell mass, leg height, duration, or muscle-activation ranking."
@@ -5433,7 +5495,9 @@
       "id": "boxing-science-2021-punch-snap-exercises",
       "sourceType": "officialTechnicalStandard",
       "title": "10 Exercises to Improve Punch Snap for Boxing",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2021,
       "url": "https://boxingscience.co.uk/10-exercises-to-improve-punch-snap-for-boxing/",
       "scope": "The Boxing Science technical article prescribes manual-resistance Pallof isometric holds with constant changes in force direction for 15 to 30 seconds and explicitly cues the athlete to prevent forward and sideways trunk leaning. It supports resisted spine-flexion and lateral-flexion tendencies for the perturbation fixture, not quantified partner force, exact joint moments, or a categorical complete-body muscle ranking."
@@ -5442,7 +5506,9 @@
       "id": "boxing-science-2021-pallof-press",
       "sourceType": "officialTechnicalStandard",
       "title": "Rotational Strength and Power for Boxing: The Pallof Press",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2021,
       "url": "https://boxingscience.co.uk/rotational-strength-and-power-for-boxing-the-pallof-press/",
       "scope": "The Boxing Science technical article identifies standing and kneeling manual-resistance Pallof holds, gives the standing hip-width stance with slight hip and knee bend, and explicitly cues active resistance to rotation. It supports the rotational resisted tendency and standing posture of the manual fixture, not equivalence to a steady band Pallof hold, quantified partner force, or exact-fixture muscle activation."
@@ -5451,7 +5517,9 @@
       "id": "boxing-science-2019-core-library",
       "sourceType": "officialTechnicalStandard",
       "title": "Core Exercise Library",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2019,
       "url": "https://boxingscience.co.uk/courses/core/",
       "scope": "The public Boxing Science core-library index, published September 27, 2019 and reviewed in its May 22, 2026 revision, identifies Plank Row and Plank with Knee Touch as separate bodyweight core drills used in its athlete-development programs. It corroborates the branded source identity and separation of the two fixtures, but the index alone does not supply their complete execution, muscle roles, loading, or repetition semantics."
@@ -5460,7 +5528,9 @@
       "id": "boxing-science-2021-boxer-warmup",
       "sourceType": "officialTechnicalStandard",
       "title": "The Boxer's Warm Up",
-      "authors": ["Boxing Science"],
+      "authors": [
+        "Boxing Science"
+      ],
       "year": 2021,
       "url": "https://boxingscience.co.uk/the-boxers-warm-up/",
       "scope": "The Boxing Science warm-up standard, published March 2, 2021 and modified July 13, 2022, includes lateral plank walks and plank clockface work before strength sessions and prescribes three to five lateral-plank steps in each direction. It supports the bidirectional lateral-travel prescription and use of the clockface pattern, not exact muscle recruitment, a training outcome, or interchangeability with forearm walking planks."
@@ -5469,7 +5539,11 @@
       "id": "can-2024-high-plank-support-emg",
       "sourceType": "experimentalEMGStudy",
       "title": "Shoulder and Scapular Muscle Activity During Low and High Plank Variations With Different Body-Weight-Bearing Statuses",
-      "authors": ["Ezgi Nur Can", "Gulcan Harput", "Elif Turgut"],
+      "authors": [
+        "Ezgi Nur Can",
+        "Gulcan Harput",
+        "Elif Turgut"
+      ],
       "year": 2024,
       "doi": "10.1519/JSC.0000000000004622",
       "pmid": "37815235",
@@ -5480,7 +5554,14 @@
       "id": "youdas-2018-fitness-ball-plank",
       "sourceType": "experimentalEMGStudy",
       "title": "Magnitudes of Muscle Activation of Spine Stabilizers in Healthy Adults During Prone on Elbow Planking Exercises With and Without a Fitness Ball",
-      "authors": ["James W. Youdas", "Kendra C. Coleman", "Erin E. Holstad", "Stephanie D. Long", "Nicole L. Veldkamp", "John H. Hollman"],
+      "authors": [
+        "James W. Youdas",
+        "Kendra C. Coleman",
+        "Erin E. Holstad",
+        "Stephanie D. Long",
+        "Nicole L. Veldkamp",
+        "John H. Hollman"
+      ],
       "year": 2018,
       "doi": "10.1080/09593985.2017.1377792",
       "pmid": "28922049",
@@ -5491,10 +5572,116 @@
       "id": "pfp-2022-tall-plank-clock",
       "sourceType": "officialTechnicalStandard",
       "title": "Functionally Fit: Tall Plank Resisted Scapular Clock",
-      "authors": ["Brian Schiff"],
+      "authors": [
+        "Brian Schiff"
+      ],
       "year": 2022,
       "url": "https://fit-pro.com/article-4672-Functionally-Fit-Tall-Plank-Resisted-Scapular-Clock.html",
       "scope": "The professional technique article specifies a tall plank with a light loop, right-hand taps toward one, three, and five o'clock with a return to center after each tap, and a mirrored left-side set. It directly supports the three-position clock path and return semantics. Its loop sits around the wrists rather than Boxing Science's outside-of-hands interface, so it does not establish that the two band contacts are interchangeable or support a universal resistance, muscle ranking, or medical outcome."
+    },
+    {
+      "id": "ace-2025-two-arm-landmine-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "The ACE Workout Builder for Landmine Training",
+      "authors": [
+        "American Council on Exercise"
+      ],
+      "year": 2025,
+      "url": "https://www.acefitness.org/continuing-education/certified/september-2025/8948/the-ace-workout-builder-for-landmine-training/",
+      "scope": "ACE identifies a two-arm landmine press as a bilateral landmine-training option. It supports the existence of the two-hand standing fixture and distinguishes it from one-arm pressing. The catalog's square hip-width stance, strict no-leg-drive boundary, added-plate logging convention, and muscle roles remain explicit product and anatomy-mechanics choices rather than measurements from this article."
+    },
+    {
+      "id": "boxing-science-landmine-punch",
+      "sourceType": "officialTechnicalStandard",
+      "title": "The Landmine Punch for Boxing",
+      "authors": [
+        "Boxing Science"
+      ],
+      "year": 2026,
+      "url": "https://boxingscience.co.uk/the-landmine-punch-for-boxing/",
+      "scope": "Boxing Science presents the landmine punch as a punch-specific whole-body power drill using lower-body drive, hip and trunk rotation, and forceful arm extension along a pivoted bar path. It supports retaining the bar rather than releasing it and separating this rotational power task from a strict landmine press. It does not establish universal load, exact joint moments, muscle ranking, or the catalog's added-plate comparison convention."
+    },
+    {
+      "id": "boxing-science-vertical-press-course",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Vertical Press",
+      "authors": [
+        "Boxing Science"
+      ],
+      "year": 2026,
+      "url": "https://boxingscience.co.uk/courses/vertical-press/",
+      "scope": "Publisher-hosted Boxing Science course roster explicitly names the 1/2 Kneeling Single Arm Dumbbell Press, Dumbbell Push Press, Half Kneeling Single Arm Landmine Press, Landmine Shoulder Press, and Landmine Punch. It corroborates those fixture identities but its public page does not expose the members-only technique videos, joint kinematics, muscle ranking, universal loads, or the catalog side and logging conventions."
+    },
+    {
+      "id": "boxing-science-accommodating-resistance",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Accommodating Resistance Training for Boxing",
+      "authors": [
+        "Boxing Science"
+      ],
+      "year": 2020,
+      "url": "https://boxingscience.co.uk/strength-power-for-boxing-accommodating-resistance/",
+      "scope": "Publisher-hosted Boxing Science guidance describes medicine-ball chest passes as upper-body power work, cues tucked elbows and full elbow extension, and shows release into the air. It corroborates the chest-pass identity and launch cues but does not independently establish the catalog supine floor posture, partner-only reset, joint moments, muscle hierarchy, or universal load."
+    },
+    {
+      "id": "boxing-science-isometric-training",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Isometric Training for Boxing and MMA",
+      "authors": [
+        "Boxing Science"
+      ],
+      "year": 2020,
+      "url": "https://boxingscience.co.uk/isometric-training-for-boxing-and-mma/",
+      "scope": "Publisher-hosted Boxing Science guidance defines overcoming isometrics against an immovable object and explicitly names a towel or sturdy wall as zero-equipment options. It corroborates the wall-hold identity and maximal-intent no-motion class but not the exact hand spacing, split stance, joint moments, muscle ranking, or duration seed."
+    },
+    {
+      "id": "nsca-2014-supine-medicine-ball-chest-pass",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Complex Set Variations—Improving Strength and Power",
+      "authors": [
+        "Chat Williams"
+      ],
+      "year": 2014,
+      "url": "https://www.nsca.com/globalassets/education/ptq/ptq-1.3.pdf",
+      "scope": "The National Strength and Conditioning Association article specifies a supine medicine-ball chest pass in which a trainer or partner stands above the athlete, drops the ball around chest level, and receives the athlete's explosive return pass. It establishes the supine posture, partner interface, reactive catch, chest-level transition, and explosive two-hand return, but not a universal ball mass, muscle ranking, or exact elbow angle."
+    },
+    {
+      "id": "ace-2017-dumbbell-push-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Fast and Efficient Upper-body Training",
+      "authors": [
+        "Makeba Edwards"
+      ],
+      "year": 2017,
+      "url": "https://www.acefitness.org/resources/pros/expert-articles/6467/fast-and-efficient-upper-body-training/",
+      "scope": "The American Council on Exercise article specifies a paired-dumbbell push press from a hip-width stance with the dumbbells just above the shoulders and palms forward. It directs a slight knee bend followed by simultaneous leg straightening and overhead pressing, then a return to the start. It establishes the bilateral implement configuration, pronated rack, leg drive, overhead endpoint, and reset, but not a universal load or muscle ranking."
+    },
+    {
+      "id": "opex-2020-half-kneeling-single-arm-dumbbell-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Single Arm Half Kneeling Dumbbell Press",
+      "authors": [
+        "OPEX Fitness"
+      ],
+      "year": 2020,
+      "url": "https://www.youtube.com/watch?v=2WoOrh3dqss",
+      "scope": "The official OPEX Fitness exercise-library demonstration specifies a half-kneeling single-arm dumbbell press with the dumbbell in the hand opposite the forward knee, starting at shoulder height, pressing to elbow lockout, and returning to the start. It establishes the unilateral implement, same-side-down-knee relationship, shoulder start, overhead endpoint, and controlled reset, but not a universal load, grip rotation, or muscle ranking."
+    },
+    {
+      "id": "hendri-2025-isometric-wall-push",
+      "sourceType": "studyProtocol",
+      "title": "Effect of upper limb isometric training (ULIT) on hamstring strength in early postoperative anterior cruciate ligament reconstruction patients: Study protocol for a randomized controlled trial",
+      "authors": [
+        "Efri Noor Muhamad Hendri",
+        "Mohamad Shariff A Hamid",
+        "Badrul Akmal Hisham Md Yusoff",
+        "Norlelawati Mohamad",
+        "Ashril Yusof"
+      ],
+      "year": 2025,
+      "pmcid": "PMC12370102",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12370102/",
+      "scope": "The published study protocol specifies a standing isometric wall push-up performed facing a solid wall from about arm's length with the feet shoulder-width apart and the hands at shoulder height. Participants apply force against the wall while maintaining arm alignment and hold each effort for five seconds. It establishes the bilateral standing wall interface, shoulder-height hand position, no-motion intent, and duration tracking, but not maximal effort, a towel interface, split stance, elbow tucking, or muscle ranking."
     }
   ]
 }

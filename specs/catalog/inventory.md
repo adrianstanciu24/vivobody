@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 145 |
-| Exercises | 316 |
+| Reviewed families | 149 |
+| Exercises | 324 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 359 |
+| Evidence sources | 368 |
 
 ## Family roster
 
@@ -79,12 +79,14 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [horizontal-press](families/horizontal-press.json) | 15 |
 | [incline-press](families/incline-press.json) | 6 |
 | [inclined-leg-press](families/inclined-leg-press.json) | 2 |
+| [isometric-wall-press-hold](families/isometric-wall-press-hold.json) | 1 |
 | [kettlebell-swing](families/kettlebell-swing.json) | 1 |
 | [knee-extension](families/knee-extension.json) | 3 |
 | [knee-flexion](families/knee-flexion.json) | 4 |
 | [kneeling-ab-wheel-rollout](families/kneeling-ab-wheel-rollout.json) | 1 |
 | [kneeling-barbell-rollout](families/kneeling-barbell-rollout.json) | 1 |
-| [landmine-press](families/landmine-press.json) | 2 |
+| [landmine-press](families/landmine-press.json) | 4 |
+| [landmine-punch](families/landmine-punch.json) | 1 |
 | [landmine-rotation](families/landmine-rotation.json) | 1 |
 | [lateral-band-walk](families/lateral-band-walk.json) | 1 |
 | [lateral-high-plank-walk](families/lateral-high-plank-walk.json) | 1 |
@@ -92,11 +94,13 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [machine-hack-squat](families/machine-hack-squat.json) | 1 |
 | [medicine-ball-carioca-throw](families/medicine-ball-carioca-throw.json) | 1 |
 | [medicine-ball-lateral-shuffle-throw](families/medicine-ball-lateral-shuffle-throw.json) | 1 |
+| [medicine-ball-punch-throw](families/medicine-ball-punch-throw.json) | 1 |
 | [medicine-ball-reactive-half-kneeling-wall-throw](families/medicine-ball-reactive-half-kneeling-wall-throw.json) | 1 |
 | [medicine-ball-rotational-slam](families/medicine-ball-rotational-slam.json) | 1 |
 | [medicine-ball-standing-overhead-slam](families/medicine-ball-standing-overhead-slam.json) | 1 |
 | [medicine-ball-stationary-rotational-throw](families/medicine-ball-stationary-rotational-throw.json) | 3 |
 | [medicine-ball-straight-leg-sit-up](families/medicine-ball-straight-leg-sit-up.json) | 1 |
+| [medicine-ball-supine-chest-pass](families/medicine-ball-supine-chest-pass.json) | 1 |
 | [medicine-ball-tall-kneeling-overhead-slam](families/medicine-ball-tall-kneeling-overhead-slam.json) | 1 |
 | [mid-thigh-clean-pull](families/mid-thigh-clean-pull.json) | 1 |
 | [multidirectional-manual-core-hold](families/multidirectional-manual-core-hold.json) | 1 |
@@ -108,7 +112,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [power-clean](families/power-clean.json) | 1 |
 | [power-snatch](families/power-snatch.json) | 1 |
 | [push-jerk](families/push-jerk.json) | 1 |
-| [push-press](families/push-press.json) | 1 |
+| [push-press](families/push-press.json) | 2 |
 | [reverse-fly](families/reverse-fly.json) | 6 |
 | [roman-chair-hip-extension](families/roman-chair-hip-extension.json) | 1 |
 | [romanian-deadlift](families/romanian-deadlift.json) | 5 |
@@ -160,7 +164,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [upper-arm-pad-chest-fly](families/upper-arm-pad-chest-fly.json) | 1 |
 | [upper-arm-pad-shoulder-abduction](families/upper-arm-pad-shoulder-abduction.json) | 1 |
 | [upright-row](families/upright-row.json) | 1 |
-| [vertical-press](families/vertical-press.json) | 12 |
+| [vertical-press](families/vertical-press.json) | 13 |
 | [vertical-pull](families/vertical-pull.json) | 14 |
 | [walking-lunge](families/walking-lunge.json) | 1 |
 | [wall-sit](families/wall-sit.json) | 1 |

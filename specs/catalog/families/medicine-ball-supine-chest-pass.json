@@ -1,0 +1,291 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "medicine-ball-supine-chest-pass",
+  "name": "Supine Medicine Ball Chest Pass",
+  "definition": "A bilateral reactive medicine-ball power pass performed supine on the floor with a prepared trainer or partner standing above the athlete. The partner drops the ball around chest level; the athlete catches it and immediately returns it explosively with a two-hand chest pass. Wall rebounds, seated throws, standing throws, shot-put releases, and unassisted vertical tosses remain outside this family.",
+  "evidenceRefs": [
+    "nsca-2014-supine-medicine-ball-chest-pass",
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "boxing-science-accommodating-resistance"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "chest",
+    "allowed": [
+      "chest"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "medicineBall"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.horizontalAdduction"
+    ],
+    "primeActions": [],
+    "movementPhases": [
+      {
+        "id": "receive",
+        "name": "Receive",
+        "primeActions": [],
+        "yieldingActions": [
+          "shoulder.horizontalAbduction",
+          "elbow.flexion"
+        ]
+      },
+      {
+        "id": "release",
+        "name": "Release",
+        "primeActions": [
+          "shoulder.horizontalAdduction",
+          "elbow.extension"
+        ]
+      }
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "pectoralisMajorSternocostal"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "pectoralisMajorSternocostal"
+      ],
+      "secondary": [
+        "pectoralisMajorClavicular",
+        "deltoidAnterior",
+        "triceps"
+      ],
+      "stabilizer": [
+        "serratus",
+        "trapeziusMiddle",
+        "abs",
+        "fingerFlexors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Floor posture retained for the throw.",
+      "allowedValues": [
+        "supineFloor"
+      ]
+    },
+    {
+      "id": "ballStart",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly specified ball transition into the repetition.",
+      "allowedValues": [
+        "partnerDropAroundChestLevel"
+      ]
+    },
+    {
+      "id": "elbowPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-resolved elbow relationship.",
+      "allowedValues": [
+        "notFixed"
+      ]
+    },
+    {
+      "id": "releaseDirection",
+      "valueType": "enum",
+      "required": true,
+      "description": "Direction of the free release.",
+      "allowedValues": [
+        "verticalToPreparedPartner"
+      ]
+    },
+    {
+      "id": "responseStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "How each repetition resets.",
+      "allowedValues": [
+        "partnerDropsAthleteCatchesAndReturns"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether the ball follows an external guide.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 3,
+      "maximum": 8
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "supine-medicine-ball-chest-pass",
+      "name": "Supine Medicine Ball Chest Pass",
+      "aliases": [
+        "Supine Med Ball Chest Pass",
+        "Lying Medicine Ball Chest Pass"
+      ],
+      "equipment": "medicineBall",
+      "laterality": "bilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 5,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "bodyPosition": "supineFloor",
+        "ballStart": "partnerDropAroundChestLevel",
+        "elbowPosition": "notFixed",
+        "releaseDirection": "verticalToPreparedPartner",
+        "responseStrategy": "partnerDropsAthleteCatchesAndReturns",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "nsca-2014-supine-medicine-ball-chest-pass",
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "boxing-science-accommodating-resistance"
+      ],
+      "execution": {
+        "startingPosition": "Lie face up on the floor while a prepared trainer or partner stands securely above you holding a medicine ball.",
+        "movement": "Have the partner drop the ball toward your chest. Catch it with both hands around chest level and immediately return it explosively with a two-hand chest pass.",
+        "endpoint": "The repetition ends when the ball leaves both hands.",
+        "returnPhase": "Let the partner catch the return pass and prepare the next controlled drop.",
+        "controlledJoints": "Absorb the drop through the arms and reverse it without sitting up to add trunk momentum.",
+        "supportAndPosture": "Keep your torso and head supported on the floor throughout the pass.",
+        "disqualifyingCompensations": [
+          "Starting from a paused ball on the chest removes the specified reactive drop-and-return phase.",
+          "Throwing toward a wall changes the receiving environment.",
+          "Curling the torso off the floor adds a sit-up action."
+        ]
+      }
+    }
+  ]
+}

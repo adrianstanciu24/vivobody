@@ -129,6 +129,24 @@ REQUESTED_PLANK_FAMILY_IDS = {
     "swiss-ball-stir-the-pot",
 }
 
+BOXING_PRESS_BATCH_FAMILY_IDS = {
+    "isometric-wall-press-hold",
+    "landmine-punch",
+    "medicine-ball-punch-throw",
+    "medicine-ball-supine-chest-pass",
+}
+
+BOXING_PRESS_BATCH_RECORD_IDS = {
+    "dumbbell-push-press",
+    "half-kneeling-single-arm-dumbbell-press",
+    "half-kneeling-single-arm-landmine-press",
+    "isometric-wall-press-hold",
+    "landmine-punch",
+    "medicine-ball-punch-throw",
+    "standing-two-hand-landmine-press",
+    "supine-medicine-ball-chest-pass",
+}
+
 REQUESTED_EXERCISE_EVIDENCE_IDS = {
     "narouei-2018-nordic-hamstring",
     "sarabon-2019-nordic-variations",
@@ -384,6 +402,12 @@ EVERYDAY_COVERAGE_RULE_IDS = {
     "everyday-good-morning-fixture-is-training-programmed",
     "power-test-uses-total-system-load",
     "everyday-strength-uses-same-landmine-plate-load",
+    "split-stance-pins-standing-unilateral-topology",
+    "half-kneeling-stance-pins-reviewed-topology",
+    "half-kneeling-position-pins-reviewed-topology",
+    "parallel-stance-pins-two-hand-topology",
+    "two-arm-task-pins-two-hand-topology",
+    "total-system-accounting-pins-power-test",
 }
 
 LATE_LOWER_BODY_FOLLOW_UP_RECORD_IDS = (
@@ -2282,7 +2306,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             catalog.validate_family(
                                 family, self.foundation, "forearm control mutation"
                             )
-        self.assertEqual(fixture_count, 30)
+        self.assertEqual(fixture_count, 31)
 
     def test_external_overhead_press_requires_wrist_and_hand_demands(self) -> None:
         for index, exercise in enumerate(self.vertical_press["exercises"]):
@@ -4027,6 +4051,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "machine-shoulder-press",
                 "hammer-strength-mtssp-single-arm-shoulder-press",
                 "wall-supported-strict-handstand-push-up",
+                "half-kneeling-single-arm-dumbbell-press",
             ],
         )
 
@@ -4109,6 +4134,11 @@ class CatalogFoundationTests(unittest.TestCase):
                         "elbow", "wrist", "hand", "spine", "pelvis",
                         "hip", "knee", "ankle", "foot",
                     ),
+                ),
+                "half-kneeling-single-arm-dumbbell-press": (
+                    "dumbbell", "unilateral", "halfKneeling", "none", "free",
+                    90, "neutral", False, None, None,
+                    ("spine", "pelvis", "wrist", "hand"),
                 ),
             },
         )
@@ -6998,6 +7028,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "medicine-ball-stationary-rotational-throw",
             "medicine-ball-lateral-shuffle-throw",
             "medicine-ball-carioca-throw",
+            *BOXING_PRESS_BATCH_FAMILY_IDS,
             "russian-twist",
             "forearm-plank-arm-reach",
             "forearm-plank-hip-drop",
@@ -7019,7 +7050,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            316,
+            324,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -8043,6 +8074,9 @@ class CatalogFoundationTests(unittest.TestCase):
             "lateral-high-plank-walk",
             "swiss-ball-stir-the-pot",
             "banded-high-plank-clockface-tap",
+            "medicine-ball-punch-throw",
+            "medicine-ball-supine-chest-pass",
+            "isometric-wall-press-hold",
             *CORE_ENDURANCE_FAMILY_IDS,
         }
         actual_family_ids = set()
@@ -8622,8 +8656,10 @@ class CatalogFoundationTests(unittest.TestCase):
                     "lake-2014-push-press-power",
                     "seth-2019-shoulder-work",
                     "soriano-2024-push-press-jerk",
+                    "ace-2017-dumbbell-push-press",
+                    "boxing-science-vertical-press-course",
                 ],
-                "roster": ["barbell-push-press"],
+                "roster": ["barbell-push-press", "dumbbell-push-press"],
             },
         }
         self.assertEqual(set(self.batch3_families), set(expected))
@@ -8753,6 +8789,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "lumbarExtensors": "stabilizer",
             },
         }
+        expected["dumbbell-push-press"] = expected["barbell-push-press"]
         actual = {
             exercise["catalogID"]: {
                 assignment["muscle"]: assignment["role"]
@@ -8918,7 +8955,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "1e4c6f7ea4f315b4e072498e5a63c72e0513bc52c4b00aa478927595f8cc3cda",
+            "542082280e9ee9f946a26a1d762dc57ac6195cde61e82260d6b89415e60b7420",
         )
 
     def test_batch3_variant_axis_contracts_are_exact_and_covered(
@@ -9070,6 +9107,12 @@ class CatalogFoundationTests(unittest.TestCase):
                     ("standingNoRedip",),
                 ),
                 "footContact": ("enum", ("continuous",)),
+                "implementConfiguration": (
+                    "enum", ("straightBarbell", "pairedDumbbells")
+                ),
+                "loadAccounting": (
+                    "enum", ("totalBarAndPlates", "perImplement")
+                ),
             },
         }
         optional_by_family = {
@@ -9346,7 +9389,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             ),
                         )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 79)
+        self.assertEqual(mutation_count, 98)
 
     def test_batch3_cross_family_press_and_scapular_boundaries_are_pinned(
         self,
@@ -9450,7 +9493,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     f"declares forbidden prime action {re.escape(action)}",
                 )
 
-    def test_batch3_one_record_contracts_keep_invariants_at_axis_level(
+    def test_batch3_single_record_contract_keeps_invariants_at_axis_level(
         self,
     ) -> None:
         expected_seeds = {
@@ -9460,13 +9503,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 5,
                 2.5,
                 12,
-            ),
-            "push-press": (
-                "barbell-push-press",
-                "power",
-                45,
-                20,
-                5,
             ),
         }
         for family_id, seed in expected_seeds.items():
@@ -9934,7 +9970,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "e3d694aeec3fd933f7c2ddc15b24b8e3d9cb861e57194868c2e304f15d10607c"
                 ),
                 "standing-single-arm-landmine-press": (
-                    "fcc110f6d6f25e344c5f56afdd6662794c5ad4bf82610fda5393c62f459f000d"
+                    "d3c8660ce36ff2e6382e89320b6c4e9edde70e15b3422d4d35ff1ea022a1dc17"
                 ),
             },
         )
@@ -9962,7 +9998,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "db7ec7204d2a6fa7d7371885fb82e09414efea3ea7e17b601b16fb69aa50b2cc"
                 ),
                 "standing-single-arm-landmine-press": (
-                    "6da20b16d3e418a596876e1bb1cd83c3a1dd1b199bcda22d3ba98b3b78c04eca"
+                    "b403293dc49c7efdde57085a6911033a44b8637700c7fecd04b8289949a963bb"
                 ),
             },
         )
@@ -9982,11 +10018,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 "musclePolicy": "3fc5e5acdc93036f6ecaa8045d25446534e842af471741ea251fef2f206638ce",
             },
             "landmine-press": {
-                "allowed": "2a90f8978a391db025b84f1695c378284137d8d3a31236c63127c86c3346c26e",
+                "allowed": "9ed31965ef35f38ec74f6304278934c70063844a9ec027b6094b80c1c43d40c1",
                 "recommended": "a07fe8ed0eae9d2ab391cf7b2d67d12fff46aed4fba41e4fd3a898a9bbedc561",
                 "movementSignature": "b796825269b75343474af267928d7958ec26da8d6268856b4fb2b445b1a51ef3",
-                "variantAxes": "04b89c7a21a368ea3f55695fa444722a144e5a4b46554b49ffcd1d6fe778f185",
-                "exerciseRules": "48a73f73d56e1c7921aa66ce94062198c1cb393495d0463b1754bc3535db2e43",
+                "variantAxes": "d0fe7b36c275ed735611c24fa072d4e52210c4c7a51015ad43361cdbbac67f61",
+                "exerciseRules": "490e0ca2ba20780787919b6ad0e55008710e2392402efd400a538126f7ba5456",
                 "musclePolicy": "a5917e807108c407217c4ab3f12b4d67dbe02c4da28fc2f1802e8cc5a045c74d",
             },
         }
@@ -10180,7 +10216,9 @@ class CatalogFoundationTests(unittest.TestCase):
             with self.subTest(stabilizer=muscle):
                 with self.assertRaises(catalog.ValidationFailure):
                     catalog.validate_family(mutated, self.foundation, "mutated vertical press")
-        for external in family["exercises"][:-1]:
+        for external in family["exercises"]:
+            if external["catalogID"] == exercise["catalogID"]:
+                continue
             self.assertTrue(bodyweight_axes.isdisjoint(external["variant"]))
         self.assertNotIn(
             "closed-chain-vertical-press",
@@ -16970,7 +17008,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 359)
+        self.assertEqual(len(source_by_id), 368)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -17127,8 +17165,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             10,
         )
-        self.assertEqual(len(self.real_families), 145)
-        self.assertEqual(len(self.foundation.evidence_ids), 359)
+        self.assertEqual(len(self.real_families), 149)
+        self.assertEqual(len(self.foundation.evidence_ids), 368)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -18550,7 +18588,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         normalized_proposal = " ".join(proposal.split())
 
-        self.assertIn("| Reviewed families | 145 |", self.catalog_inventory)
+        self.assertIn("| Reviewed families | 149 |", self.catalog_inventory)
         self.assertIn(
             "Batch 7 now contains nine active families",
             roadmap,
@@ -18561,7 +18599,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 316 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 324 |", self.catalog_inventory)
         self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
@@ -19703,9 +19741,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 145)
-        self.assertEqual(len(records), 316)
-        self.assertEqual(len(self.foundation.evidence_ids), 359)
+        self.assertEqual(len(self.real_families), 149)
+        self.assertEqual(len(records), 324)
+        self.assertEqual(len(self.foundation.evidence_ids), 368)
         self.assertEqual(
             {
                 key: upright[key]
@@ -20055,7 +20093,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 316 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 324 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -22982,21 +23020,21 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 316 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 324 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_145_families_and_316_exercises(
+    def test_runtime_projection_is_exactly_149_families_and_324_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 316)
+        self.assertEqual(len(records), 324)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 145)
+        self.assertEqual(len({record["familyID"] for record in records}), 149)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -23133,6 +23171,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "upper-arm-pad-chest-fly",
                 "upper-arm-pad-shoulder-abduction",
                 "vertical-press", "seated-dip-press", "pike-push-up",
+                "isometric-wall-press-hold", "landmine-punch",
+                "medicine-ball-punch-throw", "medicine-ball-supine-chest-pass",
             },
             "pull": {
                 "active-dead-hang",
@@ -23427,7 +23467,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 316)
+            self.assertEqual(len(emitted), 324)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -23679,7 +23719,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_ids), 359)
+        self.assertEqual(len(source_ids), 368)
         self.assertTrue(COMPREHENSIVE_EXPANSION_EVIDENCE_IDS <= source_ids)
 
     def test_must_have_expansion_is_source_exact_and_runtime_visible(self) -> None:
@@ -24074,9 +24114,9 @@ class CatalogFoundationTests(unittest.TestCase):
 
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
-        self.assertEqual(len(self.real_families), 145)
-        self.assertEqual(len(runtime), 316)
-        self.assertEqual(len(self.foundation.evidence_ids), 359)
+        self.assertEqual(len(self.real_families), 149)
+        self.assertEqual(len(runtime), 324)
+        self.assertEqual(len(self.foundation.evidence_ids), 368)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids
@@ -25723,7 +25763,7 @@ class CatalogFoundationTests(unittest.TestCase):
             for family in self.real_families
             if family["id"].startswith("medicine-ball-")
         }
-        self.assertEqual(len(families), 8)
+        self.assertEqual(len(families), 10)
         for family_id, original in families.items():
             mutated = copy.deepcopy(original)
             axis_id = mutated["variantAxes"][0]["id"]
@@ -25743,6 +25783,168 @@ class CatalogFoundationTests(unittest.TestCase):
             "both yielding and another action mode",
         ):
             catalog.validate_family(reactive, self.foundation)
+
+    def test_boxing_press_batch_is_exact_and_mutation_guarded(self):
+        families = {family["id"]: family for family in self.real_families}
+        exercises = {
+            exercise["catalogID"]: (family["id"], exercise)
+            for family in self.real_families
+            for exercise in family["exercises"]
+        }
+        self.assertTrue(BOXING_PRESS_BATCH_RECORD_IDS <= exercises.keys())
+        self.assertEqual(
+            {
+                catalog_id: exercises[catalog_id][0]
+                for catalog_id in BOXING_PRESS_BATCH_RECORD_IDS
+            },
+            {
+                "dumbbell-push-press": "push-press",
+                "half-kneeling-single-arm-dumbbell-press": "vertical-press",
+                "half-kneeling-single-arm-landmine-press": "landmine-press",
+                "isometric-wall-press-hold": "isometric-wall-press-hold",
+                "landmine-punch": "landmine-punch",
+                "medicine-ball-punch-throw": "medicine-ball-punch-throw",
+                "standing-two-hand-landmine-press": "landmine-press",
+                "supine-medicine-ball-chest-pass": (
+                    "medicine-ball-supine-chest-pass"
+                ),
+            },
+        )
+
+        semantics = {
+            catalog_id: tuple(
+                exercises[catalog_id][1][key]
+                for key in (
+                    "modality", "trackingMode", "loadMode", "laterality"
+                )
+            )
+            for catalog_id in BOXING_PRESS_BATCH_RECORD_IDS
+        }
+        self.assertEqual(
+            semantics["isometric-wall-press-hold"],
+            ("isometricStrength", "duration", "nonComparable", "bilateral"),
+        )
+        for catalog_id in {
+            "dumbbell-push-press", "landmine-punch",
+            "medicine-ball-punch-throw", "supine-medicine-ball-chest-pass",
+        }:
+            with self.subTest(catalog_id=catalog_id):
+                self.assertEqual(semantics[catalog_id][0:2], ("power", "reps"))
+
+        two_hand = exercises["standing-two-hand-landmine-press"][1]
+        single_arm = exercises["standing-single-arm-landmine-press"][1]
+        self.assertTrue(
+            {"Standing Landmine Press", "Landmine Press"}
+            <= set(two_hand["aliases"])
+        )
+        self.assertNotIn("Landmine Press", single_arm["aliases"])
+
+        proposal = (
+            catalog.SPEC_ROOT
+            / "proposals"
+            / "kettlebell-press-ups-with-bands.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Status: blocked pending setup confirmation", proposal)
+        self.assertNotIn(
+            "Kettlebell Press-Ups w/ Bands",
+            {
+                exercise["name"]
+                for family in self.real_families
+                for exercise in family["exercises"]
+            },
+        )
+
+        for family_id in BOXING_PRESS_BATCH_FAMILY_IDS:
+            original = families[family_id]
+            for axis in original["variantAxes"]:
+                if not axis["required"]:
+                    continue
+                mutated = copy.deepcopy(original)
+                mutated["exercises"][0]["variant"].pop(axis["id"])
+                with self.subTest(family=family_id, missing_axis=axis["id"]):
+                    with self.assertRaises(catalog.ValidationFailure):
+                        catalog.validate_family(mutated, self.foundation)
+
+            for action in original["movementSignature"][
+                "forbiddenPrimeActions"
+            ]:
+                mutated = copy.deepcopy(original)
+                mutated["exercises"][0]["additionalPrimeActions"] = [action]
+                with self.subTest(family=family_id, forbidden_action=action):
+                    with self.assertRaises(catalog.ValidationFailure):
+                        catalog.validate_family(mutated, self.foundation)
+
+            for requirement_index, requirement in enumerate(
+                original["musclePolicy"]["requirements"]
+            ):
+                mutated = copy.deepcopy(original)
+                mutated["exercises"][0]["involvement"] = [
+                    assignment
+                    for assignment in mutated["exercises"][0]["involvement"]
+                    if assignment["muscle"] not in requirement["anyOf"]
+                ]
+                with self.subTest(
+                    family=family_id,
+                    missing_requirement=requirement_index,
+                ):
+                    with self.assertRaises(catalog.ValidationFailure):
+                        catalog.validate_family(mutated, self.foundation)
+
+        existing_family_mutations = {
+            "vertical-press": (
+                "half-kneeling-single-arm-dumbbell-press", "bodyPosition"
+            ),
+            "landmine-press": (
+                "standing-two-hand-landmine-press", "workingSide"
+            ),
+            "push-press": ("dumbbell-push-press", "loadAccounting"),
+        }
+        for family_id, (catalog_id, axis_id) in existing_family_mutations.items():
+            mutated = copy.deepcopy(families[family_id])
+            exercise = next(
+                item for item in mutated["exercises"]
+                if item["catalogID"] == catalog_id
+            )
+            exercise["variant"].pop(axis_id)
+            with self.subTest(family=family_id, missing_axis=axis_id):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(mutated, self.foundation)
+
+        hybrid_mutations = (
+            (
+                "vertical-press", "half-kneeling-single-arm-dumbbell-press",
+                {"equipment": "barbell", "laterality": "bilateral"},
+                {},
+            ),
+            (
+                "landmine-press", "standing-single-arm-landmine-press",
+                {}, {"bodyPosition": "halfKneeling"},
+            ),
+            (
+                "landmine-press", "standing-single-arm-landmine-press",
+                {"laterality": "bilateral"},
+                {"workingSide": "bothArmsTogether"},
+            ),
+            (
+                "push-press", "barbell-push-press", {},
+                {
+                    "gripOrientation": "neutralToPronated",
+                    "implementConfiguration": "pairedDumbbells",
+                    "loadAccounting": "perImplement",
+                },
+            ),
+        )
+        for family_id, catalog_id, top_level, variant in hybrid_mutations:
+            mutated = copy.deepcopy(families[family_id])
+            exercise = next(
+                item for item in mutated["exercises"]
+                if item["catalogID"] == catalog_id
+            )
+            exercise.update(top_level)
+            exercise["variant"].update(variant)
+            with self.subTest(family=family_id, hybrid=catalog_id):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(mutated, self.foundation)
 
         stationary = copy.deepcopy(
             families["medicine-ball-stationary-rotational-throw"]

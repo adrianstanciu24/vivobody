@@ -76,6 +76,17 @@ CORE_ENDURANCE_RECORD_IDS = {
     "partner-perturbation-manual-core-hold",
 }
 
+BOXING_PRESS_BATCH_RECORD_IDS = {
+    "dumbbell-push-press",
+    "half-kneeling-single-arm-dumbbell-press",
+    "half-kneeling-single-arm-landmine-press",
+    "isometric-wall-press-hold",
+    "landmine-punch",
+    "medicine-ball-punch-throw",
+    "standing-two-hand-landmine-press",
+    "supine-medicine-ball-chest-pass",
+}
+
 
 class RequestedCatalogGapTests(unittest.TestCase):
     @classmethod
@@ -122,13 +133,15 @@ class RequestedCatalogGapTests(unittest.TestCase):
                        | ROTATIONAL_STRENGTH_RECORD_IDS
                        | CORE_STRENGTH_EXPANSION_RECORD_IDS
                        | CORE_ENDURANCE_RECORD_IDS
+                       | BOXING_PRESS_BATCH_RECORD_IDS
                    )]
         self.assertEqual(len(records), 259)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()
-        # Reviewed runtime after later catalog additions; source-only support
-        # metadata may change without changing product records or muscle credit.
+        # Reviewed runtime after the unqualified Landmine Press alias moved from
+        # the single-arm record to the new two-hand record. New batch records are
+        # excluded above; source-only support metadata may change independently.
         self.assertEqual(hashlib.sha256(encoded).hexdigest(),
-                         "ff1b2becb43daf2421746a680ade7d8f94f850eab06acecd497ae1d6be585cdc")
+                         "9a853e5e4468e88fcbab06b8c05d369199177fe0d8eb75bf7819ca51bd6c31ee")
 
     def test_unloaded_splits_do_not_credit_an_implement_hold(self):
         for catalog_id in ("bodyweight-split-squat", "bodyweight-bulgarian-split-squat"):

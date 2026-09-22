@@ -1,0 +1,58 @@
+{
+  "name": "catalog-boxing-press-batch-accessibility",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityXXXL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPush"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Standing Two-Hand Landmine Press,"
+        },
+        "direction": "up",
+        "maxSwipes": 70
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Standing Two-Hand Landmine Press,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Standing Two-Hand Landmine Press"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "labelContains": "Muscles used by Standing Two-Hand Landmine Press"
+    }
+  ],
+  "forbidden": []
+}

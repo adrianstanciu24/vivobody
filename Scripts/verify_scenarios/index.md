@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 174.
+Scenario files: 175.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -33,6 +33,7 @@ Scenario files: 174.
 | [catalog-adductor-coverage](catalog-adductor-coverage.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-adductor-machine-light](catalog-adductor-machine-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-banded-plank-clockface-dark](catalog-banded-plank-clockface-dark.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-boxing-press-batch-accessibility](catalog-boxing-press-batch-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [catalog-cable-expansion](catalog-cable-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-common-machines-accessibility](catalog-common-machines-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-common-machines-light](catalog-common-machines-light.json) | library | `--static-body -settings.appearance light` |
