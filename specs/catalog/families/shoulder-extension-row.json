@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "shoulder-extension-row",
   "name": "Horizontal Row",
-  "definition": "A strict compound horizontal pull whose concentric phase combines shoulder extension from a flexed start, scapular retraction, and elbow flexion while the torso and lower body resist rather than propel the load. The admitted upper-arm path remains tucked or within a modest scapular corridor. Wide or deliberately flared horizontal-abduction rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, face pulls, momentum rows, renegade rows, and unreviewed bodyweight inclinations or apparatuses remain outside this contract. The measured 45-degree fixture routes to diagonal-pull; product-named lever high rows do not inherit that ownership without geometry review. The anchored-bar branch is only the unsupported bilateral close-neutral-grip landmine T-bar row, with tucked elbows and an anchored lever arc; other landmine rows remain excluded.",
+  "definition": "A strict compound horizontal pull whose concentric phase combines shoulder extension from a flexed start, scapular retraction, and elbow flexion while the torso and lower body resist rather than propel the load. The admitted upper-arm path remains tucked or within a modest scapular corridor. Unilateral dumbbell fixtures distinguish hand-only bench support with both feet planted from hand-and-knee bench support. Wide or deliberately flared horizontal-abduction rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, face pulls, momentum rows, renegade rows, and unreviewed bodyweight inclinations or apparatuses remain outside this contract. The measured 45-degree fixture routes to diagonal-pull; product-named lever high rows do not inherit that ownership without geometry review. The anchored-bar branch is only the unsupported bilateral close-neutral-grip landmine T-bar row, with tucked elbows and an anchored lever arc; other landmine rows remain excluded.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "fennell-2016-shoulder-retractor-row",
@@ -336,6 +336,7 @@
       "description": "Whether the opposite hand and knee support the body without directly supporting the torso.",
       "allowedValues": [
         "none",
+        "handOnBench",
         "handAndKneeOnBench"
       ]
     },
@@ -708,6 +709,26 @@
         { "field": "equipment", "value": "machine" },
         { "field": "variant.bodyPosition", "value": "seated" },
         { "field": "variant.machineType", "value": "leverRow" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "hand-only-support-is-unilateral-dumbbell",
+      "description": "Hand-only contralateral bench support belongs to a unilateral hip-hinged dumbbell row with both feet planted and no torso support.",
+      "when": {
+        "field": "variant.contralateralSupport",
+        "operator": "equals",
+        "value": "handOnBench"
+      },
+      "then": [
+        { "field": "equipment", "value": "dumbbell" },
+        { "field": "laterality", "value": "unilateral" },
+        { "field": "variant.bodyPosition", "value": "hipHinged" },
+        { "field": "variant.lowerBodySupport", "value": "none" },
+        { "field": "variant.torsoSupport", "value": "none" },
+        { "field": "variant.gripOrientation", "value": "neutral" },
+        { "field": "variant.externalPath", "value": "free" }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -1454,6 +1475,78 @@
           "Rowing one dumbbell at a time turns the two-arm row into a one-arm row.",
           "Standing up to swing the dumbbells turns the strict row into a momentum row."
         ]
+      }
+    },
+    {
+      "catalogID": "single-arm-bent-over-row",
+      "name": "Single-Arm Bent-Over Row",
+      "aliases": [
+        "Single Arm Bent Over Row",
+        "Hand-Supported Single-Arm Bent-Over Row"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 35,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 98,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "hipHinged",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "handOnBench",
+        "externalPath": "free"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "saeterbakken-2015-unilateral-row-core",
+        "boxing-science-exercise-library"
+      ],
+      "execution": {
+        "startingPosition": "Stand with both feet slightly wider than hip-width, hinge until the torso is approximately parallel to the floor, place the opposite hand on a bench, and let the dumbbell hang beneath the working shoulder.",
+        "movement": "Pull the dumbbell toward the working-side armpit at a controlled tempo.",
+        "endpoint": "End with the elbow beside the torso without turning the shoulders.",
+        "returnPhase": "Lower the dumbbell under control until the working arm is straight.",
+        "controlledJoints": "Keep the hips, knees, and torso still while the shoulder blade moves naturally with the row.",
+        "supportAndPosture": "Keep both feet planted and use only the opposite hand on the bench for support.",
+        "disqualifyingCompensations": [
+          "Placing the opposite knee on the bench changes the fixture into the existing One-Arm Dumbbell Row.",
+          "Rotating the torso to lift the dumbbell changes the strict row into a row-and-rotate variation.",
+          "Standing up or driving through the legs turns the strict row into a momentum row."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then switch to the other arm."
       }
     },
     {

@@ -1,0 +1,244 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "rotational-row",
+  "name": "Rotational Row",
+  "definition": "A unilateral kettlebell row from a hand-supported hip hinge that deliberately combines shoulder extension from flexion, scapular retraction, elbow flexion, and upper-body spinal rotation while both feet, hips, and knees remain position-held. The exact admitted fixture rows toward the armpit and turns the shoulders and upper back over the working side before a controlled return. Strict non-rotational rows, accidental momentum twists, pelvis- or leg-driven turns, unsupported rows, renegade rows, and cable or dumbbell variants remain outside this narrow family. The catalog represents the deliberate turn as spinal rotation without claiming isolated thoracic motion or side-specific oblique recruitment.",
+  "evidenceRefs": [
+    "ruddock-2016-professional-boxing",
+    "saeterbakken-2015-unilateral-row-core",
+    "sugaya-2016-trunk-rotation",
+    "ackland-2008-shoulder-moment-arms",
+    "boxing-science-exercise-library"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "kettlebell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.rotation"
+    ],
+    "primeActions": [
+      {
+        "action": "shoulder.extension",
+        "condition": "fromFlexedPosition"
+      },
+      "scapula.retraction",
+      "elbow.flexion",
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      { "anyOf": ["lats"], "minimumRole": "primary" },
+      { "anyOf": ["obliques"], "minimumRole": "primary" },
+      { "anyOf": ["teresMajor"], "minimumRole": "secondary" },
+      { "anyOf": ["deltoidPosterior"], "minimumRole": "secondary" },
+      { "anyOf": ["bicepsBrachii"], "minimumRole": "secondary" },
+      { "anyOf": ["brachialis"], "minimumRole": "secondary" },
+      { "anyOf": ["brachioradialis"], "minimumRole": "secondary" },
+      { "anyOf": ["trapeziusMiddle"], "minimumRole": "secondary" },
+      { "anyOf": ["fingerFlexors"], "minimumRole": "stabilizer" },
+      { "anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer" }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "lats",
+        "obliques"
+      ],
+      "secondary": [
+        "teresMajor",
+        "deltoidPosterior",
+        "bicepsBrachii",
+        "brachialis",
+        "brachioradialis",
+        "trapeziusMiddle",
+        "rhomboids"
+      ],
+      "stabilizer": [
+        "subscapularis",
+        "externalRotators",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "lumbarExtensors",
+        "gluteMax",
+        "gluteMed",
+        "vasti",
+        "medialHamstrings",
+        "bicepsFemoris"
+      ]
+    }
+  },
+  "variantAxes": [
+    { "id": "kineticChain", "valueType": "enum", "required": true, "description": "The kettlebell moves freely in the working hand.", "allowedValues": ["open"] },
+    { "id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed torso and hip relationship.", "allowedValues": ["hipHingedTorsoParallel"] },
+    { "id": "stance", "valueType": "enum", "required": true, "description": "The reviewed two-foot stance.", "allowedValues": ["bothFeetSlightlyWiderThanHip"] },
+    { "id": "contralateralSupport", "valueType": "enum", "required": true, "description": "Only the opposite hand braces on the bench.", "allowedValues": ["handOnBench"] },
+    { "id": "gripOrientation", "valueType": "enum", "required": true, "description": "The working hand remains neutral on the kettlebell handle.", "allowedValues": ["neutral"] },
+    { "id": "rowPath", "valueType": "enum", "required": true, "description": "The reviewed kettlebell path.", "allowedValues": ["beneathShoulderToArmpit"] },
+    { "id": "rotationStrategy", "valueType": "enum", "required": true, "description": "The shoulders and upper back deliberately turn over the working side.", "allowedValues": ["upperBodyTurnsHipsAndKneesHeld"] },
+    { "id": "loadAccounting", "valueType": "enum", "required": true, "description": "Log the marked mass of the single kettlebell once.", "allowedValues": ["singleImplement"] },
+    { "id": "fixedPath", "valueType": "boolean", "required": true, "description": "The bench supports the opposite hand but does not guide the kettlebell path.", "fixedValue": false }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 6,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "kettlebell-row-and-rotate",
+      "name": "Kettlebell Row and Rotate",
+      "aliases": [
+        "KB Row and Rotate",
+        "Single-Arm Kettlebell Row and Rotate"
+      ],
+      "equipment": "kettlebell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 35,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 98,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "obliques", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" },
+        { "muscle": "vasti", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "hipHingedTorsoParallel",
+        "stance": "bothFeetSlightlyWiderThanHip",
+        "contralateralSupport": "handOnBench",
+        "gripOrientation": "neutral",
+        "rowPath": "beneathShoulderToArmpit",
+        "rotationStrategy": "upperBodyTurnsHipsAndKneesHeld",
+        "loadAccounting": "singleImplement",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ruddock-2016-professional-boxing",
+        "saeterbakken-2015-unilateral-row-core",
+        "sugaya-2016-trunk-rotation",
+        "ackland-2008-shoulder-moment-arms",
+        "boxing-science-exercise-library"
+      ],
+      "execution": {
+        "startingPosition": "Stand with both feet slightly wider than hip-width, hinge until the torso is approximately parallel to the floor, brace the opposite hand on a bench, and hold one kettlebell beneath the working shoulder with a straight arm.",
+        "movement": "Row the kettlebell toward the working-side armpit while deliberately rotating the shoulders and upper back over that side.",
+        "endpoint": "Finish with the kettlebell near the armpit and the upper body turned while the hips and knees remain still.",
+        "returnPhase": "Untwist and lower the kettlebell slowly until the arm is straight beneath the shoulder.",
+        "controlledJoints": "Keep both feet planted and prevent the hips and knees from driving or following the turn.",
+        "supportAndPosture": "Maintain the hand-supported hinge and rotate through the upper body rather than shifting the pelvis.",
+        "disqualifyingCompensations": [
+          "Keeping the torso square changes the fixture into a strict supported row.",
+          "Turning the hips or driving through the legs changes the reviewed upper-body rotation strategy.",
+          "Placing the opposite knee on the bench changes the support topology."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then switch the kettlebell and bench-support hand."
+      }
+    }
+  ]
+}

@@ -1,0 +1,244 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "prone-tyw-hold-sequence",
+  "name": "Prone T-Y-W Hold Sequence",
+  "definition": "A bilateral floor-prone shoulder and scapular isometric sequence performed without an implement. The athlete keeps the abdomen and chin in contact with the floor, braces the trunk and glutes, and holds the raised T, Y, and W positions for five seconds each. Vivobody tracks the exact three-position sequence as one aggregate 15-second duration because the current timer does not store per-letter intervals. Dynamic prone raises, weighted bench-supported versions, reverse flies, isolated prone T, Y, or W exercises, suspension Y raises, and band scapular retractions remain outside this narrow family.",
+  "evidenceRefs": [
+    "cole-2013-scapular-bracing",
+    "ronai-2016-prone-t",
+    "ronai-2016-prone-y",
+    "ronai-2017-prone-w",
+    "ludewig-2009-multiplanar-humeral-elevation",
+    "ackland-2008-shoulder-moment-arms",
+    "boxing-science-exercise-library"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal",
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.extension",
+      "shoulder.adduction",
+      "shoulder.internalRotation"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "shoulder.extension",
+      "shoulder.adduction",
+      "shoulder.internalRotation",
+      "scapula.protraction",
+      "scapula.downwardRotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "spine",
+      "pelvis",
+      "hip"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      { "anyOf": ["trapeziusMiddle"], "minimumRole": "primary" },
+      { "anyOf": ["trapeziusLower"], "minimumRole": "primary" },
+      { "anyOf": ["deltoidAnterior"], "minimumRole": "secondary" },
+      { "anyOf": ["deltoidLateral"], "minimumRole": "secondary" },
+      { "anyOf": ["deltoidPosterior"], "minimumRole": "secondary" },
+      { "anyOf": ["externalRotators"], "minimumRole": "secondary" },
+      { "anyOf": ["serratus"], "minimumRole": "secondary" },
+      { "anyOf": ["supraspinatus"], "minimumRole": "secondary" },
+      { "anyOf": ["abs"], "minimumRole": "stabilizer" },
+      { "anyOf": ["gluteMax"], "minimumRole": "stabilizer" }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "trapeziusMiddle",
+        "trapeziusLower",
+        "deltoidPosterior"
+      ],
+      "secondary": [
+        "deltoidAnterior",
+        "deltoidLateral",
+        "externalRotators",
+        "serratus",
+        "supraspinatus",
+        "rhomboids",
+        "trapeziusUpper"
+      ],
+      "stabilizer": [
+        "triceps",
+        "bicepsBrachii",
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "gluteMax"
+      ]
+    }
+  },
+  "variantAxes": [
+    { "id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed floor-supported posture.", "allowedValues": ["proneFloor"] },
+    { "id": "torsoContact", "valueType": "enum", "required": true, "description": "The abdomen and chin remain in contact with the floor.", "allowedValues": ["abdomenAndChinOnFloor"] },
+    { "id": "positionSequence", "valueType": "enum", "required": true, "description": "The source-prescribed order of arm shapes.", "allowedValues": ["tThenYThenW"] },
+    { "id": "holdPerPositionSeconds", "valueType": "number", "required": true, "description": "Each T, Y, and W position is held for five seconds.", "minimum": 5, "maximum": 5 },
+    { "id": "armConfiguration", "valueType": "enum", "required": true, "description": "T and Y use straight arms; W uses bent elbows and external rotation.", "allowedValues": ["straightTAndYBentW"] },
+    { "id": "braceStrategy", "valueType": "enum", "required": true, "description": "The trunk and glutes remain braced throughout.", "allowedValues": ["coreAndGlutesBraced"] },
+    { "id": "fixedPath", "valueType": "boolean", "required": true, "description": "No external guide constrains the arm positions.", "fixedValue": false }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 15,
+      "maximum": 60
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "prone-tyw-hold-sequence",
+      "name": "Prone T-Y-W Holds",
+      "aliases": [
+        "Prone TYWs",
+        "Prone TYW",
+        "Prone T-Y-W Series"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "searchPriority": 98,
+      "involvement": [
+        { "muscle": "trapeziusMiddle", "role": "primary" },
+        { "muscle": "trapeziusLower", "role": "primary" },
+        { "muscle": "deltoidPosterior", "role": "primary" },
+        { "muscle": "deltoidAnterior", "role": "secondary" },
+        { "muscle": "deltoidLateral", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "secondary" },
+        { "muscle": "serratus", "role": "secondary" },
+        { "muscle": "supraspinatus", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "trapeziusUpper", "role": "secondary" },
+        { "muscle": "triceps", "role": "stabilizer" },
+        { "muscle": "bicepsBrachii", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "variant": {
+        "bodyPosition": "proneFloor",
+        "torsoContact": "abdomenAndChinOnFloor",
+        "positionSequence": "tThenYThenW",
+        "holdPerPositionSeconds": 5,
+        "armConfiguration": "straightTAndYBentW",
+        "braceStrategy": "coreAndGlutesBraced",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "cole-2013-scapular-bracing",
+        "ronai-2016-prone-t",
+        "ronai-2016-prone-y",
+        "ronai-2017-prone-w",
+        "ludewig-2009-multiplanar-humeral-elevation",
+        "ackland-2008-shoulder-moment-arms",
+        "boxing-science-exercise-library"
+      ],
+      "execution": {
+        "startingPosition": "Lie face down on the floor with your abdomen and chin in contact, legs long, glutes engaged, and trunk braced.",
+        "movement": "Lift both straight arms into a T and hold for five seconds, lower to reset, lift into a Y and hold for five seconds, then lower and form a bent-elbow W for the final five-second hold.",
+        "endpoint": "Complete one 15-second T-to-Y-to-W sequence with each position held for five seconds.",
+        "controlledJoints": "Keep the neck long, avoid shrugging, and preserve the intended straight-arm T and Y and bent-elbow W shapes.",
+        "supportAndPosture": "Keep the abdomen and chin down and the glutes and trunk braced throughout the sequence.",
+        "disqualifyingCompensations": [
+          "Lifting the torso or chin off the floor changes the reviewed support posture.",
+          "Skipping or reordering a letter changes the prescribed T-Y-W sequence.",
+          "Adding weights or using a bench changes the resistance and support geometry."
+        ]
+      },
+      "defaultDuration": 15
+    }
+  ]
+}

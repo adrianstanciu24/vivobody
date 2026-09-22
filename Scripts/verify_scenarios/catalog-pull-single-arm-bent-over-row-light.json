@@ -1,0 +1,23 @@
+{
+  "name": "catalog-pull-single-arm-bent-over-row-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "light"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "Single-Arm Bent-Over Row"},
+    {"wait": {"labelRegex": "^Single-Arm Bent-Over Row, Dumbbell · Horizontal Pull"}},
+    {"tap": {"labelRegex": "^Single-Arm Bent-Over Row, Dumbbell · Horizontal Pull"}},
+    {"wait": {"label": "STRENGTH · REPS"}}
+  ],
+  "required": [
+    {"label": "Single-Arm Bent-Over Row"},
+    {"labelContains": "Muscles used by Single-Arm Bent-Over Row"}
+  ],
+  "forbidden": []
+}

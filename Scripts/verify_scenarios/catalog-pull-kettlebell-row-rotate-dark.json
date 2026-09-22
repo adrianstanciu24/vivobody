@@ -1,0 +1,23 @@
+{
+  "name": "catalog-pull-kettlebell-row-rotate-dark",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "KB Row and Rotate"},
+    {"wait": {"labelRegex": "^Kettlebell Row and Rotate, Kettlebell · Horizontal Pull"}},
+    {"tap": {"labelRegex": "^Kettlebell Row and Rotate, Kettlebell · Horizontal Pull"}},
+    {"wait": {"label": "STRENGTH · REPS"}}
+  ],
+  "required": [
+    {"label": "Kettlebell Row and Rotate"},
+    {"labelContains": "Muscles used by Kettlebell Row and Rotate"}
+  ],
+  "forbidden": []
+}

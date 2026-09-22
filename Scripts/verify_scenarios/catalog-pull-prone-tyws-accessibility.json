@@ -1,0 +1,29 @@
+{
+  "name": "catalog-pull-prone-tyws-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "Prone TYWs"},
+    {"wait": {"labelRegex": "^Prone T-Y-W Holds, Bodyweight · Pull · Isolation"}},
+    {"tap": {"labelRegex": "^Prone T-Y-W Holds, Bodyweight · Pull · Isolation"}},
+    {"wait": {"label": "STRENGTH · HOLD"}}
+  ],
+  "required": [
+    {"label": "Prone T-Y-W Holds"},
+    {"labelContains": "Muscles used by Prone T-Y-W Holds"}
+  ],
+  "forbidden": []
+}

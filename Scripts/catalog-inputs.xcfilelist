@@ -92,11 +92,13 @@ $(SRCROOT)/specs/catalog/families/passive-dead-hang.json
 $(SRCROOT)/specs/catalog/families/pike-push-up.json
 $(SRCROOT)/specs/catalog/families/power-clean.json
 $(SRCROOT)/specs/catalog/families/power-snatch.json
+$(SRCROOT)/specs/catalog/families/prone-tyw-hold-sequence.json
 $(SRCROOT)/specs/catalog/families/push-jerk.json
 $(SRCROOT)/specs/catalog/families/push-press.json
 $(SRCROOT)/specs/catalog/families/reverse-fly.json
 $(SRCROOT)/specs/catalog/families/roman-chair-hip-extension.json
 $(SRCROOT)/specs/catalog/families/romanian-deadlift.json
+$(SRCROOT)/specs/catalog/families/rotational-row.json
 $(SRCROOT)/specs/catalog/families/russian-twist.json
 $(SRCROOT)/specs/catalog/families/scapular-depression.json
 $(SRCROOT)/specs/catalog/families/scapular-elevation.json

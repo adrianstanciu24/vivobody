@@ -1,0 +1,23 @@
+{
+  "name": "catalog-pull-speed-pull-up-dark",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "Speed Pull-Up"},
+    {"wait": {"labelRegex": "^Speed Pull-Up, Bodyweight · Vertical Pull"}},
+    {"tap": {"labelRegex": "^Speed Pull-Up, Bodyweight · Vertical Pull"}},
+    {"wait": {"label": "POWER / EXPLOSIVE"}}
+  ],
+  "required": [
+    {"label": "Speed Pull-Up"},
+    {"labelContains": "Muscles used by Speed Pull-Up"}
+  ],
+  "forbidden": []
+}

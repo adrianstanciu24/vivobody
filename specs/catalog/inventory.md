@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 149 |
-| Exercises | 324 |
+| Reviewed families | 151 |
+| Exercises | 328 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 368 |
+| Evidence sources | 375 |
 
 ## Family roster
 
@@ -111,11 +111,13 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [pike-push-up](families/pike-push-up.json) | 1 |
 | [power-clean](families/power-clean.json) | 1 |
 | [power-snatch](families/power-snatch.json) | 1 |
+| [prone-tyw-hold-sequence](families/prone-tyw-hold-sequence.json) | 1 |
 | [push-jerk](families/push-jerk.json) | 1 |
 | [push-press](families/push-press.json) | 2 |
 | [reverse-fly](families/reverse-fly.json) | 6 |
 | [roman-chair-hip-extension](families/roman-chair-hip-extension.json) | 1 |
 | [romanian-deadlift](families/romanian-deadlift.json) | 5 |
+| [rotational-row](families/rotational-row.json) | 1 |
 | [russian-twist](families/russian-twist.json) | 1 |
 | [scapular-depression](families/scapular-depression.json) | 1 |
 | [scapular-elevation](families/scapular-elevation.json) | 4 |
@@ -127,7 +129,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [seated-machine-back-extension](families/seated-machine-back-extension.json) | 1 |
 | [shoulder-abduction-raise](families/shoulder-abduction-raise.json) | 3 |
 | [shoulder-extension-isolation](families/shoulder-extension-isolation.json) | 4 |
-| [shoulder-extension-row](families/shoulder-extension-row.json) | 14 |
+| [shoulder-extension-row](families/shoulder-extension-row.json) | 15 |
 | [shoulder-external-rotation](families/shoulder-external-rotation.json) | 3 |
 | [shoulder-flexion-raise](families/shoulder-flexion-raise.json) | 2 |
 | [shoulder-horizontal-abduction-row](families/shoulder-horizontal-abduction-row.json) | 7 |
@@ -165,7 +167,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [upper-arm-pad-shoulder-abduction](families/upper-arm-pad-shoulder-abduction.json) | 1 |
 | [upright-row](families/upright-row.json) | 1 |
 | [vertical-press](families/vertical-press.json) | 13 |
-| [vertical-pull](families/vertical-pull.json) | 14 |
+| [vertical-pull](families/vertical-pull.json) | 15 |
 | [walking-lunge](families/walking-lunge.json) | 1 |
 | [wall-sit](families/wall-sit.json) | 1 |
 | [wrist-extension](families/wrist-extension.json) | 1 |

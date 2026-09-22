@@ -87,6 +87,13 @@ BOXING_PRESS_BATCH_RECORD_IDS = {
     "supine-medicine-ball-chest-pass",
 }
 
+REQUESTED_PULL_RECORD_IDS = {
+    "speed-pull-up",
+    "prone-tyw-hold-sequence",
+    "single-arm-bent-over-row",
+    "kettlebell-row-and-rotate",
+}
+
 
 class RequestedCatalogGapTests(unittest.TestCase):
     @classmethod
@@ -134,6 +141,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
                        | CORE_STRENGTH_EXPANSION_RECORD_IDS
                        | CORE_ENDURANCE_RECORD_IDS
                        | BOXING_PRESS_BATCH_RECORD_IDS
+                       | REQUESTED_PULL_RECORD_IDS
                    )]
         self.assertEqual(len(records), 259)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()

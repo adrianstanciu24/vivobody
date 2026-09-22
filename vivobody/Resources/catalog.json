@@ -17466,6 +17466,147 @@
     ]
   },
   {
+    "familyID": "prone-tyw-hold-sequence",
+    "familyName": "Prone T-Y-W Hold Sequence",
+    "movementActions": [
+      {
+        "actionID": "scapula.downwardRotation",
+        "name": "Scapular downward rotation",
+        "plane": "frontal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "scapula.protraction",
+        "name": "Scapular protraction",
+        "plane": "transverse",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "shoulder.internalRotation",
+        "name": "Shoulder internal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "prone-tyw-hold-sequence",
+    "name": "Prone T-Y-W Holds",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 15,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "trainingRole": "pull",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal",
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Prone TYWs",
+      "Prone TYW",
+      "Prone T-Y-W Series"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie face down on the floor with your abdomen and chin in contact, legs long, glutes engaged, and trunk braced.",
+      "movement": "Lift both straight arms into a T and hold for five seconds, lower to reset, lift into a Y and hold for five seconds, then lower and form a bent-elbow W for the final five-second hold.",
+      "endpoint": "Complete one 15-second T-to-Y-to-W sequence with each position held for five seconds.",
+      "controlledJoints": "Keep the neck long, avoid shrugging, and preserve the intended straight-arm T and Y and bent-elbow W shapes.",
+      "supportAndPosture": "Keep the abdomen and chin down and the glutes and trunk braced throughout the sequence.",
+      "disqualifyingCompensations": [
+        "Lifting the torso or chin off the floor changes the reviewed support posture.",
+        "Skipping or reordering a letter changes the prescribed T-Y-W sequence.",
+        "Adding weights or using a bench changes the resistance and support geometry."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "push-jerk",
     "familyName": "Push Jerk",
     "movementActions": [
@@ -19219,6 +19360,140 @@
       },
       {
         "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "rotational-row",
+    "familyName": "Rotational Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "kettlebell-row-and-rotate",
+    "name": "Kettlebell Row and Rotate",
+    "group": "back",
+    "defaultWeight": 35,
+    "defaultWeightKg": 15,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "kettlebell",
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "KB Row and Rotate",
+      "Single-Arm Kettlebell Row and Rotate"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with both feet slightly wider than hip-width, hinge until the torso is approximately parallel to the floor, brace the opposite hand on a bench, and hold one kettlebell beneath the working shoulder with a straight arm.",
+      "movement": "Row the kettlebell toward the working-side armpit while deliberately rotating the shoulders and upper back over that side.",
+      "endpoint": "Finish with the kettlebell near the armpit and the upper body turned while the hips and knees remain still.",
+      "returnPhase": "Untwist and lower the kettlebell slowly until the arm is straight beneath the shoulder.",
+      "controlledJoints": "Keep both feet planted and prevent the hips and knees from driving or following the turn.",
+      "supportAndPosture": "Maintain the hand-supported hinge and rotate through the upper body rather than shifting the pelvis.",
+      "disqualifyingCompensations": [
+        "Keeping the torso square changes the fixture into a strict supported row.",
+        "Turning the hips or driving through the legs changes the reviewed upper-body rotation strategy.",
+        "Placing the opposite knee on the bench changes the support topology."
+      ],
+      "sideOrDirection": "Complete all repetitions on one side, then switch the kettlebell and bench-support hand."
+    },
+    "involvement": [
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
         "role": "stabilizer"
       }
     ]
@@ -21376,6 +21651,126 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "shoulder-extension-row",
+    "familyName": "Horizontal Row",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "single-arm-bent-over-row",
+    "name": "Single-Arm Bent-Over Row",
+    "group": "back",
+    "defaultWeight": 35,
+    "defaultWeightKg": 15,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "horizontal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Single Arm Bent Over Row",
+      "Hand-Supported Single-Arm Bent-Over Row"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with both feet slightly wider than hip-width, hinge until the torso is approximately parallel to the floor, place the opposite hand on a bench, and let the dumbbell hang beneath the working shoulder.",
+      "movement": "Pull the dumbbell toward the working-side armpit at a controlled tempo.",
+      "endpoint": "End with the elbow beside the torso without turning the shoulders.",
+      "returnPhase": "Lower the dumbbell under control until the working arm is straight.",
+      "controlledJoints": "Keep the hips, knees, and torso still while the shoulder blade moves naturally with the row.",
+      "supportAndPosture": "Keep both feet planted and use only the opposite hand on the bench for support.",
+      "disqualifyingCompensations": [
+        "Placing the opposite knee on the bench changes the fixture into the existing One-Arm Dumbbell Row.",
+        "Rotating the torso to lift the dumbbell changes the strict row into a row-and-rotate variation.",
+        "Standing up or driving through the legs turns the strict row into a momentum row."
+      ],
+      "sideOrDirection": "Complete all repetitions on one side, then switch to the other arm."
+    },
+    "involvement": [
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
         "role": "stabilizer"
       },
       {
@@ -32213,6 +32608,139 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "vertical-pull",
+    "familyName": "Vertical Pull",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.retraction",
+        "name": "Scapular retraction",
+        "plane": "transverse",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.adduction",
+        "name": "Shoulder adduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "speed-pull-up",
+    "name": "Speed Pull-Up",
+    "group": "back",
+    "defaultWeight": 0,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Fast Pull-Up",
+      "Continuous Explosive Pull-Up"
+    ],
+    "searchPriority": 98,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Hang from parallel handles with a shoulder-width neutral grip, straight elbows, slight hip and knee flexion held still, and the trunk braced.",
+      "movement": "Pull as fast as possible by driving the elbows down while keeping the hips and legs still.",
+      "endpoint": "The chin clears the handles without a kip or a higher chest-to-bar target.",
+      "returnPhase": "Descend quickly but under control to straight elbows, then reverse immediately into the next repetition without pausing or bouncing.",
+      "controlledJoints": "Keep the elbows tucked and do not use hip, knee, or torso drive.",
+      "supportAndPosture": "Hold the slight hip and knee flexion steady while hanging freely from the handles.",
+      "disqualifyingCompensations": [
+        "Swinging, kicking, or tucking the knees to create propulsion turns the strict speed pull-up into a kipping variation.",
+        "Pausing at the bottom removes the reviewed immediate turnaround.",
+        "Pulling the chest to the bar or releasing the handles changes the exercise into a different explosive pull-up fixture."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
         "role": "stabilizer"
       }
     ]

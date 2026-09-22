@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "vertical-pull",
   "name": "Vertical Pull",
-  "definition": "A strict compound pull in which the humerus travels down from an overhead position through shoulder adduction with a sagittal extension component, the scapula retracts, and the elbow flexes. The family covers front/scapular-path pull-ups, assisted pull-ups, cable pulldowns, and lever pulldowns without deliberate trunk or lower-body propulsion. Straight-arm pulldowns, scapular pull-ups, flared horizontal-abduction high rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, and one-arm bodyweight pull-ups remain outside this contract. Flared high rows route to shoulder-horizontal-abduction-row; the measured 45-degree cable fixture routes to diagonal-pull; and product-named lever high rows remain excluded until their own geometry is reviewed. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. This correction applies only to the six suspended pull-up/chin-up fixtures, including platform-assisted variants; the seven seated pulldown rosters are unchanged. Assistance and grip orientation may change demand without implying equal activity. Radial and ulnar wrist flexors additionally receive stabilizer roles in the same six suspended fixtures. Mannella measured both during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Suspension, assistance, and grip orientation differ from that protocol; exact-fixture transfer is a categorical anatomy-and-mechanics inference, not direct phase recruitment, uniformly high activity, muscle force, or adaptation. Forman bounds this transfer because wrist-flexor activity varies with wrist-force direction and can be low. No dynamic wrist-flexion prime action is added; seated pulldown rosters remain unchanged. The foot-loop band-assisted pull-up uses variable elastic assistance and non-comparable resistance, without inventing a constant assistance mass or effective bodyweight fraction. Its strict suspended anatomy and grip-control roles transfer categorically from the reviewed pull-up fixtures.",
+  "definition": "A strict compound pull in which the humerus travels down from an overhead position through shoulder adduction with a sagittal extension component, the scapula retracts, and the elbow flexes. The family covers front/scapular-path pull-ups, assisted pull-ups, cable pulldowns, lever pulldowns, and the exact neutral-grip Speed Pull-Up fixture without deliberate trunk or lower-body propulsion. The speed fixture is a power exercise distinguished by maximal concentric intent and an immediate eccentric-to-concentric turnaround; it does not claim measured velocity. Straight-arm pulldowns, scapular pull-ups, flared horizontal-abduction high rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, and one-arm bodyweight pull-ups remain outside this contract. Flared high rows route to shoulder-horizontal-abduction-row; the measured 45-degree cable fixture routes to diagonal-pull; and product-named lever high rows remain excluded until their own geometry is reviewed. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. This correction applies only to the reviewed suspended pull-up/chin-up fixtures, including platform-assisted and speed variants; the seated pulldown rosters are unchanged. Assistance and grip orientation may change demand without implying equal activity. Radial and ulnar wrist flexors additionally receive stabilizer roles in the same suspended fixtures. Mannella measured both during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Suspension, assistance, and grip orientation differ from that protocol; exact-fixture transfer is a categorical anatomy-and-mechanics inference, not direct phase recruitment, uniformly high activity, muscle force, or adaptation. Forman bounds this transfer because wrist-flexor activity varies with wrist-force direction and can be low. No dynamic wrist-flexion prime action is added; seated pulldown rosters remain unchanged. The foot-loop band-assisted pull-up uses variable elastic assistance and non-comparable resistance, without inventing a constant assistance mass or effective bodyweight fraction. Its strict suspended anatomy and grip-control roles transfer categorically from the reviewed pull-up fixtures.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "andersen-2014-lat-pulldown-width",
@@ -18,7 +18,10 @@
     "youdas-2010-pullup-chinup",
     "krings-2021-fat-grip-resistance-exercise",
     "forman-2019-handgrip-wrist-force",
-    "mannella-2022-grip-wrist-perturbations"
+    "mannella-2022-grip-wrist-perturbations",
+    "vigouroux-2023-pullup-completion",
+    "hayashi-2026-countermovement-pullup",
+    "boxing-science-exercise-library"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -44,7 +47,8 @@
       "band"
     ],
     "modalities": [
-      "dynamicStrength"
+      "dynamicStrength",
+      "power"
     ],
     "trackingModes": [
       "reps"
@@ -310,6 +314,16 @@
       "allowedValues": [
         "frontScapular"
       ]
+    },
+    {
+      "id": "repetitionStyle",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether each repetition resets under control or uses the reviewed immediate eccentric-to-concentric turnaround without a bottom pause.",
+      "allowedValues": [
+        "controlledReset",
+        "immediateTurnaround"
+      ]
     }
   ],
   "exerciseRules": [
@@ -322,14 +336,6 @@
         "value": "bodyweight"
       },
       "then": [
-        {
-          "field": "loadMode",
-          "value": "bodyweightAdded"
-        },
-        {
-          "field": "bodyweightFraction",
-          "value": 1
-        },
         {
           "field": "laterality",
           "value": "bilateral"
@@ -350,6 +356,72 @@
           "field": "variant.pathConstraint",
           "value": "free"
         }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-added-requires-full-fraction",
+      "description": "Comparable added-load pull-ups count the athlete's full bodyweight fraction.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        { "field": "equipment", "value": "bodyweight" },
+        { "field": "bodyweightFraction", "value": 1 },
+        { "field": "variant.repetitionStyle", "value": "controlledReset" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "immediate-turnaround-identifies-speed-pullup",
+      "description": "The reviewed immediate-turnaround fixture is a strict neutral-grip bodyweight power pull with no lower-body propulsion and no comparable load claim.",
+      "when": {
+        "field": "variant.repetitionStyle",
+        "operator": "equals",
+        "value": "immediateTurnaround"
+      },
+      "then": [
+        { "field": "equipment", "value": "bodyweight" },
+        { "field": "modality", "value": "power" },
+        { "field": "trackingMode", "value": "reps" },
+        { "field": "loadMode", "value": "nonComparable" },
+        { "field": "bodyweightFraction", "value": 0 },
+        { "field": "laterality", "value": "bilateral" },
+        { "field": "variant.gripOrientation", "value": "neutral" },
+        { "field": "variant.relativeGripWidth", "value": "shoulderWidth" },
+        { "field": "variant.lowerBodyContribution", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "power-identifies-immediate-turnaround",
+      "description": "Power modality is reserved for the exact strict Speed Pull-Up fixture.",
+      "when": {
+        "field": "modality",
+        "operator": "equals",
+        "value": "power"
+      },
+      "then": [
+        { "field": "variant.repetitionStyle", "value": "immediateTurnaround" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "controlled-reset-is-dynamic-strength",
+      "description": "Existing strict pull-ups and pulldowns retain controlled-reset dynamic-strength semantics.",
+      "when": {
+        "field": "variant.repetitionStyle",
+        "operator": "equals",
+        "value": "controlledReset"
+      },
+      "then": [
+        { "field": "modality", "value": "dynamicStrength" }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -780,7 +852,8 @@
         "relativeGripWidth": "shoulderWidth",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -862,7 +935,8 @@
         "relativeGripWidth": "shoulderWidth",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -941,7 +1015,8 @@
         "relativeGripWidth": "shoulderWidth",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1022,7 +1097,8 @@
         "relativeGripWidth": "wide",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1102,7 +1178,8 @@
         "pathConstraint": "assistancePlatformGuided",
         "machineType": "assistedPullUp",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1182,7 +1259,8 @@
         "pathConstraint": "assistancePlatformGuided",
         "machineType": "assistedPullUp",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1247,7 +1325,8 @@
         "relativeGripWidth": "medium",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -1312,7 +1391,8 @@
         "relativeGripWidth": "narrow",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -1373,7 +1453,8 @@
         "relativeGripWidth": "shoulderWidth",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -1434,7 +1515,8 @@
         "relativeGripWidth": "wide",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -1497,7 +1579,8 @@
         "gripOrientation": "neutral",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1563,7 +1646,8 @@
         "pathConstraint": "leverGuided",
         "machineType": "leverPulldown",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -1625,7 +1709,8 @@
         "pathConstraint": "leverGuided",
         "machineType": "leverPulldown",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1647,6 +1732,76 @@
           "Leaning the torso to move the lever turns the single-arm pulldown into a full-body heave."
         ],
         "sideOrDirection": "Complete the set with one arm, then repeat with the other arm."
+      }
+    },
+    {
+      "catalogID": "speed-pull-up",
+      "name": "Speed Pull-Up",
+      "aliases": [
+        "Fast Pull-Up",
+        "Continuous Explosive Pull-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 5,
+      "searchPriority": 98,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
+        { "muscle": "trapeziusLower", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiUlnaris", "role": "stabilizer" },
+        { "muscle": "fingerExtensors", "role": "stabilizer" },
+        { "muscle": "flexorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "flexorCarpiUlnaris", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "shoulderWidth",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular",
+        "repetitionStyle": "immediateTurnaround"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "vigouroux-2023-pullup-completion",
+        "hayashi-2026-countermovement-pullup",
+        "boxing-science-exercise-library"
+      ],
+      "execution": {
+        "startingPosition": "Hang from parallel handles with a shoulder-width neutral grip, straight elbows, slight hip and knee flexion held still, and the trunk braced.",
+        "movement": "Pull as fast as possible by driving the elbows down while keeping the hips and legs still.",
+        "endpoint": "The chin clears the handles without a kip or a higher chest-to-bar target.",
+        "returnPhase": "Descend quickly but under control to straight elbows, then reverse immediately into the next repetition without pausing or bouncing.",
+        "controlledJoints": "Keep the elbows tucked and do not use hip, knee, or torso drive.",
+        "supportAndPosture": "Hold the slight hip and knee flexion steady while hanging freely from the handles.",
+        "disqualifyingCompensations": [
+          "Swinging, kicking, or tucking the knees to create propulsion turns the strict speed pull-up into a kipping variation.",
+          "Pausing at the bottom removes the reviewed immediate turnaround.",
+          "Pulling the chest to the bar or releasing the handles changes the exercise into a different explosive pull-up fixture."
+        ]
       }
     },
     {
@@ -1741,7 +1896,8 @@
         "relativeGripWidth": "shoulderWidth",
         "pathConstraint": "free",
         "lowerBodyContribution": "none",
-        "pullPath": "frontScapular"
+        "pullPath": "frontScapular",
+        "repetitionStyle": "controlledReset"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [

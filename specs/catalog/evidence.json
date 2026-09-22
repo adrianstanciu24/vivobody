@@ -5456,7 +5456,7 @@
       ],
       "year": 2026,
       "url": "https://www.scribd.com/document/965522663/EXERCISE-LIBRARY-Boxing-Science-Strength-and-Conditioning-Program-Vwtlck",
-      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. It specifies the setup and repetition boundaries for the Supine Med Ball Chest Pass, Medicine Ball Punch Throw, half-kneeling dumbbell and landmine presses, Dumbbell Push Press, Landmine Punch, Isometric Wall Hold, and the previously cataloged trunk and plank fixtures. It anchors those exact named fixtures' setup, support, path, reset, and side prescription, not universal loads, joint moments, categorical muscle rankings, medical outcomes, or equipment variants whose topology the text leaves unspecified."
+      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. It specifies the setup and repetition boundaries for the Supine Med Ball Chest Pass, Medicine Ball Punch Throw, half-kneeling dumbbell and landmine presses, Dumbbell Push Press, Landmine Punch, Isometric Wall Hold, Speed Pull-Up, Prone TYWs, Single-Arm Bent-Over Row, Kettlebell Row and Rotate, and the previously cataloged trunk and plank fixtures. It anchors those exact named fixtures' setup, support, path, reset, and side prescription, not universal loads, joint moments, categorical muscle rankings, medical outcomes, or equipment variants whose topology the text leaves unspecified. The Row and Rotate body copy says dumbbell despite its KB title; the active kettlebell interpretation is corroborated by the publisher's image and Ruddock et al.'s peer-reviewed exercise name."
     },
     {
       "id": "boxing-science-2021-core-training",
@@ -5682,6 +5682,106 @@
       "pmcid": "PMC12370102",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12370102/",
       "scope": "The published study protocol specifies a standing isometric wall push-up performed facing a solid wall from about arm's length with the feet shoulder-width apart and the hands at shoulder height. Participants apply force against the wall while maintaining arm alignment and hold each effort for five seconds. It establishes the bilateral standing wall interface, shoulder-height hand position, no-motion intent, and duration tracking, but not maximal effort, a towel interface, split stance, elbow tucking, or muscle ranking."
+    },
+    {
+      "id": "vigouroux-2023-pullup-completion",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Pull-up forms of completion impacts deeply the muscular and articular involvements",
+      "authors": [
+        "Laurent Vigouroux",
+        "Thomas Cartier",
+        "Guillaume Rao",
+        "Eric Berton"
+      ],
+      "year": 2023,
+      "doi": "10.1016/j.scispo.2022.03.006",
+      "url": "https://doi.org/10.1016/j.scispo.2022.03.006",
+      "scope": "Primary kinematics, force, and surface-EMG comparison of continuous and bottom-paused pull-ups using pronated and supinated grips. It supports treating an immediate reversal as a meaningful repetition-style distinction, but does not study the catalog's neutral-grip narrowing, prescribe lower-body posture, or establish a new muscle-role hierarchy."
+    },
+    {
+      "id": "hayashi-2026-countermovement-pullup",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Relationship Between Mechanical Variables and Maximum Strength in Countermovement and Pure Concentric Pull-Ups Among Male Collegiate Athletes",
+      "authors": [
+        "Kazuki Hayashi",
+        "Jun Yasuda",
+        "Seiji Aruga"
+      ],
+      "year": 2026,
+      "doi": "10.70252/IJES2026401",
+      "url": "https://doi.org/10.70252/IJES2026401",
+      "scope": "Primary mechanical study of maximal-speed countermovement and pure-concentric pull-ups performed with a pronated shoulder-width grip while lower-limb and torso momentum were prohibited. It supports a strict explosive turnaround without leg propulsion, but not the catalog's neutral-grip narrowing, exact coaching cues, universal repetition count, or measured in-app velocity."
+    },
+    {
+      "id": "cole-2013-scapular-bracing",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Scapular Bracing and Alteration of Posture and Muscle Activity in Overhead Athletes With Poor Posture",
+      "authors": [
+        "Ashley K. Cole",
+        "Melanie L. McGrath",
+        "Shana E. Harrington",
+        "Darin A. Padua",
+        "Terri J. Rucinski",
+        "William E. Prentice"
+      ],
+      "year": 2013,
+      "doi": "10.4085/1062-6050-48.1.13",
+      "pmid": "23672321",
+      "pmcid": "PMC3554027",
+      "url": "https://doi.org/10.4085/1062-6050-48.1.13",
+      "scope": "Randomized surface-EMG study that included separate prone W, Y, and T exercises and measured upper-, middle-, and lower-trapezius and serratus-anterior activity. It supports those scapular contributors across the three positions, but the loaded unilateral table exercises and brace comparison do not directly establish the catalog's unloaded bilateral floor sequence, five-second holds, or quantitative role ranking."
+    },
+    {
+      "id": "ronai-2016-prone-t",
+      "sourceType": "peerReviewedTechniqueArticle",
+      "title": "The Prone Shoulder Full Can",
+      "authors": [
+        "Peter Ronai"
+      ],
+      "year": 2016,
+      "doi": "10.1249/FIT.0000000000000255",
+      "url": "https://doi.org/10.1249/FIT.0000000000000255",
+      "scope": "Peer-reviewed exercise-technique standard for the prone T/full-can position. It supports the T arm geometry and its shoulder and scapular control boundary, but is not an experimental comparison and does not establish the complete T-Y-W floor sequence."
+    },
+    {
+      "id": "ronai-2016-prone-y",
+      "sourceType": "peerReviewedTechniqueArticle",
+      "title": "Prone Scaption Above 90 Degrees in External Rotation (The Prone Y)",
+      "authors": [
+        "Peter Ronai"
+      ],
+      "year": 2016,
+      "doi": "10.1249/FIT.0000000000000219",
+      "url": "https://doi.org/10.1249/FIT.0000000000000219",
+      "scope": "Peer-reviewed exercise-technique standard for the prone Y in externally rotated scaption above 90 degrees, including floor and table options. It supports the Y geometry but does not establish the exact three-position sequence or muscle-force ranking."
+    },
+    {
+      "id": "ronai-2017-prone-w",
+      "sourceType": "peerReviewedTechniqueArticle",
+      "title": "Prone Shoulder External Rotation From 90 Degrees of Abduction",
+      "authors": [
+        "Peter Ronai"
+      ],
+      "year": 2017,
+      "doi": "10.1249/FIT.0000000000000345",
+      "url": "https://doi.org/10.1249/FIT.0000000000000345",
+      "scope": "Peer-reviewed exercise-technique standard for the prone W position using shoulder external rotation from approximately 90 degrees of abduction with flexed elbows. It supports the W geometry but does not establish the exact three-position sequence or quantitative recruitment."
+    },
+    {
+      "id": "ruddock-2016-professional-boxing",
+      "sourceType": "peerReviewedTechniqueArticle",
+      "title": "Strength and Conditioning for Professional Boxing",
+      "authors": [
+        "Alan D. Ruddock",
+        "Daniel C. Wilson",
+        "Stephen W. Thompson",
+        "Dave Hembrough",
+        "Edward M. Winter"
+      ],
+      "year": 2016,
+      "doi": "10.1519/SSC.0000000000000217",
+      "url": "https://doi.org/10.1519/SSC.0000000000000217",
+      "scope": "Peer-reviewed professional-boxing strength-and-conditioning recommendations explicitly list the KB row and rotate. It corroborates the requested kettlebell exercise identity but does not measure the exact joint kinematics, establish the catalog's support topology, quantify muscle contributions, or prescribe a universal load."
     }
   ]
 }

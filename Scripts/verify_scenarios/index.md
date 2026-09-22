@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 175.
+Scenario files: 179.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -71,6 +71,10 @@ Scenario files: 175.
 | [catalog-plank-alias-search-accessibility](catalog-plank-alias-search-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-plank-knee-touch-dark](catalog-plank-knee-touch-dark.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-plank-shoulder-tap-light](catalog-plank-shoulder-tap-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-pull-kettlebell-row-rotate-dark](catalog-pull-kettlebell-row-rotate-dark.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-pull-prone-tyws-accessibility](catalog-pull-prone-tyws-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-pull-single-arm-bent-over-row-light](catalog-pull-single-arm-bent-over-row-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-pull-speed-pull-up-dark](catalog-pull-speed-pull-up-dark.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-requested-gaps-accessibility](catalog-requested-gaps-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [catalog-requested-gaps-light](catalog-requested-gaps-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-requested-gaps](catalog-requested-gaps.json) | library | `--static-body -settings.appearance dark` |
