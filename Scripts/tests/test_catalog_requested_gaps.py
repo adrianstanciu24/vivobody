@@ -69,6 +69,13 @@ CORE_STRENGTH_EXPANSION_RECORD_IDS = {
     "trx-standing-rollout",
 }
 
+CORE_ENDURANCE_RECORD_IDS = {
+    "forty-five-degree-bench-anchored-core-hold",
+    "partner-anchored-lateral-trunk-hold",
+    "dumbbell-weighted-supine-core-hold",
+    "partner-perturbation-manual-core-hold",
+}
+
 
 class RequestedCatalogGapTests(unittest.TestCase):
     @classmethod
@@ -114,6 +121,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
                        | TRX_SUSPENSION_RECORD_IDS | MEDICINE_BALL_RECORD_IDS
                        | ROTATIONAL_STRENGTH_RECORD_IDS
                        | CORE_STRENGTH_EXPANSION_RECORD_IDS
+                       | CORE_ENDURANCE_RECORD_IDS
                    )]
         self.assertEqual(len(records), 259)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()

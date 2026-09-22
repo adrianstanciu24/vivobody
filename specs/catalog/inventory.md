@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 141 |
-| Exercises | 312 |
+| Reviewed families | 145 |
+| Exercises | 316 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 354 |
+| Evidence sources | 359 |
 
 ## Family roster
 
@@ -32,6 +32,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [anti-rotation](families/anti-rotation.json) | 1 |
 | [banded-high-plank-clockface-tap](families/banded-high-plank-clockface-tap.json) | 1 |
 | [belt-loaded-machine-glute-bridge](families/belt-loaded-machine-glute-bridge.json) | 1 |
+| [bench-anchored-supine-trunk-hold](families/bench-anchored-supine-trunk-hold.json) | 1 |
 | [bicycle-crunch](families/bicycle-crunch.json) | 1 |
 | [bilateral-squat](families/bilateral-squat.json) | 7 |
 | [bird-dog](families/bird-dog.json) | 1 |
@@ -45,6 +46,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [decline-press](families/decline-press.json) | 5 |
 | [diagonal-pull](families/diagonal-pull.json) | 1 |
 | [dip](families/dip.json) | 3 |
+| [dumbbell-weighted-supine-core-hold](families/dumbbell-weighted-supine-core-hold.json) | 1 |
 | [dynamic-lunge](families/dynamic-lunge.json) | 5 |
 | [elbow-extension](families/elbow-extension.json) | 14 |
 | [elbow-flexion](families/elbow-flexion.json) | 14 |
@@ -97,8 +99,10 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [medicine-ball-straight-leg-sit-up](families/medicine-ball-straight-leg-sit-up.json) | 1 |
 | [medicine-ball-tall-kneeling-overhead-slam](families/medicine-ball-tall-kneeling-overhead-slam.json) | 1 |
 | [mid-thigh-clean-pull](families/mid-thigh-clean-pull.json) | 1 |
+| [multidirectional-manual-core-hold](families/multidirectional-manual-core-hold.json) | 1 |
 | [nordic-curl](families/nordic-curl.json) | 1 |
 | [padded-machine-pullover](families/padded-machine-pullover.json) | 1 |
+| [partner-anchored-lateral-trunk-hold](families/partner-anchored-lateral-trunk-hold.json) | 1 |
 | [passive-dead-hang](families/passive-dead-hang.json) | 1 |
 | [pike-push-up](families/pike-push-up.json) | 1 |
 | [power-clean](families/power-clean.json) | 1 |

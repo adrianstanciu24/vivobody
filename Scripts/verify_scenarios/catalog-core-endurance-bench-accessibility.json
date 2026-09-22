@@ -1,0 +1,21 @@
+{
+  "name": "catalog-core-endurance-bench-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityL"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterCore"}},
+    {"scrollTo": {"selector": {"labelRegex": "^45° Bench-Anchored Core Hold,"}, "direction": "up", "maxSwipes": 100}},
+    {"tap": {"labelRegex": "^45° Bench-Anchored Core Hold,"}},
+    {"wait": {"label": "STRENGTH · HOLD"}},
+    {"assert": {"required": [{"label": "45° Bench-Anchored Core Hold"}, {"labelContains": "Muscles used by 45° Bench-Anchored Core Hold"}]}}
+  ],
+  "required": [
+    {"label": "45° Bench-Anchored Core Hold"},
+    {"label": "STRENGTH · HOLD"}
+  ],
+  "forbidden": []
+}

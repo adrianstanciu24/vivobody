@@ -13,6 +13,7 @@ $(SRCROOT)/specs/catalog/families/anti-rotation-press.json
 $(SRCROOT)/specs/catalog/families/anti-rotation.json
 $(SRCROOT)/specs/catalog/families/banded-high-plank-clockface-tap.json
 $(SRCROOT)/specs/catalog/families/belt-loaded-machine-glute-bridge.json
+$(SRCROOT)/specs/catalog/families/bench-anchored-supine-trunk-hold.json
 $(SRCROOT)/specs/catalog/families/bicycle-crunch.json
 $(SRCROOT)/specs/catalog/families/bilateral-squat.json
 $(SRCROOT)/specs/catalog/families/bird-dog.json
@@ -26,6 +27,7 @@ $(SRCROOT)/specs/catalog/families/dead-bug.json
 $(SRCROOT)/specs/catalog/families/decline-press.json
 $(SRCROOT)/specs/catalog/families/diagonal-pull.json
 $(SRCROOT)/specs/catalog/families/dip.json
+$(SRCROOT)/specs/catalog/families/dumbbell-weighted-supine-core-hold.json
 $(SRCROOT)/specs/catalog/families/dynamic-lunge.json
 $(SRCROOT)/specs/catalog/families/elbow-extension.json
 $(SRCROOT)/specs/catalog/families/elbow-flexion.json
@@ -78,8 +80,10 @@ $(SRCROOT)/specs/catalog/families/medicine-ball-stationary-rotational-throw.json
 $(SRCROOT)/specs/catalog/families/medicine-ball-straight-leg-sit-up.json
 $(SRCROOT)/specs/catalog/families/medicine-ball-tall-kneeling-overhead-slam.json
 $(SRCROOT)/specs/catalog/families/mid-thigh-clean-pull.json
+$(SRCROOT)/specs/catalog/families/multidirectional-manual-core-hold.json
 $(SRCROOT)/specs/catalog/families/nordic-curl.json
 $(SRCROOT)/specs/catalog/families/padded-machine-pullover.json
+$(SRCROOT)/specs/catalog/families/partner-anchored-lateral-trunk-hold.json
 $(SRCROOT)/specs/catalog/families/passive-dead-hang.json
 $(SRCROOT)/specs/catalog/families/pike-push-up.json
 $(SRCROOT)/specs/catalog/families/power-clean.json

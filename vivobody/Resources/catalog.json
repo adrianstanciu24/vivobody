@@ -1391,6 +1391,79 @@
     ]
   },
   {
+    "familyID": "bench-anchored-supine-trunk-hold",
+    "familyName": "Bench-Anchored Supine Trunk Hold",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "forty-five-degree-bench-anchored-core-hold",
+    "name": "45° Bench-Anchored Core Hold",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Supine Core ISO Hold",
+      "Bench-Anchored Supine Core Hold",
+      "45-Degree Core Hold"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Sit at the edge of a flat bench with your lower body on the bench and a partner holding your legs securely. Cross your arms over your chest and keep your head and trunk neutral.",
+      "movement": "Lean the straight trunk back until it is about 45 degrees to the bench, then stop moving.",
+      "endpoint": "Hold the 45-degree position for the set time without changing the trunk angle.",
+      "controlledJoints": "Keep the spine, pelvis, and hips still throughout the hold.",
+      "supportAndPosture": "Keep the lower body anchored on the bench and the unsupported torso in one neutral line.",
+      "disqualifyingCompensations": [
+        "Rounding or extending the lower back leaves the strict neutral-trunk hold.",
+        "Rising toward upright or dropping below the 45-degree position changes the prescribed fixture.",
+        "Using the arms or hands to support the torso changes the exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      }
+    ]
+  },
+  {
     "familyID": "bicycle-crunch",
     "familyName": "Bicycle Crunch",
     "movementActions": [
@@ -4475,6 +4548,100 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "dumbbell-weighted-supine-core-hold",
+    "familyName": "Dumbbell-Weighted Supine Core Hold",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "dumbbell-weighted-supine-core-hold",
+    "name": "Dumbbell-Weighted Supine Core Hold",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Supine ISO Hold w/ Weight",
+      "Supine ISO Hold with Weight",
+      "Weighted Supine ISO Hold"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie on your back with both knees bent and hold the heads of one round-head dumbbell in both hands near your shoulders. Tilt your pelvis back and press your lower back into the floor.",
+      "movement": "Raise your head and shoulder blades, extend the arms beside your ears, and straighten both legs to a height you can control without opening a gap beneath your lower back.",
+      "endpoint": "Hold the long weighted shape for the set time with the dumbbell steady overhead.",
+      "controlledJoints": "Keep the knees and elbows straight and keep the shoulders, spine, pelvis, and hips still.",
+      "supportAndPosture": "Grip both dumbbell heads securely, record the dumbbell's total mass once, and keep the lower back in contact with the floor.",
+      "disqualifyingCompensations": [
+        "A gap opening beneath the lower back ends the strict hold.",
+        "Bending the knees or elbows changes the reviewed long-lever fixture.",
+        "Pressing or pulling the dumbbell, rocking the body, or performing repetitions changes the exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "secondary"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "secondary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
         "role": "stabilizer"
       }
     ]
@@ -15703,6 +15870,125 @@
     ]
   },
   {
+    "familyID": "multidirectional-manual-core-hold",
+    "familyName": "Multidirectional Manual Core Hold",
+    "movementActions": [
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.lateralFlexion",
+        "name": "Spinal lateral flexion",
+        "plane": "frontal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "partner-perturbation-manual-core-hold",
+    "name": "Partner-Perturbation Manual Core Hold",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 20,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal",
+      "transverse"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "ISO Holds w/ Manual Resistance",
+      "ISO Holds with Manual Resistance",
+      "Manual Core Holds",
+      "Manual Resistance Pallof Iso Hold",
+      "Manual Resistance Pallof Iso Holds"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand with both feet about hip-width apart, soften the hips and knees, brace the trunk, and extend both arms near shoulder height with the hands clasped. Have a partner place their hands against yours.",
+      "movement": "Keep the hands, trunk, pelvis, and feet as still as possible while the partner applies brief pressure from changing directions.",
+      "endpoint": "Continue resisting the changing pushes for the set time without turning the drill into a movement repetition.",
+      "controlledJoints": "Maintain the arm lever and resist trunk flexion, side bending, and rotation without stepping.",
+      "supportAndPosture": "Keep both feet planted and use only enough partner pressure to preserve a controlled neutral position.",
+      "disqualifyingCompensations": [
+        "Stepping or lifting a foot changes the two-foot standing fixture.",
+        "Allowing repeated trunk bending or turning changes the task from an isometric hold to a dynamic drill.",
+        "Using maximal or uncontrolled partner force leaves the controlled endurance exercise."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "quadratusLumborum",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "nordic-curl",
     "familyName": "Nordic Curl",
     "movementActions": [
@@ -15875,6 +16161,74 @@
       },
       {
         "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "partner-anchored-lateral-trunk-hold",
+    "familyName": "Partner-Anchored Lateral Trunk Hold",
+    "movementActions": [
+      {
+        "actionID": "spine.lateralFlexion",
+        "name": "Spinal lateral flexion",
+        "plane": "frontal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "partner-anchored-lateral-trunk-hold",
+    "name": "Partner-Anchored Lateral Trunk Hold",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Lateral ISO Hold",
+      "Lateral ISO Holds",
+      "Bench Lateral Core Hold"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Lie sideways with your hips at the edge of a flat bench, your lower body supported on the bench, and your upper torso extending beyond the edge. Have a partner secure your legs and cross your arms over your chest.",
+      "movement": "Bring the unsupported torso into a straight horizontal line with the hips and hold without bending or rotating.",
+      "endpoint": "Maintain the horizontal lateral hold for the set time.",
+      "controlledJoints": "Keep the spine, pelvis, and hips still while the torso remains unsupported.",
+      "supportAndPosture": "Keep the lower body fixed by the partner and do not use an arm to support the torso.",
+      "disqualifyingCompensations": [
+        "Dropping or repeatedly lifting the torso turns the hold into a lateral-flexion repetition.",
+        "Rolling forward or backward changes the task into a rotational hold.",
+        "Supporting the torso with an arm changes the reviewed bench fixture."
+      ],
+      "sideOrDirection": "Hold on one side, then repeat the same duration on the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "quadratusLumborum",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
         "role": "stabilizer"
       }
     ]

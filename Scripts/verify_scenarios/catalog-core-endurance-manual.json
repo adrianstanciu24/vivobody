@@ -1,0 +1,21 @@
+{
+  "name": "catalog-core-endurance-manual",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterCore"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Partner-Perturbation Manual Core Hold,"}, "direction": "up", "maxSwipes": 100}},
+    {"tap": {"labelRegex": "^Partner-Perturbation Manual Core Hold,"}},
+    {"wait": {"label": "STRENGTH · HOLD"}},
+    {"assert": {"required": [{"label": "Partner-Perturbation Manual Core Hold"}, {"labelContains": "Muscles used by Partner-Perturbation Manual Core Hold"}]}}
+  ],
+  "required": [
+    {"label": "Partner-Perturbation Manual Core Hold"},
+    {"label": "STRENGTH · HOLD"}
+  ],
+  "forbidden": []
+}

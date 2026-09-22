@@ -1,0 +1,21 @@
+{
+  "name": "catalog-core-endurance-lateral-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "light"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterCore"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Partner-Anchored Lateral Trunk Hold,"}, "direction": "up", "maxSwipes": 100}},
+    {"tap": {"labelRegex": "^Partner-Anchored Lateral Trunk Hold,"}},
+    {"wait": {"label": "STRENGTH · HOLD"}},
+    {"assert": {"required": [{"label": "Partner-Anchored Lateral Trunk Hold"}, {"labelContains": "Muscles used by Partner-Anchored Lateral Trunk Hold"}]}}
+  ],
+  "required": [
+    {"label": "Partner-Anchored Lateral Trunk Hold"},
+    {"label": "STRENGTH · HOLD"}
+  ],
+  "forbidden": []
+}

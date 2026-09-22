@@ -1,0 +1,331 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "bench-anchored-supine-trunk-hold",
+  "name": "Bench-Anchored Supine Trunk Hold",
+  "definition": "A bilateral isometric core family performed seated at the edge of a bench with the lower body held in place by a partner. The athlete reclines the straight trunk to about 45 degrees relative to the bench and holds without spinal or hip motion. Gravity tends to extend the spine and hips; those are resisted tendencies rather than dynamic repetitions. This contract covers the exact 45-degree training hold, not the separately described 60-degree assessment, unsupported hollow holds, sit-ups, or partner perturbations.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "boxing-science-exercise-library",
+    "boxing-science-2021-core-training"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 60
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "spine.extension",
+      "hip.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "iliopsoas"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "abs",
+        "iliopsoas"
+      ],
+      "secondary": [
+        "obliques",
+        "rectusFemoris"
+      ],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed whole-body relationship to the bench.",
+      "allowedValues": [
+        "seatedAtBenchEdgeTorsoReclined"
+      ]
+    },
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bench supports the lower body while the torso remains unsupported.",
+      "allowedValues": [
+        "benchLowerBodyOnly"
+      ]
+    },
+    {
+      "id": "externalAnchor",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the lower body is held in place.",
+      "allowedValues": [
+        "partnerAnchoredLowerBody"
+      ]
+    },
+    {
+      "id": "trainingAngle",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-named 45-degree training position without inventing an anatomical or bench-surface measurement reference.",
+      "allowedValues": [
+        "sourceDefinedFortyFiveDegreePosition"
+      ]
+    },
+    {
+      "id": "bodyAlignment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The straight trunk alignment held during the test.",
+      "allowedValues": [
+        "neutralStraightTorso"
+      ]
+    },
+    {
+      "id": "armPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The arm position that avoids using the arms for support.",
+      "allowedValues": [
+        "crossedOnChest"
+      ]
+    },
+    {
+      "id": "headPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The head position maintained with the trunk.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether spinal motion creates repetitions.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether pelvic motion creates repetitions.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip motion creates repetitions.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "holdType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The tracked task rather than a repetition count.",
+      "allowedValues": [
+        "timedIsometric"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a machine constrain the torso path."
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "forty-five-degree-bench-anchored-core-hold",
+      "name": "45° Bench-Anchored Core Hold",
+      "aliases": [
+        "Supine Core ISO Hold",
+        "Bench-Anchored Supine Core Hold",
+        "45-Degree Core Hold"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 30,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "iliopsoas",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "secondary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "bodyPosition": "seatedAtBenchEdgeTorsoReclined",
+        "supportSurface": "benchLowerBodyOnly",
+        "externalAnchor": "partnerAnchoredLowerBody",
+        "trainingAngle": "sourceDefinedFortyFiveDegreePosition",
+        "bodyAlignment": "neutralStraightTorso",
+        "armPosition": "crossedOnChest",
+        "headPosition": "neutral",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "holdType": "timedIsometric",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "boxing-science-2021-core-training"
+      ],
+      "execution": {
+        "startingPosition": "Sit at the edge of a flat bench with your lower body on the bench and a partner holding your legs securely. Cross your arms over your chest and keep your head and trunk neutral.",
+        "movement": "Lean the straight trunk back until it is about 45 degrees to the bench, then stop moving.",
+        "endpoint": "Hold the 45-degree position for the set time without changing the trunk angle.",
+        "controlledJoints": "Keep the spine, pelvis, and hips still throughout the hold.",
+        "supportAndPosture": "Keep the lower body anchored on the bench and the unsupported torso in one neutral line.",
+        "disqualifyingCompensations": [
+          "Rounding or extending the lower back leaves the strict neutral-trunk hold.",
+          "Rising toward upright or dropping below the 45-degree position changes the prescribed fixture.",
+          "Using the arms or hands to support the torso changes the exercise."
+        ]
+      }
+    }
+  ]
+}

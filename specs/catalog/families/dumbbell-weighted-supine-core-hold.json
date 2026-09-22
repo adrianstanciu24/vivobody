@@ -1,0 +1,247 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "dumbbell-weighted-supine-core-hold",
+  "name": "Dumbbell-Weighted Supine Core Hold",
+  "definition": "A bilateral weighted isometric performed supine with one round-head dumbbell held in both hands. From a bent-knee, dumbbell-at-shoulders setup, the athlete fixes the lower back to the floor, raises the head and shoulder-blade region, extends the arms beside the ears, straightens and raises both legs, and holds the long-lever shape. Gravity tends to extend the spine and hips; those are resisted tendencies rather than dynamic repetitions. This narrow contract does not include the unloaded Hollow Hold, medicine balls, plates, alternating limbs, rocks, presses, pullovers, or repeated leg lowering.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "drysdale-2004-pelvic-tilt-hollowing",
+    "okubo-2021-end-range-active-straight-leg-raise",
+    "boxing-science-exercise-library",
+    "boxing-science-weighted-supine-core-hold-video"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 60
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "spine.extension",
+      "hip.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {"anyOf": ["abs"], "minimumRole": "primary"},
+      {"anyOf": ["obliques"], "minimumRole": "secondary"},
+      {"anyOf": ["iliopsoas"], "minimumRole": "secondary"},
+      {"anyOf": ["rectusFemoris"], "minimumRole": "secondary"},
+      {"anyOf": ["serratus"], "minimumRole": "stabilizer"},
+      {"anyOf": ["deltoidAnterior"], "minimumRole": "stabilizer"},
+      {"anyOf": ["triceps"], "minimumRole": "stabilizer"},
+      {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"},
+      {"anyOf": ["gluteMax"], "minimumRole": "stabilizer"}
+    ],
+    "allowedByRole": {
+      "primary": [
+        "abs"
+      ],
+      "secondary": [
+        "obliques",
+        "iliopsoas",
+        "rectusFemoris"
+      ],
+      "stabilizer": [
+        "serratus",
+        "deltoidAnterior",
+        "triceps",
+        "fingerFlexors",
+        "gluteMax"
+      ]
+    }
+  },
+  "variantAxes": [
+    {"id": "bodyPosition", "valueType": "enum", "required": true, "description": "The reviewed body orientation.", "allowedValues": ["supine"]},
+    {"id": "supportSurface", "valueType": "enum", "required": true, "description": "The floor supports the trunk and pelvis.", "allowedValues": ["floor"]},
+    {"id": "startConfiguration", "valueType": "enum", "required": true, "description": "The staged setup before extending into the hold.", "allowedValues": ["kneesFlexedDumbbellAtShoulders"]},
+    {"id": "pelvisPosture", "valueType": "enum", "required": true, "description": "The pelvic position held throughout.", "allowedValues": ["posteriorTiltHeld"]},
+    {"id": "lumbarContact", "valueType": "enum", "required": true, "description": "The required lower-back relationship to the floor.", "allowedValues": ["noGap"]},
+    {"id": "shoulderBladePosition", "valueType": "enum", "required": true, "description": "The held shoulder-blade-region relationship to the floor.", "allowedValues": ["offFloor"]},
+    {"id": "upperArmPosition", "valueType": "enum", "required": true, "description": "The long overhead arm position.", "allowedValues": ["besideEars"]},
+    {"id": "implementConfiguration", "valueType": "enum", "required": true, "description": "The exact implement shown by the official demonstration.", "allowedValues": ["singleRoundHeadDumbbell"]},
+    {"id": "handTask", "valueType": "enum", "required": true, "description": "Both hands hold the dumbbell heads securely.", "allowedValues": ["twoHandDumbbellHeadHold"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The single dumbbell's total mass is recorded once.", "allowedValues": ["totalImplementOnce"]},
+    {"id": "shoulderMotion", "valueType": "enum", "required": true, "description": "The overhead shoulder position remains still during the timed hold.", "allowedValues": ["positionHeld"]},
+    {"id": "elbowMotion", "valueType": "enum", "required": true, "description": "The elbows remain extended.", "allowedValues": ["extendedHeld"]},
+    {"id": "legPosition", "valueType": "enum", "required": true, "description": "Both straight legs remain raised from the floor.", "allowedValues": ["straightRaisedFromFloor"]},
+    {"id": "kneeMotion", "valueType": "enum", "required": true, "description": "The knees remain extended.", "allowedValues": ["extendedHeld"]},
+    {"id": "bodyMotion", "valueType": "enum", "required": true, "description": "The final shape is held without rocking.", "allowedValues": ["stillHold"]},
+    {"id": "holdType", "valueType": "enum", "required": true, "description": "The tracked task is a timed isometric.", "allowedValues": ["timedIsometric"]},
+    {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No machine constrains the body path."},
+    {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "description": "The legs maintain the static shape rather than creating repetitions.", "allowedValues": ["staticHoldOnly"]}
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "dumbbell-weighted-supine-core-hold",
+      "name": "Dumbbell-Weighted Supine Core Hold",
+      "aliases": [
+        "Supine ISO Hold w/ Weight",
+        "Supine ISO Hold with Weight",
+        "Weighted Supine ISO Hold"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 1,
+      "defaultDuration": 30,
+      "searchPriority": 95,
+      "involvement": [
+        {"muscle": "abs", "role": "primary"},
+        {"muscle": "obliques", "role": "secondary"},
+        {"muscle": "iliopsoas", "role": "secondary"},
+        {"muscle": "rectusFemoris", "role": "secondary"},
+        {"muscle": "serratus", "role": "stabilizer"},
+        {"muscle": "deltoidAnterior", "role": "stabilizer"},
+        {"muscle": "triceps", "role": "stabilizer"},
+        {"muscle": "fingerFlexors", "role": "stabilizer"},
+        {"muscle": "gluteMax", "role": "stabilizer"}
+      ],
+      "variant": {
+        "bodyPosition": "supine",
+        "supportSurface": "floor",
+        "startConfiguration": "kneesFlexedDumbbellAtShoulders",
+        "pelvisPosture": "posteriorTiltHeld",
+        "lumbarContact": "noGap",
+        "shoulderBladePosition": "offFloor",
+        "upperArmPosition": "besideEars",
+        "implementConfiguration": "singleRoundHeadDumbbell",
+        "handTask": "twoHandDumbbellHeadHold",
+        "loadAccounting": "totalImplementOnce",
+        "shoulderMotion": "positionHeld",
+        "elbowMotion": "extendedHeld",
+        "legPosition": "straightRaisedFromFloor",
+        "kneeMotion": "extendedHeld",
+        "bodyMotion": "stillHold",
+        "holdType": "timedIsometric",
+        "fixedPath": false,
+        "lowerBodyContribution": "staticHoldOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "boxing-science-weighted-supine-core-hold-video",
+        "drysdale-2004-pelvic-tilt-hollowing",
+        "okubo-2021-end-range-active-straight-leg-raise",
+        "holzbaur-2005-upper-extremity"
+      ],
+      "execution": {
+        "startingPosition": "Lie on your back with both knees bent and hold the heads of one round-head dumbbell in both hands near your shoulders. Tilt your pelvis back and press your lower back into the floor.",
+        "movement": "Raise your head and shoulder blades, extend the arms beside your ears, and straighten both legs to a height you can control without opening a gap beneath your lower back.",
+        "endpoint": "Hold the long weighted shape for the set time with the dumbbell steady overhead.",
+        "controlledJoints": "Keep the knees and elbows straight and keep the shoulders, spine, pelvis, and hips still.",
+        "supportAndPosture": "Grip both dumbbell heads securely, record the dumbbell's total mass once, and keep the lower back in contact with the floor.",
+        "disqualifyingCompensations": [
+          "A gap opening beneath the lower back ends the strict hold.",
+          "Bending the knees or elbows changes the reviewed long-lever fixture.",
+          "Pressing or pulling the dumbbell, rocking the body, or performing repetitions changes the exercise."
+        ]
+      }
+    }
+  ]
+}

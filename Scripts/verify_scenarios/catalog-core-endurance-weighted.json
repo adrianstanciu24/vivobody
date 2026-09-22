@@ -1,0 +1,21 @@
+{
+  "name": "catalog-core-endurance-weighted",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"identifier": "libraryExerciseFilterCore"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Dumbbell-Weighted Supine Core Hold,"}, "direction": "up", "maxSwipes": 100}},
+    {"tap": {"labelRegex": "^Dumbbell-Weighted Supine Core Hold,"}},
+    {"wait": {"label": "STRENGTH · HOLD"}},
+    {"assert": {"required": [{"label": "Dumbbell-Weighted Supine Core Hold"}, {"labelContains": "Muscles used by Dumbbell-Weighted Supine Core Hold"}]}}
+  ],
+  "required": [
+    {"label": "Dumbbell-Weighted Supine Core Hold"},
+    {"label": "STRENGTH · HOLD"}
+  ],
+  "forbidden": []
+}

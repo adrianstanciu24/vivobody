@@ -5400,7 +5400,52 @@
       "authors": ["Boxing Science"],
       "year": 2026,
       "url": "https://www.scribd.com/document/965522663/EXERCISE-LIBRARY-Boxing-Science-Strength-and-Conditioning-Program-Vwtlck",
-      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. It specifies the straight-leg medicine-ball sit-up plus five plank fixtures: alternating opposite-shoulder taps from high plank under the idiosyncratic Plank Row name; opposite hand and knee lifted with the knee brought to hip level, for which the exact hand-to-knee contact is owner-selected because the source sentence is incomplete; a mirrored four-contact lateral high-plank shuffle; bilateral forearms circling a Swiss ball in both directions; and high-plank clockface taps against a loop outside the hands. It anchors those stated setup, path, support, and instruction boundaries, not universal loads, joint moments, categorical muscle rankings, medical outcomes, or equivalence to renegade rows, toe touches, static ball planks, and other same-name variants."
+      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. It specifies the straight-leg medicine-ball sit-up; the 45-degree partner-anchored supine hold; the partner-anchored lateral bench hold; the hands-elevated dumbbell plank; the weighted supine hold without identifying its implement; the standing manual-resistance hold; the single-arm medicine-ball plank; and five previously cataloged plank fixtures. It anchors the stated setup, support, path, and instruction boundaries of those exact fixtures, not universal loads, joint moments, categorical muscle rankings, medical outcomes, or equivalence to similarly named exercises."
+    },
+    {
+      "id": "boxing-science-2021-core-training",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Core Training for Boxing",
+      "authors": ["Boxing Science"],
+      "year": 2021,
+      "url": "https://boxingscience.co.uk/core-training-for-boxing/",
+      "scope": "The Boxing Science technical article directly describes a partner-anchored 60-degree trunk-hold assessment and a lateral trunk-hold assessment performed with the hips at the bench edge and the lower body fixed. It supports the partner-anchored bench fixtures and their no-movement endurance intent, but it does not make the 60-degree assessment identical to the exercise library's separately named 45-degree training hold or establish the catalog's complete muscle hierarchy."
+    },
+    {
+      "id": "boxing-science-manual-core-holds-video",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Manual Core Holds",
+      "authors": ["Boxing Science"],
+      "year": 2020,
+      "url": "https://www.youtube.com/watch?v=2TiIZZdTYSI",
+      "scope": "The official Boxing Science demonstration shows an athlete standing with clasped hands extended while a partner applies brief manual perturbations from changing directions. It establishes the standing bilateral support, extended-arm hand contact, changing-direction partner resistance, and static trunk-control intent; it does not quantify partner force or establish an exact muscle-activation ranking."
+    },
+    {
+      "id": "boxing-science-weighted-supine-core-hold-video",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Supine Core Holds",
+      "authors": ["Boxing Science"],
+      "year": 2020,
+      "url": "https://www.youtube.com/watch?v=bF80SPRr_64",
+      "scope": "The official Boxing Science demonstration, published June 19, 2020, shows one round-head dumbbell held in both hands, a staged start with the knees bent and dumbbell near the shoulders, and a long-lever hold with the arms overhead, head and shoulder-blade region raised, straight legs elevated, and lower back controlled against the floor. It establishes that exact implement and geometry, not a universal dumbbell mass, leg height, duration, or muscle-activation ranking."
+    },
+    {
+      "id": "boxing-science-2021-punch-snap-exercises",
+      "sourceType": "officialTechnicalStandard",
+      "title": "10 Exercises to Improve Punch Snap for Boxing",
+      "authors": ["Boxing Science"],
+      "year": 2021,
+      "url": "https://boxingscience.co.uk/10-exercises-to-improve-punch-snap-for-boxing/",
+      "scope": "The Boxing Science technical article prescribes manual-resistance Pallof isometric holds with constant changes in force direction for 15 to 30 seconds and explicitly cues the athlete to prevent forward and sideways trunk leaning. It supports resisted spine-flexion and lateral-flexion tendencies for the perturbation fixture, not quantified partner force, exact joint moments, or a categorical complete-body muscle ranking."
+    },
+    {
+      "id": "boxing-science-2021-pallof-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Rotational Strength and Power for Boxing: The Pallof Press",
+      "authors": ["Boxing Science"],
+      "year": 2021,
+      "url": "https://boxingscience.co.uk/rotational-strength-and-power-for-boxing-the-pallof-press/",
+      "scope": "The Boxing Science technical article identifies standing and kneeling manual-resistance Pallof holds, gives the standing hip-width stance with slight hip and knee bend, and explicitly cues active resistance to rotation. It supports the rotational resisted tendency and standing posture of the manual fixture, not equivalence to a steady band Pallof hold, quantified partner force, or exact-fixture muscle activation."
     },
     {
       "id": "boxing-science-2019-core-library",

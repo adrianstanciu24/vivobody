@@ -1,0 +1,350 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "partner-anchored-lateral-trunk-hold",
+  "name": "Partner-Anchored Lateral Trunk Hold",
+  "definition": "A unilateral isometric trunk family performed side-lying with the hips at the edge of a bench, the lower body supported and fixed by a partner, and the torso unsupported. The athlete holds a straight horizontal shoulder-to-hip line without arm support or trunk movement. Gravity tends to laterally flex the spine; that is a resisted tendency rather than a dynamic repetition. The hips remain fixed, so gluteus medius receives conservative mechanics-derived stability credit. Floor and suspension side bridges, lateral trunk lifts, Copenhagen holds, hip-abduction variants, and moving side-plank drills remain outside this narrow fixture.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "arnold-2010-lower-limb",
+    "boxing-science-exercise-library",
+    "boxing-science-2021-core-training"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 60
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.lateralFlexion"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "spine.lateralFlexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "quadratusLumborum"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [
+        "quadratusLumborum"
+      ],
+      "stabilizer": [
+        "abs",
+        "gluteMed"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed relationship between the torso and bench.",
+      "allowedValues": [
+        "sideLyingBenchUnsupportedTorso"
+      ]
+    },
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bench supports only the lower body.",
+      "allowedValues": [
+        "benchLowerBodyOnly"
+      ]
+    },
+    {
+      "id": "supportSide",
+      "valueType": "enum",
+      "required": true,
+      "description": "The unilateral hold is performed one side at a time.",
+      "allowedValues": [
+        "oneSideAtATime"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both sides are trained for equal time.",
+      "allowedValues": [
+        "bothSides"
+      ]
+    },
+    {
+      "id": "upperBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso receives no arm support.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "A partner anchors the lower body on the bench.",
+      "allowedValues": [
+        "partnerAnchoredLowerBodyOnBench"
+      ]
+    },
+    {
+      "id": "legPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The legs remain extended on the bench.",
+      "allowedValues": [
+        "extended"
+      ]
+    },
+    {
+      "id": "armPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The arms do not assist the unsupported torso.",
+      "allowedValues": [
+        "crossedOnChest"
+      ]
+    },
+    {
+      "id": "bodyAlignment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The shoulder-to-hip line remains straight and horizontal.",
+      "allowedValues": [
+        "shoulderHipStraightTorsoHorizontal"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The spine holds position rather than repeating lateral flexion.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The pelvis remains still.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hips remain still.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "holdType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The tracked task is a timed isometric.",
+      "allowedValues": [
+        "timedIsometric"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "No machine constrains the torso path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower body supplies externally anchored static support only.",
+      "allowedValues": [
+        "externallyAnchoredStaticSupport"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "partner-anchored-lateral-trunk-hold",
+      "name": "Partner-Anchored Lateral Trunk Hold",
+      "aliases": [
+        "Lateral ISO Hold",
+        "Lateral ISO Holds",
+        "Bench Lateral Core Hold"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 30,
+      "searchPriority": 95,
+      "involvement": [
+        {"muscle": "obliques", "role": "primary"},
+        {"muscle": "quadratusLumborum", "role": "secondary"},
+        {"muscle": "abs", "role": "stabilizer"},
+        {"muscle": "gluteMed", "role": "stabilizer"}
+      ],
+      "variant": {
+        "bodyPosition": "sideLyingBenchUnsupportedTorso",
+        "supportSurface": "benchLowerBodyOnly",
+        "supportSide": "oneSideAtATime",
+        "trainingSidePrescription": "bothSides",
+        "upperBodySupport": "none",
+        "lowerBodySupport": "partnerAnchoredLowerBodyOnBench",
+        "legPosture": "extended",
+        "armPosition": "crossedOnChest",
+        "bodyAlignment": "shoulderHipStraightTorsoHorizontal",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "holdType": "timedIsometric",
+        "fixedPath": false,
+        "lowerBodyContribution": "externallyAnchoredStaticSupport"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "boxing-science-2021-core-training"
+      ],
+      "execution": {
+        "startingPosition": "Lie sideways with your hips at the edge of a flat bench, your lower body supported on the bench, and your upper torso extending beyond the edge. Have a partner secure your legs and cross your arms over your chest.",
+        "movement": "Bring the unsupported torso into a straight horizontal line with the hips and hold without bending or rotating.",
+        "endpoint": "Maintain the horizontal lateral hold for the set time.",
+        "controlledJoints": "Keep the spine, pelvis, and hips still while the torso remains unsupported.",
+        "supportAndPosture": "Keep the lower body fixed by the partner and do not use an arm to support the torso.",
+        "disqualifyingCompensations": [
+          "Dropping or repeatedly lifting the torso turns the hold into a lateral-flexion repetition.",
+          "Rolling forward or backward changes the task into a rotational hold.",
+          "Supporting the torso with an arm changes the reviewed bench fixture."
+        ],
+        "sideOrDirection": "Hold on one side, then repeat the same duration on the other side."
+      }
+    }
+  ]
+}

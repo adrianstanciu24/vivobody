@@ -1,0 +1,393 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "multidirectional-manual-core-hold",
+  "name": "Multidirectional Manual Core Hold",
+  "definition": "A standing bilateral isometric core family in which an athlete extends clasped hands and maintains the trunk and pelvis while a partner applies changing-direction manual perturbations through the hands. The perturbations create flexion, lateral-flexion, and rotation tendencies that the athlete resists without producing repetitions. Partner force is intentionally not recorded as a numeric load because the source does not quantify it. The product classifies the fixture as bodyweight to suppress a false resistance field; the required partner remains explicit in the name, variant, and instructions rather than being misrepresented as measurable equipment. Fixed-direction presses, partner wrestling drills, steady band or cable Pallof holds, and moving trunk exercises remain outside this contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "boxing-science-exercise-library",
+    "boxing-science-manual-core-holds-video",
+    "boxing-science-2021-punch-snap-exercises",
+    "boxing-science-2021-pallof-press"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal",
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 60
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.flexion",
+      "spine.lateralFlexion",
+      "spine.rotation"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "spine.flexion",
+      "spine.lateralFlexion",
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "quadratusLumborum"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [
+        "quadratusLumborum",
+        "lumbarExtensors"
+      ],
+      "stabilizer": [
+        "abs",
+        "serratus",
+        "externalRotators",
+        "deltoidAnterior",
+        "triceps",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMed",
+        "vasti",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed upright body orientation.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "stance",
+      "valueType": "enum",
+      "required": true,
+      "description": "The stable bilateral foot placement.",
+      "allowedValues": [
+        "feetHipWidth"
+      ]
+    },
+    {
+      "id": "lowerBodyPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The athletic lower-body position used to absorb perturbations without stepping.",
+      "allowedValues": [
+        "slightHipAndKneeFlexion"
+      ]
+    },
+    {
+      "id": "armPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lever position used for partner contact.",
+      "allowedValues": [
+        "bothArmsExtendedNearShoulderHeight"
+      ]
+    },
+    {
+      "id": "handPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed two-hand contact configuration.",
+      "allowedValues": [
+        "handsClasped"
+      ]
+    },
+    {
+      "id": "resistanceSource",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source of the unquantified perturbations.",
+      "allowedValues": [
+        "partnerManualPerturbations"
+      ]
+    },
+    {
+      "id": "perturbationDirection",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the partner changes direction across the hold.",
+      "allowedValues": [
+        "changingFlexionLateralFlexionAndRotation"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the athlete allows deliberate spinal movement.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the athlete allows deliberate pelvic movement.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The base of support maintained throughout the hold.",
+      "allowedValues": [
+        "bothFeetRemainPlanted"
+      ]
+    },
+    {
+      "id": "holdType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The tracked task rather than a repetition count.",
+      "allowedValues": [
+        "timedIsometric"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether a machine constrains the perturbation path."
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "partner-perturbation-manual-core-hold",
+      "name": "Partner-Perturbation Manual Core Hold",
+      "aliases": [
+        "ISO Holds w/ Manual Resistance",
+        "ISO Holds with Manual Resistance",
+        "Manual Core Holds",
+        "Manual Resistance Pallof Iso Hold",
+        "Manual Resistance Pallof Iso Holds"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 20,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "quadratusLumborum",
+          "role": "secondary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "bodyPosition": "standing",
+        "stance": "feetHipWidth",
+        "lowerBodyPosture": "slightHipAndKneeFlexion",
+        "armPosition": "bothArmsExtendedNearShoulderHeight",
+        "handPosition": "handsClasped",
+        "resistanceSource": "partnerManualPerturbations",
+        "perturbationDirection": "changingFlexionLateralFlexionAndRotation",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "footContact": "bothFeetRemainPlanted",
+        "holdType": "timedIsometric",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "boxing-science-manual-core-holds-video",
+        "boxing-science-2021-punch-snap-exercises",
+        "boxing-science-2021-pallof-press"
+      ],
+      "execution": {
+        "startingPosition": "Stand with both feet about hip-width apart, soften the hips and knees, brace the trunk, and extend both arms near shoulder height with the hands clasped. Have a partner place their hands against yours.",
+        "movement": "Keep the hands, trunk, pelvis, and feet as still as possible while the partner applies brief pressure from changing directions.",
+        "endpoint": "Continue resisting the changing pushes for the set time without turning the drill into a movement repetition.",
+        "controlledJoints": "Maintain the arm lever and resist trunk flexion, side bending, and rotation without stepping.",
+        "supportAndPosture": "Keep both feet planted and use only enough partner pressure to preserve a controlled neutral position.",
+        "disqualifyingCompensations": [
+          "Stepping or lifting a foot changes the two-foot standing fixture.",
+          "Allowing repeated trunk bending or turning changes the task from an isometric hold to a dynamic drill.",
+          "Using maximal or uncontrolled partner force leaves the controlled endurance exercise."
+        ]
+      }
+    }
+  ]
+}

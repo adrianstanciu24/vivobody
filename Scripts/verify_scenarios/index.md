@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 170.
+Scenario files: 174.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -38,6 +38,10 @@ Scenario files: 170.
 | [catalog-common-machines-light](catalog-common-machines-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-common-machines](catalog-common-machines.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-comprehensive-expansion](catalog-comprehensive-expansion.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-core-endurance-bench-accessibility](catalog-core-endurance-bench-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-core-endurance-lateral-light](catalog-core-endurance-lateral-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-core-endurance-manual](catalog-core-endurance-manual.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-core-endurance-weighted](catalog-core-endurance-weighted.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-core-strength-expansion-accessibility](catalog-core-strength-expansion-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-core-strength-expansion-light](catalog-core-strength-expansion-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-core-strength-expansion](catalog-core-strength-expansion.json) | library | `--static-body -settings.appearance dark` |
