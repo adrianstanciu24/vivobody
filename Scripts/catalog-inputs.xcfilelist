@@ -41,6 +41,7 @@ $(SRCROOT)/specs/catalog/families/forearm-pronation.json
 $(SRCROOT)/specs/catalog/families/forearm-supination.json
 $(SRCROOT)/specs/catalog/families/full-snatch.json
 $(SRCROOT)/specs/catalog/families/glute-ham-raise.json
+$(SRCROOT)/specs/catalog/families/goblet-squat-to-press.json
 $(SRCROOT)/specs/catalog/families/hang-power-clean.json
 $(SRCROOT)/specs/catalog/families/hang-power-snatch.json
 $(SRCROOT)/specs/catalog/families/hanging-leg-raise.json
@@ -71,6 +72,8 @@ $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/landmine-punch.json
 $(SRCROOT)/specs/catalog/families/landmine-reverse-lunge-knee-drive.json
 $(SRCROOT)/specs/catalog/families/landmine-rotation.json
+$(SRCROOT)/specs/catalog/families/landmine-squat-to-press.json
+$(SRCROOT)/specs/catalog/families/landmine-squat.json
 $(SRCROOT)/specs/catalog/families/lateral-band-walk.json
 $(SRCROOT)/specs/catalog/families/lateral-high-plank-walk.json
 $(SRCROOT)/specs/catalog/families/lateral-lunge.json

@@ -3504,7 +3504,7 @@
       "doi": "10.1519/JSC.0000000000004094",
       "pmid": "34341315",
       "url": "https://doi.org/10.1519/JSC.0000000000004094",
-      "scope": "Goblet and landmine squats were compared with force-plate kinetics and surface EMG of vastus medialis, vastus lateralis, semitendinosus, and biceps femoris. The study supports conservative quadriceps and hamstring participation for the goblet squat, but it did not collect kinematics or pin the kettlebell horn grip and complete setup tuple."
+      "scope": "Goblet and landmine squats were compared with force-plate kinetics and surface EMG of vastus medialis, vastus lateralis, semitendinosus, and biceps femoris. The study supports conservative quadriceps and hamstring participation for both squat categories, but it did not collect kinematics or pin either exact grip, depth, or complete setup tuple; it cannot rank the catalog fixtures' muscle roles."
     },
     {
       "id": "lee-2017-smith-squat-human-machine",
@@ -5588,7 +5588,27 @@
       ],
       "year": 2025,
       "url": "https://www.acefitness.org/continuing-education/certified/september-2025/8948/the-ace-workout-builder-for-landmine-training/",
-      "scope": "ACE identifies a two-arm landmine press as a bilateral landmine-training option. It supports the existence of the two-hand standing fixture and distinguishes it from one-arm pressing. The catalog's square hip-width stance, strict no-leg-drive boundary, added-plate logging convention, and muscle roles remain explicit product and anatomy-mechanics choices rather than measurements from this article."
+      "scope": "ACE identifies a two-arm landmine press and a landmine goblet squat as distinct landmine-training options. It supports the existence of those two-hand categories and the bar's anchored arc, but gives no measured grip, squat depth, or joint kinematics for the squat. The catalog's square hip-width press stance, strict no-leg-drive boundary, squat chest hold, squat controlled depth, added-plate logging convention, and muscle roles remain explicit fixture, product, and anatomy-mechanics choices rather than measurements from this article."
+    },
+    {
+      "id": "nsca-2020-landmine-squat-to-press",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Landmine Squat to Press, NSCA Coach 7.3",
+      "authors": ["National Strength and Conditioning Association"],
+      "year": 2020,
+      "url": "https://www.nsca.com/globalassets/education/nsca-coach/nsca-coach-7.3.pdf",
+      "scope": "The exercise-technique description on printed page 42 specifies a bar anchored in a landmine, a stacked-hand hold at the upper sternum, a squat to parallel or near parallel, rapid hip-knee-ankle extension, release of the lower hand, and a diagonal single-arm finish with the starting hand alternated. It anchors this exact power fixture, not a two-hand press-through-lockout, barbell thruster, measured muscle-force ranking, or universal training load."
+    },
+    {
+      "id": "cavaggioni-2021-goblet-squat-overhead-press",
+      "sourceType": "randomizedClinicalTrial",
+      "title": "Effects of a Randomized Home-Based Quality of Movement Protocol on Function, Posture and Strength in Outpatients with Obesity",
+      "authors": ["Luca Cavaggioni", "Luisa Gilardini", "Gabriella Redaelli", "Marina Croci", "Paolo Capodaglio", "Michele Gobbi", "Simona Bertoli"],
+      "year": 2021,
+      "pmcid": "PMC8618132",
+      "doi": "10.3390/healthcare9111451",
+      "url": "https://doi.org/10.3390/healthcare9111451",
+      "scope": "The movement-quality training protocol names a goblet squat to overhead press with a dumbbell. It supports this combined exercise category and identifies a dumbbell implement; the single-dumbbell choice is a bounded interpretation of the singular wording. It does not establish grip, exact depth, transition tempo, elbow endpoint, muscle activity, or effectiveness of the individual exercise. Those fixture details are bounded separately by the existing reviewed goblet setup and explicit catalog choices."
     },
     {
       "id": "boxing-science-landmine-punch",

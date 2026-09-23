@@ -1,0 +1,374 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "landmine-squat",
+  "name": "Landmine Squat",
+  "definition": "A bilateral squat facing a fixed landmine pivot, with both hands holding the moving sleeve in front of the chest throughout the repetition. Both feet remain planted while the hips and knees flex to a controlled, self-selected depth, then extend to standing as the sleeve follows its pivoted arc. ACE names the landmine goblet squat and Collins et al. directly studied the landmine-squat category, but the accessible study abstract does not establish grip, depth, or joint kinematics. The exact two-hand chest hold and controlled depth are a bounded catalog fixture; the categorical joint actions and muscle roles are anatomy-and-mechanics inferences, not measured rankings. A press, alternating-hand release, rotation, lunge, machine-guided squat, or free-bar squat is outside this family. Log added plates only and compare loads only on the same bar and pivot setup.",
+  "evidenceRefs": [
+    "ace-2025-two-arm-landmine-press",
+    "arnold-2010-lower-limb",
+    "collins-2021-goblet-landmine-squat"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "gluteMax"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "gluteMed",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "deltoidAnterior",
+        "trapeziusUpper",
+        "brachialis",
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "tibialisAnterior",
+        "tensorFasciaeLatae"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "barbellConstraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "One bar end remains anchored in a landmine pivot.",
+      "allowedValues": [
+        "landminePivot"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both hands hold the moving sleeve at the chest throughout.",
+      "allowedValues": [
+        "twoHandsCupMovingSleeveAtChest"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The symmetric standing stance.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "squatDepth",
+      "valueType": "enum",
+      "required": true,
+      "description": "Depth is controlled but not claimed as a study-specific angle.",
+      "allowedValues": [
+        "selfSelectedControlledDepth"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The sleeve follows the anchored bar's rotational arc.",
+      "allowedValues": [
+        "pivotedBarRotationalArc"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain planted.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Entered mass is added plates, comparable only on the same setup.",
+      "allowedValues": [
+        "addedPlatesSameLandmineOnly"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The landmine pivot constrains the sleeve path.",
+      "fixedValue": true
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "two-hand-landmine-squat",
+      "name": "Two-Hand Landmine Squat",
+      "aliases": [
+        "Landmine Squat",
+        "Landmine Goblet Squat"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "barbellConstraint": "landminePivot",
+        "handTask": "twoHandsCupMovingSleeveAtChest",
+        "stanceConfiguration": "symmetricBilateral",
+        "squatDepth": "selfSelectedControlledDepth",
+        "resistanceGeometry": "pivotedBarRotationalArc",
+        "footContact": "continuous",
+        "loadAccounting": "addedPlatesSameLandmineOnly",
+        "fixedPath": true
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ace-2025-two-arm-landmine-press",
+        "arnold-2010-lower-limb",
+        "collins-2021-goblet-landmine-squat"
+      ],
+      "execution": {
+        "startingPosition": "Secure one end of the bar in a landmine pivot. Face the pivot with both feet planted and cup the moving sleeve in both hands in front of the chest. Log added plates only.",
+        "movement": "Bend the hips and knees together while keeping the sleeve at chest height; let the anchored bar travel through its arc.",
+        "endpoint": "Descend to a controlled depth that allows both feet to stay planted and the trunk to stay braced.",
+        "returnPhase": "Extend the hips, knees, and ankles to stand while keeping both hands on the sleeve at the chest.",
+        "controlledJoints": "Track the knees with the feet and do not drive the sleeve away from the chest as a press.",
+        "supportAndPosture": "Keep the trunk braced, both feet planted, and the bar anchored throughout the set.",
+        "disqualifyingCompensations": [
+          "Pressing the sleeve away from the chest changes the task into a squat-to-press.",
+          "Releasing one hand or rotating the trunk leaves the reviewed two-hand squat fixture.",
+          "Stepping, lunging, or using a machine-guided bar changes the setup."
+        ]
+      }
+    }
+  ]
+}

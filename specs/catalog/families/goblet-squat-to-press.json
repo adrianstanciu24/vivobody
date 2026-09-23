@@ -1,0 +1,468 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "goblet-squat-to-press",
+  "name": "Goblet Squat to Press",
+  "definition": "A bilateral controlled repetition combining one single-dumbbell goblet squat and a two-hand overhead press of the same dumbbell. The dumbbell begins vertical at the chest with both hands cupping its top head, the athlete squats to approximately thigh parallel or deeper as mobility allows, stands, then presses overhead without a second knee dip. Cavaggioni et al. name the single-dumbbell combined exercise in a training protocol, and NASM supports the chest-held goblet setup; neither source measured the complete transition, grip during overhead travel, muscle contribution, or a universal depth. The two-hand hold, ordered return, and categorical roles are bounded catalog choices and anatomy-and-mechanics inferences. A kettlebell, two-dumbbell shoulder rack, single-arm press, uninterrupted power thruster, or separate exercises are outside this family. Log the complete mass of one dumbbell once.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "arnold-2010-lower-limb",
+    "cavaggioni-2021-goblet-squat-overhead-press",
+    "holzbaur-2005-upper-extremity",
+    "nasm-2026-goblet-squat-exercise-library",
+    "seth-2019-shoulder-work"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.flexion",
+      "shoulder.abduction"
+    ],
+    "primeActions": [],
+    "movementPhases": [
+      {
+        "id": "goblet-squat-descent",
+        "name": "Goblet Squat Descent",
+        "primeActions": [],
+        "yieldingActions": [
+          "hip.flexion",
+          "knee.flexion",
+          "ankle.dorsiflexion"
+        ]
+      },
+      {
+        "id": "goblet-squat-ascent",
+        "name": "Goblet Squat Ascent",
+        "primeActions": [
+          "hip.extension",
+          "knee.extension",
+          "ankle.plantarflexion"
+        ]
+      },
+      {
+        "id": "two-hand-overhead-press",
+        "name": "Two-Hand Overhead Press",
+        "primeActions": [
+          "shoulder.flexion",
+          "shoulder.abduction",
+          "scapula.upwardRotation",
+          "scapula.posteriorTilt",
+          "elbow.extension"
+        ]
+      }
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "shoulder.extension",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "gluteMax",
+        "deltoidAnterior"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "medialHamstrings",
+        "gastrocnemius",
+        "soleus",
+        "deltoidLateral",
+        "supraspinatus",
+        "triceps",
+        "serratus",
+        "trapeziusUpper",
+        "trapeziusLower"
+      ],
+      "stabilizer": [
+        "bicepsFemoris",
+        "gluteMed",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "subscapularis",
+        "abs",
+        "obliques",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "One vertical dumbbell starts at the chest with both hands cupping its top head.",
+      "allowedValues": [
+        "singleDumbbellVerticalAtChestCuppingTopHead"
+      ]
+    },
+    {
+      "id": "squatDepth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed goblet endpoint is approximately parallel or deeper as mobility allows.",
+      "allowedValues": [
+        "thighParallelOrDeeperAsMobilityAllows"
+      ]
+    },
+    {
+      "id": "transition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Stand from the squat, then press in a controlled sequence.",
+      "allowedValues": [
+        "standThenControlledPress"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both hands retain the dumbbell through the press.",
+      "allowedValues": [
+        "twoHandsCupTopHeadThroughout"
+      ]
+    },
+    {
+      "id": "pressPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "One dumbbell travels from chest to overhead.",
+      "allowedValues": [
+        "singleDumbbellChestToOverhead"
+      ]
+    },
+    {
+      "id": "receiveStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "There is no jerk receive.",
+      "allowedValues": [
+        "noSecondDipOrRebend"
+      ]
+    },
+    {
+      "id": "armEndpoint",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both arms finish overhead.",
+      "allowedValues": [
+        "elbowsFullyExtendedOverhead"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "The entered mass is one complete dumbbell.",
+      "allowedValues": [
+        "totalSingleDumbbell"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain planted.",
+      "allowedValues": [
+        "bothFeetPlanted"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The dumbbell has no external path guide.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "two-hand-single-dumbbell-goblet-squat-to-press",
+      "name": "Two-Hand Single-Dumbbell Goblet Squat to Press",
+      "aliases": [
+        "Dumbbell Goblet Squat to Press",
+        "Single-Dumbbell Goblet Squat to Overhead Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 8,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "loadPlacement": "singleDumbbellVerticalAtChestCuppingTopHead",
+        "squatDepth": "thighParallelOrDeeperAsMobilityAllows",
+        "transition": "standThenControlledPress",
+        "handTask": "twoHandsCupTopHeadThroughout",
+        "pressPath": "singleDumbbellChestToOverhead",
+        "receiveStrategy": "noSecondDipOrRebend",
+        "armEndpoint": "elbowsFullyExtendedOverhead",
+        "loadAccounting": "totalSingleDumbbell",
+        "footContact": "bothFeetPlanted",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "arnold-2010-lower-limb",
+        "cavaggioni-2021-goblet-squat-overhead-press",
+        "holzbaur-2005-upper-extremity",
+        "nasm-2026-goblet-squat-exercise-library",
+        "seth-2019-shoulder-work"
+      ],
+      "execution": {
+        "startingPosition": "Stand with both feet about hip width apart and hold one vertical dumbbell at the chest with both hands cupping its top head. Log the complete dumbbell mass once.",
+        "movement": "Squat with the dumbbell at the chest, stand through the hips, knees, and ankles, then press the same dumbbell overhead with both hands under control.",
+        "endpoint": "Finish standing with both elbows extended overhead and without a second knee dip.",
+        "returnPhase": "Lower the dumbbell under control to the two-hand chest hold before the next squat.",
+        "controlledJoints": "Track the knees with the feet, brace the trunk, and keep both hands securely on the dumbbell through the press.",
+        "supportAndPosture": "Keep both feet planted and do not use a rack, bench, or other support.",
+        "disqualifyingCompensations": [
+          "Changing to a kettlebell or a shoulder-racked two-dumbbell press changes the implement and grip task.",
+          "Pressing with one hand changes the two-hand finish.",
+          "Driving directly through the squat into an explosive press changes the controlled sequence."
+        ]
+      }
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 12
+    }
+  }
+}

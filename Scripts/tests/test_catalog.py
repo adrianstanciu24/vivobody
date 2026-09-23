@@ -7059,6 +7059,9 @@ class CatalogFoundationTests(unittest.TestCase):
             "straight-leg-hip-flexion-sit-up",
             "supine-medicine-ball-limb-lowering",
             "landmine-rotation",
+            "landmine-squat",
+            "landmine-squat-to-press",
+            "goblet-squat-to-press",
             "landmine-reverse-lunge-knee-drive",
             "banded-single-leg-hip-thrust",
             *REQUESTED_PLANK_FAMILY_IDS,
@@ -7070,7 +7073,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            334,
+            337,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -8100,6 +8103,7 @@ class CatalogFoundationTests(unittest.TestCase):
             *CORE_ENDURANCE_FAMILY_IDS,
             "prone-tyw-hold-sequence",
             "rotational-row",
+            "goblet-squat-to-press",
         }
         actual_family_ids = set()
         for original in self.real_families:
@@ -17241,7 +17245,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 375)
+        self.assertEqual(len(source_by_id), 377)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -17398,8 +17402,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             10,
         )
-        self.assertEqual(len(self.real_families), 153)
-        self.assertEqual(len(self.foundation.evidence_ids), 375)
+        self.assertEqual(len(self.real_families), 156)
+        self.assertEqual(len(self.foundation.evidence_ids), 377)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -18821,7 +18825,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         normalized_proposal = " ".join(proposal.split())
 
-        self.assertIn("| Reviewed families | 153 |", self.catalog_inventory)
+        self.assertIn("| Reviewed families | 156 |", self.catalog_inventory)
         self.assertIn(
             "Batch 7 now contains nine active families",
             roadmap,
@@ -18832,7 +18836,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 334 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 337 |", self.catalog_inventory)
         self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
@@ -19974,9 +19978,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 153)
-        self.assertEqual(len(records), 334)
-        self.assertEqual(len(self.foundation.evidence_ids), 375)
+        self.assertEqual(len(self.real_families), 156)
+        self.assertEqual(len(records), 337)
+        self.assertEqual(len(self.foundation.evidence_ids), 377)
         self.assertEqual(
             {
                 key: upright[key]
@@ -20326,7 +20330,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 334 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 337 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -23267,21 +23271,21 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 334 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 337 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_149_families_and_324_exercises(
+    def test_runtime_projection_contains_each_reviewed_family_and_exercise(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 334)
+        self.assertEqual(len(records), 337)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 153)
+        self.assertEqual(len({record["familyID"] for record in records}), 156)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -23460,6 +23464,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "cable-pull-through",
                 "suspension-assisted-single-leg-squat",
                 "suspension-hamstring-curl", "suspension-hip-press",
+                "goblet-squat-to-press", "landmine-squat",
+                "landmine-squat-to-press",
             },
             "core": {
                 "anti-extension", "anti-lateral-flexion", "anti-rotation",
@@ -23717,7 +23723,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 334)
+            self.assertEqual(len(emitted), 337)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -23969,7 +23975,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_ids), 375)
+        self.assertEqual(len(source_ids), 377)
         self.assertTrue(COMPREHENSIVE_EXPANSION_EVIDENCE_IDS <= source_ids)
 
     def test_must_have_expansion_is_source_exact_and_runtime_visible(self) -> None:
@@ -24364,9 +24370,9 @@ class CatalogFoundationTests(unittest.TestCase):
 
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
-        self.assertEqual(len(self.real_families), 153)
-        self.assertEqual(len(runtime), 334)
-        self.assertEqual(len(self.foundation.evidence_ids), 375)
+        self.assertEqual(len(self.real_families), 156)
+        self.assertEqual(len(runtime), 337)
+        self.assertEqual(len(self.foundation.evidence_ids), 377)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids
@@ -27740,6 +27746,81 @@ class RequestedPullCatalogTests(unittest.TestCase):
             with self.subTest(family=family_id, record=catalog_id):
                 with self.assertRaises(catalog.ValidationFailure):
                     catalog.validate_family(family, self.foundation, "neighbor leak")
+
+
+class RequestedSquatCombinationCatalogTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.foundation = catalog.validate_foundation()
+        cls.families = {
+            family_id: catalog.load_json(catalog.FAMILIES_ROOT / f"{family_id}.json")
+            for family_id in (
+                "landmine-squat",
+                "landmine-squat-to-press",
+                "goblet-squat-to-press",
+            )
+        }
+
+    def test_exact_rosters_keep_squat_and_press_histories_distinct(self) -> None:
+        expected = {
+            "landmine-squat": ("two-hand-landmine-squat", "dynamicStrength", "bilateral"),
+            "landmine-squat-to-press": ("alternating-landmine-squat-to-press", "power", "unilateral"),
+            "goblet-squat-to-press": ("two-hand-single-dumbbell-goblet-squat-to-press", "dynamicStrength", "bilateral"),
+        }
+        for family_id, (record_id, modality, laterality) in expected.items():
+            with self.subTest(family=family_id):
+                family = self.families[family_id]
+                self.assertEqual(len(family["exercises"]), 1)
+                exercise = family["exercises"][0]
+                self.assertEqual(exercise["catalogID"], record_id)
+                self.assertEqual(exercise["modality"], modality)
+                self.assertEqual(exercise["laterality"], laterality)
+                self.assertEqual(exercise["loadMode"], "external")
+                self.assertEqual(exercise["trackingMode"], "reps")
+
+    def test_squat_does_not_admit_a_press_or_rotational_variant(self) -> None:
+        for action in ("shoulder.flexion", "elbow.extension", "spine.rotation"):
+            family = copy.deepcopy(self.families["landmine-squat"])
+            family["exercises"][0]["additionalPrimeActions"] = [action]
+            with self.subTest(action=action):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(family, self.foundation, "squat press leak")
+
+    def test_alternating_press_requires_unilateral_side_instructions(self) -> None:
+        family = copy.deepcopy(self.families["landmine-squat-to-press"])
+        exercise = family["exercises"][0]
+        exercise["execution"].pop("sideOrDirection")
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(family, self.foundation, "missing alternating sides")
+
+    def test_goblet_press_rejects_kettlebell_substitution(self) -> None:
+        family = copy.deepcopy(self.families["goblet-squat-to-press"])
+        family["exercises"][0]["equipment"] = "kettlebell"
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family(family, self.foundation, "different goblet implement")
+
+    def test_new_family_axes_are_required(self) -> None:
+        for family_id, original in self.families.items():
+            for axis in original["variantAxes"]:
+                family = copy.deepcopy(original)
+                family["exercises"][0]["variant"].pop(axis["id"])
+                with self.subTest(family=family_id, axis=axis["id"]):
+                    with self.assertRaises(catalog.ValidationFailure):
+                        catalog.validate_family(family, self.foundation, "missing squat axis")
+
+    def test_neighbor_families_reject_combined_movements(self) -> None:
+        for neighbor_id, record_id in (
+            ("bilateral-squat", "landmine-squat-to-press"),
+            ("bilateral-squat", "goblet-squat-to-press"),
+            ("thruster", "goblet-squat-to-press"),
+            ("landmine-press", "landmine-squat-to-press"),
+        ):
+            neighbor = catalog.load_json(catalog.FAMILIES_ROOT / f"{neighbor_id}.json")
+            candidate = self.families[record_id]["exercises"][0]
+            neighbor["exercises"].append(copy.deepcopy(candidate))
+            with self.subTest(neighbor=neighbor_id, candidate=record_id):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(neighbor, self.foundation, "neighbor leak")
 
 
 if __name__ == "__main__":

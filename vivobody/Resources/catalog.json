@@ -8784,6 +8784,206 @@
     ]
   },
   {
+    "familyID": "goblet-squat-to-press",
+    "familyName": "Goblet Squat to Press",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.posteriorTilt",
+        "name": "Scapular posterior tilt",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
+    "catalogID": "two-hand-single-dumbbell-goblet-squat-to-press",
+    "name": "Two-Hand Single-Dumbbell Goblet Squat to Press",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Dumbbell Goblet Squat to Press",
+      "Single-Dumbbell Goblet Squat to Overhead Press"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with both feet about hip width apart and hold one vertical dumbbell at the chest with both hands cupping its top head. Log the complete dumbbell mass once.",
+      "movement": "Squat with the dumbbell at the chest, stand through the hips, knees, and ankles, then press the same dumbbell overhead with both hands under control.",
+      "endpoint": "Finish standing with both elbows extended overhead and without a second knee dip.",
+      "returnPhase": "Lower the dumbbell under control to the two-hand chest hold before the next squat.",
+      "controlledJoints": "Track the knees with the feet, brace the trunk, and keep both hands securely on the dumbbell through the press.",
+      "supportAndPosture": "Keep both feet planted and do not use a rack, bench, or other support.",
+      "disqualifyingCompensations": [
+        "Changing to a kettlebell or a shoulder-racked two-dumbbell press changes the implement and grip task.",
+        "Pressing with one hand changes the two-hand finish.",
+        "Driving directly through the squat into an explosive press changes the controlled sequence."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "hang-power-clean",
     "familyName": "Hang Power Clean",
     "movementActions": [
@@ -15093,6 +15293,318 @@
       },
       {
         "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "landmine-squat",
+    "familyName": "Landmine Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "two-hand-landmine-squat",
+    "name": "Two-Hand Landmine Squat",
+    "group": "legs",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Landmine Squat",
+      "Landmine Goblet Squat"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Secure one end of the bar in a landmine pivot. Face the pivot with both feet planted and cup the moving sleeve in both hands in front of the chest. Log added plates only.",
+      "movement": "Bend the hips and knees together while keeping the sleeve at chest height; let the anchored bar travel through its arc.",
+      "endpoint": "Descend to a controlled depth that allows both feet to stay planted and the trunk to stay braced.",
+      "returnPhase": "Extend the hips, knees, and ankles to stand while keeping both hands on the sleeve at the chest.",
+      "controlledJoints": "Track the knees with the feet and do not drive the sleeve away from the chest as a press.",
+      "supportAndPosture": "Keep the trunk braced, both feet planted, and the bar anchored throughout the set.",
+      "disqualifyingCompensations": [
+        "Pressing the sleeve away from the chest changes the task into a squat-to-press.",
+        "Releasing one hand or rotating the trunk leaves the reviewed two-hand squat fixture.",
+        "Stepping, lunging, or using a machine-guided bar changes the setup."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "landmine-squat-to-press",
+    "familyName": "Landmine Squat to Press",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
+    "catalogID": "alternating-landmine-squat-to-press",
+    "name": "Alternating Landmine Squat to Press",
+    "group": "legs",
+    "defaultWeight": 10,
+    "defaultWeightKg": 5,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Landmine Squat to Press"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Anchor one end of an Olympic bar in a landmine. Stand slightly wider than shoulder width with the moving sleeve at the upper sternum and hands stacked. Log added plates only.",
+      "movement": "Squat to parallel or near parallel, then rapidly extend the hips, knees, and ankles to drive the sleeve forward and up. As the ankles extend, release the lower hand and continue the diagonal press with the upper hand.",
+      "endpoint": "Finish tall with the pressing arm extended along the landmine arc and no forward step; heel rise from the drive is allowed. Do not add a second knee dip.",
+      "returnPhase": "Guide the sleeve back to the upper sternum with both hands, restack the hands in the opposite order, and alternate the pressing arm on the next repetition.",
+      "controlledJoints": "Keep the knees tracking with the feet, the trunk braced, and the bar anchored through the whole movement.",
+      "supportAndPosture": "Begin each repetition with both feet in the same stance and do not step forward, even though the NSCA standard permits a step if needed. Heel rise during the drive is allowed.",
+      "disqualifyingCompensations": [
+        "Keeping both hands on the sleeve through the finish changes the published alternating-arm fixture.",
+        "Pausing after standing turns the repetition into a squat followed by a strict press.",
+        "A second dip, trunk rotation, or forward step leaves this planted-foot fixture."
+      ],
+      "sideOrDirection": "Alternate the pressing arm on successive repetitions, keeping the same added-plate load for both sides; count each press as one repetition and complete equal repetitions per arm within the set."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
         "role": "stabilizer"
       }
     ]

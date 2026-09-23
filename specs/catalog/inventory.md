@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 153 |
-| Exercises | 334 |
+| Reviewed families | 156 |
+| Exercises | 337 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 375 |
+| Evidence sources | 377 |
 
 ## Family roster
 
@@ -60,6 +60,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [forearm-supination](families/forearm-supination.json) | 1 |
 | [full-snatch](families/full-snatch.json) | 1 |
 | [glute-ham-raise](families/glute-ham-raise.json) | 1 |
+| [goblet-squat-to-press](families/goblet-squat-to-press.json) | 1 |
 | [hang-power-clean](families/hang-power-clean.json) | 1 |
 | [hang-power-snatch](families/hang-power-snatch.json) | 1 |
 | [hanging-leg-raise](families/hanging-leg-raise.json) | 2 |
@@ -90,6 +91,8 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [landmine-punch](families/landmine-punch.json) | 1 |
 | [landmine-reverse-lunge-knee-drive](families/landmine-reverse-lunge-knee-drive.json) | 1 |
 | [landmine-rotation](families/landmine-rotation.json) | 1 |
+| [landmine-squat-to-press](families/landmine-squat-to-press.json) | 1 |
+| [landmine-squat](families/landmine-squat.json) | 1 |
 | [lateral-band-walk](families/lateral-band-walk.json) | 1 |
 | [lateral-high-plank-walk](families/lateral-high-plank-walk.json) | 1 |
 | [lateral-lunge](families/lateral-lunge.json) | 2 |

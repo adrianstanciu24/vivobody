@@ -1,0 +1,119 @@
+{
+  "name": "catalog-landmine-squat-to-press-accessibility-dark",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Alternating Landmine Squat to Press"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Alternating Landmine Squat to Press,"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Alternating Landmine Squat to Press,"
+      }
+    },
+    {
+      "wait": {
+        "label": "POWER / EXPLOSIVE"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Alternating Landmine Squat to Press"
+          },
+          {
+            "labelContains": "Muscles used by Alternating Landmine Squat to Press"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "release the lower hand"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-side-direction"
+        },
+        "direction": "up",
+        "maxSwipes": 18
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-side-direction",
+            "labelContains": "equal repetitions per arm"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}

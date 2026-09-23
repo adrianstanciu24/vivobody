@@ -149,6 +149,9 @@ class RequestedCatalogGapTests(unittest.TestCase):
                            "landmine-single-leg-romanian-deadlift",
                            "kettlebell-single-leg-romanian-deadlift",
                            "banded-single-leg-hip-thrust",
+                           "two-hand-single-dumbbell-goblet-squat-to-press",
+                           "two-hand-landmine-squat",
+                           "alternating-landmine-squat-to-press",
                        }
                    )]
         self.assertEqual(len(records), 259)

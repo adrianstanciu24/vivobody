@@ -1,0 +1,414 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "landmine-squat-to-press",
+  "name": "Landmine Squat to Press",
+  "definition": "A standing power repetition using an Olympic bar anchored in a ground landmine. Both hands begin stacked on the moving sleeve at the upper sternum. A near-parallel squat flows into rapid hip, knee, and ankle extension that drives the sleeve forward and upward; the lower hand releases and the other arm finishes the diagonal press. The pressing arm alternates on successive repetitions. NSCA Coach 7.3 specifies this hand change and permits a forward step if needed; this catalog fixture retains a planted-foot finish for consistent tracking. Shoulder and elbow actions and categorical muscle roles are anatomy-and-mechanics inferences, not measured muscle-force rankings. A two-hand finish, strict standing press, free-bar thruster, rotational punch, or second dip is outside this family. Enter added plates only; compare loads only on the same bar and pivot setup.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "arnold-2010-lower-limb",
+    "holzbaur-2005-upper-extremity",
+    "nsca-2020-landmine-squat-to-press"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [],
+    "movementPhases": [
+      {
+        "id": "near-parallel-descent",
+        "name": "Near-Parallel Descent",
+        "primeActions": [],
+        "yieldingActions": [
+          "hip.flexion",
+          "knee.flexion",
+          "ankle.dorsiflexion"
+        ]
+      },
+      {
+        "id": "triple-extension-and-diagonal-press",
+        "name": "Triple Extension and Diagonal Press",
+        "primeActions": [
+          "hip.extension",
+          "knee.extension",
+          "ankle.plantarflexion",
+          "shoulder.flexion",
+          "elbow.extension"
+        ]
+      }
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.horizontalAdduction",
+      "spine.rotation",
+      "hip.abduction"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "gluteMax",
+        "deltoidAnterior"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "medialHamstrings",
+        "gastrocnemius",
+        "soleus",
+        "triceps",
+        "pectoralisMajorClavicular"
+      ],
+      "stabilizer": [
+        "bicepsFemoris",
+        "gluteMed",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "subscapularis",
+        "serratus",
+        "trapeziusUpper",
+        "trapeziusLower",
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "tibialisAnterior"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "barbellConstraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "One bar end is anchored.",
+      "allowedValues": [
+        "landminePivot"
+      ]
+    },
+    {
+      "id": "barStartPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The sleeve starts at the upper sternum.",
+      "allowedValues": [
+        "movingSleeveAtUpperSternum"
+      ]
+    },
+    {
+      "id": "handTransition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower hand releases during each press and the finishing arm alternates.",
+      "allowedValues": [
+        "stackedToAlternatingSingleArm"
+      ]
+    },
+    {
+      "id": "squatDepth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The NSCA squat endpoint.",
+      "allowedValues": [
+        "parallelOrNearParallel"
+      ]
+    },
+    {
+      "id": "transition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The squat ascent drives the press without a pause.",
+      "allowedValues": [
+        "continuousTripleExtensionToPress"
+      ]
+    },
+    {
+      "id": "pressPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The sleeve follows the pivoted forward-up arc.",
+      "allowedValues": [
+        "pivotedDiagonalForwardUp"
+      ]
+    },
+    {
+      "id": "receiveStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "The finish has no jerk receive.",
+      "allowedValues": [
+        "noSecondDipOrRebend"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog fixture keeps both feet planted.",
+      "allowedValues": [
+        "bothFeetPlanted"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Only added plates are entered and compared on the same setup.",
+      "allowedValues": [
+        "addedPlatesSameLandmineOnly"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The pivot constrains the bar path.",
+      "fixedValue": true
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "alternating-landmine-squat-to-press",
+      "name": "Alternating Landmine Squat to Press",
+      "aliases": [
+        "Landmine Squat to Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "unilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 8,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "barbellConstraint": "landminePivot",
+        "barStartPosition": "movingSleeveAtUpperSternum",
+        "handTransition": "stackedToAlternatingSingleArm",
+        "squatDepth": "parallelOrNearParallel",
+        "transition": "continuousTripleExtensionToPress",
+        "pressPath": "pivotedDiagonalForwardUp",
+        "receiveStrategy": "noSecondDipOrRebend",
+        "footContact": "bothFeetPlanted",
+        "loadAccounting": "addedPlatesSameLandmineOnly",
+        "fixedPath": true
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "arnold-2010-lower-limb",
+        "holzbaur-2005-upper-extremity",
+        "nsca-2020-landmine-squat-to-press"
+      ],
+      "execution": {
+        "startingPosition": "Anchor one end of an Olympic bar in a landmine. Stand slightly wider than shoulder width with the moving sleeve at the upper sternum and hands stacked. Log added plates only.",
+        "movement": "Squat to parallel or near parallel, then rapidly extend the hips, knees, and ankles to drive the sleeve forward and up. As the ankles extend, release the lower hand and continue the diagonal press with the upper hand.",
+        "endpoint": "Finish tall with the pressing arm extended along the landmine arc and no forward step; heel rise from the drive is allowed. Do not add a second knee dip.",
+        "returnPhase": "Guide the sleeve back to the upper sternum with both hands, restack the hands in the opposite order, and alternate the pressing arm on the next repetition.",
+        "controlledJoints": "Keep the knees tracking with the feet, the trunk braced, and the bar anchored through the whole movement.",
+        "supportAndPosture": "Begin each repetition with both feet in the same stance and do not step forward, even though the NSCA standard permits a step if needed. Heel rise during the drive is allowed.",
+        "disqualifyingCompensations": [
+          "Keeping both hands on the sleeve through the finish changes the published alternating-arm fixture.",
+          "Pausing after standing turns the repetition into a squat followed by a strict press.",
+          "A second dip, trunk rotation, or forward step leaves this planted-foot fixture."
+        ],
+        "sideOrDirection": "Alternate the pressing arm on successive repetitions, keeping the same added-plate load for both sides; count each press as one repetition and complete equal repetitions per arm within the set."
+      }
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 4,
+      "maximum": 12
+    }
+  }
+}

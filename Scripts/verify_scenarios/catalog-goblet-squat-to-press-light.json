@@ -1,0 +1,98 @@
+{
+  "name": "catalog-goblet-squat-to-press-light",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Two-Hand Single-Dumbbell Goblet Squat to Press"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Two-Hand Single-Dumbbell Goblet Squat to Press,"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Two-Hand Single-Dumbbell Goblet Squat to Press,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Two-Hand Single-Dumbbell Goblet Squat to Press"
+          },
+          {
+            "labelContains": "Muscles used by Two-Hand Single-Dumbbell Goblet Squat to Press"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "Log the complete dumbbell mass once"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}
