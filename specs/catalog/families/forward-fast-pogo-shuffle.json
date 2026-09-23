@@ -1,0 +1,226 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "forward-fast-pogo-shuffle",
+  "name": "Forward Fast Pogo Shuffle",
+  "definition": "A forward-travelling rapid shuffle on the balls of the feet with alternating brief foot contacts as a practical interpretation of the source-described shuffle, slight knee flexion, heels low, and hands on hips. The Boxing Science library recommends 10–15 seconds; the current power catalog supports repetition tracking only, so each alternating contact is logged as a rep as a product convention and duration is given as practice guidance. This is not a simultaneous stationary vertical pogo or a maximal-height jump. The intentionally small hip and knee motions control forward travel without making a lunge or squat repetition. Ankle and knee contributions are frequency-dependent; no tendon or boxing-performance outcome is claimed.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "arnold-2010-lower-limb",
+    "hobara-2011-hopping-frequency-leg-stiffness"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "ankle.plantarflexion"
+    ],
+    "primeActions": [],
+    "movementPhases": [
+      {
+        "id": "forefoot-loading",
+        "name": "Forefoot Loading",
+        "primeActions": [],
+        "yieldingActions": [
+          "ankle.dorsiflexion"
+        ]
+      },
+      {
+        "id": "quick-push-off",
+        "name": "Quick Push-Off",
+        "primeActions": [
+          "ankle.plantarflexion"
+        ]
+      }
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "primary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "soleus",
+        "gastrocnemius"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "vasti",
+        "gluteMax",
+        "rectusFemoris",
+        "abs",
+        "obliques",
+        "tibialisAnterior"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "travel",
+      "valueType": "enum",
+      "required": true,
+      "description": "The drill travels forward.",
+      "allowedValues": [
+        "forward"
+      ]
+    },
+    {
+      "id": "footSequence",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each foot touches in alternation.",
+      "allowedValues": [
+        "alternatingContacts"
+      ]
+    },
+    {
+      "id": "heelStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "Heels stay slightly raised without a high calf raise.",
+      "allowedValues": [
+        "slightlyRaised"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "No guided body path.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 12,
+      "maximum": 40
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "fast-pogos",
+      "name": "Fast Pogos",
+      "aliases": [
+        "Forward Fast Pogos"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 20,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "soleus",
+          "role": "primary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "travel": "forward",
+        "footSequence": "alternatingContacts",
+        "heelStrategy": "slightlyRaised",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "hobara-2011-hopping-frequency-leg-stiffness"
+      ],
+      "execution": {
+        "startingPosition": "Stand hip-width with slightly bent knees, hands on hips, and weight on the balls of the feet with heels just raised.",
+        "movement": "Shuffle forward with fast, alternating forefoot contacts for approximately 10–15 seconds.",
+        "endpoint": "Complete each quick contact while continuing forward.",
+        "returnPhase": "Lift and replace the opposite foot quickly; count each foot contact as one rep.",
+        "controlledJoints": "Keep knees slightly flexed and hips facing forward; avoid exaggerated heel rise.",
+        "supportAndPosture": "Use a clear, level forward lane and keep the hands on the hips.",
+        "disqualifyingCompensations": [
+          "Jumping vertically with both feet together becomes stationary Pogos.",
+          "Taking long running strides changes the short-contact shuffle."
+        ],
+        "sideOrDirection": "Alternate feet; count every foot contact, not each left-right pair."
+      }
+    }
+  ]
+}

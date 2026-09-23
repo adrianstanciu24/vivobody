@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 156 |
-| Exercises | 337 |
+| Reviewed families | 161 |
+| Exercises | 343 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 377 |
+| Evidence sources | 382 |
 
 ## Family roster
 
@@ -58,6 +58,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [forearm-plank-hip-drop](families/forearm-plank-hip-drop.json) | 1 |
 | [forearm-pronation](families/forearm-pronation.json) | 1 |
 | [forearm-supination](families/forearm-supination.json) | 1 |
+| [forward-fast-pogo-shuffle](families/forward-fast-pogo-shuffle.json) | 1 |
 | [full-snatch](families/full-snatch.json) | 1 |
 | [glute-ham-raise](families/glute-ham-raise.json) | 1 |
 | [goblet-squat-to-press](families/goblet-squat-to-press.json) | 1 |
@@ -96,6 +97,8 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [lateral-band-walk](families/lateral-band-walk.json) | 1 |
 | [lateral-high-plank-walk](families/lateral-high-plank-walk.json) | 1 |
 | [lateral-lunge](families/lateral-lunge.json) | 2 |
+| [lateral-skater-hop-to-vertical-jump](families/lateral-skater-hop-to-vertical-jump.json) | 1 |
+| [lateral-skater-hop](families/lateral-skater-hop.json) | 1 |
 | [machine-hack-squat](families/machine-hack-squat.json) | 1 |
 | [medicine-ball-carioca-throw](families/medicine-ball-carioca-throw.json) | 1 |
 | [medicine-ball-lateral-shuffle-throw](families/medicine-ball-lateral-shuffle-throw.json) | 1 |
@@ -149,6 +152,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [squat-clean](families/squat-clean.json) | 1 |
 | [standing-band-trunk-rotation](families/standing-band-trunk-rotation.json) | 1 |
 | [standing-suspension-rollout](families/standing-suspension-rollout.json) | 1 |
+| [stationary-pogo-hop](families/stationary-pogo-hop.json) | 1 |
 | [step-up](families/step-up.json) | 2 |
 | [straight-leg-hip-flexion-sit-up](families/straight-leg-hip-flexion-sit-up.json) | 1 |
 | [straight-leg-sit-up](families/straight-leg-sit-up.json) | 1 |
@@ -171,6 +175,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [upper-arm-pad-chest-fly](families/upper-arm-pad-chest-fly.json) | 1 |
 | [upper-arm-pad-shoulder-abduction](families/upper-arm-pad-shoulder-abduction.json) | 1 |
 | [upright-row](families/upright-row.json) | 1 |
+| [vertical-countermovement-jump](families/vertical-countermovement-jump.json) | 2 |
 | [vertical-press](families/vertical-press.json) | 13 |
 | [vertical-pull](families/vertical-pull.json) | 15 |
 | [walking-lunge](families/walking-lunge.json) | 1 |

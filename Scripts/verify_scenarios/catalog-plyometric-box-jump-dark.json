@@ -1,0 +1,23 @@
+{
+  "name": "catalog-plyometric-box-jump-dark",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "Box Jumps"},
+    {"wait": {"labelRegex": "^Box Jumps,"}},
+    {"tap": {"labelRegex": "^Box Jumps,"}},
+    {"wait": {"label": "POWER / EXPLOSIVE"}}
+  ],
+  "required": [
+    {"label": "Box Jumps"},
+    {"labelContains": "Muscles used by Box Jumps"}
+  ],
+  "forbidden": []
+}

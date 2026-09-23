@@ -1,0 +1,221 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "stationary-pogo-hop",
+  "name": "Stationary Pogo Hop",
+  "definition": "A repeated bilateral in-place forefoot hop with hands on hips, little hip and knee bend, rapid ground contact, and vertical flight. This is not a full countermovement squat jump or a planted calf raise. The Boxing Science fixture cues dorsiflexed toes; any tendon-stiffness or performance benefit remains unclaimed. Calf emphasis is a categorical mechanics inference and hopping-frequency effects are protocol dependent.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "arnold-2010-lower-limb",
+    "hobara-2011-hopping-frequency-leg-stiffness"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "ankle.plantarflexion"
+    ],
+    "primeActions": [],
+    "movementPhases": [
+      {
+        "id": "forefoot-loading",
+        "name": "Forefoot Loading",
+        "primeActions": [],
+        "yieldingActions": [
+          "ankle.dorsiflexion"
+        ]
+      },
+      {
+        "id": "rebound",
+        "name": "Rebound",
+        "primeActions": [
+          "ankle.plantarflexion"
+        ]
+      }
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "primary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "soleus",
+        "gastrocnemius"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "gluteMax",
+        "abs",
+        "obliques",
+        "tibialisAnterior",
+        "vasti"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "travel",
+      "valueType": "enum",
+      "required": true,
+      "description": "The drill remains in place.",
+      "allowedValues": [
+        "inPlace"
+      ]
+    },
+    {
+      "id": "footSequence",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet rebound together.",
+      "allowedValues": [
+        "simultaneousBilateral"
+      ]
+    },
+    {
+      "id": "contactStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "Brief ball-of-foot contact.",
+      "allowedValues": [
+        "briefForefoot"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "No external path constraint.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 30
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "stationary-pogos",
+      "name": "Pogos",
+      "aliases": [
+        "Pogo Jumps",
+        "Pogo Hops"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 12,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "soleus",
+          "role": "primary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "travel": "inPlace",
+        "footSequence": "simultaneousBilateral",
+        "contactStrategy": "briefForefoot",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "hobara-2011-hopping-frequency-leg-stiffness"
+      ],
+      "execution": {
+        "startingPosition": "Stand hip-width with legs nearly straight and hands on hips.",
+        "movement": "Perform continuous vertical hops, seeking height while keeping ground contact brief from the balls of both feet with minimal hip and knee bend.",
+        "endpoint": "Reach a brief airborne phase on each rebound.",
+        "returnPhase": "Land on the balls of both feet and rebound quickly; count each landing-and-rebound cycle as one rep.",
+        "controlledJoints": "Keep both ankles aligned and the trunk steady; point the toes toward the shins during flight.",
+        "supportAndPosture": "Use a clear, level floor and keep the movement in place.",
+        "disqualifyingCompensations": [
+          "Deep hip-and-knee dipping becomes a countermovement jump.",
+          "Travelling forward with alternating quick foot contacts becomes Fast Pogos."
+        ]
+      }
+    }
+  ]
+}

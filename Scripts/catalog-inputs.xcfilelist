@@ -39,6 +39,7 @@ $(SRCROOT)/specs/catalog/families/forearm-plank-arm-reach.json
 $(SRCROOT)/specs/catalog/families/forearm-plank-hip-drop.json
 $(SRCROOT)/specs/catalog/families/forearm-pronation.json
 $(SRCROOT)/specs/catalog/families/forearm-supination.json
+$(SRCROOT)/specs/catalog/families/forward-fast-pogo-shuffle.json
 $(SRCROOT)/specs/catalog/families/full-snatch.json
 $(SRCROOT)/specs/catalog/families/glute-ham-raise.json
 $(SRCROOT)/specs/catalog/families/goblet-squat-to-press.json
@@ -77,6 +78,8 @@ $(SRCROOT)/specs/catalog/families/landmine-squat.json
 $(SRCROOT)/specs/catalog/families/lateral-band-walk.json
 $(SRCROOT)/specs/catalog/families/lateral-high-plank-walk.json
 $(SRCROOT)/specs/catalog/families/lateral-lunge.json
+$(SRCROOT)/specs/catalog/families/lateral-skater-hop-to-vertical-jump.json
+$(SRCROOT)/specs/catalog/families/lateral-skater-hop.json
 $(SRCROOT)/specs/catalog/families/machine-hack-squat.json
 $(SRCROOT)/specs/catalog/families/medicine-ball-carioca-throw.json
 $(SRCROOT)/specs/catalog/families/medicine-ball-lateral-shuffle-throw.json
@@ -130,6 +133,7 @@ $(SRCROOT)/specs/catalog/families/split-stance-squat.json
 $(SRCROOT)/specs/catalog/families/squat-clean.json
 $(SRCROOT)/specs/catalog/families/standing-band-trunk-rotation.json
 $(SRCROOT)/specs/catalog/families/standing-suspension-rollout.json
+$(SRCROOT)/specs/catalog/families/stationary-pogo-hop.json
 $(SRCROOT)/specs/catalog/families/step-up.json
 $(SRCROOT)/specs/catalog/families/straight-leg-hip-flexion-sit-up.json
 $(SRCROOT)/specs/catalog/families/straight-leg-sit-up.json
@@ -152,6 +156,7 @@ $(SRCROOT)/specs/catalog/families/trap-bar-deadlift.json
 $(SRCROOT)/specs/catalog/families/upper-arm-pad-chest-fly.json
 $(SRCROOT)/specs/catalog/families/upper-arm-pad-shoulder-abduction.json
 $(SRCROOT)/specs/catalog/families/upright-row.json
+$(SRCROOT)/specs/catalog/families/vertical-countermovement-jump.json
 $(SRCROOT)/specs/catalog/families/vertical-press.json
 $(SRCROOT)/specs/catalog/families/vertical-pull.json
 $(SRCROOT)/specs/catalog/families/walking-lunge.json

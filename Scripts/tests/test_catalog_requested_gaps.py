@@ -94,6 +94,15 @@ REQUESTED_PULL_RECORD_IDS = {
     "kettlebell-row-and-rotate",
 }
 
+PLYOMETRIC_RECORD_IDS = {
+    "box-jump-20-40-cm",
+    "paired-dumbbell-cmj",
+    "stationary-pogos",
+    "fast-pogos",
+    "ice-skaters",
+    "ice-skaters-with-jump",
+}
+
 
 class RequestedCatalogGapTests(unittest.TestCase):
     @classmethod
@@ -142,6 +151,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
                        | CORE_ENDURANCE_RECORD_IDS
                        | BOXING_PRESS_BATCH_RECORD_IDS
                        | REQUESTED_PULL_RECORD_IDS
+                       | PLYOMETRIC_RECORD_IDS
                        | {
                            "goblet-split-squat",
                            "goblet-reverse-lunge",

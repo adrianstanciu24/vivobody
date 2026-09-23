@@ -1,0 +1,23 @@
+{
+  "name": "catalog-plyometric-skater-jump-light-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "light", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "Ice Skaters with Jump"},
+    {"wait": {"labelRegex": "^Ice Skaters with Jump,"}},
+    {"tap": {"labelRegex": "^Ice Skaters with Jump,"}},
+    {"wait": {"label": "POWER / EXPLOSIVE"}}
+  ],
+  "required": [
+    {"label": "Ice Skaters with Jump"},
+    {"labelContains": "Muscles used by Ice Skaters with Jump"}
+  ],
+  "forbidden": []
+}

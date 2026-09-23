@@ -1,0 +1,513 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "vertical-countermovement-jump",
+  "name": "Vertical Countermovement Jump",
+  "definition": "A bilateral small hip-and-knee countermovement followed by rapid hip, knee, and ankle extension, flight, and a controlled flexed landing. The exact roster separates a floor-to-20–40 cm box jump with a held receive from a paired side-held dumbbell jump returning to the floor. The box height and dumbbell mass are fixture bounds, not general prescriptions. The step-down reset is supported by NASM technique guidance, not stated by the Boxing Science page. A step-up, depth jump, tuck jump, and unloaded floor CMJ are outside this contract. The box fixture does not pin an arm-swing strategy; only the dumbbell fixture keeps the arms rigid at the sides. Muscle roles are categorical lower-limb anatomy-and-mechanics inferences, not exact-fixture EMG rankings.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "arnold-2010-lower-limb",
+    "janikov-2023-countermovement-hurdle-box-jumps",
+    "bordelon-2022-dumbbell-loaded-jump",
+    "holzbaur-2005-upper-extremity",
+    "nasm-box-jump-technique"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight",
+      "dumbbell"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [],
+    "movementPhases": [
+      {
+        "id": "countermovement",
+        "name": "Countermovement",
+        "primeActions": [],
+        "yieldingActions": [
+          "hip.flexion",
+          "knee.flexion",
+          "ankle.dorsiflexion"
+        ]
+      },
+      {
+        "id": "takeoff",
+        "name": "Takeoff",
+        "primeActions": [
+          "hip.extension",
+          "knee.extension",
+          "ankle.plantarflexion"
+        ]
+      },
+      {
+        "id": "receive",
+        "name": "Controlled Landing",
+        "primeActions": [],
+        "yieldingActions": [
+          "hip.flexion",
+          "knee.flexion",
+          "ankle.dorsiflexion"
+        ]
+      }
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "gluteMax"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "gluteMed",
+        "tibialisAnterior",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "deltoidAnterior",
+        "brachialis"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "landingSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact receiving surface after flight.",
+      "allowedValues": [
+        "box",
+        "floor"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed hand-load placement.",
+      "allowedValues": [
+        "none",
+        "pairedDumbbellsAtSides"
+      ]
+    },
+    {
+      "id": "landingStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-defined landing and reset.",
+      "allowedValues": [
+        "holdOneToTwoSeconds",
+        "controlledReset"
+      ]
+    },
+    {
+      "id": "armStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source leaves box-jump arm use unspecified; the paired-dumbbell fixture holds the arms rigid.",
+      "allowedValues": [
+        "sourceUnspecified",
+        "rigidAtSides"
+      ]
+    },
+    {
+      "id": "descentStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "The route to the next repetition.",
+      "allowedValues": [
+        "stepDown",
+        "groundReset"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "No guided path constrains takeoff or flight.",
+      "fixedValue": false
+    },
+    {
+      "id": "boxHeightBand",
+      "valueType": "enum",
+      "required": true,
+      "description": "The Boxing Science 20–40 cm box interval or no box.",
+      "allowedValues": [
+        "twentyToFortyCm",
+        "notApplicable"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "One side-held dumbbell is the entered weight; no added load is entered for the box jump.",
+      "allowedValues": [
+        "perDumbbell",
+        "notApplicable"
+      ]
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "box-fixture",
+      "description": "The bodyweight jump receives on a 20–40 cm box and steps down between reps.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [
+        {
+          "field": "variant.landingSurface",
+          "value": "box"
+        },
+        {
+          "field": "variant.loadPlacement",
+          "value": "none"
+        },
+        {
+          "field": "variant.landingStrategy",
+          "value": "holdOneToTwoSeconds"
+        },
+        {
+          "field": "variant.armStrategy",
+          "value": "sourceUnspecified"
+        },
+        {
+          "field": "variant.descentStrategy",
+          "value": "stepDown"
+        },
+        {
+          "field": "variant.boxHeightBand",
+          "value": "twentyToFortyCm"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "notApplicable"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-fixture",
+      "description": "Two side-held dumbbells remain controlled throughout a ground-return jump.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        {
+          "field": "variant.landingSurface",
+          "value": "floor"
+        },
+        {
+          "field": "variant.loadPlacement",
+          "value": "pairedDumbbellsAtSides"
+        },
+        {
+          "field": "variant.landingStrategy",
+          "value": "controlledReset"
+        },
+        {
+          "field": "variant.armStrategy",
+          "value": "rigidAtSides"
+        },
+        {
+          "field": "variant.descentStrategy",
+          "value": "groundReset"
+        },
+        {
+          "field": "variant.boxHeightBand",
+          "value": "notApplicable"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "perDumbbell"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireAdditionalStabilityDemands": [
+        "shoulder",
+        "elbow",
+        "wrist",
+        "hand"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 3,
+      "maximum": 8
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "box-jump-20-40-cm",
+      "name": "Box Jumps",
+      "aliases": [
+        "Box Jump"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 5,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "landingSurface": "box",
+        "loadPlacement": "none",
+        "landingStrategy": "holdOneToTwoSeconds",
+        "armStrategy": "sourceUnspecified",
+        "descentStrategy": "stepDown",
+        "fixedPath": false,
+        "boxHeightBand": "twentyToFortyCm",
+        "loadAccounting": "notApplicable"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "janikov-2023-countermovement-hurdle-box-jumps",
+        "nasm-box-jump-technique"
+      ],
+      "execution": {
+        "startingPosition": "Stand facing a stable 20–40 cm box with both feet about hip width apart.",
+        "movement": "Make a small hip-and-knee dip, then rapidly extend the hips, knees, and ankles to jump onto the box.",
+        "endpoint": "Land softly on both feet with flexed hips and knees, finish extending the hips, and hold the landing for one to two seconds.",
+        "returnPhase": "Step down under control and reset before the next jump.",
+        "controlledJoints": "Keep both knees tracking with the feet; avoid pulling the knees high to clear the box.",
+        "supportAndPosture": "Use a stable box and a clear landing area.",
+        "disqualifyingCompensations": [
+          "Stepping onto the box instead of jumping becomes a step-up.",
+          "Starting on the box and dropping to the floor becomes a depth jump."
+        ]
+      }
+    },
+    {
+      "catalogID": "paired-dumbbell-cmj",
+      "name": "Dumbbell CMJ",
+      "aliases": [
+        "Dumbbell Countermovement Jump",
+        "DB CMJ"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "reps": 5,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "landingSurface": "floor",
+        "loadPlacement": "pairedDumbbellsAtSides",
+        "landingStrategy": "controlledReset",
+        "armStrategy": "rigidAtSides",
+        "descentStrategy": "groundReset",
+        "fixedPath": false,
+        "boxHeightBand": "notApplicable",
+        "loadAccounting": "perDumbbell"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "shoulder",
+        "elbow",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "bordelon-2022-dumbbell-loaded-jump"
+      ],
+      "execution": {
+        "startingPosition": "Stand hip-width with one 3–10 kg dumbbell in each hand at your sides; the entered weight is per dumbbell.",
+        "movement": "Make a quick hip-and-knee dip, then extend the hips, knees, and ankles rapidly to jump vertically while the arms stay by your sides.",
+        "endpoint": "Reach flight with both dumbbells controlled at your sides.",
+        "returnPhase": "Land softly on both feet and reset upright before the next jump.",
+        "controlledJoints": "Keep knees aligned with feet and wrists neutral; do not swing the dumbbells for momentum.",
+        "supportAndPosture": "Use a clear, level floor and retain both dumbbells throughout the repetition.",
+        "disqualifyingCompensations": [
+          "Using one dumbbell changes the paired-load fixture.",
+          "Swinging the arms or dumbbells changes the reviewed rigid-arm jump."
+        ]
+      },
+      "defaultWeightKg": 5
+    }
+  ]
+}

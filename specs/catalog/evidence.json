@@ -5456,7 +5456,7 @@
       ],
       "year": 2026,
       "url": "https://www.scribd.com/document/965522663/EXERCISE-LIBRARY-Boxing-Science-Strength-and-Conditioning-Program-Vwtlck",
-      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. It specifies the setup and repetition boundaries for the Supine Med Ball Chest Pass, Medicine Ball Punch Throw, half-kneeling dumbbell and landmine presses, Dumbbell Push Press, Landmine Punch, Isometric Wall Hold, Speed Pull-Up, Prone TYWs, Single-Arm Bent-Over Row, Kettlebell Row and Rotate, and the previously cataloged trunk and plank fixtures. It anchors those exact named fixtures' setup, support, path, reset, and side prescription, not universal loads, joint moments, categorical muscle rankings, medical outcomes, or equipment variants whose topology the text leaves unspecified. The Row and Rotate body copy says dumbbell despite its KB title; the active kettlebell interpretation is corroborated by the publisher's image and Ruddock et al.'s peer-reviewed exercise name. Pages 63-68 illustrate the exact goblet split squat, goblet reverse lunge, landmine reverse lunge to knee raise, landmine single-leg RDL, kettlebell single-leg RDL, and banded single-leg hip thrust. The landmine RDL movement prose repeats lunge cues, so only its photo and setup text support the hinge; photographs clarify the landmine holds, working-leg/load sides, knee-drive finish, and hip-thrust band path. These pages do not establish universal loads, muscle rankings, or exact unreported joint angles."
+      "scope": "This undated branded Boxing Science exercise-library document is registered with retrieval year 2026 from a third-party mirror, not a claimed publication year or an independently authenticated publisher-hosted copy. It specifies the setup and repetition boundaries for the Supine Med Ball Chest Pass, Medicine Ball Punch Throw, half-kneeling dumbbell and landmine presses, Dumbbell Push Press, Landmine Punch, Isometric Wall Hold, Speed Pull-Up, Prone TYWs, Single-Arm Bent-Over Row, Kettlebell Row and Rotate, and the previously cataloged trunk and plank fixtures. It anchors those exact named fixtures' setup, support, path, reset, and side prescription, not universal loads, joint moments, categorical muscle rankings, medical outcomes, or equipment variants whose topology the text leaves unspecified. The Row and Rotate body copy says dumbbell despite its KB title; the active kettlebell interpretation is corroborated by the publisher's image and Ruddock et al.'s peer-reviewed exercise name. Pages 63-68 illustrate the exact goblet split squat, goblet reverse lunge, landmine reverse lunge to knee raise, landmine single-leg RDL, kettlebell single-leg RDL, and banded single-leg hip thrust. The landmine RDL movement prose repeats lunge cues, so only its photo and setup text support the hinge; photographs clarify the landmine holds, working-leg/load sides, knee-drive finish, and hip-thrust band path. These pages do not establish universal loads, muscle rankings, or exact unreported joint angles. Pages 41–44 and 49–50 specify the exact Box Jumps, paired Dumbbell CMJ, stationary Pogos, forward-travelling Fast Pogos, lateral Ice Skaters, and Ice Skaters with an added vertical hop. Their stated boxing-performance, tendon-stiffness, and rate-of-force-development benefits are not adopted as catalog claims."
     },
     {
       "id": "boxing-science-2021-core-training",
@@ -5594,7 +5594,9 @@
       "id": "nsca-2020-landmine-squat-to-press",
       "sourceType": "officialTechnicalStandard",
       "title": "Landmine Squat to Press, NSCA Coach 7.3",
-      "authors": ["National Strength and Conditioning Association"],
+      "authors": [
+        "National Strength and Conditioning Association"
+      ],
       "year": 2020,
       "url": "https://www.nsca.com/globalassets/education/nsca-coach/nsca-coach-7.3.pdf",
       "scope": "The exercise-technique description on printed page 42 specifies a bar anchored in a landmine, a stacked-hand hold at the upper sternum, a squat to parallel or near parallel, rapid hip-knee-ankle extension, release of the lower hand, and a diagonal single-arm finish with the starting hand alternated. It anchors this exact power fixture, not a two-hand press-through-lockout, barbell thruster, measured muscle-force ranking, or universal training load."
@@ -5603,7 +5605,15 @@
       "id": "cavaggioni-2021-goblet-squat-overhead-press",
       "sourceType": "randomizedClinicalTrial",
       "title": "Effects of a Randomized Home-Based Quality of Movement Protocol on Function, Posture and Strength in Outpatients with Obesity",
-      "authors": ["Luca Cavaggioni", "Luisa Gilardini", "Gabriella Redaelli", "Marina Croci", "Paolo Capodaglio", "Michele Gobbi", "Simona Bertoli"],
+      "authors": [
+        "Luca Cavaggioni",
+        "Luisa Gilardini",
+        "Gabriella Redaelli",
+        "Marina Croci",
+        "Paolo Capodaglio",
+        "Michele Gobbi",
+        "Simona Bertoli"
+      ],
       "year": 2021,
       "pmcid": "PMC8618132",
       "doi": "10.3390/healthcare9111451",
@@ -5802,6 +5812,84 @@
       "doi": "10.1519/SSC.0000000000000217",
       "url": "https://doi.org/10.1519/SSC.0000000000000217",
       "scope": "Peer-reviewed professional-boxing strength-and-conditioning recommendations explicitly list the KB row and rotate. It corroborates the requested kettlebell exercise identity but does not measure the exact joint kinematics, establish the catalog's support topology, quantify muscle contributions, or prescribe a universal load."
+    },
+    {
+      "id": "bordelon-2022-dumbbell-loaded-jump",
+      "sourceType": "experimentalBiomechanicsStudy",
+      "title": "Optimal Load Magnitude and Placement for Peak Power Production in a Vertical Jump: A Segmental Contribution Analysis",
+      "authors": [
+        "N. M. Bordelon",
+        "D. H. Jones",
+        "K. M. Sweeney",
+        "D. J. Davis",
+        "M. L. Critchley",
+        "L. E. Rochelle",
+        "A. C. George",
+        "B. Dai"
+      ],
+      "year": 2022,
+      "doi": "10.1519/JSC.0000000000003597",
+      "pmid": "32282626",
+      "url": "https://doi.org/10.1519/JSC.0000000000003597",
+      "scope": "Handheld dumbbell-loaded countermovement jumps support the loaded vertical-jump task. Study loading and arm strategy differ from the Boxing Science paired 3–10 kg rigid-arm fixture; no exact-fixture muscle ranking follows."
+    },
+    {
+      "id": "durnin-2026-single-leg-lateral-jump",
+      "sourceType": "experimentalBiomechanicsStudy",
+      "title": "Hip and knee joint work modulate single-leg lateral jump performance despite the ankle being the primary contributor",
+      "authors": [
+        "A. C. Durnin",
+        "J. Cannon"
+      ],
+      "year": 2026,
+      "doi": "10.1016/j.jbiomech.2026.113257",
+      "pmid": "41880715",
+      "url": "https://doi.org/10.1016/j.jbiomech.2026.113257",
+      "scope": "Single-leg lateral-jump joint mechanics support a multi-joint lateral bound. It does not test the Boxing Science immediate vertical-hop and split-stance receiving sequence or establish categorical muscle rankings."
+    },
+    {
+      "id": "hobara-2011-hopping-frequency-leg-stiffness",
+      "sourceType": "experimentalBiomechanicsStudy",
+      "title": "Determinant of leg stiffness during hopping is frequency-dependent",
+      "authors": [
+        "Hiroaki Hobara",
+        "K. Inoue",
+        "K. Omuro",
+        "T. Muraoka",
+        "K. Kanosue"
+      ],
+      "year": 2011,
+      "doi": "10.1007/s00421-011-1853-z",
+      "pmid": "21318314",
+      "url": "https://doi.org/10.1007/s00421-011-1853-z",
+      "scope": "Repeated hopping mechanics vary with frequency, including ankle and knee contributions. Supports preserving cadence as a fixture distinction, not a universal ankle-only or tendon-adaptation claim."
+    },
+    {
+      "id": "janikov-2023-countermovement-hurdle-box-jumps",
+      "sourceType": "experimentalBiomechanicsStudy",
+      "title": "Countermovement, Hurdle, and Box Jumps: Data-Driven Exercise Selection",
+      "authors": [
+        "M. Tino Janikov",
+        "Jan Pádecký",
+        "Valentin Doguet",
+        "James J. Tufano"
+      ],
+      "year": 2023,
+      "doi": "10.3390/jfmk8020061",
+      "pmid": "37218857",
+      "url": "https://doi.org/10.3390/jfmk8020061",
+      "scope": "Comparative jump kinetics including a 50-centimeter box jump. Supports jump-to-box as a separate task, not force claims for the Boxing Science 20–40-centimeter fixture or a muscle ranking."
+    },
+    {
+      "id": "nasm-box-jump-technique",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Box Jumps",
+      "authors": [
+        "National Academy of Sports Medicine"
+      ],
+      "year": 2026,
+      "url": "https://www.nasm.org/resource-center/exercise-library/box-jumps",
+      "scope": "Official technique page accessed in 2026 (not a claimed publication year) specifies controlled bilateral box landing followed by a careful step-down reset. It supports that reset choice for the Boxing Science 20–40 cm fixture, not the exact box-height interval, muscle ranking, or performance outcomes."
     }
   ]
 }

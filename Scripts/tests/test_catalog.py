@@ -7066,6 +7066,9 @@ class CatalogFoundationTests(unittest.TestCase):
             "banded-single-leg-hip-thrust",
             *REQUESTED_PLANK_FAMILY_IDS,
             "copenhagen-adduction", "anti-rotation-press", "dead-bug", "bird-dog",
+            "forward-fast-pogo-shuffle", "lateral-skater-hop",
+            "lateral-skater-hop-to-vertical-jump", "stationary-pogo-hop",
+            "vertical-countermovement-jump",
         }
         self.assertEqual(
             {family["id"] for family in self.real_families},
@@ -7073,7 +7076,56 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            337,
+            343,
+        )
+
+    def test_plyometric_fixtures_keep_distinct_family_boundaries(self) -> None:
+        expected_rosters = {
+            "vertical-countermovement-jump": {
+                "box-jump-20-40-cm", "paired-dumbbell-cmj",
+            },
+            "stationary-pogo-hop": {"stationary-pogos"},
+            "forward-fast-pogo-shuffle": {"fast-pogos"},
+            "lateral-skater-hop": {"ice-skaters"},
+            "lateral-skater-hop-to-vertical-jump": {
+                "ice-skaters-with-jump",
+            },
+        }
+        families = {family["id"]: family for family in self.real_families}
+        for family_id, roster in expected_rosters.items():
+            family = families[family_id]
+            with self.subTest(family=family_id):
+                self.assertEqual(
+                    {exercise["catalogID"] for exercise in family["exercises"]},
+                    roster,
+                )
+                self.assertIn("boxing-science-exercise-library", family["evidenceRefs"])
+                self.assertEqual(
+                    catalog.validate_family(family, self.foundation, family_id),
+                    [],
+                )
+
+        vertical = families["vertical-countermovement-jump"]
+        for index, field, replacement in (
+            (0, "landingSurface", "floor"),
+            (0, "boxHeightBand", "notApplicable"),
+            (1, "loadAccounting", "notApplicable"),
+            (1, "armStrategy", "sourceUnspecified"),
+        ):
+            mutated = copy.deepcopy(vertical)
+            mutated["exercises"][index]["variant"][field] = replacement
+            with self.subTest(exercise=index, axis=field), self.assertRaises(
+                catalog.ValidationFailure
+            ):
+                catalog.validate_family(mutated, self.foundation, "mutated jump")
+
+        self.assertEqual(
+            len(families["lateral-skater-hop"]["movementSignature"]["movementPhases"]),
+            2,
+        )
+        self.assertEqual(
+            len(families["lateral-skater-hop-to-vertical-jump"]["movementSignature"]["movementPhases"]),
+            4,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -8104,6 +8156,9 @@ class CatalogFoundationTests(unittest.TestCase):
             "prone-tyw-hold-sequence",
             "rotational-row",
             "goblet-squat-to-press",
+            "forward-fast-pogo-shuffle", "lateral-skater-hop",
+            "lateral-skater-hop-to-vertical-jump", "stationary-pogo-hop",
+            "vertical-countermovement-jump",
         }
         actual_family_ids = set()
         for original in self.real_families:
@@ -17245,7 +17300,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 377)
+        self.assertEqual(len(source_by_id), 382)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -17402,8 +17457,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             10,
         )
-        self.assertEqual(len(self.real_families), 156)
-        self.assertEqual(len(self.foundation.evidence_ids), 377)
+        self.assertEqual(len(self.real_families), 161)
+        self.assertEqual(len(self.foundation.evidence_ids), 382)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -18825,7 +18880,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         normalized_proposal = " ".join(proposal.split())
 
-        self.assertIn("| Reviewed families | 156 |", self.catalog_inventory)
+        self.assertIn("| Reviewed families | 161 |", self.catalog_inventory)
         self.assertIn(
             "Batch 7 now contains nine active families",
             roadmap,
@@ -18836,7 +18891,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 337 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 343 |", self.catalog_inventory)
         self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
@@ -19978,9 +20033,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 156)
-        self.assertEqual(len(records), 337)
-        self.assertEqual(len(self.foundation.evidence_ids), 377)
+        self.assertEqual(len(self.real_families), 161)
+        self.assertEqual(len(records), 343)
+        self.assertEqual(len(self.foundation.evidence_ids), 382)
         self.assertEqual(
             {
                 key: upright[key]
@@ -20330,7 +20385,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 337 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 343 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -23271,7 +23326,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 337 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 343 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
@@ -23280,12 +23335,12 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 337)
+        self.assertEqual(len(records), 343)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 156)
+        self.assertEqual(len({record["familyID"] for record in records}), 161)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -23466,6 +23521,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 "suspension-hamstring-curl", "suspension-hip-press",
                 "goblet-squat-to-press", "landmine-squat",
                 "landmine-squat-to-press",
+                "forward-fast-pogo-shuffle", "lateral-skater-hop",
+                "lateral-skater-hop-to-vertical-jump", "stationary-pogo-hop",
+                "vertical-countermovement-jump",
             },
             "core": {
                 "anti-extension", "anti-lateral-flexion", "anti-rotation",
@@ -23723,7 +23781,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 337)
+            self.assertEqual(len(emitted), 343)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -23975,7 +24033,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_ids), 377)
+        self.assertEqual(len(source_ids), 382)
         self.assertTrue(COMPREHENSIVE_EXPANSION_EVIDENCE_IDS <= source_ids)
 
     def test_must_have_expansion_is_source_exact_and_runtime_visible(self) -> None:
@@ -24370,9 +24428,9 @@ class CatalogFoundationTests(unittest.TestCase):
 
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
-        self.assertEqual(len(self.real_families), 156)
-        self.assertEqual(len(runtime), 337)
-        self.assertEqual(len(self.foundation.evidence_ids), 377)
+        self.assertEqual(len(self.real_families), 161)
+        self.assertEqual(len(runtime), 343)
+        self.assertEqual(len(self.foundation.evidence_ids), 382)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids

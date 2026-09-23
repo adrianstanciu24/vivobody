@@ -1,0 +1,260 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "lateral-skater-hop",
+  "name": "Lateral Skater Hop",
+  "definition": "A side-to-side single-leg hop: push laterally off one leg, land on the other with hip and knee flexion, and reverse direction. The slightly forward trunk does not deliberately rotate or side bend. It excludes the immediate added vertical hop and split-stance receive of the separate sequence. Muscle roles are categorical anatomy-and-mechanics inferences from the bound and controlled landing, not exact Boxing Science muscle measurements.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "arnold-2010-lower-limb",
+    "durnin-2026-single-leg-lateral-jump"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension",
+      "hip.abduction"
+    ],
+    "primeActions": [],
+    "movementPhases": [
+      {
+        "id": "lateral-takeoff",
+        "name": "Lateral Takeoff",
+        "primeActions": [
+          "hip.abduction",
+          "hip.extension",
+          "knee.extension",
+          "ankle.plantarflexion"
+        ]
+      },
+      {
+        "id": "opposite-leg-landing",
+        "name": "Opposite-Leg Landing",
+        "primeActions": [],
+        "yieldingActions": [
+          "hip.flexion",
+          "knee.flexion",
+          "ankle.dorsiflexion"
+        ]
+      }
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti"
+      ],
+      "secondary": [
+        "gluteMax",
+        "gastrocnemius",
+        "soleus",
+        "rectusFemoris",
+        "gluteMed"
+      ],
+      "stabilizer": [
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "tibialisAnterior",
+        "tensorFasciaeLatae"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "travel",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each hop travels side-to-side.",
+      "allowedValues": [
+        "lateralAlternating"
+      ]
+    },
+    {
+      "id": "initialReceive",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lateral hop first lands on the opposite leg.",
+      "allowedValues": [
+        "singleLeg"
+      ]
+    },
+    {
+      "id": "trunkStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "The trunk inclines slightly without deliberate rotation or lateral flexion.",
+      "allowedValues": [
+        "forwardInclineNoRotationOrSideBend"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "No guide constrains the hop.",
+      "fixedValue": false
+    },
+    {
+      "id": "finish",
+      "valueType": "enum",
+      "required": true,
+      "description": "The receiving leg finishes the hop without an added vertical jump.",
+      "allowedValues": [
+        "singleLegHold"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 4,
+      "maximum": 12
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "ice-skaters",
+      "name": "Ice Skaters",
+      "aliases": [
+        "Skater Hops",
+        "Lateral Skater Hops"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "gluteMed",
+          "role": "secondary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "travel": "lateralAlternating",
+        "initialReceive": "singleLeg",
+        "trunkStrategy": "forwardInclineNoRotationOrSideBend",
+        "fixedPath": false,
+        "finish": "singleLegHold"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "durnin-2026-single-leg-lateral-jump"
+      ],
+      "execution": {
+        "startingPosition": "Stand on one slightly flexed leg with room to hop sideways.",
+        "movement": "Push through the supporting leg and hop laterally to the other leg.",
+        "endpoint": "Land softly on the receiving heel with the hip pushed back and the knee aligned with the foot.",
+        "returnPhase": "Stabilize briefly, then hop back toward the first side.",
+        "controlledJoints": "Keep the torso slightly forward without twisting or side bending.",
+        "supportAndPosture": "Use a clear, level lateral lane and no hand support.",
+        "disqualifyingCompensations": [
+          "Stepping sideways without flight changes the hop into a lateral step.",
+          "Adding an immediate vertical hop and split-stance receive becomes Ice Skaters with Jump."
+        ],
+        "sideOrDirection": "Alternate sides; count each lateral landing as one rep."
+      }
+    }
+  ]
+}
