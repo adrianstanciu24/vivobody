@@ -1307,6 +1307,86 @@
     ]
   },
   {
+    "familyID": "banded-single-leg-hip-thrust",
+    "familyName": "Banded Single-Leg Hip Thrust",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "banded-single-leg-hip-thrust",
+    "name": "Banded Single-Leg Hip Thrust",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Band-Resisted Single-Leg Hip Thrust"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Set the upper back on a bench edge. Secure both ends of a long band near the floor with heavy dumbbells and lay the band across the pelvis. Plant one heel under its knee with the toes lifted; lift the other leg with its knee near a right angle.",
+      "movement": "Brace the trunk and drive the hips up as quickly as you can through the planted heel against the band, keeping the pelvis level.",
+      "endpoint": "Reach full hip extension with the pelvis level; do not arch beyond neutral.",
+      "returnPhase": "Lower the pelvis toward the floor under control while keeping the free leg lifted, then repeat.",
+      "controlledJoints": "Keep the free knee bent and its toes drawn toward the shin; avoid rotating or shifting the pelvis.",
+      "supportAndPosture": "Keep the upper back supported on the bench and both band anchors secure; band tension is not a comparable weight.",
+      "disqualifyingCompensations": [
+        "Putting the band around the knees changes the resistance direction.",
+        "Using both feet for the thrust changes the one-leg fixture.",
+        "Dropping the upper back to the floor changes the bench hip thrust to a floor bridge."
+      ],
+      "sideOrDirection": "Complete the set with one planted heel, then mirror the setup for the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "belt-loaded-machine-glute-bridge",
     "familyName": "Belt-Loaded Machine Glute Bridge",
     "movementActions": [
@@ -5207,6 +5287,141 @@
         "Pulling the body upright with the arms changes the intended lower-body action."
       ],
       "sideOrDirection": "Return to standing with both feet together after each repetition and alternate which foot steps backward."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "dynamic-lunge",
+    "familyName": "Dynamic Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "goblet-reverse-lunge",
+    "name": "Goblet Reverse Lunge",
+    "group": "legs",
+    "defaultWeight": 25,
+    "defaultWeightKg": 12.5,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Dumbbell Goblet Reverse Lunge",
+      "Single-Dumbbell Goblet Reverse Lunge"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand hip-width apart holding one vertical dumbbell at the chest with both hands; log the whole dumbbell weight.",
+      "movement": "Keep one foot planted, step the other foot back, and lower into a controlled split position.",
+      "endpoint": "Reach a stable split-lunge depth without a prescribed step length or knee-to-floor distance.",
+      "returnPhase": "Drive through the planted front foot and bring the rear foot forward to two-foot standing.",
+      "controlledJoints": "Keep the goblet load close to the chest and control the front knee and pelvis.",
+      "supportAndPosture": "Keep the trunk upright and use no external support.",
+      "disqualifyingCompensations": [
+        "Keeping the feet split between repetitions changes this to a split squat.",
+        "Moving the load to the sides changes the reviewed goblet fixture."
+      ],
+      "sideOrDirection": "Complete repetitions with one front leg, then repeat with the other."
     },
     "involvement": [
       {
@@ -14656,6 +14871,149 @@
       {
         "muscle": "gluteMed",
         "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "landmine-reverse-lunge-knee-drive",
+    "familyName": "Landmine Reverse Lunge to Knee Raise",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "landmine-reverse-lunge-to-knee-raise",
+    "name": "Landmine Reverse Lunge to Knee Raise",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Landmine Reverse Lunge with Knee Drive"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Anchor one end of a barbell. Cup the loaded sleeve with both hands in front of the upper chest, elbows tucked, and stand hip-width apart. Log added plates only and compare on the same landmine setup.",
+      "movement": "Keep the selected front foot planted, step the other foot back, and lower to a reverse lunge with the rear knee near the floor.",
+      "endpoint": "Drive upward through the planted leg and raise the returning rear knee to about hip height while balancing on that front foot.",
+      "returnPhase": "Lower the raised leg under control, then repeat the lunge.",
+      "controlledJoints": "Keep the sleeve near the chest, trunk upright, and pelvis controlled as the bar follows its anchored arc.",
+      "supportAndPosture": "Keep the selected front foot planted throughout the lunge and knee drive; no hand or torso support.",
+      "disqualifyingCompensations": [
+        "Stopping at two-foot standing without the knee drive omits the defining phase.",
+        "Holding the bar in an elbow crease or overhead changes the reviewed setup."
+      ],
+      "sideOrDirection": "Complete the set with one planted working leg, then mirror the setup for the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "iliopsoas",
+        "role": "secondary"
       }
     ]
   },
@@ -24666,6 +25024,270 @@
     ]
   },
   {
+    "familyID": "single-leg-deadlift",
+    "familyName": "Single-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "kettlebell-single-leg-romanian-deadlift",
+    "name": "Kettlebell Single-Leg RDL",
+    "group": "legs",
+    "defaultWeight": 25,
+    "defaultWeightKg": 12.5,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "kettlebell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Kettlebell Single-Leg Romanian Deadlift"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand hip-width apart. Choose the working leg and hold one kettlebell in the hand on that same side; log its full weight. Lift the opposite leg.",
+      "movement": "Keep a slight bend in the working knee, hinge at the hip, and extend the free leg behind while lowering the bell beside the working leg.",
+      "endpoint": "Lower the kettlebell just past the working knee with the pelvis and trunk controlled.",
+      "returnPhase": "Extend the working hip to stand tall. The source does not specify whether the free foot touches between repetitions.",
+      "controlledJoints": "Keep the working knee softly bent rather than squatting, with the shoulders set and trunk braced.",
+      "supportAndPosture": "Keep the working foot planted and the free leg unloaded throughout the hinge.",
+      "disqualifyingCompensations": [
+        "Putting the free foot down to share load changes the single-leg hinge.",
+        "Moving the bell to the opposite hand changes the reviewed load side."
+      ],
+      "sideOrDirection": "Finish one side, then switch the working leg and kettlebell hand."
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "single-leg-deadlift",
+    "familyName": "Single-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "landmine-single-leg-romanian-deadlift",
+    "name": "Landmine Single-Leg RDL",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 6,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Landmine Single-Leg Romanian Deadlift"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Secure one end of a bar in a landmine anchor and stand side-on. Hold the loaded sleeve with the hand on the free-leg side; log added plates only, comparing loads on the same bar and anchor setup.",
+      "movement": "Balance on the opposite working leg with a soft knee, hinge at the hip, and extend the free leg behind as the sleeve follows its anchored arc.",
+      "endpoint": "Lower the sleeve near the floor without turning the hinge into a split squat or setting the load down.",
+      "returnPhase": "Extend the working hip and bring the trunk upright while keeping the sleeve in the same hand. The source does not show how the next repetition begins.",
+      "controlledJoints": "Control the pelvis and trunk during the hinge and let the anchored bar follow its lever arc; the source does not establish an exact grip orientation.",
+      "supportAndPosture": "Keep the working foot planted, the free leg unloaded, and the opposite hand free.",
+      "disqualifyingCompensations": [
+        "Placing the free foot down makes this a staggered hinge.",
+        "Holding the sleeve with the working-leg-side hand changes the photographed fixture.",
+        "Bending deeply at the working knee changes the hip-dominant action."
+      ],
+      "sideOrDirection": "Complete one side, then turn around to mirror the setup."
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "spine-extension",
     "familyName": "Spine Extension",
     "movementActions": [
@@ -25929,6 +26551,141 @@
       },
       {
         "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "split-stance-squat",
+    "familyName": "Stationary Split Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "goblet-split-squat",
+    "name": "Goblet Split Squat",
+    "group": "legs",
+    "defaultWeight": 25,
+    "defaultWeightKg": 12.5,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Single-Dumbbell Goblet Split Squat",
+      "Dumbbell Goblet Split Squat"
+    ],
+    "searchPriority": 96,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Hold one dumbbell vertically with both hands at the chest; log the entire dumbbell weight. Set a fixed split stance with the lead foot flat and rear forefoot on the floor.",
+      "movement": "Keep both feet in place, trunk upright, and lower straight down.",
+      "endpoint": "Stop with the front leg about a right angle and the rear knee behind the hips.",
+      "returnPhase": "Drive through the lead foot to rise into the same split stance without stepping.",
+      "controlledJoints": "Keep the dumbbell close to the chest and control the lead knee and pelvis over the planted foot.",
+      "supportAndPosture": "Maintain full lead-foot and rear-forefoot contact without a bench or hand support.",
+      "disqualifyingCompensations": [
+        "Stepping between repetitions changes this stationary split squat into a lunge.",
+        "Moving the dumbbell to one hand or both sides changes the reviewed goblet load placement."
+      ],
+      "sideOrDirection": "Complete the set with one lead leg, then switch legs."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
         "role": "stabilizer"
       },
       {

@@ -12,6 +12,7 @@ $(SRCROOT)/specs/catalog/families/anti-lateral-flexion.json
 $(SRCROOT)/specs/catalog/families/anti-rotation-press.json
 $(SRCROOT)/specs/catalog/families/anti-rotation.json
 $(SRCROOT)/specs/catalog/families/banded-high-plank-clockface-tap.json
+$(SRCROOT)/specs/catalog/families/banded-single-leg-hip-thrust.json
 $(SRCROOT)/specs/catalog/families/belt-loaded-machine-glute-bridge.json
 $(SRCROOT)/specs/catalog/families/bench-anchored-supine-trunk-hold.json
 $(SRCROOT)/specs/catalog/families/bicycle-crunch.json
@@ -68,6 +69,7 @@ $(SRCROOT)/specs/catalog/families/kneeling-ab-wheel-rollout.json
 $(SRCROOT)/specs/catalog/families/kneeling-barbell-rollout.json
 $(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/landmine-punch.json
+$(SRCROOT)/specs/catalog/families/landmine-reverse-lunge-knee-drive.json
 $(SRCROOT)/specs/catalog/families/landmine-rotation.json
 $(SRCROOT)/specs/catalog/families/lateral-band-walk.json
 $(SRCROOT)/specs/catalog/families/lateral-high-plank-walk.json

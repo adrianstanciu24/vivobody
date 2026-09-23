@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "single-leg-deadlift",
   "name": "Single-Leg Deadlift",
-  "definition": "A unilateral unsupported free-weight hinge performed on one working leg, with hip extension as the sole dynamic prime action and the free leg used for balance rather than propulsion. The roster contains exactly three reviewed fixtures. Diamant et al. studied a floor-start barbell single-leg deadlift using an individual eight-repetition-maximum load: the working foot was centered before a standard Olympic bar, the free leg extended behind, the knee bent only enough to preserve the instructed extended back, both hands used a shoulder-width pronated grip, the bar stayed close to the body, the working hip reached full extension, the free foot could touch briefly at the top for stabilization, and the bar returned to the floor. Mo et al. studied continuous dumbbell single-leg Romanian deadlifts with either an ipsilateral or contralateral one-hand load: the dominant working leg maintained an instructed approximately 15-degree knee angle, the bottom trunk posture was about parallel to the ground, and six repetitions were performed at maximal concentric and eccentric speed with an individually matched metronome pace. Mo standardized foot and grip placement but did not report their dimensions or orientation, did not report the free-leg trajectory, and did not separately state whether the dumbbell cycle entered at the top or bottom. Product instructions therefore expose those limits rather than filling them from generic coaching convention, and mirroring either source to the other working side is an explicit catalog adaptation. The fixed 45-pound / 20-kilogram barbell and 25-pound / 12.5-kilogram dumbbell seeds are product initialization, not claims that they equal an athlete's eight-repetition maximum or Mo's flywheel-matched six-repetition load. The sagittal plane classification follows the hip-extension prime; frontal- and transverse-plane control remain stability demands, not invented dynamic actions. Medial hamstrings and gluteus maximus are non-ranked co-primary hip extensors, while the directly measured lumbar extensors oppose the source-described spinal-flexion tendency. Gluteus medius and obliques control the pelvis and trunk. The visible biceps-femoris region remains a stabilizer because its combined mesh cannot distinguish the hip-extending long head from the short head. Surface EMG supports the existence and distinction of these fixtures but does not establish numeric muscle contribution, equal activation, hypertrophy, or equipment equivalence. Mooney et al. directly documented a staggered-stance barbell Romanian deadlift but did not report rear-foot load sharing, stance width, knee behavior, grip, range endpoint, bar path, or cadence and combined that exercise with Nordic work and field training. B-stance, kickstand, staggered-stance, flywheel, bodyweight, kettlebell, cable, machine, externally supported, unstable-surface, arbitrary-load-side, and other familiar single-leg hinge names therefore remain outside this contract. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. Radial and ulnar wrist flexors are distinct grip-associated wrist-control co-contributors and receive stabilizer roles. Pratt directly measured flexor carpi ulnaris during conventional barbell deadlifts; Mannella measured both wrist flexors during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Transfer to each reviewed deadlift fixture is a categorical anatomy-and-mechanics inference, not direct measurement of its phases or uniformly high recruitment. Forman shows that wrist-flexor activity depends on wrist-force direction and can be low. These roles do not introduce dynamic wrist flexion, equal involvement, or measured adaptation. TFL receives stabilizer credit for unsupported single-leg hip and pelvic control, not hip extension. Collings recorded TFL in related single-leg Romanian tasks but reported modeled gluteal forces, not TFL force or ranking. Transfer to the floor-start barbell and both single-dumbbell load sides uses unchanged anatomical capability and each fixture geometry; exact TFL phase recruitment, equal effort and adaptation are not established.",
+  "definition": "A unilateral unsupported single-leg hinge performed on one working leg, with hip extension as the sole dynamic prime action and the free leg used for balance rather than propulsion. The roster contains five reviewed fixtures: a free barbell, two dumbbell load sides, one kettlebell, and an anchored landmine sleeve. Diamant et al. studied a floor-start barbell single-leg deadlift using an individual eight-repetition-maximum load: the working foot was centered before a standard Olympic bar, the free leg extended behind, the knee bent only enough to preserve the instructed extended back, both hands used a shoulder-width pronated grip, the bar stayed close to the body, the working hip reached full extension, the free foot could touch briefly at the top for stabilization, and the bar returned to the floor. Mo et al. studied continuous dumbbell single-leg Romanian deadlifts with either an ipsilateral or contralateral one-hand load: the dominant working leg maintained an instructed approximately 15-degree knee angle, the bottom trunk posture was about parallel to the ground, and six repetitions were performed at maximal concentric and eccentric speed with an individually matched metronome pace. Mo standardized foot and grip placement but did not report their dimensions or orientation, did not report the free-leg trajectory, and did not separately state whether the dumbbell cycle entered at the top or bottom. Product instructions therefore expose those limits rather than filling them from generic coaching convention, and mirroring either source to the other working side is an explicit catalog adaptation. The fixed 45-pound / 20-kilogram barbell and 25-pound / 12.5-kilogram dumbbell seeds are product initialization, not claims that they equal an athlete's eight-repetition maximum or Mo's flywheel-matched six-repetition load. The sagittal plane classification follows the hip-extension prime; frontal- and transverse-plane control remain stability demands, not invented dynamic actions. Medial hamstrings and gluteus maximus are non-ranked co-primary hip extensors, while the directly measured lumbar extensors oppose the source-described spinal-flexion tendency. Gluteus medius and obliques control the pelvis and trunk. The visible biceps-femoris region remains a stabilizer because its combined mesh cannot distinguish the hip-extending long head from the short head. Surface EMG in the Diamant and Mo protocols supports the distinction of their free-weight fixtures but does not establish numeric muscle contribution, equal activation, hypertrophy, or equipment equivalence. Mooney et al. directly documented a staggered-stance barbell Romanian deadlift but did not report rear-foot load sharing, stance width, knee behavior, grip, range endpoint, bar path, or cadence and combined that exercise with Nordic work and field training. B-stance, kickstand, staggered-stance, flywheel, bodyweight, cable, machine, externally supported, unstable-surface, other kettlebell or landmine load sides, and other familiar single-leg hinge names remain outside this contract. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. Radial and ulnar wrist flexors are distinct grip-associated wrist-control co-contributors and receive stabilizer roles. Pratt directly measured flexor carpi ulnaris during conventional barbell deadlifts; Mannella measured both wrist flexors during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Transfer to each reviewed deadlift fixture, including the Boxing Science kettlebell and landmine grips, is a categorical anatomy-and-mechanics inference, not direct measurement of its phases or uniformly high recruitment. Forman shows that wrist-flexor activity depends on wrist-force direction and can be low. These roles do not introduce dynamic wrist flexion, equal involvement, or measured adaptation. TFL receives stabilizer credit for unsupported single-leg hip and pelvic control, not hip extension. Collings recorded TFL in related single-leg Romanian tasks but reported modeled gluteal forces, not TFL force or ranking. Transfer to the floor-start barbell, both single-dumbbell load sides, and the Boxing Science fixtures uses unchanged anatomical capability and each fixture geometry; exact TFL phase recruitment, equal effort and adaptation are not established. The Boxing Science kettlebell branch holds one bell on the working-leg side and lowers it just past the knee. Its anchored landmine branch stands side-on and grips the sleeve on the free-leg side while the working leg hinges; neither branch inherits the Mo six-repetition flywheel protocol or Diamant free-bar floor start. The landmine prose repeats lunge instructions, so its photographed hinge and setup define the fixture.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
@@ -14,7 +14,8 @@
     "forman-2019-handgrip-wrist-force",
     "pratt-2020-deadlift-grip-forearm-emg",
     "mannella-2022-grip-wrist-perturbations",
-    "collings-2023-gluteal-muscle-forces"
+    "collings-2023-gluteal-muscle-forces",
+    "boxing-science-exercise-library"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -34,7 +35,8 @@
   "allowed": {
     "equipment": [
       "barbell",
-      "dumbbell"
+      "dumbbell",
+      "kettlebell"
     ],
     "modalities": [
       "dynamicStrength"
@@ -313,10 +315,11 @@
       "id": "supportSurface",
       "valueType": "enum",
       "required": true,
-      "description": "Diamant explicitly used the floor; Mo did not report the support surface beyond the unilateral stance.",
+      "description": "Diamant used the floor, Mo did not report a surface, and the Boxing Science photos show a gym floor.",
       "allowedValues": [
         "floor",
-        "unreported"
+        "unreported",
+        "gymFloor"
       ]
     },
     {
@@ -326,7 +329,8 @@
       "description": "Which working side the source directly exposed or measured, together with the disclosed product mirroring boundary.",
       "allowedValues": [
         "bothSidesWarmedUpRightSideMeasuredProductMirrored",
-        "dominantSideTestedProductMirrored"
+        "dominantSideTestedProductMirrored",
+        "boxingScienceDemonstratedSideMirrored"
       ]
     },
     {
@@ -336,17 +340,19 @@
       "description": "The directly reported free-leg instruction; Mo did not report a free-leg trajectory for the dumbbell conditions.",
       "allowedValues": [
         "straightLegExtendsBehindAndReturnsNearWorkingLeg",
-        "positionUnreported"
+        "positionUnreported",
+        "extendsBehindDuringHinge"
       ]
     },
     {
       "id": "nonWorkingFootContact",
       "valueType": "enum",
       "required": true,
-      "description": "Diamant allowed a brief free-foot touch at the top for stabilization; Mo reported unilateral stance but not the free foot's exact contact trajectory.",
+      "description": "The free leg is unloaded during Boxing Science hinges, but contact between repetitions is not shown.",
       "allowedValues": [
         "briefTopContactPermittedForStabilization",
-        "unilateralStanceExactContactTrajectoryUnreported"
+        "unilateralStanceExactContactTrajectoryUnreported",
+        "airborneDuringHingeTopResetUnreported"
       ]
     },
     {
@@ -356,7 +362,8 @@
       "description": "The working-foot placement reported for the fixture.",
       "allowedValues": [
         "workingFootCenteredBeforeBarbell",
-        "standardizedButDimensionsUnreported"
+        "standardizedButDimensionsUnreported",
+        "hipWidthStart"
       ]
     },
     {
@@ -372,7 +379,7 @@
       "id": "footwear",
       "valueType": "enum",
       "required": true,
-      "description": "Diamant tested barefoot; Mo did not report footwear.",
+      "description": "Diamant tested barefoot; other source fixtures do not prescribe footwear.",
       "allowedValues": [
         "barefoot",
         "unreported"
@@ -382,27 +389,31 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "The exact free-weight interface: one Olympic bar held with both hands or one dumbbell held with one hand.",
+      "description": "Two-hand free barbell, one free dumbbell, one free kettlebell, or one-hand anchored landmine sleeve.",
       "allowedValues": [
         "bilateralBarbell",
-        "singleDumbbell"
+        "singleDumbbell",
+        "singleKettlebell",
+        "singleLandmineSleeve"
       ]
     },
     {
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "Where the source placed the free weight relative to the body.",
+      "description": "Two hands on the free bar, one hand beneath the loaded shoulder for Mo dumbbells, or one hand on the Boxing Science bell/sleeve.",
       "allowedValues": [
         "twoHandsInFrontCloseToBody",
-        "oneHandAlignedBelowLoadedShoulder"
+        "oneHandAlignedBelowLoadedShoulder",
+        "oneHandBesideWorkingLeg",
+        "oneHandAtAnchoredSleeveFreeLegSide"
       ]
     },
     {
       "id": "loadSideRelativeToWorkingLeg",
       "valueType": "enum",
       "required": false,
-      "description": "The one-dumbbell hand relative to the working leg; this axis exists only for the directly compared dumbbell conditions.",
+      "description": "Hand holding the single implement relative to the planted working leg; absent for the two-hand barbell.",
       "allowedValues": [
         "ipsilateral",
         "contralateral"
@@ -412,11 +423,13 @@
       "id": "loadAlignment",
       "valueType": "enum",
       "required": true,
-      "description": "The reviewed free-weight path or shoulder line, bound reciprocally to equipment and dumbbell load side.",
+      "description": "The free bar close to the body, a source-authored single-implement shoulder or working-leg side, or the anchored sleeve on the free-leg side.",
       "allowedValues": [
         "barCloseToWorkingKneeAndBody",
         "ipsilateralShoulderLine",
-        "contralateralShoulderLine"
+        "contralateralShoulderLine",
+        "workingLegSide",
+        "anchoredArcFreeLegSide"
       ]
     },
     {
@@ -426,7 +439,8 @@
       "description": "Diamant prescribed shoulder width; Mo standardized the one-hand grip position but did not report its exact location.",
       "allowedValues": [
         "shoulderWidth",
-        "standardizedButUnreported"
+        "standardizedButUnreported",
+        "oneHand"
       ]
     },
     {
@@ -446,13 +460,14 @@
       "description": "The source-exact upper-body setup rather than a generic cue borrowed across fixtures.",
       "allowedValues": [
         "latAndAbdominalPretensionWithScapularRetraction",
-        "unreportedBeyondSpinalStability"
+        "unreportedBeyondSpinalStability",
+        "bracedTrunkShouldersSet"
       ]
     },
     {
       "id": "externalLoadPrescription",
       "valueType": "enum",
-      "required": true,
+      "required": false,
       "description": "Diamant used each exercise's individual eight-repetition maximum; Mo used the highest successful six-repetition dumbbell load that matched the paired flywheel concentric velocity within 0.1 meters per second.",
       "allowedValues": [
         "individualEightRepMaximum",
@@ -475,7 +490,8 @@
       "description": "The reviewed anti-flexion instruction or demand; neither source collected spinal kinematics.",
       "allowedValues": [
         "extendedDuringHingeNeutralAtTopByInstructionKinematicsUnmeasured",
-        "antiFlexionStabilityRequiredKinematicsUnmeasured"
+        "antiFlexionStabilityRequiredKinematicsUnmeasured",
+        "neutralBracedDuringHinge"
       ]
     },
     {
@@ -485,27 +501,31 @@
       "description": "The source-prescribed working-knee behavior, recorded as instruction rather than a measured fixed position.",
       "allowedValues": [
         "flexedOnlyAsNeededForStraightBackKinematicsUnmeasured",
-        "approximatelyFifteenDegreesMaintainedByInstructionKinematicsUnmeasured"
+        "approximatelyFifteenDegreesMaintainedByInstructionKinematicsUnmeasured",
+        "slightBendMaintained"
       ]
     },
     {
       "id": "bottomEndpoint",
       "valueType": "enum",
       "required": true,
-      "description": "The directly reported lower boundary without inventing a universal joint angle.",
+      "description": "Source-specific bottom: free bar on floor, Mo trunk near parallel, Boxing bell just past knee, or anchored sleeve near floor.",
       "allowedValues": [
         "barbellOnFloorWithTorsoParallelRecommendedKinematicsUnmeasured",
-        "trunkAboutParallelByInstructionKinematicsUnmeasured"
+        "trunkAboutParallelByInstructionKinematicsUnmeasured",
+        "bellJustPastWorkingKnee",
+        "landmineSleeveNearFloor"
       ]
     },
     {
       "id": "repetitionTopology",
       "valueType": "enum",
       "required": true,
-      "description": "The complete source-specific repetition boundary. The dumbbell publication reported a continuous cycle but did not separately state its first-entry order.",
+      "description": "Diamant floor cycles, Mo six continuous cycles, or Boxing Science top-and-hinge movement with next-entry contact unreported.",
       "allowedValues": [
         "fiveFloorToFullHipExtensionToFloorCyclesWithBriefTopHold",
-        "sixContinuousDumbbellCyclesWithEntryOrderUnreported"
+        "sixContinuousDumbbellCyclesWithEntryOrderUnreported",
+        "topToHingeToTopEntryUnreported"
       ]
     },
     {
@@ -515,24 +535,25 @@
       "description": "Diamant normalized the full movement and inter-repetition pause to a four-second repetition with an approximately two-second pause; Mo used maximal speed in both phases at an individualized metronome pace.",
       "allowedValues": [
         "fourSecondRepetitionIncludingApproximatelyTwoSecondInterRepPause",
-        "maximalSpeedBothPhasesAtIndividualFlywheelMatchedMetronomePace"
+        "maximalSpeedBothPhasesAtIndividualFlywheelMatchedMetronomePace",
+        "controlledSourceUnreported"
       ]
     },
     {
       "id": "fixedPath",
       "valueType": "boolean",
       "required": true,
-      "fixedValue": false,
-      "description": "No rail, lever, or other mechanism constrains either free-weight path."
+      "description": "The anchored landmine sleeve follows a constrained lever arc; free barbell, dumbbell, and kettlebell paths are not constrained."
     },
     {
       "id": "interRepSupport",
       "valueType": "enum",
       "required": true,
-      "description": "The source-specific external support available at a repetition boundary.",
+      "description": "Source-specific floor set-down, Mo continuous unsupported repetitions, or unreported top reset for Boxing Science.",
       "allowedValues": [
         "barbellFloorWithBriefFreeFootTopContactAndTimedPause",
-        "noneDuringSixContinuousRepetitions"
+        "noneDuringSixContinuousRepetitions",
+        "sourceUnreportedAtTop"
       ]
     },
     {
@@ -543,6 +564,28 @@
       "allowedValues": [
         "hipDominantSingleLegHingeWithNondefiningKneeTechnique"
       ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whole free-bar mass, whole dumbbell or kettlebell mass, or only added plates on the same anchored landmine setup.",
+      "allowedValues": [
+        "totalBarAndPlates",
+        "wholeDumbbell",
+        "wholeKettlebell",
+        "addedPlatesSameLandmineOnly"
+      ]
+    },
+    {
+      "id": "externalPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "Free implement path or anchored landmine lever arc.",
+      "allowedValues": [
+        "free",
+        "landmineArc"
+      ]
     }
   ],
   "exerciseRules": [
@@ -550,30 +593,83 @@
       "id": "barbell-requires-diamant-floor-topology",
       "description": "Barbell equipment is limited to Diamant et al.'s five-repetition floor-start single-leg-deadlift fixture.",
       "when": {
-        "field": "equipment",
+        "field": "variant.loadInterface",
         "operator": "equals",
-        "value": "barbell"
+        "value": "bilateralBarbell"
       },
       "then": [
-        { "field": "variant.supportSurface", "value": "floor" },
-        { "field": "variant.workingSideEvidence", "value": "bothSidesWarmedUpRightSideMeasuredProductMirrored" },
-        { "field": "variant.nonWorkingLegTechnique", "value": "straightLegExtendsBehindAndReturnsNearWorkingLeg" },
-        { "field": "variant.nonWorkingFootContact", "value": "briefTopContactPermittedForStabilization" },
-        { "field": "variant.footPlacement", "value": "workingFootCenteredBeforeBarbell" },
-        { "field": "variant.footwear", "value": "barefoot" },
-        { "field": "variant.loadInterface", "value": "bilateralBarbell" },
-        { "field": "variant.loadPlacement", "value": "twoHandsInFrontCloseToBody" },
-        { "field": "variant.loadAlignment", "value": "barCloseToWorkingKneeAndBody" },
-        { "field": "variant.gripWidth", "value": "shoulderWidth" },
-        { "field": "variant.gripOrientation", "value": "pronated" },
-        { "field": "variant.upperBodySetup", "value": "latAndAbdominalPretensionWithScapularRetraction" },
-        { "field": "variant.externalLoadPrescription", "value": "individualEightRepMaximum" },
-        { "field": "variant.spineTechnique", "value": "extendedDuringHingeNeutralAtTopByInstructionKinematicsUnmeasured" },
-        { "field": "variant.kneeTechnique", "value": "flexedOnlyAsNeededForStraightBackKinematicsUnmeasured" },
-        { "field": "variant.bottomEndpoint", "value": "barbellOnFloorWithTorsoParallelRecommendedKinematicsUnmeasured" },
-        { "field": "variant.repetitionTopology", "value": "fiveFloorToFullHipExtensionToFloorCyclesWithBriefTopHold" },
-        { "field": "variant.tempo", "value": "fourSecondRepetitionIncludingApproximatelyTwoSecondInterRepPause" },
-        { "field": "variant.interRepSupport", "value": "barbellFloorWithBriefFreeFootTopContactAndTimedPause" }
+        {
+          "field": "variant.supportSurface",
+          "value": "floor"
+        },
+        {
+          "field": "variant.workingSideEvidence",
+          "value": "bothSidesWarmedUpRightSideMeasuredProductMirrored"
+        },
+        {
+          "field": "variant.nonWorkingLegTechnique",
+          "value": "straightLegExtendsBehindAndReturnsNearWorkingLeg"
+        },
+        {
+          "field": "variant.nonWorkingFootContact",
+          "value": "briefTopContactPermittedForStabilization"
+        },
+        {
+          "field": "variant.footPlacement",
+          "value": "workingFootCenteredBeforeBarbell"
+        },
+        {
+          "field": "variant.footwear",
+          "value": "barefoot"
+        },
+        {
+          "field": "variant.loadPlacement",
+          "value": "twoHandsInFrontCloseToBody"
+        },
+        {
+          "field": "variant.loadAlignment",
+          "value": "barCloseToWorkingKneeAndBody"
+        },
+        {
+          "field": "variant.gripWidth",
+          "value": "shoulderWidth"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
+          "field": "variant.upperBodySetup",
+          "value": "latAndAbdominalPretensionWithScapularRetraction"
+        },
+        {
+          "field": "variant.externalLoadPrescription",
+          "value": "individualEightRepMaximum"
+        },
+        {
+          "field": "variant.spineTechnique",
+          "value": "extendedDuringHingeNeutralAtTopByInstructionKinematicsUnmeasured"
+        },
+        {
+          "field": "variant.kneeTechnique",
+          "value": "flexedOnlyAsNeededForStraightBackKinematicsUnmeasured"
+        },
+        {
+          "field": "variant.bottomEndpoint",
+          "value": "barbellOnFloorWithTorsoParallelRecommendedKinematicsUnmeasured"
+        },
+        {
+          "field": "variant.repetitionTopology",
+          "value": "fiveFloorToFullHipExtensionToFloorCyclesWithBriefTopHold"
+        },
+        {
+          "field": "variant.tempo",
+          "value": "fourSecondRepetitionIncludingApproximatelyTwoSecondInterRepPause"
+        },
+        {
+          "field": "variant.interRepSupport",
+          "value": "barbellFloorWithBriefFreeFootTopContactAndTimedPause"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": [
@@ -589,7 +685,10 @@
         "value": "fiveFloorToFullHipExtensionToFloorCyclesWithBriefTopHold"
       },
       "then": [
-        { "field": "equipment", "value": "barbell" }
+        {
+          "field": "equipment",
+          "value": "barbell"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": [
@@ -605,14 +704,38 @@
         "value": "dumbbell"
       },
       "then": [
-        { "field": "variant.supportSurface", "value": "unreported" },
-        { "field": "variant.workingSideEvidence", "value": "dominantSideTestedProductMirrored" },
-        { "field": "variant.nonWorkingLegTechnique", "value": "positionUnreported" },
-        { "field": "variant.nonWorkingFootContact", "value": "unilateralStanceExactContactTrajectoryUnreported" },
-        { "field": "variant.footPlacement", "value": "standardizedButDimensionsUnreported" },
-        { "field": "variant.footwear", "value": "unreported" },
-        { "field": "variant.loadInterface", "value": "singleDumbbell" },
-        { "field": "variant.loadPlacement", "value": "oneHandAlignedBelowLoadedShoulder" },
+        {
+          "field": "variant.supportSurface",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.workingSideEvidence",
+          "value": "dominantSideTestedProductMirrored"
+        },
+        {
+          "field": "variant.nonWorkingLegTechnique",
+          "value": "positionUnreported"
+        },
+        {
+          "field": "variant.nonWorkingFootContact",
+          "value": "unilateralStanceExactContactTrajectoryUnreported"
+        },
+        {
+          "field": "variant.footPlacement",
+          "value": "standardizedButDimensionsUnreported"
+        },
+        {
+          "field": "variant.footwear",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "singleDumbbell"
+        },
+        {
+          "field": "variant.loadPlacement",
+          "value": "oneHandAlignedBelowLoadedShoulder"
+        },
         {
           "field": "variant.loadAlignment",
           "allowedValues": [
@@ -620,16 +743,46 @@
             "contralateralShoulderLine"
           ]
         },
-        { "field": "variant.gripWidth", "value": "standardizedButUnreported" },
-        { "field": "variant.gripOrientation", "value": "unreported" },
-        { "field": "variant.upperBodySetup", "value": "unreportedBeyondSpinalStability" },
-        { "field": "variant.externalLoadPrescription", "value": "highestSixRepLoadMatchedWithinPointOneMetersPerSecondToFlywheel" },
-        { "field": "variant.spineTechnique", "value": "antiFlexionStabilityRequiredKinematicsUnmeasured" },
-        { "field": "variant.kneeTechnique", "value": "approximatelyFifteenDegreesMaintainedByInstructionKinematicsUnmeasured" },
-        { "field": "variant.bottomEndpoint", "value": "trunkAboutParallelByInstructionKinematicsUnmeasured" },
-        { "field": "variant.repetitionTopology", "value": "sixContinuousDumbbellCyclesWithEntryOrderUnreported" },
-        { "field": "variant.tempo", "value": "maximalSpeedBothPhasesAtIndividualFlywheelMatchedMetronomePace" },
-        { "field": "variant.interRepSupport", "value": "noneDuringSixContinuousRepetitions" }
+        {
+          "field": "variant.gripWidth",
+          "value": "standardizedButUnreported"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "unreported"
+        },
+        {
+          "field": "variant.upperBodySetup",
+          "value": "unreportedBeyondSpinalStability"
+        },
+        {
+          "field": "variant.externalLoadPrescription",
+          "value": "highestSixRepLoadMatchedWithinPointOneMetersPerSecondToFlywheel"
+        },
+        {
+          "field": "variant.spineTechnique",
+          "value": "antiFlexionStabilityRequiredKinematicsUnmeasured"
+        },
+        {
+          "field": "variant.kneeTechnique",
+          "value": "approximatelyFifteenDegreesMaintainedByInstructionKinematicsUnmeasured"
+        },
+        {
+          "field": "variant.bottomEndpoint",
+          "value": "trunkAboutParallelByInstructionKinematicsUnmeasured"
+        },
+        {
+          "field": "variant.repetitionTopology",
+          "value": "sixContinuousDumbbellCyclesWithEntryOrderUnreported"
+        },
+        {
+          "field": "variant.tempo",
+          "value": "maximalSpeedBothPhasesAtIndividualFlywheelMatchedMetronomePace"
+        },
+        {
+          "field": "variant.interRepSupport",
+          "value": "noneDuringSixContinuousRepetitions"
+        }
       ],
       "requirePresent": [
         "variant.loadSideRelativeToWorkingLeg"
@@ -645,26 +798,14 @@
         "value": "sixContinuousDumbbellCyclesWithEntryOrderUnreported"
       },
       "then": [
-        { "field": "equipment", "value": "dumbbell" }
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        }
       ],
       "requirePresent": [
         "variant.loadSideRelativeToWorkingLeg"
       ],
-      "requireAbsent": []
-    },
-    {
-      "id": "ipsilateral-load-requires-ipsilateral-alignment",
-      "description": "An ipsilateral dumbbell is held on the working-leg side and aligned with that shoulder.",
-      "when": {
-        "field": "variant.loadSideRelativeToWorkingLeg",
-        "operator": "equals",
-        "value": "ipsilateral"
-      },
-      "then": [
-        { "field": "equipment", "value": "dumbbell" },
-        { "field": "variant.loadAlignment", "value": "ipsilateralShoulderLine" }
-      ],
-      "requirePresent": [],
       "requireAbsent": []
     },
     {
@@ -676,23 +817,14 @@
         "value": "ipsilateralShoulderLine"
       },
       "then": [
-        { "field": "equipment", "value": "dumbbell" },
-        { "field": "variant.loadSideRelativeToWorkingLeg", "value": "ipsilateral" }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "contralateral-load-requires-contralateral-alignment",
-      "description": "A contralateral dumbbell is held opposite the working leg and aligned with that shoulder.",
-      "when": {
-        "field": "variant.loadSideRelativeToWorkingLeg",
-        "operator": "equals",
-        "value": "contralateral"
-      },
-      "then": [
-        { "field": "equipment", "value": "dumbbell" },
-        { "field": "variant.loadAlignment", "value": "contralateralShoulderLine" }
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.loadSideRelativeToWorkingLeg",
+          "value": "ipsilateral"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -706,8 +838,250 @@
         "value": "contralateralShoulderLine"
       },
       "then": [
-        { "field": "equipment", "value": "dumbbell" },
-        { "field": "variant.loadSideRelativeToWorkingLeg", "value": "contralateral" }
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.loadSideRelativeToWorkingLeg",
+          "value": "contralateral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "single-kettlebell-boxing-science-hinge",
+      "description": "The one-kettlebell fixture is held on the working-leg side and descends only just past the knee.",
+      "when": {
+        "field": "variant.loadInterface",
+        "operator": "equals",
+        "value": "singleKettlebell"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "kettlebell"
+        },
+        {
+          "field": "variant.loadSideRelativeToWorkingLeg",
+          "value": "ipsilateral"
+        },
+        {
+          "field": "variant.loadAlignment",
+          "value": "workingLegSide"
+        },
+        {
+          "field": "variant.bottomEndpoint",
+          "value": "bellJustPastWorkingKnee"
+        },
+        {
+          "field": "variant.externalPath",
+          "value": "free"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "wholeKettlebell"
+        },
+        {
+          "field": "variant.repetitionTopology",
+          "value": "topToHingeToTopEntryUnreported"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "single-landmine-boxing-science-hinge",
+      "description": "The photographed anchored sleeve is held on the free-leg side and logs added plates only.",
+      "when": {
+        "field": "variant.loadInterface",
+        "operator": "equals",
+        "value": "singleLandmineSleeve"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "variant.loadSideRelativeToWorkingLeg",
+          "value": "contralateral"
+        },
+        {
+          "field": "variant.loadAlignment",
+          "value": "anchoredArcFreeLegSide"
+        },
+        {
+          "field": "variant.bottomEndpoint",
+          "value": "landmineSleeveNearFloor"
+        },
+        {
+          "field": "variant.externalPath",
+          "value": "landmineArc"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "addedPlatesSameLandmineOnly"
+        },
+        {
+          "field": "variant.repetitionTopology",
+          "value": "topToHingeToTopEntryUnreported"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "landmine-arc-requires-anchored-sleeve",
+      "description": "The anchored arc belongs only to the landmine sleeve with plate-only accounting.",
+      "when": {
+        "field": "variant.externalPath",
+        "operator": "equals",
+        "value": "landmineArc"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "singleLandmineSleeve"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "addedPlatesSameLandmineOnly"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "plate-only-accounting-requires-landmine",
+      "description": "Plate-only accounting cannot leak to free implements.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "addedPlatesSameLandmineOnly"
+      },
+      "then": [
+        {
+          "field": "variant.externalPath",
+          "value": "landmineArc"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "singleLandmineSleeve"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "free-path-requires-free-implement",
+      "description": "Free barbell, dumbbell, and kettlebell paths are not anchored and do not use plate-only landmine accounting.",
+      "when": {
+        "field": "variant.externalPath",
+        "operator": "equals",
+        "value": "free"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        },
+        {
+          "field": "variant.loadInterface",
+          "allowedValues": [
+            "bilateralBarbell",
+            "singleDumbbell",
+            "singleKettlebell"
+          ]
+        },
+        {
+          "field": "variant.loadAccounting",
+          "allowedValues": [
+            "totalBarAndPlates",
+            "wholeDumbbell",
+            "wholeKettlebell"
+          ]
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "whole-kettlebell-accounting-requires-kettlebell",
+      "description": "Whole kettlebell mass is reserved for the exact kettlebell hinge.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "wholeKettlebell"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "kettlebell"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "singleKettlebell"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "whole-dumbbell-accounting-requires-dumbbell",
+      "description": "Whole dumbbell mass is reserved for the Mo dumbbell hinges.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "wholeDumbbell"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "singleDumbbell"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "total-bar-accounting-requires-free-bar",
+      "description": "The free two-hand barbell record logs bar and plates, unlike an anchored landmine.",
+      "when": {
+        "field": "variant.loadAccounting",
+        "operator": "equals",
+        "value": "totalBarAndPlates"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "bilateralBarbell"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -738,20 +1112,62 @@
       "reps": 5,
       "searchPriority": 92,
       "involvement": [
-        { "muscle": "medialHamstrings", "role": "primary" },
-        { "muscle": "gluteMax", "role": "primary" },
-        { "muscle": "lumbarExtensors", "role": "secondary" },
-        { "muscle": "bicepsFemoris", "role": "stabilizer" },
-        { "muscle": "gluteMed", "role": "stabilizer" },
-        { "muscle": "gastrocnemius", "role": "stabilizer" },
-        { "muscle": "soleus", "role": "stabilizer" },
-        { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "externalRotators", "role": "stabilizer" },
-        { "muscle": "trapeziusUpper", "role": "stabilizer" },
-        { "muscle": "brachialis", "role": "stabilizer" },
-        { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" },
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
         {
           "muscle": "extensorCarpiUlnaris",
           "role": "stabilizer"
@@ -801,7 +1217,9 @@
         "tempo": "fourSecondRepetitionIncludingApproximatelyTwoSecondInterRepPause",
         "fixedPath": false,
         "interRepSupport": "barbellFloorWithBriefFreeFootTopContactAndTimedPause",
-        "lowerBodyContribution": "hipDominantSingleLegHingeWithNondefiningKneeTechnique"
+        "lowerBodyContribution": "hipDominantSingleLegHingeWithNondefiningKneeTechnique",
+        "externalPath": "free",
+        "loadAccounting": "totalBarAndPlates"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -842,20 +1260,62 @@
       "reps": 6,
       "searchPriority": 88,
       "involvement": [
-        { "muscle": "medialHamstrings", "role": "primary" },
-        { "muscle": "gluteMax", "role": "primary" },
-        { "muscle": "lumbarExtensors", "role": "secondary" },
-        { "muscle": "bicepsFemoris", "role": "stabilizer" },
-        { "muscle": "gluteMed", "role": "stabilizer" },
-        { "muscle": "gastrocnemius", "role": "stabilizer" },
-        { "muscle": "soleus", "role": "stabilizer" },
-        { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "externalRotators", "role": "stabilizer" },
-        { "muscle": "trapeziusUpper", "role": "stabilizer" },
-        { "muscle": "brachialis", "role": "stabilizer" },
-        { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" },
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
         {
           "muscle": "extensorCarpiUlnaris",
           "role": "stabilizer"
@@ -906,7 +1366,9 @@
         "tempo": "maximalSpeedBothPhasesAtIndividualFlywheelMatchedMetronomePace",
         "fixedPath": false,
         "interRepSupport": "noneDuringSixContinuousRepetitions",
-        "lowerBodyContribution": "hipDominantSingleLegHingeWithNondefiningKneeTechnique"
+        "lowerBodyContribution": "hipDominantSingleLegHingeWithNondefiningKneeTechnique",
+        "externalPath": "free",
+        "loadAccounting": "wholeDumbbell"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -947,20 +1409,62 @@
       "reps": 6,
       "searchPriority": 90,
       "involvement": [
-        { "muscle": "medialHamstrings", "role": "primary" },
-        { "muscle": "gluteMax", "role": "primary" },
-        { "muscle": "lumbarExtensors", "role": "secondary" },
-        { "muscle": "bicepsFemoris", "role": "stabilizer" },
-        { "muscle": "gluteMed", "role": "stabilizer" },
-        { "muscle": "gastrocnemius", "role": "stabilizer" },
-        { "muscle": "soleus", "role": "stabilizer" },
-        { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "externalRotators", "role": "stabilizer" },
-        { "muscle": "trapeziusUpper", "role": "stabilizer" },
-        { "muscle": "brachialis", "role": "stabilizer" },
-        { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" },
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
         {
           "muscle": "extensorCarpiUlnaris",
           "role": "stabilizer"
@@ -1011,7 +1515,9 @@
         "tempo": "maximalSpeedBothPhasesAtIndividualFlywheelMatchedMetronomePace",
         "fixedPath": false,
         "interRepSupport": "noneDuringSixContinuousRepetitions",
-        "lowerBodyContribution": "hipDominantSingleLegHingeWithNondefiningKneeTechnique"
+        "lowerBodyContribution": "hipDominantSingleLegHingeWithNondefiningKneeTechnique",
+        "externalPath": "free",
+        "loadAccounting": "wholeDumbbell"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -1032,6 +1538,298 @@
           "Stopping well before the reported trunk-parallel bottom turns the reviewed range into an unreviewed partial single-leg hinge."
         ],
         "sideOrDirection": "Complete the continuous set on one working leg with the dumbbell in the opposite hand, then move the dumbbell and mirror the setup on the other leg. Mo et al. tested only the dominant working leg; the mirrored prescription is a catalog adaptation."
+      }
+    },
+    {
+      "catalogID": "kettlebell-single-leg-romanian-deadlift",
+      "name": "Kettlebell Single-Leg RDL",
+      "aliases": [
+        "Kettlebell Single-Leg Romanian Deadlift"
+      ],
+      "equipment": "kettlebell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 25,
+      "defaultWeightKg": 12.5,
+      "reps": 6,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "unilateralClosed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "singleWorkingLeg",
+        "workingFootContact": "continuous",
+        "supportSurface": "gymFloor",
+        "workingSideEvidence": "boxingScienceDemonstratedSideMirrored",
+        "nonWorkingLegTechnique": "extendsBehindDuringHinge",
+        "nonWorkingFootContact": "airborneDuringHingeTopResetUnreported",
+        "footPlacement": "hipWidthStart",
+        "footOrientation": "unreported",
+        "footwear": "unreported",
+        "loadInterface": "singleKettlebell",
+        "loadPlacement": "oneHandBesideWorkingLeg",
+        "loadSideRelativeToWorkingLeg": "ipsilateral",
+        "loadAlignment": "workingLegSide",
+        "gripWidth": "oneHand",
+        "gripOrientation": "unreported",
+        "upperBodySetup": "bracedTrunkShouldersSet",
+        "hipMotion": "extends",
+        "spineTechnique": "neutralBracedDuringHinge",
+        "kneeTechnique": "slightBendMaintained",
+        "bottomEndpoint": "bellJustPastWorkingKnee",
+        "repetitionTopology": "topToHingeToTopEntryUnreported",
+        "tempo": "controlledSourceUnreported",
+        "fixedPath": false,
+        "interRepSupport": "sourceUnreportedAtTop",
+        "lowerBodyContribution": "hipDominantSingleLegHingeWithNondefiningKneeTechnique",
+        "loadAccounting": "wholeKettlebell",
+        "externalPath": "free"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "mo-2023-single-leg-romanian-loading-position"
+      ],
+      "execution": {
+        "startingPosition": "Stand hip-width apart. Choose the working leg and hold one kettlebell in the hand on that same side; log its full weight. Lift the opposite leg.",
+        "movement": "Keep a slight bend in the working knee, hinge at the hip, and extend the free leg behind while lowering the bell beside the working leg.",
+        "endpoint": "Lower the kettlebell just past the working knee with the pelvis and trunk controlled.",
+        "returnPhase": "Extend the working hip to stand tall. The source does not specify whether the free foot touches between repetitions.",
+        "controlledJoints": "Keep the working knee softly bent rather than squatting, with the shoulders set and trunk braced.",
+        "supportAndPosture": "Keep the working foot planted and the free leg unloaded throughout the hinge.",
+        "disqualifyingCompensations": [
+          "Putting the free foot down to share load changes the single-leg hinge.",
+          "Moving the bell to the opposite hand changes the reviewed load side."
+        ],
+        "sideOrDirection": "Finish one side, then switch the working leg and kettlebell hand."
+      }
+    },
+    {
+      "catalogID": "landmine-single-leg-romanian-deadlift",
+      "name": "Landmine Single-Leg RDL",
+      "aliases": [
+        "Landmine Single-Leg Romanian Deadlift"
+      ],
+      "equipment": "barbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 6,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "unilateralClosed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "singleWorkingLeg",
+        "workingFootContact": "continuous",
+        "supportSurface": "gymFloor",
+        "workingSideEvidence": "boxingScienceDemonstratedSideMirrored",
+        "nonWorkingLegTechnique": "extendsBehindDuringHinge",
+        "nonWorkingFootContact": "airborneDuringHingeTopResetUnreported",
+        "footPlacement": "hipWidthStart",
+        "footOrientation": "unreported",
+        "footwear": "unreported",
+        "loadInterface": "singleLandmineSleeve",
+        "loadPlacement": "oneHandAtAnchoredSleeveFreeLegSide",
+        "loadSideRelativeToWorkingLeg": "contralateral",
+        "loadAlignment": "anchoredArcFreeLegSide",
+        "gripWidth": "oneHand",
+        "gripOrientation": "unreported",
+        "upperBodySetup": "unreportedBeyondSpinalStability",
+        "hipMotion": "extends",
+        "spineTechnique": "neutralBracedDuringHinge",
+        "kneeTechnique": "slightBendMaintained",
+        "bottomEndpoint": "landmineSleeveNearFloor",
+        "repetitionTopology": "topToHingeToTopEntryUnreported",
+        "tempo": "controlledSourceUnreported",
+        "fixedPath": true,
+        "interRepSupport": "sourceUnreportedAtTop",
+        "lowerBodyContribution": "hipDominantSingleLegHingeWithNondefiningKneeTechnique",
+        "loadAccounting": "addedPlatesSameLandmineOnly",
+        "externalPath": "landmineArc"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "mo-2023-single-leg-romanian-loading-position"
+      ],
+      "execution": {
+        "startingPosition": "Secure one end of a bar in a landmine anchor and stand side-on. Hold the loaded sleeve with the hand on the free-leg side; log added plates only, comparing loads on the same bar and anchor setup.",
+        "movement": "Balance on the opposite working leg with a soft knee, hinge at the hip, and extend the free leg behind as the sleeve follows its anchored arc.",
+        "endpoint": "Lower the sleeve near the floor without turning the hinge into a split squat or setting the load down.",
+        "returnPhase": "Extend the working hip and bring the trunk upright while keeping the sleeve in the same hand. The source does not show how the next repetition begins.",
+        "controlledJoints": "Control the pelvis and trunk during the hinge and let the anchored bar follow its lever arc; the source does not establish an exact grip orientation.",
+        "supportAndPosture": "Keep the working foot planted, the free leg unloaded, and the opposite hand free.",
+        "disqualifyingCompensations": [
+          "Placing the free foot down makes this a staggered hinge.",
+          "Holding the sleeve with the working-leg-side hand changes the photographed fixture.",
+          "Bending deeply at the working knee changes the hip-dominant action."
+        ],
+        "sideOrDirection": "Complete one side, then turn around to mirror the setup."
       }
     }
   ]

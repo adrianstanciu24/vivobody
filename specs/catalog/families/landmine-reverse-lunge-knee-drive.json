@@ -1,0 +1,651 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "landmine-reverse-lunge-knee-drive",
+  "name": "Landmine Reverse Lunge to Knee Raise",
+  "definition": "A source-exact reverse step lunge followed by a same-repetition free-leg knee drive while the front foot stays planted. Both hands cup the anchored landmine sleeve at upper-chest height; the rear foot steps back, the athlete rises on the planted leg and lifts that free knee near hip height, then controls the raised leg for the next repetition; the exact inter-repetition reset is unreported. The anchored bar follows its lever arc and only added plates are logged on the same setup. A plain reverse lunge returning to two feet, front-rack or elbow-crease holds, and unanchored barbell lunges remain outside this family.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "comfort-2015-forward-reverse-lunge-kinetics",
+    "arnold-2010-lower-limb"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "hip.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "tibialisAnterior"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "tensorFasciaeLatae"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "iliopsoas"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "gluteMax"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus",
+        "iliopsoas"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "bicepsFemoris",
+        "gluteMed",
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "externalRotators",
+        "trapeziusUpper",
+        "triceps",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "tibialisAnterior",
+        "tensorFasciaeLatae"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: kineticChain.",
+      "allowedValues": [
+        "closedDuringLoadedPhase"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: bodyPosition.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: torsoSupport.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "trunkOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: trunkOrientation.",
+      "allowedValues": [
+        "upright"
+      ]
+    },
+    {
+      "id": "upperLimbPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: upperLimbPosition.",
+      "allowedValues": [
+        "bothHandsCupLandmineSleeveAtChest"
+      ]
+    },
+    {
+      "id": "startSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: startSupport.",
+      "allowedValues": [
+        "bilateralStanding"
+      ]
+    },
+    {
+      "id": "stepDirection",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: stepDirection.",
+      "allowedValues": [
+        "contralateralRearward"
+      ]
+    },
+    {
+      "id": "selectedLeadFootTransition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: selectedLeadFootTransition.",
+      "allowedValues": [
+        "remainsPlantedThroughout"
+      ]
+    },
+    {
+      "id": "contralateralFootTransition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: contralateralFootTransition.",
+      "allowedValues": [
+        "stepsRearwardThenReturns"
+      ]
+    },
+    {
+      "id": "landingFoot",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: landingFoot.",
+      "allowedValues": [
+        "contralateral"
+      ]
+    },
+    {
+      "id": "selectedLeadFootContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: selectedLeadFootContact.",
+      "allowedValues": [
+        "maintainedWholeFoot"
+      ]
+    },
+    {
+      "id": "landingDemand",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: landingDemand.",
+      "allowedValues": [
+        "dynamicFootContact"
+      ]
+    },
+    {
+      "id": "depthCriterion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: depthCriterion.",
+      "allowedValues": [
+        "rearKneeNearFloorPhoto"
+      ]
+    },
+    {
+      "id": "returnTopology",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: returnTopology.",
+      "allowedValues": [
+        "singleLegKneeDriveNextEntryUnreported"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: spineMotion.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: pelvisMotion.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: hipMotion.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: kneeMotion.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: ankleMotion.",
+      "allowedValues": [
+        "plantarflexes"
+      ]
+    },
+    {
+      "id": "footMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: footMotion.",
+      "allowedValues": [
+        "positionHeldDuringLoadedPhase"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: loadPlacement.",
+      "allowedValues": [
+        "landmineSleeveUpperChest"
+      ]
+    },
+    {
+      "id": "stepLengthCriterion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: stepLengthCriterion.",
+      "allowedValues": [
+        "sourceUnreported"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: gripOrientation.",
+      "allowedValues": [
+        "twoHandCupped"
+      ]
+    },
+    {
+      "id": "implementConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: implementConfiguration.",
+      "allowedValues": [
+        "anchoredBarbellSleeve"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: loadAccounting.",
+      "allowedValues": [
+        "addedPlatesSameLandmineOnly"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Exact Boxing Science fixture: fixedPath.",
+      "fixedValue": true
+    },
+    {
+      "id": "cadenceProtocol",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: cadenceProtocol.",
+      "allowedValues": [
+        "controlledSourceUnreported"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: lowerBodyContribution.",
+      "allowedValues": [
+        "compoundHipKneeAnkleExtension"
+      ]
+    },
+    {
+      "id": "kneeDriveHeight",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: kneeDriveHeight.",
+      "allowedValues": [
+        "aboutHipHeight"
+      ]
+    },
+    {
+      "id": "barPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: barPath.",
+      "allowedValues": [
+        "landmineArc"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "landmine-reverse-lunge-to-knee-raise",
+      "name": "Landmine Reverse Lunge to Knee Raise",
+      "aliases": [
+        "Landmine Reverse Lunge with Knee Drive"
+      ],
+      "equipment": "barbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "iliopsoas",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closedDuringLoadedPhase",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "trunkOrientation": "upright",
+        "upperLimbPosition": "bothHandsCupLandmineSleeveAtChest",
+        "startSupport": "bilateralStanding",
+        "stepDirection": "contralateralRearward",
+        "selectedLeadFootTransition": "remainsPlantedThroughout",
+        "contralateralFootTransition": "stepsRearwardThenReturns",
+        "landingFoot": "contralateral",
+        "selectedLeadFootContact": "maintainedWholeFoot",
+        "landingDemand": "dynamicFootContact",
+        "depthCriterion": "rearKneeNearFloorPhoto",
+        "returnTopology": "singleLegKneeDriveNextEntryUnreported",
+        "spineMotion": "nonstandardized",
+        "pelvisMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeldDuringLoadedPhase",
+        "loadPlacement": "landmineSleeveUpperChest",
+        "stepLengthCriterion": "sourceUnreported",
+        "gripOrientation": "twoHandCupped",
+        "implementConfiguration": "anchoredBarbellSleeve",
+        "loadAccounting": "addedPlatesSameLandmineOnly",
+        "fixedPath": true,
+        "cadenceProtocol": "controlledSourceUnreported",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension",
+        "kneeDriveHeight": "aboutHipHeight",
+        "barPath": "landmineArc"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "shoulder",
+        "scapula",
+        "elbow",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "comfort-2015-forward-reverse-lunge-kinetics",
+        "arnold-2010-lower-limb"
+      ],
+      "execution": {
+        "startingPosition": "Anchor one end of a barbell. Cup the loaded sleeve with both hands in front of the upper chest, elbows tucked, and stand hip-width apart. Log added plates only and compare on the same landmine setup.",
+        "movement": "Keep the selected front foot planted, step the other foot back, and lower to a reverse lunge with the rear knee near the floor.",
+        "endpoint": "Drive upward through the planted leg and raise the returning rear knee to about hip height while balancing on that front foot.",
+        "returnPhase": "Lower the raised leg under control, then repeat the lunge.",
+        "controlledJoints": "Keep the sleeve near the chest, trunk upright, and pelvis controlled as the bar follows its anchored arc.",
+        "supportAndPosture": "Keep the selected front foot planted throughout the lunge and knee drive; no hand or torso support.",
+        "disqualifyingCompensations": [
+          "Stopping at two-foot standing without the knee drive omits the defining phase.",
+          "Holding the bar in an elbow crease or overhead changes the reviewed setup."
+        ],
+        "sideOrDirection": "Complete the set with one planted working leg, then mirror the setup for the other side."
+      }
+    }
+  ]
+}

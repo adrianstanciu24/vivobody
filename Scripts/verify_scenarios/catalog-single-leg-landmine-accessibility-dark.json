@@ -1,0 +1,78 @@
+{
+  "name": "catalog-single-leg-landmine-accessibility-dark",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Landmine Reverse Lunge to Knee Raise"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Landmine Reverse Lunge to Knee Raise, "
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Landmine Reverse Lunge to Knee Raise, "
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Landmine Reverse Lunge to Knee Raise"
+          },
+          {
+            "labelContains": "Muscles used by Landmine Reverse Lunge to Knee Raise"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Landmine Reverse Lunge to Knee Raise"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    }
+  ],
+  "forbidden": []
+}

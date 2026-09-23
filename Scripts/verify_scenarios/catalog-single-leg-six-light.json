@@ -1,0 +1,396 @@
+{
+  "name": "catalog-single-leg-six-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Goblet Split Squat"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Goblet Split Squat, "
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Goblet Split Squat, "
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Goblet Split Squat"
+          },
+          {
+            "labelContains": "Muscles used by Goblet Split Squat"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Goblet Reverse Lunge"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Goblet Reverse Lunge, "
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Goblet Reverse Lunge, "
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Goblet Reverse Lunge"
+          },
+          {
+            "labelContains": "Muscles used by Goblet Reverse Lunge"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Landmine Reverse Lunge to Knee Raise"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Landmine Reverse Lunge to Knee Raise, "
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Landmine Reverse Lunge to Knee Raise, "
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Landmine Reverse Lunge to Knee Raise"
+          },
+          {
+            "labelContains": "Muscles used by Landmine Reverse Lunge to Knee Raise"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Landmine Single-Leg RDL"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Landmine Single-Leg RDL, "
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Landmine Single-Leg RDL, "
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Landmine Single-Leg RDL"
+          },
+          {
+            "labelContains": "Muscles used by Landmine Single-Leg RDL"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Kettlebell Single-Leg RDL"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Kettlebell Single-Leg RDL, "
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Kettlebell Single-Leg RDL, "
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Kettlebell Single-Leg RDL"
+          },
+          {
+            "labelContains": "Muscles used by Kettlebell Single-Leg RDL"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Banded Single-Leg Hip Thrust"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Banded Single-Leg Hip Thrust, "
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Banded Single-Leg Hip Thrust, "
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Banded Single-Leg Hip Thrust"
+          },
+          {
+            "labelContains": "Muscles used by Banded Single-Leg Hip Thrust"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Banded Single-Leg Hip Thrust"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    }
+  ],
+  "forbidden": []
+}

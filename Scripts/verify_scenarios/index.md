@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 179.
+Scenario files: 181.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -83,6 +83,8 @@ Scenario files: 179.
 | [catalog-second-wave-bicycle-crunch](catalog-second-wave-bicycle-crunch.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-second-wave-front-raise-accessibility](catalog-second-wave-front-raise-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [catalog-second-wave-glute-bridge-light](catalog-second-wave-glute-bridge-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-single-leg-landmine-accessibility-dark](catalog-single-leg-landmine-accessibility-dark.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-single-leg-six-light](catalog-single-leg-six-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-six-bird-dog](catalog-six-bird-dog.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-six-cable-pallof-press](catalog-six-cable-pallof-press.json) | library | `--static-body -settings.appearance light` |
 | [catalog-six-dead-bug](catalog-six-dead-bug.json) | library | `--static-body -settings.appearance light` |

@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "split-stance-squat",
   "name": "Stationary Split Squat",
-  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns floor-supported barbell and paired-dumbbell split squats using an approximately leg-length stance, lead thigh-parallel endpoint, erect torso, full lead-foot contact, and rear-forefoot floor support. It also owns two source-exact rear-foot-elevated fixtures: a high-bar setup with the rear foot fixed at patella height and a two-dumbbell setup with the top of the rear foot supported on a bench of unreported height. Each keeps its contacts fixed and returns through lead-side hip extension, knee extension, and ankle plantarflexion. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, kettlebell, and deficit branches remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the stationary and rear-foot-elevated split-squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. TFL receives stabilizer credit for hip, pelvic and knee alignment in the asymmetric fixed stance. Collings recorded TFL in a related two-dumbbell split squat; its modeled gluteal outcomes do not establish TFL force or ranking. Transfer to exact barbell, floor-supported and rear-foot-elevated fixtures is categorical anatomy and mechanics. Rear support, stance, load placement and depth retain their own source boundaries; no hip-extension or dynamic hip-flexion role is added. The unloaded floor and Bulgarian bench fixtures share this stationary split-stance family. Hands stay on the hips, no implement-grip roles are credited, and resistance remains unquantified rather than assigning a bodyweight percentage. Floor geometry transfers categorically from reviewed split-squat standards and explicit unloaded warmups; the unloaded bench posture follows NASM. Bench height and stance length remain unreported for both top-of-foot bench fixtures.",
+  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. The roster owns floor-supported barbell and paired-dumbbell split squats using an approximately leg-length stance and lead thigh-parallel endpoint, plus a one-dumbbell goblet fixture with source-unreported stance length and near-right-angle lead knee. These loaded floor fixtures keep an erect torso, full lead-foot contact, and rear-forefoot floor support. It also owns two source-exact rear-foot-elevated fixtures: a high-bar setup with the rear foot fixed at patella height and a two-dumbbell setup with the top of the rear foot supported on a bench of unreported height. Each keeps its contacts fixed and returns through lead-side hip extension, knee extension, and ankle plantarflexion. Dynamic lunges, unsupported rear-foot variants, other elevations, Smith, kettlebell, and deficit branches remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the stationary and rear-foot-elevated split-squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. TFL receives stabilizer credit for hip, pelvic and knee alignment in the asymmetric fixed stance. Collings recorded TFL in a related two-dumbbell split squat; its modeled gluteal outcomes do not establish TFL force or ranking. Transfer to exact barbell, floor-supported and rear-foot-elevated fixtures is categorical anatomy and mechanics. Rear support, stance, load placement and depth retain their own source boundaries; no hip-extension or dynamic hip-flexion role is added. The unloaded floor and Bulgarian bench fixtures share this stationary split-stance family. Hands stay on the hips, no implement-grip roles are credited, and resistance remains unquantified rather than assigning a bodyweight percentage. Floor geometry transfers categorically from reviewed split-squat standards and explicit unloaded warmups; the unloaded bench posture follows NASM. Bench height and stance length remain unreported for both top-of-foot bench fixtures. The Boxing Science goblet branch holds one dumbbell at the chest in a fixed floor split stance, descends to a front-leg right angle, and returns without stepping; its stance length is not prescribed. This one-implement branch does not inherit the paired-dumbbell load or Song depth prescription.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "song-2023-split-squat-step-length",
@@ -14,7 +14,8 @@
     "nsca-2016-division-i-basketball-injury-screening",
     "deforest-2014-single-double-leg-squat",
     "collings-2023-gluteal-muscle-forces",
-    "nasm-2026-bulgarian-split-squat"
+    "nasm-2026-bulgarian-split-squat",
+    "boxing-science-exercise-library"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -262,7 +263,7 @@
       "id": "stanceLength",
       "valueType": "enum",
       "required": true,
-      "description": "Floor fixtures retain the reviewed leg-length stance; bench fixtures retain an unreported distance; the exact barbell box fixture uses its reviewed alignment criterion.",
+      "description": "The Song floor fixtures use an approximately leg-length stance; the Boxing Science goblet stance length is unreported, as are the bench distances.",
       "allowedValues": [
         "approximatelyLegLength",
         "individualizedPatellaOverLeadToeAtParallel",
@@ -313,23 +314,25 @@
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "The source-authored external-load placement: an upper-back barbell or one dumbbell held at each side.",
+      "description": "Reviewed upper-back barbell, paired side-held dumbbells, one chest-held goblet dumbbell, or no external load.",
       "allowedValues": [
         "upperBackBarbell",
         "highBarUpperBackBarbell",
         "pairedBesideBody",
-        "none"
+        "none",
+        "singleDumbbellGobletChest"
       ]
     },
     {
       "id": "gripOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The grip used to hold the barbell or dumbbells; notApplicable when no implement is held.",
+      "description": "Pronated barbell, neutral side-held paired dumbbells, cupped goblet dumbbell head, or not applicable for bodyweight.",
       "allowedValues": [
         "pronated",
         "neutral",
-        "notApplicable"
+        "notApplicable",
+        "cuppedDumbbellHead"
       ]
     },
     {
@@ -426,22 +429,24 @@
       "id": "implementConfiguration",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the source-exact fixture uses one straight barbell or a matched dumbbell in each hand.",
+      "description": "One straight barbell, a matched pair of dumbbells, one goblet dumbbell, or no implement.",
       "allowedValues": [
         "straightBarbell",
         "pairedDumbbells",
-        "none"
+        "none",
+        "singleDumbbellGoblet"
       ]
     },
     {
       "id": "loadAccounting",
       "valueType": "enum",
       "required": true,
-      "description": "How the logged load maps to the physical implements.",
+      "description": "Bar plus plates, one mass per paired dumbbell, the whole single goblet dumbbell, or none for unloaded fixtures.",
       "allowedValues": [
         "totalBarAndPlates",
         "perImplement",
-        "none"
+        "none",
+        "wholeImplement"
       ]
     },
     {
@@ -482,13 +487,35 @@
   "exerciseRules": [
     {
       "id": "floor-trail-support-has-no-elevation",
-      "description": "Both reviewed floor split squats keep the trail forefoot on the floor and share the exact Song geometry.",
-      "when": {"field": "variant.trailFootSupport", "operator": "equals", "value": "forefootFloor"},
+      "description": "The two Song-derived floor fixtures retain leg-length stance and thigh-parallel depth; the Boxing Science goblet floor fixture has unreported stance length and a near-right-angle lead knee.",
+      "when": {
+        "field": "variant.trailFootSupport",
+        "operator": "equals",
+        "value": "forefootFloor"
+      },
       "then": [
-        {"field": "variant.stanceLength", "value": "approximatelyLegLength"},
-        {"field": "variant.rearSupportHeight", "value": "floor"},
-        {"field": "variant.rangeOfMotion", "value": "leadThighParallel"},
-        {"field": "variant.trunkOrientation", "value": "erect"}
+        {
+          "field": "variant.stanceLength",
+          "allowedValues": [
+            "approximatelyLegLength",
+            "sourceUnreported"
+          ]
+        },
+        {
+          "field": "variant.rearSupportHeight",
+          "value": "floor"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "allowedValues": [
+            "leadThighParallel",
+            "leadKneeApproximatelyNinetyDegrees"
+          ]
+        },
+        {
+          "field": "variant.trunkOrientation",
+          "value": "erect"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -496,15 +523,40 @@
     {
       "id": "elevated-trail-support-uses-patella-height",
       "description": "The reviewed rear box is set from base of patella to ground.",
-      "when": {"field": "variant.trailFootSupport", "operator": "equals", "value": "elevatedBoxFootFixedAgainstPosteriorStop"},
+      "when": {
+        "field": "variant.trailFootSupport",
+        "operator": "equals",
+        "value": "elevatedBoxFootFixedAgainstPosteriorStop"
+      },
       "then": [
-        {"field": "variant.rearSupportHeight", "value": "baseOfPatellaToGround"},
-        {"field": "variant.stanceLength", "value": "individualizedPatellaOverLeadToeAtParallel"},
-        {"field": "variant.rangeOfMotion", "value": "leadKneeApproximatelyNinetyDegrees"},
-        {"field": "variant.loadPlacement", "value": "highBarUpperBackBarbell"},
-        {"field": "variant.trunkOrientation", "value": "nonstandardized"},
-        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
-        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+        {
+          "field": "variant.rearSupportHeight",
+          "value": "baseOfPatellaToGround"
+        },
+        {
+          "field": "variant.stanceLength",
+          "value": "individualizedPatellaOverLeadToeAtParallel"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "leadKneeApproximatelyNinetyDegrees"
+        },
+        {
+          "field": "variant.loadPlacement",
+          "value": "highBarUpperBackBarbell"
+        },
+        {
+          "field": "variant.trunkOrientation",
+          "value": "nonstandardized"
+        },
+        {
+          "field": "variant.implementConfiguration",
+          "value": "straightBarbell"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "totalBarAndPlates"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -539,26 +591,59 @@
     {
       "id": "dumbbell-load-is-paired-per-implement",
       "description": "A dumbbell record uses two matched implements while the user logs one dumbbell's weight.",
-      "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
+      "when": {
+        "field": "variant.implementConfiguration",
+        "operator": "equals",
+        "value": "pairedDumbbells"
+      },
       "then": [
-        {"field": "variant.loadPlacement", "value": "pairedBesideBody"},
-        {"field": "variant.gripOrientation", "value": "neutral"},
-        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"},
-        {"field": "variant.loadAccounting", "value": "perImplement"}
+        {
+          "field": "variant.loadPlacement",
+          "value": "pairedBesideBody"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "perImplement"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": [],
-      "requireInvolvement": [{"muscle": "triceps", "role": "stabilizer"}]
+      "requireInvolvement": [
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        }
+      ]
     },
     {
       "id": "paired-beside-body-placement-identifies-dumbbells",
       "description": "Paired side-held loading belongs only to the two reviewed dumbbell fixtures.",
-      "when": {"field": "variant.loadPlacement", "operator": "equals", "value": "pairedBesideBody"},
+      "when": {
+        "field": "variant.loadPlacement",
+        "operator": "equals",
+        "value": "pairedBesideBody"
+      },
       "then": [
-        {"field": "equipment", "value": "dumbbell"},
-        {"field": "variant.gripOrientation", "value": "neutral"},
-        {"field": "variant.implementConfiguration", "value": "pairedDumbbells"},
-        {"field": "variant.loadAccounting", "value": "perImplement"}
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        },
+        {
+          "field": "variant.implementConfiguration",
+          "value": "pairedDumbbells"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "perImplement"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -566,27 +651,70 @@
     {
       "id": "straight-barbell-configuration-identifies-barbell-loading",
       "description": "A straight barbell configuration cannot inherit paired-dumbbell placement or accounting.",
-      "when": {"field": "variant.implementConfiguration", "operator": "equals", "value": "straightBarbell"},
+      "when": {
+        "field": "variant.implementConfiguration",
+        "operator": "equals",
+        "value": "straightBarbell"
+      },
       "then": [
-        {"field": "equipment", "value": "barbell"},
-        {"field": "variant.loadPlacement", "allowedValues": ["upperBackBarbell", "highBarUpperBackBarbell"]},
-        {"field": "variant.gripOrientation", "value": "pronated"},
-        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "variant.loadPlacement",
+          "allowedValues": [
+            "upperBackBarbell",
+            "highBarUpperBackBarbell"
+          ]
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "totalBarAndPlates"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": [],
-      "requireInvolvement": [{"muscle": "brachialis", "role": "stabilizer"}]
+      "requireInvolvement": [
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        }
+      ]
     },
     {
       "id": "upper-back-placement-identifies-floor-barbell-split-squat",
       "description": "The ordinary upper-back barbell placement belongs only to the floor-supported barbell split squat.",
-      "when": {"field": "variant.loadPlacement", "operator": "equals", "value": "upperBackBarbell"},
+      "when": {
+        "field": "variant.loadPlacement",
+        "operator": "equals",
+        "value": "upperBackBarbell"
+      },
       "then": [
-        {"field": "equipment", "value": "barbell"},
-        {"field": "variant.trailFootSupport", "value": "forefootFloor"},
-        {"field": "variant.gripOrientation", "value": "pronated"},
-        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
-        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "variant.trailFootSupport",
+          "value": "forefootFloor"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
+          "field": "variant.implementConfiguration",
+          "value": "straightBarbell"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "totalBarAndPlates"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -594,13 +722,32 @@
     {
       "id": "high-bar-placement-identifies-elevated-barbell-split-squat",
       "description": "The high-bar placement belongs only to the patella-height rear-foot-elevated barbell fixture.",
-      "when": {"field": "variant.loadPlacement", "operator": "equals", "value": "highBarUpperBackBarbell"},
+      "when": {
+        "field": "variant.loadPlacement",
+        "operator": "equals",
+        "value": "highBarUpperBackBarbell"
+      },
       "then": [
-        {"field": "equipment", "value": "barbell"},
-        {"field": "variant.trailFootSupport", "value": "elevatedBoxFootFixedAgainstPosteriorStop"},
-        {"field": "variant.gripOrientation", "value": "pronated"},
-        {"field": "variant.implementConfiguration", "value": "straightBarbell"},
-        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
+        {
+          "field": "equipment",
+          "value": "barbell"
+        },
+        {
+          "field": "variant.trailFootSupport",
+          "value": "elevatedBoxFootFixedAgainstPosteriorStop"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        },
+        {
+          "field": "variant.implementConfiguration",
+          "value": "straightBarbell"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "totalBarAndPlates"
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -1017,6 +1164,51 @@
         {
           "field": "equipment",
           "value": "bodyweight"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "single-dumbbell-goblet-split-fixture",
+      "description": "The one-dumbbell chest-held Boxing Science fixture remains a fixed floor split squat with its own depth and whole-implement load.",
+      "when": {
+        "field": "variant.implementConfiguration",
+        "operator": "equals",
+        "value": "singleDumbbellGoblet"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.trailFootSupport",
+          "value": "forefootFloor"
+        },
+        {
+          "field": "variant.stanceLength",
+          "value": "sourceUnreported"
+        },
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "leadKneeApproximatelyNinetyDegrees"
+        },
+        {
+          "field": "variant.loadPlacement",
+          "value": "singleDumbbellGobletChest"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "cuppedDumbbellHead"
+        },
+        {
+          "field": "variant.loadAccounting",
+          "value": "wholeImplement"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": false
         }
       ],
       "requirePresent": [],
@@ -1850,6 +2042,150 @@
           "Jumping or lifting either support contact changes the reviewed motion."
         ],
         "sideOrDirection": "Complete the set with one leg leading, then repeat with the other leg."
+      }
+    },
+    {
+      "catalogID": "goblet-split-squat",
+      "name": "Goblet Split Squat",
+      "aliases": [
+        "Single-Dumbbell Goblet Split Squat",
+        "Dumbbell Goblet Split Squat"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 25,
+      "defaultWeightKg": 12.5,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "splitSagittal",
+        "stanceLength": "sourceUnreported",
+        "leadFootSupport": "fullFootFloor",
+        "trailFootSupport": "forefootFloor",
+        "rearSupportHeight": "floor",
+        "interRepFootTransition": "none",
+        "loadPlacement": "singleDumbbellGobletChest",
+        "gripOrientation": "cuppedDumbbellHead",
+        "rangeOfMotion": "leadKneeApproximatelyNinetyDegrees",
+        "trunkOrientation": "erect",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "implementConfiguration": "singleDumbbellGoblet",
+        "loadAccounting": "wholeImplement",
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "shoulder",
+        "scapula",
+        "elbow",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "song-2023-split-squat-step-length",
+        "deforest-2014-single-double-leg-squat"
+      ],
+      "execution": {
+        "startingPosition": "Hold one dumbbell vertically with both hands at the chest; log the entire dumbbell weight. Set a fixed split stance with the lead foot flat and rear forefoot on the floor.",
+        "movement": "Keep both feet in place, trunk upright, and lower straight down.",
+        "endpoint": "Stop with the front leg about a right angle and the rear knee behind the hips.",
+        "returnPhase": "Drive through the lead foot to rise into the same split stance without stepping.",
+        "controlledJoints": "Keep the dumbbell close to the chest and control the lead knee and pelvis over the planted foot.",
+        "supportAndPosture": "Maintain full lead-foot and rear-forefoot contact without a bench or hand support.",
+        "disqualifyingCompensations": [
+          "Stepping between repetitions changes this stationary split squat into a lunge.",
+          "Moving the dumbbell to one hand or both sides changes the reviewed goblet load placement."
+        ],
+        "sideOrDirection": "Complete the set with one lead leg, then switch legs."
       }
     }
   ]

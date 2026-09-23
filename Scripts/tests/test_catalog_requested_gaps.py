@@ -142,6 +142,14 @@ class RequestedCatalogGapTests(unittest.TestCase):
                        | CORE_ENDURANCE_RECORD_IDS
                        | BOXING_PRESS_BATCH_RECORD_IDS
                        | REQUESTED_PULL_RECORD_IDS
+                       | {
+                           "goblet-split-squat",
+                           "goblet-reverse-lunge",
+                           "landmine-reverse-lunge-to-knee-raise",
+                           "landmine-single-leg-romanian-deadlift",
+                           "kettlebell-single-leg-romanian-deadlift",
+                           "banded-single-leg-hip-thrust",
+                       }
                    )]
         self.assertEqual(len(records), 259)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()

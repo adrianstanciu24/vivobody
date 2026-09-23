@@ -1,0 +1,503 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "banded-single-leg-hip-thrust",
+  "name": "Banded Single-Leg Hip Thrust",
+  "definition": "A unilateral bench-supported hip thrust with one heel planted and a long band across the pelvis, its ends secured toward the floor by heavy dumbbells. The opposite knee stays lifted near a right angle while the working hip extends to neutral against increasing band tension. Band tension and anchor geometry are not quantified, so resistance is non-comparable. A mini band around the knees, bilateral thrust, floor glute bridge, and externally loaded barbell thrust remain outside this exact fixture.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "collings-2023-gluteal-muscle-forces",
+    "brazil-2021-barbell-hip-thrust"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMax"
+      ],
+      "secondary": [
+        "vasti"
+      ],
+      "stabilizer": [
+        "bicepsFemoris",
+        "gluteMed",
+        "lumbarExtensors",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: kineticChain.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: bodyPosition.",
+      "allowedValues": [
+        "supineShouldersElevated"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: torsoSupport.",
+      "allowedValues": [
+        "bench"
+      ]
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: pelvisSupport.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: pelvisMotion.",
+      "allowedValues": [
+        "elevates"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: spineMotion.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: hipMotion.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "hipEndPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: hipEndPosition.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: kneeMotion.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: ankleMotion.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "footMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: footMotion.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: footContact.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: footOrientation.",
+      "allowedValues": [
+        "workingToesLifted"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: stanceConfiguration.",
+      "allowedValues": [
+        "singleWorkingHeel"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "Feet begin about hip-width apart before one leg lifts; only one heel supports the loaded phase.",
+      "allowedValues": [
+        "hipWidthAtSetup"
+      ]
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: movingSegment.",
+      "allowedValues": [
+        "pelvis"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: loadPlacement.",
+      "allowedValues": [
+        "bandAcrossPelvis"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: loadInterface.",
+      "allowedValues": [
+        "longBandFloorAnchoredBothEnds"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: gripOrientation.",
+      "allowedValues": [
+        "notApplicable"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The pelvis lowers near the floor and rises to neutral hip extension; floor contact is not established.",
+      "allowedValues": [
+        "pelvisLowToHipNeutral"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Exact Boxing Science fixture: fixedPath.",
+      "fixedValue": false
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: interRepSupport.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: lowerBodyContribution.",
+      "allowedValues": [
+        "combinedHipAndKneeExtension"
+      ]
+    },
+    {
+      "id": "freeLegPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: freeLegPosition.",
+      "allowedValues": [
+        "kneeNearRightAngleToeTowardShin"
+      ]
+    },
+    {
+      "id": "bandAnchors",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: bandAnchors.",
+      "allowedValues": [
+        "heavyDumbbellsOnFloor"
+      ]
+    },
+    {
+      "id": "workingFootContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: workingFootContact.",
+      "allowedValues": [
+        "heelPlanted"
+      ]
+    },
+    {
+      "id": "bandResistance",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fixture: bandResistance.",
+      "allowedValues": [
+        "variableNonComparable"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "banded-single-leg-hip-thrust",
+      "name": "Banded Single-Leg Hip Thrust",
+      "aliases": [
+        "Band-Resisted Single-Leg Hip Thrust"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "supineShouldersElevated",
+        "torsoSupport": "bench",
+        "pelvisSupport": "none",
+        "pelvisMotion": "elevates",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "hipEndPosition": "neutral",
+        "kneeMotion": "extends",
+        "ankleMotion": "nonstandardized",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "footOrientation": "workingToesLifted",
+        "stanceConfiguration": "singleWorkingHeel",
+        "stanceWidth": "hipWidthAtSetup",
+        "movingSegment": "pelvis",
+        "loadPlacement": "bandAcrossPelvis",
+        "loadInterface": "longBandFloorAnchoredBothEnds",
+        "gripOrientation": "notApplicable",
+        "rangeOfMotion": "pelvisLowToHipNeutral",
+        "fixedPath": false,
+        "interRepSupport": "none",
+        "lowerBodyContribution": "combinedHipAndKneeExtension",
+        "freeLegPosition": "kneeNearRightAngleToeTowardShin",
+        "bandAnchors": "heavyDumbbellsOnFloor",
+        "workingFootContact": "heelPlanted",
+        "bandResistance": "variableNonComparable"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "collings-2023-gluteal-muscle-forces",
+        "brazil-2021-barbell-hip-thrust"
+      ],
+      "execution": {
+        "startingPosition": "Set the upper back on a bench edge. Secure both ends of a long band near the floor with heavy dumbbells and lay the band across the pelvis. Plant one heel under its knee with the toes lifted; lift the other leg with its knee near a right angle.",
+        "movement": "Brace the trunk and drive the hips up as quickly as you can through the planted heel against the band, keeping the pelvis level.",
+        "endpoint": "Reach full hip extension with the pelvis level; do not arch beyond neutral.",
+        "returnPhase": "Lower the pelvis toward the floor under control while keeping the free leg lifted, then repeat.",
+        "controlledJoints": "Keep the free knee bent and its toes drawn toward the shin; avoid rotating or shifting the pelvis.",
+        "supportAndPosture": "Keep the upper back supported on the bench and both band anchors secure; band tension is not a comparable weight.",
+        "disqualifyingCompensations": [
+          "Putting the band around the knees changes the resistance direction.",
+          "Using both feet for the thrust changes the one-leg fixture.",
+          "Dropping the upper back to the floor changes the bench hip thrust to a floor bridge."
+        ],
+        "sideOrDirection": "Complete the set with one planted heel, then mirror the setup for the other side."
+      }
+    }
+  ]
+}
