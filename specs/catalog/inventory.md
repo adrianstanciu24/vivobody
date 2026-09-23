@@ -12,8 +12,8 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 165 |
-| Exercises | 350 |
+| Reviewed families | 166 |
+| Exercises | 351 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
@@ -116,6 +116,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [nordic-curl](families/nordic-curl.json) | 1 |
 | [padded-machine-pullover](families/padded-machine-pullover.json) | 1 |
 | [partner-anchored-lateral-trunk-hold](families/partner-anchored-lateral-trunk-hold.json) | 1 |
+| [partner-resisted-straight-punch-hold](families/partner-resisted-straight-punch-hold.json) | 1 |
 | [passive-dead-hang](families/passive-dead-hang.json) | 1 |
 | [pike-push-up](families/pike-push-up.json) | 1 |
 | [power-clean](families/power-clean.json) | 1 |

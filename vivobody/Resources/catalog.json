@@ -18347,6 +18347,108 @@
     ]
   },
   {
+    "familyID": "partner-resisted-straight-punch-hold",
+    "familyName": "Partner-Resisted Straight Punch Hold",
+    "movementActions": [
+      {
+        "actionID": "elbow.flexion",
+        "name": "Elbow flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "shoulder.extension",
+        "name": "Shoulder extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "partner-resisted-straight-punch-hold",
+    "name": "Partner-Resisted Straight Punch Hold",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "reps": 1,
+    "trackingMode": "duration",
+    "defaultDuration": 5,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Straight Punch ISO Hold",
+      "Manual-Resistance Straight Punch Hold"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "isometricStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand in a stable boxing stance with a partner facing you. Bring one fist toward near-full straight-punch reach at about shoulder height, and keep the other hand at guard. Have the partner place their palm against the working fist.",
+      "movement": "Press forward into the partner while they apply steady pressure directly back along the straight punch line. Keep the fist almost still rather than throwing a punch.",
+      "endpoint": "Hold the same near-full-reach position for 5-10 seconds, then release. Train the other arm in a separate hold.",
+      "controlledJoints": "Keep the working shoulder and elbow near their starting angles; do not repeatedly bend or extend the arm.",
+      "supportAndPosture": "Keep both feet planted and the trunk and pelvis controlled. Ask the partner to maintain smooth resistance rather than jerking the arm.",
+      "disqualifyingCompensations": [
+        "Throwing the fist forward or letting it recoil turns the hold into a dynamic punch.",
+        "Bending the elbow across the chest changes the position to a hook hold.",
+        "Driving upward from a lowered fist changes the position to an uppercut hold.",
+        "Using a wall or landmine changes the resistance geometry."
+      ],
+      "sideOrDirection": "Record one timed hold for one working arm; repeat on the other side separately."
+    },
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "primary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "passive-dead-hang",
     "familyName": "Passive Dead Hang",
     "movementActions": [

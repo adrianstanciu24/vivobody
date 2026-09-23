@@ -1,0 +1,313 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "partner-resisted-straight-punch-hold",
+  "name": "Partner-Resisted Straight Punch Hold",
+  "definition": "A unilateral standing isometric straight-punch hold against a partner's rearward manual pressure. The boxer plants a comfortable boxing stance and holds the working fist near full straight-punch reach at roughly shoulder height while the partner presses back along the punch line; the opposite hand stays at guard. The Boxing Science library specifies partner resistance, near-full jab range, and 5-10-second holds, but not measured force, exact joint angles, or a mandatory lead/rear arm. The stance, fist height, partner hand-to-fist contact, and rearward pressure direction are bounded catalog choices to make one repeatable straight-line fixture. An active punch, changing-angle sequence, hook, uppercut, landmine punch, wall press, or partner perturbation hold is outside this family. Manual resistance is represented as bodyweight/nonComparable to avoid a false weight field; the required partner is explicit in the name and instructions. Anterior deltoid and clavicular pectoralis share non-ranked primary shoulder credit; the remaining roles are conservative anatomy-and-mechanics inferences, not EMG rankings measured in this hold.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "push",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.extension"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "shoulder.extension",
+      "elbow.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidAnterior",
+        "pectoralisMajorClavicular"
+      ],
+      "secondary": [
+        "triceps"
+      ],
+      "stabilizer": [
+        "serratus",
+        "abs",
+        "obliques",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMed",
+        "vasti",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "stance",
+      "valueType": "enum",
+      "required": true,
+      "description": "Stable stance selected for the straight-punch hold.",
+      "allowedValues": [
+        "stationaryBoxingStance"
+      ]
+    },
+    {
+      "id": "punchPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Held straight-punch position near full reach, with the fist around shoulder height.",
+      "allowedValues": [
+        "nearFullStraightReach"
+      ]
+    },
+    {
+      "id": "partnerPressure",
+      "valueType": "enum",
+      "required": true,
+      "description": "Partner contact and resistance direction during the stationary hold.",
+      "allowedValues": [
+        "rearwardAlongStraightPunchLine"
+      ]
+    },
+    {
+      "id": "partnerContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Partner hand contact at the working fist, not the forearm or elbow.",
+      "allowedValues": [
+        "partnerPalmAgainstWorkingFist"
+      ]
+    },
+    {
+      "id": "workingSide",
+      "valueType": "enum",
+      "required": true,
+      "description": "One arm works per logged hold; repeat on the other side in a separate hold.",
+      "allowedValues": [
+        "oneArmPerHold"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The partner opposes a static fist position without a rail, lever, or guided load path.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 5,
+      "maximum": 10
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "partner-resisted-straight-punch-hold",
+      "name": "Partner-Resisted Straight Punch Hold",
+      "aliases": [
+        "Straight Punch ISO Hold",
+        "Manual-Resistance Straight Punch Hold"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "primary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "stance": "stationaryBoxingStance",
+        "punchPosition": "nearFullStraightReach",
+        "partnerPressure": "rearwardAlongStraightPunchLine",
+        "workingSide": "oneArmPerHold",
+        "fixedPath": false,
+        "partnerContact": "partnerPalmAgainstWorkingFist"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "arnold-2010-lower-limb",
+        "christophy-2012-lumbar-spine"
+      ],
+      "execution": {
+        "startingPosition": "Stand in a stable boxing stance with a partner facing you. Bring one fist toward near-full straight-punch reach at about shoulder height, and keep the other hand at guard. Have the partner place their palm against the working fist.",
+        "movement": "Press forward into the partner while they apply steady pressure directly back along the straight punch line. Keep the fist almost still rather than throwing a punch.",
+        "endpoint": "Hold the same near-full-reach position for 5-10 seconds, then release. Train the other arm in a separate hold.",
+        "controlledJoints": "Keep the working shoulder and elbow near their starting angles; do not repeatedly bend or extend the arm.",
+        "supportAndPosture": "Keep both feet planted and the trunk and pelvis controlled. Ask the partner to maintain smooth resistance rather than jerking the arm.",
+        "sideOrDirection": "Record one timed hold for one working arm; repeat on the other side separately.",
+        "disqualifyingCompensations": [
+          "Throwing the fist forward or letting it recoil turns the hold into a dynamic punch.",
+          "Bending the elbow across the chest changes the position to a hook hold.",
+          "Driving upward from a lowered fist changes the position to an uppercut hold.",
+          "Using a wall or landmine changes the resistance geometry."
+        ]
+      },
+      "defaultDuration": 5
+    }
+  ]
+}

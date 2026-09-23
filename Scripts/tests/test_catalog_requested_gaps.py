@@ -169,6 +169,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
                            "above-knee-band-side-walk",
                            "bodyweight-single-leg-hip-thrust",
                            "bodyweight-prisoner-box-squat-overhead-reach",
+                           "partner-resisted-straight-punch-hold",
                        }
                    )]
         self.assertEqual(len(records), 259)

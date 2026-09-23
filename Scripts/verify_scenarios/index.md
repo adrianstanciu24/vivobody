@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 190.
+Scenario files: 193.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -100,6 +100,9 @@ Scenario files: 190.
 | [catalog-six-landmine-t-bar-row](catalog-six-landmine-t-bar-row.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-six-leg-press-calf-raise](catalog-six-leg-press-calf-raise.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-six-standing-dumbbell-calf-raise](catalog-six-standing-dumbbell-calf-raise.json) | library | `--static-body -settings.appearance light` |
+| [catalog-straight-punch-hold-accessibility](catalog-straight-punch-hold-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-straight-punch-hold-light](catalog-straight-punch-hold-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-straight-punch-hold](catalog-straight-punch-hold.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-swiss-ball-stir-the-pot-light](catalog-swiss-ball-stir-the-pot-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-tfl-compound-development](catalog-tfl-compound-development.json) | today | `--ui-test-tfl-development --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-tfl-coverage](catalog-tfl-coverage.json) | library | `--static-body -settings.appearance dark` |

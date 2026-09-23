@@ -97,6 +97,7 @@ $(SRCROOT)/specs/catalog/families/multidirectional-manual-core-hold.json
 $(SRCROOT)/specs/catalog/families/nordic-curl.json
 $(SRCROOT)/specs/catalog/families/padded-machine-pullover.json
 $(SRCROOT)/specs/catalog/families/partner-anchored-lateral-trunk-hold.json
+$(SRCROOT)/specs/catalog/families/partner-resisted-straight-punch-hold.json
 $(SRCROOT)/specs/catalog/families/passive-dead-hang.json
 $(SRCROOT)/specs/catalog/families/pike-push-up.json
 $(SRCROOT)/specs/catalog/families/power-clean.json

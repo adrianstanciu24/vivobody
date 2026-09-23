@@ -1,0 +1,104 @@
+{
+  "name": "catalog-straight-punch-hold-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPush"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Partner-Resisted Straight Punch Hold"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Partner-Resisted Straight Punch Hold,"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Partner-Resisted Straight Punch Hold,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · HOLD"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-movement"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "partner"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Partner-Resisted Straight Punch Hold"
+    },
+    {
+      "identifier": "exercise-execution-movement",
+      "labelContains": "partner"
+    }
+  ],
+  "forbidden": []
+}
