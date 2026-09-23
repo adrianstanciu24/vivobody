@@ -1,0 +1,500 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "prisoner-box-squat-overhead-reach",
+  "name": "Prisoner Box Squat with Overhead Reach",
+  "definition": "A bodyweight box squat and seated overhead reach shown in the Boxing Science video. Start standing with hands interlocked behind the head, sit back onto a bench, release the hands and reach both arms up in a wide V while seated, return the hands behind the head, then stand. The bench supports the seated reach. This is one rep-counted sequence, with no external load or measured mobility outcome. The seated reach distinguishes it from the active unsupported bodyweight squat.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "boxing-science-prisoner-box-squat-reach-video",
+    "arnold-2010-lower-limb"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "scapula.upwardRotation",
+      "elbow.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.extension",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot",
+      "shoulder",
+      "scapula",
+      "elbow"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidLateral"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "gluteMax"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus",
+        "adductorMagnus",
+        "deltoidAnterior",
+        "serratus",
+        "triceps",
+        "deltoidLateral"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "deltoidAnterior",
+        "externalRotators",
+        "trapeziusUpper",
+        "brachialis",
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "tibialisAnterior",
+        "tensorFasciaeLatae"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: kineticChain.",
+      "allowedValues": [
+        "closedFeet"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: bodyPosition.",
+      "allowedValues": [
+        "standingToBenchSeatedToStanding"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: torsoSupport.",
+      "allowedValues": [
+        "benchSeatedAtBottom"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: stanceConfiguration.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: stanceWidth.",
+      "allowedValues": [
+        "wideSelfSelected"
+      ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: footOrientation.",
+      "allowedValues": [
+        "selfSelectedToeOut"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: footContact.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: hipMotion.",
+      "allowedValues": [
+        "extendsOnAscent"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: kneeMotion.",
+      "allowedValues": [
+        "extendsOnAscent"
+      ]
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: ankleMotion.",
+      "allowedValues": [
+        "plantarflexesOnAscent"
+      ]
+    },
+    {
+      "id": "benchContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: benchContact.",
+      "allowedValues": [
+        "seatedWeightSupported"
+      ]
+    },
+    {
+      "id": "handStart",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: handStart.",
+      "allowedValues": [
+        "interlockedBehindHead"
+      ]
+    },
+    {
+      "id": "reachTiming",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: reachTiming.",
+      "allowedValues": [
+        "seatedAtBottom"
+      ]
+    },
+    {
+      "id": "reachPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: reachPath.",
+      "allowedValues": [
+        "bothArmsWideVOverhead"
+      ]
+    },
+    {
+      "id": "handReturn",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: handReturn.",
+      "allowedValues": [
+        "behindHeadBeforeStanding"
+      ]
+    },
+    {
+      "id": "repetitionUnit",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: repetitionUnit.",
+      "allowedValues": [
+        "squatSitReachResetStand"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Exact Boxing Science bench squat and seated reach: fixedPath.",
+      "fixedValue": false
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "bodyweight-prisoner-box-squat-overhead-reach",
+      "name": "Prisoner Squat with Overhead Reach",
+      "aliases": [
+        "Prisoner Box Squat with Overhead Reach",
+        "Prisoner Squat to Overhead Reach"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closedFeet",
+        "bodyPosition": "standingToBenchSeatedToStanding",
+        "torsoSupport": "benchSeatedAtBottom",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "wideSelfSelected",
+        "footOrientation": "selfSelectedToeOut",
+        "footContact": "continuous",
+        "hipMotion": "extendsOnAscent",
+        "kneeMotion": "extendsOnAscent",
+        "ankleMotion": "plantarflexesOnAscent",
+        "benchContact": "seatedWeightSupported",
+        "handStart": "interlockedBehindHead",
+        "reachTiming": "seatedAtBottom",
+        "reachPath": "bothArmsWideVOverhead",
+        "handReturn": "behindHeadBeforeStanding",
+        "repetitionUnit": "squatSitReachResetStand",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "boxing-science-prisoner-box-squat-reach-video",
+        "arnold-2010-lower-limb"
+      ],
+      "execution": {
+        "startingPosition": "Stand in front of a bench with feet comfortably wide. Interlock both hands behind the head and keep the elbows open.",
+        "movement": "Sit back onto the bench with the knees tracking out over the feet. While seated, release the hands and reach both arms up in a wide V.",
+        "endpoint": "Reach overhead while the pelvis is supported on the bench and the trunk stays controlled.",
+        "returnPhase": "Bring the hands behind the head while seated, then press through both feet to stand upright.",
+        "controlledJoints": "Keep the feet planted, avoid letting the knees cave inward, and raise the arms without flaring the rib cage.",
+        "supportAndPosture": "Use the bench for a brief seated position; keep the trunk braced during the reach and rise.",
+        "disqualifyingCompensations": [
+          "Keeping the hands behind the head throughout omits the defining overhead reach.",
+          "Reaching overhead while standing changes the reviewed seated phase.",
+          "Removing the bench changes the squat support and endpoint."
+        ]
+      }
+    }
+  ]
+}

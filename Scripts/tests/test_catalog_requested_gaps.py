@@ -162,6 +162,13 @@ class RequestedCatalogGapTests(unittest.TestCase):
                            "two-hand-single-dumbbell-goblet-squat-to-press",
                            "two-hand-landmine-squat",
                            "alternating-landmine-squat-to-press",
+                           "foot-anchored-band-reverse-lunge",
+                           "quadruped-band-hip-extension",
+                           "quadruped-fire-hydrants-with-band",
+                           "single-kettlebell-romanian-deadlift",
+                           "above-knee-band-side-walk",
+                           "bodyweight-single-leg-hip-thrust",
+                           "bodyweight-prisoner-box-squat-overhead-reach",
                        }
                    )]
         self.assertEqual(len(records), 259)

@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 186.
+Scenario files: 190.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -69,6 +69,10 @@ Scenario files: 186.
 | [catalog-machine-second-wave](catalog-machine-second-wave.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-magnus-extension](catalog-magnus-extension.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-medicine-ball-power](catalog-medicine-ball-power.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-mobility-fire-hydrant](catalog-mobility-fire-hydrant.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-mobility-glute-hip-accessibility-light](catalog-mobility-glute-hip-accessibility-light.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-mobility-glute-hip](catalog-mobility-glute-hip.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-mobility-prisoner-reach](catalog-mobility-prisoner-reach.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-must-have-expansion](catalog-must-have-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
 | [catalog-plank-alias-search-accessibility](catalog-plank-alias-search-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |

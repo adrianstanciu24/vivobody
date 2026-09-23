@@ -1,0 +1,64 @@
+{
+  "name": "catalog-mobility-prisoner-reach",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Prisoner"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Prisoner Squat with Overhead Reach, Bodyweight \u00b7 Squat"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Prisoner Squat with Overhead Reach, Bodyweight \u00b7 Squat"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Prisoner Squat with Overhead Reach"
+    },
+    {
+      "labelContains": "Muscles used by Prisoner Squat with Overhead Reach"
+    }
+  ],
+  "forbidden": []
+}

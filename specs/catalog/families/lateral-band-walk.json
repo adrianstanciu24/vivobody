@@ -3,10 +3,11 @@
   "schemaVersion": 1,
   "id": "lateral-band-walk",
   "name": "Lateral Band Walk",
-  "definition": "Resisted lateral stepping with a loop immediately above the ankles, a self-selected squat posture, and approximately thirty-centimeter initial foot spacing and lead steps. A repetition consists of a leading step followed by a trailing step restoring that gap; repeat equally in the opposite direction. The lead hip abducts against the loop and the trailing hip adducts under band tension with eccentric abductor control. Berry directly recorded gluteus medius, gluteus maximus and TFL in moving and stance limbs; primary gluteus medius and secondary TFL are categorical emphasis judgments, not EMG rankings. Gluteus maximus, vasti, abs, obliques and soleus receive conservative postural control roles for the maintained squat, trunk and stance. No deliberate hip rotation or concentric adductor role is inferred. Upright walking, bands above the knees or around the feet, diagonal monster walks, crossover steps, squatting on every step, and unsupported open-chain abduction remain outside this family. Isolation describes the defining resisted hip motion; the held squat and foot-clearance adjustments are nondefining. Both moving and stance hip abductors contribute as support shifts and the pelvis travels.",
+  "definition": "Resisted lateral stepping with a loop immediately above the ankles, a self-selected squat posture, and approximately thirty-centimeter initial foot spacing and lead steps. A repetition consists of a leading step followed by a trailing step restoring that gap; repeat equally in the opposite direction. The lead hip abducts against the loop and the trailing hip adducts under band tension with eccentric abductor control. Berry directly recorded gluteus medius, gluteus maximus and TFL in moving and stance limbs; primary gluteus medius and secondary TFL are categorical emphasis judgments, not EMG rankings. Gluteus maximus, vasti, abs, obliques and soleus receive conservative postural control roles for the maintained squat, trunk and stance. No deliberate hip rotation or concentric adductor role is inferred. Upright walking, unreviewed band placements around the feet, diagonal monster walks, crossover steps, squatting on every step, and unsupported open-chain abduction remain outside this family. Isolation describes the defining resisted hip motion; the held squat and foot-clearance adjustments are nondefining. Both moving and stance hip abductors contribute as support shifts and the pelvis travels. The Boxing Science above-knee fixture begins at hip-width with slight hip and knee flexion, steps laterally against a mini band just above the knees, and returns the trailing foot to the starting spacing. Its shorter band lever arm is not interchangeable with the ankle-band fixture.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
-    "berry-2015-resisted-side-stepping"
+    "berry-2015-resisted-side-stepping",
+    "boxing-science-exercise-library"
   ],
   "fixed": {
     "mechanic": "isolation",
@@ -191,9 +192,10 @@
       "id": "bodyPosition",
       "valueType": "enum",
       "required": true,
-      "description": "Retain a comfortable squat depth throughout; no numeric hip or knee angle is prescribed.",
+      "description": "Retain a comfortable squat depth throughout; no numeric hip or knee angle is prescribed. Boxing Science above-knee fixture maintains slight hip and knee flexion.",
       "allowedValues": [
-        "selfSelectedSquatMaintained"
+        "selfSelectedSquatMaintained",
+        "slightHipAndKneeFlexionMaintained"
       ]
     },
     {
@@ -209,27 +211,30 @@
       "id": "bandPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "The loop contacts both lower legs immediately above the ankle bones.",
+      "description": "The loop contacts both lower legs immediately above the ankle bones. Boxing Science places the mini band immediately above the knees.",
       "allowedValues": [
-        "justAboveAnkles"
+        "justAboveAnkles",
+        "justAboveKnees"
       ]
     },
     {
       "id": "footSpacing",
       "valueType": "enum",
       "required": true,
-      "description": "Restore roughly thirty centimeters between the feet after each complete step pair.",
+      "description": "Restore roughly thirty centimeters between the feet after each complete step pair. Boxing Science begins at hip-width spacing.",
       "allowedValues": [
-        "approximatelyThirtyCentimeters"
+        "approximatelyThirtyCentimeters",
+        "hipWidth"
       ]
     },
     {
       "id": "stepLength",
       "valueType": "enum",
       "required": true,
-      "description": "The leading foot moves roughly thirty centimeters sideways.",
+      "description": "The leading foot moves roughly thirty centimeters sideways. The source does not prescribe a numeric step length.",
       "allowedValues": [
-        "approximatelyThirtyCentimeters"
+        "approximatelyThirtyCentimeters",
+        "selfSelected"
       ]
     },
     {
@@ -245,9 +250,10 @@
       "id": "trunkStrategy",
       "valueType": "enum",
       "required": true,
-      "description": "Keep the chosen squat inclination controlled without deliberate side bending or rotation.",
+      "description": "Keep the chosen squat inclination controlled without deliberate side bending or rotation. The source prescribes a controlled side step without a measured trunk angle.",
       "allowedValues": [
-        "controlledSquatInclination"
+        "controlledSquatInclination",
+        "uprightControlled"
       ]
     },
     {
@@ -276,7 +282,66 @@
       "fixedValue": false
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "ankle-band-reviewed-setup",
+      "description": "Band placement pins the matching source-exact posture, spacing, and step length.",
+      "when": {
+        "field": "variant.bandPlacement",
+        "operator": "equals",
+        "value": "justAboveAnkles"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "selfSelectedSquatMaintained"
+        },
+        {
+          "field": "variant.footSpacing",
+          "value": "approximatelyThirtyCentimeters"
+        },
+        {
+          "field": "variant.stepLength",
+          "value": "approximatelyThirtyCentimeters"
+        },
+        {
+          "field": "variant.trunkStrategy",
+          "value": "controlledSquatInclination"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "above-knee-band-reviewed-setup",
+      "description": "Band placement pins the matching source-exact posture, spacing, and step length.",
+      "when": {
+        "field": "variant.bandPlacement",
+        "operator": "equals",
+        "value": "justAboveKnees"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "slightHipAndKneeFlexionMaintained"
+        },
+        {
+          "field": "variant.footSpacing",
+          "value": "hipWidth"
+        },
+        {
+          "field": "variant.stepLength",
+          "value": "selfSelected"
+        },
+        {
+          "field": "variant.trunkStrategy",
+          "value": "uprightControlled"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "recommended": {
     "defaultReps": {
       "minimum": 8,
@@ -363,6 +428,85 @@
           "Moving the band above the knees or around the feet changes its resistance geometry."
         ],
         "sideOrDirection": "Complete the logged repetitions in one direction, then repeat the same number in the opposite direction."
+      }
+    },
+    {
+      "catalogID": "above-knee-band-side-walk",
+      "name": "Banded Side Walks",
+      "aliases": [
+        "Above-Knee Band Side Walk"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 12,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "gluteMed",
+          "role": "primary"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "alternatingStanceAndSwing",
+        "bodyPosition": "slightHipAndKneeFlexionMaintained",
+        "travelDirection": "lateral",
+        "bandPlacement": "justAboveKnees",
+        "footSpacing": "hipWidth",
+        "stepLength": "selfSelected",
+        "footOrientation": "forward",
+        "trunkStrategy": "uprightControlled",
+        "repetitionUnit": "leadStepThenTrailingStep",
+        "bandTension": "maintainedBetweenSteps",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "berry-2015-resisted-side-stepping",
+        "boxing-science-exercise-library"
+      ],
+      "execution": {
+        "startingPosition": "Stand with feet hip-width apart and a mini band just above both knees. Bend the hips and knees slightly.",
+        "movement": "Push the knees outward against the band, step one foot to the side, then step the trailing foot toward the lead foot to restore hip-width spacing.",
+        "endpoint": "Finish each paired step with both feet planted at approximately the starting width.",
+        "returnPhase": "Continue in the same direction for the prescribed repetitions, then reverse direction.",
+        "controlledJoints": "Keep the knees tracking with the feet and maintain slight hip and knee flexion.",
+        "supportAndPosture": "Stay upright and keep tension in the band without twisting the pelvis.",
+        "disqualifyingCompensations": [
+          "Moving the band to the ankles changes the reviewed resistance lever arm.",
+          "Letting the feet snap together removes band tension between steps."
+        ],
+        "sideOrDirection": "Complete the same number of paired side steps in each direction."
       }
     }
   ]

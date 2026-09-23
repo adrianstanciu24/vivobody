@@ -1,0 +1,51 @@
+{
+  "name": "catalog-mobility-glute-hip",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Banded Side Walks,"
+        },
+        "direction": "up",
+        "maxSwipes": 45
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Banded Side Walks,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Banded Side Walks"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "labelContains": "Muscles used by Banded Side Walks"
+    }
+  ],
+  "forbidden": []
+}

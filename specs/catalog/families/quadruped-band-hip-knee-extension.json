@@ -1,0 +1,389 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "quadruped-band-hip-knee-extension",
+  "name": "Quadruped Band Hip and Knee Extension",
+  "definition": "A Boxing Science all-fours band exercise in which one leg moves from a bent-knee quadruped start to backward hip and knee extension. A mini band links the feet while both hands and the other knee support the body. The working knee moves; this fixture is distinct from held-knee hip-extension isolation and from a bird dog with opposite-arm reach. Band tension is non-comparable.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "arnold-2010-lower-limb"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "hip",
+      "pelvis",
+      "knee",
+      "spine"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMax"
+      ],
+      "secondary": [
+        "medialHamstrings",
+        "vasti"
+      ],
+      "stabilizer": [
+        "bicepsFemoris",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: kineticChain.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: bodyPosition.",
+      "allowedValues": [
+        "quadruped"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: torsoSupport.",
+      "allowedValues": [
+        "handsOnFloor"
+      ]
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: pelvisSupport.",
+      "allowedValues": [
+        "supportKneeAndHandsOnFloor"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: pelvisMotion.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: spineMotion.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: hipMotion.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "hipStartFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: hipStartFlexionDegrees.",
+      "minimum": 90,
+      "maximum": 90
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: kneeMotion.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: rangeOfMotion.",
+      "allowedValues": [
+        "quadrupedToBackwardLegExtension"
+      ]
+    },
+    {
+      "id": "kneePosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: kneePosture.",
+      "allowedValues": [
+        "flexedToNearExtended"
+      ]
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: movingSegment.",
+      "allowedValues": [
+        "thigh"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: loadInterface.",
+      "allowedValues": [
+        "miniBandAroundFeet"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: resistanceGeometry.",
+      "allowedValues": [
+        "elasticBandBetweenFeet"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: fixedPath.",
+      "fixedValue": false
+    },
+    {
+      "id": "handSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: handSupport.",
+      "allowedValues": [
+        "bothHandsOnFloor"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Boxing Science quadruped band fixture: lowerBodyContribution.",
+      "allowedValues": [
+        "isolatedJointMotion"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "quadruped-band-hip-extension",
+      "name": "Quadruped Hip Extension with Band",
+      "aliases": [
+        "Banded Quadruped Hip Extension",
+        "Mini-Band Quadruped Kickback"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "secondary"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "quadruped",
+        "torsoSupport": "handsOnFloor",
+        "pelvisSupport": "supportKneeAndHandsOnFloor",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "rangeOfMotion": "quadrupedToBackwardLegExtension",
+        "kneePosture": "flexedToNearExtended",
+        "movingSegment": "thigh",
+        "loadInterface": "miniBandAroundFeet",
+        "resistanceGeometry": "elasticBandBetweenFeet",
+        "fixedPath": false,
+        "handSupport": "bothHandsOnFloor",
+        "lowerBodyContribution": "isolatedJointMotion",
+        "hipStartFlexionDegrees": 90
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "jeon-2016-prone-table-hip-extension",
+        "boxing-science-exercise-library"
+      ],
+      "execution": {
+        "startingPosition": "Start on all fours with both knees bent beneath the hips and both hands on the floor. Loop a light-to-medium mini band around both feet.",
+        "movement": "Move one leg backward, extending its hip and knee against the band while pointing the toes toward the floor.",
+        "endpoint": "Reach a controlled backward leg extension while the pelvis remains square and the low back does not arch.",
+        "returnPhase": "Bend the working knee and hip to bring it back beneath the body under control.",
+        "controlledJoints": "Keep the support knee and both hands planted, and avoid twisting the pelvis or extending through the low back.",
+        "supportAndPosture": "Maintain trunk tension and distribute support across both hands and the grounded knee.",
+        "disqualifyingCompensations": [
+          "Reaching an opposite arm forward changes the task to a bird dog.",
+          "Arching the low back to lift the leg higher replaces hip extension with spinal motion.",
+          "Moving the band to the knees changes the resistance direction."
+        ],
+        "sideOrDirection": "Finish the set on one working leg, then repeat with the other leg."
+      }
+    }
+  ]
+}

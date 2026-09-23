@@ -1,0 +1,23 @@
+{
+  "name": "catalog-mobility-fire-hydrant",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "Quadruped Fire Hydrants with Band"},
+    {"wait": {"labelRegex": "^Quadruped Fire Hydrants with Band, Band · Legs"}},
+    {"tap": {"labelRegex": "^Quadruped Fire Hydrants with Band, Band · Legs"}},
+    {"wait": {"label": "STRENGTH · REPS"}}
+  ],
+  "required": [
+    {"label": "Quadruped Fire Hydrants with Band"},
+    {"labelContains": "Muscles used by Quadruped Fire Hydrants with Band"}
+  ],
+  "forbidden": []
+}

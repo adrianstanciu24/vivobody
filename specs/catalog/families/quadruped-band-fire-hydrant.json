@@ -1,0 +1,400 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "quadruped-band-fire-hydrant",
+  "name": "Quadruped Band Fire Hydrant",
+  "definition": "An all-fours unilateral bent-knee lateral lift against a mini band immediately above the knees, as shown by Boxing Science. The reviewed movement cue and still image establish hip abduction while the support knee and both hands stay planted. The source calls this an external-rotation exercise, but it does not show an axial femoral rotation path; hip rotation is therefore unreported in this contract. The pelvis and trunk are controlled without claiming zero measured motion. This quadruped fixture is distinct from side-lying, seated, and standing abduction. Band tension is non-comparable.",
+  "evidenceRefs": [
+    "boxing-science-exercise-library",
+    "arnold-2010-lower-limb"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.abduction"
+    ],
+    "primeActions": [
+      "hip.abduction"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.adduction",
+      "hip.internalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension",
+      "hip.externalRotation"
+    ],
+    "stabilityDemands": [
+      "hip",
+      "pelvis",
+      "knee",
+      "spine"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "tensorFasciaeLatae"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMed"
+      ],
+      "secondary": [
+        "tensorFasciaeLatae"
+      ],
+      "stabilizer": [
+        "abs",
+        "obliques",
+        "bicepsFemoris"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: kineticChain.",
+      "allowedValues": [
+        "openWorkingLeg"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: bodyPosition.",
+      "allowedValues": [
+        "quadruped"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: torsoSupport.",
+      "allowedValues": [
+        "bothHandsOnFloor"
+      ]
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: pelvisSupport.",
+      "allowedValues": [
+        "supportKneeOnFloor"
+      ]
+    },
+    {
+      "id": "supportLegPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: supportLegPosture.",
+      "allowedValues": [
+        "kneeBentUnderHip"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: pelvisMotion.",
+      "allowedValues": [
+        "positionControlled"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: spineMotion.",
+      "allowedValues": [
+        "positionControlled"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: hipMotion.",
+      "allowedValues": [
+        "abducts"
+      ]
+    },
+    {
+      "id": "hipSagittalPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: hipSagittalPosture.",
+      "allowedValues": [
+        "flexedNearRightAngle"
+      ]
+    },
+    {
+      "id": "hipRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: hipRotation.",
+      "allowedValues": [
+        "unreported"
+      ]
+    },
+    {
+      "id": "abductionEndpointReference",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: abductionEndpointReference.",
+      "allowedValues": [
+        "pelvisControlLimit"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: kneeMotion.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "kneePosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: kneePosture.",
+      "allowedValues": [
+        "bent"
+      ]
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: movingSegment.",
+      "allowedValues": [
+        "thigh"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: loadInterface.",
+      "allowedValues": [
+        "miniBandAboveKnees"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: resistanceGeometry.",
+      "allowedValues": [
+        "elasticAcrossThighs"
+      ]
+    },
+    {
+      "id": "handSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: handSupport.",
+      "allowedValues": [
+        "bothHandsOnFloor"
+      ]
+    },
+    {
+      "id": "cadence",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: cadence.",
+      "allowedValues": [
+        "controlledReturn"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: fixedPath.",
+      "fixedValue": false
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Exact Boxing Science fire-hydrant fixture: lowerBodyContribution.",
+      "allowedValues": [
+        "isolatedHipMotion"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 20
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "quadruped-fire-hydrants-with-band",
+      "name": "Quadruped Fire Hydrants with Band",
+      "aliases": [
+        "Banded Quadruped Fire Hydrant"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "gluteMed",
+          "role": "primary"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "openWorkingLeg",
+        "bodyPosition": "quadruped",
+        "torsoSupport": "bothHandsOnFloor",
+        "pelvisSupport": "supportKneeOnFloor",
+        "supportLegPosture": "kneeBentUnderHip",
+        "pelvisMotion": "positionControlled",
+        "spineMotion": "positionControlled",
+        "hipMotion": "abducts",
+        "hipSagittalPosture": "flexedNearRightAngle",
+        "hipRotation": "unreported",
+        "abductionEndpointReference": "pelvisControlLimit",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "bent",
+        "movingSegment": "thigh",
+        "loadInterface": "miniBandAboveKnees",
+        "resistanceGeometry": "elasticAcrossThighs",
+        "handSupport": "bothHandsOnFloor",
+        "cadence": "controlledReturn",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedHipMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "boxing-science-exercise-library",
+        "arnold-2010-lower-limb"
+      ],
+      "execution": {
+        "startingPosition": "Kneel on all fours with a light-to-medium mini band immediately above both knees. Place the hands beneath the shoulders and the knees beneath the hips.",
+        "movement": "Keep one knee bent and lift that thigh out to the side against the band.",
+        "endpoint": "Stop the lateral lift when further travel would roll the pelvis or arch the low back.",
+        "returnPhase": "Lower the bent leg slowly beneath the hip while controlling band tension.",
+        "controlledJoints": "Keep the support knee and both hands planted, and hold the working knee bent throughout.",
+        "supportAndPosture": "Maintain a controlled trunk and pelvis while the working hip moves.",
+        "disqualifyingCompensations": [
+          "Straightening the working knee changes the band path and movement.",
+          "Rolling the pelvis to lift higher replaces the controlled hip action.",
+          "Moving the band to the feet changes the resistance fixture."
+        ],
+        "sideOrDirection": "Complete the set with one working leg, then repeat on the other side."
+      }
+    }
+  ]
+}

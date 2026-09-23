@@ -2777,6 +2777,87 @@
     ]
   },
   {
+    "familyID": "bodyweight-single-leg-hip-thrust",
+    "familyName": "Bodyweight Single-Leg Hip Thrust",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "bodyweight-single-leg-hip-thrust",
+    "name": "Single-Leg Hip Thrusts",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Bodyweight Single-Leg Hip Thrust",
+      "Unweighted Single-Leg Hip Thrust"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Rest the upper back on the edge of a bench. Set the feet about hip-width apart with the working ankle under its knee, then lift the other leg and hold that knee near a right angle.",
+      "movement": "Press through the planted heel with its toes lifted and raise the pelvis by extending the working hip.",
+      "endpoint": "Stop at full hip extension with the pelvis level and without arching the low back.",
+      "returnPhase": "Lower the pelvis under control while keeping the free leg lifted.",
+      "controlledJoints": "Keep the free knee bent near a right angle and its toe drawn toward the shin.",
+      "supportAndPosture": "Keep the upper back supported on the bench and the trunk braced against pelvic rotation.",
+      "disqualifyingCompensations": [
+        "Putting both feet on the floor changes this to a two-leg thrust.",
+        "Adding a band across the pelvis changes the resistance fixture.",
+        "Resting the upper back on the floor changes the exercise to a glute bridge."
+      ],
+      "sideOrDirection": "Complete the set on one planted heel, then mirror the setup on the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "cable-pull-through",
     "familyName": "Cable Pull-Through",
     "movementActions": [
@@ -5486,6 +5567,120 @@
       },
       {
         "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "dynamic-lunge",
+    "familyName": "Dynamic Lunge",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "foot-anchored-band-reverse-lunge",
+    "name": "Reverse Lunge with Band",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Foot-Anchored Band Reverse Lunge"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand upright with a medium-tension mini band around the working foot. Pin the band with the opposite-side hand near the opposite hip.",
+      "movement": "Step the other foot backward into a reverse lunge while keeping the planted knee aligned with the front foot.",
+      "endpoint": "Reach a controlled split stance at a comfortable depth without letting the front knee cave inward.",
+      "returnPhase": "Drive through the planted heel to step the rear foot forward and return upright.",
+      "controlledJoints": "Control the planted knee over the foot and avoid letting the band pull the hip or pelvis out of alignment.",
+      "supportAndPosture": "Keep the torso upright and the band pinned at the opposite hip throughout the set.",
+      "disqualifyingCompensations": [
+        "Removing the band changes the resistance fixture.",
+        "Holding suspension handles changes the task to an assisted reverse lunge.",
+        "Leaving the feet split between repetitions changes the movement to a split squat."
+      ],
+      "sideOrDirection": "Complete the set with one foot anchoring the band, then mirror the setup for the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -15783,6 +15978,89 @@
     ]
   },
   {
+    "familyID": "lateral-band-walk",
+    "familyName": "Lateral Band Walk",
+    "movementActions": [
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.adduction",
+        "name": "Hip adduction",
+        "plane": "frontal",
+        "kind": "yielding"
+      }
+    ],
+    "catalogID": "above-knee-band-side-walk",
+    "name": "Banded Side Walks",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 12,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Above-Knee Band Side Walk"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand with feet hip-width apart and a mini band just above both knees. Bend the hips and knees slightly.",
+      "movement": "Push the knees outward against the band, step one foot to the side, then step the trailing foot toward the lead foot to restore hip-width spacing.",
+      "endpoint": "Finish each paired step with both feet planted at approximately the starting width.",
+      "returnPhase": "Continue in the same direction for the prescribed repetitions, then reverse direction.",
+      "controlledJoints": "Keep the knees tracking with the feet and maintain slight hip and knee flexion.",
+      "supportAndPosture": "Stay upright and keep tension in the band without twisting the pelvis.",
+      "disqualifyingCompensations": [
+        "Moving the band to the ankles changes the reviewed resistance lever arm.",
+        "Letting the feet snap together removes band tension between steps."
+      ],
+      "sideOrDirection": "Complete the same number of paired side steps in each direction."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMed",
+        "role": "primary"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "lateral-high-plank-walk",
     "familyName": "Lateral High-Plank Walk",
     "movementActions": [
@@ -18684,6 +18962,152 @@
     ]
   },
   {
+    "familyID": "prisoner-box-squat-overhead-reach",
+    "familyName": "Prisoner Box Squat with Overhead Reach",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "elbow.extension",
+        "name": "Elbow extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "scapula.upwardRotation",
+        "name": "Scapular upward rotation",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.abduction",
+        "name": "Shoulder abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "shoulder.flexion",
+        "name": "Shoulder flexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "bodyweight-prisoner-box-squat-overhead-reach",
+    "name": "Prisoner Squat with Overhead Reach",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Prisoner Box Squat with Overhead Reach",
+      "Prisoner Squat to Overhead Reach"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand in front of a bench with feet comfortably wide. Interlock both hands behind the head and keep the elbows open.",
+      "movement": "Sit back onto the bench with the knees tracking out over the feet. While seated, release the hands and reach both arms up in a wide V.",
+      "endpoint": "Reach overhead while the pelvis is supported on the bench and the trunk stays controlled.",
+      "returnPhase": "Bring the hands behind the head while seated, then press through both feet to stand upright.",
+      "controlledJoints": "Keep the feet planted, avoid letting the knees cave inward, and raise the arms without flaring the rib cage.",
+      "supportAndPosture": "Use the bench for a brief seated position; keep the trunk braced during the reach and rise.",
+      "disqualifyingCompensations": [
+        "Keeping the hands behind the head throughout omits the defining overhead reach.",
+        "Reaching overhead while standing changes the reviewed seated phase.",
+        "Removing the bench changes the squat support and endpoint."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      }
+    ]
+  },
+  {
     "familyID": "prone-tyw-hold-sequence",
     "familyName": "Prone T-Y-W Hold Sequence",
     "movementActions": [
@@ -19356,6 +19780,153 @@
       },
       {
         "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "quadruped-band-fire-hydrant",
+    "familyName": "Quadruped Band Fire Hydrant",
+    "movementActions": [
+      {
+        "actionID": "hip.abduction",
+        "name": "Hip abduction",
+        "plane": "frontal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "quadruped-fire-hydrants-with-band",
+    "name": "Quadruped Fire Hydrants with Band",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "isolation",
+    "trainingRole": "legs",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Banded Quadruped Fire Hydrant"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Kneel on all fours with a light-to-medium mini band immediately above both knees. Place the hands beneath the shoulders and the knees beneath the hips.",
+      "movement": "Keep one knee bent and lift that thigh out to the side against the band.",
+      "endpoint": "Stop the lateral lift when further travel would roll the pelvis or arch the low back.",
+      "returnPhase": "Lower the bent leg slowly beneath the hip while controlling band tension.",
+      "controlledJoints": "Keep the support knee and both hands planted, and hold the working knee bent throughout.",
+      "supportAndPosture": "Maintain a controlled trunk and pelvis while the working hip moves.",
+      "disqualifyingCompensations": [
+        "Straightening the working knee changes the band path and movement.",
+        "Rolling the pelvis to lift higher replaces the controlled hip action.",
+        "Moving the band to the feet changes the resistance fixture."
+      ],
+      "sideOrDirection": "Complete the set with one working leg, then repeat on the other side."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMed",
+        "role": "primary"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "quadruped-band-hip-knee-extension",
+    "familyName": "Quadruped Band Hip and Knee Extension",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
+    "catalogID": "quadruped-band-hip-extension",
+    "name": "Quadruped Hip Extension with Band",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Banded Quadruped Hip Extension",
+      "Mini-Band Quadruped Kickback"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Start on all fours with both knees bent beneath the hips and both hands on the floor. Loop a light-to-medium mini band around both feet.",
+      "movement": "Move one leg backward, extending its hip and knee against the band while pointing the toes toward the floor.",
+      "endpoint": "Reach a controlled backward leg extension while the pelvis remains square and the low back does not arch.",
+      "returnPhase": "Bend the working knee and hip to bring it back beneath the body under control.",
+      "controlledJoints": "Keep the support knee and both hands planted, and avoid twisting the pelvis or extending through the low back.",
+      "supportAndPosture": "Maintain trunk tension and distribute support across both hands and the grounded knee.",
+      "disqualifyingCompensations": [
+        "Reaching an opposite arm forward changes the task to a bird dog.",
+        "Arching the low back to lift the leg higher replaces hip extension with spinal motion.",
+        "Moving the band to the knees changes the resistance direction."
+      ],
+      "sideOrDirection": "Finish the set on one working leg, then repeat with the other leg."
+    },
+    "involvement": [
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
         "role": "stabilizer"
       },
       {
@@ -20505,6 +21076,135 @@
         "Touching or resetting the dumbbells on the floor leaves the continuous top-start fixture.",
         "Alternating the dumbbells changes the paired implementation.",
         "Bending the knees into a squat or rounding the spine changes the reviewed hinge."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "romanian-deadlift",
+    "familyName": "Romanian and Stiff-Leg Deadlift",
+    "movementActions": [
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "spine.flexion",
+        "name": "Spinal flexion",
+        "plane": "sagittal",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "single-kettlebell-romanian-deadlift",
+    "name": "Kettlebell RDL",
+    "group": "legs",
+    "defaultWeight": 24,
+    "defaultWeightKg": 12.5,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "kettlebell",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Kettlebell Romanian Deadlift",
+      "Single-Kettlebell RDL"
+    ],
+    "searchPriority": 95,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand with feet about shoulder-width apart and knees slightly bent. Hold one kettlebell by its handle between the legs.",
+      "movement": "Push the hips back while keeping the knees slightly bent and the kettlebell between the legs.",
+      "endpoint": "Stop at a comfortable hinge depth while keeping the trunk controlled and the bell between the legs.",
+      "returnPhase": "Drive through the feet and forcefully extend the hips to stand tall without arching the low back.",
+      "controlledJoints": "Keep knee bend approximately constant and the bell close to the body.",
+      "supportAndPosture": "Maintain a controlled trunk position and let the arms carry the bell without rowing it.",
+      "disqualifyingCompensations": [
+        "Using one leg as the sole stance leg changes this to a single-leg RDL.",
+        "Swinging the bell with momentum changes the hinge to a kettlebell swing.",
+        "Setting the bell down and resetting each repetition changes the continuous fixture."
       ]
     },
     "involvement": [

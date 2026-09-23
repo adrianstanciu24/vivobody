@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 161 |
-| Exercises | 343 |
+| Reviewed families | 165 |
+| Exercises | 350 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 382 |
+| Evidence sources | 383 |
 
 ## Family roster
 
@@ -38,6 +38,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [bilateral-squat](families/bilateral-squat.json) | 7 |
 | [bird-dog](families/bird-dog.json) | 1 |
 | [bodyweight-glute-bridge](families/bodyweight-glute-bridge.json) | 2 |
+| [bodyweight-single-leg-hip-thrust](families/bodyweight-single-leg-hip-thrust.json) | 1 |
 | [cable-pull-through](families/cable-pull-through.json) | 1 |
 | [chest-fly](families/chest-fly.json) | 4 |
 | [clean-and-jerk](families/clean-and-jerk.json) | 1 |
@@ -48,7 +49,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [diagonal-pull](families/diagonal-pull.json) | 1 |
 | [dip](families/dip.json) | 3 |
 | [dumbbell-weighted-supine-core-hold](families/dumbbell-weighted-supine-core-hold.json) | 1 |
-| [dynamic-lunge](families/dynamic-lunge.json) | 6 |
+| [dynamic-lunge](families/dynamic-lunge.json) | 7 |
 | [elbow-extension](families/elbow-extension.json) | 14 |
 | [elbow-flexion](families/elbow-flexion.json) | 14 |
 | [externally-rotating-face-pull](families/externally-rotating-face-pull.json) | 1 |
@@ -94,7 +95,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [landmine-rotation](families/landmine-rotation.json) | 1 |
 | [landmine-squat-to-press](families/landmine-squat-to-press.json) | 1 |
 | [landmine-squat](families/landmine-squat.json) | 1 |
-| [lateral-band-walk](families/lateral-band-walk.json) | 1 |
+| [lateral-band-walk](families/lateral-band-walk.json) | 2 |
 | [lateral-high-plank-walk](families/lateral-high-plank-walk.json) | 1 |
 | [lateral-lunge](families/lateral-lunge.json) | 2 |
 | [lateral-skater-hop-to-vertical-jump](families/lateral-skater-hop-to-vertical-jump.json) | 1 |
@@ -119,12 +120,15 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [pike-push-up](families/pike-push-up.json) | 1 |
 | [power-clean](families/power-clean.json) | 1 |
 | [power-snatch](families/power-snatch.json) | 1 |
+| [prisoner-box-squat-overhead-reach](families/prisoner-box-squat-overhead-reach.json) | 1 |
 | [prone-tyw-hold-sequence](families/prone-tyw-hold-sequence.json) | 1 |
 | [push-jerk](families/push-jerk.json) | 1 |
 | [push-press](families/push-press.json) | 2 |
+| [quadruped-band-fire-hydrant](families/quadruped-band-fire-hydrant.json) | 1 |
+| [quadruped-band-hip-knee-extension](families/quadruped-band-hip-knee-extension.json) | 1 |
 | [reverse-fly](families/reverse-fly.json) | 6 |
 | [roman-chair-hip-extension](families/roman-chair-hip-extension.json) | 1 |
-| [romanian-deadlift](families/romanian-deadlift.json) | 5 |
+| [romanian-deadlift](families/romanian-deadlift.json) | 6 |
 | [rotational-row](families/rotational-row.json) | 1 |
 | [russian-twist](families/russian-twist.json) | 1 |
 | [scapular-depression](families/scapular-depression.json) | 1 |

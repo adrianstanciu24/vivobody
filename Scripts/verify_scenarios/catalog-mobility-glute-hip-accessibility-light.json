@@ -1,0 +1,29 @@
+{
+  "name": "catalog-mobility-glute-hip-accessibility-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "Banded Side Walks"},
+    {"wait": {"labelRegex": "^Banded Side Walks, Band · Legs"}},
+    {"tap": {"labelRegex": "^Banded Side Walks, Band · Legs"}},
+    {"wait": {"label": "STRENGTH · REPS"}}
+  ],
+  "required": [
+    {"label": "Banded Side Walks"},
+    {"labelContains": "Muscles used by Banded Side Walks"}
+  ],
+  "forbidden": []
+}
