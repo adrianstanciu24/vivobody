@@ -33,7 +33,7 @@
     },
     {
       "tap": {
-        "label": "Save Workout",
+        "label": "Finish Early",
         "role": "AXButton"
       }
     },

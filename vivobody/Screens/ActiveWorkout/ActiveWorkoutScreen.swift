@@ -38,7 +38,7 @@ struct ActiveWorkoutScreen: View {
 
     /// Optional discard callback. When provided, the top-bar X button
     /// appears. Tapping it shows an end-workout alert; logged workouts
-    /// can be saved from there, while empty workouts only discard.
+    /// can be finished early, while empty workouts only discard.
     /// Distinct from `onDismiss`, which archives.
     private let onDiscard: (() -> Void)?
 
@@ -163,7 +163,7 @@ struct ActiveWorkoutScreen: View {
         }
         .alert(endWorkoutAlertTitle, isPresented: $showDiscardConfirm) {
             if session.totalSets > 0 {
-                Button("Save Workout") {
+                Button(session.isAllComplete ? "Finish Workout" : "Finish Early") {
                     Haptics.soft()
                     finishScrubbing(then: onDismiss)
                 }
@@ -180,7 +180,7 @@ struct ActiveWorkoutScreen: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             if session.totalSets > 0 {
-                Text("Save \(session.totalSets) logged set\(session.totalSets == 1 ? "" : "s") to History, or discard this workout.")
+                Text("Save \(session.totalSets) set\(session.totalSets == 1 ? "" : "s") to History. You can't resume it.")
             } else {
                 Text("This workout will be removed.")
             }
@@ -484,7 +484,8 @@ struct ActiveWorkoutScreen: View {
     }
 
     private var endWorkoutAlertTitle: String {
-        session.totalSets > 0 ? "End this workout?" : "Discard this workout?"
+        if session.totalSets == 0 { return "Discard this workout?" }
+        return session.isAllComplete ? "Finish workout?" : "Finish early?"
     }
 
     /// Empty drafts can only come from legacy restoration or an
