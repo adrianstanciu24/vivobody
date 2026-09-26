@@ -60,6 +60,7 @@ struct BreathingTimer: View {
 
     init(
         duration: TimeInterval,
+        totalDuration: TimeInterval? = nil,
         nextSetLabel: String? = nil,
         onComplete: @escaping () -> Void = {},
         onSkip: @escaping () -> Void = {},
@@ -74,9 +75,10 @@ struct BreathingTimer: View {
         self.onZero = onZero
         let now = Date()
         let end = now.addingTimeInterval(duration)
-        self._startTime = State(initialValue: now)
+        let total = max(duration, totalDuration ?? duration)
+        self._startTime = State(initialValue: now.addingTimeInterval(duration - total))
         self._endTime = State(initialValue: end)
-        self._totalDuration = State(initialValue: duration)
+        self._totalDuration = State(initialValue: total)
         self._secondsRemaining = State(initialValue: Int(duration.rounded(.up)))
     }
 
@@ -181,26 +183,18 @@ struct BreathingTimer: View {
         }
     }
 
-    /// The hero readout, LCD-style: the live time rendered over its
-    /// own unlit ghost segments. In the final 10 seconds the digits
+    /// The live time is an unobstructed readout. In the final 10 seconds the digits
     /// switch to Volt with a glow — the machine raising its voice —
     /// without a single glyph moving (panel discipline).
     private func timeHero(remaining: TimeInterval, breath: Double) -> some View {
         let urgent = !hasFinished && remaining > 0 && remaining <= 10
-        return ZStack(alignment: .leading) {
-            Text(SegmentDisplay.ghost(for: Self.timeString(remaining)))
-                .font(Typography.bigMetric)
-                .foregroundStyle(Ink.primary.opacity(0.06))
-                .monospacedDigit()
-                .accessibilityHidden(true)
-            DigitTicker(
-                value: remaining,
-                font: Typography.bigMetric,
-                color: urgent ? Tint.inProgress : Ink.primary,
-                formatter: { Self.timeString($0) }
-            )
-            .shadow(color: urgent ? Tint.inProgress.opacity(0.35) : .clear, radius: 14)
-        }
+        return DigitTicker(
+            value: remaining,
+            font: Typography.bigMetric,
+            color: urgent ? Tint.inProgress : Ink.primary,
+            formatter: { Self.timeString($0) }
+        )
+        .shadow(color: urgent ? Tint.inProgress.opacity(0.35) : .clear, radius: 14)
         .scaleEffect(reduceMotion ? 1.0 : breath, anchor: .leading)
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: breath)
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: urgent)

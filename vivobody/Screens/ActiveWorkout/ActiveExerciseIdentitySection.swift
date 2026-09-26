@@ -53,9 +53,36 @@ struct ActiveSetStatusSection: View {
     let input: ActiveExerciseIdentityInput
     let actions: ActiveSetIndicatorActions
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
+            : AnyLayout(HStackLayout(spacing: Space.lg))
+        layout {
+            if !input.sets.isEmpty {
+                Text(progressLabel)
+                    .font(Typography.sectionLabel)
+                    .monospacedDigit()
+                    .foregroundStyle(Ink.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .layoutPriority(1)
+            }
+            timeline
+        }
+    }
+
+    private var progressLabel: String {
+        if let current = input.sets.first(where: { $0.status == .current }) {
+            return "Set \(current.number) of \(input.sets.count)"
+        }
+        let completed = input.sets.count(where: { $0.status == .completed })
+        return "\(completed) of \(input.sets.count) complete"
+    }
+
+    private var timeline: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Space.md) {
+            HStack(spacing: Space.xs) {
                 ForEach(input.sets) { set in
                     indicator(set)
                 }
@@ -69,6 +96,7 @@ struct ActiveSetStatusSection: View {
     private func indicator(_ set: ActiveSetIndicatorInput) -> some View {
         let pipView = LEDLamp(
             state: lampState(for: set.status),
+            shape: .segment,
             reading: set.visibleReading
         )
         .frame(minWidth: 44, minHeight: 44)
@@ -134,7 +162,8 @@ struct ActiveExerciseConfigurationSection: View {
         HStack(alignment: .top, spacing: Space.lg) {
             VStack(alignment: .leading, spacing: Space.sm) {
                 Text(input.setLegend)
-                    .panelLegend()
+                    .panelLegendType()
+                    .foregroundStyle(Ink.secondary)
                     .accessibilityHidden(true)
                 setCountControls
             }
@@ -142,7 +171,8 @@ struct ActiveExerciseConfigurationSection: View {
             if let increment = input.weightIncrement {
                 VStack(alignment: .leading, spacing: Space.sm) {
                     Text("STEP")
-                        .panelLegend()
+                        .panelLegendType()
+                        .foregroundStyle(Ink.secondary)
                         .accessibilityHidden(true)
                     weightStepButton(increment)
                 }
@@ -171,7 +201,7 @@ struct ActiveExerciseConfigurationSection: View {
         Button(action: actions.addSet) {
             Image(systemName: "plus")
                 .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.tertiary)
+                .foregroundStyle(Ink.secondary)
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
         }
@@ -188,7 +218,7 @@ struct ActiveExerciseConfigurationSection: View {
             Image(systemName: "minus")
                 .font(Typography.sectionLabel)
                 .foregroundStyle(
-                    input.removableSetID == nil ? Ink.quaternary : Ink.tertiary
+                    input.removableSetID == nil ? Ink.quaternary : Ink.secondary
                 )
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())

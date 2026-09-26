@@ -180,6 +180,15 @@ and fills newly elapsed training days without duplicating its sessions.
 It takes precedence over `-debug` and the manual `--seed-*` flags. Previously
 seeded history remains additive if switching between fixtures.
 
+For App Store captures, `--ui-test-reset -years --app-store-demo` creates the
+same two-year archive and adjusts only its synthetic recent workouts and
+scheduled templates. Recent sessions include heavy sets, whole-number hard-set
+totals, and approximately 10% week-over-week volume change. This option requires
+the explicit reset flag; later captures preserve the store without resetting.
+`--ui-test-app-store-workout` adds a 185 lb × 8 bench-press session if there is
+no active workout; `--ui-test-app-store-rest` starts that fixture during a
+two-minute rest. Use `-settings.weightUnit lb` for a consistent capture set.
+
 ```bash
 RESET_STATE=0 LAUNCH_ARGS='-years' TAB=history READY_TIMEOUT=120 Scripts/verify.sh
 ```

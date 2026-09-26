@@ -28,6 +28,18 @@ struct ScrubGraduationRail: View {
             drawIndex(in: &context, size: size)
         }
         .frame(width: Self.width)
+        .mask {
+            LinearGradient(
+                stops: [
+                    .init(color: .clear, location: 0),
+                    .init(color: .black, location: 0.20),
+                    .init(color: .black, location: 0.80),
+                    .init(color: .clear, location: 1),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
         .padding(.vertical, 3)
         .opacity(visible ? 1 : 0)
         .animation(reduceMotion ? nil : .easeOut(duration: 0.16), value: visible)
@@ -49,20 +61,6 @@ struct ScrubGraduationRail: View {
                 ]),
                 startPoint: CGPoint(x: rect.minX, y: 0),
                 endPoint: CGPoint(x: rect.maxX, y: 0)
-            )
-        )
-        // End shading makes the graduations recede around a small cylinder.
-        roller.fill(
-            Path(rect),
-            with: .linearGradient(
-                Gradient(stops: [
-                    .init(color: Surface.background, location: 0),
-                    .init(color: Surface.background.opacity(0), location: 0.25),
-                    .init(color: Surface.background.opacity(0), location: 0.75),
-                    .init(color: Surface.background, location: 1),
-                ]),
-                startPoint: .zero,
-                endPoint: CGPoint(x: 0, y: size.height)
             )
         )
     }

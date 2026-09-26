@@ -229,19 +229,19 @@ extension MePresentation {
         )
         let lifetimeMetrics = [
             Metric(
-                value: "\(overview.totalWorkouts)",
+                value: overview.totalWorkouts.formatted(.number),
                 unit: nil,
                 label: overview.totalWorkouts == 1 ? "workout" : "workouts",
                 accent: false
             ),
             Metric(
-                value: "\(overview.totalSets)",
+                value: overview.totalSets.formatted(.number),
                 unit: nil,
                 label: overview.totalSets == 1 ? "set" : "sets",
                 accent: false
             ),
             Metric(
-                value: "\(recordCount)",
+                value: recordCount.formatted(.number),
                 unit: nil,
                 label: recordCount == 1 ? "PR" : "PRs",
                 accent: recordCount > 0

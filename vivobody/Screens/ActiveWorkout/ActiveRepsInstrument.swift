@@ -44,7 +44,8 @@ struct ActiveRepsInstrument: View {
                 || input.instrument.loadMode == .nonComparable
             {
                 Text(input.instrument.loadInputLabel)
-                    .panelLegend()
+                    .panelLegendType()
+                    .foregroundStyle(Ink.secondary)
             }
             resistanceAccessibleLoadControl {
                 BareScrubber(
@@ -56,7 +57,7 @@ struct ActiveRepsInstrument: View {
                     unit: input.instrument.loadUnit(for: weight),
                     unitFontSize: 18,
                     numberColor: Ink.primary,
-                    unitColor: Ink.tertiary,
+                    unitColor: Ink.secondary,
                     formatter: activeLoadFormatter,
                     accessibilityLabel: input.instrument.loadInputLabel,
                     showsScrubHint: input.instrument.isActivePage,
@@ -80,10 +81,12 @@ struct ActiveRepsInstrument: View {
         VStack(alignment: .leading, spacing: Space.sm) {
             HStack(alignment: .firstTextBaseline) {
                 Text("Bodyweight")
-                    .panelLegend()
+                    .panelLegendType()
+                    .foregroundStyle(Ink.secondary)
                 Spacer(minLength: Space.lg)
                 Text("Added load")
-                    .panelLegend()
+                    .panelLegendType()
+                    .foregroundStyle(Ink.secondary)
             }
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -97,7 +100,7 @@ struct ActiveRepsInstrument: View {
 
                 Text("+")
                     .font(Typography.statValue)
-                    .foregroundStyle(Ink.quaternary)
+                    .foregroundStyle(Ink.secondary)
                     .accessibilityHidden(true)
                 BareScrubber(
                     value: $weight,
@@ -108,7 +111,7 @@ struct ActiveRepsInstrument: View {
                     unit: input.instrument.unit.symbol,
                     unitFontSize: 13,
                     numberColor: Ink.secondary,
-                    unitColor: Ink.tertiary,
+                    unitColor: Ink.secondary,
                     accessibilityLabel: input.instrument.loadInputLabel,
                     showsScrubHint: input.instrument.isActivePage,
                     performsScrubNudge: input.instrument.isActivePage,
@@ -129,7 +132,8 @@ struct ActiveRepsInstrument: View {
     private var unloadedInstrument: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("REPS")
-                .panelLegend()
+                .panelLegendType()
+                .foregroundStyle(Ink.secondary)
                 .accessibilityHidden(true)
             BareScrubber(
                 value: $reps,
@@ -140,7 +144,7 @@ struct ActiveRepsInstrument: View {
                 unit: "reps",
                 unitFontSize: 18,
                 numberColor: Ink.primary,
-                unitColor: Ink.tertiary,
+                unitColor: Ink.secondary,
                 accessibilityLabel: "Reps",
                 showsScrubHint: input.instrument.isActivePage,
                 performsScrubNudge: input.instrument.isActivePage,
@@ -158,7 +162,7 @@ struct ActiveRepsInstrument: View {
         HStack(alignment: .center, spacing: Space.sm) {
             Text("×")
                 .font(Typography.statValue)
-                .foregroundStyle(Ink.quaternary)
+                .foregroundStyle(Ink.secondary)
                 .accessibilityHidden(true)
             BareScrubber(
                 value: $reps,
@@ -169,7 +173,7 @@ struct ActiveRepsInstrument: View {
                 unit: "reps",
                 unitFontSize: 14,
                 numberColor: Ink.primary.opacity(Opacity.strong),
-                unitColor: Ink.tertiary,
+                unitColor: Ink.secondary,
                 accessibilityLabel: "Reps",
                 showsScrubHint: input.instrument.isActivePage,
                 hitSlop: 18,
@@ -187,7 +191,8 @@ struct ActiveRepsInstrument: View {
         if completed.isUnloaded {
             VStack(alignment: .leading, spacing: Space.sm) {
                 Text("REPS")
-                    .panelLegend()
+                    .panelLegendType()
+                    .foregroundStyle(Ink.secondary)
                     .accessibilityHidden(true)
                 HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                     Text(completed.repsText)
@@ -198,7 +203,7 @@ struct ActiveRepsInstrument: View {
                         .minimumScaleFactor(0.35)
                     Text("reps")
                         .font(Typography.metricUnit)
-                        .foregroundStyle(Ink.tertiary)
+                        .foregroundStyle(Ink.secondary)
                 }
             }
             .accessibilityElement(children: .ignore)
@@ -214,7 +219,7 @@ struct ActiveRepsInstrument: View {
                 HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                     Text("×")
                         .font(Typography.statValue)
-                        .foregroundStyle(Ink.quaternary)
+                        .foregroundStyle(Ink.secondary)
                         .accessibilityHidden(true)
                     Text(completed.repsText)
                         .font(Typography.metricLg)
@@ -222,7 +227,7 @@ struct ActiveRepsInstrument: View {
                         .monospacedDigit()
                     Text("reps")
                         .font(Typography.metricUnit)
-                        .foregroundStyle(Ink.tertiary)
+                        .foregroundStyle(Ink.secondary)
                 }
             }
             .accessibilityElement(children: .combine)
@@ -255,7 +260,7 @@ struct ActiveRepsInstrument: View {
         if input.instrument.showsAssistanceDirection {
             Text("Less assistance = harder")
                 .font(Typography.caption)
-                .foregroundStyle(Ink.quaternary)
+                .foregroundStyle(Ink.secondary)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityIdentifier("assistanceDirectionHint")
         }

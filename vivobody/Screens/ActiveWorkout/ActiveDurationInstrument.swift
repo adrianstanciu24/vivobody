@@ -28,7 +28,8 @@ struct ActiveDurationInstrument: View {
     private var activeInstrument: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text(input.instrument.modality.durationLabel)
-                .panelLegend()
+                .panelLegendType()
+                .foregroundStyle(Ink.secondary)
             BareScrubber(
                 value: $duration,
                 range: DurationFormatter.scrubRange,
@@ -68,10 +69,12 @@ struct ActiveDurationInstrument: View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .firstTextBaseline) {
                 Text("Bodyweight")
-                    .panelLegend()
+                    .panelLegendType()
+                    .foregroundStyle(Ink.secondary)
                 Spacer(minLength: Space.lg)
                 Text("Added load")
-                    .panelLegend()
+                    .panelLegendType()
+                    .foregroundStyle(Ink.secondary)
             }
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text("BW")
@@ -82,7 +85,7 @@ struct ActiveDurationInstrument: View {
                 Spacer(minLength: Space.lg)
                 Text("+")
                     .font(Typography.statValue)
-                    .foregroundStyle(Ink.quaternary)
+                    .foregroundStyle(Ink.secondary)
                     .accessibilityHidden(true)
                 BareScrubber(
                     value: $weight,
@@ -93,7 +96,7 @@ struct ActiveDurationInstrument: View {
                     unit: input.instrument.unit.symbol,
                     unitFontSize: 13,
                     numberColor: Ink.secondary,
-                    unitColor: Ink.tertiary,
+                    unitColor: Ink.secondary,
                     accessibilityLabel: input.instrument.loadInputLabel,
                     showsScrubHint: input.instrument.isActivePage,
                     tickTone: .deep,
@@ -113,13 +116,14 @@ struct ActiveDurationInstrument: View {
                 || input.instrument.loadMode == .nonComparable
             {
                 Text(input.instrument.loadInputLabel)
-                    .panelLegend()
+                    .panelLegendType()
+                    .foregroundStyle(Ink.secondary)
             }
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 if input.instrument.loadMode != .nonComparable {
                     Text(input.instrument.loadMode.inputOperatorSymbol)
                         .font(Typography.statValue)
-                        .foregroundStyle(Ink.quaternary)
+                        .foregroundStyle(Ink.secondary)
                         .accessibilityHidden(true)
                 }
                 resistanceAccessibleLoadControl {
@@ -132,7 +136,7 @@ struct ActiveDurationInstrument: View {
                         unit: input.instrument.loadUnit(for: weight),
                         unitFontSize: 14,
                         numberColor: Ink.secondary,
-                        unitColor: Ink.tertiary,
+                        unitColor: Ink.secondary,
                         formatter: activeLoadFormatter,
                         accessibilityLabel: input.instrument.loadInputLabel,
                         showsScrubHint: input.instrument.isActivePage,
@@ -152,7 +156,8 @@ struct ActiveDurationInstrument: View {
     private func completedInstrument(_ completed: ActiveCompletedDurationInput) -> some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text(completed.durationLabel)
-                .panelLegend()
+                .panelLegendType()
+                .foregroundStyle(Ink.secondary)
             Text(completed.timeText)
                 .font(.system(size: 104, weight: .bold))
                 .foregroundStyle(Tint.complete)
@@ -198,7 +203,7 @@ struct ActiveDurationInstrument: View {
         if input.instrument.showsAssistanceDirection {
             Text("Less assistance = harder")
                 .font(Typography.caption)
-                .foregroundStyle(Ink.quaternary)
+                .foregroundStyle(Ink.secondary)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityIdentifier("assistanceDirectionHint")
         }

@@ -104,6 +104,12 @@ enum WeightFormatter {
     /// render the unit as a separate label.
     static func volumeValue(_ lb: Double, unit: WeightUnit) -> String {
         let display = toDisplay(lb, unit: unit)
+        if display >= 1_000_000 {
+            let millions = display / 1_000_000
+            return millions.truncatingRemainder(dividingBy: 1) == 0
+                ? "\(Int(millions))M"
+                : String(format: "%.1fM", millions)
+        }
         if display >= 10000 {
             let k = display / 1000
             return k.truncatingRemainder(dividingBy: 1) == 0

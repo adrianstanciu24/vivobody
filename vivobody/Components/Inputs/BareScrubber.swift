@@ -86,17 +86,6 @@ struct BareScrubber: View {
 
     var body: some View {
         heroLayout
-            .overlay(alignment: .trailing) {
-                if showsRail {
-                    ScrubGraduationRail(
-                        value: value,
-                        step: step,
-                        spacing: max(pointsPerStep, 7),
-                        visible: keepsRailVisible || isDragging || isCoasting,
-                        engaged: isDragging || isCoasting
-                    )
-                }
-            }
             .overlay(alignment: .top) {
                 if wallFlashEdge == .top { wallFlashLine }
             }
@@ -230,7 +219,15 @@ struct BareScrubber: View {
                     hintChevrons
                 }
                 .frame(
-                    maxWidth: max(1, proxy.size.width - reservedRailWidth),
+                    width: max(1, (keepsRailVisible
+                            ? min(proxy.size.width, liveSize.width * scale + reservedWidth)
+                            : proxy.size.width) - reservedRailWidth),
+                    alignment: fittedContentAlignment
+                )
+                .padding(.trailing, reservedRailWidth)
+                .overlay(alignment: .trailing) { graduationRail }
+                .frame(
+                    maxWidth: .infinity,
                     maxHeight: .infinity,
                     alignment: fittedContentAlignment
                 )
@@ -250,6 +247,22 @@ struct BareScrubber: View {
                 hintChevrons
             }
             .padding(.trailing, reservedRailWidth)
+            .overlay(alignment: .trailing) { graduationRail }
+        }
+    }
+
+    /// Persistent rails sit beside their readout; the outer layout retains
+    /// its full gesture target and its stable worst-case digit scale.
+    @ViewBuilder
+    private var graduationRail: some View {
+        if showsRail {
+            ScrubGraduationRail(
+                value: value,
+                step: step,
+                spacing: max(pointsPerStep, 7),
+                visible: keepsRailVisible || isDragging || isCoasting,
+                engaged: isDragging || isCoasting
+            )
         }
     }
 

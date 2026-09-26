@@ -85,14 +85,13 @@ struct SetCompleteButton: View {
             content
         }
         .frame(maxWidth: .infinity)
-        // Keep 96pt as the normal instrument height, but let this large
-        // target yield before compact controls when a two-line exercise
-        // name makes the fixed panel crowded. Accessibility sizes scroll,
-        // so they retain a 96pt minimum and may grow for wrapped text.
+        // A verb-only action stays generous without outweighing the working
+        // values. Numeric rows keep their taller footprint; enlarged action
+        // text can grow in the accessibility layout's scrolling viewport.
         .frame(
-            minHeight: dynamicTypeSize.isAccessibilitySize ? 96 : 72,
-            idealHeight: 96,
-            maxHeight: dynamicTypeSize.isAccessibilitySize ? .infinity : 96
+            minHeight: dynamicTypeSize.isAccessibilitySize || title == nil ? 96 : 64,
+            idealHeight: dynamicTypeSize.isAccessibilitySize ? nil : (title == nil ? 96 : 72),
+            maxHeight: dynamicTypeSize.isAccessibilitySize ? nil : (title == nil ? 96 : 72)
         )
         .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         .scaleEffect(pressScale)
@@ -139,11 +138,11 @@ struct SetCompleteButton: View {
             // The full accent bloom belongs to the completed state;
             // idle gets a quieter ember.
             .shadow(
-                color: isComplete ? accent.opacity(0.50) : liveAccent.opacity(0.20),
-                radius: isComplete ? 24 : 12,
+                color: isComplete ? accent.opacity(0.50) : liveAccent.opacity(0.12),
+                radius: isComplete ? 24 : 8,
                 y: isComplete ? 9 : 4
             )
-            .shadow(color: .black.opacity(0.50), radius: 8, y: 4)
+            .shadow(color: .black.opacity(isComplete ? 0.25 : 0.12), radius: 8, y: 4)
             .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.78), value: isComplete)
     }
 

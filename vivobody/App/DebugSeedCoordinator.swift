@@ -19,6 +19,10 @@ import VivoKit
             in context: ModelContext
         ) {
             for step in steps {
+                if step == .appStoreWorkout || step == .appStoreRest {
+                    DebugAppStoreSeeder.seedWorkout(resting: step == .appStoreRest, in: context)
+                    continue
+                }
                 if step == .templateStartingLoads {
                     DebugTemplateLoadsSeeder.seed(in: context)
                     continue
@@ -46,9 +50,12 @@ import VivoKit
             in context: ModelContext
         ) {
             switch fixture {
-            case .years:
+            case .years, .yearsForAppStore:
                 DebugTrainingSeeder.seedTemplates(in: context)
                 DebugYearsSeeder.seed(in: context)
+                if fixture == .yearsForAppStore {
+                    DebugAppStoreSeeder.prepareHistory(in: context)
+                }
             case .training:
                 DebugTrainingSeeder.seed(in: context)
             case .history:

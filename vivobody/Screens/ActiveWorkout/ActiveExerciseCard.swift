@@ -4,11 +4,11 @@
 //
 //  One page in the SwipePager — an exercise instrument built to be
 //  read from arm's length in half a second. Identity, progress, and
-//  adjustable working-set controls stay full-bleed on black.
+//  adjustable working-set controls share an open, adaptive instrument field.
 //
 //  First-principles layout (top → bottom):
 //    • Exercise name (the page's identity).
-//    • Set segments — done / active / pending lamps, glanceable at a
+//    • Set position plus done / active / pending lamps, glanceable at a
 //      flick and never mistakable for the pager's page dots. The
 //      newest completed lamp stretches into a readout capsule
 //      carrying its "60 × 8" (tap any lit lamp to edit, long-press
@@ -16,17 +16,16 @@
 //      merged into one strip.
 //    • Configuration, the working weight/reps hero, and effort share
 //      one aligned field, separated by quiet hairlines rather than a
-//      container. The numbers remain the interface, with no chip.
-//    • The single biggest target on screen: a full-width verb
-//      button — "Complete set" / "Finish exercise" — wearing a dim
-//      volt tint so the live action is the panel's loudest surface.
+//      container. Soft focus behind the working values gives them depth;
+//      persistent rails sit directly beside each readout.
+//    • A compact full-width verb button — "Complete set" / "Finish
+//      exercise" — keeps the action clear without outweighing the values.
 //      A flexible middle stage centers the available controls between
 //      the fixed identity and thumb-reachable primary action, so an
 //      omitted capability rebalances space instead of leaving a hole.
 //
-//  Two accents, per the product principles: Volt for in-progress
-//  (the live action), gold for complete (a finished set, exercise,
-//  or PR). They never read alike.
+//  Progress uses outline versus fill as well as the shared accent, so
+//  pending, current, and completed sets do not depend on hue alone.
 //
 //  The card owns instrument presentation and tap-time scrub flushing. Set
 //  completion crosses a typed coordinator boundary; analytics, persistence,
@@ -135,7 +134,7 @@ struct ActiveExerciseCard: View {
             nameRow
                 .powerOn(0, animated: isActive)
             setPips
-                .padding(.top, Space.md)
+                .padding(.top, Space.sm)
                 .powerOn(1, animated: isActive)
 
             instrumentArea(expandsVertically: expandsVertically)

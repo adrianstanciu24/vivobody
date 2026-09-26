@@ -60,28 +60,41 @@ extension ActiveExerciseCard {
             )
 
             SectionDivider()
-                .padding(.vertical, Space.lg)
+                .padding(.vertical, Space.sm)
 
-            switch cardInput.metric {
-            case .empty:
-                ActiveExerciseEmptyInstrument()
-            case let .reps(input):
-                ActiveRepsInstrument(
-                    input: input,
-                    weight: weightDisplayBinding,
-                    reps: repsBinding,
-                    onScrubEnded: activeScrubDidEnd,
-                    adjustResistance: adjustResistance
-                )
-            case let .duration(input):
-                ActiveDurationInstrument(
-                    input: input,
-                    weight: weightDisplayBinding,
-                    duration: durationBinding,
-                    onScrubEnded: activeScrubDidEnd,
-                    adjustResistance: adjustResistance
-                )
-            }
+            metricInstrument
+                .background {
+                    Ellipse()
+                        .fill(Tint.primary.opacity(0.10))
+                        .padding(.horizontal, Space.xl)
+                        .blur(radius: Space.xxl)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
+        }
+    }
+
+    @ViewBuilder
+    private var metricInstrument: some View {
+        switch cardInput.metric {
+        case .empty:
+            ActiveExerciseEmptyInstrument()
+        case let .reps(input):
+            ActiveRepsInstrument(
+                input: input,
+                weight: weightDisplayBinding,
+                reps: repsBinding,
+                onScrubEnded: activeScrubDidEnd,
+                adjustResistance: adjustResistance
+            )
+        case let .duration(input):
+            ActiveDurationInstrument(
+                input: input,
+                weight: weightDisplayBinding,
+                duration: durationBinding,
+                onScrubEnded: activeScrubDidEnd,
+                adjustResistance: adjustResistance
+            )
         }
     }
 
@@ -92,7 +105,7 @@ extension ActiveExerciseCard {
 
             if showsRIRControl {
                 SectionDivider()
-                    .padding(.vertical, Space.xl)
+                    .padding(.vertical, Space.md)
                 ActiveExerciseEffortSection(
                     input: cardInput.effortAction,
                     rir: rirBinding
@@ -101,7 +114,7 @@ extension ActiveExerciseCard {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, Space.lg)
+        .padding(.vertical, Space.md)
         .frame(
             maxWidth: .infinity,
             maxHeight: expandsVertically ? .infinity : nil,

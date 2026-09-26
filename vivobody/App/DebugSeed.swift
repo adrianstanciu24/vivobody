@@ -59,6 +59,8 @@ import Foundation
         case weeklyVolume
         case forearmDevelopment
         case tflDevelopment
+        case appStoreWorkout
+        case appStoreRest
     }
 
     enum DebugManualFixture: Equatable {
@@ -68,6 +70,7 @@ import Foundation
         case templates
         case training
         case years
+        case yearsForAppStore
     }
 
     /// Converts launch arguments into immutable intent only. Callers decide
@@ -111,6 +114,8 @@ import Foundation
         private static func initialActiveSteps(in arguments: Set<String>) -> [DebugLaunchStep] {
             [
                 substitutionStep(in: arguments),
+                requested(.appStoreWorkout, by: "--ui-test-app-store-workout", in: arguments),
+                requested(.appStoreRest, by: "--ui-test-app-store-rest", in: arguments),
                 requested(.activeAssistance, by: "--ui-test-active-assistance", in: arguments),
                 requested(.completionRestoration, by: "--ui-test-completion-restoration", in: arguments),
                 requested(.skipActiveRest, by: "--ui-test-skip-active-rest", in: arguments),
@@ -191,6 +196,11 @@ import Foundation
         }
 
         private static func manualFixture(in arguments: Set<String>) -> DebugManualFixture? {
+            if arguments.contains("-years"), arguments.contains("--app-store-demo"),
+               arguments.contains("--ui-test-reset")
+            {
+                return .yearsForAppStore
+            }
             let requests: [(String, DebugManualFixture)] = [
                 ("-years", .years),
                 ("-debug", .training),

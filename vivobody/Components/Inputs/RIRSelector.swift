@@ -39,10 +39,11 @@ struct RIRSelector: View {
         VStack(alignment: .leading, spacing: Space.sm) {
             HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
                 Text("RIR")
-                    .panelLegend()
+                    .panelLegendType()
+                    .foregroundStyle(Ink.secondary)
                 Text(caption)
                     .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
+                    .foregroundStyle(Ink.secondary)
             }
 
             StepSelector(

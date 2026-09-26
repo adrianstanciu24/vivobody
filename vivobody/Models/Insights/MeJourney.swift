@@ -346,15 +346,6 @@ enum JourneyMilestones {
         unit: WeightUnit
     ) -> Milestone {
         let thresholds: [Double] = [100_000, 500_000, 1_000_000, 5_000_000]
-        /// Compact display unit-aware: "100k", "1M", "5M".
-        func compact(_ lb: Double) -> String {
-            let display = WeightFormatter.toDisplay(lb, unit: unit)
-            if display >= 1_000_000 {
-                let m = display / 1_000_000
-                return m.truncatingRemainder(dividingBy: 1) == 0 ? "\(Int(m))M" : String(format: "%.1fM", m)
-            }
-            return WeightFormatter.volumeValue(lb, unit: unit)
-        }
         guard tonnage.availability != .unavailable else {
             return Milestone(
                 icon: "scalemass.fill",
@@ -371,8 +362,8 @@ enum JourneyMilestones {
             return Milestone(
                 icon: "scalemass.fill",
                 legend: tonnage.availability == .partial ? "Known volume" : "Volume",
-                valueLabel: compact(volume) + valueSuffix,
-                targetLabel: "\(compact(next)) \(unit.symbol)",
+                valueLabel: WeightFormatter.volumeValue(volume, unit: unit) + valueSuffix,
+                targetLabel: "\(WeightFormatter.volumeValue(next, unit: unit)) \(unit.symbol)",
                 targetProgress: Swift.min(1, Swift.max(0, volume / next)),
                 achieved: false
             )
@@ -380,7 +371,7 @@ enum JourneyMilestones {
         return Milestone(
             icon: "scalemass.fill",
             legend: tonnage.availability == .partial ? "Known volume" : "Volume",
-            valueLabel: compact(volume) + valueSuffix,
+            valueLabel: WeightFormatter.volumeValue(volume, unit: unit) + valueSuffix,
             targetLabel: nil,
             targetProgress: 1,
             achieved: true

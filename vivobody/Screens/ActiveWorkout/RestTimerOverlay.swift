@@ -39,6 +39,7 @@ struct RestTimerOverlay: View {
 
             BreathingTimer(
                 duration: max(1, session.restRemaining),
+                totalDuration: session.restDuration,
                 nextSetLabel: nextSetLabel,
                 onComplete: {
                     session.skipRest()
