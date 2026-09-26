@@ -65,6 +65,7 @@ struct ActiveRepsInstrument: View {
                     tickTone: .deep,
                     hitSlop: 12,
                     showsRail: true,
+                    keepsRailVisible: true,
                     cancellationID: input.instrument.scrubCancellationID,
                     onScrubEnded: onScrubEnded
                 )
@@ -111,8 +112,11 @@ struct ActiveRepsInstrument: View {
                     accessibilityLabel: input.instrument.loadInputLabel,
                     showsScrubHint: input.instrument.isActivePage,
                     performsScrubNudge: input.instrument.isActivePage,
+                    fitsWidth: true,
                     tickTone: .deep,
                     hitSlop: 18,
+                    showsRail: true,
+                    keepsRailVisible: true,
                     cancellationID: input.instrument.scrubCancellationID,
                     onScrubEnded: onScrubEnded
                 )
@@ -143,6 +147,7 @@ struct ActiveRepsInstrument: View {
                 fitsWidth: true,
                 hitSlop: 12,
                 showsRail: true,
+                keepsRailVisible: true,
                 cancellationID: input.instrument.scrubCancellationID,
                 onScrubEnded: onScrubEnded
             )
@@ -169,7 +174,7 @@ struct ActiveRepsInstrument: View {
                 showsScrubHint: input.instrument.isActivePage,
                 hitSlop: 18,
                 showsRail: true,
-                railClearance: 26,
+                keepsRailVisible: true,
                 cancellationID: input.instrument.scrubCancellationID,
                 onScrubEnded: onScrubEnded
             )

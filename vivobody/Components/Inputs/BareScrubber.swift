@@ -35,11 +35,11 @@ struct BareScrubber: View {
     var tickTone: Haptics.TickTone = .standard
     /// Extra hit-test reach beyond the glyphs; zero on dense editor rows.
     var hitSlop: CGFloat = 0
-    /// Shows the transient graduation rail on full-width hero scrubbers.
+    /// Shows the graduation rail beside the value.
     var showsRail: Bool = false
-    /// Keeps the rail visible when a surface uses it as a first-use affordance.
+    /// Keeps the rail visible as an enduring invitation to scrub.
     var keepsRailVisible: Bool = false
-    /// Rail space for non-full-width layouts; ignored by full-width heroes.
+    /// Optional extra clearance beyond the rail's standard reserved lane.
     var railClearance: CGFloat = 0
     /// Invalidates motion before completion, archive, and discard transitions.
     var cancellationID: Int = 0
@@ -92,7 +92,8 @@ struct BareScrubber: View {
                         value: value,
                         step: step,
                         spacing: max(pointsPerStep, 7),
-                        visible: keepsRailVisible || isDragging || isCoasting
+                        visible: keepsRailVisible || isDragging || isCoasting,
+                        engaged: isDragging || isCoasting
                     )
                 }
             }
@@ -191,7 +192,7 @@ struct BareScrubber: View {
 
     @ViewBuilder
     private var hintChevrons: some View {
-        if showsScrubHint, !hasScrubbed {
+        if showsScrubHint, !hasScrubbed, !keepsRailVisible {
             ScrubHintChevrons()
                 .transition(.opacity)
         }
@@ -207,10 +208,15 @@ struct BareScrubber: View {
         if fitsWidth {
             let liveSize = rowSize(for: formattedValue)
             let templateSize = rowSize(for: templateFormat(range.upperBound))
+            let hintWidth: CGFloat = (showsScrubHint && !hasScrubbed && !keepsRailVisible) ? (Space.sm + 16) : 0
+            let reservedWidth = reservedRailWidth + hintWidth
+            let font = UIFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .bold)
+            let baselineOffset = font.ascender - font.lineHeight / 2
             GeometryReader { proxy in
-                let scale = fitScale(
+                let scale = Self.fitScale(
                     availableWidth: proxy.size.width,
-                    templateWidth: templateSize.width
+                    templateWidth: templateSize.width,
+                    reservedWidth: reservedWidth
                 )
                 HStack(alignment: .center, spacing: Space.sm) {
                     numberUnitRow
@@ -224,31 +230,46 @@ struct BareScrubber: View {
                     hintChevrons
                 }
                 .frame(
-                    maxWidth: .infinity,
+                    maxWidth: max(1, proxy.size.width - reservedRailWidth),
                     maxHeight: .infinity,
                     alignment: fittedContentAlignment
                 )
             }
             .frame(height: max(fontSize, templateSize.height))
+            .alignmentGuide(.lastTextBaseline) { dimensions in
+                let scale = Self.fitScale(
+                    availableWidth: dimensions.width,
+                    templateWidth: templateSize.width,
+                    reservedWidth: reservedWidth
+                )
+                return dimensions.height / 2 + baselineOffset * scale
+            }
         } else {
             HStack(alignment: .center, spacing: Space.sm) {
                 numberUnitRow
                 hintChevrons
             }
-            .padding(.trailing, railClearance)
+            .padding(.trailing, reservedRailWidth)
         }
     }
 
     /// Uniform shrink factor (≤ 1) that fits the worst-case number row
     /// into the offered width, reserving a little room for the
-    /// chevrons while the first-use hint is showing. Constant during a
+    /// rail and any first-use chevrons. Constant during a
     /// scrub because it depends on the range, not the live value.
-    private func fitScale(availableWidth: CGFloat, templateWidth: CGFloat) -> CGFloat {
+    private nonisolated static func fitScale(
+        availableWidth: CGFloat,
+        templateWidth: CGFloat,
+        reservedWidth: CGFloat
+    ) -> CGFloat {
         guard templateWidth > 0, availableWidth > 0 else { return 1 }
-        let reserve: CGFloat = (showsScrubHint && !hasScrubbed) ? (Space.sm + 16) : 0
-        let target = max(1, availableWidth - reserve)
+        let target = max(1, availableWidth - reservedWidth)
         guard templateWidth > target else { return 1 }
         return target / templateWidth
+    }
+
+    private var reservedRailWidth: CGFloat {
+        showsRail ? max(railClearance, ScrubGraduationRail.width + Space.sm) : railClearance
     }
 
     private var fittedContentAlignment: Alignment {

@@ -2,7 +2,8 @@
 //  BareScrubberGallery.swift
 //  vivobody
 //
-//  Interactive regression gallery for hero fitting, hint, and rail visuals.
+//  Interactive load and reps examples for persistent rail visibility,
+//  compact graduation density, and long-value clearance in both appearances.
 //
 
 #if DEBUG
@@ -10,38 +11,57 @@
     import VivoKit
 
     struct BareScrubberGallery: View {
-        @State private var weight = 192.5
+        @State private var weight = 185.5
+        @State private var reps = 11.0
 
         var body: some View {
             VStack(alignment: .leading, spacing: Space.lg) {
                 BareScrubber(
                     value: $weight,
                     range: 0 ... 275,
-                    step: 2.5,
+                    step: 0.5,
                     pointsPerStep: 8,
                     fontSize: 104,
                     unit: "kg",
                     unitFontSize: 18,
                     accessibilityLabel: "Weight",
-                    showsScrubHint: true,
                     fitsWidth: true,
-                    showsRail: true
+                    showsRail: true,
+                    keepsRailVisible: true
                 )
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.orange.opacity(0.35))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 60)
+                HStack(spacing: Space.sm) {
+                    Text("×")
+                        .font(Typography.statValue)
+                        .foregroundStyle(Ink.quaternary)
+                        .accessibilityHidden(true)
+                    BareScrubber(
+                        value: $reps,
+                        range: 1 ... 30,
+                        pointsPerStep: 16,
+                        fontSize: 46,
+                        unit: "reps",
+                        unitFontSize: 14,
+                        accessibilityLabel: "Reps",
+                        showsRail: true,
+                        keepsRailVisible: true
+                    )
+                    Spacer(minLength: 0)
+                }
             }
-            .padding(.horizontal, 20)
-            .frame(width: 334)
-            .border(Color.red.opacity(0.5))
+            .padding(.horizontal, Space.gutter)
+            .frame(maxWidth: 374)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.ignoresSafeArea())
+            .background(Surface.background.ignoresSafeArea())
         }
     }
 
-    #Preview("Bare Scrubber") {
+    #Preview("Scrubber · Dark") {
         BareScrubberGallery()
             .preferredColorScheme(.dark)
+    }
+
+    #Preview("Scrubber · Light") {
+        BareScrubberGallery()
+            .preferredColorScheme(.light)
     }
 #endif

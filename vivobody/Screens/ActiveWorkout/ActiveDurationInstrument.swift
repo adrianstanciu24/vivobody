@@ -43,6 +43,7 @@ struct ActiveDurationInstrument: View {
                 fitsWidth: true,
                 hitSlop: 12,
                 showsRail: true,
+                keepsRailVisible: true,
                 cancellationID: input.instrument.scrubCancellationID,
                 onScrubEnded: onScrubEnded
             )
@@ -97,6 +98,8 @@ struct ActiveDurationInstrument: View {
                     showsScrubHint: input.instrument.isActivePage,
                     tickTone: .deep,
                     hitSlop: 18,
+                    showsRail: true,
+                    keepsRailVisible: true,
                     cancellationID: input.instrument.scrubCancellationID,
                     onScrubEnded: onScrubEnded
                 )
@@ -135,6 +138,8 @@ struct ActiveDurationInstrument: View {
                         showsScrubHint: input.instrument.isActivePage,
                         tickTone: .deep,
                         hitSlop: 18,
+                        showsRail: true,
+                        keepsRailVisible: true,
                         cancellationID: input.instrument.scrubCancellationID,
                         onScrubEnded: onScrubEnded
                     )
