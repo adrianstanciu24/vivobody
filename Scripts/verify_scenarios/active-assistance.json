@@ -46,6 +46,10 @@
       "valueContains": "8"
     },
     {
+      "label": "Reps left in the tank",
+      "role": "AXSlider"
+    },
+    {
       "identifier": "completeSetButton",
       "role": "AXButton",
       "enabled": true

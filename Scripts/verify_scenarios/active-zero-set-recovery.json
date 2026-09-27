@@ -39,7 +39,7 @@
             "visible": true
           },
           {
-            "label": "Reps in reserve",
+            "label": "Reps left in the tank",
             "role": "AXSlider",
             "visible": true
           }
@@ -112,7 +112,7 @@
       "visible": true
     },
     {
-      "label": "Reps in reserve",
+      "label": "Reps left in the tank",
       "role": "AXSlider",
       "visible": true
     }

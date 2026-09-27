@@ -351,7 +351,8 @@ struct OnboardingScreen: View {
         PrimaryActionButton(
             title: "Start",
             icon: "arrow.right",
-            inputLabels: ["Start", "Begin", "Get Started"]
+            inputLabels: ["Start", "Begin", "Get Started"],
+            sound: .finale
         ) {
             saveAndStart()
         }

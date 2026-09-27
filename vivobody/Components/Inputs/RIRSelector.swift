@@ -7,9 +7,8 @@
 //  many left in the tank); 0…5 is the usable RIR range, beyond which
 //  the self-estimate is noise. Reuses the app's standard StepSelector
 //  pill so it reads like every other "pick one of a small set" control
-//  (weight step, units). A caption names the effort in plain language
-//  ("left in the tank") while the pill owns the number, so the scale
-//  never needs explaining and nothing reads twice.
+//  (weight step, units). A plain-language label names what the pill's
+//  selected number measures without requiring the RIR abbreviation.
 //
 
 import SwiftUI
@@ -24,7 +23,7 @@ struct RIRSelector: View {
     /// is open-ended ("5+") because RIR above 5 is indistinguishable
     /// from failure-distance standpoint — 5 and 10 reps in the tank
     /// both just mean "well short of failure." Single source of truth
-    /// so the pill, caption, and "Last …" echo all read alike.
+    /// so the pill and "Last …" echo read alike.
     static func displayLabel(_ value: Int) -> String {
         value >= 5 ? "5+" : "\(value)"
     }
@@ -38,10 +37,10 @@ struct RIRSelector: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                Text("RIR")
+                Text("Reps")
                     .panelLegendType()
                     .foregroundStyle(Ink.secondary)
-                Text(caption)
+                Text("left in the tank")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.secondary)
             }
@@ -61,28 +60,18 @@ struct RIRSelector: View {
         .fixedSize(horizontal: false, vertical: true)
         .accessibilityRepresentation {
             Slider(value: accessibilitySliderBinding, in: 0 ... 5, step: 1) {
-                Text("Reps in reserve")
+                Text("Reps left in the tank")
             }
             .accessibilityValue(accessibilityValue)
             .accessibilityHint("Swipe up or down to change")
         }
     }
 
-    /// The effort in words, without restating the number — the
-    /// selected chip already says "2", the caption says what it means.
-    private var caption: String {
-        switch value {
-        case 0: "to failure"
-        case 5: "well short of failure"
-        default: "left in the tank"
-        }
-    }
-
     private var accessibilityValue: String {
         switch value {
         case 0: "0, to failure"
-        case 5: "5 or more reps in reserve"
-        default: "\(value) reps in reserve"
+        case 5: "5 or more reps left in the tank"
+        default: "\(value) reps left in the tank"
         }
     }
 
