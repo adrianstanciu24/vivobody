@@ -263,6 +263,46 @@ struct CatalogSyncTests {
         #expect(savedWorkoutExercise.catalogID == "barbell-bench-press")
     }
 
+    @Test func retiredGoodMorningKeepsExistingPlansAndHistoryDistinct() throws {
+        let context = try makeContext()
+        let testDefaults = try makeDefaults()
+        defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
+
+        let retiredID = "barbell-good-morning-25-percent-body-mass"
+        let retiredName = "25% Body-Mass Barbell Good Morning"
+        let retired = ExerciseCatalogItem(
+            catalogID: retiredID,
+            familyID: "hip-hinge",
+            name: retiredName,
+            group: .legs,
+            defaultWeight: 45
+        )
+        let templateExercise = TemplateExercise(from: retired, sortOrder: 0)
+        let workoutExercise = Exercise(from: retired, sortOrder: 0)
+        context.insert(retired)
+        context.insert(WorkoutTemplate(name: "Hinge Day", exercises: [templateExercise]))
+        context.insert(WorkoutSession(exercises: [workoutExercise]))
+        try context.saveOrRollback()
+
+        let result = try reconcile(in: context, defaults: testDefaults.defaults)
+        let catalog = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
+        let savedTemplate = try #require(
+            try context.fetch(FetchDescriptor<TemplateExercise>()).first
+        )
+        let savedWorkout = try #require(
+            try context.fetch(FetchDescriptor<Exercise>()).first
+        )
+
+        #expect(result.removedItemIDs == [retired.id])
+        #expect(!catalog.contains { $0.catalogID == retiredID })
+        #expect(catalog.contains { $0.catalogID == "barbell-good-morning" })
+        #expect(savedTemplate.catalogID == retiredID)
+        #expect(savedTemplate.name == retiredName)
+        #expect(savedWorkout.catalogID == retiredID)
+        #expect(savedWorkout.name == retiredName)
+        #expect(Exercise(from: savedTemplate).catalogID == retiredID)
+    }
+
     @Test func failedReconciliationRollsBackCanonicalEditsDeletesAndInserts() throws {
         let context = try makeContext()
         let testDefaults = try makeDefaults()

@@ -2,10 +2,11 @@
 
 Successor note: the deadlift deferrals in this historical review are
 superseded by [the deadlift activation record](deadlift-activation.md). This
-document retains the original Batch-5 decision history; its good-morning and
-hip-thrust/bridge outcomes remain active.
+document retains the original Batch-5 decision history. The exact
+25-percent-body-mass good morning was later retired; the active hinge roster
+contains the separate program-loaded high-bar good morning.
 
-Status: final. `hip-hinge` is active with one barbell good morning, and
+Status: historical decision record. `hip-hinge` is active with one program-loaded barbell good morning, and
 `hip-thrust-bridge` is active with one barbell hip thrust plus one barbell
 glute bridge. The hinge activation follows Schellenberg et al.'s directly
 measured good-morning fixture; it does not revive the rejected static-knee
@@ -14,8 +15,9 @@ these names.
 
 A later everyday-coverage review retained that exact 25-percent-body-mass
 record and added a separate high-bar barbell good morning with program-selected
-external load. Its broader stance, tempo, range, and load-variable knee-motion
-values are source-bounded rather than aliases for the original test fixture.
+external load. A subsequent catalog revision retired the study fixture.
+Its historical stance, tempo, range, and load prescription are not aliases
+for the active program-loaded movement.
 
 ## Outcome
 

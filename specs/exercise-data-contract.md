@@ -15,7 +15,11 @@ supplemental `--family` inputs are never emitted.
 
 - `catalogID` is a stable, unique, lowercase identifier for one canonical
   movement. It does not change when display copy changes and is independent of
-  SwiftData's installation-local model UUID.
+  SwiftData's installation-local model UUID. A retired bundled ID is never
+  reassigned to another movement. Launch reconciliation removes its Library
+  entry, while existing template and workout snapshots retain the original
+  ID, name, and performance semantics. The retired 25%-body-mass good morning
+  remains distinct from the program-loaded `barbell-good-morning`.
 - Bundled exercise history uses `catalogID`. Custom catalog items use their
   persistent item UUID plus the complete normalized performance signature:
   semantic kind, modality, tracking mode, load mode, and bodyweight fraction

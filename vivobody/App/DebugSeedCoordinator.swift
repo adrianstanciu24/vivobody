@@ -19,22 +19,7 @@ import VivoKit
             in context: ModelContext
         ) {
             for step in steps {
-                if step == .appStoreWorkout || step == .appStoreRest {
-                    DebugAppStoreSeeder.seedWorkout(resting: step == .appStoreRest, in: context)
-                    continue
-                }
-                if step == .templateStartingLoads {
-                    DebugTemplateLoadsSeeder.seed(in: context)
-                    continue
-                }
-                if step == .forearmDevelopment {
-                    DebugForearmDevelopmentSeeder.seed(in: context)
-                    continue
-                }
-                if step == .tflDevelopment {
-                    DebugYearsSeeder.seedTFLVerification(in: context)
-                    continue
-                }
+                if seedSpecialFixture(step, in: context) { continue }
                 if DebugActiveWorkoutSeeder.handleCore(step, in: context) { continue }
                 if DebugActiveWorkoutSeeder.handleInstrument(step, in: context) { continue }
                 if DebugArchivedHistorySeeder.handle(step, in: context) { continue }
@@ -43,6 +28,24 @@ import VivoKit
                 if handleWidgetRequest(step) { continue }
                 assertionFailure("Unhandled debug launch step: \(step)")
             }
+        }
+
+        private static func seedSpecialFixture(
+            _ step: DebugLaunchStep,
+            in context: ModelContext
+        ) -> Bool {
+            if step == .appStoreWorkout || step == .appStoreRest {
+                DebugAppStoreSeeder.seedWorkout(resting: step == .appStoreRest, in: context)
+            } else if step == .templateStartingLoads {
+                DebugTemplateLoadsSeeder.seed(in: context)
+            } else if step == .forearmDevelopment {
+                DebugForearmDevelopmentSeeder.seed(in: context)
+            } else if step == .tflDevelopment {
+                DebugYearsSeeder.seedTFLVerification(in: context)
+            } else {
+                return false
+            }
+            return true
         }
 
         static func seedManualFixture(

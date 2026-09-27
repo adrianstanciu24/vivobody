@@ -7,6 +7,7 @@
 //
 
 import Testing
+import VivoKitSnapshotCore
 @testable import vivobody
 
 struct SettingsInteractionPolicyTests {

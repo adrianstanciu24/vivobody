@@ -372,6 +372,9 @@ and discloses load-dependent extra knee excursion as an observed limitation
 rather than promoting knee extension. Romanian, stiff-leg, conventional,
 sumo, trap-bar, deficit, floor-pull, and supported-back-extension variants
 remain outside the contract.
+The exact 25-percent-body-mass record was subsequently retired. The active
+roster contains only the program-loaded high-bar good morning; saved snapshots
+retain the retired record's identity.
 
 The later [deadlift activation](proposals/deadlift-activation.md) preserves
 that boundary and adds two separate owners rather than broadening

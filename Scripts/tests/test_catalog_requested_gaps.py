@@ -142,7 +142,11 @@ class RequestedCatalogGapTests(unittest.TestCase):
 
     def test_existing_runtime_records_are_preserved(self):
         families = [catalog.load_json(p) for p in catalog.FAMILIES_ROOT.glob("*.json")]
-        records = [r for r in catalog.compile_runtime_catalog(families)
+        compiled = catalog.compile_runtime_catalog(families)
+        compiled_ids = {record["catalogID"] for record in compiled}
+        self.assertIn("barbell-good-morning", compiled_ids)
+        self.assertNotIn("barbell-good-morning-25-percent-body-mass", compiled_ids)
+        records = [r for r in compiled
                    if r["catalogID"] not in (
                        set(OWNERS) | SECOND_WAVE_RECORD_IDS
                        | TRX_SUSPENSION_RECORD_IDS | MEDICINE_BALL_RECORD_IDS
@@ -172,13 +176,13 @@ class RequestedCatalogGapTests(unittest.TestCase):
                            "partner-resisted-straight-punch-hold",
                        }
                    )]
-        self.assertEqual(len(records), 259)
+        self.assertEqual(len(records), 258)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()
-        # Reviewed runtime after the unqualified Landmine Press alias moved from
-        # the single-arm record to the new two-hand record. New batch records are
-        # excluded above; source-only support metadata may change independently.
+        # Reviewed runtime after copy updates and retirement of the distinct
+        # 25%-body-mass good-morning fixture. New batch records are excluded
+        # above; source-only support metadata may change independently.
         self.assertEqual(hashlib.sha256(encoded).hexdigest(),
-                         "9a853e5e4468e88fcbab06b8c05d369199177fe0d8eb75bf7819ca51bd6c31ee")
+                         "b7a36d64d8c5e998fb600782456a09a8217acc9ee93a2f34d888ada1e05fe5d6")
 
     def test_unloaded_splits_do_not_credit_an_implement_hold(self):
         for catalog_id in ("bodyweight-split-squat", "bodyweight-bulgarian-split-squat"):

@@ -71,10 +71,10 @@ spine motion as nonstandardized rather than inventing position-held claims.
 Batch 5 and its initial deadlift follow-up added thirteen exercises across
 `bilateral-squat`, `hip-thrust-bridge`, `split-stance-squat`, `step-up`,
 `hip-hinge`, `dynamic-lunge`, `conventional-deadlift`, and
-`romanian-deadlift`. The original nine records remain the reviewed squat,
-thrust/bridge, split-squat, step-up, good-morning, and dynamic-lunge fixtures.
-That roster still includes the exact 25-percent-body-mass barbell good morning,
-and a later review added a separate everyday high-bar strength record with
+`romanian-deadlift`. The original roster included an exact
+25-percent-body-mass barbell good morning. That study fixture is retired from
+the bundled Library; saved template and workout snapshots retain its identity.
+The active `hip-hinge` roster has one high-bar barbell good morning with
 program-selected external load and source-bounded stance, tempo, and knee-motion
 semantics.
 The follow-up adds one conventional barbell deadlift plus distinct Romanian,

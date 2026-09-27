@@ -545,7 +545,7 @@
       "disqualifyingCompensations": [
         "Bending and extending the knees changes the ankle-only movement.",
         "Bouncing or swinging the dumbbells propels the load.",
-        "Lifting one heel first changes the simultaneous bilateral fixture."
+        "Lifting one heel first changes the movement; raise both heels together."
       ]
     },
     "involvement": [
@@ -613,7 +613,7 @@
     "execution": {
       "startingPosition": "Sit in a leg press suitable for calf raises with your back supported and both forefeet secure on the platform edge, heels free. Extend your knees without forcing them backward. Compare the entered load only on this machine.",
       "movement": "Press through both forefeet together to move the platform away by extending your ankles.",
-      "endpoint": "Finish at your highest controlled plantarflexion without changing your knee angle.",
+      "endpoint": "Finish at your highest controlled heel rise without changing your knee angle.",
       "returnPhase": "Return through a comfortable ankle range under control while both forefeet stay securely supported.",
       "controlledJoints": "Keep the knees extended and the hips, pelvis, and back steady.",
       "supportAndPosture": "Keep your back and pelvis against the machine pads; follow its safety-stop instructions.",
@@ -1126,7 +1126,7 @@
       "startingPosition": "Set a cable pulley at chest height beside you. Hold one handle in both hands at your chest.",
       "movement": "Press your hands forward without turning your torso or hips.",
       "endpoint": "Pause with your arms extended, then bring the handle back to your chest under control.",
-      "returnPhase": "Retract the handle to your chest under control without turning toward the pulley.",
+      "returnPhase": "Bring the handle back to your chest under control without turning toward the pulley.",
       "controlledJoints": "Keep your wrists steady and your back upright.",
       "supportAndPosture": "Stand side-on with parallel feet about hip-width apart and knees slightly bent.",
       "disqualifyingCompensations": [

@@ -2775,6 +2775,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 COMPREHENSIVE_EXPANSION_RECORD_IDS
                 | DEFAULT_CATALOG_GAP_RECORD_IDS
                 | DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS
+                | UPPER_BODY_ADDITION_RECORD_IDS
             )
         }
         self.assertEqual(actual, expected)
@@ -2976,8 +2977,8 @@ class CatalogFoundationTests(unittest.TestCase):
                             f"fails muscle requirement {requirement_index}",
                         )
                     demotion_count += 1
-        self.assertEqual(removal_count, 116)
-        self.assertEqual(demotion_count, 42)
+        self.assertEqual(removal_count, 102)
+        self.assertEqual(demotion_count, 39)
 
     def test_late_lower_body_stability_providers_are_exact(self) -> None:
         expected = {
@@ -3313,7 +3314,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             ),
                         )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 291)
+        self.assertEqual(mutation_count, 267)
 
     def test_matching_rule_requires_explicit_additional_stability_demand(self) -> None:
         family = self.family_copy()
@@ -7076,7 +7077,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            351,
+            350,
         )
 
     def test_plyometric_fixtures_keep_distinct_family_boundaries(self) -> None:
@@ -7380,6 +7381,9 @@ class CatalogFoundationTests(unittest.TestCase):
                             )
                         else:
                             self.delete_rule_field(exercise, assertion["field"])
+                        if not self.rule_matches_exercise(rule, exercise):
+                            self.assertEqual(assertion["field"], rule["when"]["field"])
+                            continue
                         with self.assertRaisesRegex(
                             catalog.ValidationFailure,
                             expected_message,
@@ -8272,6 +8276,9 @@ class CatalogFoundationTests(unittest.TestCase):
                         rule=rule["id"],
                         assertion=assertion["field"],
                     ):
+                        if not self.rule_matches_exercise(rule, mutated):
+                            self.assertEqual(assertion["field"], rule["when"]["field"])
+                            continue
                         with self.assertRaisesRegex(
                             catalog.ValidationFailure,
                             expected_message,
@@ -8370,7 +8377,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         )
                     mutation_count += 1
 
-        self.assertEqual(mutation_count, 509)
+        self.assertEqual(mutation_count, 779)
 
     def test_conditioned_rotation_cannot_be_broadened_per_exercise(
         self,
@@ -12937,7 +12944,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "walking or alternating lunges",
             normalized_lunge,
         )
-        self.assertIn("| [hip-hinge](families/hip-hinge.json) | 2 |", self.catalog_inventory)
+        self.assertIn("| [hip-hinge](families/hip-hinge.json) | 1 |", self.catalog_inventory)
         self.assertIn("| [dynamic-lunge](families/dynamic-lunge.json) | 7 |", self.catalog_inventory)
         self.assertIn(
             "Later review activated both the good-morning hinge owner and the "
@@ -12945,7 +12952,7 @@ class CatalogFoundationTests(unittest.TestCase):
             normalized_roadmap,
         )
         self.assertIn(
-            "the exact 25-percent-body-mass barbell good morning",
+            "The active `hip-hinge` roster has one high-bar barbell good morning",
             normalized_readme,
         )
 
@@ -16148,6 +16155,10 @@ class CatalogFoundationTests(unittest.TestCase):
             "conventional-barbell-deadlift", "bodyweight-forward-lunge",
             "bodyweight-reverse-lunge", "two-dumbbell-forward-lunge",
             "two-dumbbell-reverse-lunge",
+            "trx-squat", "bodyweight-split-squat",
+            "bodyweight-bulgarian-split-squat", "goblet-split-squat",
+            "trx-reverse-lunge", "goblet-reverse-lunge",
+            "foot-anchored-band-reverse-lunge",
         }
         families = [f for f in self.real_families if f["id"] in {
             "bilateral-squat", "split-stance-squat", "ankle-plantarflexion",
@@ -16161,6 +16172,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 if exercise["catalogID"] in expected:
                     self.assertEqual(roles["tibialisAnterior"], "stabilizer")
                     actual.add(exercise["catalogID"])
+                elif exercise["catalogID"] == "standing-dumbbell-calf-raise":
+                    self.assertEqual(exercise["equipment"], "dumbbell")
+                    self.assertNotIn("tibialisAnterior", roles)
                 else:
                     self.assertEqual(exercise["equipment"], "machine")
                     self.assertNotIn("tibialisAnterior", roles)
@@ -18861,7 +18875,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 351 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 350 |", self.catalog_inventory)
         self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
@@ -20004,7 +20018,7 @@ class CatalogFoundationTests(unittest.TestCase):
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
         self.assertEqual(len(self.real_families), 166)
-        self.assertEqual(len(records), 351)
+        self.assertEqual(len(records), 350)
         self.assertEqual(len(self.foundation.evidence_ids), 383)
         self.assertEqual(
             {
@@ -20355,7 +20369,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 351 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 350 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -21507,7 +21521,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "single-cable-handle-remains-unilateral",
                 "unreported-cable-interface-remains-unilateral",
                 "dumbbell-handle-remains-unilateral",
-                "rope-pins-bilateral-neutral-pushdown",
+                "rope-pins-bilateral-neutral-cable-fixtures",
                 "straight-cable-bar-pins-bilateral-pushdown",
             },
             "split-stance-squat": {
@@ -23299,7 +23313,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 351 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 350 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
@@ -23308,7 +23322,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 351)
+        self.assertEqual(len(records), 350)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
@@ -23756,7 +23770,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 351)
+            self.assertEqual(len(emitted), 350)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -24413,7 +24427,7 @@ class CatalogFoundationTests(unittest.TestCase):
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
         self.assertEqual(len(self.real_families), 166)
-        self.assertEqual(len(runtime), 351)
+        self.assertEqual(len(runtime), 350)
         self.assertEqual(len(self.foundation.evidence_ids), 383)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
