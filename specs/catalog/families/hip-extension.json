@@ -462,8 +462,8 @@
     },
     {
       "catalogID": "supported-cable-ankle-cuff-hip-extension",
-      "name": "Supported Cable Ankle-Cuff Hip Extension",
-      "aliases": ["Standing Cable Hip Extension", "Cable Glute Kickback"],
+      "name": "Standing Cable Hip Extension",
+      "aliases": ["Cable Glute Kickback", "Supported Cable Ankle-Cuff Hip Extension"],
       "equipment": "cable",
       "laterality": "unilateral",
       "modality": "dynamicStrength",

@@ -360,10 +360,10 @@
   "exercises": [
     {
       "catalogID": "bodyweight-active-straight-leg-raise",
-      "name": "Bodyweight Active Straight-Leg Raise",
+      "name": "Active Straight-Leg Raise",
       "aliases": [
-        "Active Straight-Leg Raise",
-        "Supine Straight-Leg Raise"
+        "Supine Straight-Leg Raise",
+        "Bodyweight Active Straight-Leg Raise"
       ],
       "equipment": "bodyweight",
       "laterality": "unilateral",
@@ -437,11 +437,11 @@
     },
     {
       "catalogID": "supported-standing-cable-hip-flexion",
-      "name": "Supported Standing Cable Hip Flexion",
+      "name": "Standing Cable Hip Flexion",
       "aliases": [
-        "Standing Cable Hip Flexion",
         "Straight-Leg Cable Hip Flexion",
-        "Cable Hip Flexor Raise"
+        "Cable Hip Flexor Raise",
+        "Supported Standing Cable Hip Flexion"
       ],
       "equipment": "cable",
       "laterality": "unilateral",

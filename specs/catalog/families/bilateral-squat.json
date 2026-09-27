@@ -1100,8 +1100,14 @@
     },
     {
       "catalogID": "bodyweight-floor-squat-100-degrees",
-      "name": "100° Two-Leg Bodyweight Floor Squat",
-      "aliases": ["Bodyweight Squat", "Air Squat", "100-Degree Bodyweight Floor Squat"],
+      "name": "Bodyweight Squat",
+      "aliases": [
+        "Air Squat",
+        "100-Degree Bodyweight Floor Squat",
+        "100° Two-Leg Bodyweight Floor Squat",
+        "Bodyweight Squat (100°)",
+        "Bodyweight Squat (100° Knee Bend)"
+      ],
       "equipment": "bodyweight",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

@@ -43,8 +43,8 @@
   "exercises": [
     {
       "catalogID": "45-degree-roman-chair-back-extension",
-      "name": "45° Roman-Chair Back Extension",
-      "aliases": ["45° Back Extension", "45-Degree Back Extension", "Roman-Chair Hyperextension"],
+      "name": "Roman-Chair Back Extension",
+      "aliases": ["45° Back Extension", "45-Degree Back Extension", "Roman-Chair Hyperextension", "45° Roman-Chair Back Extension"],
       "equipment": "other",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

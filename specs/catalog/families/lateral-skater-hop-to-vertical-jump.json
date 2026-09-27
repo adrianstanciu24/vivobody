@@ -197,9 +197,9 @@
   "exercises": [
     {
       "catalogID": "ice-skaters-with-jump",
-      "name": "Ice Skaters with Jump",
+      "name": "Skater Hop to Vertical Jump",
       "aliases": [
-        "Skater Hop to Vertical Jump"
+        "Ice Skaters with Jump"
       ],
       "equipment": "bodyweight",
       "laterality": "unilateral",

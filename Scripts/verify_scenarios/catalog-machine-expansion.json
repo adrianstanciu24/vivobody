@@ -19,7 +19,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Seated Handled Lever-Machine Chest Fly,"
+          "labelRegex": "^Seated Machine Chest Fly \\(Handles\\),"
         },
         "direction": "up",
         "maxSwipes": 8
@@ -27,7 +27,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^Seated Handled Lever-Machine Chest Fly,"
+        "labelRegex": "^Seated Machine Chest Fly \\(Handles\\),"
       }
     },
     {
@@ -38,13 +38,13 @@
   ],
   "required": [
     {
-      "label": "Seated Handled Lever-Machine Chest Fly"
+      "label": "Seated Machine Chest Fly (Handles)"
     },
     {
       "label": "STRENGTH · REPS"
     },
     {
-      "labelContains": "Muscles used by Seated Handled Lever-Machine Chest Fly"
+      "labelContains": "Muscles used by Seated Machine Chest Fly (Handles)"
     }
   ],
   "forbidden": []

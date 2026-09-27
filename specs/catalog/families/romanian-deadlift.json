@@ -934,9 +934,10 @@
   "exercises": [
     {
       "catalogID": "barbell-romanian-deadlift",
-      "name": "Floor-Touch Barbell Romanian Deadlift",
+      "name": "Barbell RDL (Floor Touch)",
       "aliases": [
-        "Floor-Touch Romanian Deadlift"
+        "Floor-Touch Romanian Deadlift",
+        "Floor-Touch Barbell Romanian Deadlift"
       ],
       "equipment": "barbell",
       "laterality": "bilateral",
@@ -1205,11 +1206,14 @@
     },
     {
       "catalogID": "barbell-romanian-deadlift-15-cm-step",
-      "name": "15 cm Step Barbell Romanian Deadlift",
+      "name": "Barbell Deficit RDL",
       "aliases": [
         "15 cm Step Romanian Deadlift",
         "15 cm Deficit Romanian Deadlift",
-        "Step RDL"
+        "Step RDL",
+        "15 cm Step Barbell Romanian Deadlift",
+        "Barbell RDL (15 cm Step)",
+        "Barbell Deficit RDL (15 cm)"
       ],
       "equipment": "barbell",
       "laterality": "bilateral",
@@ -1343,11 +1347,12 @@
     },
     {
       "catalogID": "continuous-top-start-barbell-romanian-deadlift",
-      "name": "Continuous Top-Start Barbell Romanian Deadlift",
+      "name": "Barbell RDL (Continuous)",
       "aliases": [
         "Barbell Romanian Deadlift",
         "Romanian Deadlift",
-        "RDL"
+        "RDL",
+        "Continuous Top-Start Barbell Romanian Deadlift"
       ],
       "equipment": "barbell",
       "laterality": "bilateral",
@@ -1482,11 +1487,12 @@
     },
     {
       "catalogID": "two-dumbbell-continuous-romanian-deadlift",
-      "name": "Two-Dumbbell Continuous Romanian Deadlift",
+      "name": "Two-Dumbbell RDL (Continuous)",
       "aliases": [
         "Two-Dumbbell Romanian Deadlift",
         "Dumbbell Romanian Deadlift",
-        "Dumbbell RDL"
+        "Dumbbell RDL",
+        "Two-Dumbbell Continuous Romanian Deadlift"
       ],
       "equipment": "dumbbell",
       "laterality": "bilateral",

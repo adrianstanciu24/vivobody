@@ -334,10 +334,10 @@
   "exercises": [
     {
       "catalogID": "partner-supported-copenhagen-adduction",
-      "name": "Partner-Supported Copenhagen Adduction",
+      "name": "Partner Copenhagen Adduction",
       "aliases": [
-        "Partner Copenhagen Adduction",
-        "Dynamic Partner Copenhagen"
+        "Dynamic Partner Copenhagen",
+        "Partner-Supported Copenhagen Adduction"
       ],
       "equipment": "bodyweight",
       "laterality": "unilateral",

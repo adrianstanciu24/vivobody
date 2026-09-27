@@ -42,8 +42,8 @@
   "recommended": {"defaultReps": {"minimum": 8, "maximum": 20}},
   "exercises": [{
     "catalogID": "alternating-high-plank-shoulder-tap",
-    "name": "Alternating High-Plank Shoulder Tap",
-    "aliases": ["Plank Row", "High-Plank Shoulder Tap", "Plank Shoulder Tap"],
+    "name": "High-Plank Shoulder Tap",
+    "aliases": ["Plank Row", "Plank Shoulder Tap", "Alternating High-Plank Shoulder Tap"],
     "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 16, "searchPriority": 95,
     "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
     "variant": {"startSupport": "bilateralPalmsAndToes", "tapSupport": "singlePalmAndBothFeet", "footSpacing": "hipWidthOrWiderForControl", "handTarget": "oppositeShoulder", "trunkMotion": "heldAgainstExtensionAndRotation", "limbSequence": "alternatingOneAtATime", "repetitionCounting": "eachTouchAndReturn", "fixedPath": false},

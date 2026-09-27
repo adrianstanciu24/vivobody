@@ -51,8 +51,8 @@
   "exercises": [
     {
       "catalogID": "crossover-to-medicine-ball-rotational-throw",
-      "name": "Crossover to Medicine Ball Rotational Throw",
-      "aliases": ["Carioca to Med Ball Throw", "Carioca Medicine Ball Throw", "Crossover to MB Rotational Throw"],
+      "name": "Crossover Rotational Medicine Ball Throw",
+      "aliases": ["Carioca to Med Ball Throw", "Carioca Medicine Ball Throw", "Crossover to MB Rotational Throw", "Crossover to Medicine Ball Rotational Throw"],
       "equipment": "medicineBall", "laterality": "unilateral", "modality": "power", "trackingMode": "reps", "loadMode": "nonComparable",
       "bodyweightFraction": 0, "defaultWeight": 10, "defaultWeightKg": 5, "reps": 4, "searchPriority": 89,
       "involvement": [

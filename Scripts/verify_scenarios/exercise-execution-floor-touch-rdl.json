@@ -9,7 +9,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Floor-Touch Barbell Romanian Deadlift,"
+          "labelRegex": "^Barbell RDL \\(Floor Touch\\),"
         },
         "direction": "up",
         "maxSwipes": 24
@@ -17,7 +17,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^Floor-Touch Barbell Romanian Deadlift,"
+        "labelRegex": "^Barbell RDL \\(Floor Touch\\),"
       }
     },
     {

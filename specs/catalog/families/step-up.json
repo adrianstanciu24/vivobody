@@ -476,9 +476,11 @@
   "exercises": [
     {
       "catalogID": "bodyweight-forward-step-up-21cm",
-      "name": "21 cm Bodyweight Forward Step-Up",
+      "name": "Bodyweight Forward Step-Up",
       "aliases": [
-        "21 cm Forward Step-Up"
+        "21 cm Forward Step-Up",
+        "21 cm Bodyweight Forward Step-Up",
+        "Bodyweight Step-Up (21 cm)"
       ],
       "equipment": "bodyweight",
       "laterality": "unilateral",

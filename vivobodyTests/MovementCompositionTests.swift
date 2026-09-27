@@ -63,7 +63,7 @@ struct MovementCompositionTests {
     @Test func countsCompoundAndIsolationSets() {
         // These are canonical names in the bundled family catalog.
         let bench = lift("Barbell Bench Press", .chest, [(8, true), (8, true)])
-        let curl = lift("Seated Unilateral Machine Leg Curl", .legs, [(12, true), (12, true), (12, true)])
+        let curl = lift("Seated Single-Leg Curl", .legs, [(12, true), (12, true), (12, true)])
         let split = [session(daysAgo: 1, [bench, curl])].compoundIsolationSplit(now: now)
         #expect(split.compoundSets == 2)
         #expect(split.isolationSets == 3)
@@ -124,7 +124,7 @@ struct MovementCompositionTests {
 
     @Test func ignoresFutureSessions() {
         let recent = session(daysAgo: 1, [lift("Barbell Bench Press", .chest, [(8, true)])])
-        let future = session(daysAgo: -1, [lift("Seated Unilateral Machine Leg Curl", .legs, [(12, true)])])
+        let future = session(daysAgo: -1, [lift("Seated Single-Leg Curl", .legs, [(12, true)])])
         let split = [recent, future].compoundIsolationSplit(now: now)
 
         #expect(split.compoundSets == 1)
@@ -151,7 +151,7 @@ struct MovementCompositionTests {
 
     @Test func dominantTieResolvesTowardCompound() {
         let bench = lift("Barbell Bench Press", .chest, [(8, true)])                    // compound, 1
-        let curl = lift("Seated Unilateral Machine Leg Curl", .legs, [(12, true)])      // isolation, 1
+        let curl = lift("Seated Single-Leg Curl", .legs, [(12, true)])      // isolation, 1
         let split = [session(daysAgo: 1, [bench, curl])].compoundIsolationSplit(now: now)
         #expect(split.compoundSets == 1)
         #expect(split.isolationSets == 1)
@@ -160,7 +160,7 @@ struct MovementCompositionTests {
 
     @Test func sharesComputedOverClassifiedTotalOnly() {
         let bench = lift("Barbell Bench Press", .chest, [(8, true), (8, true)])          // compound, 2
-        let curl = lift("Seated Unilateral Machine Leg Curl", .legs, [(12, true)])       // isolation, 1
+        let curl = lift("Seated Single-Leg Curl", .legs, [(12, true)])       // isolation, 1
         let custom = lift("My Weird Lift", .chest, [(8, true), (8, true), (8, true)]) // unclassified, 3
         let split = [session(daysAgo: 1, [bench, curl, custom])].compoundIsolationSplit(now: now)
         #expect(split.classifiedTotal == 3)

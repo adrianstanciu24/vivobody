@@ -429,10 +429,10 @@
   "exercises": [
     {
       "catalogID": "seated-unilateral-machine-leg-curl",
-      "name": "Seated Unilateral Machine Leg Curl",
+      "name": "Seated Single-Leg Curl",
       "aliases": [
-        "Seated Single-Leg Curl",
-        "Unilateral Seated Leg Curl"
+        "Unilateral Seated Leg Curl",
+        "Seated Unilateral Machine Leg Curl"
       ],
       "equipment": "machine",
       "laterality": "unilateral",
@@ -507,10 +507,11 @@
     },
     {
       "catalogID": "prone-unilateral-machine-leg-curl",
-      "name": "Prone Unilateral Machine Leg Curl",
+      "name": "Prone Single-Leg Machine Curl",
       "aliases": [
         "Lying Single-Leg Curl",
-        "Unilateral Prone Leg Curl"
+        "Unilateral Prone Leg Curl",
+        "Prone Unilateral Machine Leg Curl"
       ],
       "equipment": "machine",
       "laterality": "unilateral",
@@ -585,8 +586,8 @@
     },
     {
       "catalogID": "johnson-sl160-bilateral-seated-leg-curl",
-      "name": "Johnson SL160 Bilateral Seated Leg Curl",
-      "aliases": ["Bilateral Seated Leg Curl", "Seated Leg Curl"],
+      "name": "Seated Leg Curl",
+      "aliases": ["Bilateral Seated Leg Curl", "Johnson SL160 Bilateral Seated Leg Curl"],
       "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
       "bodyweightFraction": 0, "defaultWeight": 40, "defaultWeightKg": 20, "reps": 10, "searchPriority": 91,
       "involvement": [

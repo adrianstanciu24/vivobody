@@ -395,10 +395,11 @@
   "exercises": [
     {
       "catalogID": "seated-45-degree-cable-pulldown",
-      "name": "Seated 45-Degree Cable Pulldown",
+      "name": "Seated Diagonal Cable Pulldown",
       "aliases": [
         "45-Degree Lat Pulldown",
-        "Diagonal Cable Pulldown"
+        "Diagonal Cable Pulldown",
+        "Seated 45-Degree Cable Pulldown"
       ],
       "equipment": "cable",
       "laterality": "bilateral",

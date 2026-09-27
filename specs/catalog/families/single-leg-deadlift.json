@@ -1244,10 +1244,11 @@
     },
     {
       "catalogID": "dumbbell-single-leg-romanian-deadlift-ipsilateral-load",
-      "name": "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift",
+      "name": "Same-Side Dumbbell Single-Leg RDL",
       "aliases": [
         "Same-Side-Load Dumbbell Single-Leg Romanian Deadlift",
-        "Ipsilateral Dumbbell Single-Leg RDL"
+        "Ipsilateral Dumbbell Single-Leg RDL",
+        "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift"
       ],
       "equipment": "dumbbell",
       "laterality": "unilateral",
@@ -1393,10 +1394,11 @@
     },
     {
       "catalogID": "dumbbell-single-leg-romanian-deadlift-contralateral-load",
-      "name": "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift",
+      "name": "Opposite-Side Dumbbell Single-Leg RDL",
       "aliases": [
         "Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift",
-        "Contralateral Dumbbell Single-Leg RDL"
+        "Contralateral Dumbbell Single-Leg RDL",
+        "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift"
       ],
       "equipment": "dumbbell",
       "laterality": "unilateral",

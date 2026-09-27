@@ -449,10 +449,10 @@
   "exercises": [
     {
       "catalogID": "reclined-unilateral-machine-leg-extension",
-      "name": "Reclined Unilateral Machine Leg Extension",
+      "name": "Reclined Single-Leg Extension",
       "aliases": [
         "40-Degree Single-Leg Extension",
-        "Reclined Single-Leg Extension"
+        "Reclined Unilateral Machine Leg Extension"
       ],
       "equipment": "machine",
       "laterality": "unilateral",
@@ -518,10 +518,10 @@
     },
     {
       "catalogID": "upright-unilateral-machine-leg-extension",
-      "name": "Upright Unilateral Machine Leg Extension",
+      "name": "Upright Single-Leg Extension",
       "aliases": [
         "90-Degree Single-Leg Extension",
-        "Upright Single-Leg Extension"
+        "Upright Unilateral Machine Leg Extension"
       ],
       "equipment": "machine",
       "laterality": "unilateral",
@@ -586,11 +586,12 @@
     },
     {
       "catalogID": "upright-bilateral-lever-machine-leg-extension",
-      "name": "Upright Bilateral Lever-Machine Leg Extension",
+      "name": "Upright Machine Leg Extension",
       "aliases": [
         "Bilateral Machine Leg Extension",
         "Machine Leg Extension",
-        "Leg Extension"
+        "Leg Extension",
+        "Upright Bilateral Lever-Machine Leg Extension"
       ],
       "equipment": "machine",
       "laterality": "bilateral",

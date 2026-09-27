@@ -13,7 +13,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Contralateral-Load Dumbbell Single-Leg Romanian Deadlift,.*Dumbbell"
+          "labelRegex": "^Opposite-Side Dumbbell Single-Leg RDL,.*Dumbbell"
         },
         "direction": "up",
         "maxSwipes": 24
@@ -23,14 +23,14 @@
       "assert": {
         "required": [
           {
-            "labelRegex": "^Contralateral-Load Dumbbell Single-Leg Romanian Deadlift,.*Dumbbell"
+            "labelRegex": "^Opposite-Side Dumbbell Single-Leg RDL,.*Dumbbell"
           }
         ]
       }
     },
     {
       "tap": {
-        "labelRegex": "^Contralateral-Load Dumbbell Single-Leg Romanian Deadlift,.*Dumbbell"
+        "labelRegex": "^Opposite-Side Dumbbell Single-Leg RDL,.*Dumbbell"
       }
     },
     {
@@ -43,10 +43,10 @@
       "assert": {
         "required": [
           {
-            "label": "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift"
+            "label": "Opposite-Side Dumbbell Single-Leg RDL"
           },
           {
-            "labelContains": "Muscles used by Contralateral-Load Dumbbell Single-Leg Romanian Deadlift"
+            "labelContains": "Muscles used by Opposite-Side Dumbbell Single-Leg RDL"
           },
           {
             "label": "Movement",

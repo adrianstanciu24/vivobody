@@ -144,8 +144,8 @@
   "exercises": [
     {
       "catalogID": "bodyweight-supine-glute-bridge-90-degrees",
-      "name": "90° Bodyweight Supine Glute Bridge",
-      "aliases": ["Bodyweight Glute Bridge", "Floor Glute Bridge", "90-Degree Bodyweight Supine Glute Bridge"],
+      "name": "Bodyweight Glute Bridge",
+      "aliases": ["Floor Glute Bridge", "90-Degree Bodyweight Supine Glute Bridge", "90° Bodyweight Supine Glute Bridge"],
       "equipment": "bodyweight",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

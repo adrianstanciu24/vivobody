@@ -7,8 +7,8 @@
   },
   "steps": [
     {"wait": {"label": "Exercises", "value": "Selected"}},
-    {"scrollTo": {"selector": {"labelRegex": "^Bodyweight Active Straight-Leg Raise,"}, "direction": "up", "maxSwipes": 50}},
-    {"tap": {"labelRegex": "^Bodyweight Active Straight-Leg Raise,"}},
+    {"scrollTo": {"selector": {"labelRegex": "^Active Straight-Leg Raise,"}, "direction": "up", "maxSwipes": 50}},
+    {"tap": {"labelRegex": "^Active Straight-Leg Raise,"}},
     {"wait": {"label": "STRENGTH · REPS"}},
     {"scrollTo": {"selector": {"labelRegex": "^Secondary, (?=.*TFL)(?=.*Rectus Femoris)"}, "direction": "up", "maxSwipes": 8}}
   ],

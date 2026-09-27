@@ -13,7 +13,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | Measure | Count |
 |---|---:|
 | Reviewed families | 166 |
-| Exercises | 351 |
+| Exercises | 350 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
@@ -75,7 +75,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hip-extension](families/hip-extension.json) | 3 |
 | [hip-external-rotation](families/hip-external-rotation.json) | 1 |
 | [hip-flexion](families/hip-flexion.json) | 2 |
-| [hip-hinge](families/hip-hinge.json) | 2 |
+| [hip-hinge](families/hip-hinge.json) | 1 |
 | [hip-internal-rotation](families/hip-internal-rotation.json) | 1 |
 | [hip-thrust-bridge](families/hip-thrust-bridge.json) | 2 |
 | [hollow-hold](families/hollow-hold.json) | 1 |

@@ -30,12 +30,12 @@ class MobilityGluteHipCatalogTests(unittest.TestCase):
 
     def test_all_seven_named_records_compile_with_distinct_identities(self):
         expected = {
-            "foot-anchored-band-reverse-lunge": "Reverse Lunge with Band",
+            "foot-anchored-band-reverse-lunge": "Foot-Anchored Band Reverse Lunge",
             "quadruped-band-hip-extension": "Quadruped Hip Extension with Band",
-            "quadruped-fire-hydrants-with-band": "Quadruped Fire Hydrants with Band",
+            "quadruped-fire-hydrants-with-band": "Banded Fire Hydrant",
             "single-kettlebell-romanian-deadlift": "Kettlebell RDL",
-            "above-knee-band-side-walk": "Banded Side Walks",
-            "bodyweight-single-leg-hip-thrust": "Single-Leg Hip Thrusts",
+            "above-knee-band-side-walk": "Above-Knee Band Lateral Walk",
+            "bodyweight-single-leg-hip-thrust": "Single-Leg Hip Thrust",
             "bodyweight-prisoner-box-squat-overhead-reach": "Prisoner Squat with Overhead Reach",
         }
         records = json.loads((SCRIPTS_ROOT.parent / "vivobody" / "Resources" / "catalog.json").read_text())

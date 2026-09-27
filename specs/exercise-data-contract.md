@@ -44,6 +44,12 @@ supplemental `--family` inputs are never emitted.
   similarly named variants without runtime sentence parsing.
 - Aliases are search synonyms only. Canonical names and aliases are unique after
   case-folding and whitespace normalization.
+- A bundled exercise's canonical name uses familiar training language and the
+  shortest qualifiers needed to distinguish its movement from neighboring
+  records. Exact study dimensions, fixture provenance, and setup instructions
+  belong in the authored execution fields unless omitting them from the name
+  would make the displayed exercise misleading. A display-name change retains
+  the stable `catalogID` and the former name as a search alias.
 
 ## Movement panel presentation
 

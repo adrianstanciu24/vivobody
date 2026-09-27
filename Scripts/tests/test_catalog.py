@@ -398,7 +398,6 @@ EVERYDAY_COVERAGE_EVIDENCE_IDS = {
 }
 
 EVERYDAY_COVERAGE_RULE_IDS = {
-    "body-mass-test-fixture-is-source-exact",
     "everyday-good-morning-fixture-is-training-programmed",
     "power-test-uses-total-system-load",
     "everyday-strength-uses-same-landmine-plate-load",
@@ -2988,7 +2987,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "knee": {"rectusFemoris", "tensorFasciaeLatae"},
                 "spine": {"abs", "obliques"},
             },
-            "barbell-good-morning-25-percent-body-mass": {
+            "barbell-good-morning": {
                 "shoulder": {"externalRotators"},
                 "scapula": {"trapeziusUpper"},
                 "elbow": {"brachialis"},
@@ -3013,9 +3012,6 @@ class CatalogFoundationTests(unittest.TestCase):
             "knee": {"rectusFemoris", "tensorFasciaeLatae"},
             "spine": {"abs", "obliques"},
         }
-        expected["barbell-good-morning"] = expected[
-            "barbell-good-morning-25-percent-body-mass"
-        ]
         lunge_providers = {
             "spine": {"abs", "obliques", "lumbarExtensors"},
             "pelvis": {
@@ -3102,43 +3098,24 @@ class CatalogFoundationTests(unittest.TestCase):
                 "bodyPosition": enum("standing"),
                 "torsoSupport": enum("none"),
                 "stanceConfiguration": enum("symmetricBilateral"),
-                "stanceWidth": enum("shoulderWidth", "approximatelyHipWidth"),
-                "footOrientation": enum(
-                    "slightNaturalToeOut", "forwardOrSlightToeOut"
-                ),
+                "stanceWidth": enum("approximatelyHipWidth"),
+                "footOrientation": enum("forwardOrSlightToeOut"),
                 "footContact": enum("continuous"),
-                "loadPlacement": enum(
-                    "posteriorShoulderUpperBack", "upperTrapeziusHighBar"
-                ),
-                "gripOrientation": enum(
-                    "comfortableUnreported", "overhandEquidistant"
-                ),
-                "externalLoadPrescription": enum(
-                    "twentyFivePercentBodyMass", "programSelectedExternalLoad"
-                ),
+                "loadPlacement": enum("upperTrapeziusHighBar"),
+                "gripOrientation": enum("overhandEquidistant"),
+                "externalLoadPrescription": enum("programSelectedExternalLoad"),
                 "hipMotion": enum("extends"),
-                "spineMotion": enum(
-                    "extendsWithMeasuredSegmentalExcursion",
-                    "extendsAfterMeasuredLumbarExcursion",
-                ),
+                "spineMotion": enum("extendsAfterMeasuredLumbarExcursion"),
                 "kneeMotion": enum(
-                    "measuredSmallNondefiningExcursion",
-                    "slightFlexionMaintainedWithObservedLoadDependentExcursion",
+                    "slightFlexionMaintainedWithObservedLoadDependentExcursion"
                 ),
-                "rangeOfMotion": enum(
-                    "maximumHipFlexionWithNaturalSpineTechnique",
-                    "selfSelectedControlledDepth",
-                ),
-                "headPosition": enum("alignedWithSpine", "nonstandardized"),
-                "tempo": enum(
-                    "equalNormalDescentAscent",
-                    "controlledSelfSelectedCatalogBoundary",
-                ),
+                "rangeOfMotion": enum("selfSelectedControlledDepth"),
+                "headPosition": enum("nonstandardized"),
+                "tempo": enum("controlledSelfSelectedCatalogBoundary"),
                 "fixedPath": ("boolean", False),
                 "interRepSupport": enum("none"),
                 "lowerBodyContribution": enum(
-                    "hipAndSpineExtensionWithSmallKneeExcursion",
-                    "hipAndSpineExtensionWithSlightMaintainedKneeFlexion",
+                    "hipAndSpineExtensionWithSlightMaintainedKneeFlexion"
                 ),
             },
             "dynamic-lunge": {
@@ -6336,10 +6313,10 @@ class CatalogFoundationTests(unittest.TestCase):
                     "Machine Rear-Delt Row",
                     "Chest-Supported Machine High Row",
                 ],
-                "single-arm-chest-supported-machine-rear-delt-row": [
-                    "Single-Arm Machine Rear-Delt Row",
-                    "One-Arm Machine Rear-Delt Row",
-                ],
+            "single-arm-chest-supported-machine-rear-delt-row": [
+                "One-Arm Machine Rear-Delt Row",
+                "Single-Arm Machine Rear-Delt Row",
+            ],
                 "trx-high-row": [
                     "Suspension High Row",
                     "TRX Flared-Elbow Row",
@@ -9061,7 +9038,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "542082280e9ee9f946a26a1d762dc57ac6195cde61e82260d6b89415e60b7420",
+            "5b961cf3ca8bb47a80855c3466dd58365d685034fa9c883ed3b5d4c698949551",
         )
 
     def test_batch3_variant_axis_contracts_are_exact_and_covered(
@@ -10119,8 +10096,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "allowed": "667a712fb724756d285c22700574f606f42241a6b7c93baa229a20826ec23a4c",
                 "recommended": "330c8f339794dd6a4f81d94bd4eb7395163c7e7ce9ec0c08ba317399773e3331",
                 "movementSignature": "88f3100e88746c14df1b5f57affae7f9ecbf52e866fe42871340f0c3fb155f9c",
-                "variantAxes": "fb63478cf3f25ab73a316e139fa049a3c48e4ec7d806f9ca5ba19adaac5e23be",
-                "exerciseRules": "a6b8f3ad47de79f5c1610d96a1f6157243f6ae7ed7ad8754ef4a4d981c20b6ee",
+                "variantAxes": "26fd3fc5b6469d093dac07d4bfab9e71004f676234ed5aa64a229c0ba9190c2b",
+                "exerciseRules": "c7ca6479639f08426cc43404b6c5b00c38c4c05cec8f6ef6ff75a0cdfb1bde5f",
                 "musclePolicy": "3fc5e5acdc93036f6ecaa8045d25446534e842af471741ea251fef2f206638ce",
             },
             "landmine-press": {
@@ -10153,20 +10130,6 @@ class CatalogFoundationTests(unittest.TestCase):
         hip_hinge = copy.deepcopy(
             self.late_lower_body_closure_families["hip-hinge"]
         )
-        exact_good_morning = next(
-            exercise
-            for exercise in hip_hinge["exercises"]
-            if exercise["catalogID"]
-            == "barbell-good-morning-25-percent-body-mass"
-        )
-        exact_good_morning["variant"]["externalLoadPrescription"] = (
-            "programSelectedExternalLoad"
-        )
-        self.assert_family_fails(hip_hinge, "violates exercise rule")
-
-        hip_hinge = copy.deepcopy(
-            self.late_lower_body_closure_families["hip-hinge"]
-        )
         everyday_good_morning = next(
             exercise
             for exercise in hip_hinge["exercises"]
@@ -10175,19 +10138,7 @@ class CatalogFoundationTests(unittest.TestCase):
         everyday_good_morning["variant"]["externalLoadPrescription"] = (
             "twentyFivePercentBodyMass"
         )
-        self.assert_family_fails(hip_hinge, "violates exercise rule")
-
-        hip_hinge = copy.deepcopy(
-            self.late_lower_body_closure_families["hip-hinge"]
-        )
-        exact_good_morning = next(
-            exercise
-            for exercise in hip_hinge["exercises"]
-            if exercise["catalogID"]
-            == "barbell-good-morning-25-percent-body-mass"
-        )
-        exact_good_morning["reps"] = 10
-        self.assert_family_fails(hip_hinge, "reps must equal 8")
+        self.assert_family_fails(hip_hinge, "disallowed value")
 
         hip_hinge = copy.deepcopy(
             self.late_lower_body_closure_families["hip-hinge"]
@@ -10490,10 +10441,10 @@ class CatalogFoundationTests(unittest.TestCase):
     ) -> None:
         expected = {
             "reclined-unilateral-machine-leg-extension": {
-                "name": "Reclined Unilateral Machine Leg Extension",
+                "name": "Reclined Single-Leg Extension",
                 "aliases": [
                     "40-Degree Single-Leg Extension",
-                    "Reclined Single-Leg Extension",
+                    "Reclined Unilateral Machine Leg Extension",
                 ],
                 "setup": ("machine", "unilateral", "external", 20, 10, 12),
                 "roles": {"vasti": "primary", "rectusFemoris": "primary"},
@@ -10503,10 +10454,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 ],
             },
             "upright-unilateral-machine-leg-extension": {
-                "name": "Upright Unilateral Machine Leg Extension",
+                "name": "Upright Single-Leg Extension",
                 "aliases": [
                     "90-Degree Single-Leg Extension",
-                    "Upright Single-Leg Extension",
+                    "Upright Unilateral Machine Leg Extension",
                 ],
                 "setup": ("machine", "unilateral", "external", 20, 10, 12),
                 "roles": {"vasti": "primary", "rectusFemoris": "secondary"},
@@ -10516,10 +10467,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 ],
             },
             "seated-unilateral-machine-leg-curl": {
-                "name": "Seated Unilateral Machine Leg Curl",
+                "name": "Seated Single-Leg Curl",
                 "aliases": [
-                    "Seated Single-Leg Curl",
                     "Unilateral Seated Leg Curl",
+                    "Seated Unilateral Machine Leg Curl",
                 ],
                 "setup": ("machine", "unilateral", "external", 20, 10, 10),
                 "roles": {
@@ -10531,10 +10482,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 "evidence": ["maeo-2021-seated-prone-leg-curl"],
             },
             "prone-unilateral-machine-leg-curl": {
-                "name": "Prone Unilateral Machine Leg Curl",
+                "name": "Prone Single-Leg Machine Curl",
                 "aliases": [
                     "Lying Single-Leg Curl",
                     "Unilateral Prone Leg Curl",
+                    "Prone Unilateral Machine Leg Curl",
                 ],
                 "setup": ("machine", "unilateral", "external", 20, 10, 10),
                 "roles": {
@@ -10564,20 +10516,22 @@ class CatalogFoundationTests(unittest.TestCase):
                 ],
             },
             "standing-unilateral-machine-calf-raise": {
-                "name": "Standing Unilateral Machine Calf Raise",
+                "name": "Standing Single-Leg Machine Calf Raise",
                 "aliases": [
                     "Single-Leg Standing Calf Raise",
                     "Single-Leg Standing Calf Raise Machine",
+                    "Standing Unilateral Machine Calf Raise",
                 ],
                 "setup": ("machine", "unilateral", "external", 20, 10, 10),
                 "roles": {"gastrocnemius": "primary", "soleus": "primary"},
                 "evidence": ["kinoshita-2023-standing-seated-calf-raise"],
             },
             "seated-unilateral-machine-calf-raise": {
-                "name": "Seated Unilateral Machine Calf Raise",
+                "name": "Seated Single-Leg Machine Calf Raise",
                 "aliases": [
                     "Single-Leg Seated Calf Raise",
                     "Single-Leg Seated Calf Raise Machine",
+                    "Seated Unilateral Machine Calf Raise",
                 ],
                 "setup": ("machine", "unilateral", "external", 20, 10, 10),
                 "roles": {"soleus": "primary", "gastrocnemius": "secondary"},
@@ -11776,8 +11730,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 ],
             },
             "bodyweight-forward-step-up-21cm": {
-                "name": "21 cm Bodyweight Forward Step-Up",
-                "aliases": ["21 cm Forward Step-Up"],
+                "name": "Bodyweight Forward Step-Up",
+                "aliases": [
+                    "21 cm Forward Step-Up", "21 cm Bodyweight Forward Step-Up",
+                    "Bodyweight Step-Up (21 cm)",
+                ],
                 "setup": ("bodyweight", "unilateral", "nonComparable", 0, None, 10),
                 "roles": {
                     "vasti": "primary", "gluteMax": "primary",
@@ -13106,9 +13063,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "evidence": (
                     "arnold-2010-lower-limb",
                     "christophy-2012-lumbar-spine",
-                    "schellenberg-2013-deadlift-goodmorning-kinematics",
                 ),
-                "roster": ("barbell-good-morning-25-percent-body-mass",),
+                "roster": (),
             },
             "dynamic-lunge": {
                 "name": "Dynamic Lunge",
@@ -13252,8 +13208,8 @@ class CatalogFoundationTests(unittest.TestCase):
     def test_late_lower_body_closure_exercise_surfaces_are_exact(self) -> None:
         expected = {
             "bodyweight-active-straight-leg-raise": {
-                "name": "Bodyweight Active Straight-Leg Raise",
-                "aliases": ("Active Straight-Leg Raise", "Supine Straight-Leg Raise"),
+                "name": "Active Straight-Leg Raise",
+                "aliases": ("Supine Straight-Leg Raise", "Bodyweight Active Straight-Leg Raise"),
                 "setup": (
                     "bodyweight",
                     "unilateral",
@@ -13277,36 +13233,6 @@ class CatalogFoundationTests(unittest.TestCase):
                     "arnold-2010-lower-limb",
                     "okubo-2021-end-range-active-straight-leg-raise",
                     "yamane-2019-straight-leg-raise",
-                ),
-            },
-            "barbell-good-morning-25-percent-body-mass": {
-                "name": "25% Body-Mass Barbell Good Morning",
-                "aliases": (
-                    "Barbell Good Morning at 25% Body Mass",
-                    "25% Bodyweight Good Morning",
-                ),
-                "setup": (
-                    "barbell", "bilateral", "dynamicStrength", "reps",
-                    "external", 0, 45, 20, 8, 76,
-                ),
-                "roles": {
-                    "medialHamstrings": "primary",
-                    "gluteMax": "primary",
-                    "lumbarExtensors": "primary",
-                    "bicepsFemoris": "stabilizer",
-                    "gluteMed": "stabilizer",
-                    "gastrocnemius": "stabilizer",
-                    "soleus": "stabilizer",
-                    "fingerFlexors": "stabilizer",
-                    "extensorCarpiRadialis": "stabilizer",
-                    "externalRotators": "stabilizer",
-                    "trapeziusUpper": "stabilizer",
-                    "brachialis": "stabilizer",
-                    "abs": "stabilizer",
-                    "obliques": "stabilizer",
-                },
-                "evidence": (
-                    "schellenberg-2013-deadlift-goodmorning-kinematics",
                 ),
             },
             "bodyweight-forward-lunge": {
@@ -13390,11 +13316,11 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         }
         expected["supported-standing-cable-hip-flexion"] = {
-            "name": "Supported Standing Cable Hip Flexion",
+            "name": "Standing Cable Hip Flexion",
             "aliases": (
-                "Standing Cable Hip Flexion",
                 "Straight-Leg Cable Hip Flexion",
                 "Cable Hip Flexor Raise",
+                "Supported Standing Cable Hip Flexion",
             ),
             "setup": (
                 "cable",
@@ -13546,22 +13472,21 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             hinge_variant["spineMotion"],
-            "extendsWithMeasuredSegmentalExcursion",
+            "extendsAfterMeasuredLumbarExcursion",
         )
         self.assertEqual(
             hinge_variant["kneeMotion"],
-            "measuredSmallNondefiningExcursion",
+            "slightFlexionMaintainedWithObservedLoadDependentExcursion",
         )
         self.assertEqual(
             hinge_variant["externalLoadPrescription"],
-            "twentyFivePercentBodyMass",
+            "programSelectedExternalLoad",
         )
         self.assertEqual(hinge_exercise["loadMode"], "external")
         self.assertEqual(hinge_exercise["defaultWeight"], 45)
         self.assertEqual(hinge_exercise["defaultWeightKg"], 20)
         self.assertIn(
-            "Load the bar with 25 percent of your body weight; use 45 lb or "
-            "20 kg only if that matches your calculated weight",
+            "use the total bar-plus-plate load selected for your training program",
             hinge_exercise["execution"]["startingPosition"],
         )
         hinge_names = " ".join(
@@ -13701,23 +13626,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "bodyweightFraction": 0,
                 "reps": 10,
                 "searchPriority": 68,
-            },
-            "barbell-good-morning-25-percent-body-mass": {
-                "familyID": "hip-hinge",
-                "mechanic": "compound",
-                "pattern": "hinge",
-                "direction": None,
-                "planes": ["sagittal"],
-                "equipment": "barbell",
-                "laterality": "bilateral",
-                "modality": "dynamicStrength",
-                "trackingMode": "reps",
-                "loadMode": "external",
-                "defaultWeight": 45,
-                "defaultWeightKg": 20,
-                "bodyweightFraction": 0,
-                "reps": 8,
-                "searchPriority": 76,
             },
             "bodyweight-forward-lunge": {
                 "familyID": "dynamic-lunge",
@@ -13953,8 +13861,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
             },
             "barbell-romanian-deadlift": {
-                "name": "Floor-Touch Barbell Romanian Deadlift",
-                "aliases": ("Floor-Touch Romanian Deadlift",),
+                "name": "Barbell RDL (Floor Touch)",
+                "aliases": ("Floor-Touch Romanian Deadlift", "Floor-Touch Barbell Romanian Deadlift"),
                 "setup": ("barbell", "bilateral", "external", 95, 42.5, 6, 96),
                 "roles": romanian_roles,
                 "evidence": (
@@ -13973,11 +13881,14 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
             },
             "barbell-romanian-deadlift-15-cm-step": {
-                "name": "15 cm Step Barbell Romanian Deadlift",
+                "name": "Barbell Deficit RDL",
                 "aliases": (
                     "15 cm Step Romanian Deadlift",
                     "15 cm Deficit Romanian Deadlift",
                     "Step RDL",
+                    "15 cm Step Barbell Romanian Deadlift",
+                    "Barbell RDL (15 cm Step)",
+                    "Barbell Deficit RDL (15 cm)",
                 ),
                 "setup": ("barbell", "bilateral", "external", 95, 42.5, 6, 78),
                 "roles": romanian_roles,
@@ -13986,8 +13897,13 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
             },
             "continuous-top-start-barbell-romanian-deadlift": {
-                "name": "Continuous Top-Start Barbell Romanian Deadlift",
-                "aliases": ("Barbell Romanian Deadlift", "Romanian Deadlift", "RDL"),
+                "name": "Barbell RDL (Continuous)",
+                "aliases": (
+                    "Barbell Romanian Deadlift",
+                    "Romanian Deadlift",
+                    "RDL",
+                    "Continuous Top-Start Barbell Romanian Deadlift",
+                ),
                 "setup": ("barbell", "bilateral", "external", 45, 20, 8, 99),
                 "roles": romanian_roles,
                 "evidence": (
@@ -13998,11 +13914,12 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
             },
             "two-dumbbell-continuous-romanian-deadlift": {
-                "name": "Two-Dumbbell Continuous Romanian Deadlift",
+                "name": "Two-Dumbbell RDL (Continuous)",
                 "aliases": (
                     "Two-Dumbbell Romanian Deadlift",
                     "Dumbbell Romanian Deadlift",
                     "Dumbbell RDL",
+                    "Two-Dumbbell Continuous Romanian Deadlift",
                 ),
                 "setup": ("dumbbell", "bilateral", "external", 20, 10, 8, 96),
                 "roles": romanian_roles,
@@ -14562,7 +14479,7 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "barbell-romanian-deadlift": {
                 "familyID": "romanian-deadlift",
-                "name": "Floor-Touch Barbell Romanian Deadlift",
+                "name": "Barbell RDL (Floor Touch)",
                 "defaultWeight": 95,
                 "defaultWeightKg": 42.5,
                 "reps": 6,
@@ -14578,7 +14495,7 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "barbell-romanian-deadlift-15-cm-step": {
                 "familyID": "romanian-deadlift",
-                "name": "15 cm Step Barbell Romanian Deadlift",
+                "name": "Barbell Deficit RDL",
                 "defaultWeight": 95,
                 "defaultWeightKg": 42.5,
                 "reps": 6,
@@ -14746,11 +14663,12 @@ class CatalogFoundationTests(unittest.TestCase):
 
         expected_exercises = {
             "barefoot-dead-stop-sumo-barbell-deadlift": {
-                "name": "Barefoot Dead-Stop Sumo Barbell Deadlift",
+                "name": "Dead-Stop Barbell Sumo Deadlift",
                 "aliases": (
                     "Sumo Barbell Deadlift",
                     "Sumo Deadlift",
                     "Double-Overhand Dead-Stop Sumo Deadlift",
+                    "Barefoot Dead-Stop Sumo Barbell Deadlift",
                 ),
                 "setup": (
                     "barbell", "bilateral", "dynamicStrength", "reps",
@@ -14802,11 +14720,12 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "dumbbell-single-leg-romanian-deadlift-ipsilateral-load": {
                 "name": (
-                    "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift"
+                    "Same-Side Dumbbell Single-Leg RDL"
                 ),
                 "aliases": (
                     "Same-Side-Load Dumbbell Single-Leg Romanian Deadlift",
                     "Ipsilateral Dumbbell Single-Leg RDL",
+                    "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift",
                 ),
                 "setup": (
                     "dumbbell", "unilateral", "dynamicStrength", "reps",
@@ -14816,11 +14735,12 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "dumbbell-single-leg-romanian-deadlift-contralateral-load": {
                 "name": (
-                    "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift"
+                    "Opposite-Side Dumbbell Single-Leg RDL"
                 ),
                 "aliases": (
                     "Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift",
                     "Contralateral Dumbbell Single-Leg RDL",
+                    "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift",
                 ),
                 "setup": (
                     "dumbbell", "unilateral", "dynamicStrength", "reps",
@@ -15876,9 +15796,13 @@ class CatalogFoundationTests(unittest.TestCase):
         }
         expected = {
             "barefoot-dead-stop-sumo-barbell-deadlift": (
-                "sumo-deadlift", "Barefoot Dead-Stop Sumo Barbell Deadlift",
-                ("Sumo Barbell Deadlift", "Sumo Deadlift",
-                 "Double-Overhand Dead-Stop Sumo Deadlift"),
+                "sumo-deadlift", "Dead-Stop Barbell Sumo Deadlift",
+                (
+                    "Sumo Barbell Deadlift",
+                    "Sumo Deadlift",
+                    "Double-Overhand Dead-Stop Sumo Deadlift",
+                    "Barefoot Dead-Stop Sumo Barbell Deadlift",
+                ),
                 "barbell", "bilateral", 45, 20, 3, 100,
             ),
             "low-handle-trap-bar-deadlift": (
@@ -15903,16 +15827,22 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             "dumbbell-single-leg-romanian-deadlift-ipsilateral-load": (
                 "single-leg-deadlift",
-                "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift",
-                ("Same-Side-Load Dumbbell Single-Leg Romanian Deadlift",
-                 "Ipsilateral Dumbbell Single-Leg RDL"),
+                "Same-Side Dumbbell Single-Leg RDL",
+                (
+                    "Same-Side-Load Dumbbell Single-Leg Romanian Deadlift",
+                    "Ipsilateral Dumbbell Single-Leg RDL",
+                    "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift",
+                ),
                 "dumbbell", "unilateral", 25, 12.5, 6, 88,
             ),
             "dumbbell-single-leg-romanian-deadlift-contralateral-load": (
                 "single-leg-deadlift",
-                "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift",
-                ("Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift",
-                 "Contralateral Dumbbell Single-Leg RDL"),
+                "Opposite-Side Dumbbell Single-Leg RDL",
+                (
+                    "Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift",
+                    "Contralateral Dumbbell Single-Leg RDL",
+                    "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift",
+                ),
                 "dumbbell", "unilateral", 25, 12.5, 6, 90,
             ),
             "kettlebell-single-leg-romanian-deadlift": (
@@ -16638,8 +16568,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "evidence": adduction["evidenceRefs"],
             },
             {
-                "name": "Supported Standing Band Hip Adduction",
-                "aliases": ["Standing Band Hip Adduction", "Band Hip Adduction"],
+                "name": "Standing Band Hip Adduction",
+                "aliases": ["Band Hip Adduction", "Supported Standing Band Hip Adduction"],
                 "setup": (
                     "band", "unilateral", "dynamicStrength", "reps",
                     "nonComparable", 0, 0, None, 10, 80,
@@ -17758,8 +17688,11 @@ class CatalogFoundationTests(unittest.TestCase):
         expected = {
             "30-degree-curl-up": {
                 "family": "spine-flexion",
-                "name": "30-Degree Curl-Up",
-                "aliases": ["Thirty-Degree Curl-Up", "30-Degree Partial Curl-Up"],
+                "name": "Partial Curl-Up",
+                "aliases": [
+                    "Thirty-Degree Curl-Up", "30-Degree Partial Curl-Up",
+                    "30-Degree Curl-Up",
+                ],
                 "domain": ("bodyweight", "bilateral", "dynamicStrength", "reps", "nonComparable"),
                 "seed": (0, None, 12, None, 82),
                 "roles": {"abs": "primary", "obliques": "secondary"},
@@ -17805,6 +17738,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "aliases": [
                     "30-Degree Side-Lying Trunk Lift",
                     "Fixed-Leg Lateral Trunk Lift",
+                    "Fixed-Leg Side-Lying Trunk Lift",
                 ],
                 "domain": ("bodyweight", "unilateral", "dynamicStrength", "reps", "nonComparable"),
                 "seed": (0, None, 10, None, 74),
@@ -20449,7 +20383,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "dynamicStrength", "external", 30, 15, 10, 90,
             ),
             "bilateral-incline-dumbbell-curl": (
-                "Bilateral Incline Dumbbell Curl", "elbow-flexion", [],
+                "Incline Dumbbell Curl", "elbow-flexion", ["Bilateral Incline Dumbbell Curl"],
                 "dumbbell", "dynamicStrength", "external", 15, 7.5, 10, 90,
             ),
             "barbell-mid-thigh-clean-pull": (
@@ -20918,7 +20852,7 @@ class CatalogFoundationTests(unittest.TestCase):
         }
         expected = {
             "45-degree-incline-leg-press": (
-                "45° Incline Leg Press", "inclined-leg-press",
+                "Incline Leg Press", "inclined-leg-press",
                 "dynamicStrength", "reps",
             ),
             "machine-hack-squat": (
@@ -20926,11 +20860,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 "dynamicStrength", "reps",
             ),
             "barbell-rear-foot-elevated-split-squat": (
-                "Barbell Rear-Foot-Elevated Split Squat",
+                "Barbell Bulgarian Split Squat",
                 "split-stance-squat", "dynamicStrength", "reps",
             ),
             "johnson-sl160-bilateral-seated-leg-curl": (
-                "Johnson SL160 Bilateral Seated Leg Curl", "knee-flexion",
+                "Seated Leg Curl", "knee-flexion",
                 "dynamicStrength", "reps",
             ),
             "flex-fitness-bilateral-prone-leg-curl": (
@@ -20946,7 +20880,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "dynamicStrength", "reps",
             ),
             "45-degree-roman-chair-back-extension": (
-                "45° Roman-Chair Back Extension",
+                "Roman-Chair Back Extension",
                 "roman-chair-hip-extension", "dynamicStrength", "reps",
             ),
             "hanging-knee-raise": (
@@ -20966,7 +20900,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "elbow-flexion", "dynamicStrength", "reps",
             ),
             "bilateral-straight-bar-cable-triceps-pushdown": (
-                "Bilateral Straight-Bar Cable Triceps Pushdown",
+                "Straight-Bar Cable Triceps Pushdown",
                 "elbow-extension", "dynamicStrength", "reps",
             ),
             "standing-dual-cable-crossover": (
@@ -23154,8 +23088,11 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             {
                 "catalogID": "seated-45-degree-cable-pulldown",
-                "name": "Seated 45-Degree Cable Pulldown",
-                "aliases": ["45-Degree Lat Pulldown", "Diagonal Cable Pulldown"],
+                "name": "Seated Diagonal Cable Pulldown",
+                "aliases": [
+                    "45-Degree Lat Pulldown", "Diagonal Cable Pulldown",
+                    "Seated 45-Degree Cable Pulldown",
+                ],
                 "equipment": "cable",
                 "laterality": "bilateral",
                 "modality": "dynamicStrength",
@@ -23952,8 +23889,8 @@ class CatalogFoundationTests(unittest.TestCase):
         }
         expected = {
             "standing-bilateral-barbell-shrug": (
-                "Standing Bilateral Barbell Shrug",
-                ("Barbell Shrug", "Standing Barbell Shrug"),
+                "Barbell Shrug",
+                ("Standing Barbell Shrug", "Standing Bilateral Barbell Shrug"),
                 ("barbell", "bilateral", "external", 45, 20, 10),
                 {
                     "levatorScapulae": "primary",
@@ -23974,11 +23911,12 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
             ),
             "upright-bilateral-lever-machine-leg-extension": (
-                "Upright Bilateral Lever-Machine Leg Extension",
+                "Upright Machine Leg Extension",
                 (
                     "Bilateral Machine Leg Extension",
                     "Machine Leg Extension",
                     "Leg Extension",
+                    "Upright Bilateral Lever-Machine Leg Extension",
                 ),
                 ("machine", "bilateral", "external", 20, 10, 12),
                 {"vasti": "primary", "rectusFemoris": "secondary"},
@@ -23988,8 +23926,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
             ),
             "supported-cable-ankle-cuff-hip-extension": (
-                "Supported Cable Ankle-Cuff Hip Extension",
-                ("Standing Cable Hip Extension", "Cable Glute Kickback"),
+                "Standing Cable Hip Extension",
+                ("Cable Glute Kickback", "Supported Cable Ankle-Cuff Hip Extension"),
                 ("cable", "unilateral", "external", 10, 5, 10),
                 {
                     "gluteMax": "primary",
@@ -24000,8 +23938,12 @@ class CatalogFoundationTests(unittest.TestCase):
                 ("cybex-2008-mg500-manual", "arnold-2010-lower-limb"),
             ),
             "bilateral-standing-shoulder-pad-machine-calf-raise": (
-                "Bilateral Standing Shoulder-Pad Machine Calf Raise",
-                ("Standing Machine Calf Raise", "Standing Calf Raise Machine"),
+                "Standing Shoulder-Pad Machine Calf Raise",
+                (
+                    "Standing Machine Calf Raise",
+                    "Standing Calf Raise Machine",
+                    "Bilateral Standing Shoulder-Pad Machine Calf Raise",
+                ),
                 ("machine", "bilateral", "external", 20, 10, 10),
                 {"gastrocnemius": "primary", "soleus": "primary"},
                 (
@@ -24010,8 +23952,12 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
             ),
             "bilateral-seated-thigh-pad-machine-calf-raise": (
-                "Bilateral Seated Thigh-Pad Machine Calf Raise",
-                ("Seated Machine Calf Raise", "Seated Calf Raise Machine"),
+                "Seated Thigh-Pad Machine Calf Raise",
+                (
+                    "Seated Machine Calf Raise",
+                    "Seated Calf Raise Machine",
+                    "Bilateral Seated Thigh-Pad Machine Calf Raise",
+                ),
                 ("machine", "bilateral", "external", 20, 10, 10),
                 {"soleus": "primary", "gastrocnemius": "secondary"},
                 (
@@ -24489,25 +24435,25 @@ class CatalogFoundationTests(unittest.TestCase):
         }
         expected = {
             "bodyweight-floor-squat-100-degrees": (
-                "100° Two-Leg Bodyweight Floor Squat", "bodyweight", "bilateral",
+                "Bodyweight Squat", "bodyweight", "bilateral",
                 "dynamicStrength", "reps", "nonComparable", 0, 0, None, 10,
             ),
             "bodyweight-supine-glute-bridge-90-degrees": (
-                "90° Bodyweight Supine Glute Bridge", "bodyweight", "bilateral",
+                "Bodyweight Glute Bridge", "bodyweight", "bilateral",
                 "dynamicStrength", "reps", "nonComparable", 0, 0, None, 10,
             ),
             "wall-balanced-single-leg-bodyweight-heel-raise": (
-                "Wall-Balanced Single-Leg Bodyweight Heel Raise", "bodyweight",
+                "Wall-Balanced Single-Leg Heel Raise", "bodyweight",
                 "unilateral", "dynamicStrength", "reps", "nonComparable", 0,
                 0, None, 12,
             ),
             "hands-elevated-push-up-30-48-cm": (
-                "30.48 cm Hands-Elevated Push-Up", "bodyweight", "bilateral",
+                "Hands-Elevated Push-Up", "bodyweight", "bilateral",
                 "dynamicStrength", "reps", "bodyweightAdded", 0.55, 0, None,
                 10,
             ),
             "feet-elevated-push-up-30-48-cm": (
-                "30.48 cm Feet-Elevated Push-Up", "bodyweight", "bilateral",
+                "Feet-Elevated Push-Up", "bodyweight", "bilateral",
                 "dynamicStrength", "reps", "bodyweightAdded", 0.7, 0, None, 8,
             ),
             "straight-leg-unanchored-sit-up": (
@@ -24519,7 +24465,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "dynamicStrength", "reps", "nonComparable", 0, 0, None, 10,
             ),
             "bodyweight-lateral-lunge-60-percent-height": (
-                "60%-Height Bodyweight Lateral Lunge", "bodyweight", "unilateral",
+                "Bodyweight Lateral Lunge", "bodyweight", "unilateral",
                 "dynamicStrength", "reps", "nonComparable", 0, 0, None, 8,
             ),
             "barbell-hang-power-clean": (
@@ -25030,7 +24976,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "totalSingleImplement",
             ),
             "two-dumbbell-stationary-split-squat": (
-                "split-stance-squat", "Two-Dumbbell Stationary Split Squat",
+                "split-stance-squat", "Two-Dumbbell Split Squat",
                 "dumbbell", "reps", "external", 20, 10, 8, None, 95,
                 "perImplement",
             ),
@@ -25040,7 +24986,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "perImplement",
             ),
             "bilateral-dumbbell-shrug": (
-                "scapular-elevation", "Bilateral Dumbbell Shrug",
+                "scapular-elevation", "Two-Dumbbell Shrug",
                 "dumbbell", "reps", "external", 20, 10, 10, None, 96,
                 "perImplement",
             ),
@@ -25069,9 +25015,9 @@ class CatalogFoundationTests(unittest.TestCase):
 
         expected_record_digests = {
             "single-dumbbell-goblet-squat": "c53012eb99ff4671ad0d6606df088f6aeda8ef8b194535f1430942f0174246e6",
-            "two-dumbbell-stationary-split-squat": '25b1757e8082e415f6f70e50270c8fdc89dc7517c050f3a016998de1ad49a6f7',
+            "two-dumbbell-stationary-split-squat": 'c5747fe6998a675f3bc4bdd9bcac38a7f5edc19811dfcd405bf749b5c4e1f925',
             "two-dumbbell-reverse-lunge": "9314f9f6173279ba6603d24f13550ed3a075bcfed51e5b592d92ec38ad29df09",
-            "bilateral-dumbbell-shrug": "91ec8faddf96d84265f3655fb180aaf6b7debd680fb09f8bffde750b9d9c5b88",
+            "bilateral-dumbbell-shrug": "de21824d67269a9db081ad15f23ccfcb29c7a269bc45a9800ba591083e52556b",
             "scapular-pull-up": "5fca3d5c1bb8c831757adfdbe59e4049090886f58b06f7331ad3589d0a2876ff",
             "high-handle-trap-bar-farmer-carry": "17193b3ba873b923ba0fbf00fdd3ad9c12424215206d49850ab1d31da1ffb6c3",
         }
@@ -25669,7 +25615,7 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             {
                 "alternating-supine-bicycle-crunch": (
-                    "Alternating Supine Bicycle Crunch",
+                    "Bicycle Crunch",
                     "bodyweight",
                     "unilateral",
                     "nonComparable",
@@ -25687,7 +25633,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     10,
                 ),
                 "simultaneous-bilateral-dumbbell-front-raise": (
-                    "Simultaneous Bilateral Dumbbell Front Raise",
+                    "Two-Dumbbell Front Raise",
                     "dumbbell",
                     "bilateral",
                     "external",
@@ -26482,7 +26428,7 @@ class RotationalStrengthCatalogTests(unittest.TestCase):
         )
         self.assertEqual(
             landmine["aliases"],
-            ["Landmine Rotation", "Landmine 180", "180-Degree Landmine"],
+            ["Landmine Rotation", "Landmine 180", "180-Degree Landmine", "Standing Two-Hand Landmine Rotation"],
         )
         self.assertIn(
             "explicit product adaptation",
@@ -27722,13 +27668,13 @@ class RequestedPullCatalogTests(unittest.TestCase):
 
     def test_requested_records_have_exact_owners_and_names(self) -> None:
         expected = {
-            "speed-pull-up": ("Speed Pull-Up", "vertical-pull"),
+            "speed-pull-up": ("Neutral-Grip Speed Pull-Up", "vertical-pull"),
             "prone-tyw-hold-sequence": (
                 "Prone T-Y-W Holds",
                 "prone-tyw-hold-sequence",
             ),
             "single-arm-bent-over-row": (
-                "Single-Arm Bent-Over Row",
+                "One-Arm Dumbbell Row (Hand on Bench)",
                 "shoulder-extension-row",
             ),
             "kettlebell-row-and-rotate": (

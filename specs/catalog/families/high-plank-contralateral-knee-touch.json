@@ -34,8 +34,8 @@
   "recommended": {"defaultReps": {"minimum": 6, "maximum": 16}},
   "exercises": [{
     "catalogID": "alternating-high-plank-contralateral-knee-touch",
-    "name": "Alternating High-Plank Contralateral Knee Touch",
-    "aliases": ["Plank Row w/ Knee Touch", "Plank Row with Knee Touch", "Plank with Knee Touch", "Contralateral Plank Knee Touch"],
+    "name": "High-Plank Opposite-Knee Touch",
+    "aliases": ["Plank Row w/ Knee Touch", "Plank Row with Knee Touch", "Plank with Knee Touch", "Contralateral Plank Knee Touch", "Alternating High-Plank Contralateral Knee Touch"],
     "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
     "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "deltoidPosterior", "role": "secondary"}, {"muscle": "iliopsoas", "role": "secondary"}, {"muscle": "sartorius", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
     "variant": {"startSupport": "bilateralPalmsAndToes", "touchSupport": "singlePalmAndOppositeFoot", "limbPairing": "contralateralHandAndKnee", "kneePath": "flexedForwardToHipLevel", "touchTarget": "freeHandToOppositeKnee", "trunkMotion": "heldAgainstExtensionAndRotation", "limbSequence": "alternatingAfterFourPointReset", "repetitionCounting": "eachTouchAndReturn", "fixedPath": false},

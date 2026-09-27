@@ -52,8 +52,8 @@
   "exercises": [
     {
       "catalogID": "lateral-shuffle-to-medicine-ball-throw",
-      "name": "Lateral Shuffle to Medicine Ball Throw",
-      "aliases": ["Lateral Shuffle + Med Ball Throw", "Lateral Shuffle Med Ball Throw", "Shuffle to Rotational Medicine Ball Throw"],
+      "name": "Lateral Shuffle Rotational Medicine Ball Throw",
+      "aliases": ["Lateral Shuffle + Med Ball Throw", "Lateral Shuffle Med Ball Throw", "Shuffle to Rotational Medicine Ball Throw", "Lateral Shuffle to Medicine Ball Throw", "Lateral Shuffle Medicine Ball Throw"],
       "equipment": "medicineBall", "laterality": "unilateral", "modality": "power", "trackingMode": "reps", "loadMode": "nonComparable",
       "bodyweightFraction": 0, "defaultWeight": 10, "defaultWeightKg": 5, "reps": 4, "searchPriority": 90,
       "involvement": [

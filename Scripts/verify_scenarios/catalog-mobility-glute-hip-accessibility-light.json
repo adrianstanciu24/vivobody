@@ -16,14 +16,14 @@
     {"tap": {"label": "Search"}},
     {"wait": {"role": "AXTextField", "value": "Search exercises"}},
     {"tap": {"role": "AXTextField", "value": "Search exercises"}},
-    {"typeText": "Banded Side Walks"},
-    {"wait": {"labelRegex": "^Banded Side Walks, Band · Legs"}},
-    {"tap": {"labelRegex": "^Banded Side Walks, Band · Legs"}},
+    {"typeText": "Above-Knee Band Lateral Walk"},
+    {"wait": {"labelRegex": "^Above-Knee Band Lateral Walk, Band · Legs"}},
+    {"tap": {"labelRegex": "^Above-Knee Band Lateral Walk, Band · Legs"}},
     {"wait": {"label": "STRENGTH · REPS"}}
   ],
   "required": [
-    {"label": "Banded Side Walks"},
-    {"labelContains": "Muscles used by Banded Side Walks"}
+    {"label": "Above-Knee Band Lateral Walk"},
+    {"labelContains": "Muscles used by Above-Knee Band Lateral Walk"}
   ],
   "forbidden": []
 }

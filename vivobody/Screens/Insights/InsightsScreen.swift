@@ -29,6 +29,8 @@ struct InsightsScreen: View {
             }
         }
         .screenBackground()
+        .toolbarBackground(Surface.background, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
     }
 
     // MARK: - Instrument shell

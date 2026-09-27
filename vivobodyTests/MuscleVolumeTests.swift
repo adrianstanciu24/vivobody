@@ -103,7 +103,7 @@ struct MuscleVolumeTests {
     }
 
     @Test func dipsCreditBothPectoralRegionsWhileNeutralStartFlexionDoesNot() {
-        for name in ["Bar Dip", "Ring Dip"] {
+        for name in ["Parallel-Bar Dip", "Ring Dip"] {
             let s = session(at: day(0), [lift(name, .chest, sets: 3)])
             let stats = [s].muscleVolume(now: day(0))
             #expect(stat(.pectoralisMajorClavicular, in: stats).effectiveSets == 3)

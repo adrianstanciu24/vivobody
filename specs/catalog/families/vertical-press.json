@@ -1577,12 +1577,13 @@
     },
     {
       "catalogID": "single-arm-standing-dumbbell-overhead-press",
-      "name": "Single-Arm Standing Dumbbell Overhead Press",
+      "name": "Standing Single-Arm Dumbbell Press",
       "aliases": [
         "Single-Arm Dumbbell Overhead Press",
         "One-Arm Standing Dumbbell Overhead Press",
         "Single-Arm Dumbbell Shoulder Press",
-        "One-Arm Dumbbell Shoulder Press"
+        "One-Arm Dumbbell Shoulder Press",
+        "Single-Arm Standing Dumbbell Overhead Press"
       ],
       "equipment": "dumbbell",
       "laterality": "unilateral",
@@ -1949,11 +1950,12 @@
     },
     {
       "catalogID": "unsupported-seated-dumbbell-overhead-press",
-      "name": "Unsupported Seated Dumbbell Overhead Press",
+      "name": "Seated Dumbbell Press (No Backrest)",
       "aliases": [
         "Unsupported Seated Dumbbell Shoulder Press",
         "No-Backrest Dumbbell Shoulder Press",
-        "Seated Dumbbell Press Without Back Support"
+        "Seated Dumbbell Press Without Back Support",
+        "Unsupported Seated Dumbbell Overhead Press"
       ],
       "equipment": "dumbbell",
       "laterality": "bilateral",
@@ -2079,11 +2081,12 @@
     },
     {
       "catalogID": "single-arm-seated-dumbbell-overhead-press",
-      "name": "Single-Arm Seated Dumbbell Overhead Press",
+      "name": "Seated Single-Arm Dumbbell Press",
       "aliases": [
         "One-Arm Seated Dumbbell Overhead Press",
         "Single-Arm Seated Dumbbell Shoulder Press",
-        "One-Arm Seated Dumbbell Shoulder Press"
+        "One-Arm Seated Dumbbell Shoulder Press",
+        "Single-Arm Seated Dumbbell Overhead Press"
       ],
       "equipment": "dumbbell",
       "laterality": "unilateral",
@@ -2212,11 +2215,12 @@
     },
     {
       "catalogID": "single-arm-standing-kettlebell-overhead-press",
-      "name": "Single-Arm Standing Kettlebell Overhead Press",
+      "name": "Standing Single-Arm Kettlebell Press",
       "aliases": [
         "Single-Arm Kettlebell Overhead Press",
         "One-Arm Standing Kettlebell Press",
-        "Kettlebell Military Press"
+        "Kettlebell Military Press",
+        "Single-Arm Standing Kettlebell Overhead Press"
       ],
       "equipment": "kettlebell",
       "laterality": "unilateral",
@@ -2722,11 +2726,11 @@
     },
     {
       "catalogID": "wall-supported-strict-handstand-push-up",
-      "name": "Wall-Supported Strict Handstand Push-Up",
+      "name": "Strict Wall Handstand Push-Up",
       "aliases": [
-        "Strict Wall Handstand Push-Up",
         "Wall Handstand Push-Up",
-        "Inversion-Stand Handstand Push-Up"
+        "Inversion-Stand Handstand Push-Up",
+        "Wall-Supported Strict Handstand Push-Up"
       ],
       "equipment": "bodyweight",
       "laterality": "bilateral",

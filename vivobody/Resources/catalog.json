@@ -207,7 +207,7 @@
       }
     ],
     "catalogID": "standing-unilateral-machine-calf-raise",
-    "name": "Standing Unilateral Machine Calf Raise",
+    "name": "Standing Single-Leg Machine Calf Raise",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -224,7 +224,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Single-Leg Standing Calf Raise",
-      "Single-Leg Standing Calf Raise Machine"
+      "Single-Leg Standing Calf Raise Machine",
+      "Standing Unilateral Machine Calf Raise"
     ],
     "searchPriority": 85,
     "bodyweightFraction": 0.0,
@@ -266,7 +267,7 @@
       }
     ],
     "catalogID": "seated-unilateral-machine-calf-raise",
-    "name": "Seated Unilateral Machine Calf Raise",
+    "name": "Seated Single-Leg Machine Calf Raise",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -283,7 +284,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Single-Leg Seated Calf Raise",
-      "Single-Leg Seated Calf Raise Machine"
+      "Single-Leg Seated Calf Raise Machine",
+      "Seated Unilateral Machine Calf Raise"
     ],
     "searchPriority": 85,
     "bodyweightFraction": 0.0,
@@ -325,7 +327,7 @@
       }
     ],
     "catalogID": "bilateral-standing-shoulder-pad-machine-calf-raise",
-    "name": "Bilateral Standing Shoulder-Pad Machine Calf Raise",
+    "name": "Standing Shoulder-Pad Machine Calf Raise",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -342,7 +344,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Standing Machine Calf Raise",
-      "Standing Calf Raise Machine"
+      "Standing Calf Raise Machine",
+      "Bilateral Standing Shoulder-Pad Machine Calf Raise"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -384,7 +387,7 @@
       }
     ],
     "catalogID": "bilateral-seated-thigh-pad-machine-calf-raise",
-    "name": "Bilateral Seated Thigh-Pad Machine Calf Raise",
+    "name": "Seated Thigh-Pad Machine Calf Raise",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -401,7 +404,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Seated Machine Calf Raise",
-      "Seated Calf Raise Machine"
+      "Seated Calf Raise Machine",
+      "Bilateral Seated Thigh-Pad Machine Calf Raise"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -443,7 +447,7 @@
       }
     ],
     "catalogID": "wall-balanced-single-leg-bodyweight-heel-raise",
-    "name": "Wall-Balanced Single-Leg Bodyweight Heel Raise",
+    "name": "Wall-Balanced Single-Leg Heel Raise",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 12,
@@ -460,7 +464,8 @@
     "aliases": [
       "Single-Leg Bodyweight Heel Raise",
       "Bodyweight Single-Leg Calf Raise",
-      "Light-Wall-Balance Single-Leg Heel Raise"
+      "Light-Wall-Balance Single-Leg Heel Raise",
+      "Wall-Balanced Single-Leg Bodyweight Heel Raise"
     ],
     "searchPriority": 98,
     "bodyweightFraction": 0,
@@ -1488,7 +1493,7 @@
       }
     ],
     "catalogID": "forty-five-degree-bench-anchored-core-hold",
-    "name": "45° Bench-Anchored Core Hold",
+    "name": "Bench-Anchored Core Hold",
     "group": "core",
     "defaultWeight": 0,
     "reps": 1,
@@ -1506,7 +1511,8 @@
     "aliases": [
       "Supine Core ISO Hold",
       "Bench-Anchored Supine Core Hold",
-      "45-Degree Core Hold"
+      "45-Degree Core Hold",
+      "45° Bench-Anchored Core Hold"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -1573,7 +1579,7 @@
       }
     ],
     "catalogID": "alternating-supine-bicycle-crunch",
-    "name": "Alternating Supine Bicycle Crunch",
+    "name": "Bicycle Crunch",
     "group": "core",
     "defaultWeight": 0,
     "reps": 10,
@@ -1589,9 +1595,9 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Bicycle Crunch",
       "Supine Bicycle Crunch",
-      "Alternating Bicycle Crunch"
+      "Alternating Bicycle Crunch",
+      "Alternating Supine Bicycle Crunch"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -2288,7 +2294,7 @@
       }
     ],
     "catalogID": "bodyweight-floor-squat-100-degrees",
-    "name": "100° Two-Leg Bodyweight Floor Squat",
+    "name": "Bodyweight Squat",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 10,
@@ -2303,9 +2309,11 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Bodyweight Squat",
       "Air Squat",
-      "100-Degree Bodyweight Floor Squat"
+      "100-Degree Bodyweight Floor Squat",
+      "100° Two-Leg Bodyweight Floor Squat",
+      "Bodyweight Squat (100°)",
+      "Bodyweight Squat (100° Knee Bend)"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -2634,7 +2642,7 @@
       }
     ],
     "catalogID": "bodyweight-supine-glute-bridge-90-degrees",
-    "name": "90° Bodyweight Supine Glute Bridge",
+    "name": "Bodyweight Glute Bridge",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 10,
@@ -2649,9 +2657,9 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Bodyweight Glute Bridge",
       "Floor Glute Bridge",
-      "90-Degree Bodyweight Supine Glute Bridge"
+      "90-Degree Bodyweight Supine Glute Bridge",
+      "90° Bodyweight Supine Glute Bridge"
     ],
     "searchPriority": 98,
     "bodyweightFraction": 0,
@@ -2794,7 +2802,7 @@
       }
     ],
     "catalogID": "bodyweight-single-leg-hip-thrust",
-    "name": "Single-Leg Hip Thrusts",
+    "name": "Single-Leg Hip Thrust",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 8,
@@ -2810,7 +2818,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Bodyweight Single-Leg Hip Thrust",
-      "Unweighted Single-Leg Hip Thrust"
+      "Unweighted Single-Leg Hip Thrust",
+      "Single-Leg Hip Thrusts"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -3240,7 +3249,7 @@
       }
     ],
     "catalogID": "seated-handled-lever-machine-chest-fly",
-    "name": "Seated Handled Lever-Machine Chest Fly",
+    "name": "Seated Machine Chest Fly (Handles)",
     "group": "chest",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -3256,8 +3265,9 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Seated Handled Machine Chest Fly",
-      "Handled Lever Chest Fly"
+      "Handled Lever Chest Fly",
+      "Seated Handled Lever-Machine Chest Fly",
+      "Seated Handled Machine Chest Fly"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -3702,7 +3712,7 @@
       }
     ],
     "catalogID": "partner-supported-copenhagen-adduction",
-    "name": "Partner-Supported Copenhagen Adduction",
+    "name": "Partner Copenhagen Adduction",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 6,
@@ -3717,8 +3727,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Partner Copenhagen Adduction",
-      "Dynamic Partner Copenhagen"
+      "Dynamic Partner Copenhagen",
+      "Partner-Supported Copenhagen Adduction"
     ],
     "searchPriority": 90,
     "bodyweightFraction": 0,
@@ -4225,7 +4235,7 @@
       }
     ],
     "catalogID": "hands-elevated-push-up-30-48-cm",
-    "name": "30.48 cm Hands-Elevated Push-Up",
+    "name": "Hands-Elevated Push-Up",
     "group": "chest",
     "defaultWeight": 0,
     "reps": 10,
@@ -4241,8 +4251,8 @@
     "laterality": "bilateral",
     "aliases": [
       "12-Inch Hands-Elevated Push-Up",
-      "Hands-Elevated Push-Up",
-      "Incline Push-Up"
+      "Incline Push-Up",
+      "30.48 cm Hands-Elevated Push-Up"
     ],
     "searchPriority": 98,
     "bodyweightFraction": 0.55,
@@ -4306,7 +4316,7 @@
       }
     ],
     "catalogID": "seated-45-degree-cable-pulldown",
-    "name": "Seated 45-Degree Cable Pulldown",
+    "name": "Seated Diagonal Cable Pulldown",
     "group": "back",
     "defaultWeight": 35,
     "defaultWeightKg": 15,
@@ -4323,7 +4333,8 @@
     "laterality": "bilateral",
     "aliases": [
       "45-Degree Lat Pulldown",
-      "Diagonal Cable Pulldown"
+      "Diagonal Cable Pulldown",
+      "Seated 45-Degree Cable Pulldown"
     ],
     "searchPriority": 82,
     "bodyweightFraction": 0,
@@ -4423,7 +4434,7 @@
       }
     ],
     "catalogID": "bar-dip",
-    "name": "Bar Dip",
+    "name": "Parallel-Bar Dip",
     "group": "chest",
     "defaultWeight": 0,
     "reps": 8,
@@ -4440,7 +4451,8 @@
     "aliases": [
       "Dip",
       "Parallel Bar Dip",
-      "Bodyweight Dip"
+      "Bodyweight Dip",
+      "Bar Dip"
     ],
     "searchPriority": 97,
     "bodyweightFraction": 1,
@@ -4630,7 +4642,7 @@
       }
     ],
     "catalogID": "life-fitness-pro2-assisted-dip-machine",
-    "name": "Life Fitness Pro 2 Assisted Dip Machine",
+    "name": "Machine-Assisted Dip",
     "group": "chest",
     "defaultWeight": 40,
     "defaultWeightKg": 20,
@@ -4646,8 +4658,8 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Machine-Assisted Dip",
-      "Counterbalanced Dip"
+      "Counterbalanced Dip",
+      "Life Fitness Pro 2 Assisted Dip Machine"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 1,
@@ -5603,7 +5615,7 @@
       }
     ],
     "catalogID": "foot-anchored-band-reverse-lunge",
-    "name": "Reverse Lunge with Band",
+    "name": "Foot-Anchored Band Reverse Lunge",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 8,
@@ -5618,7 +5630,7 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Foot-Anchored Band Reverse Lunge"
+      "Reverse Lunge with Band"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -6100,7 +6112,7 @@
       }
     ],
     "catalogID": "bilateral-barbell-lying-triceps-extension",
-    "name": "Bilateral Barbell Lying Triceps Extension",
+    "name": "Barbell Lying Triceps Extension",
     "group": "arms",
     "defaultWeight": 30,
     "defaultWeightKg": 15,
@@ -6117,7 +6129,7 @@
     "laterality": "bilateral",
     "aliases": [
       "Lying Barbell Triceps Press",
-      "Barbell Lying Triceps Extension"
+      "Bilateral Barbell Lying Triceps Extension"
     ],
     "searchPriority": 92,
     "bodyweightFraction": 0,
@@ -6175,7 +6187,7 @@
       }
     ],
     "catalogID": "bilateral-straight-bar-cable-triceps-pushdown",
-    "name": "Bilateral Straight-Bar Cable Triceps Pushdown",
+    "name": "Straight-Bar Cable Triceps Pushdown",
     "group": "arms",
     "defaultWeight": 30,
     "defaultWeightKg": 15,
@@ -6191,9 +6203,9 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Straight-Bar Cable Triceps Pushdown",
       "Cable Triceps Pushdown",
-      "Two-Arm Triceps Pushdown"
+      "Two-Arm Triceps Pushdown",
+      "Bilateral Straight-Bar Cable Triceps Pushdown"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -6258,7 +6270,7 @@
       }
     ],
     "catalogID": "bilateral-rope-cable-triceps-pushdown",
-    "name": "Bilateral Rope Cable Triceps Pushdown",
+    "name": "Rope Cable Triceps Pushdown",
     "group": "arms",
     "defaultWeight": 30,
     "defaultWeightKg": 15,
@@ -6274,9 +6286,9 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Rope Cable Triceps Pushdown",
       "Bilateral Rope Pushdown",
-      "Rope Triceps Pushdown"
+      "Rope Triceps Pushdown",
+      "Bilateral Rope Cable Triceps Pushdown"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -6342,7 +6354,7 @@
       }
     ],
     "catalogID": "life-fitness-pro2-seated-triceps-extension",
-    "name": "Life Fitness Pro 2 Seated Triceps Extension",
+    "name": "Seated Machine Triceps Extension",
     "group": "arms",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -6359,8 +6371,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Machine Triceps Extension",
-      "Seated Machine Triceps Extension",
-      "Selectorized Triceps Extension"
+      "Selectorized Triceps Extension",
+      "Life Fitness Pro 2 Seated Triceps Extension"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -7389,7 +7401,7 @@
       }
     ],
     "catalogID": "bilateral-incline-dumbbell-curl",
-    "name": "Bilateral Incline Dumbbell Curl",
+    "name": "Incline Dumbbell Curl",
     "group": "arms",
     "defaultWeight": 15,
     "defaultWeightKg": 7.5,
@@ -7404,7 +7416,9 @@
       "sagittal"
     ],
     "laterality": "bilateral",
-    "aliases": [],
+    "aliases": [
+      "Bilateral Incline Dumbbell Curl"
+    ],
     "searchPriority": 90,
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
@@ -7457,7 +7471,7 @@
       }
     ],
     "catalogID": "standing-bilateral-supinated-dumbbell-curl",
-    "name": "Standing Bilateral Supinated Dumbbell Curl",
+    "name": "Standing Two-Dumbbell Supinated Curl",
     "group": "arms",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -7474,6 +7488,7 @@
     "laterality": "bilateral",
     "aliases": [
       "Bilateral Dumbbell Curl",
+      "Standing Bilateral Supinated Dumbbell Curl",
       "Standing Dumbbell Biceps Curl"
     ],
     "searchPriority": 94,
@@ -7540,7 +7555,7 @@
       }
     ],
     "catalogID": "bilateral-dumbbell-hammer-curl",
-    "name": "Bilateral Dumbbell Hammer Curl",
+    "name": "Dumbbell Hammer Curl",
     "group": "arms",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -7557,8 +7572,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Bilateral Hammer Curl",
-      "Dumbbell Hammer Curl",
-      "Standing Dumbbell Hammer Curl"
+      "Standing Dumbbell Hammer Curl",
+      "Bilateral Dumbbell Hammer Curl"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -7945,7 +7960,7 @@
       }
     ],
     "catalogID": "high-pulley-rope-face-pull-with-external-rotation",
-    "name": "High-Pulley Rope Face Pull with Deliberate External Rotation",
+    "name": "Rope Face Pull with External Rotation",
     "group": "shoulders",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -7962,7 +7977,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Externally Rotating Rope Face Pull",
-      "High-Pulley Face Pull with External Rotation"
+      "High-Pulley Face Pull with External Rotation",
+      "High-Pulley Rope Face Pull with Deliberate External Rotation"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -8344,7 +8360,7 @@
       }
     ],
     "catalogID": "alternating-forearm-plank-arm-reach",
-    "name": "Alternating Forearm-Plank Arm Reach",
+    "name": "Forearm Plank Arm Reach",
     "group": "core",
     "defaultWeight": 0,
     "reps": 10,
@@ -8361,7 +8377,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Plank with Arm Reach",
-      "Plank and Reach"
+      "Plank and Reach",
+      "Alternating Forearm-Plank Arm Reach"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -8438,7 +8455,7 @@
       }
     ],
     "catalogID": "alternating-forearm-plank-hip-drop",
-    "name": "Alternating Forearm-Plank Hip Drop",
+    "name": "Forearm Plank Hip Drop",
     "group": "core",
     "defaultWeight": 0,
     "reps": 12,
@@ -8456,7 +8473,8 @@
     "aliases": [
       "Plank Twists",
       "Plank Hip Twists",
-      "Plank Hip Drops"
+      "Plank Hip Drops",
+      "Alternating Forearm-Plank Hip Drop"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -8678,7 +8696,7 @@
       }
     ],
     "catalogID": "fast-pogos",
-    "name": "Fast Pogos",
+    "name": "Forward Pogo Shuffle",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 20,
@@ -8693,7 +8711,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Forward Fast Pogos"
+      "Forward Fast Pogos",
+      "Fast Pogos"
     ],
     "searchPriority": 97,
     "bodyweightFraction": 0,
@@ -8707,7 +8726,7 @@
       "controlledJoints": "Keep knees slightly flexed and hips facing forward; avoid exaggerated heel rise.",
       "supportAndPosture": "Use a clear, level forward lane and keep the hands on the hips.",
       "disqualifyingCompensations": [
-        "Jumping vertically with both feet together becomes stationary Pogos.",
+        "Jumping vertically with both feet together becomes Stationary Two-Foot Pogos.",
         "Taking long running strides changes the short-contact shuffle."
       ],
       "sideOrDirection": "Alternate feet; count every foot contact, not each left-right pair."
@@ -9137,7 +9156,7 @@
       }
     ],
     "catalogID": "two-hand-single-dumbbell-goblet-squat-to-press",
-    "name": "Two-Hand Single-Dumbbell Goblet Squat to Press",
+    "name": "Single-Dumbbell Goblet Squat to Press",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -9155,7 +9174,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Dumbbell Goblet Squat to Press",
-      "Single-Dumbbell Goblet Squat to Overhead Press"
+      "Single-Dumbbell Goblet Squat to Overhead Press",
+      "Two-Hand Single-Dumbbell Goblet Squat to Press"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -9891,7 +9911,7 @@
       }
     ],
     "catalogID": "alternating-high-plank-contralateral-knee-touch",
-    "name": "Alternating High-Plank Contralateral Knee Touch",
+    "name": "High-Plank Opposite-Knee Touch",
     "group": "core",
     "defaultWeight": 0,
     "reps": 10,
@@ -9910,7 +9930,8 @@
       "Plank Row w/ Knee Touch",
       "Plank Row with Knee Touch",
       "Plank with Knee Touch",
-      "Contralateral Plank Knee Touch"
+      "Contralateral Plank Knee Touch",
+      "Alternating High-Plank Contralateral Knee Touch"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -10219,7 +10240,7 @@
       }
     ],
     "catalogID": "alternating-high-plank-t-spine-rotation",
-    "name": "Alternating High-Plank T-Spine Rotation",
+    "name": "High-Plank T-Spine Rotation",
     "group": "core",
     "defaultWeight": 0,
     "reps": 10,
@@ -10237,7 +10258,8 @@
     "aliases": [
       "Rotational Plank",
       "Plank Rotation",
-      "T Plank"
+      "T Plank",
+      "Alternating High-Plank T-Spine Rotation"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -10330,7 +10352,7 @@
       }
     ],
     "catalogID": "alternating-high-plank-shoulder-tap",
-    "name": "Alternating High-Plank Shoulder Tap",
+    "name": "High-Plank Shoulder Tap",
     "group": "core",
     "defaultWeight": 0,
     "reps": 16,
@@ -10347,8 +10369,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Plank Row",
-      "High-Plank Shoulder Tap",
-      "Plank Shoulder Tap"
+      "Plank Shoulder Tap",
+      "Alternating High-Plank Shoulder Tap"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -10553,7 +10575,7 @@
       }
     ],
     "catalogID": "bodyweight-side-lying-hip-abduction",
-    "name": "Bodyweight Side-Lying Hip Abduction",
+    "name": "Side-Lying Hip Abduction",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 12,
@@ -10568,8 +10590,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Side-Lying Hip Abduction",
-      "Side-Lying Leg Raise"
+      "Side-Lying Leg Raise",
+      "Bodyweight Side-Lying Hip Abduction"
     ],
     "searchPriority": 90,
     "bodyweightFraction": 0,
@@ -10688,7 +10710,7 @@
       }
     ],
     "catalogID": "supported-standing-band-hip-adduction",
-    "name": "Supported Standing Band Hip Adduction",
+    "name": "Standing Band Hip Adduction",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 10,
@@ -10703,8 +10725,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Standing Band Hip Adduction",
-      "Band Hip Adduction"
+      "Band Hip Adduction",
+      "Supported Standing Band Hip Adduction"
     ],
     "searchPriority": 80,
     "bodyweightFraction": 0,
@@ -10845,7 +10867,7 @@
       }
     ],
     "catalogID": "supported-standing-cable-hip-adduction",
-    "name": "Supported Standing Cable Hip Adduction",
+    "name": "Standing Cable Hip Adduction",
     "group": "legs",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -10861,8 +10883,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Standing Cable Hip Adduction",
-      "Cable Hip Adduction"
+      "Cable Hip Adduction",
+      "Supported Standing Cable Hip Adduction"
     ],
     "searchPriority": 92,
     "bodyweightFraction": 0,
@@ -10991,7 +11013,7 @@
       }
     ],
     "catalogID": "supported-cable-ankle-cuff-hip-extension",
-    "name": "Supported Cable Ankle-Cuff Hip Extension",
+    "name": "Standing Cable Hip Extension",
     "group": "legs",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -11007,8 +11029,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Standing Cable Hip Extension",
-      "Cable Glute Kickback"
+      "Cable Glute Kickback",
+      "Supported Cable Ankle-Cuff Hip Extension"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -11201,7 +11223,7 @@
       }
     ],
     "catalogID": "bodyweight-active-straight-leg-raise",
-    "name": "Bodyweight Active Straight-Leg Raise",
+    "name": "Active Straight-Leg Raise",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 10,
@@ -11216,8 +11238,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Active Straight-Leg Raise",
-      "Supine Straight-Leg Raise"
+      "Supine Straight-Leg Raise",
+      "Bodyweight Active Straight-Leg Raise"
     ],
     "searchPriority": 68,
     "bodyweightFraction": 0,
@@ -11271,7 +11293,7 @@
       }
     ],
     "catalogID": "supported-standing-cable-hip-flexion",
-    "name": "Supported Standing Cable Hip Flexion",
+    "name": "Standing Cable Hip Flexion",
     "group": "legs",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -11287,9 +11309,9 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Standing Cable Hip Flexion",
       "Straight-Leg Cable Hip Flexion",
-      "Cable Hip Flexor Raise"
+      "Cable Hip Flexor Raise",
+      "Supported Standing Cable Hip Flexion"
     ],
     "searchPriority": 90,
     "bodyweightFraction": 0,
@@ -11332,118 +11354,6 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "stabilizer"
-      }
-    ]
-  },
-  {
-    "familyID": "hip-hinge",
-    "familyName": "Hip Hinge",
-    "movementActions": [
-      {
-        "actionID": "hip.extension",
-        "name": "Hip extension",
-        "plane": "sagittal",
-        "kind": "produced"
-      },
-      {
-        "actionID": "spine.extension",
-        "name": "Spinal extension",
-        "plane": "sagittal",
-        "kind": "produced"
-      }
-    ],
-    "catalogID": "barbell-good-morning-25-percent-body-mass",
-    "name": "25% Body-Mass Barbell Good Morning",
-    "group": "legs",
-    "defaultWeight": 45,
-    "defaultWeightKg": 20,
-    "reps": 8,
-    "trackingMode": "reps",
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "trainingRole": "legs",
-    "pattern": "hinge",
-    "direction": null,
-    "planes": [
-      "sagittal"
-    ],
-    "laterality": "bilateral",
-    "aliases": [
-      "Barbell Good Morning at 25% Body Mass",
-      "25% Bodyweight Good Morning"
-    ],
-    "searchPriority": 76,
-    "bodyweightFraction": 0,
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "execution": {
-      "startingPosition": "Stand upright with your feet approximately shoulder-width apart and naturally turned slightly outward. Place a free bar securely across the back of your shoulders and upper back in a comfortable hand position. Load the bar with 25 percent of your body weight; use 45 lb or 20 kg only if that matches your calculated weight.",
-      "movement": "Push your hips backward as far as you can while keeping a natural back position.",
-      "endpoint": "End the descent when your hips have moved as far back as they comfortably can.",
-      "returnPhase": "Straighten your hips and return to standing at the same controlled speed used for the descent, keeping the bar on your body for all eight repetitions.",
-      "controlledJoints": "Allow only a small bend in the knees throughout the movement.",
-      "supportAndPosture": "Keep your head aligned with your spine, brace your trunk, and keep both feet planted.",
-      "disqualifyingCompensations": [
-        "Bending the knees deeply turns the hinge into a squat.",
-        "Rounding the back turns the hinge into a rounded-back pull."
-      ]
-    },
-    "involvement": [
-      {
-        "muscle": "medialHamstrings",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "primary"
-      },
-      {
-        "muscle": "lumbarExtensors",
-        "role": "primary"
-      },
-      {
-        "muscle": "bicepsFemoris",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "gastrocnemius",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "soleus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "fingerFlexors",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "extensorCarpiRadialis",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "externalRotators",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "trapeziusUpper",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "brachialis",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
         "role": "stabilizer"
       }
     ]
@@ -13575,7 +13485,7 @@
       }
     ],
     "catalogID": "feet-elevated-push-up-30-48-cm",
-    "name": "30.48 cm Feet-Elevated Push-Up",
+    "name": "Feet-Elevated Push-Up",
     "group": "chest",
     "defaultWeight": 0,
     "reps": 8,
@@ -13592,8 +13502,8 @@
     "laterality": "bilateral",
     "aliases": [
       "12-Inch Feet-Elevated Push-Up",
-      "Feet-Elevated Push-Up",
-      "Decline Push-Up"
+      "Decline Push-Up",
+      "30.48 cm Feet-Elevated Push-Up"
     ],
     "searchPriority": 98,
     "bodyweightFraction": 0.7,
@@ -13663,7 +13573,7 @@
       }
     ],
     "catalogID": "trx-suspended-push-up",
-    "name": "TRX Suspended Push-Up",
+    "name": "TRX Feet-Suspended Push-Up",
     "group": "chest",
     "defaultWeight": 0,
     "reps": 8,
@@ -13680,8 +13590,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Feet-Suspended Push-Up",
-      "TRX Feet-Suspended Push-Up",
-      "Suspension Trainer Push-Up"
+      "Suspension Trainer Push-Up",
+      "TRX Suspended Push-Up"
     ],
     "searchPriority": 99,
     "bodyweightFraction": 0,
@@ -13761,7 +13671,7 @@
       }
     ],
     "catalogID": "45-degree-incline-leg-press",
-    "name": "45° Incline Leg Press",
+    "name": "Incline Leg Press",
     "group": "legs",
     "defaultWeight": 90,
     "defaultWeightKg": 40,
@@ -13778,7 +13688,8 @@
     "laterality": "bilateral",
     "aliases": [
       "45-Degree Leg Press",
-      "Inclined Leg Press"
+      "Inclined Leg Press",
+      "45° Incline Leg Press"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -13837,7 +13748,7 @@
       }
     ],
     "catalogID": "panatta-1fw090-single-leg-45-degree-leg-press",
-    "name": "Panatta 1FW090 Single-Leg 45° Leg Press",
+    "name": "Single-Leg Incline Leg Press",
     "group": "legs",
     "defaultWeight": 45,
     "defaultWeightKg": 20,
@@ -13855,7 +13766,7 @@
     "aliases": [
       "Single-Leg 45° Leg Press",
       "Unilateral 45° Leg Press",
-      "Single-Leg Incline Leg Press"
+      "Panatta 1FW090 Single-Leg 45° Leg Press"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -14099,7 +14010,7 @@
       }
     ],
     "catalogID": "reclined-unilateral-machine-leg-extension",
-    "name": "Reclined Unilateral Machine Leg Extension",
+    "name": "Reclined Single-Leg Extension",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -14116,7 +14027,7 @@
     "laterality": "unilateral",
     "aliases": [
       "40-Degree Single-Leg Extension",
-      "Reclined Single-Leg Extension"
+      "Reclined Unilateral Machine Leg Extension"
     ],
     "searchPriority": 75,
     "bodyweightFraction": 0.0,
@@ -14158,7 +14069,7 @@
       }
     ],
     "catalogID": "upright-unilateral-machine-leg-extension",
-    "name": "Upright Unilateral Machine Leg Extension",
+    "name": "Upright Single-Leg Extension",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -14175,7 +14086,7 @@
     "laterality": "unilateral",
     "aliases": [
       "90-Degree Single-Leg Extension",
-      "Upright Single-Leg Extension"
+      "Upright Unilateral Machine Leg Extension"
     ],
     "searchPriority": 80,
     "bodyweightFraction": 0.0,
@@ -14217,7 +14128,7 @@
       }
     ],
     "catalogID": "upright-bilateral-lever-machine-leg-extension",
-    "name": "Upright Bilateral Lever-Machine Leg Extension",
+    "name": "Upright Machine Leg Extension",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -14235,7 +14146,8 @@
     "aliases": [
       "Bilateral Machine Leg Extension",
       "Machine Leg Extension",
-      "Leg Extension"
+      "Leg Extension",
+      "Upright Bilateral Lever-Machine Leg Extension"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -14277,7 +14189,7 @@
       }
     ],
     "catalogID": "seated-unilateral-machine-leg-curl",
-    "name": "Seated Unilateral Machine Leg Curl",
+    "name": "Seated Single-Leg Curl",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -14293,8 +14205,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Seated Single-Leg Curl",
-      "Unilateral Seated Leg Curl"
+      "Unilateral Seated Leg Curl",
+      "Seated Unilateral Machine Leg Curl"
     ],
     "searchPriority": 85,
     "bodyweightFraction": 0.0,
@@ -14344,7 +14256,7 @@
       }
     ],
     "catalogID": "prone-unilateral-machine-leg-curl",
-    "name": "Prone Unilateral Machine Leg Curl",
+    "name": "Prone Single-Leg Machine Curl",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -14361,7 +14273,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Lying Single-Leg Curl",
-      "Unilateral Prone Leg Curl"
+      "Unilateral Prone Leg Curl",
+      "Prone Unilateral Machine Leg Curl"
     ],
     "searchPriority": 80,
     "bodyweightFraction": 0.0,
@@ -14411,7 +14324,7 @@
       }
     ],
     "catalogID": "johnson-sl160-bilateral-seated-leg-curl",
-    "name": "Johnson SL160 Bilateral Seated Leg Curl",
+    "name": "Seated Leg Curl",
     "group": "legs",
     "defaultWeight": 40,
     "defaultWeightKg": 20,
@@ -14428,7 +14341,7 @@
     "laterality": "bilateral",
     "aliases": [
       "Bilateral Seated Leg Curl",
-      "Seated Leg Curl"
+      "Johnson SL160 Bilateral Seated Leg Curl"
     ],
     "searchPriority": 91,
     "bodyweightFraction": 0,
@@ -15511,7 +15424,7 @@
       }
     ],
     "catalogID": "standing-two-hand-landmine-rotation",
-    "name": "Standing Two-Hand Landmine Rotation",
+    "name": "Two-Hand Landmine Rotation",
     "group": "core",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -15529,7 +15442,8 @@
     "aliases": [
       "Landmine Rotation",
       "Landmine 180",
-      "180-Degree Landmine"
+      "180-Degree Landmine",
+      "Standing Two-Hand Landmine Rotation"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -15995,7 +15909,7 @@
       }
     ],
     "catalogID": "above-knee-band-side-walk",
-    "name": "Banded Side Walks",
+    "name": "Above-Knee Band Lateral Walk",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 12,
@@ -16010,7 +15924,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Above-Knee Band Side Walk"
+      "Above-Knee Band Side Walk",
+      "Banded Side Walks"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -16224,7 +16139,7 @@
       }
     ],
     "catalogID": "bodyweight-lateral-lunge-60-percent-height",
-    "name": "60%-Height Bodyweight Lateral Lunge",
+    "name": "Bodyweight Lateral Lunge",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 8,
@@ -16240,9 +16155,9 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Bodyweight Lateral Lunge",
       "60-Percent-Body-Height Lateral Lunge",
-      "Side Lunge"
+      "Side Lunge",
+      "60%-Height Bodyweight Lateral Lunge"
     ],
     "searchPriority": 97,
     "bodyweightFraction": 0,
@@ -16539,7 +16454,7 @@
       }
     ],
     "catalogID": "ice-skaters",
-    "name": "Ice Skaters",
+    "name": "Skater Hops",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 8,
@@ -16555,8 +16470,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Skater Hops",
-      "Lateral Skater Hops"
+      "Lateral Skater Hops",
+      "Ice Skaters"
     ],
     "searchPriority": 97,
     "bodyweightFraction": 0,
@@ -16571,7 +16486,7 @@
       "supportAndPosture": "Use a clear, level lateral lane and no hand support.",
       "disqualifyingCompensations": [
         "Stepping sideways without flight changes the hop into a lateral step.",
-        "Adding an immediate vertical hop and split-stance receive becomes Ice Skaters with Jump."
+        "Adding an immediate vertical hop and split-stance receive becomes Skater Hop to Vertical Jump."
       ],
       "sideOrDirection": "Alternate sides; count each lateral landing as one rep."
     },
@@ -16670,7 +16585,7 @@
       }
     ],
     "catalogID": "ice-skaters-with-jump",
-    "name": "Ice Skaters with Jump",
+    "name": "Skater Hop to Vertical Jump",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 5,
@@ -16686,7 +16601,7 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Skater Hop to Vertical Jump"
+      "Ice Skaters with Jump"
     ],
     "searchPriority": 97,
     "bodyweightFraction": 0,
@@ -16854,7 +16769,7 @@
       }
     ],
     "catalogID": "crossover-to-medicine-ball-rotational-throw",
-    "name": "Crossover to Medicine Ball Rotational Throw",
+    "name": "Crossover Rotational Medicine Ball Throw",
     "group": "core",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -16872,7 +16787,8 @@
     "aliases": [
       "Carioca to Med Ball Throw",
       "Carioca Medicine Ball Throw",
-      "Crossover to MB Rotational Throw"
+      "Crossover to MB Rotational Throw",
+      "Crossover to Medicine Ball Rotational Throw"
     ],
     "searchPriority": 89,
     "bodyweightFraction": 0,
@@ -16949,7 +16865,7 @@
       }
     ],
     "catalogID": "lateral-shuffle-to-medicine-ball-throw",
-    "name": "Lateral Shuffle to Medicine Ball Throw",
+    "name": "Lateral Shuffle Rotational Medicine Ball Throw",
     "group": "core",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -16967,7 +16883,9 @@
     "aliases": [
       "Lateral Shuffle + Med Ball Throw",
       "Lateral Shuffle Med Ball Throw",
-      "Shuffle to Rotational Medicine Ball Throw"
+      "Shuffle to Rotational Medicine Ball Throw",
+      "Lateral Shuffle to Medicine Ball Throw",
+      "Lateral Shuffle Medicine Ball Throw"
     ],
     "searchPriority": 90,
     "bodyweightFraction": 0,
@@ -19902,7 +19820,7 @@
       }
     ],
     "catalogID": "quadruped-fire-hydrants-with-band",
-    "name": "Quadruped Fire Hydrants with Band",
+    "name": "Banded Fire Hydrant",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 10,
@@ -19917,7 +19835,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Banded Quadruped Fire Hydrant"
+      "Banded Quadruped Fire Hydrant",
+      "Quadruped Fire Hydrants with Band"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -20552,7 +20471,7 @@
       }
     ],
     "catalogID": "45-degree-roman-chair-back-extension",
-    "name": "45° Roman-Chair Back Extension",
+    "name": "Roman-Chair Back Extension",
     "group": "legs",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -20570,7 +20489,8 @@
     "aliases": [
       "45° Back Extension",
       "45-Degree Back Extension",
-      "Roman-Chair Hyperextension"
+      "Roman-Chair Hyperextension",
+      "45° Roman-Chair Back Extension"
     ],
     "searchPriority": 92,
     "bodyweightFraction": 0,
@@ -20625,7 +20545,7 @@
       }
     ],
     "catalogID": "barbell-romanian-deadlift",
-    "name": "Floor-Touch Barbell Romanian Deadlift",
+    "name": "Barbell RDL (Floor Touch)",
     "group": "legs",
     "defaultWeight": 95,
     "defaultWeightKg": 42.5,
@@ -20641,7 +20561,8 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Floor-Touch Romanian Deadlift"
+      "Floor-Touch Romanian Deadlift",
+      "Floor-Touch Barbell Romanian Deadlift"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -20882,7 +20803,7 @@
       }
     ],
     "catalogID": "barbell-romanian-deadlift-15-cm-step",
-    "name": "15 cm Step Barbell Romanian Deadlift",
+    "name": "Barbell Deficit RDL",
     "group": "legs",
     "defaultWeight": 95,
     "defaultWeightKg": 42.5,
@@ -20900,7 +20821,10 @@
     "aliases": [
       "15 cm Step Romanian Deadlift",
       "15 cm Deficit Romanian Deadlift",
-      "Step RDL"
+      "Step RDL",
+      "15 cm Step Barbell Romanian Deadlift",
+      "Barbell RDL (15 cm Step)",
+      "Barbell Deficit RDL (15 cm)"
     ],
     "searchPriority": 78,
     "bodyweightFraction": 0,
@@ -21013,7 +20937,7 @@
       }
     ],
     "catalogID": "continuous-top-start-barbell-romanian-deadlift",
-    "name": "Continuous Top-Start Barbell Romanian Deadlift",
+    "name": "Barbell RDL (Continuous)",
     "group": "legs",
     "defaultWeight": 45,
     "defaultWeightKg": 20,
@@ -21031,7 +20955,8 @@
     "aliases": [
       "Barbell Romanian Deadlift",
       "Romanian Deadlift",
-      "RDL"
+      "RDL",
+      "Continuous Top-Start Barbell Romanian Deadlift"
     ],
     "searchPriority": 99,
     "bodyweightFraction": 0,
@@ -21143,7 +21068,7 @@
       }
     ],
     "catalogID": "two-dumbbell-continuous-romanian-deadlift",
-    "name": "Two-Dumbbell Continuous Romanian Deadlift",
+    "name": "Two-Dumbbell RDL (Continuous)",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -21161,7 +21086,8 @@
     "aliases": [
       "Two-Dumbbell Romanian Deadlift",
       "Dumbbell Romanian Deadlift",
-      "Dumbbell RDL"
+      "Dumbbell RDL",
+      "Two-Dumbbell Continuous Romanian Deadlift"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -21787,7 +21713,7 @@
       }
     ],
     "catalogID": "bilateral-dumbbell-shrug",
-    "name": "Bilateral Dumbbell Shrug",
+    "name": "Two-Dumbbell Shrug",
     "group": "back",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -21803,8 +21729,8 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Two-Dumbbell Shrug",
-      "Dumbbell Shrug"
+      "Dumbbell Shrug",
+      "Bilateral Dumbbell Shrug"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -21885,7 +21811,7 @@
       }
     ],
     "catalogID": "bilateral-30-degree-stabilization-shrug",
-    "name": "Bilateral 30-Degree Stabilization Shrug",
+    "name": "Arm-Raised Stabilization Shrug",
     "group": "back",
     "defaultWeight": 0,
     "reps": 2,
@@ -21900,8 +21826,9 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "30-Degree Stabilization Shrug",
-      "Bilateral Stabilization Shrug"
+      "Bilateral Stabilization Shrug",
+      "Bilateral 30-Degree Stabilization Shrug",
+      "30-Degree Stabilization Shrug"
     ],
     "searchPriority": 68,
     "bodyweightFraction": 0,
@@ -21985,7 +21912,7 @@
       }
     ],
     "catalogID": "standing-bilateral-barbell-shrug",
-    "name": "Standing Bilateral Barbell Shrug",
+    "name": "Barbell Shrug",
     "group": "back",
     "defaultWeight": 45,
     "defaultWeightKg": 20,
@@ -22001,8 +21928,8 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Barbell Shrug",
-      "Standing Barbell Shrug"
+      "Standing Barbell Shrug",
+      "Standing Bilateral Barbell Shrug"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -22794,7 +22721,7 @@
       }
     ],
     "catalogID": "simultaneous-bilateral-dumbbell-lateral-raise",
-    "name": "Simultaneous Bilateral Dumbbell Lateral Raise",
+    "name": "Two-Dumbbell Lateral Raise",
     "group": "shoulders",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -22811,7 +22738,7 @@
     "laterality": "bilateral",
     "aliases": [
       "Bilateral Dumbbell Lateral Raise",
-      "Two-Dumbbell Lateral Raise"
+      "Simultaneous Bilateral Dumbbell Lateral Raise"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -23707,7 +23634,7 @@
       }
     ],
     "catalogID": "single-arm-bent-over-row",
-    "name": "Single-Arm Bent-Over Row",
+    "name": "One-Arm Dumbbell Row (Hand on Bench)",
     "group": "back",
     "defaultWeight": 35,
     "defaultWeightKg": 15,
@@ -23724,7 +23651,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Single Arm Bent Over Row",
-      "Hand-Supported Single-Arm Bent-Over Row"
+      "Hand-Supported Single-Arm Bent-Over Row",
+      "Single-Arm Bent-Over Row"
     ],
     "searchPriority": 98,
     "bodyweightFraction": 0,
@@ -23738,7 +23666,7 @@
       "controlledJoints": "Keep the hips, knees, and torso still while the shoulder blade moves naturally with the row.",
       "supportAndPosture": "Keep both feet planted and use only the opposite hand on the bench for support.",
       "disqualifyingCompensations": [
-        "Placing the opposite knee on the bench changes the fixture into the existing One-Arm Dumbbell Row.",
+        "Placing the opposite knee on the bench changes the fixture into the existing One-Arm Dumbbell Row (Hand and Knee on Bench).",
         "Rotating the torso to lift the dumbbell changes the strict row into a row-and-rotate variation.",
         "Standing up or driving through the legs turns the strict row into a momentum row."
       ],
@@ -23827,7 +23755,7 @@
       }
     ],
     "catalogID": "one-arm-dumbbell-row",
-    "name": "One-Arm Dumbbell Row",
+    "name": "One-Arm Dumbbell Row (Hand and Knee on Bench)",
     "group": "back",
     "defaultWeight": 35,
     "defaultWeightKg": 15,
@@ -23844,7 +23772,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Single-Arm Dumbbell Row",
-      "One-Arm DB Row"
+      "One-Arm DB Row",
+      "One-Arm Dumbbell Row"
     ],
     "searchPriority": 97,
     "bodyweightFraction": 0,
@@ -25274,7 +25203,7 @@
       }
     ],
     "catalogID": "simultaneous-bilateral-dumbbell-front-raise",
-    "name": "Simultaneous Bilateral Dumbbell Front Raise",
+    "name": "Two-Dumbbell Front Raise",
     "group": "shoulders",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -25291,7 +25220,7 @@
     "laterality": "bilateral",
     "aliases": [
       "Bilateral Dumbbell Front Raise",
-      "Two-Dumbbell Front Raise"
+      "Simultaneous Bilateral Dumbbell Front Raise"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -25932,8 +25861,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Single-Arm Machine Rear-Delt Row",
-      "One-Arm Machine Rear-Delt Row"
+      "One-Arm Machine Rear-Delt Row",
+      "Single-Arm Machine Rear-Delt Row"
     ],
     "searchPriority": 75,
     "bodyweightFraction": 0,
@@ -26433,7 +26362,7 @@
       }
     ],
     "catalogID": "dumbbell-single-leg-romanian-deadlift-ipsilateral-load",
-    "name": "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift",
+    "name": "Same-Side Dumbbell Single-Leg RDL",
     "group": "legs",
     "defaultWeight": 25,
     "defaultWeightKg": 12.5,
@@ -26450,7 +26379,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Same-Side-Load Dumbbell Single-Leg Romanian Deadlift",
-      "Ipsilateral Dumbbell Single-Leg RDL"
+      "Ipsilateral Dumbbell Single-Leg RDL",
+      "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift"
     ],
     "searchPriority": 88,
     "bodyweightFraction": 0,
@@ -26568,7 +26498,7 @@
       }
     ],
     "catalogID": "dumbbell-single-leg-romanian-deadlift-contralateral-load",
-    "name": "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift",
+    "name": "Opposite-Side Dumbbell Single-Leg RDL",
     "group": "legs",
     "defaultWeight": 25,
     "defaultWeightKg": 12.5,
@@ -26585,7 +26515,8 @@
     "laterality": "unilateral",
     "aliases": [
       "Opposite-Side-Load Dumbbell Single-Leg Romanian Deadlift",
-      "Contralateral Dumbbell Single-Leg RDL"
+      "Contralateral Dumbbell Single-Leg RDL",
+      "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift"
     ],
     "searchPriority": 90,
     "bodyweightFraction": 0,
@@ -27016,7 +26947,7 @@
       }
     ],
     "catalogID": "30-degree-curl-up",
-    "name": "30-Degree Curl-Up",
+    "name": "Partial Curl-Up",
     "group": "core",
     "defaultWeight": 0,
     "reps": 12,
@@ -27032,7 +26963,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Thirty-Degree Curl-Up",
-      "30-Degree Partial Curl-Up"
+      "30-Degree Partial Curl-Up",
+      "30-Degree Curl-Up"
     ],
     "searchPriority": 82,
     "bodyweightFraction": 0,
@@ -27169,7 +27101,8 @@
     "laterality": "unilateral",
     "aliases": [
       "30-Degree Side-Lying Trunk Lift",
-      "Fixed-Leg Lateral Trunk Lift"
+      "Fixed-Leg Lateral Trunk Lift",
+      "Fixed-Leg Side-Lying Trunk Lift"
     ],
     "searchPriority": 74,
     "bodyweightFraction": 0,
@@ -27621,7 +27554,7 @@
       }
     ],
     "catalogID": "two-dumbbell-stationary-split-squat",
-    "name": "Two-Dumbbell Stationary Split Squat",
+    "name": "Two-Dumbbell Split Squat",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -27637,9 +27570,9 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Two-Dumbbell Split Squat",
-      "Dumbbell Split Squat",
-      "Stationary Dumbbell Split Squat"
+      "Stationary Dumbbell Split Squat",
+      "Two-Dumbbell Stationary Split Squat",
+      "Dumbbell Split Squat"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -27758,7 +27691,7 @@
       }
     ],
     "catalogID": "barbell-rear-foot-elevated-split-squat",
-    "name": "Barbell Rear-Foot-Elevated Split Squat",
+    "name": "Barbell Bulgarian Split Squat",
     "group": "legs",
     "defaultWeight": 45,
     "defaultWeightKg": 20,
@@ -27774,9 +27707,9 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Barbell Bulgarian Split Squat",
       "Barbell Bulgarian Squat",
-      "Barbell RFESS"
+      "Barbell RFESS",
+      "Barbell Rear-Foot-Elevated Split Squat"
     ],
     "searchPriority": 92,
     "bodyweightFraction": 0,
@@ -27894,7 +27827,7 @@
       }
     ],
     "catalogID": "two-dumbbell-rear-foot-elevated-split-squat",
-    "name": "Two-Dumbbell Rear-Foot-Elevated Split Squat",
+    "name": "Two-Dumbbell Bulgarian Split Squat",
     "group": "legs",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -27910,9 +27843,10 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Dumbbell Bulgarian Split Squat",
       "Dumbbell Rear-Foot-Elevated Split Squat",
-      "Dumbbell RFESS"
+      "Dumbbell RFESS",
+      "Two-Dumbbell Rear-Foot-Elevated Split Squat",
+      "Dumbbell Bulgarian Split Squat"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -28729,7 +28663,7 @@
       }
     ],
     "catalogID": "stationary-pogos",
-    "name": "Pogos",
+    "name": "Stationary Two-Foot Pogos",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 12,
@@ -28745,7 +28679,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Pogo Jumps",
-      "Pogo Hops"
+      "Pogo Hops",
+      "Pogos"
     ],
     "searchPriority": 97,
     "bodyweightFraction": 0,
@@ -28760,7 +28695,7 @@
       "supportAndPosture": "Use a clear, level floor and keep the movement in place.",
       "disqualifyingCompensations": [
         "Deep hip-and-knee dipping becomes a countermovement jump.",
-        "Travelling forward with alternating quick foot contacts becomes Fast Pogos."
+        "Travelling forward with alternating quick foot contacts becomes Forward Pogo Shuffle."
       ]
     },
     "involvement": [
@@ -28818,7 +28753,7 @@
       }
     ],
     "catalogID": "bodyweight-forward-step-up-21cm",
-    "name": "21 cm Bodyweight Forward Step-Up",
+    "name": "Bodyweight Forward Step-Up",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 10,
@@ -28833,7 +28768,9 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "21 cm Forward Step-Up"
+      "21 cm Forward Step-Up",
+      "21 cm Bodyweight Forward Step-Up",
+      "Bodyweight Step-Up (21 cm)"
     ],
     "searchPriority": 70,
     "bodyweightFraction": 0,
@@ -29344,7 +29281,7 @@
       }
     ],
     "catalogID": "barefoot-dead-stop-sumo-barbell-deadlift",
-    "name": "Barefoot Dead-Stop Sumo Barbell Deadlift",
+    "name": "Dead-Stop Barbell Sumo Deadlift",
     "group": "legs",
     "defaultWeight": 45,
     "defaultWeightKg": 20,
@@ -29362,7 +29299,8 @@
     "aliases": [
       "Sumo Barbell Deadlift",
       "Sumo Deadlift",
-      "Double-Overhand Dead-Stop Sumo Deadlift"
+      "Double-Overhand Dead-Stop Sumo Deadlift",
+      "Barefoot Dead-Stop Sumo Barbell Deadlift"
     ],
     "searchPriority": 100,
     "bodyweightFraction": 0,
@@ -29503,7 +29441,7 @@
       }
     ],
     "catalogID": "medicine-ball-weighted-leg-lower",
-    "name": "Medicine-Ball Weighted Leg Lower",
+    "name": "Medicine-Ball Arm-and-Leg Lower",
     "group": "core",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -29521,7 +29459,8 @@
     "aliases": [
       "Weighted Leg Lowers",
       "Weighted Leg Lower",
-      "Med Ball Leg Lower"
+      "Med Ball Leg Lower",
+      "Medicine-Ball Weighted Leg Lower"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -31240,7 +31179,7 @@
       }
     ],
     "catalogID": "life-fitness-pro2-upper-arm-pad-pec-fly",
-    "name": "Life Fitness Pro 2 Upper-Arm-Pad Pec Fly",
+    "name": "Upper-Arm-Pad Pec Fly",
     "group": "chest",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -31258,7 +31197,8 @@
     "aliases": [
       "Upper-Arm-Pad Pec Deck",
       "Elbow-Pad Pec Deck",
-      "Upper-Arm-Pad Machine Pec Fly"
+      "Upper-Arm-Pad Machine Pec Fly",
+      "Life Fitness Pro 2 Upper-Arm-Pad Pec Fly"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,
@@ -31340,7 +31280,7 @@
       }
     ],
     "catalogID": "seated-upper-arm-pad-machine-lateral-raise",
-    "name": "Seated Upper-Arm-Pad Machine Lateral Raise",
+    "name": "Upper-Arm-Pad Machine Lateral Raise",
     "group": "shoulders",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -31356,8 +31296,8 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Upper-Arm-Pad Machine Lateral Raise",
-      "Elbow-Pad Machine Lateral Raise"
+      "Elbow-Pad Machine Lateral Raise",
+      "Seated Upper-Arm-Pad Machine Lateral Raise"
     ],
     "searchPriority": 94,
     "bodyweightFraction": 0,
@@ -31601,7 +31541,7 @@
       }
     ],
     "catalogID": "box-jump-20-40-cm",
-    "name": "Box Jumps",
+    "name": "Box Jump",
     "group": "legs",
     "defaultWeight": 0,
     "reps": 5,
@@ -31616,7 +31556,7 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Box Jump"
+      "Box Jumps"
     ],
     "searchPriority": 97,
     "bodyweightFraction": 0,
@@ -31723,7 +31663,7 @@
       }
     ],
     "catalogID": "paired-dumbbell-cmj",
-    "name": "Dumbbell CMJ",
+    "name": "Dumbbell Countermovement Jump",
     "group": "legs",
     "defaultWeight": 10,
     "defaultWeightKg": 5,
@@ -31739,8 +31679,8 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Dumbbell Countermovement Jump",
-      "DB CMJ"
+      "DB CMJ",
+      "Dumbbell CMJ"
     ],
     "searchPriority": 97,
     "bodyweightFraction": 0,
@@ -32162,7 +32102,7 @@
       }
     ],
     "catalogID": "single-arm-standing-dumbbell-overhead-press",
-    "name": "Single-Arm Standing Dumbbell Overhead Press",
+    "name": "Standing Single-Arm Dumbbell Press",
     "group": "shoulders",
     "defaultWeight": 15,
     "defaultWeightKg": 7.5,
@@ -32182,7 +32122,8 @@
       "Single-Arm Dumbbell Overhead Press",
       "One-Arm Standing Dumbbell Overhead Press",
       "Single-Arm Dumbbell Shoulder Press",
-      "One-Arm Dumbbell Shoulder Press"
+      "One-Arm Dumbbell Shoulder Press",
+      "Single-Arm Standing Dumbbell Overhead Press"
     ],
     "searchPriority": 82,
     "bodyweightFraction": 0,
@@ -32597,7 +32538,7 @@
       }
     ],
     "catalogID": "unsupported-seated-dumbbell-overhead-press",
-    "name": "Unsupported Seated Dumbbell Overhead Press",
+    "name": "Seated Dumbbell Press (No Backrest)",
     "group": "shoulders",
     "defaultWeight": 15,
     "defaultWeightKg": 7.5,
@@ -32616,7 +32557,8 @@
     "aliases": [
       "Unsupported Seated Dumbbell Shoulder Press",
       "No-Backrest Dumbbell Shoulder Press",
-      "Seated Dumbbell Press Without Back Support"
+      "Seated Dumbbell Press Without Back Support",
+      "Unsupported Seated Dumbbell Overhead Press"
     ],
     "searchPriority": 77,
     "bodyweightFraction": 0,
@@ -32749,7 +32691,7 @@
       }
     ],
     "catalogID": "single-arm-seated-dumbbell-overhead-press",
-    "name": "Single-Arm Seated Dumbbell Overhead Press",
+    "name": "Seated Single-Arm Dumbbell Press",
     "group": "shoulders",
     "defaultWeight": 15,
     "defaultWeightKg": 7.5,
@@ -32768,7 +32710,8 @@
     "aliases": [
       "One-Arm Seated Dumbbell Overhead Press",
       "Single-Arm Seated Dumbbell Shoulder Press",
-      "One-Arm Seated Dumbbell Shoulder Press"
+      "One-Arm Seated Dumbbell Shoulder Press",
+      "Single-Arm Seated Dumbbell Overhead Press"
     ],
     "searchPriority": 83,
     "bodyweightFraction": 0,
@@ -32903,7 +32846,7 @@
       }
     ],
     "catalogID": "single-arm-standing-kettlebell-overhead-press",
-    "name": "Single-Arm Standing Kettlebell Overhead Press",
+    "name": "Standing Single-Arm Kettlebell Press",
     "group": "shoulders",
     "defaultWeight": 20,
     "defaultWeightKg": 10,
@@ -32922,7 +32865,8 @@
     "aliases": [
       "Single-Arm Kettlebell Overhead Press",
       "One-Arm Standing Kettlebell Press",
-      "Kettlebell Military Press"
+      "Kettlebell Military Press",
+      "Single-Arm Standing Kettlebell Overhead Press"
     ],
     "searchPriority": 89,
     "bodyweightFraction": 0,
@@ -33492,7 +33436,7 @@
       }
     ],
     "catalogID": "wall-supported-strict-handstand-push-up",
-    "name": "Wall-Supported Strict Handstand Push-Up",
+    "name": "Strict Wall Handstand Push-Up",
     "group": "shoulders",
     "defaultWeight": 0,
     "reps": 5,
@@ -33508,9 +33452,9 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Strict Wall Handstand Push-Up",
       "Wall Handstand Push-Up",
-      "Inversion-Stand Handstand Push-Up"
+      "Inversion-Stand Handstand Push-Up",
+      "Wall-Supported Strict Handstand Push-Up"
     ],
     "searchPriority": 84,
     "bodyweightFraction": 0,
@@ -34330,7 +34274,7 @@
       }
     ],
     "catalogID": "assisted-pull-up-machine",
-    "name": "Assisted Pull-Up Machine",
+    "name": "Machine-Assisted Pull-Up",
     "group": "back",
     "defaultWeight": 50,
     "defaultWeightKg": 22.5,
@@ -34347,8 +34291,8 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Machine-Assisted Pull-Up",
-      "Assisted Pullup"
+      "Assisted Pullup",
+      "Assisted Pull-Up Machine"
     ],
     "searchPriority": 92,
     "bodyweightFraction": 1,
@@ -34459,7 +34403,7 @@
       }
     ],
     "catalogID": "assisted-chin-up-machine",
-    "name": "Assisted Chin-Up Machine",
+    "name": "Machine-Assisted Chin-Up",
     "group": "back",
     "defaultWeight": 50,
     "defaultWeightKg": 22.5,
@@ -34476,8 +34420,8 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Machine-Assisted Chin-Up",
-      "Assisted Chinup"
+      "Assisted Chinup",
+      "Assisted Chin-Up Machine"
     ],
     "searchPriority": 88,
     "bodyweightFraction": 1,
@@ -35406,7 +35350,7 @@
       }
     ],
     "catalogID": "speed-pull-up",
-    "name": "Speed Pull-Up",
+    "name": "Neutral-Grip Speed Pull-Up",
     "group": "back",
     "defaultWeight": 0,
     "reps": 5,
@@ -35423,7 +35367,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Fast Pull-Up",
-      "Continuous Explosive Pull-Up"
+      "Continuous Explosive Pull-Up",
+      "Speed Pull-Up"
     ],
     "searchPriority": 98,
     "bodyweightFraction": 0,
@@ -35666,7 +35611,7 @@
       }
     ],
     "catalogID": "two-dumbbell-continuous-walking-lunge",
-    "name": "Two-Dumbbell Continuous Walking Lunge",
+    "name": "Two-Dumbbell Walking Lunge",
     "group": "legs",
     "defaultWeight": 15,
     "defaultWeightKg": 7.5,
@@ -35682,8 +35627,8 @@
     ],
     "laterality": "unilateral",
     "aliases": [
-      "Dumbbell Walking Lunge",
-      "Two-Dumbbell Walking Lunge"
+      "Two-Dumbbell Continuous Walking Lunge",
+      "Dumbbell Walking Lunge"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,

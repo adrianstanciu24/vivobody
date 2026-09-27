@@ -307,9 +307,9 @@
   "exercises": [
     {
       "catalogID": "box-jump-20-40-cm",
-      "name": "Box Jumps",
+      "name": "Box Jump",
       "aliases": [
-        "Box Jump"
+        "Box Jumps"
       ],
       "equipment": "bodyweight",
       "laterality": "bilateral",
@@ -398,10 +398,10 @@
     },
     {
       "catalogID": "paired-dumbbell-cmj",
-      "name": "Dumbbell CMJ",
+      "name": "Dumbbell Countermovement Jump",
       "aliases": [
-        "Dumbbell Countermovement Jump",
-        "DB CMJ"
+        "DB CMJ",
+        "Dumbbell CMJ"
       ],
       "equipment": "dumbbell",
       "laterality": "bilateral",

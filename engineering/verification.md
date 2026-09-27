@@ -181,8 +181,10 @@ It takes precedence over `-debug` and the manual `--seed-*` flags. Previously
 seeded history remains additive if switching between fixtures.
 
 For App Store captures, `--ui-test-reset -years --app-store-demo` creates the
-same two-year archive and adjusts only its synthetic recent workouts and
-scheduled templates. Recent sessions include heavy sets, whole-number hard-set
+same two-year archive and adjusts only its synthetic workouts and scheduled
+templates. A legs/back emphasis with lighter arms/core gives the body map and
+lifetime signature a visible contrast using catalog-backed exercise roles.
+Recent sessions include heavy sets, whole-number hard-set
 totals, and approximately 10% week-over-week volume change. This option requires
 the explicit reset flag; later captures preserve the store without resetting.
 `--ui-test-app-store-workout` adds a 185 lb × 8 bench-press session if there is

@@ -1361,11 +1361,11 @@
     },
     {
       "catalogID": "two-dumbbell-stationary-split-squat",
-      "name": "Two-Dumbbell Stationary Split Squat",
+      "name": "Two-Dumbbell Split Squat",
       "aliases": [
-        "Two-Dumbbell Split Squat",
-        "Dumbbell Split Squat",
-        "Stationary Dumbbell Split Squat"
+        "Stationary Dumbbell Split Squat",
+        "Two-Dumbbell Stationary Split Squat",
+        "Dumbbell Split Squat"
       ],
       "equipment": "dumbbell",
       "laterality": "unilateral",
@@ -1509,11 +1509,11 @@
     },
     {
       "catalogID": "barbell-rear-foot-elevated-split-squat",
-      "name": "Barbell Rear-Foot-Elevated Split Squat",
+      "name": "Barbell Bulgarian Split Squat",
       "aliases": [
-        "Barbell Bulgarian Split Squat",
         "Barbell Bulgarian Squat",
-        "Barbell RFESS"
+        "Barbell RFESS",
+        "Barbell Rear-Foot-Elevated Split Squat"
       ],
       "equipment": "barbell",
       "laterality": "unilateral",
@@ -1654,11 +1654,12 @@
     },
     {
       "catalogID": "two-dumbbell-rear-foot-elevated-split-squat",
-      "name": "Two-Dumbbell Rear-Foot-Elevated Split Squat",
+      "name": "Two-Dumbbell Bulgarian Split Squat",
       "aliases": [
-        "Dumbbell Bulgarian Split Squat",
         "Dumbbell Rear-Foot-Elevated Split Squat",
-        "Dumbbell RFESS"
+        "Dumbbell RFESS",
+        "Two-Dumbbell Rear-Foot-Elevated Split Squat",
+        "Dumbbell Bulgarian Split Squat"
       ],
       "equipment": "dumbbell",
       "laterality": "unilateral",

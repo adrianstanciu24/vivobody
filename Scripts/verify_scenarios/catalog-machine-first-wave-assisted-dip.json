@@ -19,7 +19,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Life Fitness Pro 2 Assisted Dip Machine,"
+          "labelRegex": "^Machine-Assisted Dip,"
         },
         "direction": "up",
         "maxSwipes": 45
@@ -27,7 +27,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^Life Fitness Pro 2 Assisted Dip Machine,"
+        "labelRegex": "^Machine-Assisted Dip,"
       }
     },
     {
@@ -47,10 +47,10 @@
   ],
   "required": [
     {
-      "label": "Life Fitness Pro 2 Assisted Dip Machine"
+      "label": "Machine-Assisted Dip"
     },
     {
-      "labelContains": "Muscles used by Life Fitness Pro 2 Assisted Dip Machine"
+      "labelContains": "Muscles used by Machine-Assisted Dip"
     },
     {
       "label": "Movement",

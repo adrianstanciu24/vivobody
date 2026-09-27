@@ -20,6 +20,7 @@ import SwiftData
                   let previousStart = calendar.date(byAdding: .weekOfYear, value: -1, to: thisWeek.start)
             else { return }
 
+            emphasizeLegsAndBack(sessions, in: context)
             let recent = sessions.filter {
                 $0.id.uuidString.hasPrefix("D2400000-") &&
                     ($0.completedAt ?? .distantPast) >= previousStart
@@ -43,6 +44,46 @@ import SwiftData
             tuneWeeklyComparison(recent, thisWeek: thisWeek)
             prepareTemplates(templates, in: context)
             try? context.saveOrRollback()
+        }
+
+        /// A lower-body/pull emphasis makes both the recent body map and the
+        /// lifetime signature informative. All roles still come from the catalog.
+        private static func emphasizeLegsAndBack(_ sessions: [WorkoutSession], in context: ModelContext) {
+            let replacements: [(name: String, pounds: Double)] = [
+                ("Barbell Back Squat", 165),
+                ("Shoulder-Width Straight-Arm Cable Pulldown", 60),
+                ("Barbell Hip Thrust", 185),
+                ("Seated Leg Curl", 80),
+            ]
+            let archive = sessions.filter { $0.id.uuidString.hasPrefix("D2400000-") }
+                .sorted { $0.startedAt < $1.startedAt }
+            for (index, session) in archive.enumerated() where index % 8 != 0 {
+                var names = Set(session.exercises.map(\.name))
+                var removed: [Exercise] = []
+                session.exercises = session.orderedExercises.map { old in
+                    guard [.arms, .core, .shoulders].contains(old.group),
+                          let lift = replacements.first(where: { !names.contains($0.name) })
+                    else { return old }
+                    names.insert(lift.name)
+                    let replacement = debugCatalogExercise(
+                        named: lift.name, plannedSets: old.sets.count,
+                        plannedReps: old.plannedReps,
+                        plannedWeight: lift.pounds + Double(index % 12) * 2.5,
+                        sortOrder: old.sortOrder
+                    )
+                    for (set, original) in zip(replacement.orderedSets, old.orderedSets) {
+                        set.reps = original.reps
+                        set.repsInReserve = original.repsInReserve
+                        set.rirLogged = original.rirLogged
+                        set.isCompleted = original.isCompleted
+                    }
+                    removed.append(old)
+                    return replacement
+                }
+                for old in removed {
+                    context.delete(old)
+                }
+            }
         }
 
         private static func tuneWeeklyComparison(_ sessions: [WorkoutSession], thisWeek: DateInterval) {

@@ -953,10 +953,10 @@
     },
     {
       "catalogID": "bodyweight-side-lying-hip-abduction",
-      "name": "Bodyweight Side-Lying Hip Abduction",
+      "name": "Side-Lying Hip Abduction",
       "aliases": [
-        "Side-Lying Hip Abduction",
-        "Side-Lying Leg Raise"
+        "Side-Lying Leg Raise",
+        "Bodyweight Side-Lying Hip Abduction"
       ],
       "equipment": "bodyweight",
       "laterality": "unilateral",

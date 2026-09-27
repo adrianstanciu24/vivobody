@@ -19,7 +19,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^High-Pulley Rope Face Pull with Deliberate External Rotation,"
+          "labelRegex": "^Rope Face Pull with External Rotation,"
         },
         "direction": "up",
         "maxSwipes": 20
@@ -27,7 +27,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^High-Pulley Rope Face Pull with Deliberate External Rotation,"
+        "labelRegex": "^Rope Face Pull with External Rotation,"
       }
     },
     {
@@ -38,13 +38,13 @@
   ],
   "required": [
     {
-      "label": "High-Pulley Rope Face Pull with Deliberate External Rotation"
+      "label": "Rope Face Pull with External Rotation"
     },
     {
       "label": "STRENGTH · REPS"
     },
     {
-      "labelContains": "Muscles used by High-Pulley Rope Face Pull with Deliberate External Rotation"
+      "labelContains": "Muscles used by Rope Face Pull with External Rotation"
     }
   ],
   "forbidden": []

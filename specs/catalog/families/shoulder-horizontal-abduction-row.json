@@ -981,8 +981,8 @@
       "catalogID": "single-arm-chest-supported-machine-rear-delt-row",
       "name": "Single-Arm Chest-Supported Machine Rear-Delt Row",
       "aliases": [
-        "Single-Arm Machine Rear-Delt Row",
-        "One-Arm Machine Rear-Delt Row"
+        "One-Arm Machine Rear-Delt Row",
+        "Single-Arm Machine Rear-Delt Row"
       ],
       "equipment": "machine",
       "laterality": "unilateral",

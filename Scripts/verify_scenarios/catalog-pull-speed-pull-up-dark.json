@@ -10,14 +10,14 @@
     {"tap": {"label": "Search"}},
     {"wait": {"role": "AXTextField", "value": "Search exercises"}},
     {"tap": {"role": "AXTextField", "value": "Search exercises"}},
-    {"typeText": "Speed Pull-Up"},
-    {"wait": {"labelRegex": "^Speed Pull-Up, Bodyweight · Vertical Pull"}},
-    {"tap": {"labelRegex": "^Speed Pull-Up, Bodyweight · Vertical Pull"}},
+    {"typeText": "Neutral-Grip Speed Pull-Up"},
+    {"wait": {"labelRegex": "^Neutral-Grip Speed Pull-Up, Bodyweight · Vertical Pull"}},
+    {"tap": {"labelRegex": "^Neutral-Grip Speed Pull-Up, Bodyweight · Vertical Pull"}},
     {"wait": {"label": "POWER / EXPLOSIVE"}}
   ],
   "required": [
-    {"label": "Speed Pull-Up"},
-    {"labelContains": "Muscles used by Speed Pull-Up"}
+    {"label": "Neutral-Grip Speed Pull-Up"},
+    {"labelContains": "Muscles used by Neutral-Grip Speed Pull-Up"}
   ],
   "forbidden": []
 }

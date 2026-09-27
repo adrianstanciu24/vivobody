@@ -34,16 +34,16 @@
       }
     },
     {
-      "typeText": "Two-Hand Single-Dumbbell Goblet Squat to Press"
+      "typeText": "Dumbbell Goblet Squat to Press"
     },
     {
       "wait": {
-        "labelRegex": "^Two-Hand Single-Dumbbell Goblet Squat to Press,"
+        "labelRegex": "^Single-Dumbbell Goblet Squat to Press,"
       }
     },
     {
       "tap": {
-        "labelRegex": "^Two-Hand Single-Dumbbell Goblet Squat to Press,"
+        "labelRegex": "^Single-Dumbbell Goblet Squat to Press,"
       }
     },
     {
@@ -55,10 +55,10 @@
       "assert": {
         "required": [
           {
-            "label": "Two-Hand Single-Dumbbell Goblet Squat to Press"
+            "label": "Single-Dumbbell Goblet Squat to Press"
           },
           {
-            "labelContains": "Muscles used by Two-Hand Single-Dumbbell Goblet Squat to Press"
+            "labelContains": "Muscles used by Single-Dumbbell Goblet Squat to Press"
           }
         ]
       }

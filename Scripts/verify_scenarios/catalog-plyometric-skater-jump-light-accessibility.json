@@ -10,14 +10,14 @@
     {"tap": {"label": "Search"}},
     {"wait": {"role": "AXTextField", "value": "Search exercises"}},
     {"tap": {"role": "AXTextField", "value": "Search exercises"}},
-    {"typeText": "Ice Skaters with Jump"},
-    {"wait": {"labelRegex": "^Ice Skaters with Jump,"}},
-    {"tap": {"labelRegex": "^Ice Skaters with Jump,"}},
+    {"typeText": "Skater Hop to Vertical Jump"},
+    {"wait": {"labelRegex": "^Skater Hop to Vertical Jump,"}},
+    {"tap": {"labelRegex": "^Skater Hop to Vertical Jump,"}},
     {"wait": {"label": "POWER / EXPLOSIVE"}}
   ],
   "required": [
-    {"label": "Ice Skaters with Jump"},
-    {"labelContains": "Muscles used by Ice Skaters with Jump"}
+    {"label": "Skater Hop to Vertical Jump"},
+    {"labelContains": "Muscles used by Skater Hop to Vertical Jump"}
   ],
   "forbidden": []
 }

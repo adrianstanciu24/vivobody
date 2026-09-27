@@ -101,7 +101,7 @@ import SwiftData
             let core = WorkoutTemplate(name: "Core A", sortOrder: 2)
             core.exercises = [
                 debugCatalogTemplateExercise(
-                    named: "30-Degree Curl-Up",
+                    named: "Partial Curl-Up",
                     plannedSets: 3,
                     plannedReps: 12,
                     plannedWeight: 0,

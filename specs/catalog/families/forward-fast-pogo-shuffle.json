@@ -149,9 +149,10 @@
   "exercises": [
     {
       "catalogID": "fast-pogos",
-      "name": "Fast Pogos",
+      "name": "Forward Pogo Shuffle",
       "aliases": [
-        "Forward Fast Pogos"
+        "Forward Fast Pogos",
+        "Fast Pogos"
       ],
       "equipment": "bodyweight",
       "laterality": "unilateral",
@@ -216,7 +217,7 @@
         "controlledJoints": "Keep knees slightly flexed and hips facing forward; avoid exaggerated heel rise.",
         "supportAndPosture": "Use a clear, level forward lane and keep the hands on the hips.",
         "disqualifyingCompensations": [
-          "Jumping vertically with both feet together becomes stationary Pogos.",
+          "Jumping vertically with both feet together becomes Stationary Two-Foot Pogos.",
           "Taking long running strides changes the short-contact shuffle."
         ],
         "sideOrDirection": "Alternate feet; count every foot contact, not each left-right pair."

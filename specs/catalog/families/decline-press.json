@@ -728,8 +728,8 @@
     },
     {
       "catalogID": "hands-elevated-push-up-30-48-cm",
-      "name": "30.48 cm Hands-Elevated Push-Up",
-      "aliases": ["12-Inch Hands-Elevated Push-Up", "Hands-Elevated Push-Up", "Incline Push-Up"],
+      "name": "Hands-Elevated Push-Up",
+      "aliases": ["12-Inch Hands-Elevated Push-Up", "Incline Push-Up", "30.48 cm Hands-Elevated Push-Up"],
       "equipment": "bodyweight",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

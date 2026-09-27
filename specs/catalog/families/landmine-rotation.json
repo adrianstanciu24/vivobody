@@ -299,11 +299,12 @@
   "exercises": [
     {
       "catalogID": "standing-two-hand-landmine-rotation",
-      "name": "Standing Two-Hand Landmine Rotation",
+      "name": "Two-Hand Landmine Rotation",
       "aliases": [
         "Landmine Rotation",
         "Landmine 180",
-        "180-Degree Landmine"
+        "180-Degree Landmine",
+        "Standing Two-Hand Landmine Rotation"
       ],
       "equipment": "barbell",
       "laterality": "bilateral",

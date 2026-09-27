@@ -148,10 +148,11 @@
   "exercises": [
     {
       "catalogID": "stationary-pogos",
-      "name": "Pogos",
+      "name": "Stationary Two-Foot Pogos",
       "aliases": [
         "Pogo Jumps",
-        "Pogo Hops"
+        "Pogo Hops",
+        "Pogos"
       ],
       "equipment": "bodyweight",
       "laterality": "bilateral",
@@ -213,7 +214,7 @@
         "supportAndPosture": "Use a clear, level floor and keep the movement in place.",
         "disqualifyingCompensations": [
           "Deep hip-and-knee dipping becomes a countermovement jump.",
-          "Travelling forward with alternating quick foot contacts becomes Fast Pogos."
+          "Travelling forward with alternating quick foot contacts becomes Forward Pogo Shuffle."
         ]
       }
     }

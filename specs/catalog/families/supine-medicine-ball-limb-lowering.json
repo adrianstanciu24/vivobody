@@ -34,8 +34,8 @@
   "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
   "exercises": [{
     "catalogID": "medicine-ball-weighted-leg-lower",
-    "name": "Medicine-Ball Weighted Leg Lower",
-    "aliases": ["Weighted Leg Lowers", "Weighted Leg Lower", "Med Ball Leg Lower"],
+    "name": "Medicine-Ball Arm-and-Leg Lower",
+    "aliases": ["Weighted Leg Lowers", "Weighted Leg Lower", "Med Ball Leg Lower", "Medicine-Ball Weighted Leg Lower"],
     "equipment": "medicineBall",
     "laterality": "bilateral",
     "modality": "dynamicStrength",

@@ -1123,10 +1123,10 @@
     },
     {
       "catalogID": "assisted-pull-up-machine",
-      "name": "Assisted Pull-Up Machine",
+      "name": "Machine-Assisted Pull-Up",
       "aliases": [
-        "Machine-Assisted Pull-Up",
-        "Assisted Pullup"
+        "Assisted Pullup",
+        "Assisted Pull-Up Machine"
       ],
       "equipment": "machine",
       "laterality": "bilateral",
@@ -1203,10 +1203,10 @@
     },
     {
       "catalogID": "assisted-chin-up-machine",
-      "name": "Assisted Chin-Up Machine",
+      "name": "Machine-Assisted Chin-Up",
       "aliases": [
-        "Machine-Assisted Chin-Up",
-        "Assisted Chinup"
+        "Assisted Chinup",
+        "Assisted Chin-Up Machine"
       ],
       "equipment": "machine",
       "laterality": "bilateral",
@@ -1736,10 +1736,11 @@
     },
     {
       "catalogID": "speed-pull-up",
-      "name": "Speed Pull-Up",
+      "name": "Neutral-Grip Speed Pull-Up",
       "aliases": [
         "Fast Pull-Up",
-        "Continuous Explosive Pull-Up"
+        "Continuous Explosive Pull-Up",
+        "Speed Pull-Up"
       ],
       "equipment": "bodyweight",
       "laterality": "bilateral",

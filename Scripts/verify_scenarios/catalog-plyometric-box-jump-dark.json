@@ -10,14 +10,14 @@
     {"tap": {"label": "Search"}},
     {"wait": {"role": "AXTextField", "value": "Search exercises"}},
     {"tap": {"role": "AXTextField", "value": "Search exercises"}},
-    {"typeText": "Box Jumps"},
-    {"wait": {"labelRegex": "^Box Jumps,"}},
-    {"tap": {"labelRegex": "^Box Jumps,"}},
+    {"typeText": "Box Jump"},
+    {"wait": {"labelRegex": "^Box Jump,"}},
+    {"tap": {"labelRegex": "^Box Jump,"}},
     {"wait": {"label": "POWER / EXPLOSIVE"}}
   ],
   "required": [
-    {"label": "Box Jumps"},
-    {"labelContains": "Muscles used by Box Jumps"}
+    {"label": "Box Jump"},
+    {"labelContains": "Muscles used by Box Jump"}
   ],
   "forbidden": []
 }

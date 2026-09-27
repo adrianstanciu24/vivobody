@@ -22,23 +22,23 @@ import SwiftData
         private static let plans: [Plan] = [
             Plan(name: "Lower A", weekday: 2, lifts: [
                 ("Barbell Back Squat", 8, 185),
-                ("Continuous Top-Start Barbell Romanian Deadlift", 10, 135),
-                ("Upright Bilateral Lever-Machine Leg Extension", 12, 80),
-                ("Bilateral Standing Shoulder-Pad Machine Calf Raise", 12, 100),
+                ("Barbell RDL (Continuous)", 10, 135),
+                ("Upright Machine Leg Extension", 12, 80),
+                ("Standing Shoulder-Pad Machine Calf Raise", 12, 100),
                 ("Kneeling Cable Crunch", 12, 40),
             ]),
             Plan(name: "Upper Push", weekday: 3, lifts: [
                 ("Barbell Bench Press", 8, 135),
                 ("Seated Dumbbell Overhead Press", 10, 35),
-                ("Simultaneous Bilateral Dumbbell Lateral Raise", 12, 15),
-                ("Bilateral Rope Cable Triceps Pushdown", 12, 40),
-                ("30-Degree Curl-Up", 12, 0),
+                ("Two-Dumbbell Lateral Raise", 12, 15),
+                ("Rope Cable Triceps Pushdown", 12, 40),
+                ("Partial Curl-Up", 12, 0),
             ]),
             Plan(name: "Lower B", weekday: 5, lifts: [
                 ("Barbell Front Squat", 8, 135),
                 ("Barbell Hip Thrust", 10, 155),
-                ("Johnson SL160 Bilateral Seated Leg Curl", 12, 70),
-                ("Bilateral Seated Thigh-Pad Machine Calf Raise", 12, 70),
+                ("Seated Leg Curl", 12, 70),
+                ("Seated Thigh-Pad Machine Calf Raise", 12, 70),
                 ("Supine Reverse Crunch", 12, 0),
             ]),
             Plan(name: "Upper Pull", weekday: 6, lifts: [

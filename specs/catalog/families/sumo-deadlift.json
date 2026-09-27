@@ -553,11 +553,12 @@
   "exercises": [
     {
       "catalogID": "barefoot-dead-stop-sumo-barbell-deadlift",
-      "name": "Barefoot Dead-Stop Sumo Barbell Deadlift",
+      "name": "Dead-Stop Barbell Sumo Deadlift",
       "aliases": [
         "Sumo Barbell Deadlift",
         "Sumo Deadlift",
-        "Double-Overhand Dead-Stop Sumo Deadlift"
+        "Double-Overhand Dead-Stop Sumo Deadlift",
+        "Barefoot Dead-Stop Sumo Barbell Deadlift"
       ],
       "equipment": "barbell",
       "laterality": "bilateral",

@@ -629,8 +629,12 @@
     },
     {
       "catalogID": "seated-handled-lever-machine-chest-fly",
-      "name": "Seated Handled Lever-Machine Chest Fly",
-      "aliases": ["Seated Handled Machine Chest Fly", "Handled Lever Chest Fly"],
+      "name": "Seated Machine Chest Fly (Handles)",
+      "aliases": [
+        "Handled Lever Chest Fly",
+        "Seated Handled Lever-Machine Chest Fly",
+        "Seated Handled Machine Chest Fly"
+      ],
       "equipment": "machine",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

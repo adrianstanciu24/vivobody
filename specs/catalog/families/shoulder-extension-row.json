@@ -1479,10 +1479,11 @@
     },
     {
       "catalogID": "single-arm-bent-over-row",
-      "name": "Single-Arm Bent-Over Row",
+      "name": "One-Arm Dumbbell Row (Hand on Bench)",
       "aliases": [
         "Single Arm Bent Over Row",
-        "Hand-Supported Single-Arm Bent-Over Row"
+        "Hand-Supported Single-Arm Bent-Over Row",
+        "Single-Arm Bent-Over Row"
       ],
       "equipment": "dumbbell",
       "laterality": "unilateral",
@@ -1542,7 +1543,7 @@
         "controlledJoints": "Keep the hips, knees, and torso still while the shoulder blade moves naturally with the row.",
         "supportAndPosture": "Keep both feet planted and use only the opposite hand on the bench for support.",
         "disqualifyingCompensations": [
-          "Placing the opposite knee on the bench changes the fixture into the existing One-Arm Dumbbell Row.",
+          "Placing the opposite knee on the bench changes the fixture into the existing One-Arm Dumbbell Row (Hand and Knee on Bench).",
           "Rotating the torso to lift the dumbbell changes the strict row into a row-and-rotate variation.",
           "Standing up or driving through the legs turns the strict row into a momentum row."
         ],
@@ -1551,10 +1552,11 @@
     },
     {
       "catalogID": "one-arm-dumbbell-row",
-      "name": "One-Arm Dumbbell Row",
+      "name": "One-Arm Dumbbell Row (Hand and Knee on Bench)",
       "aliases": [
         "Single-Arm Dumbbell Row",
-        "One-Arm DB Row"
+        "One-Arm DB Row",
+        "One-Arm Dumbbell Row"
       ],
       "equipment": "dumbbell",
       "laterality": "unilateral",

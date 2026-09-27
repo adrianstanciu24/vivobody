@@ -492,10 +492,10 @@
     },
     {
       "catalogID": "simultaneous-bilateral-dumbbell-front-raise",
-      "name": "Simultaneous Bilateral Dumbbell Front Raise",
+      "name": "Two-Dumbbell Front Raise",
       "aliases": [
         "Bilateral Dumbbell Front Raise",
-        "Two-Dumbbell Front Raise"
+        "Simultaneous Bilateral Dumbbell Front Raise"
       ],
       "equipment": "dumbbell",
       "laterality": "bilateral",

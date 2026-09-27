@@ -793,8 +793,8 @@
     },
     {
       "catalogID": "feet-elevated-push-up-30-48-cm",
-      "name": "30.48 cm Feet-Elevated Push-Up",
-      "aliases": ["12-Inch Feet-Elevated Push-Up", "Feet-Elevated Push-Up", "Decline Push-Up"],
+      "name": "Feet-Elevated Push-Up",
+      "aliases": ["12-Inch Feet-Elevated Push-Up", "Decline Push-Up", "30.48 cm Feet-Elevated Push-Up"],
       "equipment": "bodyweight",
       "laterality": "bilateral",
       "modality": "dynamicStrength",
@@ -841,8 +841,8 @@
     },
     {
       "catalogID": "trx-suspended-push-up",
-      "name": "TRX Suspended Push-Up",
-      "aliases": ["Feet-Suspended Push-Up", "TRX Feet-Suspended Push-Up", "Suspension Trainer Push-Up"],
+      "name": "TRX Feet-Suspended Push-Up",
+      "aliases": ["Feet-Suspended Push-Up", "Suspension Trainer Push-Up", "TRX Suspended Push-Up"],
       "equipment": "suspensionTrainer",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

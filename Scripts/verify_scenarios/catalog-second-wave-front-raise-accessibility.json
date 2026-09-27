@@ -26,7 +26,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Simultaneous Bilateral Dumbbell Front Raise,"
+          "labelRegex": "^Two-Dumbbell Front Raise,"
         },
         "direction": "up",
         "maxSwipes": 65
@@ -34,7 +34,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^Simultaneous Bilateral Dumbbell Front Raise,"
+        "labelRegex": "^Two-Dumbbell Front Raise,"
       }
     },
     {
@@ -46,10 +46,10 @@
       "assert": {
         "required": [
           {
-            "label": "Simultaneous Bilateral Dumbbell Front Raise"
+            "label": "Two-Dumbbell Front Raise"
           },
           {
-            "labelContains": "Muscles used by Simultaneous Bilateral Dumbbell Front Raise"
+            "labelContains": "Muscles used by Two-Dumbbell Front Raise"
           }
         ]
       }
@@ -61,12 +61,6 @@
         },
         "direction": "up",
         "maxSwipes": 20
-      }
-    },
-    {
-      "swipe": {
-        "direction": "up",
-        "count": 1
       }
     },
     {

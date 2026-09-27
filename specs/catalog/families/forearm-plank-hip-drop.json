@@ -25,7 +25,7 @@
   ],
   "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 8, "maximum": 20}},
   "exercises": [{
-    "catalogID": "alternating-forearm-plank-hip-drop", "name": "Alternating Forearm-Plank Hip Drop", "aliases": ["Plank Twists", "Plank Hip Twists", "Plank Hip Drops"],
+    "catalogID": "alternating-forearm-plank-hip-drop", "name": "Forearm Plank Hip Drop", "aliases": ["Plank Twists", "Plank Hip Twists", "Plank Hip Drops", "Alternating Forearm-Plank Hip Drop"],
     "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 12, "searchPriority": 94,
     "involvement": [{"muscle": "obliques", "role": "primary"}, {"muscle": "abs", "role": "primary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
     "variant": {"supportSurface": "floor", "upperBodySupport": "bilateralForearms", "lowerBodySupport": "bothFeetPivot", "hipPath": "alternatingHipDrop", "trainingDirectionPrescription": "bothDirectionsAlternating", "repetitionCounting": "eachSideEndpoint", "fixedPath": false},

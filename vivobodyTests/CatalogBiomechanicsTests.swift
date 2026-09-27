@@ -33,7 +33,7 @@ struct CatalogBiomechanicsTests {
             ("barbell-preacher-curl", "Barbell Preacher Curl", "elbow-flexion"),
             (
                 "bilateral-incline-dumbbell-curl",
-                "Bilateral Incline Dumbbell Curl",
+                "Incline Dumbbell Curl",
                 "elbow-flexion"
             ),
             (
@@ -219,7 +219,7 @@ struct CatalogBiomechanicsTests {
                 forCatalogID: "high-pulley-rope-face-pull-with-external-rotation"
             )
         )
-        #expect(facePull.name == "High-Pulley Rope Face Pull with Deliberate External Rotation")
+        #expect(facePull.name == "Rope Face Pull with External Rotation")
     }
 
     @Test func defaultCatalogGapFixturesReachTheRuntimeProjection() throws {
@@ -233,27 +233,27 @@ struct CatalogBiomechanicsTests {
         )] = [
             (
                 "bodyweight-floor-squat-100-degrees",
-                "100° Two-Leg Bodyweight Floor Squat",
+                "Bodyweight Squat",
                 "bilateral-squat", .bodyweight, .dynamicStrength, .nonComparable
             ),
             (
                 "bodyweight-supine-glute-bridge-90-degrees",
-                "90° Bodyweight Supine Glute Bridge",
+                "Bodyweight Glute Bridge",
                 "bodyweight-glute-bridge", .bodyweight, .dynamicStrength, .nonComparable
             ),
             (
                 "wall-balanced-single-leg-bodyweight-heel-raise",
-                "Wall-Balanced Single-Leg Bodyweight Heel Raise",
+                "Wall-Balanced Single-Leg Heel Raise",
                 "ankle-plantarflexion", .bodyweight, .dynamicStrength, .nonComparable
             ),
             (
                 "hands-elevated-push-up-30-48-cm",
-                "30.48 cm Hands-Elevated Push-Up",
+                "Hands-Elevated Push-Up",
                 "decline-press", .bodyweight, .dynamicStrength, .bodyweightAdded
             ),
             (
                 "feet-elevated-push-up-30-48-cm",
-                "30.48 cm Feet-Elevated Push-Up",
+                "Feet-Elevated Push-Up",
                 "incline-press", .bodyweight, .dynamicStrength, .bodyweightAdded
             ),
             (
@@ -268,7 +268,7 @@ struct CatalogBiomechanicsTests {
             ),
             (
                 "bodyweight-lateral-lunge-60-percent-height",
-                "60%-Height Bodyweight Lateral Lunge",
+                "Bodyweight Lateral Lunge",
                 "lateral-lunge", .bodyweight, .dynamicStrength, .nonComparable
             ),
             (
@@ -626,11 +626,12 @@ struct CatalogBiomechanicsTests {
         )
 
         #expect(sumo.familyID == "sumo-deadlift")
-        #expect(sumo.name == "Barefoot Dead-Stop Sumo Barbell Deadlift")
+        #expect(sumo.name == "Dead-Stop Barbell Sumo Deadlift")
         #expect(sumo.aliases == [
             "Sumo Barbell Deadlift",
             "Sumo Deadlift",
             "Double-Overhand Dead-Stop Sumo Deadlift",
+            "Barefoot Dead-Stop Sumo Barbell Deadlift",
         ])
         #expect(sumo.equipment == .barbell)
         #expect(sumo.laterality == .bilateral)
@@ -713,14 +714,14 @@ struct CatalogBiomechanicsTests {
         #expect(barbell.defaultWeight == 45)
         #expect(barbell.defaultWeightKg == 20)
 
-        #expect(sameSide.name == "Ipsilateral-Load Dumbbell Single-Leg Romanian Deadlift")
+        #expect(sameSide.name == "Same-Side Dumbbell Single-Leg RDL")
         #expect(sameSide.equipment == .dumbbell)
         #expect(sameSide.reps == 6)
         #expect(sameSide.defaultWeight == 25)
         #expect(sameSide.defaultWeightKg == 12.5)
         #expect(sameSide.aliases.contains("Same-Side-Load Dumbbell Single-Leg Romanian Deadlift"))
 
-        #expect(oppositeSide.name == "Contralateral-Load Dumbbell Single-Leg Romanian Deadlift")
+        #expect(oppositeSide.name == "Opposite-Side Dumbbell Single-Leg RDL")
         #expect(oppositeSide.equipment == .dumbbell)
         #expect(oppositeSide.reps == 6)
         #expect(oppositeSide.defaultWeight == 25)
@@ -750,7 +751,7 @@ struct CatalogBiomechanicsTests {
         let fly = try #require(CatalogData.record(forExerciseNamed: "Flat Dumbbell Fly"))
         let curl = try #require(CatalogData.record(forExerciseNamed: "Supinated Straight-Bar Cable Curl"))
         let reverseFly = try #require(CatalogData.record(forExerciseNamed: "Prone Dumbbell Reverse Fly"))
-        let legExtension = try #require(CatalogData.record(forExerciseNamed: "Upright Unilateral Machine Leg Extension"))
+        let legExtension = try #require(CatalogData.record(forExerciseNamed: "Upright Single-Leg Extension"))
 
         #expect(bench.trainingRole == .push)
         #expect(fly.mechanic == .isolation && fly.trainingRole == .push)
@@ -766,7 +767,7 @@ struct CatalogBiomechanicsTests {
         #expect(bench.muscleInvolvement.role(for: .deltoidAnterior) == .secondary)
         #expect(bench.muscleInvolvement.role(for: .triceps) == .secondary)
 
-        for name in ["Bar Dip", "Ring Dip"] {
+        for name in ["Parallel-Bar Dip", "Ring Dip"] {
             let dip = try #require(CatalogData.record(forExerciseNamed: name))
             #expect(dip.muscleInvolvement.role(for: .pectoralisMajorClavicular) == .primary)
             #expect(dip.muscleInvolvement.role(for: .pectoralisMajorSternocostal) == .primary)
@@ -845,7 +846,7 @@ struct CatalogBiomechanicsTests {
         #expect(depression.muscleInvolvement.role(for: .pectoralisMinor) == nil)
 
         let stabilizationShrug = try #require(
-            CatalogData.record(forExerciseNamed: "Bilateral 30-Degree Stabilization Shrug")
+            CatalogData.record(forExerciseNamed: "Arm-Raised Stabilization Shrug")
         )
         #expect(stabilizationShrug.familyID == "scapular-elevation")
         #expect(stabilizationShrug.muscleInvolvement.role(for: .trapeziusUpper) == .primary)
@@ -872,7 +873,7 @@ struct CatalogBiomechanicsTests {
         #expect(uprightRow.muscleInvolvement.role(for: .trapeziusMiddle) == .stabilizer)
 
         let diagonalPull = try #require(
-            CatalogData.record(forExerciseNamed: "Seated 45-Degree Cable Pulldown")
+            CatalogData.record(forExerciseNamed: "Seated Diagonal Cable Pulldown")
         )
         #expect(diagonalPull.familyID == "diagonal-pull")
         #expect(diagonalPull.mechanic == .compound)
@@ -941,7 +942,7 @@ struct CatalogBiomechanicsTests {
         #expect(everydayLandmine.muscleInvolvement.role(for: .serratus) == .stabilizer)
 
         let handstand = try #require(
-            CatalogData.record(forExerciseNamed: "Wall-Supported Strict Handstand Push-Up")
+            CatalogData.record(forExerciseNamed: "Strict Wall Handstand Push-Up")
         )
         #expect(handstand.familyID == "vertical-press")
         #expect(handstand.mechanic == .compound)
@@ -957,7 +958,7 @@ struct CatalogBiomechanicsTests {
         #expect(handstand.muscleInvolvement.role(for: .gluteMax) == .stabilizer)
 
         let hipFlexion = try #require(
-            CatalogData.record(forExerciseNamed: "Bodyweight Active Straight-Leg Raise")
+            CatalogData.record(forExerciseNamed: "Active Straight-Leg Raise")
         )
         #expect(hipFlexion.familyID == "hip-flexion")
         #expect(hipFlexion.mechanic == .isolation)
@@ -968,21 +969,6 @@ struct CatalogBiomechanicsTests {
         #expect(hipFlexion.muscleInvolvement.role(for: .rectusFemoris) == .secondary)
         #expect(hipFlexion.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
         #expect(hipFlexion.muscleInvolvement.role(for: .sartorius) == nil)
-
-        let goodMorning = try #require(
-            CatalogData.record(forExerciseNamed: "25% Body-Mass Barbell Good Morning")
-        )
-        #expect(goodMorning.familyID == "hip-hinge")
-        #expect(goodMorning.mechanic == .compound)
-        #expect(goodMorning.pattern == .hinge)
-        #expect(goodMorning.planes == [.sagittal])
-        #expect(goodMorning.loadMode == .external)
-        #expect(goodMorning.defaultWeight == 45)
-        #expect(goodMorning.defaultWeightKg == 20)
-        #expect(goodMorning.muscleInvolvement.role(for: .medialHamstrings) == .primary)
-        #expect(goodMorning.muscleInvolvement.role(for: .gluteMax) == .primary)
-        #expect(goodMorning.muscleInvolvement.role(for: .lumbarExtensors) == .primary)
-        #expect(goodMorning.muscleInvolvement.role(for: .bicepsFemoris) == .stabilizer)
 
         let everydayGoodMorning = try #require(
             CatalogData.record(forExerciseNamed: "Barbell Good Morning")

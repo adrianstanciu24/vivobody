@@ -260,11 +260,12 @@
   "exercises": [
     {
       "catalogID": "forty-five-degree-bench-anchored-core-hold",
-      "name": "45° Bench-Anchored Core Hold",
+      "name": "Bench-Anchored Core Hold",
       "aliases": [
         "Supine Core ISO Hold",
         "Bench-Anchored Supine Core Hold",
-        "45-Degree Core Hold"
+        "45-Degree Core Hold",
+        "45° Bench-Anchored Core Hold"
       ],
       "equipment": "bodyweight",
       "laterality": "bilateral",

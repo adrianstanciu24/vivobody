@@ -280,7 +280,7 @@ struct AntagonistBalanceTests {
         let board = [
             session(at: day(1), [
                 lift("Standing Single-Arm Landmine Press Power Test", .shoulders, sets: 3),
-                lift("Wall-Supported Strict Handstand Push-Up", .shoulders, sets: 4),
+                lift("Strict Wall Handstand Push-Up", .shoulders, sets: 4),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -331,7 +331,7 @@ struct AntagonistBalanceTests {
     @Test func diagonalPullCountsBroadlyWithoutInventingDirectionalAncestry() {
         let board = [
             session(at: day(1), [
-                lift("Seated 45-Degree Cable Pulldown", .back, sets: 3),
+                lift("Seated Diagonal Cable Pulldown", .back, sets: 3),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -345,8 +345,8 @@ struct AntagonistBalanceTests {
         let board = [
             session(at: day(1), [
                 lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs, sets: 2),
-                lift("Supported Standing Band Hip Adduction", .legs, sets: 3),
-                lift("Standing Unilateral Machine Calf Raise", .legs, sets: 4),
+                lift("Standing Band Hip Adduction", .legs, sets: 3),
+                lift("Standing Single-Leg Machine Calf Raise", .legs, sets: 4),
                 lift("Seated Band Ankle Dorsiflexion", .legs, sets: 5),
             ]),
         ].antagonistBalance(now: day(2))
@@ -366,7 +366,7 @@ struct AntagonistBalanceTests {
         let sessions = (0 ..< 2).map { index in
             session(at: day(Double(index) * 5), [
                 lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs, sets: 3),
-                lift("Standing Unilateral Machine Calf Raise", .legs, sets: 3),
+                lift("Standing Single-Leg Machine Calf Raise", .legs, sets: 3),
             ])
         }
         let board = sessions.antagonistBalance(now: day(10))
@@ -387,7 +387,7 @@ struct AntagonistBalanceTests {
         let board = [
             session(at: day(1), [
                 lift("Barbell Back Squat", .legs, sets: 2),
-                lift("25% Body-Mass Barbell Good Morning", .legs, sets: 3),
+                lift("Barbell Good Morning", .legs, sets: 3),
                 lift("Barbell Split Squat", .legs, sets: 6),
                 lift("Bodyweight Forward Lunge", .legs, sets: 7),
                 lift("Bodyweight Reverse Lunge", .legs, sets: 8),
@@ -404,7 +404,7 @@ struct AntagonistBalanceTests {
         let board = [
             session(at: day(1), [
                 lift("Barbell Bench Press", .chest, sets: 2),
-                lift("One-Arm Dumbbell Row", .back, sets: 3),
+                lift("One-Arm Dumbbell Row (Hand and Knee on Bench)", .back, sets: 3),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -437,10 +437,10 @@ struct AntagonistBalanceTests {
                 lift("Barbell Back Squat", .legs),
                 lift("Barbell Hip Thrust", .legs),
                 lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs),
-                lift("Supported Standing Band Hip Adduction", .legs),
-                lift("Standing Unilateral Machine Calf Raise", .legs),
+                lift("Standing Band Hip Adduction", .legs),
+                lift("Standing Single-Leg Machine Calf Raise", .legs),
                 lift("Seated Band Ankle Dorsiflexion", .legs),
-                lift("One-Arm Dumbbell Row", .back),
+                lift("One-Arm Dumbbell Row (Hand and Knee on Bench)", .back),
             ]),
         ].antagonistBalance(now: day(2))
 

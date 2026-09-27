@@ -301,7 +301,7 @@ struct MuscleDevelopmentTests {
     }
 
     @Test func dipsDevelopBothPectoralRegionsButNeutralStartFlexionDoesNot() {
-        for name in ["Bar Dip", "Ring Dip"] {
+        for name in ["Parallel-Bar Dip", "Ring Dip"] {
             let s = session(
                 at: day(0),
                 [lift(name, .chest, sets: 3, reps: 8, weight: 0)]
@@ -392,7 +392,7 @@ struct MuscleDevelopmentTests {
 
         let handstand = session(
             at: day(0),
-            [lift("Wall-Supported Strict Handstand Push-Up", .shoulders, sets: 3, reps: 5, weight: 0)]
+            [lift("Strict Wall Handstand Push-Up", .shoulders, sets: 3, reps: 5, weight: 0)]
         )
         let handstandNodes = MuscleDevelopment.nodeIntensities(from: [handstand], now: day(0))
         #expect((handstandNodes["Deltoid_Anterior_L"] ?? 0) > 0)
@@ -487,7 +487,7 @@ struct MuscleDevelopmentTests {
     @Test func hipAndHingeBoundariesCreditMoversWithReducedStabilizerCredit() {
         let hipFlexion = session(
             at: day(0),
-            [lift("Bodyweight Active Straight-Leg Raise", .legs, sets: 4, reps: 10, weight: 0)]
+            [lift("Active Straight-Leg Raise", .legs, sets: 4, reps: 10, weight: 0)]
         )
         let flexionState = MuscleDevelopment.simulate(from: [hipFlexion], now: day(0))
         let flexionNodes = MuscleDevelopment.nodeIntensities(from: [hipFlexion], now: day(0))
@@ -501,7 +501,7 @@ struct MuscleDevelopmentTests {
 
         let goodMorning = session(
             at: day(0),
-            [lift("25% Body-Mass Barbell Good Morning", .legs, sets: 4, reps: 8, weight: 45)]
+            [lift("Barbell Good Morning", .legs, sets: 4, reps: 8, weight: 45)]
         )
         let hingeState = MuscleDevelopment.simulate(from: [goodMorning], now: day(0))
         let hingeNodes = MuscleDevelopment.nodeIntensities(from: [goodMorning], now: day(0))

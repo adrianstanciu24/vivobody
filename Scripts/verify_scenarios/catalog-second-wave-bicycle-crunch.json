@@ -24,7 +24,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Alternating Supine Bicycle Crunch,"
+          "labelRegex": "^Bicycle Crunch,"
         },
         "direction": "up",
         "maxSwipes": 65
@@ -38,7 +38,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^Alternating Supine Bicycle Crunch,"
+        "labelRegex": "^Bicycle Crunch,"
       }
     },
     {
@@ -50,10 +50,10 @@
       "assert": {
         "required": [
           {
-            "label": "Alternating Supine Bicycle Crunch"
+            "label": "Bicycle Crunch"
           },
           {
-            "labelContains": "Muscles used by Alternating Supine Bicycle Crunch"
+            "labelContains": "Muscles used by Bicycle Crunch"
           }
         ]
       }

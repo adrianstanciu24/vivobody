@@ -30,6 +30,8 @@ labels.
 - Balance shows a focused set of comparisons first and links to the full
   comparison board when more qualified pairs exist.
 - Empty and loading states continue to replace the instrument panel as a whole.
+- Keep the navigation and status-bar background opaque in both appearances so
+  scrolled charts and labels cannot show through behind the screen title or time.
 
 ## Information hierarchy
 

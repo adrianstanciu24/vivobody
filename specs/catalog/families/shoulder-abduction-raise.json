@@ -605,10 +605,10 @@
     },
     {
       "catalogID": "simultaneous-bilateral-dumbbell-lateral-raise",
-      "name": "Simultaneous Bilateral Dumbbell Lateral Raise",
+      "name": "Two-Dumbbell Lateral Raise",
       "aliases": [
         "Bilateral Dumbbell Lateral Raise",
-        "Two-Dumbbell Lateral Raise"
+        "Simultaneous Bilateral Dumbbell Lateral Raise"
       ],
       "equipment": "dumbbell",
       "laterality": "bilateral",

@@ -19,7 +19,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Life Fitness Pro 2 Upper-Arm-Pad Pec Fly,"
+          "labelRegex": "^Upper-Arm-Pad Pec Fly,"
         },
         "direction": "up",
         "maxSwipes": 45
@@ -27,7 +27,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^Life Fitness Pro 2 Upper-Arm-Pad Pec Fly,"
+        "labelRegex": "^Upper-Arm-Pad Pec Fly,"
       }
     },
     {
@@ -38,13 +38,13 @@
   ],
   "required": [
     {
-      "label": "Life Fitness Pro 2 Upper-Arm-Pad Pec Fly"
+      "label": "Upper-Arm-Pad Pec Fly"
     },
     {
       "label": "STRENGTH · REPS"
     },
     {
-      "labelContains": "Muscles used by Life Fitness Pro 2 Upper-Arm-Pad Pec Fly"
+      "labelContains": "Muscles used by Upper-Arm-Pad Pec Fly"
     }
   ],
   "forbidden": []

@@ -24,7 +24,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Standing Two-Hand Landmine Rotation,"
+          "labelRegex": "^Two-Hand Landmine Rotation,"
         },
         "direction": "up",
         "maxSwipes": 65
@@ -32,7 +32,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^Standing Two-Hand Landmine Rotation,"
+        "labelRegex": "^Two-Hand Landmine Rotation,"
       }
     },
     {
@@ -44,10 +44,10 @@
       "assert": {
         "required": [
           {
-            "label": "Standing Two-Hand Landmine Rotation"
+            "label": "Two-Hand Landmine Rotation"
           },
           {
-            "labelContains": "Muscles used by Standing Two-Hand Landmine Rotation"
+            "labelContains": "Muscles used by Two-Hand Landmine Rotation"
           }
         ]
       }

@@ -59,7 +59,7 @@
         ],
         "forbidden": [
           {
-            "labelContains": "Seated 45-Degree Cable Pulldown"
+            "labelContains": "Seated Diagonal Cable Pulldown"
           }
         ]
       }
@@ -76,7 +76,7 @@
       "value": "Selected"
     },
     {
-      "labelContains": "Seated 45-Degree Cable Pulldown"
+      "labelContains": "Seated Diagonal Cable Pulldown"
     },
     {
       "labelContains": "Standing Band Scapular Depression"

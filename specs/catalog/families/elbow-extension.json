@@ -2023,10 +2023,10 @@
     },
     {
       "catalogID": "bilateral-barbell-lying-triceps-extension",
-      "name": "Bilateral Barbell Lying Triceps Extension",
+      "name": "Barbell Lying Triceps Extension",
       "aliases": [
         "Lying Barbell Triceps Press",
-        "Barbell Lying Triceps Extension"
+        "Bilateral Barbell Lying Triceps Extension"
       ],
       "equipment": "barbell",
       "laterality": "bilateral",
@@ -2088,8 +2088,8 @@
     },
     {
       "catalogID": "bilateral-straight-bar-cable-triceps-pushdown",
-      "name": "Bilateral Straight-Bar Cable Triceps Pushdown",
-      "aliases": ["Straight-Bar Cable Triceps Pushdown", "Cable Triceps Pushdown", "Two-Arm Triceps Pushdown"],
+      "name": "Straight-Bar Cable Triceps Pushdown",
+      "aliases": ["Cable Triceps Pushdown", "Two-Arm Triceps Pushdown", "Bilateral Straight-Bar Cable Triceps Pushdown"],
       "equipment": "cable", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
       "bodyweightFraction": 0, "defaultWeight": 30, "defaultWeightKg": 15, "reps": 10, "searchPriority": 96,
       "involvement": [
@@ -2119,8 +2119,8 @@
     },
     {
       "catalogID": "bilateral-rope-cable-triceps-pushdown",
-      "name": "Bilateral Rope Cable Triceps Pushdown",
-      "aliases": ["Rope Cable Triceps Pushdown", "Bilateral Rope Pushdown", "Rope Triceps Pushdown"],
+      "name": "Rope Cable Triceps Pushdown",
+      "aliases": ["Bilateral Rope Pushdown", "Rope Triceps Pushdown", "Bilateral Rope Cable Triceps Pushdown"],
       "equipment": "cable", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
       "bodyweightFraction": 0, "defaultWeight": 30, "defaultWeightKg": 15, "reps": 10, "searchPriority": 94,
       "involvement": [
@@ -2149,8 +2149,8 @@
     },
     {
       "catalogID": "life-fitness-pro2-seated-triceps-extension",
-      "name": "Life Fitness Pro 2 Seated Triceps Extension",
-      "aliases": ["Machine Triceps Extension", "Seated Machine Triceps Extension", "Selectorized Triceps Extension"],
+      "name": "Seated Machine Triceps Extension",
+      "aliases": ["Machine Triceps Extension", "Selectorized Triceps Extension", "Life Fitness Pro 2 Seated Triceps Extension"],
       "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
       "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 95,
       "involvement": [{"muscle": "triceps", "role": "primary"}, {"muscle": "brachioradialis", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}],

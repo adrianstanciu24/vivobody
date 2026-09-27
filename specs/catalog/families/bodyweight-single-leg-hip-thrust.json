@@ -391,10 +391,11 @@
   "exercises": [
     {
       "catalogID": "bodyweight-single-leg-hip-thrust",
-      "name": "Single-Leg Hip Thrusts",
+      "name": "Single-Leg Hip Thrust",
       "aliases": [
         "Bodyweight Single-Leg Hip Thrust",
-        "Unweighted Single-Leg Hip Thrust"
+        "Unweighted Single-Leg Hip Thrust",
+        "Single-Leg Hip Thrusts"
       ],
       "equipment": "bodyweight",
       "laterality": "unilateral",

@@ -10,14 +10,14 @@
     {"tap": {"label": "Search"}},
     {"wait": {"role": "AXTextField", "value": "Search exercises"}},
     {"tap": {"role": "AXTextField", "value": "Search exercises"}},
-    {"typeText": "Single-Arm Bent-Over Row"},
-    {"wait": {"labelRegex": "^Single-Arm Bent-Over Row, Dumbbell · Horizontal Pull"}},
-    {"tap": {"labelRegex": "^Single-Arm Bent-Over Row, Dumbbell · Horizontal Pull"}},
+    {"typeText": "One-Arm Dumbbell Row (Hand on Bench)"},
+    {"wait": {"labelRegex": "^One-Arm Dumbbell Row \\(Hand on Bench\\), Dumbbell · Horizontal Pull"}},
+    {"tap": {"labelRegex": "^One-Arm Dumbbell Row \\(Hand on Bench\\), Dumbbell · Horizontal Pull"}},
     {"wait": {"label": "STRENGTH · REPS"}}
   ],
   "required": [
-    {"label": "Single-Arm Bent-Over Row"},
-    {"labelContains": "Muscles used by Single-Arm Bent-Over Row"}
+    {"label": "One-Arm Dumbbell Row (Hand on Bench)"},
+    {"labelContains": "Muscles used by One-Arm Dumbbell Row (Hand on Bench)"}
   ],
   "forbidden": []
 }

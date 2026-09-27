@@ -10,14 +10,14 @@
     {"tap": {"label": "Search"}},
     {"wait": {"role": "AXTextField", "value": "Search exercises"}},
     {"tap": {"role": "AXTextField", "value": "Search exercises"}},
-    {"typeText": "Quadruped Fire Hydrants with Band"},
-    {"wait": {"labelRegex": "^Quadruped Fire Hydrants with Band, Band · Legs"}},
-    {"tap": {"labelRegex": "^Quadruped Fire Hydrants with Band, Band · Legs"}},
+    {"typeText": "Banded Fire Hydrant"},
+    {"wait": {"labelRegex": "^Banded Fire Hydrant, Band · Legs"}},
+    {"tap": {"labelRegex": "^Banded Fire Hydrant, Band · Legs"}},
     {"wait": {"label": "STRENGTH · REPS"}}
   ],
   "required": [
-    {"label": "Quadruped Fire Hydrants with Band"},
-    {"labelContains": "Muscles used by Quadruped Fire Hydrants with Band"}
+    {"label": "Banded Fire Hydrant"},
+    {"labelContains": "Muscles used by Banded Fire Hydrant"}
   ],
   "forbidden": []
 }

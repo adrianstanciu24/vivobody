@@ -19,7 +19,7 @@
     {
       "scrollTo": {
         "selector": {
-          "labelRegex": "^Supported Standing Cable Hip Adduction,"
+          "labelRegex": "^Standing Cable Hip Adduction,"
         },
         "direction": "up",
         "maxSwipes": 60
@@ -27,7 +27,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^Supported Standing Cable Hip Adduction,"
+        "labelRegex": "^Standing Cable Hip Adduction,"
       }
     },
     {

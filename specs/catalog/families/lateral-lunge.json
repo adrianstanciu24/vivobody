@@ -136,8 +136,8 @@
   "exercises": [
     {
       "catalogID": "bodyweight-lateral-lunge-60-percent-height",
-      "name": "60%-Height Bodyweight Lateral Lunge",
-      "aliases": ["Bodyweight Lateral Lunge", "60-Percent-Body-Height Lateral Lunge", "Side Lunge"],
+      "name": "Bodyweight Lateral Lunge",
+      "aliases": ["60-Percent-Body-Height Lateral Lunge", "Side Lunge", "60%-Height Bodyweight Lateral Lunge"],
       "equipment": "bodyweight",
       "laterality": "unilateral",
       "modality": "dynamicStrength",

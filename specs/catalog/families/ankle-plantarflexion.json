@@ -961,10 +961,11 @@
   "exercises": [
     {
       "catalogID": "standing-unilateral-machine-calf-raise",
-      "name": "Standing Unilateral Machine Calf Raise",
+      "name": "Standing Single-Leg Machine Calf Raise",
       "aliases": [
         "Single-Leg Standing Calf Raise",
-        "Single-Leg Standing Calf Raise Machine"
+        "Single-Leg Standing Calf Raise Machine",
+        "Standing Unilateral Machine Calf Raise"
       ],
       "equipment": "machine",
       "laterality": "unilateral",
@@ -1030,10 +1031,11 @@
     },
     {
       "catalogID": "seated-unilateral-machine-calf-raise",
-      "name": "Seated Unilateral Machine Calf Raise",
+      "name": "Seated Single-Leg Machine Calf Raise",
       "aliases": [
         "Single-Leg Seated Calf Raise",
-        "Single-Leg Seated Calf Raise Machine"
+        "Single-Leg Seated Calf Raise Machine",
+        "Seated Unilateral Machine Calf Raise"
       ],
       "equipment": "machine",
       "laterality": "unilateral",
@@ -1099,10 +1101,11 @@
     },
     {
       "catalogID": "bilateral-standing-shoulder-pad-machine-calf-raise",
-      "name": "Bilateral Standing Shoulder-Pad Machine Calf Raise",
+      "name": "Standing Shoulder-Pad Machine Calf Raise",
       "aliases": [
         "Standing Machine Calf Raise",
-        "Standing Calf Raise Machine"
+        "Standing Calf Raise Machine",
+        "Bilateral Standing Shoulder-Pad Machine Calf Raise"
       ],
       "equipment": "machine",
       "laterality": "bilateral",
@@ -1169,10 +1172,11 @@
     },
     {
       "catalogID": "bilateral-seated-thigh-pad-machine-calf-raise",
-      "name": "Bilateral Seated Thigh-Pad Machine Calf Raise",
+      "name": "Seated Thigh-Pad Machine Calf Raise",
       "aliases": [
         "Seated Machine Calf Raise",
-        "Seated Calf Raise Machine"
+        "Seated Calf Raise Machine",
+        "Bilateral Seated Thigh-Pad Machine Calf Raise"
       ],
       "equipment": "machine",
       "laterality": "bilateral",
@@ -1239,8 +1243,8 @@
     },
     {
       "catalogID": "wall-balanced-single-leg-bodyweight-heel-raise",
-      "name": "Wall-Balanced Single-Leg Bodyweight Heel Raise",
-      "aliases": ["Single-Leg Bodyweight Heel Raise", "Bodyweight Single-Leg Calf Raise", "Light-Wall-Balance Single-Leg Heel Raise"],
+      "name": "Wall-Balanced Single-Leg Heel Raise",
+      "aliases": ["Single-Leg Bodyweight Heel Raise", "Bodyweight Single-Leg Calf Raise", "Light-Wall-Balance Single-Leg Heel Raise", "Wall-Balanced Single-Leg Bodyweight Heel Raise"],
       "equipment": "bodyweight",
       "laterality": "unilateral",
       "modality": "dynamicStrength",

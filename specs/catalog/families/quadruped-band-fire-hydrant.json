@@ -318,9 +318,10 @@
   "exercises": [
     {
       "catalogID": "quadruped-fire-hydrants-with-band",
-      "name": "Quadruped Fire Hydrants with Band",
+      "name": "Banded Fire Hydrant",
       "aliases": [
-        "Banded Quadruped Fire Hydrant"
+        "Banded Quadruped Fire Hydrant",
+        "Quadruped Fire Hydrants with Band"
       ],
       "equipment": "band",
       "laterality": "unilateral",

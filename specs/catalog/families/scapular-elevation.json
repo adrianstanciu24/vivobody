@@ -686,8 +686,8 @@
     },
     {
       "catalogID": "bilateral-dumbbell-shrug",
-      "name": "Bilateral Dumbbell Shrug",
-      "aliases": ["Two-Dumbbell Shrug", "Dumbbell Shrug"],
+      "name": "Two-Dumbbell Shrug",
+      "aliases": ["Dumbbell Shrug", "Bilateral Dumbbell Shrug"],
       "equipment": "dumbbell",
       "laterality": "bilateral",
       "modality": "dynamicStrength",
@@ -730,10 +730,11 @@
     },
     {
       "catalogID": "bilateral-30-degree-stabilization-shrug",
-      "name": "Bilateral 30-Degree Stabilization Shrug",
+      "name": "Arm-Raised Stabilization Shrug",
       "aliases": [
-        "30-Degree Stabilization Shrug",
-        "Bilateral Stabilization Shrug"
+        "Bilateral Stabilization Shrug",
+        "Bilateral 30-Degree Stabilization Shrug",
+        "30-Degree Stabilization Shrug"
       ],
       "equipment": "other",
       "laterality": "bilateral",
@@ -807,8 +808,8 @@
     },
     {
       "catalogID": "standing-bilateral-barbell-shrug",
-      "name": "Standing Bilateral Barbell Shrug",
-      "aliases": ["Barbell Shrug", "Standing Barbell Shrug"],
+      "name": "Barbell Shrug",
+      "aliases": ["Standing Barbell Shrug", "Standing Bilateral Barbell Shrug"],
       "equipment": "barbell", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
       "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 10, "searchPriority": 96,
       "involvement": [

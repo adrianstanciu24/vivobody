@@ -136,7 +136,7 @@ import VivoKit
                 context: context
             )
             seedBlock(
-                [("Standing Unilateral Machine Calf Raise", 70)],
+                [("Standing Single-Leg Machine Calf Raise", 70)],
                 startDaysAgo: 30,
                 endDaysAgo: 9,
                 count: 4,
@@ -378,7 +378,7 @@ import VivoKit
             case .shoulders: ("Seated Dumbbell Overhead Press", 95)
             case .legs: ("Barbell Back Squat", 185)
             case .arms: ("Supinated Straight-Bar Cable Curl", 65)
-            case .core: ("30-Degree Curl-Up", 0)
+            case .core: ("Partial Curl-Up", 0)
             }
         }
     }

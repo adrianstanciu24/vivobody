@@ -100,8 +100,8 @@
   "exercises": [
     {
       "catalogID": "45-degree-incline-leg-press",
-      "name": "45° Incline Leg Press",
-      "aliases": ["45-Degree Leg Press", "Inclined Leg Press"],
+      "name": "Incline Leg Press",
+      "aliases": ["45-Degree Leg Press", "Inclined Leg Press", "45° Incline Leg Press"],
       "equipment": "machine",
       "laterality": "bilateral",
       "modality": "dynamicStrength",
@@ -149,8 +149,8 @@
     },
     {
       "catalogID": "panatta-1fw090-single-leg-45-degree-leg-press",
-      "name": "Panatta 1FW090 Single-Leg 45° Leg Press",
-      "aliases": ["Single-Leg 45° Leg Press", "Unilateral 45° Leg Press", "Single-Leg Incline Leg Press"],
+      "name": "Single-Leg Incline Leg Press",
+      "aliases": ["Single-Leg 45° Leg Press", "Unilateral 45° Leg Press", "Panatta 1FW090 Single-Leg 45° Leg Press"],
       "equipment": "machine", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 45, "defaultWeightKg": 20, "reps": 10, "searchPriority": 95,
       "involvement": [{"muscle": "gluteMax", "role": "primary"}, {"muscle": "vasti", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "gastrocnemius", "role": "stabilizer"}],
       "variant": {"machineFixture": "panatta1FW090", "bodyPosition": "reclinedSeated", "trackInclinationDegrees": 45, "workingPlatform": "oneIndependentPlatform", "reciprocalCouplingState": "disengaged", "unusedCarriageState": "independentSafetyEngaged", "backrestSetting": "userSelectedHeldConstant", "safetyStopSetting": "userSelectedHeldConstant", "sideLoadConvention": "equalSideSettingsEnterOnce", "fixedPath": true, "loadAccounting": "platesOnWorkingCarriageSameFixtureOnly"},

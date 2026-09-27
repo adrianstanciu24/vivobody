@@ -477,10 +477,11 @@
   "exercises": [
     {
       "catalogID": "30-degree-curl-up",
-      "name": "30-Degree Curl-Up",
+      "name": "Partial Curl-Up",
       "aliases": [
         "Thirty-Degree Curl-Up",
-        "30-Degree Partial Curl-Up"
+        "30-Degree Partial Curl-Up",
+        "30-Degree Curl-Up"
       ],
       "equipment": "bodyweight",
       "laterality": "bilateral",

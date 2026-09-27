@@ -2157,9 +2157,9 @@
     },
     {
       "catalogID": "foot-anchored-band-reverse-lunge",
-      "name": "Reverse Lunge with Band",
+      "name": "Foot-Anchored Band Reverse Lunge",
       "aliases": [
-        "Foot-Anchored Band Reverse Lunge"
+        "Reverse Lunge with Band"
       ],
       "equipment": "band",
       "laterality": "unilateral",

@@ -284,11 +284,11 @@
   "exercises": [
     {
       "catalogID": "alternating-supine-bicycle-crunch",
-      "name": "Alternating Supine Bicycle Crunch",
+      "name": "Bicycle Crunch",
       "aliases": [
-        "Bicycle Crunch",
         "Supine Bicycle Crunch",
-        "Alternating Bicycle Crunch"
+        "Alternating Bicycle Crunch",
+        "Alternating Supine Bicycle Crunch"
       ],
       "equipment": "bodyweight",
       "laterality": "unilateral",

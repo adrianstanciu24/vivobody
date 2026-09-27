@@ -654,10 +654,10 @@
   "exercises": [
     {
       "catalogID": "supported-standing-band-hip-adduction",
-      "name": "Supported Standing Band Hip Adduction",
+      "name": "Standing Band Hip Adduction",
       "aliases": [
-        "Standing Band Hip Adduction",
-        "Band Hip Adduction"
+        "Band Hip Adduction",
+        "Supported Standing Band Hip Adduction"
       ],
       "equipment": "band",
       "laterality": "unilateral",
@@ -836,10 +836,10 @@
     },
     {
       "catalogID": "supported-standing-cable-hip-adduction",
-      "name": "Supported Standing Cable Hip Adduction",
+      "name": "Standing Cable Hip Adduction",
       "aliases": [
-        "Standing Cable Hip Adduction",
-        "Cable Hip Adduction"
+        "Cable Hip Adduction",
+        "Supported Standing Cable Hip Adduction"
       ],
       "equipment": "cable",
       "laterality": "unilateral",

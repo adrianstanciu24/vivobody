@@ -81,7 +81,7 @@ import SwiftData
                     daysAgo: week * 7 + 5,
                     plans: [
                         ("Barbell Back Squat", 4, reps, 185 + recentProgress * 2),
-                        ("25% Body-Mass Barbell Good Morning", 3, reps, 75 + recentProgress),
+                        ("Barbell Good Morning", 3, reps, 75 + recentProgress),
                         ("Barbell Split Squat", 2, reps, 85 + recentProgress),
                         ("Supinated Straight-Bar Cable Curl", 3, reps, 55 + recentProgress),
                         ("Single-Arm Supinated Cable Triceps Pushdown", 2, reps, 45 + recentProgress),

@@ -169,10 +169,10 @@
   "exercises": [
     {
       "catalogID": "ice-skaters",
-      "name": "Ice Skaters",
+      "name": "Skater Hops",
       "aliases": [
-        "Skater Hops",
-        "Lateral Skater Hops"
+        "Lateral Skater Hops",
+        "Ice Skaters"
       ],
       "equipment": "bodyweight",
       "laterality": "unilateral",
@@ -251,7 +251,7 @@
         "supportAndPosture": "Use a clear, level lateral lane and no hand support.",
         "disqualifyingCompensations": [
           "Stepping sideways without flight changes the hop into a lateral step.",
-          "Adding an immediate vertical hop and split-stance receive becomes Ice Skaters with Jump."
+          "Adding an immediate vertical hop and split-stance receive becomes Skater Hop to Vertical Jump."
         ],
         "sideOrDirection": "Alternate sides; count each lateral landing as one rep."
       }

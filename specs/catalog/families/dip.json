@@ -375,11 +375,12 @@
   "exercises": [
     {
       "catalogID": "bar-dip",
-      "name": "Bar Dip",
+      "name": "Parallel-Bar Dip",
       "aliases": [
         "Dip",
         "Parallel Bar Dip",
-        "Bodyweight Dip"
+        "Bodyweight Dip",
+        "Bar Dip"
       ],
       "equipment": "bodyweight",
       "laterality": "bilateral",
@@ -569,8 +570,8 @@
     },
     {
       "catalogID": "life-fitness-pro2-assisted-dip-machine",
-      "name": "Life Fitness Pro 2 Assisted Dip Machine",
-      "aliases": ["Machine-Assisted Dip", "Counterbalanced Dip"],
+      "name": "Machine-Assisted Dip",
+      "aliases": ["Counterbalanced Dip", "Life Fitness Pro 2 Assisted Dip Machine"],
       "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "assistanceSubtracted",
       "bodyweightFraction": 1, "defaultWeight": 40, "defaultWeightKg": 20, "reps": 8, "searchPriority": 96,
       "involvement": [

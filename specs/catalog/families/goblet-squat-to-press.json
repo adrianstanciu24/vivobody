@@ -317,10 +317,11 @@
   "exercises": [
     {
       "catalogID": "two-hand-single-dumbbell-goblet-squat-to-press",
-      "name": "Two-Hand Single-Dumbbell Goblet Squat to Press",
+      "name": "Single-Dumbbell Goblet Squat to Press",
       "aliases": [
         "Dumbbell Goblet Squat to Press",
-        "Single-Dumbbell Goblet Squat to Overhead Press"
+        "Single-Dumbbell Goblet Squat to Overhead Press",
+        "Two-Hand Single-Dumbbell Goblet Squat to Press"
       ],
       "equipment": "dumbbell",
       "laterality": "bilateral",

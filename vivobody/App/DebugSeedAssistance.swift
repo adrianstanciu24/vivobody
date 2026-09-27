@@ -19,7 +19,7 @@ import SwiftData
             guard existing.isEmpty else { return }
 
             let exercise = debugCatalogExercise(
-                named: "Assisted Pull-Up Machine",
+                named: "Machine-Assisted Pull-Up",
                 plannedSets: 3,
                 plannedReps: 8,
                 plannedWeight: 50,

@@ -432,9 +432,10 @@
     },
     {
       "catalogID": "above-knee-band-side-walk",
-      "name": "Banded Side Walks",
+      "name": "Above-Knee Band Lateral Walk",
       "aliases": [
-        "Above-Knee Band Side Walk"
+        "Above-Knee Band Side Walk",
+        "Banded Side Walks"
       ],
       "equipment": "band",
       "laterality": "unilateral",

@@ -3,11 +3,10 @@
   "schemaVersion": 1,
   "id": "hip-hinge",
   "name": "Hip Hinge",
-  "definition": "A bilateral unsupported closed-chain barbell good morning in which the athlete begins upright with a free bar across the posterior shoulder and upper-back surface, hinges through a reviewed control-limited range, and returns to standing through combined hip and spinal extension. The roster preserves Schellenberg et al.'s exact eight-repetition fixture with shoulder-width, slightly toe-out feet and external barbell load equal to 25 percent of body mass, and adds an everyday high-bar strength fixture using Ross et al.'s approximately hip-width stance, forward or slightly toe-out feet, equidistant overhand grip, slight maintained knee bend, and program-selected external load. Vigotsky et al. directly measured trained lifters across 50 to 90 percent of estimated one-repetition maximum without prescribing depth or tempo; their load-dependent increase in knee flexion is treated as an observed limitation, not an authored technique cue. The everyday record's controlled self-selected tempo and control-limited depth are explicit catalog safety boundaries rather than source-measured cadence or depth. Both experimental sources measured lumbar or segmental excursion, so spinal extension remains explicit rather than being hidden behind a neutral-spine coaching cue. Medial hamstrings, gluteus maximus, and lumbar extensors are non-ranked co-primary contributors. The visible biceps-femoris region receives only knee-control credit because its unsplit mesh cannot distinguish the hip-extending long head from the monoarticular short head. Romanian, stiff-leg, conventional, sumo, trap-bar, deficit, unilateral, staggered, dumbbell, cable, Smith, floor-pull, swing, and externally supported back-extension variants remain outside this contract.",
+  "definition": "A bilateral unsupported closed-chain barbell good morning in which the athlete begins upright with a free bar across the upper trapezius, hinges through a reviewed control-limited range, and returns to standing through combined hip and spinal extension. The high-bar strength fixture uses Ross et al.'s approximately hip-width stance, forward or slightly toe-out feet, equidistant overhand grip, slight maintained knee bend, and program-selected external load. Vigotsky et al. directly measured trained lifters across 50 to 90 percent of estimated one-repetition maximum without prescribing depth or tempo; their load-dependent increase in knee flexion is treated as an observed limitation, not an authored technique cue. The record's controlled self-selected tempo and control-limited depth are explicit catalog safety boundaries rather than source-measured cadence or depth. Measured lumbar excursion supports explicit spinal extension rather than hiding it behind a neutral-spine coaching cue. Medial hamstrings, gluteus maximus, and lumbar extensors are non-ranked co-primary contributors. The visible biceps-femoris region receives only knee-control credit because its unsplit mesh cannot distinguish the hip-extending long head from the monoarticular short head. Romanian, stiff-leg, conventional, sumo, trap-bar, deficit, unilateral, staggered, dumbbell, cable, Smith, floor-pull, swing, and externally supported back-extension variants remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
-    "schellenberg-2013-deadlift-goodmorning-kinematics",
     "ross-2024-good-morning-technique",
     "vigotsky-2015-good-morning-load"
   ],
@@ -156,9 +155,8 @@
       "id": "stanceWidth",
       "valueType": "enum",
       "required": true,
-      "description": "The exact research fixture standardizes shoulder-width feet; the everyday strength fixture uses Ross et al.'s approximately hip-width stance.",
+      "description": "The strength fixture uses Ross et al.'s approximately hip-width stance.",
       "allowedValues": [
-        "shoulderWidth",
         "approximatelyHipWidth"
       ]
     },
@@ -166,9 +164,8 @@
       "id": "footOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The exact research fixture prescribes a slight natural toe-out; the everyday strength standard permits forward or slightly externally rotated feet.",
+      "description": "The strength standard permits forward or slightly externally rotated feet.",
       "allowedValues": [
-        "slightNaturalToeOut",
         "forwardOrSlightToeOut"
       ]
     },
@@ -185,9 +182,8 @@
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "The exact research fixture uses a deliberately coarse posterior shoulder and upper-back surface; the everyday technique standard places the bar across the upper trapezius.",
+      "description": "The technique standard places the bar across the upper trapezius.",
       "allowedValues": [
-        "posteriorShoulderUpperBack",
         "upperTrapeziusHighBar"
       ]
     },
@@ -195,9 +191,8 @@
       "id": "gripOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The source-exact study required a comfortable hand position without reporting forearm orientation; Ross et al. prescribe an overhand grip with hands equidistant from bar center.",
+      "description": "Ross et al. prescribe an overhand grip with hands equidistant from bar center.",
       "allowedValues": [
-        "comfortableUnreported",
         "overhandEquidistant"
       ]
     },
@@ -205,9 +200,8 @@
       "id": "externalLoadPrescription",
       "valueType": "enum",
       "required": true,
-      "description": "The exact research fixture normalizes load to body mass; the everyday record accepts the external load selected for the user's program.",
+      "description": "The record accepts the external load selected for the user's program.",
       "allowedValues": [
-        "twentyFivePercentBodyMass",
         "programSelectedExternalLoad"
       ]
     },
@@ -224,9 +218,8 @@
       "id": "spineMotion",
       "valueType": "enum",
       "required": true,
-      "description": "Measured spinal excursion reverses during the ascent and is represented honestly as dynamic spinal extension; the values distinguish the original segment-resolved fixture from the everyday lumbar-measured fixture.",
+      "description": "Measured lumbar excursion reverses during the ascent and is represented as dynamic spinal extension.",
       "allowedValues": [
-        "extendsWithMeasuredSegmentalExcursion",
         "extendsAfterMeasuredLumbarExcursion"
       ]
     },
@@ -234,9 +227,8 @@
       "id": "kneeMotion",
       "valueType": "enum",
       "required": true,
-      "description": "Knee motion does not define the task and is never promoted to a knee-extension prime; the everyday technique maintains a slight bend while disclosing Vigotsky et al.'s observed load-dependent excursion as a limitation.",
+      "description": "Knee motion does not define the task and is never promoted to a knee-extension prime; the technique maintains a slight bend while disclosing Vigotsky et al.'s observed load-dependent excursion as a limitation.",
       "allowedValues": [
-        "measuredSmallNondefiningExcursion",
         "slightFlexionMaintainedWithObservedLoadDependentExcursion"
       ]
     },
@@ -244,9 +236,8 @@
       "id": "rangeOfMotion",
       "valueType": "enum",
       "required": true,
-      "description": "The exact fixture uses maximum hip flexion with its technique cue; the everyday record stops at the athlete's controlled training depth.",
+      "description": "The record stops at the athlete's controlled training depth.",
       "allowedValues": [
-        "maximumHipFlexionWithNaturalSpineTechnique",
         "selfSelectedControlledDepth"
       ]
     },
@@ -254,9 +245,8 @@
       "id": "headPosition",
       "valueType": "enum",
       "required": true,
-      "description": "The exact fixture standardizes head alignment; the everyday sources do not establish a separate universal head position.",
+      "description": "The sources do not establish a separate universal head position.",
       "allowedValues": [
-        "alignedWithSpine",
         "nonstandardized"
       ]
     },
@@ -264,9 +254,8 @@
       "id": "tempo",
       "valueType": "enum",
       "required": true,
-      "description": "The exact fixture uses equal self-selected speeds; the everyday fixture's nonnumeric control requirement is a catalog safety boundary because Ross and Vigotsky do not establish a cadence.",
+      "description": "The nonnumeric control requirement is a catalog safety boundary because Ross and Vigotsky do not establish a cadence.",
       "allowedValues": [
-        "equalNormalDescentAscent",
         "controlledSelfSelectedCatalogBoundary"
       ]
     },
@@ -290,39 +279,13 @@
       "id": "lowerBodyContribution",
       "valueType": "enum",
       "required": true,
-      "description": "Hip and spinal extension create the ascent while knee motion remains nondefining; the everyday value separates intended slight maintained flexion from observed load-dependent excursion.",
+      "description": "Hip and spinal extension create the ascent while knee motion remains nondefining; the value separates intended slight maintained flexion from observed load-dependent excursion.",
       "allowedValues": [
-        "hipAndSpineExtensionWithSmallKneeExcursion",
         "hipAndSpineExtensionWithSlightMaintainedKneeFlexion"
       ]
     }
   ],
   "exerciseRules": [
-    {
-      "id": "body-mass-test-fixture-is-source-exact",
-      "description": "The source-exact research fixture retains its body-mass prescription, standardized stance and equal-speed topology.",
-      "when": {
-        "field": "variant.externalLoadPrescription",
-        "operator": "equals",
-        "value": "twentyFivePercentBodyMass"
-      },
-      "then": [
-        {"field": "variant.stanceWidth", "value": "shoulderWidth"},
-        {"field": "variant.footOrientation", "value": "slightNaturalToeOut"},
-        {"field": "variant.loadPlacement", "value": "posteriorShoulderUpperBack"},
-        {"field": "variant.gripOrientation", "value": "comfortableUnreported"},
-        {"field": "variant.externalLoadPrescription", "value": "twentyFivePercentBodyMass"},
-        {"field": "variant.spineMotion", "value": "extendsWithMeasuredSegmentalExcursion"},
-        {"field": "variant.kneeMotion", "value": "measuredSmallNondefiningExcursion"},
-        {"field": "variant.rangeOfMotion", "value": "maximumHipFlexionWithNaturalSpineTechnique"},
-        {"field": "variant.headPosition", "value": "alignedWithSpine"},
-        {"field": "variant.tempo", "value": "equalNormalDescentAscent"},
-        {"field": "variant.lowerBodyContribution", "value": "hipAndSpineExtensionWithSmallKneeExcursion"},
-        {"field": "reps", "value": 8}
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
     {
       "id": "everyday-good-morning-fixture-is-training-programmed",
       "description": "The everyday strength fixture uses the high-bar technique standard, an approximately hip-width stance, an equidistant overhand grip, and a program-selected external load without borrowing test-only prescriptions.",
@@ -458,120 +421,6 @@
     }
   },
   "exercises": [
-    {
-      "catalogID": "barbell-good-morning-25-percent-body-mass",
-      "name": "25% Body-Mass Barbell Good Morning",
-      "execution": {
-        "startingPosition": "Stand upright with your feet approximately shoulder-width apart and naturally turned slightly outward. Place a free bar securely across the back of your shoulders and upper back in a comfortable hand position. Load the bar with 25 percent of your body weight; use 45 lb or 20 kg only if that matches your calculated weight.",
-        "movement": "Push your hips backward as far as you can while keeping a natural back position.",
-        "endpoint": "End the descent when your hips have moved as far back as they comfortably can.",
-        "returnPhase": "Straighten your hips and return to standing at the same controlled speed used for the descent, keeping the bar on your body for all eight repetitions.",
-        "controlledJoints": "Allow only a small bend in the knees throughout the movement.",
-        "supportAndPosture": "Keep your head aligned with your spine, brace your trunk, and keep both feet planted.",
-        "disqualifyingCompensations": [
-          "Bending the knees deeply turns the hinge into a squat.",
-          "Rounding the back turns the hinge into a rounded-back pull."
-        ]
-      },
-      "variant": {
-        "kineticChain": "closed",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "stanceConfiguration": "symmetricBilateral",
-        "stanceWidth": "shoulderWidth",
-        "footOrientation": "slightNaturalToeOut",
-        "footContact": "continuous",
-        "loadPlacement": "posteriorShoulderUpperBack",
-        "gripOrientation": "comfortableUnreported",
-        "externalLoadPrescription": "twentyFivePercentBodyMass",
-        "hipMotion": "extends",
-        "spineMotion": "extendsWithMeasuredSegmentalExcursion",
-        "kneeMotion": "measuredSmallNondefiningExcursion",
-        "rangeOfMotion": "maximumHipFlexionWithNaturalSpineTechnique",
-        "headPosition": "alignedWithSpine",
-        "tempo": "equalNormalDescentAscent",
-        "fixedPath": false,
-        "interRepSupport": "none",
-        "lowerBodyContribution": "hipAndSpineExtensionWithSmallKneeExcursion"
-      },
-      "involvement": [
-        {
-          "muscle": "medialHamstrings",
-          "role": "primary"
-        },
-        {
-          "muscle": "gluteMax",
-          "role": "primary"
-        },
-        {
-          "muscle": "lumbarExtensors",
-          "role": "primary"
-        },
-        {
-          "muscle": "bicepsFemoris",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "gluteMed",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "gastrocnemius",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "soleus",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "fingerFlexors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "extensorCarpiRadialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "externalRotators",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "trapeziusUpper",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "brachialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "abs",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        }
-      ],
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "schellenberg-2013-deadlift-goodmorning-kinematics"
-      ],
-      "equipment": "barbell",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "laterality": "bilateral",
-      "aliases": [
-        "Barbell Good Morning at 25% Body Mass",
-        "25% Bodyweight Good Morning"
-      ],
-      "defaultWeight": 45,
-      "defaultWeightKg": 20,
-      "bodyweightFraction": 0,
-      "reps": 8,
-      "searchPriority": 76
-    },
     {
       "catalogID": "barbell-good-morning",
       "name": "Barbell Good Morning",

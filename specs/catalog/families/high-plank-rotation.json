@@ -25,7 +25,7 @@
   ],
   "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 6, "maximum": 16}},
   "exercises": [{
-    "catalogID": "alternating-high-plank-t-spine-rotation", "name": "Alternating High-Plank T-Spine Rotation", "aliases": ["Rotational Plank", "Plank Rotation", "T Plank"],
+    "catalogID": "alternating-high-plank-t-spine-rotation", "name": "High-Plank T-Spine Rotation", "aliases": ["Rotational Plank", "Plank Rotation", "T Plank", "Alternating High-Plank T-Spine Rotation"],
     "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
     "involvement": [{"muscle": "obliques", "role": "primary"}, {"muscle": "abs", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
     "variant": {"startSupport": "bilateralPalmsAndToes", "rotatedSupport": "singlePalmAndBothFeet", "freeArmPath": "towardCeiling", "torsoPath": "highPlankToOpenSideAndReturn", "trainingDirectionPrescription": "bothDirectionsAlternating", "repetitionCounting": "eachSideEndpoint", "fixedPath": false},
