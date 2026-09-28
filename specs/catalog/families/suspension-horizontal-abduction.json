@@ -54,7 +54,7 @@
     {
       "catalogID": "trx-reverse-fly",
       "name": "TRX Reverse Fly",
-      "aliases": ["Suspension Reverse Fly", "TRX T Fly"],
+      "aliases": ["Suspension Reverse Fly", "TRX T Fly", "TRX Rear-Delt Fly"],
       "equipment": "suspensionTrainer",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

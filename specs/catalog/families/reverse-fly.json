@@ -806,7 +806,7 @@
     {
       "catalogID": "prone-dumbbell-reverse-fly",
       "name": "Prone Dumbbell Reverse Fly",
-      "aliases": [],
+      "aliases": ["Prone Dumbbell Rear-Delt Fly"],
       "equipment": "dumbbell",
       "laterality": "bilateral",
       "modality": "dynamicStrength",
@@ -888,7 +888,7 @@
     {
       "catalogID": "standing-band-reverse-fly",
       "name": "Standing Band Reverse Fly",
-      "aliases": [],
+      "aliases": ["Standing Band Rear-Delt Fly"],
       "equipment": "band",
       "laterality": "bilateral",
       "modality": "dynamicStrength",
@@ -975,7 +975,7 @@
     {
       "catalogID": "neutral-grip-machine-reverse-fly",
       "name": "Machine Reverse Fly",
-      "aliases": ["Neutral-Grip Machine Reverse Fly"],
+      "aliases": ["Neutral-Grip Machine Rear-Delt Fly", "Neutral-Grip Machine Reverse Fly", "Machine Rear-Delt Fly"],
       "equipment": "machine",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

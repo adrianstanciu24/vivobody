@@ -18980,7 +18980,9 @@
       "transverse"
     ],
     "laterality": "bilateral",
-    "aliases": [],
+    "aliases": [
+      "Prone Dumbbell Rear-Delt Fly"
+    ],
     "searchPriority": 84,
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
@@ -19058,7 +19060,9 @@
       "transverse"
     ],
     "laterality": "bilateral",
-    "aliases": [],
+    "aliases": [
+      "Standing Band Rear-Delt Fly"
+    ],
     "searchPriority": 72,
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
@@ -19142,7 +19146,9 @@
     ],
     "laterality": "bilateral",
     "aliases": [
-      "Neutral-Grip Machine Reverse Fly"
+      "Neutral-Grip Machine Rear-Delt Fly",
+      "Neutral-Grip Machine Reverse Fly",
+      "Machine Rear-Delt Fly"
     ],
     "searchPriority": 80,
     "bodyweightFraction": 0,
@@ -27585,7 +27591,8 @@
     "laterality": "bilateral",
     "aliases": [
       "Suspension Reverse Fly",
-      "TRX T Fly"
+      "TRX T Fly",
+      "TRX Rear-Delt Fly"
     ],
     "searchPriority": 96,
     "bodyweightFraction": 0,
@@ -28770,7 +28777,8 @@
       "Upper-Arm-Pad Pec Deck",
       "Elbow-Pad Pec Deck",
       "Upper-Arm-Pad Machine Pec Fly",
-      "Life Fitness Pro 2 Upper-Arm-Pad Pec Fly"
+      "Life Fitness Pro 2 Upper-Arm-Pad Pec Fly",
+      "Upper-Arm-Pad Machine Chest Fly"
     ],
     "searchPriority": 95,
     "bodyweightFraction": 0,

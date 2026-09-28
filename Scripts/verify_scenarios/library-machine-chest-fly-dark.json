@@ -1,0 +1,23 @@
+{
+  "name": "library-machine-chest-fly-dark",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "dark"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "machine chest fly"},
+    {"wait": {"labelRegex": "^Upper-Arm-Pad Pec Fly,"}}
+  ],
+  "required": [
+    {"labelRegex": "^Seated Machine Chest Fly [(]Handles[)],"},
+    {"labelRegex": "^Upper-Arm-Pad Pec Fly,"}
+  ],
+  "forbidden": [
+    {"labelRegex": "^Cable Rear-Delt Fly,"}
+  ]
+}
