@@ -13,11 +13,11 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | Measure | Count |
 |---|---:|
 | Reviewed families | 166 |
-| Exercises | 344 |
+| Exercises | 330 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 382 |
+| Evidence sources | 380 |
 
 ## Family roster
 
@@ -67,7 +67,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hang-power-snatch](families/hang-power-snatch.json) | 1 |
 | [hanging-leg-raise](families/hanging-leg-raise.json) | 2 |
 | [high-plank-contralateral-knee-touch](families/high-plank-contralateral-knee-touch.json) | 1 |
-| [high-plank-crossbody-drag](families/high-plank-crossbody-drag.json) | 2 |
+| [high-plank-crossbody-drag](families/high-plank-crossbody-drag.json) | 1 |
 | [high-plank-rotation](families/high-plank-rotation.json) | 1 |
 | [high-plank-shoulder-tap](families/high-plank-shoulder-tap.json) | 1 |
 | [hip-abduction](families/hip-abduction.json) | 4 |
@@ -127,9 +127,9 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [push-press](families/push-press.json) | 2 |
 | [quadruped-band-fire-hydrant](families/quadruped-band-fire-hydrant.json) | 1 |
 | [quadruped-band-hip-knee-extension](families/quadruped-band-hip-knee-extension.json) | 1 |
-| [reverse-fly](families/reverse-fly.json) | 6 |
+| [reverse-fly](families/reverse-fly.json) | 5 |
 | [roman-chair-hip-extension](families/roman-chair-hip-extension.json) | 1 |
-| [romanian-deadlift](families/romanian-deadlift.json) | 6 |
+| [romanian-deadlift](families/romanian-deadlift.json) | 2 |
 | [rotational-row](families/rotational-row.json) | 1 |
 | [russian-twist](families/russian-twist.json) | 1 |
 | [scapular-depression](families/scapular-depression.json) | 1 |
@@ -144,7 +144,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [shoulder-extension-isolation](families/shoulder-extension-isolation.json) | 4 |
 | [shoulder-extension-row](families/shoulder-extension-row.json) | 15 |
 | [shoulder-external-rotation](families/shoulder-external-rotation.json) | 3 |
-| [shoulder-flexion-raise](families/shoulder-flexion-raise.json) | 2 |
+| [shoulder-flexion-raise](families/shoulder-flexion-raise.json) | 1 |
 | [shoulder-horizontal-abduction-row](families/shoulder-horizontal-abduction-row.json) | 7 |
 | [shoulder-internal-rotation](families/shoulder-internal-rotation.json) | 2 |
 | [single-leg-deadlift](families/single-leg-deadlift.json) | 5 |
@@ -153,7 +153,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [spine-lateral-flexion](families/spine-lateral-flexion.json) | 1 |
 | [spine-rotation](families/spine-rotation.json) | 1 |
 | [split-jerk](families/split-jerk.json) | 1 |
-| [split-stance-squat](families/split-stance-squat.json) | 7 |
+| [split-stance-squat](families/split-stance-squat.json) | 2 |
 | [squat-clean](families/squat-clean.json) | 1 |
 | [standing-band-trunk-rotation](families/standing-band-trunk-rotation.json) | 1 |
 | [standing-suspension-rollout](families/standing-suspension-rollout.json) | 1 |
@@ -182,7 +182,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [upright-row](families/upright-row.json) | 1 |
 | [vertical-countermovement-jump](families/vertical-countermovement-jump.json) | 2 |
 | [vertical-press](families/vertical-press.json) | 13 |
-| [vertical-pull](families/vertical-pull.json) | 15 |
+| [vertical-pull](families/vertical-pull.json) | 13 |
 | [walking-lunge](families/walking-lunge.json) | 1 |
 | [wall-sit](families/wall-sit.json) | 1 |
 | [wrist-extension](families/wrist-extension.json) | 1 |

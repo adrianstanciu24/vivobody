@@ -29,7 +29,6 @@ class SingleLegSixCatalogTests(unittest.TestCase):
                 catalog.FAMILIES_ROOT / f"{family_id}.json"
             )
             for family_id in (
-                "split-stance-squat",
                 "landmine-reverse-lunge-knee-drive",
                 "single-leg-deadlift",
                 "banded-single-leg-hip-thrust",
@@ -45,8 +44,6 @@ class SingleLegSixCatalogTests(unittest.TestCase):
 
     def test_exact_names_and_load_contracts(self) -> None:
         expected = {
-            ("split-stance-squat", "goblet-split-squat"):
-                ("Goblet Split Squat", "dumbbell", "external", 25),
             ("landmine-reverse-lunge-knee-drive", "landmine-reverse-lunge-to-knee-raise"):
                 ("Landmine Reverse Lunge to Knee Raise", "barbell", "external", 0),
             ("single-leg-deadlift", "landmine-single-leg-romanian-deadlift"):
@@ -77,11 +74,6 @@ class SingleLegSixCatalogTests(unittest.TestCase):
 
     def test_fixture_geometry_is_distinct_from_neighbours(self) -> None:
         expected = {
-            ("split-stance-squat", "goblet-split-squat"): {
-                "implementConfiguration": "singleDumbbellGoblet",
-                "rangeOfMotion": "leadKneeApproximatelyNinetyDegrees",
-                "loadAccounting": "wholeImplement",
-            },
             ("landmine-reverse-lunge-knee-drive", "landmine-reverse-lunge-to-knee-raise"): {
                 "returnTopology": "singleLegKneeDriveNextEntryUnreported",
                 "barPath": "landmineArc",
@@ -115,8 +107,6 @@ class SingleLegSixCatalogTests(unittest.TestCase):
 
     def test_crossed_fixture_mutations_are_rejected(self) -> None:
         cases = (
-            ("split-stance-squat", "goblet-split-squat", "variant.loadAccounting", "perImplement"),
-            ("split-stance-squat", "goblet-split-squat", "variant.fixedPath", True),
             ("landmine-reverse-lunge-knee-drive", "landmine-reverse-lunge-to-knee-raise", "variant.fixedPath", False),
             ("landmine-reverse-lunge-knee-drive", "landmine-reverse-lunge-to-knee-raise", "variant.returnTopology", "returnToBilateralStart"),
             ("single-leg-deadlift", "landmine-single-leg-romanian-deadlift", "variant.fixedPath", False),

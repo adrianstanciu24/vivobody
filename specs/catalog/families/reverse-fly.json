@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "reverse-fly",
   "name": "Reverse Fly",
-  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally abducts the upper arms at shoulder height with a fixed, nearly extended elbow posture and no deliberate scapular-retraction prime action. The admitted roster is limited to directly reviewed prone and unsupported hip-hinged dumbbell, elastic-band, standing crossed-cable, and reverse-fly-machine variants; suspension, bodyweight, rowing, external-rotation, and bent-arm variants remain outside this contract. Cable and hip-hinged records use exact fixture rules; role assignments transfer categorical anatomy and mechanics rather than exercise-specific EMG rankings.",
+  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally abducts the upper arms at shoulder height with a fixed, nearly extended elbow posture and no deliberate scapular-retraction prime action. The roster includes prone and unsupported hip-hinged dumbbell, elastic-band, standing crossed-cable, and one seated neutral-grip reverse-fly-machine fixture. Suspension, bodyweight, rowing, external-rotation, and bent-arm variants remain outside this contract. Cable and hip-hinged records use exact fixture rules; role assignments transfer categorical anatomy and mechanics rather than exercise-specific EMG rankings.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "holzbaur-2005-upper-extremity",
@@ -974,8 +974,8 @@
     },
     {
       "catalogID": "neutral-grip-machine-reverse-fly",
-      "name": "Neutral-Grip Machine Reverse Fly",
-      "aliases": [],
+      "name": "Machine Reverse Fly",
+      "aliases": ["Neutral-Grip Machine Reverse Fly"],
       "equipment": "machine",
       "laterality": "bilateral",
       "modality": "dynamicStrength",
@@ -1052,89 +1052,6 @@
         "disqualifyingCompensations": [
           "Rowing the handles toward the torso turns the reverse fly into a row.",
           "Pinching the shoulder blades together turns the reverse fly into a shoulder-blade squeeze."
-        ]
-      }
-    },
-    {
-      "catalogID": "pronated-grip-machine-reverse-fly",
-      "name": "Pronated-Grip Machine Reverse Fly",
-      "aliases": [],
-      "equipment": "machine",
-      "laterality": "bilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0,
-      "defaultWeight": 30,
-      "defaultWeightKg": 15,
-      "reps": 12,
-      "searchPriority": 74,
-      "involvement": [
-        {
-          "muscle": "deltoidPosterior",
-          "role": "primary"
-        },
-        {
-          "muscle": "externalRotators",
-          "role": "secondary"
-        },
-        {
-          "muscle": "trapeziusMiddle",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "rhomboids",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "brachialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "triceps",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "fingerFlexors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "extensorCarpiRadialis",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "lowerBodyContribution": "none",
-        "bodyPosition": "seated",
-        "torsoSupport": "machinePad",
-        "scapularTranslation": "free",
-        "scapularStrategy": "neutralControlled",
-        "gripOrientation": "pronated",
-        "elbowMotion": "angleHeld",
-        "elbowPosture": "nearExtended",
-        "upperArmPath": "flared",
-        "upperArmElevationDegrees": 90,
-        "fixedPath": true,
-        "machineType": "reverseFly"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "ackland-2008-shoulder-moment-arms",
-        "holzbaur-2005-upper-extremity",
-        "schoenfeld-2013-reverse-fly-hand-position"
-      ],
-      "execution": {
-        "startingPosition": "Sit facing the reverse-fly machine pad, and hold the horizontal handles with the palms facing down, the upper arms at shoulder height, and the elbows in a fixed slight bend.",
-        "movement": "Follow the lever path to sweep your upper arms outward.",
-        "endpoint": "Finish with your upper arms in line with your torso.",
-        "returnPhase": "Return under control without rowing, changing the elbow bend, or deliberately turning your upper arms outward.",
-        "controlledJoints": "Keep your elbows in a fixed slight bend and your shoulder blades controlled instead of deliberately pinching them together.",
-        "supportAndPosture": "Keep your torso against the machine pad.",
-        "disqualifyingCompensations": [
-          "Turning the upper arms outward during the sweep turns the reverse fly into a rotation drill.",
-          "Rowing the handles toward the torso turns the reverse fly into a row."
         ]
       }
     },

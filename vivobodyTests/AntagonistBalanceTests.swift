@@ -388,7 +388,7 @@ struct AntagonistBalanceTests {
             session(at: day(1), [
                 lift("Barbell Back Squat", .legs, sets: 2),
                 lift("Barbell Good Morning", .legs, sets: 3),
-                lift("Barbell Split Squat", .legs, sets: 6),
+                lift("Split Squat", .legs, sets: 6),
                 lift("Forward Lunge", .legs, sets: 7),
                 lift("Reverse Lunge", .legs, sets: 8),
                 lift("Barbell Bench Press", .chest, sets: 7),

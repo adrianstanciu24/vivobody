@@ -38,13 +38,13 @@
   ],
   "required": [
     {
-      "label": "Barbell RDL (Continuous)"
+      "label": "Romanian Deadlift"
     },
     {
       "label": "STRENGTH · REPS"
     },
     {
-      "labelContains": "Muscles used by Barbell RDL (Continuous)"
+      "labelContains": "Muscles used by Romanian Deadlift"
     }
   ],
   "forbidden": []

@@ -22,7 +22,7 @@ import SwiftData
                 ("Kneeling Cable Crunch", 12, 35),
             ],
             [
-                ("Barbell RDL (Continuous)", 10, 115),
+                ("Romanian Deadlift", 10, 115),
                 ("Seated Dumbbell Overhead Press", 10, 30),
                 ("Barbell Bent-Over Row", 10, 95),
                 ("Supine Reverse Crunch", 12, 0),

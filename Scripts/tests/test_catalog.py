@@ -41,7 +41,6 @@ COMMON_MACHINE_FAMILY_IDS = {
 ESSENTIAL_EXPANSION_RECORD_IDS = {
     "45-degree-incline-leg-press",
     "machine-hack-squat",
-    "barbell-rear-foot-elevated-split-squat",
     "johnson-sl160-bilateral-seated-leg-curl",
     "flex-fitness-bilateral-prone-leg-curl",
     "technogym-bilateral-seated-hip-abduction",
@@ -166,7 +165,6 @@ REQUESTED_EXERCISE_EVIDENCE_IDS = {
 
 COMPREHENSIVE_EXPANSION_RECORD_IDS = {
     "continuous-top-start-barbell-romanian-deadlift",
-    "two-dumbbell-continuous-romanian-deadlift",
     "kettlebell-goblet-squat",
     "smith-machine-upper-back-squat",
     "two-dumbbell-rear-foot-elevated-split-squat",
@@ -350,10 +348,6 @@ DEFAULT_CANDIDATE_FOLLOW_UP_EVIDENCE_IDS = {
 DEFAULT_CANDIDATE_FOLLOW_UP_RULE_IDS = {
     "dumbbell-goblet-fixture-pins-single-vertical-dumbbell",
     "parallel-or-deeper-depth-is-dumbbell-goblet-only",
-    "paired-beside-body-placement-identifies-dumbbells",
-    "straight-barbell-configuration-identifies-barbell-loading",
-    "upper-back-placement-identifies-floor-barbell-split-squat",
-    "high-bar-placement-identifies-elevated-barbell-split-squat",
     "reverse-step-binds-planted-front-foot-topology",
     "paired-dumbbell-reverse-lunge-fixture",
     "grounded-heel-contact-pins-loaded-reverse-fixture",
@@ -446,8 +440,7 @@ UPPER_BODY_ADDITION_EVIDENCE_IDS = {
 }
 
 REQUESTED_GAPS_RECORD_IDS = {
-    "band-assisted-pull-up", "bodyweight-split-squat",
-    "bodyweight-bulgarian-split-squat", "standing-cable-hip-abduction",
+    "band-assisted-pull-up", "standing-cable-hip-abduction",
     "dumbbell-triceps-kickback", "ez-bar-skull-crusher",
     "cable-pull-through", "pike-push-up",
 }
@@ -458,7 +451,7 @@ REQUESTED_GAPS_FAMILY_IDS = {
 
 REQUESTED_GAPS_EVIDENCE_IDS = {
     "crossfit-2008-assistance-bodyweight-exercises",
-    "nasm-2026-bulgarian-split-squat", "ace-2009-cable-crossover-lower-body",
+    "ace-2009-cable-crossover-lower-body",
     "sussex-undated-cable-pull-through", "nasm-undated-pike-push-up",
     "ace-2011-triceps-kickback", "nsca-2007-strength-training-ez-lying-extension",
 }
@@ -2197,9 +2190,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "barbell-single-leg-deadlift": "stabilizer",
             "dumbbell-single-leg-romanian-deadlift-ipsilateral-load": "stabilizer",
             "dumbbell-single-leg-romanian-deadlift-contralateral-load": "stabilizer",
-            "barbell-split-squat": "stabilizer",
             "two-dumbbell-stationary-split-squat": "stabilizer",
-            "barbell-rear-foot-elevated-split-squat": "stabilizer",
             "two-dumbbell-rear-foot-elevated-split-squat": "stabilizer",
             "two-dumbbell-forward-lunge": "stabilizer",
             "two-dumbbell-reverse-lunge": "stabilizer",
@@ -2749,7 +2740,6 @@ class CatalogFoundationTests(unittest.TestCase):
             "standing-dual-cable-crossover": 10,
             "prone-dumbbell-reverse-fly": 2.5,
             "neutral-grip-machine-reverse-fly": 15,
-            "pronated-grip-machine-reverse-fly": 15,
             "barbell-pullover": 10,
             "shoulder-width-straight-arm-cable-pulldown": 15,
             "wide-grip-straight-arm-cable-pulldown": 15,
@@ -4627,8 +4617,6 @@ class CatalogFoundationTests(unittest.TestCase):
             [
                 "pull-up",
                 "chin-up",
-                "neutral-grip-pull-up",
-                "wide-grip-pull-up",
                 "assisted-pull-up-machine",
                 "assisted-chin-up-machine",
                 "cable-lat-pulldown",
@@ -4674,16 +4662,6 @@ class CatalogFoundationTests(unittest.TestCase):
                     "bodyweight", "bilateral", "bodyweightAdded", 1,
                     "closed", "suspended", "none", "supinated",
                     "shoulderWidth", "free", None, ("pelvis",),
-                ),
-                "neutral-grip-pull-up": (
-                    "bodyweight", "bilateral", "bodyweightAdded", 1,
-                    "closed", "suspended", "none", "neutral",
-                    "shoulderWidth", "free", None, ("pelvis",),
-                ),
-                "wide-grip-pull-up": (
-                    "bodyweight", "bilateral", "bodyweightAdded", 1,
-                    "closed", "suspended", "none", "pronated", "wide",
-                    "free", None, ("pelvis",),
                 ),
                 "assisted-pull-up-machine": (
                     "machine", "bilateral", "assistanceSubtracted", 1,
@@ -6807,7 +6785,6 @@ class CatalogFoundationTests(unittest.TestCase):
                     "prone-dumbbell-reverse-fly",
                     "standing-band-reverse-fly",
                     "neutral-grip-machine-reverse-fly",
-                    "pronated-grip-machine-reverse-fly",
                 ],
             },
             "shoulder-flexion-raise": {
@@ -6824,7 +6801,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "scapula.posteriorTilt",
                 ],
                 "primary": ["deltoidAnterior"],
-                "roster": ["single-arm-dumbbell-front-raise"],
+                "roster": [],
             },
             "shoulder-abduction-raise": {
                 "fixed": {
@@ -7042,7 +7019,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            344,
+            330,
         )
 
     def test_plyometric_fixtures_keep_distinct_family_boundaries(self) -> None:
@@ -11491,10 +11468,10 @@ class CatalogFoundationTests(unittest.TestCase):
                                    'demands': ['spine', 'pelvis', 'hip', 'knee', 'ankle', 'foot'],
                                    'primary': ['vasti', 'gluteMax'],
                                    'reps': {'minimum': 5, 'maximum': 15},
-                                   'allowed': {'equipment': ['barbell', 'dumbbell', 'bodyweight'],
+                                   'allowed': {'equipment': ['dumbbell'],
                                                'modalities': ['dynamicStrength'],
                                                'trackingModes': ['reps'],
-                                               'loadModes': ['external', 'nonComparable'],
+                                               'loadModes': ['external'],
                                                'lateralities': ['unilateral']},
                                    'evidence': ['arnold-2010-lower-limb',
                                                 'song-2023-split-squat-step-length',
@@ -11504,16 +11481,9 @@ class CatalogFoundationTests(unittest.TestCase):
                                                 'mackey-2021-bulgarian-split-squat',
                                                 'nsca-2016-division-i-basketball-injury-screening',
                                                 'deforest-2014-single-double-leg-squat',
-                                                'collings-2023-gluteal-muscle-forces',
-                                                'nasm-2026-bulgarian-split-squat',
-                                                'boxing-science-exercise-library'],
-                                   'roster': ['barbell-split-squat',
-                                              'two-dumbbell-stationary-split-squat',
-                                              'barbell-rear-foot-elevated-split-squat',
-                                              'two-dumbbell-rear-foot-elevated-split-squat',
-                                              'bodyweight-split-squat',
-                                              'bodyweight-bulgarian-split-squat',
-                                              'goblet-split-squat']},
+                                                'collings-2023-gluteal-muscle-forces'],
+                                   'roster': ['two-dumbbell-stationary-split-squat',
+                                              'two-dumbbell-rear-foot-elevated-split-squat']},
             "step-up": {
                 "name": "Forward Step-Up",
                 "fixed": {
@@ -11677,30 +11647,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 },
                 "evidence": ["kennedy-2024-hip-thrust-glute-bridge"],
             },
-            "barbell-split-squat": {
-                "name": "Barbell Split Squat",
-                "aliases": ["Stationary Barbell Split Squat"],
-                "setup": ("barbell", "unilateral", "external", 45, 20, 8),
-                "roles": {
-                    "vasti": "primary", "gluteMax": "primary",
-                    "rectusFemoris": "secondary",
-                    "gastrocnemius": "secondary", "soleus": "secondary",
-                    "medialHamstrings": "stabilizer",
-                    "bicepsFemoris": "stabilizer", "gluteMed": "stabilizer",
-                    "fingerFlexors": "stabilizer",
-                    "extensorCarpiRadialis": "stabilizer",
-                    "externalRotators": "stabilizer",
-                    "trapeziusUpper": "stabilizer", "brachialis": "stabilizer",
-                    "abs": "stabilizer", "obliques": "stabilizer",
-                    "lumbarExtensors": "stabilizer",
-                    "tibialisAnterior": "stabilizer",
-                    "tensorFasciaeLatae": "stabilizer",
-                },
-                "evidence": [
-                    "song-2023-split-squat-step-length",
-                    "deforest-2014-single-double-leg-squat",
-                ],
-            },
             "bodyweight-forward-step-up-21cm": {
                 "name": "Bodyweight Forward Step-Up",
                 "aliases": [
@@ -11720,34 +11666,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 },
                 "evidence": [
                     "wang-2003-forward-lateral-step-up-biomechanics"
-                ],
-            },
-            "goblet-split-squat": {
-                "name": "Goblet Split Squat",
-                "aliases": [
-                    "Single-Dumbbell Goblet Split Squat",
-                    "Dumbbell Goblet Split Squat",
-                ],
-                "setup": ("dumbbell", "unilateral", "external", 25, 12.5, 8),
-                "roles": {
-                    "vasti": "primary", "gluteMax": "primary",
-                    "rectusFemoris": "secondary",
-                    "gastrocnemius": "secondary", "soleus": "secondary",
-                    "medialHamstrings": "stabilizer",
-                    "bicepsFemoris": "stabilizer", "gluteMed": "stabilizer",
-                    "fingerFlexors": "stabilizer",
-                    "extensorCarpiRadialis": "stabilizer",
-                    "externalRotators": "stabilizer",
-                    "trapeziusUpper": "stabilizer", "triceps": "stabilizer",
-                    "abs": "stabilizer", "obliques": "stabilizer",
-                    "lumbarExtensors": "stabilizer",
-                    "tibialisAnterior": "stabilizer",
-                    "tensorFasciaeLatae": "stabilizer",
-                },
-                "evidence": [
-                    "boxing-science-exercise-library",
-                    "song-2023-split-squat-step-length",
-                    "deforest-2014-single-double-leg-squat",
                 ],
             },
         }
@@ -11884,42 +11802,30 @@ class CatalogFoundationTests(unittest.TestCase):
                 "lowerBodyContribution": enum("combinedHipAndKneeExtension"),
             },
             "split-stance-squat": {'kineticChain': ('enum', ('closed',)),
-                                   'bodyPosition': ('enum', ('standing',)),
-                                   'torsoSupport': ('enum', ('none',)),
-                                   'stanceConfiguration': ('enum', ('splitSagittal',)),
-                                   'stanceLength': ('enum',
-                                                    ('approximatelyLegLength',
-                                                     'individualizedPatellaOverLeadToeAtParallel',
-                                                     'sourceUnreported')),
-                                   'leadFootSupport': ('enum', ('fullFootFloor',)),
-                                   'trailFootSupport': ('enum',
-                                                        ('forefootFloor',
-                                                         'elevatedBoxFootFixedAgainstPosteriorStop',
-                                                         'elevatedBenchTopOfFoot')),
-                                   'rearSupportHeight': ('enum', ('floor', 'baseOfPatellaToGround', 'sourceUnreported')),
-                                   'interRepFootTransition': ('enum', ('none',)),
-                                   'loadPlacement': ('enum',
-                                                     ('upperBackBarbell',
-                                                      'highBarUpperBackBarbell',
-                                                      'pairedBesideBody',
-                                                      'none',
-                                                      'singleDumbbellGobletChest')),
-                                   'gripOrientation': ('enum', ('pronated', 'neutral', 'notApplicable', 'cuppedDumbbellHead')),
-                                   'rangeOfMotion': ('enum', ('leadThighParallel', 'leadKneeApproximatelyNinetyDegrees')),
-                                   'trunkOrientation': ('enum', ('erect', 'nonstandardized')),
-                                   'spineMotion': ('enum', ('nonstandardized',)),
-                                   'hipMotion': ('enum', ('extends',)),
-                                   'kneeMotion': ('enum', ('extends',)),
-                                   'ankleMotion': ('enum', ('plantarflexes',)),
-                                   'footMotion': ('enum', ('positionHeld',)),
-                                   'footContact': ('enum', ('continuous',)),
-                                   'interRepSupport': ('enum', ('none',)),
-                                   'fixedPath': ('boolean', False),
-                                   'implementConfiguration': ('enum', ('straightBarbell', 'pairedDumbbells', 'none', 'singleDumbbellGoblet')),
-                                   'loadAccounting': ('enum', ('totalBarAndPlates', 'perImplement', 'none', 'wholeImplement')),
-                                   'lowerBodyContribution': ('enum', ('compoundHipKneeAnkleExtension',)),
-                                   'handPosition': ('enum', ('hips',)),
-                                   'rearFootBenchFixture': ('enum', ('pairedDumbbells', 'bodyweight'))},
+             'bodyPosition': ('enum', ('standing',)),
+             'torsoSupport': ('enum', ('none',)),
+             'stanceConfiguration': ('enum', ('splitSagittal',)),
+             'stanceLength': ('enum', ('approximatelyLegLength', 'sourceUnreported')),
+             'leadFootSupport': ('enum', ('fullFootFloor',)),
+             'trailFootSupport': ('enum', ('forefootFloor', 'elevatedBenchTopOfFoot')),
+             'rearSupportHeight': ('enum', ('floor', 'sourceUnreported')),
+             'interRepFootTransition': ('enum', ('none',)),
+             'loadPlacement': ('enum', ('pairedBesideBody',)),
+             'gripOrientation': ('enum', ('neutral',)),
+             'rangeOfMotion': ('enum', ('leadThighParallel',)),
+             'trunkOrientation': ('enum', ('erect', 'nonstandardized')),
+             'spineMotion': ('enum', ('nonstandardized',)),
+             'hipMotion': ('enum', ('extends',)),
+             'kneeMotion': ('enum', ('extends',)),
+             'ankleMotion': ('enum', ('plantarflexes',)),
+             'footMotion': ('enum', ('positionHeld',)),
+             'footContact': ('enum', ('continuous',)),
+             'interRepSupport': ('enum', ('none',)),
+             'fixedPath': ('boolean', False),
+             'implementConfiguration': ('enum', ('pairedDumbbells',)),
+             'loadAccounting': ('enum', ('perImplement',)),
+             'lowerBodyContribution': ('enum', ('compoundHipKneeAnkleExtension',)),
+             'rearFootBenchFixture': ('enum', ('pairedDumbbells',))},
             "step-up": {
                 "kineticChain": enum("closed"),
                 "bodyPosition": enum("standing"),
@@ -12049,7 +11955,7 @@ class CatalogFoundationTests(unittest.TestCase):
             self.batch5_families["split-stance-squat"]["exercises"][0]["variant"][
                 "loadPlacement"
             ],
-            "upperBackBarbell",
+            "pairedBesideBody",
         )
         split_squat = self.batch5_families["split-stance-squat"]
         self.assertNotIn(
@@ -12147,23 +12053,12 @@ class CatalogFoundationTests(unittest.TestCase):
                 "floor-supported-fixture-is-glute-bridge",
                 "glute-bridge-position-requires-floor",
             ],
-            "split-stance-squat": ['floor-trail-support-has-no-elevation',
-                                   'elevated-trail-support-uses-patella-height',
-                                   'bench-top-of-foot-support-uses-paired-dumbbells',
-                                   'dumbbell-load-is-paired-per-implement',
-                                   'paired-beside-body-placement-identifies-dumbbells',
-                                   'straight-barbell-configuration-identifies-barbell-loading',
-                                   'upper-back-placement-identifies-floor-barbell-split-squat',
-                                   'high-bar-placement-identifies-elevated-barbell-split-squat',
-                                   'loaded-split-squat-requires-implement-control',
-                                   'paired-dumbbell-bench-split-squat-pins-fixture',
-                                   'non-bench-split-squat-omits-bench-fixture',
-                                   'bodyweight-bench-split-squat-pins-fixture',
-                                   'bodyweight-split-squat-has-no-implement',
-                                   'no-loadplacement-identifies-unloaded-split',
-                                   'no-implementconfiguration-identifies-unloaded-split',
-                                   'no-loadaccounting-identifies-unloaded-split',
-                                   'single-dumbbell-goblet-split-fixture'],
+            "split-stance-squat": [
+                'floor-trail-support-has-no-elevation',
+                'bench-top-of-foot-support-uses-paired-dumbbells',
+                'paired-dumbbell-bench-split-squat-pins-fixture',
+                'non-bench-split-squat-omits-bench-fixture',
+            ],
             "step-up": [
                 "bodyweight-fixture-pins-complete-twenty-one-centimeter-sequence",
                 "dumbbell-fixture-pins-paired-load-and-reported-unknowns",
@@ -12317,7 +12212,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "mutated Batch-5 stability requirement",
                             )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 273)
+        self.assertEqual(mutation_count, 184)
 
     def test_batch5_squat_shoulder_rules_are_minima_not_exclusive(self) -> None:
         family = copy.deepcopy(self.batch5_families["bilateral-squat"])
@@ -12431,8 +12326,8 @@ class CatalogFoundationTests(unittest.TestCase):
                             f"fails muscle requirement {requirement_index}",
                         )
                     demotion_count += 1
-        self.assertEqual(removal_count, 168)
-        self.assertEqual(demotion_count, 74)
+        self.assertEqual(removal_count, 103)
+        self.assertEqual(demotion_count, 49)
 
     def test_batch5_step_up_contract_mutates_every_invariant_directly(
         self,
@@ -12521,7 +12416,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             variant_by_family["split-stance-squat"]["loadPlacement"],
-            "upperBackBarbell",
+            "pairedBesideBody",
         )
         step = variant_by_family["step-up"]
         self.assertEqual(
@@ -12653,7 +12548,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "foot": {"soleus"},
             },
             "barbell-glute-bridge": {},
-            "barbell-split-squat": {
+            "two-dumbbell-stationary-split-squat": {
                 "shoulder": {"externalRotators"},
                 "scapula": {"trapeziusUpper"},
                 "elbow": {"brachialis"},
@@ -12707,11 +12602,8 @@ class CatalogFoundationTests(unittest.TestCase):
             "foot": {"gastrocnemius", "soleus", "tibialisAnterior"},
         }
         expected["barbell-glute-bridge"] = expected["barbell-hip-thrust"]
-        expected["barbell-rear-foot-elevated-split-squat"] = expected[
-            "barbell-split-squat"
-        ]
         expected["two-dumbbell-rear-foot-elevated-split-squat"] = expected[
-            "barbell-split-squat"
+            "two-dumbbell-stationary-split-squat"
         ]
         expected["two-dumbbell-rear-foot-elevated-split-squat"] = {
             region: ({"triceps"} if region == "elbow" else providers)
@@ -12721,7 +12613,7 @@ class CatalogFoundationTests(unittest.TestCase):
         }
         expected["bodyweight-forward-step-up-21cm"] = {
             region: providers
-            for region, providers in expected["barbell-split-squat"].items()
+            for region, providers in expected["two-dumbbell-stationary-split-squat"].items()
             if region not in {"shoulder", "scapula", "elbow", "wrist", "hand"}
         }
         expected["two-dumbbell-forward-step-up"] = expected[
@@ -12732,8 +12624,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "barbell-front-squat",
             "kettlebell-goblet-squat",
             "bodyweight-floor-squat-100-degrees",
-            "barbell-split-squat",
-            "barbell-rear-foot-elevated-split-squat",
+            "two-dumbbell-stationary-split-squat",
             "two-dumbbell-rear-foot-elevated-split-squat",
         ):
             expected[exercise_id] = {
@@ -12747,8 +12638,7 @@ class CatalogFoundationTests(unittest.TestCase):
         }
         for exercise_id in (
             "barbell-back-squat", "barbell-front-squat", "kettlebell-goblet-squat",
-            "bodyweight-floor-squat-100-degrees", "barbell-split-squat",
-            "barbell-rear-foot-elevated-split-squat",
+            "bodyweight-floor-squat-100-degrees", "two-dumbbell-stationary-split-squat",
             "two-dumbbell-rear-foot-elevated-split-squat",
             "bodyweight-forward-step-up-21cm", "two-dumbbell-forward-step-up",
         ):
@@ -12757,9 +12647,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 if region in {"pelvis", "hip", "knee"} else providers
                 for region, providers in expected[exercise_id].items()
             }
-        expected["goblet-split-squat"] = expected[
-            "two-dumbbell-rear-foot-elevated-split-squat"
-        ]
         for family in self.batch5_families.values():
             for exercise in family["exercises"]:
                 if exercise["catalogID"] in (
@@ -13572,14 +13459,10 @@ class CatalogFoundationTests(unittest.TestCase):
                     "forman-2019-handgrip-wrist-force",
                     "pratt-2020-deadlift-grip-forearm-emg",
                     "mannella-2022-grip-wrist-perturbations",
-                    "boxing-science-exercise-library",
                 ),
                 "roster": (
-                    "barbell-romanian-deadlift",
                     "barbell-stiff-leg-deadlift",
-                    "barbell-romanian-deadlift-15-cm-step",
                     "continuous-top-start-barbell-romanian-deadlift",
-                    "two-dumbbell-continuous-romanian-deadlift",
                 ),
             },
         }
@@ -13617,11 +13500,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 self.assertEqual(
                     family["allowed"],
                     {
-                        "equipment": (
-                            ["barbell", "dumbbell", "kettlebell"]
-                            if family_id == "romanian-deadlift"
-                            else ["barbell"]
-                        ),
+                        "equipment": ["barbell"],
                         "modalities": ["dynamicStrength"],
                         "trackingModes": ["reps"],
                         "loadModes": ["external"],
@@ -13640,8 +13519,6 @@ class CatalogFoundationTests(unittest.TestCase):
                     tuple(
                         exercise["catalogID"]
                         for exercise in family["exercises"]
-                        if exercise["catalogID"]
-                        != "single-kettlebell-romanian-deadlift"
                     ),
                     contract["roster"],
                 )
@@ -13706,17 +13583,6 @@ class CatalogFoundationTests(unittest.TestCase):
                     "collings-2026-hip-adductor-muscle-forces",
                 ),
             },
-            "barbell-romanian-deadlift": {
-                "name": "Barbell RDL (Floor Touch)",
-                "aliases": ("Floor-Touch Romanian Deadlift", "Floor-Touch Barbell Romanian Deadlift"),
-                "setup": ("barbell", "bilateral", "external", 95, 42.5, 6, 96),
-                "roles": romanian_roles,
-                "evidence": (
-                    "coratella-2022-romanian-step-stiff-leg-deadlift",
-                    "lee-2018-conventional-romanian-deadlift",
-                    "lyons-2026-conventional-romanian-deadlift",
-                ),
-            },
             "barbell-stiff-leg-deadlift": {
                 "name": "Barbell Stiff-Leg Deadlift",
                 "aliases": ("Stiff-Leg Deadlift", "SLDL"),
@@ -13726,29 +13592,13 @@ class CatalogFoundationTests(unittest.TestCase):
                     "coratella-2022-romanian-step-stiff-leg-deadlift",
                 ),
             },
-            "barbell-romanian-deadlift-15-cm-step": {
-                "name": "Barbell Deficit RDL",
-                "aliases": (
-                    "15 cm Step Romanian Deadlift",
-                    "15 cm Deficit Romanian Deadlift",
-                    "Step RDL",
-                    "15 cm Step Barbell Romanian Deadlift",
-                    "Barbell RDL (15 cm Step)",
-                    "Barbell Deficit RDL (15 cm)",
-                ),
-                "setup": ("barbell", "bilateral", "external", 95, 42.5, 6, 78),
-                "roles": romanian_roles,
-                "evidence": (
-                    "coratella-2022-romanian-step-stiff-leg-deadlift",
-                ),
-            },
             "continuous-top-start-barbell-romanian-deadlift": {
-                "name": "Barbell RDL (Continuous)",
+                "name": "Romanian Deadlift",
                 "aliases": (
                     "Barbell Romanian Deadlift",
-                    "Romanian Deadlift",
                     "RDL",
                     "Continuous Top-Start Barbell Romanian Deadlift",
+                    "Barbell RDL (Continuous)",
                 ),
                 "setup": ("barbell", "bilateral", "external", 45, 20, 8, 99),
                 "roles": romanian_roles,
@@ -13759,28 +13609,10 @@ class CatalogFoundationTests(unittest.TestCase):
                     "lee-2018-conventional-romanian-deadlift",
                 ),
             },
-            "two-dumbbell-continuous-romanian-deadlift": {
-                "name": "Two-Dumbbell RDL (Continuous)",
-                "aliases": (
-                    "Two-Dumbbell Romanian Deadlift",
-                    "Dumbbell Romanian Deadlift",
-                    "Dumbbell RDL",
-                    "Two-Dumbbell Continuous Romanian Deadlift",
-                ),
-                "setup": ("dumbbell", "bilateral", "external", 20, 10, 8, 96),
-                "roles": romanian_roles,
-                "evidence": (
-                    "ace-2025-romanian-deadlift",
-                    "nsca-2012-basics-strength-conditioning",
-                    "lee-2018-conventional-romanian-deadlift",
-                ),
-            },
         }
         actual = {}
         for family in self.deadlift_families.values():
             for exercise in family["exercises"]:
-                if exercise["catalogID"] == "single-kettlebell-romanian-deadlift":
-                    continue
                 actual[exercise["catalogID"]] = {
                     "name": exercise["name"],
                     "aliases": tuple(exercise["aliases"]),
@@ -13860,7 +13692,6 @@ class CatalogFoundationTests(unittest.TestCase):
             }
             for exercise in romanian["exercises"]
             if exercise["catalogID"] not in COMPREHENSIVE_EXPANSION_RECORD_IDS
-            and exercise["catalogID"] != "single-kettlebell-romanian-deadlift"
         }
         romanian_common = {
             "kineticChain": "closed",
@@ -13889,30 +13720,11 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertEqual(
             variants,
             {
-                "barbell-romanian-deadlift": {
-                    **romanian_common,
-                    "supportSurface": "floor",
-                    "kneeTechnique": (
-                        "slightlyFlexedStartToExtendedEndpointKinematicsUnmeasured"
-                    ),
-                    "rangeOfMotion": "floorAtFootLevelToStanding",
-                },
                 "barbell-stiff-leg-deadlift": {
                     **romanian_common,
                     "supportSurface": "floor",
                     "kneeTechnique": "extendedThroughoutKinematicsUnmeasured",
                     "rangeOfMotion": "floorAtFootLevelToStanding",
-                },
-                "barbell-romanian-deadlift-15-cm-step": {
-                    **romanian_common,
-                    "supportSurface": "fifteenCentimeterStep",
-                    "platformHeightCm": 15,
-                    "kneeTechnique": (
-                        "slightlyFlexedStartToExtendedEndpointKinematicsUnmeasured"
-                    ),
-                    "rangeOfMotion": (
-                        "floorFifteenCentimetersBelowFeetToStanding"
-                    ),
                 },
             },
         )
@@ -13932,7 +13744,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 }
                 for catalog_id in {
                     "continuous-top-start-barbell-romanian-deadlift",
-                    "two-dumbbell-continuous-romanian-deadlift",
                 }
             },
             {
@@ -13941,15 +13752,6 @@ class CatalogFoundationTests(unittest.TestCase):
                     "loadPlacement": "handsInFrontOfBody",
                     "implementConfiguration": "straightBarbell",
                     "loadAccounting": "totalBarAndPlates",
-                    "kneeTechnique": "slightlyFlexedHeld",
-                    "rangeOfMotion": "topStartToMidShinWithoutFloorContact",
-                    "interRepSupport": "noneContinuous",
-                },
-                "two-dumbbell-continuous-romanian-deadlift": {
-                    "gripOrientation": "neutral",
-                    "loadPlacement": "pairedBesideLegs",
-                    "implementConfiguration": "pairedDumbbells",
-                    "loadAccounting": "perImplement",
                     "kneeTechnique": "slightlyFlexedHeld",
                     "rangeOfMotion": "topStartToMidShinWithoutFloorContact",
                     "interRepSupport": "noneContinuous",
@@ -13973,21 +13775,11 @@ class CatalogFoundationTests(unittest.TestCase):
         )
 
         expected_rule_ids = [
-            "step-surface-pins-reviewed-deficit",
-            "below-foot-range-requires-reviewed-step",
-            "floor-surface-pins-ground-level-range",
             "ground-level-range-requires-floor-surface",
             "stiff-leg-technique-requires-ground-level-fixture",
-            "dumbbells-pin-continuous-paired-fixture",
-            "barbell-pins-single-implement-accounting",
             "continuous-range-pins-top-start-contract",
             "continuous-support-requires-top-start-range",
             "floor-contact-support-preserves-reviewed-protocol",
-            "kettlebell-pins-single-centerline-fixture",
-            "single-bell-range-requires-kettlebell",
-            "kettlebell-stance-requires-single-bell",
-            "two-hands-single-handle-requires-kettlebell",
-            "single-kettlebell-implement-requires-equipment",
         ]
         self.assertEqual(
             [rule["id"] for rule in romanian["exerciseRules"]],
@@ -14037,7 +13829,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         "mutated deadlift absence assertion",
                     )
                 mutation_count += 1
-        self.assertEqual(mutation_count, 61)
+        self.assertEqual(mutation_count, 12)
 
         mutated = copy.deepcopy(romanian)
         mutated["exercises"][0]["variant"]["kneeTechnique"] = "positionHeld"
@@ -14058,7 +13850,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "romanian-deadlift": (
                 "kineticChain", "bodyPosition", "torsoSupport",
                 "stanceConfiguration", "stanceWidth", "footOrientation",
-                "footContact", "supportSurface", "platformHeightCm",
+                "footContact", "supportSurface",
                 "loadPlacement", "gripWidth", "gripOrientation",
                 "shoulderPosition", "externalLoadPrescription",
                 "hipMotion", "spineMotion", "kneeTechnique",
@@ -14151,7 +13943,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "mutated deadlift axis",
                             )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 319)
+        self.assertEqual(mutation_count, 134)
 
     def test_deadlift_followup_required_roles_are_mutation_gated(self) -> None:
         expected_roles = {
@@ -14323,14 +14115,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "reps": 5,
                 "searchPriority": 100,
             },
-            "barbell-romanian-deadlift": {
-                "familyID": "romanian-deadlift",
-                "name": "Barbell RDL (Floor Touch)",
-                "defaultWeight": 95,
-                "defaultWeightKg": 42.5,
-                "reps": 6,
-                "searchPriority": 96,
-            },
             "barbell-stiff-leg-deadlift": {
                 "familyID": "romanian-deadlift",
                 "name": "Barbell Stiff-Leg Deadlift",
@@ -14338,14 +14122,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "defaultWeightKg": 42.5,
                 "reps": 6,
                 "searchPriority": 84,
-            },
-            "barbell-romanian-deadlift-15-cm-step": {
-                "familyID": "romanian-deadlift",
-                "name": "Barbell Deficit RDL",
-                "defaultWeight": 95,
-                "defaultWeightKg": 42.5,
-                "reps": 6,
-                "searchPriority": 78,
             },
         }
         source_exercises = {
@@ -15987,14 +15763,12 @@ class CatalogFoundationTests(unittest.TestCase):
         expected = {
             "barbell-back-squat", "barbell-front-squat", "kettlebell-goblet-squat",
             "single-dumbbell-goblet-squat", "bodyweight-floor-squat-100-degrees",
-            "barbell-split-squat", "two-dumbbell-stationary-split-squat",
-            "barbell-rear-foot-elevated-split-squat",
+            "two-dumbbell-stationary-split-squat",
             "two-dumbbell-rear-foot-elevated-split-squat",
             "wall-balanced-single-leg-bodyweight-heel-raise",
             "conventional-barbell-deadlift", "two-dumbbell-forward-lunge",
             "two-dumbbell-reverse-lunge",
-            "trx-squat", "bodyweight-split-squat",
-            "bodyweight-bulgarian-split-squat", "goblet-split-squat",
+            "trx-squat",
         }
         families = [f for f in self.real_families if f["id"] in {
             "bilateral-squat", "split-stance-squat", "ankle-plantarflexion",
@@ -17115,7 +16889,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 382)
+        self.assertEqual(len(source_by_id), 380)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -17273,7 +17047,7 @@ class CatalogFoundationTests(unittest.TestCase):
             10,
         )
         self.assertEqual(len(self.real_families), 166)
-        self.assertEqual(len(self.foundation.evidence_ids), 382)
+        self.assertEqual(len(self.foundation.evidence_ids), 380)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -18710,7 +18484,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 344 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 330 |", self.catalog_inventory)
         self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
@@ -19853,8 +19627,8 @@ class CatalogFoundationTests(unittest.TestCase):
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
         self.assertEqual(len(self.real_families), 166)
-        self.assertEqual(len(records), 344)
-        self.assertEqual(len(self.foundation.evidence_ids), 382)
+        self.assertEqual(len(records), 330)
+        self.assertEqual(len(self.foundation.evidence_ids), 380)
         self.assertEqual(
             {
                 key: upright[key]
@@ -20204,7 +19978,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 344 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 330 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -20708,10 +20482,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "Maxicam Hack Squat", "machine-hack-squat",
                 "dynamicStrength", "reps",
             ),
-            "barbell-rear-foot-elevated-split-squat": (
-                "Barbell Bulgarian Split Squat",
-                "split-stance-squat", "dynamicStrength", "reps",
-            ),
             "johnson-sl160-bilateral-seated-leg-curl": (
                 "Seated Leg Curl", "knee-flexion",
                 "dynamicStrength", "reps",
@@ -20829,10 +20599,6 @@ class CatalogFoundationTests(unittest.TestCase):
                     "threeSecondEccentricAsQuicklyAsPossibleConcentric"
                 ),
             },
-            "barbell-rear-foot-elevated-split-squat": {
-                "trailFootSupport": "elevatedBoxFootFixedAgainstPosteriorStop",
-                "rearSupportHeight": "baseOfPatellaToGround",
-            },
             "johnson-sl160-bilateral-seated-leg-curl": {
                 "machineFixture": "johnsonSL160",
                 "bodyPosition": "seated",
@@ -20910,24 +20676,12 @@ class CatalogFoundationTests(unittest.TestCase):
             "split-stance-squat": {'floor-trail-support-has-no-elevation': {'when': ('variant.trailFootSupport',
                                                                'equals',
                                                                'forefootFloor'),
-                                                      'then': {'variant.stanceLength': ('approximatelyLegLength', 'sourceUnreported'),
+                                                      'then': {'variant.stanceLength': ('approximatelyLegLength',),
                                                                'variant.rearSupportHeight': 'floor',
-                                                               'variant.rangeOfMotion': ('leadThighParallel', 'leadKneeApproximatelyNinetyDegrees'),
+                                                               'variant.rangeOfMotion': ('leadThighParallel',),
                                                                'variant.trunkOrientation': 'erect'},
                                                       'present': (),
                                                       'absent': ()},
-             'elevated-trail-support-uses-patella-height': {'when': ('variant.trailFootSupport',
-                                                                     'equals',
-                                                                     'elevatedBoxFootFixedAgainstPosteriorStop'),
-                                                            'then': {'variant.rearSupportHeight': 'baseOfPatellaToGround',
-                                                                     'variant.stanceLength': 'individualizedPatellaOverLeadToeAtParallel',
-                                                                     'variant.rangeOfMotion': 'leadKneeApproximatelyNinetyDegrees',
-                                                                     'variant.loadPlacement': 'highBarUpperBackBarbell',
-                                                                     'variant.trunkOrientation': 'nonstandardized',
-                                                                     'variant.implementConfiguration': 'straightBarbell',
-                                                                     'variant.loadAccounting': 'totalBarAndPlates'},
-                                                            'present': (),
-                                                            'absent': ()},
              'bench-top-of-foot-support-uses-paired-dumbbells': {'when': ('variant.trailFootSupport',
                                                                           'equals',
                                                                           'elevatedBenchTopOfFoot'),
@@ -20936,16 +20690,6 @@ class CatalogFoundationTests(unittest.TestCase):
                                                                           'variant.rangeOfMotion': 'leadThighParallel'},
                                                                  'present': ('variant.rearFootBenchFixture',),
                                                                  'absent': ()},
-             'dumbbell-load-is-paired-per-implement': {'when': ('variant.implementConfiguration', 'equals', 'pairedDumbbells'),
-                                                       'then': {'variant.loadPlacement': 'pairedBesideBody',
-                                                                'variant.gripOrientation': 'neutral',
-                                                                'variant.loadAccounting': 'perImplement'},
-                                                       'present': (),
-                                                       'absent': ()},
-             'loaded-split-squat-requires-implement-control': {'when': ('equipment', 'notEquals', 'bodyweight'),
-                                                               'then': {},
-                                                               'present': (),
-                                                               'absent': ('variant.handPosition',)},
              'paired-dumbbell-bench-split-squat-pins-fixture': {'when': ('variant.rearFootBenchFixture',
                                                                          'equals',
                                                                          'pairedDumbbells'),
@@ -20983,84 +20727,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                                                     'elevatedBenchTopOfFoot'),
                                                            'then': {},
                                                            'present': (),
-                                                           'absent': ('variant.rearFootBenchFixture',)},
-             'bodyweight-bench-split-squat-pins-fixture': {'when': ('variant.rearFootBenchFixture',
-                                                                    'equals',
-                                                                    'bodyweight'),
-                                                           'then': {'equipment': 'bodyweight',
-                                                                    'loadMode': 'nonComparable',
-                                                                    'bodyweightFraction': 0,
-                                                                    'variant.kineticChain': 'closed',
-                                                                    'variant.bodyPosition': 'standing',
-                                                                    'variant.torsoSupport': 'none',
-                                                                    'variant.stanceConfiguration': 'splitSagittal',
-                                                                    'variant.stanceLength': 'sourceUnreported',
-                                                                    'variant.leadFootSupport': 'fullFootFloor',
-                                                                    'variant.trailFootSupport': 'elevatedBenchTopOfFoot',
-                                                                    'variant.rearSupportHeight': 'sourceUnreported',
-                                                                    'variant.interRepFootTransition': 'none',
-                                                                    'variant.loadPlacement': 'none',
-                                                                    'variant.rangeOfMotion': 'leadThighParallel',
-                                                                    'variant.trunkOrientation': 'erect',
-                                                                    'variant.spineMotion': 'nonstandardized',
-                                                                    'variant.hipMotion': 'extends',
-                                                                    'variant.kneeMotion': 'extends',
-                                                                    'variant.ankleMotion': 'plantarflexes',
-                                                                    'variant.footMotion': 'positionHeld',
-                                                                    'variant.footContact': 'continuous',
-                                                                    'variant.interRepSupport': 'none',
-                                                                    'variant.fixedPath': False,
-                                                                    'variant.implementConfiguration': 'none',
-                                                                    'variant.loadAccounting': 'none',
-                                                                    'variant.lowerBodyContribution': 'compoundHipKneeAnkleExtension',
-                                                                    'variant.handPosition': 'hips',
-                                                                    'variant.gripOrientation': 'notApplicable'},
-                                                           'present': (),
-                                                           'absent': ()},
-             'bodyweight-split-squat-has-no-implement': {'when': ('equipment', 'equals', 'bodyweight'),
-                                                         'then': {'loadMode': 'nonComparable',
-                                                                  'bodyweightFraction': 0,
-                                                                  'variant.loadPlacement': 'none',
-                                                                  'variant.implementConfiguration': 'none',
-                                                                  'variant.loadAccounting': 'none',
-                                                                  'variant.gripOrientation': 'notApplicable',
-                                                                  'variant.handPosition': 'hips',
-                                                                  'variant.trunkOrientation': 'erect',
-                                                                  'variant.trailFootSupport': ('forefootFloor',
-                                                                                               'elevatedBenchTopOfFoot')},
-                                                         'present': (),
-                                                         'absent': ()},
-             'no-loadplacement-identifies-unloaded-split': {'when': ('variant.loadPlacement', 'equals', 'none'),
-                                                            'then': {'equipment': 'bodyweight'},
-                                                            'present': (),
-                                                            'absent': ()},
-             'no-implementconfiguration-identifies-unloaded-split': {'when': ('variant.implementConfiguration',
-                                                                              'equals',
-                                                                              'none'),
-                                                                     'then': {'equipment': 'bodyweight'},
-                                                                     'present': (),
-                                                                     'absent': ()},
-             'no-loadaccounting-identifies-unloaded-split': {'when': ('variant.loadAccounting',
-                                                                      'equals',
-                                                                      'none'),
-                                                             'then': {'equipment': 'bodyweight'},
-                                                             'present': (),
-                                                             'absent': ()},
-             'single-dumbbell-goblet-split-fixture': {
-                 'when': ('variant.implementConfiguration', 'equals', 'singleDumbbellGoblet'),
-                 'then': {
-                     'equipment': 'dumbbell',
-                     'variant.trailFootSupport': 'forefootFloor',
-                     'variant.stanceLength': 'sourceUnreported',
-                     'variant.rangeOfMotion': 'leadKneeApproximatelyNinetyDegrees',
-                     'variant.loadPlacement': 'singleDumbbellGobletChest',
-                     'variant.gripOrientation': 'cuppedDumbbellHead',
-                     'variant.loadAccounting': 'wholeImplement',
-                     'variant.fixedPath': False,
-                 },
-                 'present': (),
-                 'absent': (),
-             }},
+                                                           'absent': ('variant.rearFootBenchFixture',)}},
             "knee-flexion": {
                 "life-fitness-pins-unilateral-seated-fixture": {
                     "when": (
@@ -23148,7 +22815,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 344 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 330 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
@@ -23157,7 +22824,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 344)
+        self.assertEqual(len(records), 330)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
@@ -23605,7 +23272,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 344)
+            self.assertEqual(len(emitted), 330)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -23615,7 +23282,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 catalog.compile_runtime_catalog(self.real_families),
             )
 
-    def test_comprehensive_expansion_adds_exactly_twenty_reviewed_records(
+    def test_remaining_comprehensive_expansion_records_are_present(
         self,
     ) -> None:
         exercises = {
@@ -23625,11 +23292,10 @@ class CatalogFoundationTests(unittest.TestCase):
             if exercise["catalogID"] in COMPREHENSIVE_EXPANSION_RECORD_IDS
         }
         self.assertEqual(set(exercises), COMPREHENSIVE_EXPANSION_RECORD_IDS)
-        self.assertEqual(len(exercises), 20)
+        self.assertEqual(len(exercises), 19)
 
         expected_ownership = {
             "continuous-top-start-barbell-romanian-deadlift": "romanian-deadlift",
-            "two-dumbbell-continuous-romanian-deadlift": "romanian-deadlift",
             "kettlebell-goblet-squat": "bilateral-squat",
             "smith-machine-upper-back-squat": "bilateral-squat",
             "two-dumbbell-rear-foot-elevated-split-squat": "split-stance-squat",
@@ -23663,7 +23329,6 @@ class CatalogFoundationTests(unittest.TestCase):
             for exercise in family["exercises"]
         }
         paired_ids = {
-            "two-dumbbell-continuous-romanian-deadlift",
             "two-dumbbell-rear-foot-elevated-split-squat",
             "two-dumbbell-continuous-walking-lunge",
             "simultaneous-bilateral-dumbbell-lateral-raise",
@@ -23846,9 +23511,9 @@ class CatalogFoundationTests(unittest.TestCase):
             for exercise in family["exercises"]
         }
         continuous = exercises["continuous-top-start-barbell-romanian-deadlift"]
-        floor_touch = exercises["barbell-romanian-deadlift"]
-        self.assertTrue({"Romanian Deadlift", "RDL"} <= set(continuous["aliases"]))
-        self.assertTrue({"Romanian Deadlift", "RDL"}.isdisjoint(floor_touch["aliases"]))
+        self.assertEqual(continuous["name"], "Romanian Deadlift")
+        self.assertIn("RDL", continuous["aliases"])
+        self.assertNotIn("barbell-romanian-deadlift", exercises)
 
         goblet = exercises["kettlebell-goblet-squat"]
         rollout = exercises["kneeling-ab-wheel-rollout"]
@@ -23866,7 +23531,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_ids), 382)
+        self.assertEqual(len(source_ids), 380)
         self.assertTrue(COMPREHENSIVE_EXPANSION_EVIDENCE_IDS <= source_ids)
 
     def test_must_have_expansion_is_source_exact_and_runtime_visible(self) -> None:
@@ -24261,8 +23926,8 @@ class CatalogFoundationTests(unittest.TestCase):
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
         self.assertEqual(len(self.real_families), 166)
-        self.assertEqual(len(runtime), 344)
-        self.assertEqual(len(self.foundation.evidence_ids), 382)
+        self.assertEqual(len(runtime), 330)
+        self.assertEqual(len(self.foundation.evidence_ids), 380)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids
@@ -24824,7 +24489,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "totalSingleImplement",
             ),
             "two-dumbbell-stationary-split-squat": (
-                "split-stance-squat", "Two-Dumbbell Split Squat",
+                "split-stance-squat", "Split Squat",
                 "dumbbell", "reps", "external", 20, 10, 8, None, 95,
                 "perImplement",
             ),
@@ -24863,7 +24528,7 @@ class CatalogFoundationTests(unittest.TestCase):
 
         expected_record_digests = {
             "single-dumbbell-goblet-squat": "c53012eb99ff4671ad0d6606df088f6aeda8ef8b194535f1430942f0174246e6",
-            "two-dumbbell-stationary-split-squat": 'c5747fe6998a675f3bc4bdd9bcac38a7f5edc19811dfcd405bf749b5c4e1f925',
+            "two-dumbbell-stationary-split-squat": '235e297a88c1570302104f0dbad9f95e838a9630be4a89b91d03d5d3cbc961fe',
             "two-dumbbell-reverse-lunge": "6c575728536b745fb228ec7f977f3bf7df144783b71b127c1a61dd8d6dc653cd",
             "bilateral-dumbbell-shrug": "de21824d67269a9db081ad15f23ccfcb29c7a269bc45a9800ba591083e52556b",
             "scapular-pull-up": "5fca3d5c1bb8c831757adfdbe59e4049090886f58b06f7331ad3589d0a2876ff",
@@ -26390,7 +26055,6 @@ class CoreStrengthExpansionCatalogTests(unittest.TestCase):
         "alternating-forearm-plank-hip-drop",
         "alternating-high-plank-t-spine-rotation",
         "dumbbell-high-plank-drag",
-        "kettlebell-high-plank-drag",
         "kneeling-barbell-rollout",
         "medicine-ball-straight-leg-sit-up",
         "medicine-ball-weighted-leg-lower",
@@ -26424,7 +26088,6 @@ class CoreStrengthExpansionCatalogTests(unittest.TestCase):
             "alternating-forearm-plank-hip-drop": "forearm-plank-hip-drop",
             "alternating-high-plank-t-spine-rotation": "high-plank-rotation",
             "dumbbell-high-plank-drag": "high-plank-crossbody-drag",
-            "kettlebell-high-plank-drag": "high-plank-crossbody-drag",
             "kneeling-barbell-rollout": "kneeling-barbell-rollout",
             "medicine-ball-straight-leg-sit-up": "medicine-ball-straight-leg-sit-up",
             "medicine-ball-weighted-leg-lower": "supine-medicine-ball-limb-lowering",
@@ -26464,14 +26127,10 @@ class CoreStrengthExpansionCatalogTests(unittest.TestCase):
             with self.subTest(record=catalog_id):
                 self.assertEqual(self.runtime[catalog_id]["loadMode"], "nonComparable")
 
-        for catalog_id in {
-            "dumbbell-high-plank-drag",
-            "kettlebell-high-plank-drag",
-        }:
-            self.assertEqual(
-                self.authored[catalog_id]["variant"]["loadAccounting"],
-                "singleImplement",
-            )
+        self.assertEqual(
+            self.authored["dumbbell-high-plank-drag"]["variant"]["loadAccounting"],
+            "singleImplement",
+        )
         self.assertEqual(
             self.authored["kneeling-barbell-rollout"]["variant"]["loadAccounting"],
             "totalBarAndPlates",
@@ -26485,7 +26144,6 @@ class CoreStrengthExpansionCatalogTests(unittest.TestCase):
             "TRX Rollouts": "trx-standing-rollout",
             "Barbell Rollouts": "kneeling-barbell-rollout",
             "DB Plank Drag": "dumbbell-high-plank-drag",
-            "KB Plank Drag": "kettlebell-high-plank-drag",
             "Plank with Arm Reach": "alternating-forearm-plank-arm-reach",
             "Weighted Leg Lowers": "medicine-ball-weighted-leg-lower",
             "Straight-Leg Sit-Ups with Med Ball": "medicine-ball-straight-leg-sit-up",
@@ -26494,13 +26152,7 @@ class CoreStrengthExpansionCatalogTests(unittest.TestCase):
         for alias, catalog_id in requested.items():
             with self.subTest(alias=alias):
                 self.assertIn(alias, self.authored[catalog_id]["aliases"])
-        self.assertEqual(
-            {
-                self.authored["dumbbell-high-plank-drag"]["equipment"],
-                self.authored["kettlebell-high-plank-drag"]["equipment"],
-            },
-            {"dumbbell", "kettlebell"},
-        )
+        self.assertEqual(self.authored["dumbbell-high-plank-drag"]["equipment"], "dumbbell")
 
     def test_reviewed_evidence_and_exact_fixture_semantics_are_pinned(self) -> None:
         band = self.authored["standing-band-torso-twist"]

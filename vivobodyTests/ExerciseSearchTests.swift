@@ -152,11 +152,9 @@ struct ExerciseSearchTests {
         let catalog = bundledCatalog()
         let expected: [(String, String)] = [
             ("Romanian Deadlift", "continuous-top-start-barbell-romanian-deadlift"),
-            ("Dumbbell RDL", "two-dumbbell-continuous-romanian-deadlift"),
             ("Goblet Squat", "kettlebell-goblet-squat"),
             ("Vertical Smith Upper-Back Squat", "smith-machine-upper-back-squat"),
             ("Dumbbell Bulgarian Split Squat", "two-dumbbell-rear-foot-elevated-split-squat"),
-            ("Barbell RFESS", "barbell-rear-foot-elevated-split-squat"),
             ("Dumbbell RFESS", "two-dumbbell-rear-foot-elevated-split-squat"),
             ("Dumbbell Walking Lunge", "two-dumbbell-continuous-walking-lunge"),
             ("Machine Leg Extension", "upright-bilateral-lever-machine-leg-extension"),
@@ -179,6 +177,42 @@ struct ExerciseSearchTests {
             let ranked = ExerciseSearch.rank(items: catalog, query: query)
             #expect(ranked.first?.catalogID == catalogID)
         }
+    }
+
+    @Test func consolidatedMovementsHaveOneStandardCatalogEntry() {
+        let catalog = bundledCatalog()
+        let expected: [(String, String)] = [
+            ("Machine Reverse Fly", "neutral-grip-machine-reverse-fly"),
+            ("High-Plank Drag", "dumbbell-high-plank-drag"),
+            ("Front Raise", "simultaneous-bilateral-dumbbell-front-raise"),
+            ("Split Squat", "two-dumbbell-stationary-split-squat"),
+            ("Bulgarian Split Squat", "two-dumbbell-rear-foot-elevated-split-squat"),
+            ("Romanian Deadlift", "continuous-top-start-barbell-romanian-deadlift"),
+            ("Pull-Up", "pull-up"),
+        ]
+
+        for (name, catalogID) in expected {
+            #expect(catalog.filter { $0.name == name }.count == 1)
+            #expect(ExerciseSearch.rank(items: catalog, query: name).first?.catalogID == catalogID)
+        }
+
+        let retiredIDs: Set<String> = [
+            "pronated-grip-machine-reverse-fly",
+            "kettlebell-high-plank-drag",
+            "single-arm-dumbbell-front-raise",
+            "barbell-split-squat",
+            "barbell-rear-foot-elevated-split-squat",
+            "bodyweight-split-squat",
+            "bodyweight-bulgarian-split-squat",
+            "goblet-split-squat",
+            "barbell-romanian-deadlift",
+            "barbell-romanian-deadlift-15-cm-step",
+            "two-dumbbell-continuous-romanian-deadlift",
+            "single-kettlebell-romanian-deadlift",
+            "neutral-grip-pull-up",
+            "wide-grip-pull-up",
+        ]
+        #expect(Set(catalog.compactMap(\.catalogID)).isDisjoint(with: retiredIDs))
     }
 
     @Test func genericCleanAndSnatchKeepPowerNeighborsAheadOfSquatFixtures() throws {

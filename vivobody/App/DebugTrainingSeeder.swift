@@ -22,7 +22,7 @@ import SwiftData
         private static let plans: [Plan] = [
             Plan(name: "Lower A", weekday: 2, lifts: [
                 ("Barbell Back Squat", 8, 185),
-                ("Barbell RDL (Continuous)", 10, 135),
+                ("Romanian Deadlift", 10, 135),
                 ("Upright Machine Leg Extension", 12, 80),
                 ("Standing Shoulder-Pad Machine Calf Raise", 12, 100),
                 ("Kneeling Cable Crunch", 12, 40),

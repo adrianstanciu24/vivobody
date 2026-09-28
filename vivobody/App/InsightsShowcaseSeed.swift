@@ -82,7 +82,7 @@ import SwiftData
                     plans: [
                         ("Barbell Back Squat", 4, reps, 185 + recentProgress * 2),
                         ("Barbell Good Morning", 3, reps, 75 + recentProgress),
-                        ("Barbell Split Squat", 2, reps, 85 + recentProgress),
+                        ("Split Squat", 2, reps, 30 + recentProgress),
                         ("Supinated Straight-Bar Cable Curl", 3, reps, 55 + recentProgress),
                         ("Single-Arm Supinated Cable Triceps Pushdown", 2, reps, 45 + recentProgress),
                     ],

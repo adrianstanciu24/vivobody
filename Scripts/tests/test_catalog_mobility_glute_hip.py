@@ -28,11 +28,10 @@ class MobilityGluteHipCatalogTests(unittest.TestCase):
         with self.assertRaises(catalog.ValidationFailure):
             catalog.validate_family(family, self.foundation, "mutated fixture")
 
-    def test_remaining_six_named_records_compile_with_distinct_identities(self):
+    def test_remaining_five_named_records_compile_with_distinct_identities(self):
         expected = {
             "quadruped-band-hip-extension": "Quadruped Hip Extension with Band",
             "quadruped-fire-hydrants-with-band": "Banded Fire Hydrant",
-            "single-kettlebell-romanian-deadlift": "Kettlebell RDL",
             "above-knee-band-side-walk": "Above-Knee Band Lateral Walk",
             "bodyweight-single-leg-hip-thrust": "Single-Leg Hip Thrust",
             "bodyweight-prisoner-box-squat-overhead-reach": "Prisoner Squat with Overhead Reach",
@@ -47,7 +46,7 @@ class MobilityGluteHipCatalogTests(unittest.TestCase):
     def test_ankle_walk_cannot_borrow_above_knee_placement(self):
         self.rejected_variant("lateral-band-walk", "ankle-band-lateral-walk", "bandPlacement", "justAboveKnees")
 
-    def test_kettlebell_range_cannot_become_barbell_range(self):
+    def test_retired_kettlebell_range_cannot_become_barbell_range(self):
         self.rejected_variant("romanian-deadlift", "continuous-top-start-barbell-romanian-deadlift", "rangeOfMotion", "topStartToSelfSelectedHingeFloorContactUnreported")
 
     def test_quadruped_extension_requires_moving_knee(self):

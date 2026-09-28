@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "shoulder-flexion-raise",
   "name": "Front Raise",
-  "definition": "A strict single-joint raise in which one open-chain upper arm or both upper arms simultaneously flex from the side to shoulder height in the sagittal plane while the elbow angle, neutral humeral rotation, torso, and lower body remain controlled. Scapular upward rotation and posterior tilt are normal coupled elevation actions, not fixed-ratio claims. Upper trapezius is a secondary dynamic contributor to the declared upward rotation, not merely a stabilizer: a loaded arm-elevation model validated against EMG places superior trapezius among the greatest activity and positive-work contributors during flexion, and a small unweighted held-position study observed its activity increasing gradually in both flexion and abduction. Those sources support a categorical dynamic role without claiming equal magnitude or target emphasis across paths. The single-arm and simultaneous bilateral neutral-rotation setups are transparently bounded applications of direct dumbbell-flexion evidence. NSCA directly defines a strict simultaneous two-dumbbell front raise to shoulder height but uses palms-down hand orientation; the active neutral humeral-rotation boundary comes from the existing family rather than a claim that NSCA tested the combined fixture. Alternating raises, plate or bar raises, internal-rotation variants, and above-shoulder endpoints remain outside this contract.",
+  "definition": "A strict single-joint front raise in which both open-chain upper arms simultaneously flex from the sides to shoulder height in the sagittal plane while the elbow angle, neutral humeral rotation, torso, and lower body remain controlled. Scapular upward rotation and posterior tilt are normal coupled elevation actions, not fixed-ratio claims. Upper trapezius is a secondary dynamic contributor to the declared upward rotation, not merely a stabilizer: a loaded arm-elevation model validated against EMG places superior trapezius among the greatest activity and positive-work contributors during flexion, and a small unweighted held-position study observed its activity increasing gradually in both flexion and abduction. Those sources support a categorical dynamic role without claiming equal magnitude or target emphasis across paths. NSCA directly defines a strict simultaneous two-dumbbell front raise to shoulder height but uses palms-down hand orientation; the active neutral humeral-rotation boundary comes from the existing family rather than a claim that NSCA tested the combined fixture. Alternating or one-arm raises, plate or bar raises, internal-rotation variants, and above-shoulder endpoints remain outside this contract.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "holzbaur-2005-upper-extremity",
@@ -25,28 +25,9 @@
   },
   "groupPolicy": {
     "default": "shoulders",
-    "allowed": [
-      "shoulders"
-    ]
+    "allowed": ["shoulders"]
   },
-  "allowed": {
-    "equipment": [
-      "dumbbell"
-    ],
-    "modalities": [
-      "dynamicStrength"
-    ],
-    "trackingModes": [
-      "reps"
-    ],
-    "loadModes": [
-      "external"
-    ],
-    "lateralities": [
-      "unilateral",
-      "bilateral"
-    ]
-  },
+  "allowed": {"equipment": ["dumbbell"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external"], "lateralities": ["bilateral"]},
   "movementSignature": {
     "planeBasisActions": [
       "shoulder.flexion"
@@ -293,17 +274,16 @@
       "id": "implementConfiguration",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the fixture uses one working dumbbell or a matched pair.",
+      "description": "A matched pair of dumbbells moves together.",
       "allowedValues": [
-        "singleDumbbell",
         "pairedDumbbells"
       ]
     },
     {
       "id": "armSequence",
       "valueType": "enum",
-      "required": false,
-      "description": "The bilateral fixture raises both arms together; the unilateral fixture omits this field.",
+      "required": true,
+      "description": "Both arms raise their dumbbells together.",
       "allowedValues": [
         "simultaneousBilateral"
       ]
@@ -319,32 +299,6 @@
     }
   ],
   "exerciseRules": [
-    {
-      "id": "single-arm-front-raise-uses-one-dumbbell",
-      "description": "The unilateral front raise owns one working dumbbell and omits paired-dumbbell fields.",
-      "when": {
-        "field": "laterality",
-        "operator": "equals",
-        "value": "unilateral"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "dumbbell"
-        },
-        {
-          "field": "variant.implementConfiguration",
-          "value": "singleDumbbell"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": [
-        "variant.armSequence",
-        "variant.loadAccounting"
-      ],
-      "requireAdditionalPrimeActions": [],
-      "requireAdditionalStabilityDemands": []
-    },
     {
       "id": "bilateral-front-raise-moves-both-arms-together",
       "description": "The bilateral front raise uses a matched dumbbell pair, simultaneous arms, and per-dumbbell logging.",
@@ -388,115 +342,9 @@
   },
   "exercises": [
     {
-      "catalogID": "single-arm-dumbbell-front-raise",
-      "name": "Single-Arm Dumbbell Front Raise",
-      "aliases": [
-        "One-Arm Dumbbell Front Raise"
-      ],
-      "equipment": "dumbbell",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0,
-      "defaultWeight": 10,
-      "defaultWeightKg": 5,
-      "reps": 12,
-      "searchPriority": 82,
-      "involvement": [
-        {
-          "muscle": "deltoidAnterior",
-          "role": "primary"
-        },
-        {
-          "muscle": "pectoralisMajorClavicular",
-          "role": "secondary"
-        },
-        {
-          "muscle": "serratus",
-          "role": "secondary"
-        },
-        {
-          "muscle": "trapeziusLower",
-          "role": "secondary"
-        },
-        {
-          "muscle": "supraspinatus",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "externalRotators",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "subscapularis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "trapeziusUpper",
-          "role": "secondary"
-        },
-        {
-          "muscle": "triceps",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "fingerFlexors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "extensorCarpiRadialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "scapularTranslation": "free",
-        "elevationPath": "sagittal",
-        "humerothoracicStartElevationDegrees": 0,
-        "humerothoracicEndElevationDegrees": 90,
-        "elbowMotion": "angleHeld",
-        "humeralRotation": "neutral",
-        "lowerBodyContribution": "none",
-        "contralateralSupport": "none",
-        "implementConfiguration": "singleDumbbell"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "ludewig-2009-multiplanar-humeral-elevation",
-        "morihara-2011-scapular-muscles-flexion-abduction",
-        "parry-2012-dumbbell-shoulder-elevation",
-        "hecker-2021-deltoid-flexion-abduction"
-      ],
-      "execution": {
-        "startingPosition": "Stand upright with one dumbbell beside your thigh, your palm facing your body, and your elbow nearly straight.",
-        "movement": "Raise the upper arm directly forward from the side to shoulder height.",
-        "endpoint": "Stop the raise at shoulder height.",
-        "returnPhase": "Lower the arm under control.",
-        "controlledJoints": "Do not bend the elbow, shrug, lean, or use lower-body drive.",
-        "supportAndPosture": "Stand upright with your torso braced and your free hand still.",
-        "disqualifyingCompensations": [
-          "Swinging the dumbbell with leg drive turns the front raise into a momentum swing.",
-          "Raising the arm out to the side turns the front raise into a lateral raise.",
-          "Bending the elbow to lift the dumbbell turns the front raise into an upright row."
-        ],
-        "sideOrDirection": "Finish all repetitions on one side before switching arms."
-      }
-    },
-    {
       "catalogID": "simultaneous-bilateral-dumbbell-front-raise",
-      "name": "Two-Dumbbell Front Raise",
-      "aliases": [
-        "Bilateral Dumbbell Front Raise",
-        "Simultaneous Bilateral Dumbbell Front Raise"
-      ],
+      "name": "Front Raise",
+      "aliases": ["Bilateral Dumbbell Front Raise", "Simultaneous Bilateral Dumbbell Front Raise", "Two-Dumbbell Front Raise", "Dumbbell Front Raise"],
       "equipment": "dumbbell",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

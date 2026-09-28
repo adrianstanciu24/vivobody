@@ -1,5 +1,5 @@
 {
-  "name": "catalog-single-leg-six-light",
+  "name": "catalog-exercise-consolidation-light",
   "launch": {
     "reset": true,
     "tab": "library",
@@ -34,31 +34,26 @@
       }
     },
     {
-      "typeText": "Split Squat"
+      "typeText": "reverse fly"
     },
     {
       "wait": {
-        "labelRegex": "^Split Squat, "
-      }
-    },
-    {
-      "tap": {
-        "labelRegex": "^Split Squat, "
-      }
-    },
-    {
-      "wait": {
-        "label": "STRENGTH · REPS"
+        "labelRegex": "^Machine Reverse Fly,"
       }
     },
     {
       "assert": {
         "required": [
           {
-            "label": "Split Squat"
+            "labelRegex": "^Machine Reverse Fly,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Neutral-Grip Machine Reverse Fly,"
           },
           {
-            "labelContains": "Muscles used by Split Squat"
+            "labelRegex": "^Pronated-Grip Machine Reverse Fly,"
           }
         ]
       }
@@ -98,31 +93,26 @@
       }
     },
     {
-      "typeText": "Reverse Lunge"
+      "typeText": "high-plank drag"
     },
     {
       "wait": {
-        "labelRegex": "^Reverse Lunge, "
-      }
-    },
-    {
-      "tap": {
-        "labelRegex": "^Reverse Lunge, "
-      }
-    },
-    {
-      "wait": {
-        "label": "STRENGTH · REPS"
+        "labelRegex": "^High-Plank Drag,"
       }
     },
     {
       "assert": {
         "required": [
           {
-            "label": "Reverse Lunge"
+            "labelRegex": "^High-Plank Drag,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Dumbbell High-Plank Drag,"
           },
           {
-            "labelContains": "Muscles used by Reverse Lunge"
+            "labelRegex": "^Kettlebell High-Plank Drag,"
           }
         ]
       }
@@ -162,31 +152,29 @@
       }
     },
     {
-      "typeText": "Landmine Reverse Lunge to Knee Raise"
+      "typeText": "front raise"
     },
     {
       "wait": {
-        "labelRegex": "^Landmine Reverse Lunge to Knee Raise, "
-      }
-    },
-    {
-      "tap": {
-        "labelRegex": "^Landmine Reverse Lunge to Knee Raise, "
-      }
-    },
-    {
-      "wait": {
-        "label": "STRENGTH · REPS"
+        "labelRegex": "^Front Raise,"
       }
     },
     {
       "assert": {
         "required": [
           {
-            "label": "Landmine Reverse Lunge to Knee Raise"
+            "labelRegex": "^Front Raise,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Single-Arm Dumbbell Front Raise,"
           },
           {
-            "labelContains": "Muscles used by Landmine Reverse Lunge to Knee Raise"
+            "labelRegex": "^Two-Dumbbell Front Raise,"
+          },
+          {
+            "labelRegex": "^Simultaneous Bilateral Dumbbell Front Raise,"
           }
         ]
       }
@@ -226,31 +214,44 @@
       }
     },
     {
-      "typeText": "Landmine Single-Leg RDL"
+      "typeText": "split squat"
     },
     {
       "wait": {
-        "labelRegex": "^Landmine Single-Leg RDL, "
-      }
-    },
-    {
-      "tap": {
-        "labelRegex": "^Landmine Single-Leg RDL, "
-      }
-    },
-    {
-      "wait": {
-        "label": "STRENGTH · REPS"
+        "labelRegex": "^Split Squat,"
       }
     },
     {
       "assert": {
         "required": [
           {
-            "label": "Landmine Single-Leg RDL"
+            "labelRegex": "^Split Squat,"
           },
           {
-            "labelContains": "Muscles used by Landmine Single-Leg RDL"
+            "labelRegex": "^Bulgarian Split Squat,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Barbell Split Squat,"
+          },
+          {
+            "labelRegex": "^Bodyweight Split Squat,"
+          },
+          {
+            "labelRegex": "^Goblet Split Squat,"
+          },
+          {
+            "labelRegex": "^Dumbbell Split Squat,"
+          },
+          {
+            "labelRegex": "^Barbell Bulgarian Split Squat,"
+          },
+          {
+            "labelRegex": "^Bodyweight Bulgarian Split Squat,"
+          },
+          {
+            "labelRegex": "^Dumbbell Bulgarian Split Squat,"
           }
         ]
       }
@@ -290,31 +291,32 @@
       }
     },
     {
-      "typeText": "Kettlebell Single-Leg RDL"
+      "typeText": "romanian deadlift"
     },
     {
       "wait": {
-        "labelRegex": "^Kettlebell Single-Leg RDL, "
-      }
-    },
-    {
-      "tap": {
-        "labelRegex": "^Kettlebell Single-Leg RDL, "
-      }
-    },
-    {
-      "wait": {
-        "label": "STRENGTH · REPS"
+        "labelRegex": "^Romanian Deadlift,"
       }
     },
     {
       "assert": {
         "required": [
           {
-            "label": "Kettlebell Single-Leg RDL"
+            "labelRegex": "^Romanian Deadlift,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Barbell RDL (Floor Touch),"
           },
           {
-            "labelContains": "Muscles used by Kettlebell Single-Leg RDL"
+            "labelRegex": "^Barbell Deficit RDL,"
+          },
+          {
+            "labelRegex": "^Two-Dumbbell RDL (Continuous),"
+          },
+          {
+            "labelRegex": "^Kettlebell RDL,"
           }
         ]
       }
@@ -354,42 +356,47 @@
       }
     },
     {
-      "typeText": "Banded Single-Leg Hip Thrust"
+      "typeText": "pull-up"
     },
     {
       "wait": {
-        "labelRegex": "^Banded Single-Leg Hip Thrust, "
-      }
-    },
-    {
-      "tap": {
-        "labelRegex": "^Banded Single-Leg Hip Thrust, "
-      }
-    },
-    {
-      "wait": {
-        "label": "STRENGTH · REPS"
+        "labelRegex": "^Pull-Up,"
       }
     },
     {
       "assert": {
         "required": [
           {
-            "label": "Banded Single-Leg Hip Thrust"
+            "labelRegex": "^Pull-Up,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Neutral-Grip Pull-Up,"
           },
           {
-            "labelContains": "Muscles used by Banded Single-Leg Hip Thrust"
+            "labelRegex": "^Wide-Grip Pull-Up,"
           }
         ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Pull-Up,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
       }
     }
   ],
   "required": [
     {
-      "label": "Banded Single-Leg Hip Thrust"
+      "label": "Pull-Up"
     },
     {
-      "label": "STRENGTH · REPS"
+      "labelContains": "Muscles used by Pull-Up"
     }
   ],
   "forbidden": []

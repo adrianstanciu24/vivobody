@@ -1,0 +1,78 @@
+{
+  "name": "catalog-exercise-consolidation-dark",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "machine reverse fly"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Machine Reverse Fly,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Machine Reverse Fly,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Pronated-Grip Machine Reverse Fly,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Machine Reverse Fly,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Machine Reverse Fly"
+    },
+    {
+      "labelContains": "Muscles used by Machine Reverse Fly"
+    }
+  ],
+  "forbidden": []
+}

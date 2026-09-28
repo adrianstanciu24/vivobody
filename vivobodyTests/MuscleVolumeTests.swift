@@ -112,7 +112,7 @@ struct MuscleVolumeTests {
 
         let raise = session(
             at: day(0),
-            [lift("Single-Arm Dumbbell Front Raise", .shoulders, sets: 3)]
+            [lift("Front Raise", .shoulders, sets: 3)]
         )
         let raiseStats = [raise].muscleVolume(now: day(0))
         #expect(stat(.pectoralisMajorSternocostal, in: raiseStats).effectiveSets == 0)

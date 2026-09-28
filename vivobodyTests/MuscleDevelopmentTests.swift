@@ -317,7 +317,7 @@ struct MuscleDevelopmentTests {
             at: day(0),
             [
                 lift(
-                    "Single-Arm Dumbbell Front Raise",
+                    "Front Raise",
                     .shoulders,
                     sets: 3,
                     reps: 10,

@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 194.
+Scenario files: 196.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -53,6 +53,8 @@ Scenario files: 194.
 | [catalog-everyday-good-morning](catalog-everyday-good-morning.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-everyday-landmine-press-accessibility](catalog-everyday-landmine-press-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [catalog-everyday-landmine-press-light](catalog-everyday-landmine-press-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-exercise-consolidation-dark](catalog-exercise-consolidation-dark.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-exercise-consolidation-light](catalog-exercise-consolidation-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-forearm-development](catalog-forearm-development.json) | today | `--ui-test-forearm-development --static-body -settings.appearance dark` |
 | [catalog-forearm-stabilizers](catalog-forearm-stabilizers.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-goblet-squat-to-press-light](catalog-goblet-squat-to-press-light.json) | library | `--static-body -settings.appearance light` |

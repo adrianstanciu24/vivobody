@@ -22,7 +22,7 @@ struct CatalogBiomechanicsTests {
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
         #expect(CatalogData.record(forCatalogID: "repetitive-grip-trainer-close")?.familyID == "finger-flexion-grip")
         #expect(CatalogData.record(forCatalogID: "conventional-barbell-deadlift")?.familyID == "conventional-deadlift")
-        #expect(CatalogData.record(forCatalogID: "barbell-romanian-deadlift")?.familyID == "romanian-deadlift")
+        #expect(CatalogData.record(forCatalogID: "continuous-top-start-barbell-romanian-deadlift")?.familyID == "romanian-deadlift")
         #expect(CatalogData.record(forCatalogID: "barbell-power-clean")?.modality == .power)
         #expect(CatalogData.record(forCatalogID: "wall-sit")?.trackingMode == .duration)
     }
@@ -178,7 +178,6 @@ struct CatalogBiomechanicsTests {
     @Test func comprehensiveExpansionFixturesReachTheRuntimeProjection() throws {
         let expected: [(String, String)] = [
             ("continuous-top-start-barbell-romanian-deadlift", "romanian-deadlift"),
-            ("two-dumbbell-continuous-romanian-deadlift", "romanian-deadlift"),
             ("kettlebell-goblet-squat", "bilateral-squat"),
             ("smith-machine-upper-back-squat", "bilateral-squat"),
             ("two-dumbbell-rear-foot-elevated-split-squat", "split-stance-squat"),
@@ -779,7 +778,7 @@ struct CatalogBiomechanicsTests {
             ]?.intensity == 1)
         }
 
-        for name in ["Single-Arm Dumbbell Front Raise", "Seated Dumbbell Overhead Press"] {
+        for name in ["Front Raise", "Seated Dumbbell Overhead Press"] {
             let neutralStartFlexion = try #require(
                 CatalogData.record(forExerciseNamed: name)
             )

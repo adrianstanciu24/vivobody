@@ -29,7 +29,7 @@ import SwiftData
                 session.completedAt = date.addingTimeInterval(3600)
                 context.insert(session)
             }
-            let heldBack = exercise("Barbell Split Squat", weight: 85, reps: [10, 8, 7], order: 0)
+            let heldBack = exercise("Split Squat", weight: 30, reps: [10, 8, 7], order: 0)
             heldBack.orderedSets.last?.repsInReserve = 4
             let session = WorkoutSession(exercises: [heldBack], startedAt: now.addingTimeInterval(-86400))
             session.completedAt = now.addingTimeInterval(-82800)
