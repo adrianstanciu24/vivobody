@@ -13,11 +13,11 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | Measure | Count |
 |---|---:|
 | Reviewed families | 166 |
-| Exercises | 330 |
+| Exercises | 325 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 380 |
+| Evidence sources | 379 |
 
 ## Family roster
 
@@ -35,7 +35,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [belt-loaded-machine-glute-bridge](families/belt-loaded-machine-glute-bridge.json) | 1 |
 | [bench-anchored-supine-trunk-hold](families/bench-anchored-supine-trunk-hold.json) | 1 |
 | [bicycle-crunch](families/bicycle-crunch.json) | 1 |
-| [bilateral-squat](families/bilateral-squat.json) | 7 |
+| [bilateral-squat](families/bilateral-squat.json) | 6 |
 | [bird-dog](families/bird-dog.json) | 1 |
 | [bodyweight-glute-bridge](families/bodyweight-glute-bridge.json) | 2 |
 | [bodyweight-single-leg-hip-thrust](families/bodyweight-single-leg-hip-thrust.json) | 1 |
@@ -141,7 +141,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [seated-machine-abdominal-crunch](families/seated-machine-abdominal-crunch.json) | 1 |
 | [seated-machine-back-extension](families/seated-machine-back-extension.json) | 1 |
 | [shoulder-abduction-raise](families/shoulder-abduction-raise.json) | 3 |
-| [shoulder-extension-isolation](families/shoulder-extension-isolation.json) | 4 |
+| [shoulder-extension-isolation](families/shoulder-extension-isolation.json) | 3 |
 | [shoulder-extension-row](families/shoulder-extension-row.json) | 15 |
 | [shoulder-external-rotation](families/shoulder-external-rotation.json) | 3 |
 | [shoulder-flexion-raise](families/shoulder-flexion-raise.json) | 1 |
@@ -182,7 +182,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [upright-row](families/upright-row.json) | 1 |
 | [vertical-countermovement-jump](families/vertical-countermovement-jump.json) | 2 |
 | [vertical-press](families/vertical-press.json) | 13 |
-| [vertical-pull](families/vertical-pull.json) | 13 |
+| [vertical-pull](families/vertical-pull.json) | 10 |
 | [walking-lunge](families/walking-lunge.json) | 1 |
 | [wall-sit](families/wall-sit.json) | 1 |
 | [wrist-extension](families/wrist-extension.json) | 1 |

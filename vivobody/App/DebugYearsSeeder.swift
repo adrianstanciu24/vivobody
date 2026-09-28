@@ -16,7 +16,7 @@ import SwiftData
             [
                 ("Barbell Back Squat", 8, 155),
                 ("Barbell Bench Press", 8, 115),
-                ("Cable Lat Pulldown", 10, 85),
+                ("Lat Pulldown", 10, 85),
                 ("Lateral Lunge", 12, 0),
                 ("Standing Shoulder-Pad Machine Calf Raise", 12, 80),
                 ("Kneeling Cable Crunch", 12, 35),
@@ -26,7 +26,7 @@ import SwiftData
                 ("Seated Dumbbell Overhead Press", 10, 30),
                 ("Barbell Bent-Over Row", 10, 95),
                 ("Supine Reverse Crunch", 12, 0),
-                ("Two-Dumbbell Lateral Raise", 12, 10),
+                ("Lateral Raise", 12, 10),
                 ("Supinated Straight-Bar Cable Curl", 12, 30),
             ],
             [
@@ -39,8 +39,8 @@ import SwiftData
             ],
             [
                 ("Barbell Bench Press", 10, 105),
-                ("Cable Lat Pulldown", 12, 75),
-                ("Two-Dumbbell Lateral Raise", 12, 10),
+                ("Lat Pulldown", 12, 75),
+                ("Lateral Raise", 12, 10),
                 ("Rope Face Pull with External Rotation", 12, 25),
                 ("Supinated Straight-Bar Cable Curl", 12, 30),
                 ("Rope Cable Triceps Pushdown", 12, 30),

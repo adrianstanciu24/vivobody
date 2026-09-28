@@ -67,7 +67,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
         families = [catalog.load_json(p) for p in catalog.FAMILIES_ROOT.glob("*.json")]
         records = catalog.compile_runtime_catalog(families)
         ids = {record["catalogID"] for record in records}
-        self.assertEqual(len(records), 330)
+        self.assertEqual(len(records), 325)
         self.assertEqual(len(ids), len(records))
         self.assertTrue({
             "barbell-good-morning", "barbell-back-squat", "chin-up",
@@ -82,6 +82,9 @@ class RequestedCatalogGapTests(unittest.TestCase):
             "two-dumbbell-continuous-romanian-deadlift",
             "single-kettlebell-romanian-deadlift", "neutral-grip-pull-up",
             "wide-grip-pull-up", "barbell-good-morning-25-percent-body-mass",
+            "kettlebell-goblet-squat", "close-grip-neutral-lat-pulldown",
+            "underhand-lat-pulldown", "wide-grip-lat-pulldown",
+            "wide-grip-straight-arm-cable-pulldown",
         }.isdisjoint(ids))
 
     def test_neighboring_movements_are_rejected(self):

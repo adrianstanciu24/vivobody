@@ -206,7 +206,6 @@
       "description": "The reviewed relationship between the two hands.",
       "allowedValues": [
         "shoulderWidth",
-        "wide",
         "narrow"
       ]
     },
@@ -590,8 +589,8 @@
     },
     {
       "catalogID": "shoulder-width-straight-arm-cable-pulldown",
-      "name": "Shoulder-Width Straight-Arm Cable Pulldown",
-      "aliases": [],
+      "name": "Straight-Arm Pulldown",
+      "aliases": ["Shoulder-Width Straight-Arm Cable Pulldown"],
       "equipment": "cable",
       "laterality": "bilateral",
       "modality": "dynamicStrength",
@@ -666,95 +665,6 @@
       ],
       "execution": {
         "startingPosition": "Stand facing a high cable and hold a straight bar at shoulder width with your palms facing down and your elbows nearly straight. Begin with your hands overhead.",
-        "movement": "Bring the bar down to your thighs.",
-        "endpoint": "The bar reaches your thighs.",
-        "returnPhase": "Return overhead under control without rowing or bending your elbows.",
-        "controlledJoints": "Keep your elbow angle fixed.",
-        "supportAndPosture": "Brace your torso while standing unsupported.",
-        "disqualifyingCompensations": [
-          "Rowing the bar down with bending elbows turns the straight-arm pulldown into a row.",
-          "Bending and straightening the elbows turns the straight-arm pulldown into a triceps pushdown."
-        ]
-      }
-    },
-    {
-      "catalogID": "wide-grip-straight-arm-cable-pulldown",
-      "name": "Wide-Grip Straight-Arm Cable Pulldown",
-      "aliases": [],
-      "equipment": "cable",
-      "laterality": "bilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0,
-      "defaultWeight": 30,
-      "defaultWeightKg": 15,
-      "reps": 10,
-      "searchPriority": 68,
-      "involvement": [
-        {
-          "muscle": "lats",
-          "role": "primary"
-        },
-        {
-          "muscle": "pectoralisMajorSternocostal",
-          "role": "secondary"
-        },
-        {
-          "muscle": "teresMajor",
-          "role": "secondary"
-        },
-        {
-          "muscle": "externalRotators",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "serratus",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "trapeziusMiddle",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "triceps",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "fingerFlexors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "extensorCarpiRadialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "abs",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "scapularTranslation": "free",
-        "gripOrientation": "pronated",
-        "relativeGripWidth": "wide",
-        "elbowMotion": "angleHeld",
-        "elbowPosture": "nearExtended",
-        "startArmZone": "overheadEarlobe",
-        "concentricEndZone": "thighs",
-        "lowerBodyContribution": "none"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "ackland-2008-shoulder-moment-arms",
-        "holzbaur-2005-upper-extremity",
-        "muyor-2022-pullover-straight-arm-pulldown"
-      ],
-      "execution": {
-        "startingPosition": "Stand facing a high cable and hold a straight bar wider than shoulder width with your palms facing down and your elbows nearly straight. Begin with your hands overhead.",
         "movement": "Bring the bar down to your thighs.",
         "endpoint": "The bar reaches your thighs.",
         "returnPhase": "Return overhead under control without rowing or bending your elbows.",

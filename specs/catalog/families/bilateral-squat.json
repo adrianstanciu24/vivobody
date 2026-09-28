@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "bilateral-squat",
   "name": "Bilateral Squat",
-  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell, kettlebell, and exact Smith fixtures; NASM's single-dumbbell goblet fixture descending to approximately thigh parallel or deeper as mobility allows; one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion; and one shoulder-width, handle-supported suspension fixture using self-selected controlled depth. Those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply to loaded branches, while the suspension branch authors only its balance-support chain. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and otherwise unbounded full-depth variants remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the free bilateral squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. Adductor magnus receives secondary credit only on the reviewed barbell-back-squat fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants. TFL receives stabilizer credit only in the free fixtures for hip, pelvic and knee alignment. Selkowitz directly measured low TFL activity during an unloaded squat. Transfer across load placement, stance, foot orientation, depth and cadence is categorical anatomy and mechanics, not exact-fixture EMG or a strong TFL target. The guided Smith roster is outside this evidence slice; exclusion does not establish absent recruitment. No hip-flexion prime action or unrestricted rotation is added.",
+  "definition": "A two-leg closed-chain compound squat in which both feet remain planted while the hips and knees flex to a source-reviewed endpoint, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The roster owns loaded thigh-parallel barbell and exact Smith fixtures; NASM's single-dumbbell goblet fixture descending to approximately thigh parallel or deeper as mobility allows; one stable-floor bodyweight fixture ending at approximately 100 degrees of knee flexion; and one shoulder-width, handle-supported suspension fixture using self-selected controlled depth. Those endpoints are not treated as equivalent. Implement-specific hand and shoulder demands apply to loaded branches, while the suspension branch authors only its balance-support chain. Split-stance, lateral, box, wall, jump, thruster, unstable-surface, one-leg, differently loaded, partial, and otherwise unbounded full-depth variants remain outside this contract. Tibialis anterior is authored as an ankle/foot stabilizer on the free bilateral squat fixtures. This is a categorical anatomy-and-mechanics inference supported by measured activity in related protocols, not exact-fixture EMG or primary/secondary training emphasis. Existing geometry sources remain authoritative; machine fixtures are not added by this evidence review. Adductor magnus receives secondary credit only on the reviewed barbell-back-squat fixture for participation of its hip-extending portion. Benn provides regional extension EMG and Collings provides modeled ischiocondylar-magnus force during the exercise category; transfer to this exact geometry is categorical anatomy and mechanics, not direct fixture-specific force measurement, uniform whole-muscle loading, or a primary ranking. The central magnus-only exception does not extend to other variants. TFL receives stabilizer credit only in the free fixtures for hip, pelvic and knee alignment. Selkowitz directly measured low TFL activity during an unloaded squat. Transfer across load placement, stance, foot orientation, depth and cadence is categorical anatomy and mechanics, not exact-fixture EMG or a strong TFL target. The guided Smith roster is outside this evidence slice; exclusion does not establish absent recruitment. No hip-flexion prime action or unrestricted rotation is added.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "armstrong-2022-squat-movement-dynamics",
@@ -14,7 +14,6 @@
     "purzel-2026-powerlifting-squat-joint-moments",
     "sinclair-2022-back-squat-foot-angle",
     "yavuz-2015-front-back-squat-emg",
-    "nasm-2026-goblet-squat",
     "nasm-2026-goblet-squat-exercise-library",
     "collins-2021-goblet-landmine-squat",
     "lee-2017-smith-squat-human-machine",
@@ -45,7 +44,6 @@
   "allowed": {
     "equipment": [
       "barbell",
-      "kettlebell",
       "dumbbell",
       "machine",
       "bodyweight",
@@ -263,11 +261,10 @@
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "Where the bar, kettlebell, or dumbbell is supported during the exact squat fixture.",
+      "description": "Where the bar or dumbbell is supported during the exact squat fixture.",
       "allowedValues": [
         "upperBackBarbell",
         "anteriorDeltoidClavicleBarbell",
-        "kettlebellVerticalAtChestByHorns",
         "dumbbellVerticalAtChestCuppingTopHead",
         "none",
         "handSupportedNoExternalLoad"
@@ -277,11 +274,10 @@
       "id": "gripOrientation",
       "valueType": "enum",
       "required": true,
-      "description": "The bilateral hand configuration used to control the bar, kettlebell, or dumbbell in the exact fixture.",
+      "description": "The bilateral hand configuration used to control the bar or dumbbell in the exact fixture.",
       "allowedValues": [
         "pronated",
         "cleanGrip",
-        "hornGrip",
         "bothHandsCuppingTopHead",
         "notApplicable",
         "neutral"
@@ -375,7 +371,6 @@
       "description": "The implement arrangement used by the exact fixture.",
       "allowedValues": [
         "straightBarbell",
-        "singleKettlebell",
         "singleDumbbell",
         "verticalSmithBar",
         "none",
@@ -451,7 +446,7 @@
   "exerciseRules": [
     {
       "id": "non-comparable-squat-is-unloaded-only",
-      "description": "Only the bodyweight and suspension fixtures use non-comparable loads; loaded barbell, dumbbell, kettlebell, and machine fixtures remain external.",
+      "description": "Only the bodyweight and suspension fixtures use non-comparable loads; loaded barbell, dumbbell, and machine fixtures remain external.",
       "when": {"field": "loadMode", "operator": "equals", "value": "nonComparable"},
       "then": [
         {"field": "equipment", "allowedValues": ["bodyweight", "suspensionTrainer"]}
@@ -554,22 +549,6 @@
       "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"]
     },
     {
-      "id": "goblet-fixture-pins-single-kettlebell",
-      "description": "The reviewed goblet squat holds one vertical kettlebell by its horns at the chest.",
-      "when": {"field": "equipment", "operator": "equals", "value": "kettlebell"},
-      "then": [
-        {"field": "loadMode", "value": "external"},
-        {"field": "variant.stanceWidth", "value": "shoulderWidth"},
-        {"field": "variant.loadPlacement", "value": "kettlebellVerticalAtChestByHorns"},
-        {"field": "variant.gripOrientation", "value": "hornGrip"},
-        {"field": "variant.fixedPath", "value": false},
-        {"field": "variant.implementConfiguration", "value": "singleKettlebell"},
-        {"field": "variant.loadAccounting", "value": "totalSingleImplement"}
-      ],
-      "requirePresent": [],
-      "requireAbsent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"]
-    },
-    {
       "id": "dumbbell-goblet-fixture-pins-single-vertical-dumbbell",
       "description": "NASM's reviewed dumbbell goblet squat cups the top head of one vertical dumbbell at the chest and descends to approximately parallel or deeper as mobility allows.",
       "when": {"field": "equipment", "operator": "equals", "value": "dumbbell"},
@@ -602,17 +581,6 @@
         {"field": "variant.footOffsetFromBarCm", "value": 0}
       ],
       "requirePresent": ["variant.railOrientationDegrees", "variant.footOffsetFromBarCm"],
-      "requireAbsent": []
-    },
-    {
-      "id": "horn-grip-identifies-goblet-load",
-      "description": "A horn grip belongs to the single-kettlebell goblet fixture.",
-      "when": {"field": "variant.gripOrientation", "operator": "equals", "value": "hornGrip"},
-      "then": [
-        {"field": "equipment", "value": "kettlebell"},
-        {"field": "variant.loadPlacement", "value": "kettlebellVerticalAtChestByHorns"}
-      ],
-      "requirePresent": [],
       "requireAbsent": []
     },
     {
@@ -951,61 +919,9 @@
       }
     },
     {
-      "catalogID": "kettlebell-goblet-squat",
-      "name": "Kettlebell Goblet Squat",
-      "aliases": ["KB Goblet Squat"],
-      "equipment": "kettlebell",
-      "laterality": "bilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0,
-      "defaultWeight": 20,
-      "defaultWeightKg": 10,
-      "reps": 10,
-      "searchPriority": 95,
-      "involvement": [
-        {"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"},
-        {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "medialHamstrings", "role": "stabilizer"},
-        {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"},
-        {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
-        {"muscle": "deltoidAnterior", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"},
-        {"muscle": "brachialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"},
-        {
-          "muscle": "tibialisAnterior",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tensorFasciaeLatae",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "closed", "bodyPosition": "standing", "torsoSupport": "none", "stanceConfiguration": "symmetricBilateral",
-        "stanceWidth": "shoulderWidth", "loadPlacement": "kettlebellVerticalAtChestByHorns", "gripOrientation": "hornGrip",
-        "rangeOfMotion": "thighParallel", "spineMotion": "nonstandardized", "hipMotion": "extends", "kneeMotion": "extends",
-        "ankleMotion": "plantarflexes", "footMotion": "positionHeld", "footContact": "continuous", "interRepSupport": "none",
-        "fixedPath": false, "implementConfiguration": "singleKettlebell", "loadAccounting": "totalSingleImplement",
-        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": ["shoulder", "scapula", "elbow", "wrist", "hand"],
-      "evidenceRefs": ["nasm-2026-goblet-squat", "collins-2021-goblet-landmine-squat", "arnold-2010-lower-limb", "deforest-2014-single-double-leg-squat", "wu-2020-loading-devices-squat-lunge"],
-      "execution": {
-        "startingPosition": "Stand with both feet about shoulder-width apart and hold one kettlebell vertically at your chest by its horns.",
-        "movement": "Sit the hips down and back while bending both knees and keeping the kettlebell close to the chest.",
-        "endpoint": "Stop when the upper thighs are approximately parallel to the floor.",
-        "returnPhase": "Drive through both feet and extend the hips, knees, and ankles to stand tall with the kettlebell still at the chest.",
-        "controlledJoints": "Keep the knees tracking with the feet and the elbows under control without turning the movement into a press.",
-        "supportAndPosture": "Brace the trunk, keep both feet planted, and use no external torso support.",
-        "disqualifyingCompensations": ["Lowering the kettlebell away from the chest changes the reviewed goblet fixture.", "Stopping above thigh-parallel depth changes the reviewed range.", "Pressing the kettlebell overhead adds an upper-body prime action."]
-      }
-    },
-    {
       "catalogID": "single-dumbbell-goblet-squat",
-      "name": "Single-Dumbbell Goblet Squat",
-      "aliases": ["Dumbbell Goblet Squat", "DB Goblet Squat"],
+      "name": "Goblet Squat",
+      "aliases": ["Dumbbell Goblet Squat", "DB Goblet Squat", "Single-Dumbbell Goblet Squat"],
       "equipment": "dumbbell",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

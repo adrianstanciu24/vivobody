@@ -30,7 +30,7 @@ import SwiftData
             Plan(name: "Upper Push", weekday: 3, lifts: [
                 ("Barbell Bench Press", 8, 135),
                 ("Seated Dumbbell Overhead Press", 10, 35),
-                ("Two-Dumbbell Lateral Raise", 12, 15),
+                ("Lateral Raise", 12, 15),
                 ("Rope Cable Triceps Pushdown", 12, 40),
                 ("Partial Curl-Up", 12, 0),
             ]),
@@ -43,8 +43,8 @@ import SwiftData
             ]),
             Plan(name: "Upper Pull", weekday: 6, lifts: [
                 ("Barbell Bent-Over Row", 8, 115),
-                ("Cable Lat Pulldown", 10, 100),
-                ("Shoulder-Width Straight-Arm Cable Pulldown", 12, 40),
+                ("Lat Pulldown", 10, 100),
+                ("Straight-Arm Pulldown", 12, 40),
                 ("Supinated Straight-Bar Cable Curl", 12, 40),
                 ("Hanging Knee Raise", 12, 0),
             ]),

@@ -475,11 +475,8 @@
   "exercises": [
     {
       "catalogID": "two-dumbbell-farmer-carry",
-      "name": "Two-Dumbbell Farmer Carry",
-      "aliases": [
-        "Bilateral Dumbbell Farmer Carry",
-        "Two-Dumbbell Farmer Walk"
-      ],
+      "name": "Farmer Carry",
+      "aliases": ["Bilateral Dumbbell Farmer Carry", "Two-Dumbbell Farmer Walk", "Two-Dumbbell Farmer Carry"],
       "equipment": "dumbbell",
       "laterality": "bilateral",
       "modality": "isometricStrength",

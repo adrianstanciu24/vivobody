@@ -554,8 +554,8 @@
     },
     {
       "catalogID": "two-dumbbell-forward-step-up",
-      "name": "Two-Dumbbell Forward Step-Up",
-      "aliases": ["38 cm Dumbbell Forward Step-Up", "15-Inch Dumbbell Forward Step-Up"],
+      "name": "Forward Step-Up",
+      "aliases": ["38 cm Dumbbell Forward Step-Up", "15-Inch Dumbbell Forward Step-Up", "Two-Dumbbell Forward Step-Up"],
       "equipment": "dumbbell",
       "laterality": "unilateral",
       "modality": "dynamicStrength",

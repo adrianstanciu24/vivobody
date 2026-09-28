@@ -686,8 +686,8 @@
     },
     {
       "catalogID": "bilateral-dumbbell-shrug",
-      "name": "Two-Dumbbell Shrug",
-      "aliases": ["Dumbbell Shrug", "Bilateral Dumbbell Shrug"],
+      "name": "Shrug",
+      "aliases": ["Dumbbell Shrug", "Bilateral Dumbbell Shrug", "Two-Dumbbell Shrug"],
       "equipment": "dumbbell",
       "laterality": "bilateral",
       "modality": "dynamicStrength",

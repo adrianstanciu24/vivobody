@@ -178,7 +178,7 @@ struct CatalogBiomechanicsTests {
     @Test func comprehensiveExpansionFixturesReachTheRuntimeProjection() throws {
         let expected: [(String, String)] = [
             ("continuous-top-start-barbell-romanian-deadlift", "romanian-deadlift"),
-            ("kettlebell-goblet-squat", "bilateral-squat"),
+            ("single-dumbbell-goblet-squat", "bilateral-squat"),
             ("smith-machine-upper-back-squat", "bilateral-squat"),
             ("two-dumbbell-rear-foot-elevated-split-squat", "split-stance-squat"),
             ("two-dumbbell-continuous-walking-lunge", "walking-lunge"),

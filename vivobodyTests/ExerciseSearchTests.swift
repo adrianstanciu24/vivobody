@@ -152,7 +152,7 @@ struct ExerciseSearchTests {
         let catalog = bundledCatalog()
         let expected: [(String, String)] = [
             ("Romanian Deadlift", "continuous-top-start-barbell-romanian-deadlift"),
-            ("Goblet Squat", "kettlebell-goblet-squat"),
+            ("Goblet Squat", "single-dumbbell-goblet-squat"),
             ("Vertical Smith Upper-Back Squat", "smith-machine-upper-back-squat"),
             ("Dumbbell Bulgarian Split Squat", "two-dumbbell-rear-foot-elevated-split-squat"),
             ("Dumbbell RFESS", "two-dumbbell-rear-foot-elevated-split-squat"),
@@ -211,6 +211,35 @@ struct ExerciseSearchTests {
             "single-kettlebell-romanian-deadlift",
             "neutral-grip-pull-up",
             "wide-grip-pull-up",
+        ]
+        #expect(Set(catalog.compactMap(\.catalogID)).isDisjoint(with: retiredIDs))
+    }
+
+    @Test func conciseNamesFindTheRemainingOrdinaryMovements() {
+        let catalog = bundledCatalog()
+        let expected: [(String, String)] = [
+            ("Dumbbell Curl", "standing-bilateral-supinated-dumbbell-curl"),
+            ("Farmer Carry", "two-dumbbell-farmer-carry"),
+            ("Shrug", "bilateral-dumbbell-shrug"),
+            ("Lateral Raise", "simultaneous-bilateral-dumbbell-lateral-raise"),
+            ("Forward Step-Up", "two-dumbbell-forward-step-up"),
+            ("Goblet Squat", "single-dumbbell-goblet-squat"),
+            ("Goblet Squat to Press", "two-hand-single-dumbbell-goblet-squat-to-press"),
+            ("Lat Pulldown", "cable-lat-pulldown"),
+            ("Straight-Arm Pulldown", "shoulder-width-straight-arm-cable-pulldown"),
+        ]
+
+        for (name, catalogID) in expected {
+            #expect(catalog.filter { $0.name == name }.count == 1)
+            #expect(ExerciseSearch.rank(items: catalog, query: name).first?.catalogID == catalogID)
+        }
+
+        let retiredIDs: Set<String> = [
+            "kettlebell-goblet-squat",
+            "close-grip-neutral-lat-pulldown",
+            "underhand-lat-pulldown",
+            "wide-grip-lat-pulldown",
+            "wide-grip-straight-arm-cable-pulldown",
         ]
         #expect(Set(catalog.compactMap(\.catalogID)).isDisjoint(with: retiredIDs))
     }

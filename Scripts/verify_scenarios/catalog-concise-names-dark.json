@@ -1,0 +1,81 @@
+{
+  "name": "catalog-concise-names-dark",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "lat pulldown"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Lat Pulldown,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Lat Pulldown,"
+          },
+          {
+            "labelRegex": "^Machine Lat Pulldown,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Wide-Grip Lat Pulldown,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Lat Pulldown,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Lat Pulldown"
+    },
+    {
+      "labelContains": "Muscles used by Lat Pulldown"
+    }
+  ],
+  "forbidden": []
+}

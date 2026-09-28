@@ -38,12 +38,12 @@
     },
     {
       "wait": {
-        "labelRegex": "^Single-Dumbbell Goblet Squat to Press,"
+        "labelRegex": "^Goblet Squat to Press,"
       }
     },
     {
       "tap": {
-        "labelRegex": "^Single-Dumbbell Goblet Squat to Press,"
+        "labelRegex": "^Goblet Squat to Press,"
       }
     },
     {
@@ -55,10 +55,10 @@
       "assert": {
         "required": [
           {
-            "label": "Single-Dumbbell Goblet Squat to Press"
+            "label": "Goblet Squat to Press"
           },
           {
-            "labelContains": "Muscles used by Single-Dumbbell Goblet Squat to Press"
+            "labelContains": "Muscles used by Goblet Squat to Press"
           }
         ]
       }

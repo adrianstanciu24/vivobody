@@ -1,0 +1,497 @@
+{
+  "name": "catalog-concise-names-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "dumbbell curl"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Dumbbell Curl,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Dumbbell Curl,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Standing Two-Dumbbell Supinated Curl,"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "farmer carry"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Farmer Carry,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Farmer Carry,"
+          },
+          {
+            "labelRegex": "^High-Handle Trap-Bar Farmer Carry,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Two-Dumbbell Farmer Carry,"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "shrug"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Shrug,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Shrug,"
+          },
+          {
+            "labelRegex": "^Barbell Shrug,"
+          },
+          {
+            "labelRegex": "^Single-Arm Dumbbell Shrug,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Two-Dumbbell Shrug,"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "lateral raise"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Lateral Raise,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Lateral Raise,"
+          },
+          {
+            "labelRegex": "^Single-Arm Dumbbell Lateral Raise,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Two-Dumbbell Lateral Raise,"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "forward step-up"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Forward Step-Up,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Forward Step-Up,"
+          },
+          {
+            "labelRegex": "^Bodyweight Forward Step-Up,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Two-Dumbbell Forward Step-Up,"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "goblet squat"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Goblet Squat,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Goblet Squat,"
+          },
+          {
+            "labelRegex": "^Goblet Squat to Press,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Kettlebell Goblet Squat,"
+          },
+          {
+            "labelRegex": "^Single-Dumbbell Goblet Squat,"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "lat pulldown"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Lat Pulldown,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Lat Pulldown,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Close-Grip Neutral Lat Pulldown,"
+          },
+          {
+            "labelRegex": "^Underhand Lat Pulldown,"
+          },
+          {
+            "labelRegex": "^Wide-Grip Lat Pulldown,"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "straight-arm pulldown"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Straight-Arm Pulldown,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Straight-Arm Pulldown,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Wide-Grip Straight-Arm Cable Pulldown,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Straight-Arm Pulldown,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Straight-Arm Pulldown"
+    },
+    {
+      "labelContains": "Muscles used by Straight-Arm Pulldown"
+    }
+  ],
+  "forbidden": []
+}

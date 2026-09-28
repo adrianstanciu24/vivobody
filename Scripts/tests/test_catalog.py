@@ -165,7 +165,6 @@ REQUESTED_EXERCISE_EVIDENCE_IDS = {
 
 COMPREHENSIVE_EXPANSION_RECORD_IDS = {
     "continuous-top-start-barbell-romanian-deadlift",
-    "kettlebell-goblet-squat",
     "smith-machine-upper-back-squat",
     "two-dumbbell-rear-foot-elevated-split-squat",
     "two-dumbbell-continuous-walking-lunge",
@@ -196,7 +195,6 @@ COMPREHENSIVE_EXPANSION_EVIDENCE_IDS = {
     "ace-2025-romanian-deadlift",
     "nsca-2012-basics-strength-conditioning",
     "nsca-2016-division-i-basketball-injury-screening",
-    "nasm-2026-goblet-squat",
     "collins-2021-goblet-landmine-squat",
     "lee-2017-smith-squat-human-machine",
     "cybex-2008-mg500-manual",
@@ -2199,7 +2197,6 @@ class CatalogFoundationTests(unittest.TestCase):
             "two-dumbbell-forward-step-up": "stabilizer",
             "barbell-back-squat": "stabilizer",
             "barbell-front-squat": "stabilizer",
-            "kettlebell-goblet-squat": "stabilizer",
             "single-dumbbell-goblet-squat": "stabilizer",
             "bodyweight-floor-squat-100-degrees": "stabilizer",
             "bodyweight-lateral-lunge-60-percent-height": "secondary",
@@ -2742,7 +2739,6 @@ class CatalogFoundationTests(unittest.TestCase):
             "neutral-grip-machine-reverse-fly": 15,
             "barbell-pullover": 10,
             "shoulder-width-straight-arm-cable-pulldown": 15,
-            "wide-grip-straight-arm-cable-pulldown": 15,
         }
         actual = {
             exercise["catalogID"]: exercise["defaultWeightKg"]
@@ -4620,9 +4616,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "assisted-pull-up-machine",
                 "assisted-chin-up-machine",
                 "cable-lat-pulldown",
-                "close-grip-neutral-lat-pulldown",
-                "underhand-lat-pulldown",
-                "wide-grip-lat-pulldown",
                 "single-arm-cable-lat-pulldown",
                 "machine-lat-pulldown",
                 "single-arm-machine-lat-pulldown",
@@ -4678,20 +4671,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "cable-lat-pulldown": (
                     "cable", "bilateral", "external", 0, "open", "seated",
                     "thighPad", "pronated", "medium", "free", None, (),
-                ),
-                "close-grip-neutral-lat-pulldown": (
-                    "cable", "bilateral", "external", 0, "open", "seated",
-                    "thighPad", "neutral", "narrow", "free", None,
-                    (),
-                ),
-                "underhand-lat-pulldown": (
-                    "cable", "bilateral", "external", 0, "open", "seated",
-                    "thighPad", "supinated", "shoulderWidth", "free", None,
-                    (),
-                ),
-                "wide-grip-lat-pulldown": (
-                    "cable", "bilateral", "external", 0, "open", "seated",
-                    "thighPad", "pronated", "wide", "free", None, (),
                 ),
                 "single-arm-cable-lat-pulldown": (
                     "cable", "unilateral", "external", 0, "open", "seated",
@@ -6752,7 +6731,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "roster": [
                     "barbell-pullover",
                     "shoulder-width-straight-arm-cable-pulldown",
-                    "wide-grip-straight-arm-cable-pulldown",
                 ],
             },
             "chest-fly": {
@@ -7019,7 +6997,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            330,
+            325,
         )
 
     def test_plyometric_fixtures_keep_distinct_family_boundaries(self) -> None:
@@ -7281,7 +7259,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 ]
                 with self.subTest(family=family_id, rule=rule["id"]):
                     self.assertTrue(any(matches))
-                    self.assertTrue(any(not value for value in matches))
+                    if len(family["exercises"]) > 1:
+                        self.assertTrue(any(not value for value in matches))
 
     def test_every_batch1_rule_consequence_has_a_rejecting_mutation(
         self,
@@ -11390,7 +11369,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "reps": {"minimum": 3, "maximum": 12},
                 "allowed": {
                     "equipment": [
-                        "barbell", "kettlebell", "dumbbell", "machine",
+                        "barbell", "dumbbell", "machine",
                         "bodyweight", "suspensionTrainer",
                     ],
                     "modalities": ["dynamicStrength"],
@@ -11408,7 +11387,6 @@ class CatalogFoundationTests(unittest.TestCase):
                     "purzel-2026-powerlifting-squat-joint-moments",
                     "sinclair-2022-back-squat-foot-angle",
                     "yavuz-2015-front-back-squat-emg",
-                    "nasm-2026-goblet-squat",
                     "nasm-2026-goblet-squat-exercise-library",
                     "collins-2021-goblet-landmine-squat",
                     "lee-2017-smith-squat-human-machine",
@@ -11424,7 +11402,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "roster": [
                     "barbell-back-squat",
                     "barbell-front-squat",
-                    "kettlebell-goblet-squat",
                     "single-dumbbell-goblet-squat",
                     "smith-machine-upper-back-squat",
                     "bodyweight-floor-squat-100-degrees",
@@ -11731,12 +11708,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 "loadPlacement": enum(
                     "upperBackBarbell",
                     "anteriorDeltoidClavicleBarbell",
-                    "kettlebellVerticalAtChestByHorns",
                     "dumbbellVerticalAtChestCuppingTopHead",
                     "none", "handSupportedNoExternalLoad",
                 ),
                 "gripOrientation": enum(
-                    "pronated", "cleanGrip", "hornGrip",
+                    "pronated", "cleanGrip",
                     "bothHandsCuppingTopHead", "notApplicable", "neutral",
                 ),
                 "rangeOfMotion": enum(
@@ -11754,7 +11730,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "fixedPath": ("boolean", None),
                 "implementConfiguration": enum(
                     "straightBarbell",
-                    "singleKettlebell",
                     "singleDumbbell",
                     "verticalSmithBar",
                     "none", "independentSuspensionHandles",
@@ -12030,10 +12005,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "anterior-load-uses-clean-grip",
                 "clean-grip-is-front-rack-squat",
                 "barbell-fixtures-use-free-straight-bar-accounting",
-                "goblet-fixture-pins-single-kettlebell",
                 "dumbbell-goblet-fixture-pins-single-vertical-dumbbell",
                 "smith-fixture-pins-reviewed-vertical-zero-offset-path",
-                "horn-grip-identifies-goblet-load",
                 "loaded-squats-require-implement-support-contract",
                 "parallel-or-deeper-depth-is-dumbbell-goblet-only",
                 "bodyweight-depth-is-bodyweight-only",
@@ -12212,14 +12185,13 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "mutated Batch-5 stability requirement",
                             )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 184)
+        self.assertEqual(mutation_count, 173)
 
     def test_batch5_squat_shoulder_rules_are_minima_not_exclusive(self) -> None:
         family = copy.deepcopy(self.batch5_families["bilateral-squat"])
         additions = {
             "barbell-back-squat": "deltoidAnterior",
             "barbell-front-squat": "externalRotators",
-            "kettlebell-goblet-squat": "externalRotators",
             "smith-machine-upper-back-squat": "deltoidAnterior",
         }
         for exercise in family["exercises"]:
@@ -12326,8 +12298,8 @@ class CatalogFoundationTests(unittest.TestCase):
                             f"fails muscle requirement {requirement_index}",
                         )
                     demotion_count += 1
-        self.assertEqual(removal_count, 103)
-        self.assertEqual(demotion_count, 49)
+        self.assertEqual(removal_count, 94)
+        self.assertEqual(demotion_count, 44)
 
     def test_batch5_step_up_contract_mutates_every_invariant_directly(
         self,
@@ -12575,7 +12547,7 @@ class CatalogFoundationTests(unittest.TestCase):
         expected["barbell-front-squat"] = {
             **expected["barbell-back-squat"],
         }
-        expected["kettlebell-goblet-squat"] = expected[
+        expected["single-dumbbell-goblet-squat"] = expected[
             "barbell-front-squat"
         ]
         expected["smith-machine-upper-back-squat"] = expected[
@@ -12622,7 +12594,7 @@ class CatalogFoundationTests(unittest.TestCase):
         for exercise_id in (
             "barbell-back-squat",
             "barbell-front-squat",
-            "kettlebell-goblet-squat",
+            "single-dumbbell-goblet-squat",
             "bodyweight-floor-squat-100-degrees",
             "two-dumbbell-stationary-split-squat",
             "two-dumbbell-rear-foot-elevated-split-squat",
@@ -12637,7 +12609,7 @@ class CatalogFoundationTests(unittest.TestCase):
             for region, providers in expected["barbell-back-squat"].items()
         }
         for exercise_id in (
-            "barbell-back-squat", "barbell-front-squat", "kettlebell-goblet-squat",
+            "barbell-back-squat", "barbell-front-squat", "single-dumbbell-goblet-squat",
             "bodyweight-floor-squat-100-degrees", "two-dumbbell-stationary-split-squat",
             "two-dumbbell-rear-foot-elevated-split-squat",
             "bodyweight-forward-step-up-21cm", "two-dumbbell-forward-step-up",
@@ -15761,7 +15733,7 @@ class CatalogFoundationTests(unittest.TestCase):
 
     def test_anterior_shin_roles_do_not_spread_to_machine_fixtures(self) -> None:
         expected = {
-            "barbell-back-squat", "barbell-front-squat", "kettlebell-goblet-squat",
+            "barbell-back-squat", "barbell-front-squat",
             "single-dumbbell-goblet-squat", "bodyweight-floor-squat-100-degrees",
             "two-dumbbell-stationary-split-squat",
             "two-dumbbell-rear-foot-elevated-split-squat",
@@ -16889,7 +16861,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 380)
+        self.assertEqual(len(source_by_id), 379)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -17047,7 +17019,7 @@ class CatalogFoundationTests(unittest.TestCase):
             10,
         )
         self.assertEqual(len(self.real_families), 166)
-        self.assertEqual(len(self.foundation.evidence_ids), 380)
+        self.assertEqual(len(self.foundation.evidence_ids), 379)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -17433,10 +17405,11 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "two-dumbbell-farmer-carry": {
                 "family": "farmer-carry",
-                "name": "Two-Dumbbell Farmer Carry",
+                "name": "Farmer Carry",
                 "aliases": [
                     "Bilateral Dumbbell Farmer Carry",
                     "Two-Dumbbell Farmer Walk",
+                    "Two-Dumbbell Farmer Carry",
                 ],
                 "domain": ("dumbbell", "bilateral", "isometricStrength", "duration", "external"),
                 "seed": (60, 27.5, 1, 40, 90),
@@ -18484,7 +18457,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("| [farmer-carry](families/farmer-carry.json) | 2 |", self.catalog_inventory)
         self.assertIn("| [suitcase-carry](families/suitcase-carry.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 330 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 325 |", self.catalog_inventory)
         self.assertIn("[generated inventory](../inventory.md)", families_readme)
         self.assertIn("Batch 7 initially added nine exercises", families_readme)
         self.assertIn(
@@ -19627,8 +19600,8 @@ class CatalogFoundationTests(unittest.TestCase):
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
         self.assertEqual(len(self.real_families), 166)
-        self.assertEqual(len(records), 330)
-        self.assertEqual(len(self.foundation.evidence_ids), 380)
+        self.assertEqual(len(records), 325)
+        self.assertEqual(len(self.foundation.evidence_ids), 379)
         self.assertEqual(
             {
                 key: upright[key]
@@ -19978,7 +19951,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_roadmap = " ".join(roadmap.split())
         self.assertIn("No original catalog-roadmap work item remains unresolved", normalized_roadmap)
         self.assertIn("| [finger-flexion-grip](families/finger-flexion-grip.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 330 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 325 |", self.catalog_inventory)
         self.assertIn("Static support stays inside carries", normalized_roadmap)
         self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
         self.assertIn("pinch is unavailable", normalized_roadmap)
@@ -22815,7 +22788,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("`diagonal-pull` is active as", roadmap)
         self.assertIn("| [diagonal-pull](families/diagonal-pull.json) | 1 |", self.catalog_inventory)
-        self.assertIn("| Exercises | 330 |", self.catalog_inventory)
+        self.assertIn("| Exercises | 325 |", self.catalog_inventory)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
         self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
@@ -22824,7 +22797,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 330)
+        self.assertEqual(len(records), 325)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
@@ -23272,7 +23245,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 330)
+            self.assertEqual(len(emitted), 325)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -23292,11 +23265,10 @@ class CatalogFoundationTests(unittest.TestCase):
             if exercise["catalogID"] in COMPREHENSIVE_EXPANSION_RECORD_IDS
         }
         self.assertEqual(set(exercises), COMPREHENSIVE_EXPANSION_RECORD_IDS)
-        self.assertEqual(len(exercises), 19)
+        self.assertEqual(len(exercises), 18)
 
         expected_ownership = {
             "continuous-top-start-barbell-romanian-deadlift": "romanian-deadlift",
-            "kettlebell-goblet-squat": "bilateral-squat",
             "smith-machine-upper-back-squat": "bilateral-squat",
             "two-dumbbell-rear-foot-elevated-split-squat": "split-stance-squat",
             "two-dumbbell-continuous-walking-lunge": "walking-lunge",
@@ -23377,7 +23349,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "totalBarAndPlates",
         )
         self.assertEqual(
-            exercises["kettlebell-goblet-squat"]["variant"]["loadAccounting"],
+            exercises["single-dumbbell-goblet-squat"]["variant"]["loadAccounting"],
             "totalSingleImplement",
         )
 
@@ -23515,8 +23487,11 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertIn("RDL", continuous["aliases"])
         self.assertNotIn("barbell-romanian-deadlift", exercises)
 
-        goblet = exercises["kettlebell-goblet-squat"]
+        goblet = exercises["single-dumbbell-goblet-squat"]
         rollout = exercises["kneeling-ab-wheel-rollout"]
+        self.assertEqual(goblet["name"], "Goblet Squat")
+        self.assertIn("Single-Dumbbell Goblet Squat", goblet["aliases"])
+        self.assertNotIn("kettlebell-goblet-squat", exercises)
         self.assertNotIn("Goblet Squat", goblet["aliases"])
         self.assertNotIn("Ab Wheel Rollout", rollout["aliases"])
 
@@ -23531,7 +23506,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_ids), 380)
+        self.assertEqual(len(source_ids), 379)
         self.assertTrue(COMPREHENSIVE_EXPANSION_EVIDENCE_IDS <= source_ids)
 
     def test_must_have_expansion_is_source_exact_and_runtime_visible(self) -> None:
@@ -23926,8 +23901,8 @@ class CatalogFoundationTests(unittest.TestCase):
         runtime = catalog.compile_runtime_catalog(self.real_families)
         runtime_by_id = {record["catalogID"]: record for record in runtime}
         self.assertEqual(len(self.real_families), 166)
-        self.assertEqual(len(runtime), 330)
-        self.assertEqual(len(self.foundation.evidence_ids), 380)
+        self.assertEqual(len(runtime), 325)
+        self.assertEqual(len(self.foundation.evidence_ids), 379)
         self.assertTrue(DEFAULT_CATALOG_GAP_RECORD_IDS <= runtime_by_id.keys())
         self.assertTrue(
             DEFAULT_CATALOG_GAP_EVIDENCE_IDS <= self.foundation.evidence_ids
@@ -24484,7 +24459,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertEqual(set(records), DEFAULT_CANDIDATE_FOLLOW_UP_RECORD_IDS)
         expected = {
             "single-dumbbell-goblet-squat": (
-                "bilateral-squat", "Single-Dumbbell Goblet Squat",
+                "bilateral-squat", "Goblet Squat",
                 "dumbbell", "reps", "external", 20, 10, 10, None, 96,
                 "totalSingleImplement",
             ),
@@ -24499,7 +24474,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "perImplement",
             ),
             "bilateral-dumbbell-shrug": (
-                "scapular-elevation", "Two-Dumbbell Shrug",
+                "scapular-elevation", "Shrug",
                 "dumbbell", "reps", "external", 20, 10, 10, None, 96,
                 "perImplement",
             ),
@@ -24527,10 +24502,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 self.assertEqual(actual, wanted)
 
         expected_record_digests = {
-            "single-dumbbell-goblet-squat": "c53012eb99ff4671ad0d6606df088f6aeda8ef8b194535f1430942f0174246e6",
+            "single-dumbbell-goblet-squat": "f0bdabeebbef1a2681154a1ea6d55c11e02bb1cef3bfcca43ec27b03e9dea612",
             "two-dumbbell-stationary-split-squat": '235e297a88c1570302104f0dbad9f95e838a9630be4a89b91d03d5d3cbc961fe',
             "two-dumbbell-reverse-lunge": "6c575728536b745fb228ec7f977f3bf7df144783b71b127c1a61dd8d6dc653cd",
-            "bilateral-dumbbell-shrug": "de21824d67269a9db081ad15f23ccfcb29c7a269bc45a9800ba591083e52556b",
+            "bilateral-dumbbell-shrug": "b47b173bc820ad68265da5dfb2d72a6bee5ce5fa75d4ddf54f7ab9df28adfd01",
             "scapular-pull-up": "5fca3d5c1bb8c831757adfdbe59e4049090886f58b06f7331ad3589d0a2876ff",
             "high-handle-trap-bar-farmer-carry": "17193b3ba873b923ba0fbf00fdd3ad9c12424215206d49850ab1d31da1ffb6c3",
         }

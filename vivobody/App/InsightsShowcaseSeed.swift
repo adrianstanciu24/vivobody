@@ -69,7 +69,7 @@ import SwiftData
                         ("Barbell Bench Press", 4, reps, 135 + recentProgress),
                         ("Barbell Bent-Over Row", 2, reps, 115 + recentProgress),
                         ("Seated Dumbbell Overhead Press", 3, reps, 70 + recentProgress),
-                        ("Wide-Grip Lat Pulldown", 2, reps, 110 + recentProgress),
+                        ("Lat Pulldown", 2, reps, 110 + recentProgress),
                     ],
                     recordsEnteredLoad: recordsEnteredLoad,
                     calendar: calendar,

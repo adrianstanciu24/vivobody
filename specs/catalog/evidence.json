@@ -3479,17 +3479,6 @@
       "scope": "NSCA Coach defines a dumbbell Bulgarian split squat with the rear foot on a bench, the lead foot stepped forward, a dumbbell held at each side, controlled lowering until the lead thigh is parallel, and a heel-driven return. It establishes the two-dumbbell rear-foot-elevated fixture but does not report bench height or quantify load distribution."
     },
     {
-      "id": "nasm-2026-goblet-squat",
-      "sourceType": "officialTechnicalStandard",
-      "title": "The Goblet Squat: A Trainer's Coaching and Programming Guide",
-      "authors": [
-        "Kinsey Mahaffey"
-      ],
-      "year": 2026,
-      "url": "https://www.nasm.org/resource-center/blog/training/how-to-perform-goblet-squats",
-      "scope": "NASM's coaching guide permits a kettlebell held by the horns or ball or a vertical dumbbell held against the chest, with a hip-to-shoulder-width stance and controlled self-limited depth. It anchors the existing kettlebell horn-grip goblet interface and general standing return. It does not establish the exercise-library page's exact top-head dumbbell grip, hip-width stance, approximately parallel endpoint, a universal load, or categorical muscle ranking."
-    },
-    {
       "id": "collins-2021-goblet-landmine-squat",
       "sourceType": "experimentalKineticsEMGStudy",
       "title": "Differences in Muscle Activity and Kinetics Between the Goblet Squat and Landmine Squat in Men and Women",
