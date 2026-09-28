@@ -1,0 +1,42 @@
+{
+  "name": "catalog-lunge-curation-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--static-body", "-settings.appearance", "light"]
+  },
+  "steps": [
+    {"wait": {"label": "Exercises", "value": "Selected"}},
+    {"tap": {"label": "Search"}},
+    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
+    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
+    {"typeText": "lunge"},
+    {"wait": {"labelRegex": "^Forward Lunge,"}},
+    {
+      "assert": {
+        "required": [
+          {"labelRegex": "^Forward Lunge,"},
+          {"labelRegex": "^Reverse Lunge,"},
+          {"labelRegex": "^Lateral Lunge,"},
+          {"labelRegex": "^Walking Lunge,"},
+          {"labelRegex": "^Landmine Reverse Lunge to Knee Raise,"}
+        ],
+        "forbidden": [
+          {"labelRegex": "^Bodyweight Forward Lunge,"},
+          {"labelRegex": "^Bodyweight Reverse Lunge,"},
+          {"labelRegex": "^TRX Reverse Lunge,"},
+          {"labelRegex": "^TRX Lateral Lunge,"},
+          {"labelRegex": "^Goblet Reverse Lunge,"},
+          {"labelRegex": "^Foot-Anchored Band Reverse Lunge,"}
+        ]
+      }
+    },
+    {"tap": {"labelRegex": "^Forward Lunge,"}},
+    {"wait": {"label": "STRENGTH · REPS"}}
+  ],
+  "required": [
+    {"label": "Forward Lunge"},
+    {"labelContains": "Muscles used by Forward Lunge"}
+  ],
+  "forbidden": []
+}

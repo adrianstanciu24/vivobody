@@ -13,11 +13,11 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | Measure | Count |
 |---|---:|
 | Reviewed families | 166 |
-| Exercises | 350 |
+| Exercises | 344 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 383 |
+| Evidence sources | 382 |
 
 ## Family roster
 
@@ -49,7 +49,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [diagonal-pull](families/diagonal-pull.json) | 1 |
 | [dip](families/dip.json) | 3 |
 | [dumbbell-weighted-supine-core-hold](families/dumbbell-weighted-supine-core-hold.json) | 1 |
-| [dynamic-lunge](families/dynamic-lunge.json) | 7 |
+| [dynamic-lunge](families/dynamic-lunge.json) | 2 |
 | [elbow-extension](families/elbow-extension.json) | 14 |
 | [elbow-flexion](families/elbow-flexion.json) | 14 |
 | [externally-rotating-face-pull](families/externally-rotating-face-pull.json) | 1 |
@@ -97,7 +97,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [landmine-squat](families/landmine-squat.json) | 1 |
 | [lateral-band-walk](families/lateral-band-walk.json) | 2 |
 | [lateral-high-plank-walk](families/lateral-high-plank-walk.json) | 1 |
-| [lateral-lunge](families/lateral-lunge.json) | 2 |
+| [lateral-lunge](families/lateral-lunge.json) | 1 |
 | [lateral-skater-hop-to-vertical-jump](families/lateral-skater-hop-to-vertical-jump.json) | 1 |
 | [lateral-skater-hop](families/lateral-skater-hop.json) | 1 |
 | [machine-hack-squat](families/machine-hack-squat.json) | 1 |

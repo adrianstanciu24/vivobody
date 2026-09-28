@@ -29,8 +29,7 @@ SECOND_WAVE_RECORD_IDS = {
 }
 
 TRX_SUSPENSION_RECORD_IDS = {
-    "trx-squat", "trx-single-leg-squat", "trx-reverse-lunge",
-    "trx-lateral-lunge", "trx-hamstring-curl", "trx-hip-press",
+    "trx-squat", "trx-single-leg-squat", "trx-hamstring-curl", "trx-hip-press",
     "trx-low-row", "trx-high-row", "trx-reverse-fly",
     "trx-biceps-curl", "trx-chest-press", "trx-suspended-push-up",
     "trx-triceps-press", "trx-y-fly", "trx-suspended-plank",
@@ -158,7 +157,6 @@ class RequestedCatalogGapTests(unittest.TestCase):
                        | PLYOMETRIC_RECORD_IDS
                        | {
                            "goblet-split-squat",
-                           "goblet-reverse-lunge",
                            "landmine-reverse-lunge-to-knee-raise",
                            "landmine-single-leg-romanian-deadlift",
                            "kettlebell-single-leg-romanian-deadlift",
@@ -166,7 +164,6 @@ class RequestedCatalogGapTests(unittest.TestCase):
                            "two-hand-single-dumbbell-goblet-squat-to-press",
                            "two-hand-landmine-squat",
                            "alternating-landmine-squat-to-press",
-                           "foot-anchored-band-reverse-lunge",
                            "quadruped-band-hip-extension",
                            "quadruped-fire-hydrants-with-band",
                            "single-kettlebell-romanian-deadlift",
@@ -176,13 +173,13 @@ class RequestedCatalogGapTests(unittest.TestCase):
                            "partner-resisted-straight-punch-hold",
                        }
                    )]
-        self.assertEqual(len(records), 258)
+        self.assertEqual(len(records), 256)
         encoded = json.dumps(records, sort_keys=True, separators=(",", ":")).encode()
         # Reviewed runtime after copy updates and retirement of the distinct
-        # 25%-body-mass good-morning fixture. New batch records are excluded
-        # above; source-only support metadata may change independently.
+        # 25%-body-mass good morning and six redundant lunge variants. New
+        # batch records are excluded above; source-only metadata may change.
         self.assertEqual(hashlib.sha256(encoded).hexdigest(),
-                         "b7a36d64d8c5e998fb600782456a09a8217acc9ee93a2f34d888ada1e05fe5d6")
+                         "e5570281df33744cd70a5254e03b0333ddb760fbddbba84fe99ee1611cc1fdbe")
 
     def test_unloaded_splits_do_not_credit_an_implement_hold(self):
         for catalog_id in ("bodyweight-split-squat", "bodyweight-bulgarian-split-squat"):

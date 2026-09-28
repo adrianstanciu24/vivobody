@@ -514,10 +514,10 @@ struct MuscleDevelopmentTests {
         #expect((hingeNodes["Biceps_femoris_L"] ?? 0) > 0)
         #expect(hingeNodes["Quadratus_Lumborum_L"] == nil)
 
-        for name in ["Bodyweight Forward Lunge", "Bodyweight Reverse Lunge"] {
+        for name in ["Forward Lunge", "Reverse Lunge"] {
             let lunge = session(
                 at: day(0),
-                [lift(name, .legs, sets: 4, reps: 5, weight: 0)]
+                [lift(name, .legs, sets: 4, reps: 5, weight: 20)]
             )
             let state = MuscleDevelopment.simulate(from: [lunge], now: day(0))
             let nodes = MuscleDevelopment.nodeIntensities(from: [lunge], now: day(0))

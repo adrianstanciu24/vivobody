@@ -40,7 +40,7 @@
   "exerciseRules": [],
   "recommended": {"defaultReps": {"minimum": 6, "maximum": 20}},
   "exercises": [{
-    "catalogID": "two-dumbbell-continuous-walking-lunge", "name": "Two-Dumbbell Walking Lunge", "aliases": ["Two-Dumbbell Continuous Walking Lunge", "Dumbbell Walking Lunge"],
+    "catalogID": "two-dumbbell-continuous-walking-lunge", "name": "Walking Lunge", "aliases": ["Two-Dumbbell Walking Lunge", "Two-Dumbbell Continuous Walking Lunge", "Dumbbell Walking Lunge"],
     "equipment": "dumbbell", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0,
     "defaultWeight": 15, "defaultWeightKg": 7.5, "reps": 10, "searchPriority": 95,
     "involvement": [{"muscle": "vasti", "role": "primary"}, {"muscle": "gluteMax", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"}, {"muscle": "gastrocnemius", "role": "secondary"}, {"muscle": "soleus", "role": "secondary"}, {"muscle": "medialHamstrings", "role": "stabilizer"}, {"muscle": "bicepsFemoris", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "trapeziusUpper", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}, {"muscle": "tensorFasciaeLatae", "role": "stabilizer"}],

@@ -3,8 +3,8 @@
 #  test_catalog_single_leg_six.py
 #  vivobody
 #
-#  Exact roster, load, and negative-boundary checks for the six Boxing Science
-#  single-leg catalog fixtures.
+#  Exact roster, load, and negative-boundary checks for the retained Boxing
+#  Science single-leg catalog fixtures.
 #
 
 from __future__ import annotations
@@ -30,7 +30,6 @@ class SingleLegSixCatalogTests(unittest.TestCase):
             )
             for family_id in (
                 "split-stance-squat",
-                "dynamic-lunge",
                 "landmine-reverse-lunge-knee-drive",
                 "single-leg-deadlift",
                 "banded-single-leg-hip-thrust",
@@ -48,8 +47,6 @@ class SingleLegSixCatalogTests(unittest.TestCase):
         expected = {
             ("split-stance-squat", "goblet-split-squat"):
                 ("Goblet Split Squat", "dumbbell", "external", 25),
-            ("dynamic-lunge", "goblet-reverse-lunge"):
-                ("Goblet Reverse Lunge", "dumbbell", "external", 25),
             ("landmine-reverse-lunge-knee-drive", "landmine-reverse-lunge-to-knee-raise"):
                 ("Landmine Reverse Lunge to Knee Raise", "barbell", "external", 0),
             ("single-leg-deadlift", "landmine-single-leg-romanian-deadlift"):
@@ -83,11 +80,6 @@ class SingleLegSixCatalogTests(unittest.TestCase):
             ("split-stance-squat", "goblet-split-squat"): {
                 "implementConfiguration": "singleDumbbellGoblet",
                 "rangeOfMotion": "leadKneeApproximatelyNinetyDegrees",
-                "loadAccounting": "wholeImplement",
-            },
-            ("dynamic-lunge", "goblet-reverse-lunge"): {
-                "implementConfiguration": "singleDumbbellGoblet",
-                "returnTopology": "returnToBilateralStart",
                 "loadAccounting": "wholeImplement",
             },
             ("landmine-reverse-lunge-knee-drive", "landmine-reverse-lunge-to-knee-raise"): {
@@ -125,8 +117,6 @@ class SingleLegSixCatalogTests(unittest.TestCase):
         cases = (
             ("split-stance-squat", "goblet-split-squat", "variant.loadAccounting", "perImplement"),
             ("split-stance-squat", "goblet-split-squat", "variant.fixedPath", True),
-            ("dynamic-lunge", "goblet-reverse-lunge", "variant.fixedPath", True),
-            ("dynamic-lunge", "goblet-reverse-lunge", "variant.implementConfiguration", "pairedDumbbells"),
             ("landmine-reverse-lunge-knee-drive", "landmine-reverse-lunge-to-knee-raise", "variant.fixedPath", False),
             ("landmine-reverse-lunge-knee-drive", "landmine-reverse-lunge-to-knee-raise", "variant.returnTopology", "returnToBilateralStart"),
             ("single-leg-deadlift", "landmine-single-leg-romanian-deadlift", "variant.fixedPath", False),

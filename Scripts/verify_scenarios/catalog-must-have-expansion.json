@@ -33,7 +33,7 @@
     },
     {
       "tap": {
-        "labelRegex": "^Two-Dumbbell Forward Lunge,"
+        "labelRegex": "^Forward Lunge,"
       }
     },
     {
@@ -44,13 +44,13 @@
   ],
   "required": [
     {
-      "label": "Two-Dumbbell Forward Lunge"
+      "label": "Forward Lunge"
     },
     {
       "label": "STRENGTH · REPS"
     },
     {
-      "labelContains": "Muscles used by Two-Dumbbell Forward Lunge"
+      "labelContains": "Muscles used by Forward Lunge"
     }
   ],
   "forbidden": []

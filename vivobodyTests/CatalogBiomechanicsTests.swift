@@ -268,7 +268,7 @@ struct CatalogBiomechanicsTests {
             ),
             (
                 "bodyweight-lateral-lunge-60-percent-height",
-                "Bodyweight Lateral Lunge",
+                "Lateral Lunge",
                 "lateral-lunge", .bodyweight, .dynamicStrength, .nonComparable
             ),
             (
@@ -984,13 +984,13 @@ struct CatalogBiomechanicsTests {
         #expect(everydayGoodMorning.muscleInvolvement.role(for: .lumbarExtensors) == .primary)
         #expect(everydayGoodMorning.muscleInvolvement.role(for: .bicepsFemoris) == .stabilizer)
 
-        for name in ["Bodyweight Forward Lunge", "Bodyweight Reverse Lunge"] {
+        for name in ["Forward Lunge", "Reverse Lunge"] {
             let lunge = try #require(CatalogData.record(forExerciseNamed: name))
             #expect(lunge.familyID == "dynamic-lunge")
             #expect(lunge.mechanic == .compound)
             #expect(lunge.pattern == .lunge)
             #expect(lunge.planes == [.sagittal])
-            #expect(lunge.loadMode == .nonComparable)
+            #expect(lunge.loadMode == .external)
             #expect(lunge.laterality == .unilateral)
             #expect(lunge.muscleInvolvement.role(for: .vasti) == .primary)
             #expect(lunge.muscleInvolvement.role(for: .gluteMax) == .primary)

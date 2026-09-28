@@ -176,7 +176,7 @@ import VivoKit
                 plannedReps = 15
                 seedsStaleLoad = false
             case .noLoad:
-                name = "Bodyweight Forward Lunge"
+                name = "Lateral Lunge"
                 plannedReps = 12
                 seedsStaleLoad = true
             case .abWheel:

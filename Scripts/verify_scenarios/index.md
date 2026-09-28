@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 193.
+Scenario files: 194.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -61,6 +61,7 @@ Scenario files: 193.
 | [catalog-landmine-squat-light](catalog-landmine-squat-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-landmine-squat-to-press-accessibility-dark](catalog-landmine-squat-to-press-accessibility-dark.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-lateral-plank-walk-light](catalog-lateral-plank-walk-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-lunge-curation-light](catalog-lunge-curation-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-machine-expansion](catalog-machine-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-first-wave-assisted-dip](catalog-machine-first-wave-assisted-dip.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-machine-first-wave-pec-fly-accessibility](catalog-machine-first-wave-pec-fly-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |

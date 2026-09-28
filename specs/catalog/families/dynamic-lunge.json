@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "dynamic-lunge",
   "name": "Dynamic Lunge",
-  "definition": "A unilateral-emphasis compound repetition that begins in upright bilateral standing, steps into an asymmetric sagittal lunge, and returns to the same bilateral start. The roster owns Comfort et al.'s exact bodyweight forward and reverse fixtures, Riemann et al.'s externally loaded forward fixture, Gao et al.'s paired-dumbbell reverse fixture, and TRX's alternating handle-supported Step Back Lunge. The Riemann and Gao paired-dumbbell records use source-specific 70%-leg-length steps and side-held equal implements but preserve different depth, cadence, and foot-contact contracts. Those records log one dumbbell rather than the pair total; the Boxing Science chest-held goblet record logs the whole single dumbbell and has no numeric step or depth prescription. No study load becomes a universal prescription. The studies measure lower-limb mechanics and selected muscle activity without establishing a universal cross-muscle ranking, so every record retains a conservative regional role envelope. Stationary split squats, walking lunges, lateral or crossover paths, jumps, and continuous locomotion remain outside this contract; alternating sides belongs only to the exact suspension fixture. Tibialis anterior receives ankle/foot stabilizer credit across these discrete forward/reverse step-and-return fixtures. Gao directly recorded it in the paired-dumbbell reverse fixture; transfer to the bodyweight and suspension fixtures is a categorical anatomy-and-mechanics inference, supported by Wu's measured participation during loaded and unloaded lunges. Wu's accessible protocol does not establish exact step direction or geometry, so the fixture sources continue to own those details. This control role is not a prime-action, muscle-force, or hypertrophy ranking and does not extend to walking or lateral lunges. TFL receives stabilizer credit for loaded hip and pelvic alignment during stepping and stance. Bouillon and Selkowitz measured TFL in bodyweight forward-lunge protocols. Transfer to the exact forward/reverse, suspension, and loaded fixtures is categorical anatomy and mechanics; stride, depth, cadence, support transitions and load differ. No TFL hip-extension role, dynamic hip-flexion prime action, equal recruitment or measured adaptation is inferred. The Boxing Science goblet branch holds one dumbbell at the chest, steps the opposite foot rearward, descends to a split position, and returns to bilateral standing; no numeric step or depth is prescribed. The Boxing Science band fixture anchors a mini band around the standing foot and pins it with the opposite-side hand near the opposite hip; it uses a self-selected reverse step and non-comparable elastic resistance. Its band path is distinct from handle assistance and side-held free weights.",
+  "definition": "A unilateral-emphasis compound repetition that begins in upright bilateral standing, steps into an asymmetric sagittal lunge, and returns to the same bilateral start. The active roster owns Riemann et al.'s externally loaded forward fixture and Gao et al.'s paired-dumbbell reverse fixture. Both hold one equal dumbbell at each side and log one dumbbell rather than the pair total; their step, depth, cadence, and foot-contact instructions remain source-specific. No study load becomes a universal prescription. Lower-limb mechanics and selected muscle-activity evidence support conservative regional roles without a universal cross-muscle ranking. Tibialis anterior receives ankle and foot stabilizer credit in both discrete step-and-return fixtures; Gao measured its activity in the reverse fixture, while transfer to the forward fixture is a categorical anatomy-and-mechanics inference. TFL receives stabilizer credit for hip and pelvic alignment during stepping and stance. Bouillon and Selkowitz measured TFL in related bodyweight forward-lunge protocols; transfer to the active loaded fixtures is an explicit anatomy-and-mechanics inference, not a measured ranking or adaptation. Stationary split squats, walking lunges, lateral or crossover paths, jumps, and continuous locomotion remain outside this contract.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "comfort-2015-forward-reverse-lunge-kinetics",
@@ -11,10 +11,7 @@
     "gao-2025-dumbbell-reverse-lunge",
     "wu-2020-loading-devices-squat-lunge",
     "bouillon-2012-unilateral-weight-bearing-emg",
-    "selkowitz-2013-gluteal-tfl-fine-wire-emg",
-    "usmc-2026-trx-strength-library",
-    "trx-2022-step-back-lunge",
-    "boxing-science-exercise-library"
+    "selkowitz-2013-gluteal-tfl-fine-wire-emg"
   ],
   "fixed": {
     "mechanic": "compound",
@@ -33,10 +30,7 @@
   },
   "allowed": {
     "equipment": [
-      "bodyweight",
-      "dumbbell",
-      "suspensionTrainer",
-      "band"
+      "dumbbell"
     ],
     "modalities": [
       "dynamicStrength"
@@ -45,7 +39,6 @@
       "reps"
     ],
     "loadModes": [
-      "nonComparable",
       "external"
     ],
     "lateralities": [
@@ -245,8 +238,7 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "none",
-        "suspensionHandlesBalanceAssistance"
+        "none"
       ],
       "description": "Whether an external surface supports the torso."
     },
@@ -264,13 +256,9 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "crossed",
-        "armsAtSidesHoldingPairedImplements",
-        "bothHandsHoldingSuspensionHandles",
-        "bothHandsGobletAtChest",
-        "oppositeHandPinsBandAtOppositeHip"
+        "armsAtSidesHoldingPairedImplements"
       ],
-      "description": "Arms crossed, paired implements at the sides, one goblet dumbbell held at the chest, or both suspension handles held."
+      "description": "One paired dumbbell hangs at each side with the arms held down."
     },
     {
       "id": "startSupport",
@@ -326,12 +314,8 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "stepsThenWholeFootMaintained",
-        "maintainedOnStartPlate",
         "maintainedWithHeelGrounded",
-        "sourceUnreportedAfterForwardStep",
-        "maintainedWholeFoot",
-        "maintainedBandAroundFoot"
+        "sourceUnreportedAfterForwardStep"
       ],
       "description": "The selected lead foot either lands fully and remains in contact, stays planted on Comfort's first plate, stays planted with the heel grounded in Gao's reverse fixture, or preserves Riemann's unreported post-step contact detail."
     },
@@ -349,12 +333,8 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "fullSelfSelectedDepth",
         "maximumComfortableDepth",
-        "rearKneeApproachesFloorWithoutContact",
-        "controlledSelfSelectedDepth",
-        "splitPositionSourceUnquantified",
-        "selfSelectedBandReverseDepth"
+        "rearKneeApproachesFloorWithoutContact"
       ],
       "description": "The source endpoint is full self-selected depth, maximum comfortable depth, or Gao's rear knee approaching the floor without contact."
     },
@@ -426,38 +406,17 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "none",
-        "pairedAtSides",
-        "singleDumbbellGobletChest",
-        "bandFromStandingFootToOppositeHip"
+        "pairedAtSides"
       ],
       "description": "No external load, a matched pair at the sides, or one dumbbell held at the chest."
-    },
-    {
-      "id": "eccentricSeconds",
-      "valueType": "number",
-      "required": false,
-      "minimum": 3,
-      "maximum": 3,
-      "description": "The standardized source cadence from foot contact to maximum lead-knee flexion."
-    },
-    {
-      "id": "concentricSeconds",
-      "valueType": "number",
-      "required": false,
-      "minimum": 2,
-      "maximum": 2,
-      "description": "The standardized source cadence from maximum lead-knee flexion to stepping-foot lift-off."
     },
     {
       "id": "stepLengthCriterion",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "sourceUnreported",
         "seventyPercentSelectedLeadLegLength",
-        "seventyPercentAsisToMedialTibialCondyleLength",
-        "selfSelected"
+        "seventyPercentAsisToMedialTibialCondyleLength"
       ],
       "description": "Step length is unreported, Riemann's 70% selected-lead-leg measure, or Gao's distinct 70% anterior-superior-iliac-spine to medial-tibial-condyle measure."
     },
@@ -466,39 +425,28 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "notApplicable",
-        "neutral",
-        "cuppedDumbbellHead",
-        "bandPinnedInHand"
+        "neutral"
       ],
-      "description": "Neutral side-held pair or suspension handles, cupped goblet dumbbell head, or not applicable."
+      "description": "A neutral grip on both side-held dumbbells."
     },
     {
       "id": "implementConfiguration",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "none",
         "pairedDumbbellLikeImplements",
-        "pairedDumbbells",
-        "independentSuspensionHandles",
-        "singleDumbbellGoblet",
-        "singleFootAnchoredMiniBand"
+        "pairedDumbbells"
       ],
-      "description": "No implement, paired dumbbells, one goblet dumbbell, or independent suspension handles."
+      "description": "The source-specific paired-dumbbell arrangement."
     },
     {
       "id": "loadAccounting",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "notApplicable",
-        "perImplement",
-        "variableBodyAngleUntracked",
-        "wholeImplement",
-        "variableBandTensionUntracked"
+        "perImplement"
       ],
-      "description": "No recorded load, one weight per paired dumbbell, whole single goblet dumbbell, or variable suspension assistance."
+      "description": "Log one dumbbell's weight rather than the combined pair."
     },
     {
       "id": "externalLoadPrescription",
@@ -521,21 +469,10 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "threeSecondEccentricTwoSecondConcentric",
         "loweringAttemptedWithinTwoSecondsConcentricUnreported",
-        "participantAverageRecordedNoUniversalSeconds",
-        "controlledSourceUnreported"
+        "participantAverageRecordedNoUniversalSeconds"
       ],
       "description": "The exact study timing: Comfort standardized both phases; Riemann limited the lowering attempt to two seconds; Gao recorded each participant's average trial duration without publishing a universal phase duration."
-    },
-    {
-      "id": "sideSequence",
-      "valueType": "enum",
-      "required": false,
-      "allowedValues": [
-        "alternatingEachRep"
-      ],
-      "description": "The official suspension fixture alternates sides after each return to bilateral standing."
     },
     {
       "id": "lowerBodyContribution",
@@ -578,7 +515,6 @@
         {
           "field": "variant.selectedLeadFootContact",
           "allowedValues": [
-            "stepsThenWholeFootMaintained",
             "sourceUnreportedAfterForwardStep"
           ]
         }
@@ -610,10 +546,7 @@
         {
           "field": "variant.selectedLeadFootContact",
           "allowedValues": [
-            "maintainedOnStartPlate",
-            "maintainedWithHeelGrounded",
-            "maintainedWholeFoot",
-            "maintainedBandAroundFoot"
+            "maintainedWithHeelGrounded"
           ]
         }
       ],
@@ -690,10 +623,7 @@
         "variant.externalLoadPrescription",
         "variant.fixedPath"
       ],
-      "requireAbsent": [
-        "variant.eccentricSeconds",
-        "variant.concentricSeconds"
-      ],
+      "requireAbsent": [],
       "requireInvolvement": [
         {
           "muscle": "fingerFlexors",
@@ -782,10 +712,7 @@
         "variant.externalLoadPrescription",
         "variant.fixedPath"
       ],
-      "requireAbsent": [
-        "variant.eccentricSeconds",
-        "variant.concentricSeconds"
-      ],
+      "requireAbsent": [],
       "requireInvolvement": [
         {
           "muscle": "fingerFlexors",
@@ -803,194 +730,6 @@
         "wrist",
         "hand"
       ]
-    },
-    {
-      "id": "no-implement-pins-bodyweight-fixture",
-      "description": "The no-implement branch remains the bodyweight Comfort fixture with its exact cadence and no external-load fields.",
-      "when": {
-        "field": "variant.implementConfiguration",
-        "operator": "equals",
-        "value": "none"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "bodyweight"
-        },
-        {
-          "field": "loadMode",
-          "value": "nonComparable"
-        },
-        {
-          "field": "variant.upperLimbPosition",
-          "value": "crossed"
-        },
-        {
-          "field": "variant.loadPlacement",
-          "value": "none"
-        },
-        {
-          "field": "variant.stepLengthCriterion",
-          "value": "sourceUnreported"
-        },
-        {
-          "field": "variant.gripOrientation",
-          "value": "notApplicable"
-        },
-        {
-          "field": "variant.loadAccounting",
-          "value": "notApplicable"
-        },
-        {
-          "field": "variant.cadenceProtocol",
-          "value": "threeSecondEccentricTwoSecondConcentric"
-        }
-      ],
-      "requirePresent": [
-        "variant.eccentricSeconds",
-        "variant.concentricSeconds"
-      ],
-      "requireAbsent": [
-        "variant.externalLoadPrescription",
-        "variant.fixedPath"
-      ]
-    },
-    {
-      "id": "suspension-reverse-lunge-fixture",
-      "description": "The suspension branch is the handle-supported step-back lunge facing the anchor, with a planted selected lead foot and no invented resistance value.",
-      "when": {
-        "field": "variant.implementConfiguration",
-        "operator": "equals",
-        "value": "independentSuspensionHandles"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "suspensionTrainer"
-        },
-        {
-          "field": "laterality",
-          "value": "unilateral"
-        },
-        {
-          "field": "loadMode",
-          "value": "nonComparable"
-        },
-        {
-          "field": "variant.torsoSupport",
-          "value": "suspensionHandlesBalanceAssistance"
-        },
-        {
-          "field": "variant.upperLimbPosition",
-          "value": "bothHandsHoldingSuspensionHandles"
-        },
-        {
-          "field": "variant.stepDirection",
-          "value": "contralateralRearward"
-        },
-        {
-          "field": "variant.selectedLeadFootContact",
-          "value": "maintainedWholeFoot"
-        },
-        {
-          "field": "variant.depthCriterion",
-          "value": "controlledSelfSelectedDepth"
-        },
-        {
-          "field": "variant.loadPlacement",
-          "value": "none"
-        },
-        {
-          "field": "variant.stepLengthCriterion",
-          "value": "selfSelected"
-        },
-        {
-          "field": "variant.gripOrientation",
-          "value": "neutral"
-        },
-        {
-          "field": "variant.loadAccounting",
-          "value": "variableBodyAngleUntracked"
-        },
-        {
-          "field": "variant.fixedPath",
-          "value": false
-        },
-        {
-          "field": "variant.cadenceProtocol",
-          "value": "controlledSourceUnreported"
-        },
-        {
-          "field": "variant.sideSequence",
-          "value": "alternatingEachRep"
-        }
-      ],
-      "requirePresent": [
-        "variant.fixedPath",
-        "variant.sideSequence"
-      ],
-      "requireAbsent": [
-        "variant.eccentricSeconds",
-        "variant.concentricSeconds",
-        "variant.externalLoadPrescription"
-      ],
-      "requireAdditionalStabilityDemands": [
-        "shoulder",
-        "scapula",
-        "elbow",
-        "wrist",
-        "hand"
-      ]
-    },
-    {
-      "id": "whole-foot-contact-pins-bodyweight-forward-fixture",
-      "description": "Comfort's whole-foot forward contact belongs only to the bodyweight forward fixture.",
-      "when": {
-        "field": "variant.selectedLeadFootContact",
-        "operator": "equals",
-        "value": "stepsThenWholeFootMaintained"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "bodyweight"
-        },
-        {
-          "field": "variant.stepDirection",
-          "value": "selectedLeadForward"
-        },
-        {
-          "field": "variant.implementConfiguration",
-          "value": "none"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "maintained-contact-pins-bodyweight-reverse-fixture",
-      "description": "Comfort's continuously planted selected lead foot belongs only to the bodyweight reverse fixture.",
-      "when": {
-        "field": "variant.selectedLeadFootContact",
-        "operator": "equals",
-        "value": "maintainedOnStartPlate"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "bodyweight"
-        },
-        {
-          "field": "variant.stepDirection",
-          "value": "contralateralRearward"
-        },
-        {
-          "field": "variant.implementConfiguration",
-          "value": "none"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
     },
     {
       "id": "grounded-heel-contact-pins-loaded-reverse-fixture",
@@ -1062,506 +801,14 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
-    },
-    {
-      "id": "single-dumbbell-goblet-reverse-fixture",
-      "description": "The Boxing Science goblet reverse lunge holds one whole dumbbell at the chest and does not inherit Gao study geometry.",
-      "when": {
-        "field": "variant.implementConfiguration",
-        "operator": "equals",
-        "value": "singleDumbbellGoblet"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "dumbbell"
-        },
-        {
-          "field": "variant.upperLimbPosition",
-          "value": "bothHandsGobletAtChest"
-        },
-        {
-          "field": "variant.stepDirection",
-          "value": "contralateralRearward"
-        },
-        {
-          "field": "variant.stepLengthCriterion",
-          "value": "sourceUnreported"
-        },
-        {
-          "field": "variant.depthCriterion",
-          "value": "splitPositionSourceUnquantified"
-        },
-        {
-          "field": "variant.loadPlacement",
-          "value": "singleDumbbellGobletChest"
-        },
-        {
-          "field": "variant.gripOrientation",
-          "value": "cuppedDumbbellHead"
-        },
-        {
-          "field": "variant.loadAccounting",
-          "value": "wholeImplement"
-        },
-        {
-          "field": "variant.cadenceProtocol",
-          "value": "controlledSourceUnreported"
-        },
-        {
-          "field": "variant.fixedPath",
-          "value": false
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "foot-band-pins-reverse-lunge-fixture",
-      "description": "The reviewed foot-anchored elastic resistance is limited to the Boxing Science reverse step and opposite-side hand path.",
-      "when": {
-        "field": "variant.implementConfiguration",
-        "operator": "equals",
-        "value": "singleFootAnchoredMiniBand"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "band"
-        },
-        {
-          "field": "loadMode",
-          "value": "nonComparable"
-        },
-        {
-          "field": "variant.stepDirection",
-          "value": "contralateralRearward"
-        },
-        {
-          "field": "variant.upperLimbPosition",
-          "value": "oppositeHandPinsBandAtOppositeHip"
-        },
-        {
-          "field": "variant.selectedLeadFootContact",
-          "value": "maintainedBandAroundFoot"
-        },
-        {
-          "field": "variant.depthCriterion",
-          "value": "selfSelectedBandReverseDepth"
-        },
-        {
-          "field": "variant.loadPlacement",
-          "value": "bandFromStandingFootToOppositeHip"
-        },
-        {
-          "field": "variant.gripOrientation",
-          "value": "bandPinnedInHand"
-        },
-        {
-          "field": "variant.loadAccounting",
-          "value": "variableBandTensionUntracked"
-        },
-        {
-          "field": "variant.stepLengthCriterion",
-          "value": "selfSelected"
-        },
-        {
-          "field": "variant.cadenceProtocol",
-          "value": "controlledSourceUnreported"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": [
-        "variant.externalLoadPrescription"
-      ]
-    },
-    {
-      "id": "band-equipment-requires-foot-anchored-implement",
-      "description": "Band equipment is only the foot-anchored Boxing Science reverse-lunge fixture.",
-      "when": {
-        "field": "equipment",
-        "operator": "equals",
-        "value": "band"
-      },
-      "then": [
-        {
-          "field": "variant.implementConfiguration",
-          "value": "singleFootAnchoredMiniBand"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "band-foot-contact-requires-band-implement",
-      "description": "Foot-anchored contact cannot be borrowed by other reverse-lunge fixtures.",
-      "when": {
-        "field": "variant.selectedLeadFootContact",
-        "operator": "equals",
-        "value": "maintainedBandAroundFoot"
-      },
-      "then": [
-        {
-          "field": "variant.implementConfiguration",
-          "value": "singleFootAnchoredMiniBand"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "band-upper-limb-position-requires-foot-band",
-      "description": "Band-specific upperLimbPosition belongs only to the foot-anchored band reverse lunge.",
-      "when": {
-        "field": "variant.upperLimbPosition",
-        "operator": "equals",
-        "value": "oppositeHandPinsBandAtOppositeHip"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "band"
-        },
-        {
-          "field": "variant.implementConfiguration",
-          "value": "singleFootAnchoredMiniBand"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "band-load-placement-requires-foot-band",
-      "description": "Band-specific loadPlacement belongs only to the foot-anchored band reverse lunge.",
-      "when": {
-        "field": "variant.loadPlacement",
-        "operator": "equals",
-        "value": "bandFromStandingFootToOppositeHip"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "band"
-        },
-        {
-          "field": "variant.implementConfiguration",
-          "value": "singleFootAnchoredMiniBand"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "band-grip-orientation-requires-foot-band",
-      "description": "Band-specific gripOrientation belongs only to the foot-anchored band reverse lunge.",
-      "when": {
-        "field": "variant.gripOrientation",
-        "operator": "equals",
-        "value": "bandPinnedInHand"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "band"
-        },
-        {
-          "field": "variant.implementConfiguration",
-          "value": "singleFootAnchoredMiniBand"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "band-load-accounting-requires-foot-band",
-      "description": "Band-specific loadAccounting belongs only to the foot-anchored band reverse lunge.",
-      "when": {
-        "field": "variant.loadAccounting",
-        "operator": "equals",
-        "value": "variableBandTensionUntracked"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "band"
-        },
-        {
-          "field": "variant.implementConfiguration",
-          "value": "singleFootAnchoredMiniBand"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "band-depth-criterion-requires-foot-band",
-      "description": "Band-specific depthCriterion belongs only to the foot-anchored band reverse lunge.",
-      "when": {
-        "field": "variant.depthCriterion",
-        "operator": "equals",
-        "value": "selfSelectedBandReverseDepth"
-      },
-      "then": [
-        {
-          "field": "equipment",
-          "value": "band"
-        },
-        {
-          "field": "variant.implementConfiguration",
-          "value": "singleFootAnchoredMiniBand"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
     }
   ],
   "exercises": [
     {
-      "catalogID": "bodyweight-forward-lunge",
-      "name": "Bodyweight Forward Lunge",
-      "aliases": [
-        "Forward Lunge"
-      ],
-      "equipment": "bodyweight",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
-      "defaultWeight": 0,
-      "reps": 5,
-      "searchPriority": 88,
-      "involvement": [
-        {
-          "muscle": "vasti",
-          "role": "primary"
-        },
-        {
-          "muscle": "gluteMax",
-          "role": "primary"
-        },
-        {
-          "muscle": "rectusFemoris",
-          "role": "secondary"
-        },
-        {
-          "muscle": "gastrocnemius",
-          "role": "secondary"
-        },
-        {
-          "muscle": "soleus",
-          "role": "secondary"
-        },
-        {
-          "muscle": "medialHamstrings",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "bicepsFemoris",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "gluteMed",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "abs",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "lumbarExtensors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tibialisAnterior",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tensorFasciaeLatae",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "closedDuringLoadedPhase",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "trunkOrientation": "upright",
-        "upperLimbPosition": "crossed",
-        "startSupport": "bilateralStanding",
-        "stepDirection": "selectedLeadForward",
-        "selectedLeadFootTransition": "stepsForwardThenReturns",
-        "contralateralFootTransition": "remainsAtStartThenReceivesReturn",
-        "landingFoot": "selectedLead",
-        "selectedLeadFootContact": "stepsThenWholeFootMaintained",
-        "landingDemand": "dynamicFootContact",
-        "depthCriterion": "fullSelfSelectedDepth",
-        "returnTopology": "returnToBilateralStart",
-        "spineMotion": "nonstandardized",
-        "pelvisMotion": "nonstandardized",
-        "hipMotion": "extends",
-        "kneeMotion": "extends",
-        "ankleMotion": "plantarflexes",
-        "footMotion": "positionHeldDuringLoadedPhase",
-        "loadPlacement": "none",
-        "eccentricSeconds": 3,
-        "concentricSeconds": 2,
-        "stepLengthCriterion": "sourceUnreported",
-        "gripOrientation": "notApplicable",
-        "implementConfiguration": "none",
-        "loadAccounting": "notApplicable",
-        "cadenceProtocol": "threeSecondEccentricTwoSecondConcentric",
-        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "comfort-2015-forward-reverse-lunge-kinetics",
-        "wu-2020-loading-devices-squat-lunge"
-      ],
-      "execution": {
-        "startingPosition": "Stand upright with both feet supporting you and cross your arms over your upper body.",
-        "movement": "Step forward with the selected lead foot and land with the whole foot in contact, then lower under control for three seconds.",
-        "endpoint": "Stop the descent at your full self-selected depth.",
-        "returnPhase": "Keep the lead foot planted as you straighten the lead hip and knee and rise toward standing over two seconds, then step the lead foot back beside the other foot to complete the repetition.",
-        "controlledJoints": "Keep the lead foot fully planted through the descent and rise.",
-        "supportAndPosture": "Stay upright with your arms crossed and no external support.",
-        "disqualifyingCompensations": [
-          "Pushing off the rear foot to stand turns the lunge into a rear-leg push-off.",
-          "Dropping straight down in place turns the step-and-return lunge into a stationary split squat.",
-          "Letting the lead heel lift turns the lunge into a toe-balanced stance."
-        ],
-        "sideOrDirection": "Finish the set on the selected side, then repeat with the other lead leg."
-      }
-    },
-    {
-      "catalogID": "bodyweight-reverse-lunge",
-      "name": "Bodyweight Reverse Lunge",
-      "aliases": [
-        "Reverse Lunge"
-      ],
-      "equipment": "bodyweight",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
-      "defaultWeight": 0,
-      "reps": 5,
-      "searchPriority": 87,
-      "involvement": [
-        {
-          "muscle": "vasti",
-          "role": "primary"
-        },
-        {
-          "muscle": "gluteMax",
-          "role": "primary"
-        },
-        {
-          "muscle": "rectusFemoris",
-          "role": "secondary"
-        },
-        {
-          "muscle": "gastrocnemius",
-          "role": "secondary"
-        },
-        {
-          "muscle": "soleus",
-          "role": "secondary"
-        },
-        {
-          "muscle": "medialHamstrings",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "bicepsFemoris",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "gluteMed",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "abs",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "lumbarExtensors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tibialisAnterior",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tensorFasciaeLatae",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "closedDuringLoadedPhase",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "trunkOrientation": "upright",
-        "upperLimbPosition": "crossed",
-        "startSupport": "bilateralStanding",
-        "stepDirection": "contralateralRearward",
-        "selectedLeadFootTransition": "remainsPlantedThroughout",
-        "contralateralFootTransition": "stepsRearwardThenReturns",
-        "landingFoot": "contralateral",
-        "selectedLeadFootContact": "maintainedOnStartPlate",
-        "landingDemand": "dynamicFootContact",
-        "depthCriterion": "fullSelfSelectedDepth",
-        "returnTopology": "returnToBilateralStart",
-        "spineMotion": "nonstandardized",
-        "pelvisMotion": "nonstandardized",
-        "hipMotion": "extends",
-        "kneeMotion": "extends",
-        "ankleMotion": "plantarflexes",
-        "footMotion": "positionHeldDuringLoadedPhase",
-        "loadPlacement": "none",
-        "eccentricSeconds": 3,
-        "concentricSeconds": 2,
-        "stepLengthCriterion": "sourceUnreported",
-        "gripOrientation": "notApplicable",
-        "implementConfiguration": "none",
-        "loadAccounting": "notApplicable",
-        "cadenceProtocol": "threeSecondEccentricTwoSecondConcentric",
-        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "comfort-2015-forward-reverse-lunge-kinetics",
-        "gao-2025-dumbbell-reverse-lunge"
-      ],
-      "execution": {
-        "startingPosition": "Stand upright with both feet supporting you and cross your arms over your upper body.",
-        "movement": "Keep the selected front foot planted and step the opposite foot backward. After the rear foot lands, lower under control for three seconds without moving the selected front foot.",
-        "endpoint": "Stop the descent at your full self-selected depth.",
-        "returnPhase": "Straighten the selected front hip and knee and rise toward standing over two seconds, then bring the rear foot forward beside the front foot.",
-        "controlledJoints": "Keep the selected front foot planted through the descent and rise.",
-        "supportAndPosture": "Stay upright with your arms crossed and no external support.",
-        "disqualifyingCompensations": [
-          "Pushing off the rear foot to stand turns the lunge into a rear-leg push-off.",
-          "Dropping straight down in place turns the step-and-return lunge into a stationary split squat.",
-          "Letting the front heel lift turns the lunge into a toe-balanced stance."
-        ],
-        "sideOrDirection": "Finish the set with the same selected front leg, then repeat on the other side."
-      }
-    },
-    {
       "catalogID": "two-dumbbell-forward-lunge",
-      "name": "Two-Dumbbell Forward Lunge",
+      "name": "Forward Lunge",
       "aliases": [
+        "Two-Dumbbell Forward Lunge",
         "Dumbbell Forward Lunge",
         "Paired-Dumbbell Forward Lunge",
         "Dumbbell Anterior Lunge"
@@ -1710,8 +957,9 @@
     },
     {
       "catalogID": "two-dumbbell-reverse-lunge",
-      "name": "Two-Dumbbell Reverse Lunge",
+      "name": "Reverse Lunge",
       "aliases": [
+        "Two-Dumbbell Reverse Lunge",
         "Dumbbell Reverse Lunge",
         "Paired-Dumbbell Reverse Lunge"
       ],
@@ -1856,423 +1104,6 @@
           "Alternating the lead leg within the set changes this selected-side fixture."
         ],
         "sideOrDirection": "Finish the set with the same selected front leg, then repeat on the other side."
-      }
-    },
-    {
-      "catalogID": "trx-reverse-lunge",
-      "name": "TRX Reverse Lunge",
-      "aliases": [
-        "TRX Step-Back Lunge",
-        "Suspension Reverse Lunge",
-        "Suspension Step-Back Lunge"
-      ],
-      "equipment": "suspensionTrainer",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
-      "defaultWeight": 0,
-      "reps": 8,
-      "searchPriority": 96,
-      "involvement": [
-        {
-          "muscle": "vasti",
-          "role": "primary"
-        },
-        {
-          "muscle": "gluteMax",
-          "role": "primary"
-        },
-        {
-          "muscle": "rectusFemoris",
-          "role": "secondary"
-        },
-        {
-          "muscle": "gastrocnemius",
-          "role": "secondary"
-        },
-        {
-          "muscle": "soleus",
-          "role": "secondary"
-        },
-        {
-          "muscle": "medialHamstrings",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "bicepsFemoris",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "gluteMed",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "abs",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "lumbarExtensors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "externalRotators",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "trapeziusUpper",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "triceps",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "fingerFlexors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "extensorCarpiRadialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tibialisAnterior",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tensorFasciaeLatae",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "closedDuringLoadedPhase",
-        "bodyPosition": "standing",
-        "torsoSupport": "suspensionHandlesBalanceAssistance",
-        "trunkOrientation": "upright",
-        "upperLimbPosition": "bothHandsHoldingSuspensionHandles",
-        "startSupport": "bilateralStanding",
-        "stepDirection": "contralateralRearward",
-        "selectedLeadFootTransition": "remainsPlantedThroughout",
-        "contralateralFootTransition": "stepsRearwardThenReturns",
-        "landingFoot": "contralateral",
-        "selectedLeadFootContact": "maintainedWholeFoot",
-        "landingDemand": "dynamicFootContact",
-        "depthCriterion": "controlledSelfSelectedDepth",
-        "returnTopology": "returnToBilateralStart",
-        "spineMotion": "nonstandardized",
-        "pelvisMotion": "nonstandardized",
-        "hipMotion": "extends",
-        "kneeMotion": "extends",
-        "ankleMotion": "plantarflexes",
-        "footMotion": "positionHeldDuringLoadedPhase",
-        "loadPlacement": "none",
-        "stepLengthCriterion": "selfSelected",
-        "gripOrientation": "neutral",
-        "implementConfiguration": "independentSuspensionHandles",
-        "loadAccounting": "variableBodyAngleUntracked",
-        "fixedPath": false,
-        "cadenceProtocol": "controlledSourceUnreported",
-        "sideSequence": "alternatingEachRep",
-        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [
-        "shoulder",
-        "scapula",
-        "elbow",
-        "wrist",
-        "hand"
-      ],
-      "evidenceRefs": [
-        "usmc-2026-trx-strength-library",
-        "trx-2022-step-back-lunge",
-        "arnold-2010-lower-limb"
-      ],
-      "execution": {
-        "startingPosition": "Set the straps to mid-length, face the anchor with one handle in each hand, stand tall with both feet together, and keep the elbows at the sides.",
-        "movement": "Step one foot far backward, lower the rear knee toward the floor with the chest lifted, and use the straps only for balance.",
-        "endpoint": "Reach a controlled lunge depth with the rear knee clear of the floor and the front foot fully planted.",
-        "returnPhase": "Drive through the front foot and bring the rear foot forward until both feet are together.",
-        "controlledJoints": "Let the front hip, knee, and ankle drive the return while the arms maintain light support.",
-        "supportAndPosture": "Keep the trunk upright, both handles evenly tensioned, and the selected front knee tracking with the foot.",
-        "disqualifyingCompensations": [
-          "Leaving the feet split between repetitions turns the movement into a split squat.",
-          "Placing the rear foot in a cradle changes the reviewed step-back fixture.",
-          "Pulling the body upright with the arms changes the intended lower-body action."
-        ],
-        "sideOrDirection": "Return to standing with both feet together after each repetition and alternate which foot steps backward."
-      }
-    },
-    {
-      "catalogID": "goblet-reverse-lunge",
-      "name": "Goblet Reverse Lunge",
-      "aliases": [
-        "Dumbbell Goblet Reverse Lunge",
-        "Single-Dumbbell Goblet Reverse Lunge"
-      ],
-      "equipment": "dumbbell",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0,
-      "defaultWeight": 25,
-      "defaultWeightKg": 12.5,
-      "reps": 8,
-      "searchPriority": 96,
-      "involvement": [
-        {
-          "muscle": "vasti",
-          "role": "primary"
-        },
-        {
-          "muscle": "gluteMax",
-          "role": "primary"
-        },
-        {
-          "muscle": "rectusFemoris",
-          "role": "secondary"
-        },
-        {
-          "muscle": "gastrocnemius",
-          "role": "secondary"
-        },
-        {
-          "muscle": "soleus",
-          "role": "secondary"
-        },
-        {
-          "muscle": "medialHamstrings",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "bicepsFemoris",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "gluteMed",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "abs",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "lumbarExtensors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "externalRotators",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "trapeziusUpper",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "triceps",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "fingerFlexors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "extensorCarpiRadialis",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tibialisAnterior",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tensorFasciaeLatae",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "closedDuringLoadedPhase",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "trunkOrientation": "upright",
-        "upperLimbPosition": "bothHandsGobletAtChest",
-        "startSupport": "bilateralStanding",
-        "stepDirection": "contralateralRearward",
-        "selectedLeadFootTransition": "remainsPlantedThroughout",
-        "contralateralFootTransition": "stepsRearwardThenReturns",
-        "landingFoot": "contralateral",
-        "selectedLeadFootContact": "maintainedWholeFoot",
-        "landingDemand": "dynamicFootContact",
-        "depthCriterion": "splitPositionSourceUnquantified",
-        "returnTopology": "returnToBilateralStart",
-        "spineMotion": "nonstandardized",
-        "pelvisMotion": "nonstandardized",
-        "hipMotion": "extends",
-        "kneeMotion": "extends",
-        "ankleMotion": "plantarflexes",
-        "footMotion": "positionHeldDuringLoadedPhase",
-        "loadPlacement": "singleDumbbellGobletChest",
-        "stepLengthCriterion": "sourceUnreported",
-        "gripOrientation": "cuppedDumbbellHead",
-        "implementConfiguration": "singleDumbbellGoblet",
-        "loadAccounting": "wholeImplement",
-        "fixedPath": false,
-        "cadenceProtocol": "controlledSourceUnreported",
-        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [
-        "shoulder",
-        "scapula",
-        "elbow",
-        "wrist",
-        "hand"
-      ],
-      "evidenceRefs": [
-        "boxing-science-exercise-library",
-        "comfort-2015-forward-reverse-lunge-kinetics"
-      ],
-      "execution": {
-        "startingPosition": "Stand hip-width apart holding one vertical dumbbell at the chest with both hands; log the whole dumbbell weight.",
-        "movement": "Keep one foot planted, step the other foot back, and lower into a controlled split position.",
-        "endpoint": "Reach a stable split-lunge depth without a prescribed step length or knee-to-floor distance.",
-        "returnPhase": "Drive through the planted front foot and bring the rear foot forward to two-foot standing.",
-        "controlledJoints": "Keep the goblet load close to the chest and control the front knee and pelvis.",
-        "supportAndPosture": "Keep the trunk upright and use no external support.",
-        "disqualifyingCompensations": [
-          "Keeping the feet split between repetitions changes this to a split squat.",
-          "Moving the load to the sides changes the reviewed goblet fixture."
-        ],
-        "sideOrDirection": "Complete repetitions with one front leg, then repeat with the other."
-      }
-    },
-    {
-      "catalogID": "foot-anchored-band-reverse-lunge",
-      "name": "Foot-Anchored Band Reverse Lunge",
-      "aliases": [
-        "Reverse Lunge with Band"
-      ],
-      "equipment": "band",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
-      "defaultWeight": 0,
-      "reps": 8,
-      "searchPriority": 95,
-      "involvement": [
-        {
-          "muscle": "vasti",
-          "role": "primary"
-        },
-        {
-          "muscle": "gluteMax",
-          "role": "primary"
-        },
-        {
-          "muscle": "rectusFemoris",
-          "role": "secondary"
-        },
-        {
-          "muscle": "gastrocnemius",
-          "role": "secondary"
-        },
-        {
-          "muscle": "soleus",
-          "role": "secondary"
-        },
-        {
-          "muscle": "medialHamstrings",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "bicepsFemoris",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "gluteMed",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "abs",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "obliques",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "lumbarExtensors",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tibialisAnterior",
-          "role": "stabilizer"
-        },
-        {
-          "muscle": "tensorFasciaeLatae",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "closedDuringLoadedPhase",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "trunkOrientation": "upright",
-        "upperLimbPosition": "oppositeHandPinsBandAtOppositeHip",
-        "startSupport": "bilateralStanding",
-        "stepDirection": "contralateralRearward",
-        "selectedLeadFootTransition": "remainsPlantedThroughout",
-        "contralateralFootTransition": "stepsRearwardThenReturns",
-        "landingFoot": "contralateral",
-        "selectedLeadFootContact": "maintainedBandAroundFoot",
-        "landingDemand": "dynamicFootContact",
-        "depthCriterion": "selfSelectedBandReverseDepth",
-        "returnTopology": "returnToBilateralStart",
-        "spineMotion": "nonstandardized",
-        "pelvisMotion": "nonstandardized",
-        "hipMotion": "extends",
-        "kneeMotion": "extends",
-        "ankleMotion": "plantarflexes",
-        "footMotion": "positionHeldDuringLoadedPhase",
-        "loadPlacement": "bandFromStandingFootToOppositeHip",
-        "stepLengthCriterion": "selfSelected",
-        "gripOrientation": "bandPinnedInHand",
-        "implementConfiguration": "singleFootAnchoredMiniBand",
-        "loadAccounting": "variableBandTensionUntracked",
-        "cadenceProtocol": "controlledSourceUnreported",
-        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "comfort-2015-forward-reverse-lunge-kinetics",
-        "gao-2025-dumbbell-reverse-lunge",
-        "boxing-science-exercise-library"
-      ],
-      "execution": {
-        "startingPosition": "Stand upright with a medium-tension mini band around the working foot. Pin the band with the opposite-side hand near the opposite hip.",
-        "movement": "Step the other foot backward into a reverse lunge while keeping the planted knee aligned with the front foot.",
-        "endpoint": "Reach a controlled split stance at a comfortable depth without letting the front knee cave inward.",
-        "returnPhase": "Drive through the planted heel to step the rear foot forward and return upright.",
-        "controlledJoints": "Control the planted knee over the foot and avoid letting the band pull the hip or pelvis out of alignment.",
-        "supportAndPosture": "Keep the torso upright and the band pinned at the opposite hip throughout the set.",
-        "disqualifyingCompensations": [
-          "Removing the band changes the resistance fixture.",
-          "Holding suspension handles changes the task to an assisted reverse lunge.",
-          "Leaving the feet split between repetitions changes the movement to a split squat."
-        ],
-        "sideOrDirection": "Complete the set with one foot anchoring the band, then mirror the setup for the other side."
       }
     }
   ]

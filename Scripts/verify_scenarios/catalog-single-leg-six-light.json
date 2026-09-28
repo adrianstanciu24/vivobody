@@ -98,16 +98,16 @@
       }
     },
     {
-      "typeText": "Goblet Reverse Lunge"
+      "typeText": "Reverse Lunge"
     },
     {
       "wait": {
-        "labelRegex": "^Goblet Reverse Lunge, "
+        "labelRegex": "^Reverse Lunge, "
       }
     },
     {
       "tap": {
-        "labelRegex": "^Goblet Reverse Lunge, "
+        "labelRegex": "^Reverse Lunge, "
       }
     },
     {
@@ -119,10 +119,10 @@
       "assert": {
         "required": [
           {
-            "label": "Goblet Reverse Lunge"
+            "label": "Reverse Lunge"
           },
           {
-            "labelContains": "Muscles used by Goblet Reverse Lunge"
+            "labelContains": "Muscles used by Reverse Lunge"
           }
         ]
       }
