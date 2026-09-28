@@ -24,6 +24,8 @@ A review or investigation is read-only unless fixes are requested. A plan reques
 
 For an explicitly requested prediction-and-evidence workflow, invoke `$vivobody-evidence-loop`: [skill instructions](.agents/skills/vivobody-evidence-loop/SKILL.md). It adds task notes and hypothesis tracking only when invoked; it does not activate for ordinary work.
 
+For project work involving AI judgments or TypeSafe integration, use the [TypeSafe skill](.agents/skills/typesafe-ai/SKILL.md). Follow its live-documentation guidance before implementation.
+
 ## Project Structure & Module Organization
 
 `vivobody/` contains `App/`, `Models/`, `Screens/`, `Components/`, `Assets.xcassets/`, and `Resources/`. `vivobodyWidgets/` owns widget surfaces; `VivoKit/` shares app/widget contracts. Tests live in `vivobodyTests/` and `VivoKit/Tests/`. Author exercises in `specs/catalog/families/`; generate `vivobody/Resources/catalog.json` with `Scripts/catalog.py`.
