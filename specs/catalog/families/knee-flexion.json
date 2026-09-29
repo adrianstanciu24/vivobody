@@ -402,22 +402,6 @@
       ],
       "requirePresent": [],
       "requireAbsent": ["variant.hipFlexionDegrees"]
-    },
-    {
-      "id": "flex-fitness-pins-bilateral-prone-fixture",
-      "description": "The Flex Fitness source reports the exact bilateral prone posture and cadence.",
-      "when": {"field": "variant.machineFixture", "operator": "equals", "value": "flexFitnessProneModelUnreported"},
-      "then": [
-        {"field": "laterality", "value": "bilateral"},
-        {"field": "variant.bodyPosition", "value": "prone"},
-        {"field": "variant.pelvisSupport", "value": "machineBenchNoStrapReported"},
-        {"field": "variant.hipFlexionDegrees", "value": 45},
-        {"field": "variant.anklePosture", "value": "neutral"},
-        {"field": "variant.handSupport", "value": "armsRelaxed"},
-        {"field": "variant.cadence", "value": "twoSecondConcentricTwoSecondEccentric"}
-      ],
-      "requirePresent": ["variant.hipFlexionDegrees"],
-      "requireAbsent": []
     }
   ],
   "recommended": {
@@ -612,36 +596,6 @@
         "controlledJoints": "Keep the pelvis, spine, hips, ankles, and feet still without asymmetric movement.",
         "supportAndPosture": "Remain seated against the machine supports and keep both hands on the fixed handles.",
         "disqualifyingCompensations": ["Lifting the pelvis or back changes the supported fixture.", "Using momentum or moving one side ahead of the other changes the two-leg curl."]
-      }
-    },
-    {
-      "catalogID": "flex-fitness-bilateral-prone-leg-curl",
-      "name": "Flex Fitness Bilateral Prone Leg Curl",
-      "aliases": ["Bilateral Prone Leg Curl", "Bilateral Lying Leg Curl", "Lying Leg Curl"],
-      "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
-      "bodyweightFraction": 0, "defaultWeight": 40, "defaultWeightKg": 20, "reps": 10, "searchPriority": 90,
-      "involvement": [
-        {"muscle": "medialHamstrings", "role": "primary"}, {"muscle": "bicepsFemoris", "role": "primary"},
-        {"muscle": "sartorius", "role": "secondary"}, {"muscle": "gracilis", "role": "secondary"}
-      ],
-      "variant": {
-        "kineticChain": "open", "bodyPosition": "prone", "torsoSupport": "machinePad", "pelvisSupport": "machineBenchNoStrapReported",
-        "pelvisMotion": "positionHeld", "spineMotion": "positionHeld", "hipMotion": "positionHeld", "hipFlexionDegrees": 45,
-        "kneeMotion": "flexes", "kneeStartFlexionDegrees": 0, "kneeEndFlexionDegrees": 90, "ankleMotion": "positionHeld",
-        "anklePosture": "neutral", "footMotion": "positionHeld", "movingSegment": "lowerLeg", "loadInterface": "distalShinPad",
-        "machineType": "leverLegCurl", "machineFixture": "flexFitnessProneModelUnreported", "handSupport": "armsRelaxed",
-        "cadence": "twoSecondConcentricTwoSecondEccentric", "fixedPath": true, "lowerBodyContribution": "isolatedJointMotion"
-      },
-      "additionalPrimeActions": [], "additionalStabilityDemands": [],
-      "evidenceRefs": ["arnold-2010-lower-limb", "maeo-2021-seated-prone-leg-curl", "villalba-2026-bilateral-prone-leg-curl"],
-      "execution": {
-        "startingPosition": "Lie face down with the front of the pelvis aligned to the bench division, hold the hips at forty-five degrees, keep the ankles neutral, and relax the arms.",
-        "movement": "Flex both knees from full extension to ninety degrees over two seconds.",
-        "endpoint": "End when both knees reach ninety degrees without changing the hip angle.",
-        "returnPhase": "Extend both knees to the start over two seconds.",
-        "controlledJoints": "Keep the pelvis, spine, hips, ankles, and feet still without asymmetric movement.",
-        "supportAndPosture": "Remain face down against the bench with the arms relaxed throughout the set.",
-        "disqualifyingCompensations": ["Lifting the pelvis or arching the back changes the supported curl.", "Changing the hip angle, using momentum, or moving asymmetrically changes the reviewed fixture."]
       }
     }
   ]

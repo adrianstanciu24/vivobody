@@ -17,6 +17,9 @@ records are never assigned artificial endpoints merely to cover a range.
 
 These notes explain the scope of past additions. They are not a current roster;
 the JSON files and generated inventory determine what is present now.
+The 2026-09-29 cleanup retired 45 bundled exercises, including 30 families
+whose only exercise was retired. Their IDs remain reserved in
+`../retired-exercises.json`; older batch descriptions below remain historical.
 
 Ordered phases are available to Power contracts and to source-exact Dynamic
 Strength fixtures that pair a controlled yielding phase with an active return;

@@ -108,7 +108,7 @@ import VivoKit
                 context: context
             )
             seedBlock(
-                [("Pressure-Biofeedback Side-Lying Hip Abduction", 90)],
+                [("Technogym Seated Hip Abduction Machine", 90)],
                 startDaysAgo: 30,
                 endDaysAgo: 2,
                 count: 6,

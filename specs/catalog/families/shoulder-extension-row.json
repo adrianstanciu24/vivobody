@@ -734,23 +734,6 @@
       "requireAbsent": []
     },
     {
-      "id": "hand-and-knee-support-is-unilateral-dumbbell",
-      "description": "Hand-and-knee contralateral support belongs to an unsupported unilateral hip-hinged dumbbell row.",
-      "when": {
-        "field": "variant.contralateralSupport",
-        "operator": "equals",
-        "value": "handAndKneeOnBench"
-      },
-      "then": [
-        { "field": "equipment", "value": "dumbbell" },
-        { "field": "laterality", "value": "unilateral" },
-        { "field": "variant.bodyPosition", "value": "hipHinged" },
-        { "field": "variant.torsoSupport", "value": "none" }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
       "id": "bilateral-has-no-contralateral-support",
       "description": "Bilateral rows do not declare one-sided hand-and-knee support.",
       "when": {
@@ -867,25 +850,6 @@
       "requireAdditionalStabilityDemands": [
         "spine"
       ]
-    },
-    {
-      "id": "floor-reset-is-strict-pronated-barbell",
-      "description": "A floor-reset row is a strict bilateral pronated barbell row in an unsupported hip hinge without lower-body drive.",
-      "when": {
-        "field": "variant.interRepSupport",
-        "operator": "equals",
-        "value": "floor"
-      },
-      "then": [
-        { "field": "equipment", "value": "barbell" },
-        { "field": "laterality", "value": "bilateral" },
-        { "field": "variant.gripOrientation", "value": "pronated" },
-        { "field": "variant.bodyPosition", "value": "hipHinged" },
-        { "field": "variant.torsoSupport", "value": "none" },
-        { "field": "variant.lowerBodyContribution", "value": "none" }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
     },
     {
       "id": "narrow-grip-requires-tucked-path",
@@ -1340,75 +1304,6 @@
       }
     },
     {
-      "catalogID": "pendlay-row",
-      "name": "Pendlay Row",
-      "aliases": [
-        "Dead-Stop Barbell Row"
-      ],
-      "equipment": "barbell",
-      "laterality": "bilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0,
-      "defaultWeight": 95,
-      "defaultWeightKg": 42.5,
-      "reps": 6,
-      "searchPriority": 91,
-      "involvement": [
-        { "muscle": "lats", "role": "primary" },
-        { "muscle": "teresMajor", "role": "secondary" },
-        { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "bicepsBrachii", "role": "secondary" },
-        { "muscle": "brachialis", "role": "secondary" },
-        { "muscle": "brachioradialis", "role": "secondary" },
-        { "muscle": "trapeziusMiddle", "role": "secondary" },
-        { "muscle": "rhomboids", "role": "secondary" },
-        { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" },
-        { "muscle": "gluteMax", "role": "stabilizer" }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "hipHinged",
-        "lowerBodySupport": "none",
-        "torsoSupport": "none",
-        "scapularTranslation": "free",
-        "gripOrientation": "pronated",
-        "relativeGripWidth": "shoulderWidth",
-        "upperArmPath": "tucked",
-        "fixedPath": false,
-        "lowerBodyContribution": "none",
-        "interRepSupport": "floor",
-        "contralateralSupport": "none",
-        "externalPath": "free",
-        "barbellSetup": "freeBar"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [
-        "spine",
-        "pelvis",
-        "hip"
-      ],
-      "evidenceRefs": [
-        "fenwick-2009-row-trunk-loading"
-      ],
-      "execution": {
-        "startingPosition": "Set a barbell on the floor and hold it at shoulder width with your palms facing back.",
-        "movement": "Pull the bar toward your lower ribs.",
-        "endpoint": "End the pull with the bar at your lower ribs.",
-        "returnPhase": "Lower the bar to a complete floor reset. Rebrace before the next repetition.",
-        "controlledJoints": "Do not stand up or arch your back during the pull.",
-        "supportAndPosture": "Bend forward from your hips and brace your trunk.",
-        "disqualifyingCompensations": [
-          "Keeping the bar floating between repetitions turns the Pendlay row into a continuous bent-over row.",
-          "Bouncing the bar off the floor turns the dead-stop reset into a momentum row."
-        ]
-      }
-    },
-    {
       "catalogID": "dumbbell-bent-over-row",
       "name": "Dumbbell Bent-Over Row",
       "aliases": [
@@ -1543,81 +1438,9 @@
         "controlledJoints": "Keep the hips, knees, and torso still while the shoulder blade moves naturally with the row.",
         "supportAndPosture": "Keep both feet planted and use only the opposite hand on the bench for support.",
         "disqualifyingCompensations": [
-          "Placing the opposite knee on the bench changes the fixture into the existing One-Arm Dumbbell Row (Hand and Knee on Bench).",
+          "Placing the opposite knee on the bench changes this hand-only support fixture.",
           "Rotating the torso to lift the dumbbell changes the strict row into a row-and-rotate variation.",
           "Standing up or driving through the legs turns the strict row into a momentum row."
-        ],
-        "sideOrDirection": "Complete all repetitions on one side, then switch to the other arm."
-      }
-    },
-    {
-      "catalogID": "one-arm-dumbbell-row",
-      "name": "One-Arm Dumbbell Row (Hand and Knee on Bench)",
-      "aliases": [
-        "Single-Arm Dumbbell Row",
-        "One-Arm DB Row",
-        "One-Arm Dumbbell Row"
-      ],
-      "equipment": "dumbbell",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0,
-      "defaultWeight": 35,
-      "defaultWeightKg": 15,
-      "reps": 10,
-      "searchPriority": 97,
-      "involvement": [
-        { "muscle": "lats", "role": "primary" },
-        { "muscle": "teresMajor", "role": "secondary" },
-        { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "bicepsBrachii", "role": "secondary" },
-        { "muscle": "brachialis", "role": "secondary" },
-        { "muscle": "brachioradialis", "role": "secondary" },
-        { "muscle": "trapeziusMiddle", "role": "secondary" },
-        { "muscle": "rhomboids", "role": "secondary" },
-        { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "fingerFlexors", "role": "stabilizer" },
-        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" },
-        { "muscle": "gluteMax", "role": "stabilizer" }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "hipHinged",
-        "lowerBodySupport": "none",
-        "torsoSupport": "none",
-        "scapularTranslation": "free",
-        "gripOrientation": "neutral",
-        "upperArmPath": "tucked",
-        "fixedPath": false,
-        "lowerBodyContribution": "none",
-        "interRepSupport": "none",
-        "contralateralSupport": "handAndKneeOnBench",
-        "externalPath": "free"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [
-        "spine",
-        "pelvis",
-        "hip"
-      ],
-      "evidenceRefs": [
-        "fenwick-2009-row-trunk-loading",
-        "saeterbakken-2015-unilateral-row-core"
-      ],
-      "execution": {
-        "startingPosition": "Place your opposite hand and knee on a bench while the foot on your working side stays planted. Hold one dumbbell with your palm facing inward.",
-        "movement": "Pull your working elbow toward your hip.",
-        "endpoint": "End the pull with the dumbbell beside your hip.",
-        "returnPhase": "Lower the dumbbell under control.",
-        "controlledJoints": "Do not rotate your torso during the pull.",
-        "supportAndPosture": "Keep your hips level and facing forward.",
-        "disqualifyingCompensations": [
-          "Twisting the torso to swing the dumbbell turns the strict one-arm row into a momentum row.",
-          "Lifting the supporting hand or knee off the bench turns the supported row into an unsupported hinge row."
         ],
         "sideOrDirection": "Complete all repetitions on one side, then switch to the other arm."
       }

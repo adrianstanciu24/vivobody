@@ -93,65 +93,6 @@
       }
     },
     {
-      "typeText": "high-plank drag"
-    },
-    {
-      "wait": {
-        "labelRegex": "^High-Plank Drag,"
-      }
-    },
-    {
-      "assert": {
-        "required": [
-          {
-            "labelRegex": "^High-Plank Drag,"
-          }
-        ],
-        "forbidden": [
-          {
-            "labelRegex": "^Dumbbell High-Plank Drag,"
-          },
-          {
-            "labelRegex": "^Kettlebell High-Plank Drag,"
-          }
-        ]
-      }
-    },
-    {
-      "relaunch": {
-        "reset": false,
-        "tab": "library",
-        "arguments": [
-          "--static-body",
-          "-settings.appearance",
-          "light"
-        ]
-      }
-    },
-    {
-      "wait": {
-        "label": "Exercises",
-        "value": "Selected"
-      }
-    },
-    {
-      "tap": {
-        "label": "Search"
-      }
-    },
-    {
-      "wait": {
-        "role": "AXTextField",
-        "value": "Search exercises"
-      }
-    },
-    {
-      "tap": {
-        "role": "AXTextField",
-        "value": "Search exercises"
-      }
-    },
-    {
       "typeText": "front raise"
     },
     {
@@ -387,7 +328,7 @@
     },
     {
       "wait": {
-        "label": "STRENGTH \u00b7 REPS"
+        "label": "STRENGTH · REPS"
       }
     }
   ],

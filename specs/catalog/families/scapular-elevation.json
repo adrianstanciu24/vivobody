@@ -496,52 +496,6 @@
       "requireAbsent": ["variant.gripWidth"]
     },
     {
-      "id": "other-fixture-is-bilateral-stabilization-shrug",
-      "description": "The only admitted other-equipment fixture is Lee et al.'s bilateral 30-degree laboratory stabilization shrug.",
-      "when": {
-        "field": "equipment",
-        "operator": "equals",
-        "value": "other"
-      },
-      "then": [
-        { "field": "laterality", "value": "bilateral" },
-        { "field": "loadMode", "value": "nonComparable" },
-        { "field": "variant.upperArmPosition", "value": "abducted30" },
-        { "field": "variant.humerothoracicElevationDegrees", "value": 30 },
-        { "field": "variant.elevationPlane", "value": "frontal" },
-        { "field": "variant.humeralRotation", "value": "notReported" },
-        { "field": "variant.forearmOrientation", "value": "notReported" },
-        { "field": "variant.handTask", "value": "none" },
-        { "field": "variant.implementConfiguration", "value": "none" },
-        { "field": "variant.scapularSequence", "value": "simultaneousBilateral" },
-        { "field": "variant.resistanceGeometry", "value": "armSegmentGravity" },
-        { "field": "variant.stanceConfiguration", "value": "shoulderWidthBilateral" },
-        { "field": "variant.loadAccounting", "value": "notApplicable" },
-        { "field": "variant.humerothoracicAngleControl", "value": "digitalInclinometer" },
-        { "field": "variant.craniocervicothoracicStabilization", "value": "investigatorManual" },
-        { "field": "variant.shrugHeightTarget", "value": "individualMaximumTargetBars" },
-        { "field": "variant.topHoldSeconds", "value": 5 },
-        { "field": "variant.wristGuide", "value": "radialBordersAgainstPlasticGuides" }
-      ],
-      "requirePresent": ["variant.loadAccounting"],
-      "requireAbsent": ["variant.gripWidth"],
-      "requireMuscleRequirements": [
-        {
-          "anyOf": [
-            "deltoidLateral"
-          ],
-          "minimumRole": "stabilizer"
-        },
-        {
-          "anyOf": [
-            "supraspinatus"
-          ],
-          "minimumRole": "stabilizer"
-        }
-      ],
-      "requireAdditionalStabilityDemands": []
-    },
-    {
       "id": "barbell-fixture-is-front-held-bilateral-shrug",
       "description": "The barbell branch is the strict bilateral front-held pronated shrug with total-load accounting.",
       "when": {"field": "equipment", "operator": "equals", "value": "barbell"},
@@ -726,84 +680,6 @@
         "controlledJoints": "Keep both upper arms at the sides, both elbows straight, and both wrists neutral.",
         "supportAndPosture": "Keep the split stance and trunk stable without using leg drive.",
         "disqualifyingCompensations": ["Rolling the shoulders forward or back turns the lift into a rolling shrug.", "Bending the elbows turns the shrug into an upright row.", "Dipping the legs to heave the dumbbells turns it into a leg-driven pull.", "Using one dumbbell turns it into the one-arm fixture."]
-      }
-    },
-    {
-      "catalogID": "bilateral-30-degree-stabilization-shrug",
-      "name": "Arm-Raised Stabilization Shrug",
-      "aliases": [
-        "Bilateral Stabilization Shrug",
-        "Bilateral 30-Degree Stabilization Shrug",
-        "30-Degree Stabilization Shrug"
-      ],
-      "equipment": "other",
-      "laterality": "bilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
-      "defaultWeight": 0,
-      "reps": 2,
-      "searchPriority": 68,
-      "involvement": [
-        { "muscle": "levatorScapulae", "role": "primary" },
-        { "muscle": "trapeziusUpper", "role": "primary" },
-        { "muscle": "serratus", "role": "secondary" },
-        { "muscle": "trapeziusLower", "role": "secondary" },
-        { "muscle": "externalRotators", "role": "stabilizer" },
-        { "muscle": "triceps", "role": "stabilizer" },
-        { "muscle": "deltoidLateral", "role": "stabilizer" },
-        { "muscle": "supraspinatus", "role": "stabilizer" },
-        { "muscle": "abs", "role": "stabilizer" },
-        { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lumbarExtensors", "role": "stabilizer" }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "standing",
-        "stanceConfiguration": "shoulderWidthBilateral",
-        "torsoSupport": "none",
-        "contralateralSupport": "none",
-        "scapularTranslation": "free",
-        "upperArmPosition": "abducted30",
-        "humerothoracicElevationDegrees": 30,
-        "elevationPlane": "frontal",
-        "humeralRotation": "notReported",
-        "elbowMotion": "angleHeld",
-        "elbowPosture": "extended",
-        "forearmMotion": "angleHeld",
-        "forearmOrientation": "notReported",
-        "handTask": "none",
-        "implementConfiguration": "none",
-        "scapularSequence": "simultaneousBilateral",
-        "resistanceGeometry": "armSegmentGravity",
-        "loadAccounting": "notApplicable",
-        "humerothoracicAngleControl": "digitalInclinometer",
-        "craniocervicothoracicStabilization": "investigatorManual",
-        "shrugHeightTarget": "individualMaximumTargetBars",
-        "topHoldSeconds": 5,
-        "wristGuide": "radialBordersAgainstPlasticGuides",
-        "fixedPath": false,
-        "lowerBodyContribution": "none",
-        "neckContribution": "none"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "lee-2016-stabilization-shrug-upward-rotation"
-      ],
-      "execution": {
-        "startingPosition": "Stand with your feet shoulder-width apart and both arms raised 30 degrees out to the sides. Lightly touch the thumb-side edges of your wrists against the plastic guides. Perform two attempts. Record the larger shoulder-blade angle measured immediately after each hold; do not try to track the angle while moving.",
-        "movement": "Shrug both shoulder blades to your personal maximum-height target bars.",
-        "endpoint": "Hold the top position for five seconds.",
-        "returnPhase": "Lower slowly without bending the elbows, moving the neck or trunk, or adding external load.",
-        "controlledJoints": "Use the angle gauge to keep your arms in place.",
-        "supportAndPosture": "Have a partner steady your chin and upper chest.",
-        "disqualifyingCompensations": [
-          "Bending the elbows to climb higher turns the shrug into an upright-row motion.",
-          "Adding external load turns the no-load stabilization shrug into a loaded shrug.",
-          "Dipping the legs to drive upward turns the shrug into a leg-driven pull."
-        ]
       }
     },
     {

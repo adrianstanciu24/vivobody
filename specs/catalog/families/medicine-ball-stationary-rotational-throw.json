@@ -58,50 +58,15 @@
   ],
   "exerciseRules": [
     {
-      "id": "split-stance-binds-forward-split-support",
-      "description": "The split-stance record retains a fixed forward split support.",
-      "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "splitStance"},
-      "then": [{"field": "variant.lowerBodySupport", "value": "forwardSplitStance"}],
-      "requirePresent": [], "requireAbsent": []
-    },
-    {
       "id": "parallel-standing-binds-parallel-feet",
       "description": "The standing record retains a parallel two-foot support.",
       "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "parallelStanding"},
       "then": [{"field": "variant.lowerBodySupport", "value": "twoFeetParallel"}],
       "requirePresent": [], "requireAbsent": []
-    },
-    {
-      "id": "tall-kneeling-binds-both-knees-and-shins",
-      "description": "The tall-kneeling record retains both knees and shins on the floor.",
-      "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "tallKneeling"},
-      "then": [{"field": "variant.lowerBodySupport", "value": "bothKneesAndShins"}],
-      "requirePresent": [], "requireAbsent": []
     }
   ],
   "recommended": {"defaultReps": {"minimum": 3, "maximum": 8}},
   "exercises": [
-    {
-      "catalogID": "split-stance-rotational-medicine-ball-throw",
-      "name": "Split-Stance Rotational Medicine Ball Throw",
-      "aliases": ["Split-Stance Rotational Throws", "Split-Stance Rotational Throw", "Split-Stance Med Ball Side Throw"],
-      "equipment": "medicineBall", "laterality": "unilateral", "modality": "power", "trackingMode": "reps", "loadMode": "nonComparable",
-      "bodyweightFraction": 0, "defaultWeight": 10, "defaultWeightKg": 5, "reps": 5, "searchPriority": 93,
-      "involvement": [{"muscle": "obliques", "role": "primary"}, {"muscle": "lats", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}],
-      "variant": {"bodyPosition": "splitStance", "lowerBodySupport": "forwardSplitStance", "target": "medicineBallSafeWallPreparedPartnerOrClearThrowingArea", "grip": "twoHand", "responseStrategy": "singleReleaseThenRetrieveOrReceiveAndReset", "trainingDirectionPrescription": "bothDirections", "fixedPath": false},
-      "additionalPrimeActions": [], "additionalStabilityDemands": [],
-      "evidenceRefs": ["mocanu-2024-ballistic-medicine-ball-exercises", "ikeda-2009-side-medicine-ball-throw"],
-      "execution": {
-        "startingPosition": "Stand side-on to a medicine-ball-safe wall, prepared partner, or clear throwing area in a comfortable forward split stance with soft knees and the ball in both hands near the hip away from the target.",
-        "movement": "Keep the chosen split stance, turn the hips and torso away to load the ball, then reverse forcefully and release it once toward the target.",
-        "endpoint": "One repetition ends when the ball leaves both hands toward the target.",
-        "returnPhase": "Retrieve the ball or receive it after the repetition, then rebuild the same split stance before the next throw.",
-        "controlledJoints": "Keep both knees aligned with the feet and do not step during the counted throw.",
-        "supportAndPosture": "Use a stance you can hold without wobbling and keep the travel and landing area clear.",
-        "disqualifyingCompensations": ["Stepping during the repetition changes it into an approach throw.", "Dropping the rear knee changes the support to half-kneeling.", "Slamming into the floor changes the target and family."],
-        "sideOrDirection": "Complete the set toward one side, then mirror the stance and perform equal repetitions in the other direction."
-      }
-    },
     {
       "catalogID": "standing-rotational-medicine-ball-throw",
       "name": "Standing Rotational Medicine Ball Throw",
@@ -120,27 +85,6 @@
         "controlledJoints": "Keep the knees tracking with the feet and turn through the feet and hips instead of twisting through fixed knees.",
         "supportAndPosture": "Maintain balance through the release and keep the receiving area clear.",
         "disqualifyingCompensations": ["Stepping toward the target changes it into an approach throw.", "Using a split stance changes the reviewed support.", "Slamming into the floor changes the target and family."],
-        "sideOrDirection": "Complete the set toward one side, then turn around and perform equal repetitions in the other direction."
-      }
-    },
-    {
-      "catalogID": "tall-kneeling-rotational-medicine-ball-throw",
-      "name": "Tall-Kneeling Rotational Medicine Ball Throw",
-      "aliases": ["Kneeling Rotational Throw", "Kneeling Rotational Med Ball Throw", "Tall-Kneeling Medicine Ball Side Throw"],
-      "equipment": "medicineBall", "laterality": "unilateral", "modality": "power", "trackingMode": "reps", "loadMode": "nonComparable",
-      "bodyweightFraction": 0, "defaultWeight": 10, "defaultWeightKg": 5, "reps": 5, "searchPriority": 92,
-      "involvement": [{"muscle": "obliques", "role": "primary"}, {"muscle": "lats", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}],
-      "variant": {"bodyPosition": "tallKneeling", "lowerBodySupport": "bothKneesAndShins", "target": "medicineBallSafeWallPreparedPartnerOrClearThrowingArea", "grip": "twoHand", "responseStrategy": "singleReleaseThenRetrieveOrReceiveAndReset", "trainingDirectionPrescription": "bothDirections", "fixedPath": false},
-      "additionalPrimeActions": [], "additionalStabilityDemands": [],
-      "evidenceRefs": ["sell-2015-medicine-ball-toss", "ikeda-2009-side-medicine-ball-throw"],
-      "execution": {
-        "startingPosition": "Kneel tall on both knees and shins, side-on to a prepared partner or clear throwing area, with the ball in both hands near the hip away from the target.",
-        "movement": "Keep the hips extended, turn the torso and ball away, then reverse forcefully and release the ball once toward the target.",
-        "endpoint": "One repetition ends when the ball leaves both hands toward the target.",
-        "returnPhase": "Retrieve the ball or receive it after the repetition, then reset tall on both knees before the next throw.",
-        "controlledJoints": "Rotate without sitting back, lifting either knee, or arching through the low back.",
-        "supportAndPosture": "Stay upright on both knees and shins and keep the receiving area clear.",
-        "disqualifyingCompensations": ["Planting one foot changes the exercise into half-kneeling.", "Sitting toward the heels removes the tall-kneeling support.", "Slamming into the floor changes the target and family."],
         "sideOrDirection": "Complete the set toward one side, then turn around and perform equal repetitions in the other direction."
       }
     }

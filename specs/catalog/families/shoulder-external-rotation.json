@@ -252,23 +252,6 @@
       "requireAbsent": []
     },
     {
-      "id": "band-external-rotation-uses-standing-medial-anchor",
-      "description": "The reviewed elastic setup uses non-comparable resistance, a towel roll, and an anchor medial to a standing working shoulder.",
-      "when": {
-        "field": "equipment",
-        "operator": "equals",
-        "value": "band"
-      },
-      "then": [
-        { "field": "variant.bodyPosition", "value": "standing" },
-        { "field": "variant.torsoSupport", "value": "none" },
-        { "field": "variant.upperArmSupport", "value": "towelRoll" },
-        { "field": "variant.rotationResistanceGeometry", "value": "medialAnchor" }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
       "id": "dumbbell-external-rotation-uses-side-lying-gravity",
       "description": "The reviewed dumbbell setup uses gravity while the lateral torso rests on a bench and the upper arm is spaced by a towel roll.",
       "when": {
@@ -347,60 +330,6 @@
           "Pinching the shoulder blade back turns the isolated rotation into a row-like squeeze.",
           "Turning the torso to swing the forearm turns the isolated rotation into a trunk twist.",
           "Lifting the upper arm away from the body turns the rotation into a raised-arm exercise."
-        ],
-        "sideOrDirection": "Complete all repetitions on one side, then repeat with the other arm."
-      }
-    },
-    {
-      "catalogID": "standing-band-shoulder-external-rotation",
-      "name": "Standing Band External Rotation",
-      "aliases": [
-        "Band Shoulder External Rotation",
-        "Resistance-Band External Rotation"
-      ],
-      "equipment": "band",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
-      "defaultWeight": 0,
-      "reps": 15,
-      "searchPriority": 82,
-      "involvement": [
-        { "muscle": "externalRotators", "role": "primary" },
-        { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "trapeziusMiddle", "role": "stabilizer" }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "scapularTranslation": "free",
-        "humerothoracicElevationDegrees": 0,
-        "elbowMotion": "angleHeld",
-        "elbowPosture": "flexed",
-        "upperArmSupport": "towelRoll",
-        "rotationResistanceGeometry": "medialAnchor",
-        "fixedPath": false,
-        "lowerBodyContribution": "none"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "hintermeister-1998-elastic-shoulder-rehabilitation"
-      ],
-      "execution": {
-        "startingPosition": "Stand side-on with the band anchored across the body and a towel roll between the working upper arm and torso.",
-        "movement": "Turn the forearm away from your stomach against the band.",
-        "endpoint": "Stop when the forearm has turned out as far as it comfortably goes.",
-        "returnPhase": "Return without moving the elbow, shoulder blade, or torso.",
-        "controlledJoints": "Keep the elbow bent about 90 degrees.",
-        "supportAndPosture": "Keep the towel roll between the working upper arm and torso.",
-        "disqualifyingCompensations": [
-          "Lifting the upper arm off the towel roll turns the isolated rotation into a raised-arm rotation.",
-          "Turning the torso to help the band turns the isolated rotation into a trunk twist."
         ],
         "sideOrDirection": "Complete all repetitions on one side, then repeat with the other arm."
       }

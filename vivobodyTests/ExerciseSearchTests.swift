@@ -102,10 +102,8 @@ struct ExerciseSearchTests {
         let expected: [(String, String)] = [
             ("Bodyweight Squat", "bodyweight-floor-squat-100-degrees"),
             ("Bodyweight Glute Bridge", "bodyweight-supine-glute-bridge-90-degrees"),
-            ("Single-Leg Bodyweight Heel Raise", "wall-balanced-single-leg-bodyweight-heel-raise"),
             ("Hands-Elevated Push-Up", "hands-elevated-push-up-30-48-cm"),
             ("Feet-Elevated Push-Up", "feet-elevated-push-up-30-48-cm"),
-            ("Straight-Leg Sit-Up", "straight-leg-unanchored-sit-up"),
             ("Reverse Crunch", "supine-reverse-crunch"),
             ("Bodyweight Lateral Lunge", "bodyweight-lateral-lunge-60-percent-height"),
             ("Hang Power Clean", "barbell-hang-power-clean"),
@@ -113,7 +111,6 @@ struct ExerciseSearchTests {
             ("Push Jerk", "barbell-push-jerk"),
             ("Thruster", "barbell-thruster"),
             ("Dumbbell Pullover", "two-hand-single-dumbbell-pullover"),
-            ("Glute-Ham Raise", "ghd-glute-ham-raise"),
         ]
 
         for (query, catalogID) in expected {
@@ -128,8 +125,6 @@ struct ExerciseSearchTests {
             ("Assisted Dip Machine", "life-fitness-pro2-assisted-dip-machine"),
             ("Seated Machine Triceps Extension", "life-fitness-pro2-seated-triceps-extension"),
             ("Glute Kickback Machine", "technogym-selection-machine-glute-kickback"),
-            ("Upper-Arm-Pad Pec Deck", "life-fitness-pro2-upper-arm-pad-pec-fly"),
-            ("Machine Pec Fly", "life-fitness-pro2-upper-arm-pad-pec-fly"),
             ("Cable Glute Kickback", "supported-cable-ankle-cuff-hip-extension"),
             ("Machine Chest Fly", "seated-handled-lever-machine-chest-fly"),
         ]
@@ -164,11 +159,9 @@ struct ExerciseSearchTests {
             ("Standing Dumbbell Biceps Curl", "standing-bilateral-supinated-dumbbell-curl"),
             ("Dumbbell Hammer Curl", "bilateral-dumbbell-hammer-curl"),
             ("Rope Triceps Pushdown", "bilateral-rope-cable-triceps-pushdown"),
-            ("Rope Face Pull", "high-pulley-rope-face-pull-with-external-rotation"),
             ("Barbell Shrug", "standing-bilateral-barbell-shrug"),
             ("Seated Handled Machine Chest Fly", "seated-handled-lever-machine-chest-fly"),
             ("Cable Glute Kickback", "supported-cable-ankle-cuff-hip-extension"),
-            ("Upper-Arm-Pad Machine Lateral Raise", "seated-upper-arm-pad-machine-lateral-raise"),
             ("38 cm Dumbbell Forward Step-Up", "two-dumbbell-forward-step-up"),
             ("Ab Wheel Rollout", "kneeling-ab-wheel-rollout"),
         ]
@@ -183,7 +176,6 @@ struct ExerciseSearchTests {
         let catalog = bundledCatalog()
         let expected: [(String, String)] = [
             ("Machine Reverse Fly", "neutral-grip-machine-reverse-fly"),
-            ("High-Plank Drag", "dumbbell-high-plank-drag"),
             ("Front Raise", "simultaneous-bilateral-dumbbell-front-raise"),
             ("Split Squat", "two-dumbbell-stationary-split-squat"),
             ("Bulgarian Split Squat", "two-dumbbell-rear-foot-elevated-split-squat"),

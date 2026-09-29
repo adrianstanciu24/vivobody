@@ -12,19 +12,64 @@
     ]
   },
   "steps": [
-    {"wait": {"label": "Exercises", "value": "Selected"}},
-    {"tap": {"label": "Search"}},
-    {"wait": {"role": "AXTextField", "value": "Search exercises"}},
-    {"tap": {"role": "AXTextField", "value": "Search exercises"}},
-    {"typeText": "rear delt fly"},
-    {"wait": {"labelRegex": "^TRX Reverse Fly,"}},
-    {"scrollTo": {"selector": {"labelRegex": "^Prone Dumbbell Reverse Fly,"}, "direction": "up", "maxSwipes": 8}},
-    {"assert": {"required": [{"labelRegex": "^Prone Dumbbell Reverse Fly,"}]}}
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "rear delt fly"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Prone Dumbbell Reverse Fly,"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Prone Dumbbell Reverse Fly,"
+        },
+        "direction": "up",
+        "maxSwipes": 8
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Prone Dumbbell Reverse Fly,"
+          }
+        ]
+      }
+    }
   ],
   "required": [
-    {"labelRegex": "^Prone Dumbbell Reverse Fly,"}
+    {
+      "labelRegex": "^Prone Dumbbell Reverse Fly,"
+    }
   ],
   "forbidden": [
-    {"labelRegex": "^Chest-Supported Dumbbell Rear-Delt Row,"}
+    {
+      "labelRegex": "^Chest-Supported Dumbbell Rear-Delt Row,"
+    }
   ]
 }

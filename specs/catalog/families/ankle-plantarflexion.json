@@ -541,68 +541,6 @@
       "requireAbsent": ["variant.handSupport", "variant.balanceAssistance", "variant.minimumHeelRiseCm", "variant.repetitionStyle"]
     },
     {
-      "id": "wall-balanced-bodyweight-fixture",
-      "description": "The bodyweight branch is exactly the continuous, single-leg, extended-knee heel raise with light wall balance and a five-centimeter minimum rise.",
-      "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
-      "then": [
-        {"field": "laterality", "value": "unilateral"},
-        {"field": "loadMode", "value": "nonComparable"},
-        {"field": "bodyweightFraction", "value": 0},
-        {"field": "variant.bodyPosition", "value": "standing"},
-        {"field": "variant.pelvisSupport", "value": "none"},
-        {"field": "variant.kneeFlexionDegrees", "value": 0},
-        {"field": "variant.footOrientation", "value": "sourceUnreported"},
-        {"field": "variant.forefootSupport", "value": "floor"},
-        {"field": "variant.loadInterface", "value": "none"},
-        {"field": "variant.loadAccounting", "value": "notApplicable"},
-        {"field": "variant.fixedPath", "value": false},
-        {"field": "variant.handSupport", "value": "lightWallBalanceAtShoulderHeight"},
-        {"field": "variant.balanceAssistance", "value": "balanceOnlyNoUnloading"},
-        {"field": "variant.minimumHeelRiseCm", "value": 5},
-        {"field": "variant.repetitionStyle", "value": "continuousSameSide"}
-      ],
-      "requirePresent": ["variant.handSupport", "variant.balanceAssistance", "variant.minimumHeelRiseCm", "variant.repetitionStyle"],
-      "requireAbsent": ["variant.machineType", "variant.limbSequence"],
-      "requireInvolvement": [
-        {"muscle": "gastrocnemius", "role": "primary"},
-        {"muscle": "soleus", "role": "primary"}
-      ]
-    },
-    {
-      "id": "source-unreported-foot-orientation-is-bodyweight-only",
-      "description": "The unreported foot-orientation value belongs only to the source-exact wall-balanced bodyweight fixture.",
-      "when": {"field": "variant.footOrientation", "operator": "equals", "value": "sourceUnreported"},
-      "then": [{"field": "equipment", "value": "bodyweight"}],
-      "requirePresent": [],
-      "requireAbsent": ["variant.machineType"]
-    },
-    {
-      "id": "light-wall-balance-is-bodyweight-only",
-      "description": "The light wall-balance vocabulary cannot be reused by a loaded machine record.",
-      "when": {"field": "variant.handSupport", "operator": "equals", "value": "lightWallBalanceAtShoulderHeight"},
-      "then": [{"field": "equipment", "value": "bodyweight"}],
-      "requirePresent": ["variant.balanceAssistance", "variant.minimumHeelRiseCm"],
-      "requireAbsent": ["variant.machineType"]
-    },
-    {
-      "id": "free-fixture-requires-tibialis-control",
-      "description": "Require reviewed tibialis-anterior ankle control on the free fixture; machine records retain their existing muscle roster.",
-      "when": {
-        "field": "equipment",
-        "operator": "equals",
-        "value": "bodyweight"
-      },
-      "then": [],
-      "requirePresent": [],
-      "requireAbsent": [],
-      "requireInvolvement": [
-        {
-          "muscle": "tibialisAnterior",
-          "role": "stabilizer"
-        }
-      ]
-    },
-    {
       "id": "machine-backrest-belongs-to-leg-press",
       "description": "machineBackrest belongs to leg press.",
       "when": {
@@ -1239,70 +1177,6 @@
           "Straightening the knees turns the seated calf raise into a standing-style raise.",
           "Curling the toes turns the calf raise into a toe-flexion exercise."
         ]
-      }
-    },
-    {
-      "catalogID": "wall-balanced-single-leg-bodyweight-heel-raise",
-      "name": "Wall-Balanced Single-Leg Heel Raise",
-      "aliases": ["Single-Leg Bodyweight Heel Raise", "Bodyweight Single-Leg Calf Raise", "Light-Wall-Balance Single-Leg Heel Raise", "Wall-Balanced Single-Leg Bodyweight Heel Raise"],
-      "equipment": "bodyweight",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
-      "defaultWeight": 0,
-      "reps": 12,
-      "searchPriority": 98,
-      "involvement": [
-        {"muscle": "gastrocnemius", "role": "primary"},
-        {"muscle": "soleus", "role": "primary"},
-        {
-          "muscle": "tibialisAnterior",
-          "role": "stabilizer"
-        }
-      ],
-      "variant": {
-        "kineticChain": "closed",
-        "bodyPosition": "standing",
-        "torsoSupport": "none",
-        "pelvisSupport": "none",
-        "pelvisMotion": "positionHeld",
-        "spineMotion": "positionHeld",
-        "hipMotion": "positionHeld",
-        "kneeMotion": "positionHeld",
-        "kneeFlexionDegrees": 0,
-        "ankleMotion": "plantarflexes",
-        "footMotion": "positionHeld",
-        "footOrientation": "sourceUnreported",
-        "movingSegment": "foot",
-        "forefootSupport": "floor",
-        "heelSupport": "none",
-        "loadInterface": "none",
-        "loadAccounting": "notApplicable",
-        "fixedPath": false,
-        "lowerBodyContribution": "isolatedJointMotion",
-        "handSupport": "lightWallBalanceAtShoulderHeight",
-        "balanceAssistance": "balanceOnlyNoUnloading",
-        "minimumHeelRiseCm": 5,
-        "repetitionStyle": "continuousSameSide"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": ["flanagan-2005-heel-raise-biomechanics", "manago-2021-single-leg-heel-raise", "sara-2021-single-leg-heel-raise"],
-      "execution": {
-        "startingPosition": "Stand on one leg with that knee straight, suspend the other foot, and touch the wall lightly at shoulder height with the hands for balance only.",
-        "movement": "Raise the working heel at least five centimeters without bending the knee or pushing into the wall.",
-        "endpoint": "Finish each repetition at or above the five-centimeter heel-rise mark.",
-        "returnPhase": "Lower the heel under control to the floor and continue on the same side.",
-        "controlledJoints": "Keep the working knee extended and avoid bouncing through the ankle or curling the toes.",
-        "supportAndPosture": "Use the wall only for light balance; do not transfer meaningful body weight into the hands.",
-        "disqualifyingCompensations": [
-          "Pushing into the wall unloads the working leg and leaves the exact fixture.",
-          "Bending the knee changes the extended-knee calf raise.",
-          "Rising less than five centimeters does not meet the reviewed repetition criterion."
-        ],
-        "sideOrDirection": "Complete the full set on one working leg, then repeat on the other leg."
       }
     },
     {

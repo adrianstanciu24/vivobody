@@ -239,9 +239,9 @@ extension ExerciseDetailScreen {
 #Preview("Exercise instructions") {
     NavigationStack {
         ExerciseInstructionsScreen(
-            exerciseName: "One-Arm Dumbbell Row (Hand and Knee on Bench)",
+            exerciseName: "One-Arm Dumbbell Row (Hand on Bench)",
             execution: ExecutionInstructions(
-                startingPosition: "Place one hand and the same-side knee on a bench with the dumbbell hanging straight down.",
+                startingPosition: "Place one hand on a bench, keep both feet planted, and let the dumbbell hang straight down.",
                 movement: "Pull the dumbbell toward the lower ribs without rotating the torso.",
                 endpoint: "Finish the pull with the dumbbell beside the ribs.",
                 returnPhase: "Lower the dumbbell under control until the arm is straight.",

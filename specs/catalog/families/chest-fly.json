@@ -387,24 +387,6 @@
       ]
     },
     {
-      "id": "dual-cable-fly-pins-reviewed-tower-geometry",
-      "description": "The cable branch preserves the exact two-tower standing fixture and per-stack load meaning.",
-      "when": {"field": "equipment", "operator": "equals", "value": "cable"},
-      "then": [
-        {"field": "loadMode", "value": "external"}, {"field": "variant.bodyPosition", "value": "standing"},
-        {"field": "variant.torsoSupport", "value": "none"}, {"field": "variant.scapularTranslation", "value": "free"},
-        {"field": "variant.gripOrientation", "value": "unreported"}, {"field": "variant.upperArmPath", "value": "sidewaysInCablePlane"},
-        {"field": "variant.handleType", "value": "singleCableHandles"}, {"field": "variant.cableAnchorHeight", "value": "headLevel"},
-        {"field": "variant.stanceConfiguration", "value": "lungeEitherLegForward"}, {"field": "variant.torsoInclination", "value": "forwardNonNumeric"},
-        {"field": "variant.resistanceGeometry", "value": "dualCableCoplanar"}, {"field": "variant.loadDistribution", "value": "equalAcrossTwoTowers"},
-        {"field": "variant.loadAccounting", "value": "perStack"}, {"field": "variant.fixedPath", "value": false}
-      ],
-      "requirePresent": ["variant.handleType", "variant.cableAnchorHeight", "variant.stanceConfiguration", "variant.torsoInclination", "variant.resistanceGeometry", "variant.loadDistribution", "variant.loadAccounting"],
-      "requireAbsent": ["variant.upperArmElevationDegrees", "variant.machineFixture"],
-      "requireMuscleRequirements": [{"anyOf": ["abs", "obliques", "lumbarExtensors"], "minimumRole": "stabilizer"}],
-      "requireAdditionalStabilityDemands": ["spine", "pelvis"]
-    },
-    {
       "id": "handled-machine-fly-pins-seated-lever-fixture",
       "description": "The reviewed machine fly uses seated posterior support and bilateral handles on a fixed lever path; entered load is comparable only on that exact fixture.",
       "when": {"field": "equipment", "operator": "equals", "value": "machine"},
@@ -594,37 +576,6 @@
           "Bending and straightening the elbows turns the fly into a band press.",
           "Leaning or twisting the torso to swing the hands together turns the fly into a full-body heave."
         ]
-      }
-    },
-    {
-      "catalogID": "standing-dual-cable-crossover",
-      "name": "Standing Dual-Cable Crossover",
-      "aliases": ["Cable Crossover", "Standing Cable Crossover", "Dual-Cable Fly"],
-      "equipment": "cable", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external",
-      "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 95,
-      "involvement": [
-        {"muscle": "pectoralisMajorSternocostal", "role": "primary"}, {"muscle": "pectoralisMajorClavicular", "role": "secondary"}, {"muscle": "deltoidAnterior", "role": "secondary"},
-        {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"},
-        {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
-        {"muscle": "abs", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}
-      ],
-      "variant": {
-        "kineticChain": "open", "lowerBodyContribution": "none", "bodyPosition": "standing", "torsoSupport": "none", "scapularTranslation": "free",
-        "gripOrientation": "unreported", "elbowMotion": "angleHeld", "elbowPosture": "nearExtended", "upperArmPath": "sidewaysInCablePlane",
-        "handleType": "singleCableHandles", "cableAnchorHeight": "headLevel", "stanceConfiguration": "lungeEitherLegForward",
-        "torsoInclination": "forwardNonNumeric", "resistanceGeometry": "dualCableCoplanar", "loadDistribution": "equalAcrossTwoTowers",
-        "loadAccounting": "perStack", "fixedPath": false
-      },
-      "additionalPrimeActions": [], "additionalStabilityDemands": ["spine", "pelvis"],
-      "evidenceRefs": ["ackland-2008-shoulder-moment-arms", "holzbaur-2005-upper-extremity", "schutz-2022-chest-exercise-joint-loading"],
-      "execution": {
-        "startingPosition": "Set both towers to head level with the same load on each stack, hold one handle per side, stand centered in a lunge stance, and lean forward with a fixed slight elbow bend.",
-        "movement": "Bring both arms together in front while keeping the arms and cables in the same plane.",
-        "endpoint": "End when the hands meet in front without crossing past each other.",
-        "returnPhase": "Open the arms under control to the sideways start without changing the elbow bend.",
-        "controlledJoints": "Keep both elbows slightly bent and move the arms symmetrically.",
-        "supportAndPosture": "Hold the lunge stance and forward torso position without stepping or twisting.",
-        "disqualifyingCompensations": ["Bending and straightening the elbows changes the fly into a cable press.", "Stepping, twisting, or allowing one side to lead changes the reviewed balanced path."]
       }
     },
     {

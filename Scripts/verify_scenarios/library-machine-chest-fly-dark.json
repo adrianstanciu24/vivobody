@@ -11,13 +11,13 @@
     {"wait": {"role": "AXTextField", "value": "Search exercises"}},
     {"tap": {"role": "AXTextField", "value": "Search exercises"}},
     {"typeText": "machine chest fly"},
-    {"wait": {"labelRegex": "^Upper-Arm-Pad Pec Fly,"}}
+    {"wait": {"labelRegex": "^Seated Machine Chest Fly [(]Handles[)],"}}
   ],
   "required": [
-    {"labelRegex": "^Seated Machine Chest Fly [(]Handles[)],"},
-    {"labelRegex": "^Upper-Arm-Pad Pec Fly,"}
+    {"labelRegex": "^Seated Machine Chest Fly [(]Handles[)],"}
   ],
   "forbidden": [
+    {"labelRegex": "^Upper-Arm-Pad Pec Fly,"},
     {"labelRegex": "^Cable Rear-Delt Fly,"}
   ]
 }

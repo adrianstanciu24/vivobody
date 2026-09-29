@@ -28,7 +28,7 @@
         ],
         "forbidden": [
           {
-            "labelContains": "Seated Diagonal Cable Pulldown"
+            "labelContains": "Lat Pulldown"
           }
         ]
       }
@@ -42,7 +42,7 @@
       "assert": {
         "required": [
           {
-            "labelContains": "Seated Diagonal Cable Pulldown"
+            "labelContains": "Lat Pulldown"
           },
           {
             "labelContains": "Standing Band Scapular Depression"
@@ -62,7 +62,7 @@
       "value": "Selected"
     },
     {
-      "labelContains": "Seated Diagonal Cable Pulldown"
+      "labelContains": "Lat Pulldown"
     },
     {
       "labelContains": "Standing Band Scapular Depression"

@@ -15,12 +15,10 @@ import Testing
 @MainActor
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 312)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 141)
+        #expect(CatalogData.records.count == 280)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 136)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
-        #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
-        #expect(CatalogData.record(forCatalogID: "repetitive-grip-trainer-close")?.familyID == "finger-flexion-grip")
         #expect(CatalogData.record(forCatalogID: "conventional-barbell-deadlift")?.familyID == "conventional-deadlift")
         #expect(CatalogData.record(forCatalogID: "continuous-top-start-barbell-romanian-deadlift")?.familyID == "romanian-deadlift")
         #expect(CatalogData.record(forCatalogID: "barbell-power-clean")?.modality == .power)
@@ -115,7 +113,6 @@ struct CatalogBiomechanicsTests {
             ("life-fitness-pro2-assisted-dip-machine", "dip"),
             ("life-fitness-pro2-seated-triceps-extension", "elbow-extension"),
             ("technogym-selection-machine-glute-kickback", "hip-extension"),
-            ("life-fitness-pro2-upper-arm-pad-pec-fly", "upper-arm-pad-chest-fly"),
         ]
 
         for (catalogID, familyID) in expected {
@@ -148,11 +145,6 @@ struct CatalogBiomechanicsTests {
             (
                 "panatta-1fw090-single-leg-45-degree-leg-press",
                 "inclined-leg-press",
-                .unilateral
-            ),
-            (
-                "hammer-strength-mtscp-single-arm-chest-press",
-                "horizontal-press",
                 .unilateral
             ),
             (
@@ -189,11 +181,9 @@ struct CatalogBiomechanicsTests {
             ("standing-bilateral-supinated-dumbbell-curl", "elbow-flexion"),
             ("bilateral-dumbbell-hammer-curl", "elbow-flexion"),
             ("bilateral-rope-cable-triceps-pushdown", "elbow-extension"),
-            ("high-pulley-rope-face-pull-with-external-rotation", "externally-rotating-face-pull"),
             ("standing-bilateral-barbell-shrug", "scapular-elevation"),
             ("seated-handled-lever-machine-chest-fly", "chest-fly"),
             ("supported-cable-ankle-cuff-hip-extension", "hip-extension"),
-            ("seated-upper-arm-pad-machine-lateral-raise", "upper-arm-pad-shoulder-abduction"),
             ("two-dumbbell-forward-step-up", "step-up"),
             ("kneeling-ab-wheel-rollout", "kneeling-ab-wheel-rollout"),
         ]
@@ -212,13 +202,6 @@ struct CatalogBiomechanicsTests {
         #expect(rollout.equipment == .abWheel)
         #expect(rollout.loadMode == .nonComparable)
         #expect(!item.tracksResistance)
-
-        let facePull = try #require(
-            CatalogData.record(
-                forCatalogID: "high-pulley-rope-face-pull-with-external-rotation"
-            )
-        )
-        #expect(facePull.name == "Rope Face Pull with External Rotation")
     }
 
     @Test func defaultCatalogGapFixturesReachTheRuntimeProjection() throws {
@@ -241,11 +224,6 @@ struct CatalogBiomechanicsTests {
                 "bodyweight-glute-bridge", .bodyweight, .dynamicStrength, .nonComparable
             ),
             (
-                "wall-balanced-single-leg-bodyweight-heel-raise",
-                "Wall-Balanced Single-Leg Heel Raise",
-                "ankle-plantarflexion", .bodyweight, .dynamicStrength, .nonComparable
-            ),
-            (
                 "hands-elevated-push-up-30-48-cm",
                 "Hands-Elevated Push-Up",
                 "decline-press", .bodyweight, .dynamicStrength, .bodyweightAdded
@@ -254,11 +232,6 @@ struct CatalogBiomechanicsTests {
                 "feet-elevated-push-up-30-48-cm",
                 "Feet-Elevated Push-Up",
                 "incline-press", .bodyweight, .dynamicStrength, .bodyweightAdded
-            ),
-            (
-                "straight-leg-unanchored-sit-up",
-                "Straight-Leg Unanchored Sit-Up",
-                "straight-leg-sit-up", .bodyweight, .dynamicStrength, .nonComparable
             ),
             (
                 "supine-reverse-crunch",
@@ -294,11 +267,6 @@ struct CatalogBiomechanicsTests {
                 "two-hand-single-dumbbell-pullover",
                 "Two-Hand Single-Dumbbell Pullover",
                 "shoulder-extension-isolation", .dumbbell, .dynamicStrength, .external
-            ),
-            (
-                "ghd-glute-ham-raise",
-                "GHD Glute-Ham Raise",
-                "glute-ham-raise", .gluteHamDeveloper, .dynamicStrength, .nonComparable
             ),
         ]
 
@@ -536,19 +504,11 @@ struct CatalogBiomechanicsTests {
         ) == 0)
     }
 
-    @Test func ghdEquipmentKeepsFixtureLocalResistanceSemantics() throws {
+    @Test func ghdEquipmentKeepsFixtureLocalResistanceSemantics() {
         #expect(Equipment.gluteHamDeveloper.rawValue == "gluteHamDeveloper")
         #expect(Equipment.gluteHamDeveloper.displayName == "GHD")
         #expect(!Equipment.gluteHamDeveloper.requiresNonComparableLoad)
 
-        let record = try #require(
-            CatalogData.record(forCatalogID: "ghd-glute-ham-raise")
-        )
-        let item = ExerciseCatalogItem(record: record, createdAt: .distantPast)
-        #expect(record.equipment == .gluteHamDeveloper)
-        #expect(record.loadMode == .nonComparable)
-        #expect(record.defaultWeight == 0)
-        #expect(!item.tracksResistance)
         #expect(!ExerciseResistanceCapability.tracksResistance(
             loadMode: .nonComparable,
             equipment: .gluteHamDeveloper
@@ -794,13 +754,6 @@ struct CatalogBiomechanicsTests {
         #expect(hipThrust.muscleInvolvement.role(for: .gluteMed) == .stabilizer)
         #expect(hipThrust.muscleInvolvement.role(for: .vasti) == .secondary)
 
-        let hipAbduction = try #require(
-            CatalogData.record(forExerciseNamed: "Pressure-Biofeedback Side-Lying Hip Abduction")
-        )
-        #expect(hipAbduction.muscleInvolvement.role(for: .gluteMed) == .primary)
-        #expect(hipAbduction.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(hipAbduction.muscleInvolvement.role(for: .gluteMax) == nil)
-
         let internalRotation = try #require(
             CatalogData.record(forExerciseNamed: "Seated Flywheel Hip Internal Rotation")
         )
@@ -808,17 +761,6 @@ struct CatalogBiomechanicsTests {
         #expect(internalRotation.muscleInvolvement.role(for: .tensorFasciaeLatae) == .primary)
         #expect(internalRotation.muscleInvolvement.role(for: .gluteMin) == .secondary)
         #expect(internalRotation.muscleInvolvement.role(for: .gluteMax) == nil)
-
-        let externalRotation = try #require(
-            CatalogData.record(forExerciseNamed: "Therapist-Held Supine Band Hip External Rotation")
-        )
-        #expect(externalRotation.muscleInvolvement.role(for: .obturatorInternusGemelli) == .primary)
-        #expect(externalRotation.muscleInvolvement.role(for: .obturatorExternus) == .secondary)
-        #expect(externalRotation.muscleInvolvement.role(for: .piriformis) == .secondary)
-        #expect(externalRotation.muscleInvolvement.role(for: .quadratusFemoris) == .secondary)
-        #expect(externalRotation.muscleInvolvement.role(for: .gluteMax) == nil)
-        #expect(externalRotation.muscleInvolvement.role(for: .gluteMed) == nil)
-        #expect(externalRotation.muscleInvolvement.role(for: .sartorius) == nil)
 
         let pallof = try #require(
             CatalogData.record(forExerciseNamed: "Feet-Together Band Pallof Hold")
@@ -844,19 +786,6 @@ struct CatalogBiomechanicsTests {
         #expect(depression.muscleInvolvement.role(for: .serratus) == .stabilizer)
         #expect(depression.muscleInvolvement.role(for: .pectoralisMinor) == nil)
 
-        let stabilizationShrug = try #require(
-            CatalogData.record(forExerciseNamed: "Arm-Raised Stabilization Shrug")
-        )
-        #expect(stabilizationShrug.familyID == "scapular-elevation")
-        #expect(stabilizationShrug.muscleInvolvement.role(for: .trapeziusUpper) == .primary)
-        #expect(stabilizationShrug.muscleInvolvement.role(for: .levatorScapulae) == .primary)
-        #expect(stabilizationShrug.muscleInvolvement.role(for: .serratus) == .secondary)
-        #expect(stabilizationShrug.muscleInvolvement.role(for: .trapeziusLower) == .secondary)
-        #expect(stabilizationShrug.muscleInvolvement.role(for: .deltoidLateral) == .stabilizer)
-        #expect(stabilizationShrug.muscleInvolvement.role(for: .supraspinatus) == .stabilizer)
-        #expect(stabilizationShrug.muscleInvolvement.role(for: .fingerFlexors) == nil)
-        #expect(stabilizationShrug.muscleInvolvement.role(for: .extensorCarpiRadialis) == nil)
-
         let uprightRow = try #require(
             CatalogData.record(forExerciseNamed: "Standing Low-Cable Upright Row")
         )
@@ -870,46 +799,6 @@ struct CatalogBiomechanicsTests {
         #expect(uprightRow.muscleInvolvement.role(for: .supraspinatus) == .secondary)
         #expect(uprightRow.muscleInvolvement.role(for: .bicepsBrachii) == .secondary)
         #expect(uprightRow.muscleInvolvement.role(for: .trapeziusMiddle) == .stabilizer)
-
-        let diagonalPull = try #require(
-            CatalogData.record(forExerciseNamed: "Seated Diagonal Cable Pulldown")
-        )
-        #expect(diagonalPull.familyID == "diagonal-pull")
-        #expect(diagonalPull.mechanic == .compound)
-        #expect(diagonalPull.pattern == .pull)
-        #expect(diagonalPull.direction == .diagonal)
-        #expect(diagonalPull.planes == [.sagittal])
-        #expect(diagonalPull.loadMode == .external)
-        #expect(diagonalPull.defaultWeight == 35)
-        #expect(diagonalPull.defaultWeightKg == 15)
-        #expect(diagonalPull.muscleInvolvement.role(for: .lats) == .primary)
-        #expect(diagonalPull.muscleInvolvement.role(for: .teresMajor) == .secondary)
-        #expect(diagonalPull.muscleInvolvement.role(for: .deltoidPosterior) == .secondary)
-        #expect(diagonalPull.muscleInvolvement.role(for: .bicepsBrachii) == .secondary)
-        #expect(diagonalPull.muscleInvolvement.role(for: .trapeziusMiddle) == .stabilizer)
-        #expect(diagonalPull.muscleInvolvement.role(for: .rhomboids) == .stabilizer)
-        #expect(diagonalPull.muscleInvolvement.role(for: .fingerFlexors) == .stabilizer)
-        #expect(diagonalPull.muscleInvolvement.role(for: .extensorCarpiRadialis) == .stabilizer)
-
-        let gripTrainer = try #require(
-            CatalogData.record(forExerciseNamed: "Repetitive Grip-Trainer Close")
-        )
-        #expect(gripTrainer.familyID == "finger-flexion-grip")
-        #expect(gripTrainer.mechanic == .isolation)
-        #expect(gripTrainer.pattern == nil)
-        #expect(gripTrainer.direction == nil)
-        #expect(gripTrainer.planes == [.sagittal])
-        #expect(gripTrainer.equipment == .gripTrainer)
-        #expect(gripTrainer.equipment.displayName == "Grip Trainer")
-        #expect(gripTrainer.laterality == .unilateral)
-        #expect(gripTrainer.modality == .dynamicStrength)
-        #expect(gripTrainer.trackingMode == .reps)
-        #expect(gripTrainer.loadMode == .nonComparable)
-        #expect(gripTrainer.defaultWeight == 0)
-        #expect(gripTrainer.reps == 30)
-        #expect(gripTrainer.muscleInvolvement.role(for: .fingerFlexors) == .primary)
-        #expect(gripTrainer.muscleInvolvement.role(for: .extensorCarpiRadialis) == .stabilizer)
-        #expect(gripTrainer.muscleInvolvement.contributions.count == 2)
 
         let landmine = try #require(
             CatalogData.record(forExerciseNamed: "Standing Single-Arm Landmine Press Power Test")

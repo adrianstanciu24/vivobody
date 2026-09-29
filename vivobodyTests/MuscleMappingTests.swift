@@ -216,7 +216,7 @@ struct MuscleMappingTests {
         #expect(Muscle.allCases.flatMap(\.nodeNames).contains("Serratus_Posterior_Superior_L") == false)
     }
 
-    @Test func hipRotationFamiliesRetainExactRolesWithoutProxyPainting() {
+    @Test func hipInternalRotationRetainsExactRolesWithoutProxyPainting() {
         let internalRotation = Muscle.involvement(
             forExerciseNamed: "Seated Flywheel Hip Internal Rotation"
         )
@@ -228,24 +228,6 @@ struct MuscleMappingTests {
         #expect(internalRotation.volumeCredit(for: .obliques) == 0.1)
         #expect(internalRotation.anatomyNodeChannels["Gluteus_Medius_L"]?.intensity == 1)
         #expect(internalRotation.anatomyNodeChannels["Tensor_Fascia_Latae_L"]?.intensity == 1)
-
-        let externalRotation = Muscle.involvement(
-            forExerciseNamed: "Therapist-Held Supine Band Hip External Rotation"
-        )
-        #expect(externalRotation.role(for: .obturatorInternusGemelli) == .primary)
-        #expect(externalRotation.role(for: .obturatorExternus) == .secondary)
-        #expect(externalRotation.role(for: .piriformis) == .secondary)
-        #expect(externalRotation.role(for: .quadratusFemoris) == .secondary)
-        #expect(externalRotation.role(for: .obliques) == .stabilizer)
-        #expect(externalRotation.role(for: .medialHamstrings) == .stabilizer)
-        #expect(externalRotation.volumeCredit(for: .obturatorInternusGemelli) == 1)
-        #expect(externalRotation.volumeCredit(for: .obturatorExternus) == 0.5)
-        #expect(externalRotation.volumeCredit(for: .obliques) == 0.1)
-        #expect(externalRotation.volumeCredit(for: .medialHamstrings) == 0.1)
-        #expect(externalRotation.anatomyNodeChannels["Obturator_Internus_L"] == nil)
-        #expect(externalRotation.anatomyNodeChannels["Piriformis_L"] == nil)
-        #expect(externalRotation.anatomyNodeChannels["Semitendinosus_L"]?.intensity == 0.2)
-        #expect(externalRotation.anatomyNodeChannels["External_Oblique_L"]?.intensity == 0.2)
     }
 
     @Test func unknownAndObsoleteSnapshotKeysDoNotInventAnatomy() {

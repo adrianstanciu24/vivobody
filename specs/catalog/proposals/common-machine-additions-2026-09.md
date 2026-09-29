@@ -1,12 +1,12 @@
 # Common gym machine additions — September 2026
 
-Status: three exact Life Fitness Insignia fixtures active following owner authorization on 2026-09-18.
+Status: two fixtures remain active following owner authorization on 2026-09-18. The SS-AB abdominal crunch was retired on 2026-09-29; its ID remains reserved.
 
 ## Fixture and ownership decisions
 
 | Fixture | Active family | Reviewed repetition | Muscle roles |
 |---|---|---|---|
-| SS-AB seated abdominal crunch | [seated-machine-abdominal-crunch](../families/seated-machine-abdominal-crunch.json) | Seated upper-torso curl; arms guide, hips stay seated without deliberately driving the repetition. | Abs primary; obliques secondary. |
+| SS-AB seated abdominal crunch | [Retired ID](../retired-exercises.json) | Seated upper-torso curl; arms guide, hips stay seated without deliberately driving the repetition. | Abs primary; obliques secondary. |
 | SS-BE seated back extension | [seated-machine-back-extension](../families/seated-machine-back-extension.json) | Supported torso extension with seated hip opening; lower-back contact with the lumbar pad is the endpoint. | Lumbar extensors primary; gluteus maximus secondary. |
 | SS-GLB belt-loaded glute bridge | [belt-loaded-machine-glute-bridge](../families/belt-loaded-machine-glute-bridge.json) | Both feet planted, centered hip belt, supported upper torso, crossed arms; raise hips until thighs align with torso. | Gluteus maximus primary; vasti secondary; biceps femoris, lumbar extensors, gluteus medius and soleus stabilizers. |
 
@@ -49,15 +49,16 @@ changes are needed.
 
 Catalog output is generated through `Scripts/catalog.py`. Focused mutation
 checks cover fixture/load geometry, required contributor loss, extra actions,
-and insertion into neighboring families. The `catalog-common-machines`
-Baguette scenario covers Library discovery and exercise details; its light and
-accessibility variants exercise the same new entries at their relevant states.
+and insertion into neighboring families. At activation, the
+`catalog-common-machines` Baguette scenarios covered all three entries.
+The current scenario omits the retired crunch.
 
 ## Verification evidence
 
-`Scripts/catalog.py --check` passes with 240 exercises, 102 real families and
-277 evidence sources. All 237 existing runtime records are unchanged; exactly
-three new stable exercise IDs are present. Twelve focused catalog tests pass,
+At the 2026-09-18 activation, `Scripts/catalog.py --check` passed with 240
+exercises, 102 real families and 277 evidence sources. All 237 then-existing
+runtime records were unchanged; three new stable exercise IDs were added.
+Twelve focused catalog tests passed,
 including rejection of alternate fixtures, unsupported load semantics, missing
 contributors and neighboring-family admission. Documentation and whitespace
 checks pass.
@@ -70,7 +71,7 @@ the explicit lumbar-extensor surface limitation. Artifacts are under
 `.verify/scenarios/catalog-common-machines/` and
 `.verify/scenarios/catalog-common-machines-light/`.
 
-The accessibility-large light-mode crunch scenario also passes. Its inspected
+The now-retired accessibility-large light-mode crunch scenario also passed. Its inspected
 screenshot shows the complete exercise name wrapping across four lines without
 truncation, the highlighted abdominal surface and the primary Abs role.
 Library discovery uses the full list because the Core chip is horizontally

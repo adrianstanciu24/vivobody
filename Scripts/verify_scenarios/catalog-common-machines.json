@@ -17,220 +17,6 @@
       }
     },
     {
-      "tap": {
-        "identifier": "libraryExerciseFilterCore"
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "labelRegex": "^Life\\ Fitness\\ Insignia\\ Seated\\ Abdominal\\ Crunch,"
-        },
-        "direction": "up",
-        "maxSwipes": 60
-      }
-    },
-    {
-      "tap": {
-        "labelRegex": "^Life\\ Fitness\\ Insignia\\ Seated\\ Abdominal\\ Crunch,"
-      }
-    },
-    {
-      "wait": {
-        "label": "STRENGTH \u00b7 REPS"
-      }
-    },
-    {
-      "assert": {
-        "required": [
-          {
-            "label": "Life Fitness Insignia Seated Abdominal Crunch"
-          }
-        ]
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "labelContains": "Muscles used by Life Fitness Insignia Seated Abdominal Crunch"
-        },
-        "direction": "up"
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "labelRegex": "^Primary.*Abs"
-        },
-        "direction": "up"
-      }
-    },
-    {
-      "assert": {
-        "required": [
-          {
-            "labelRegex": "^Primary.*Abs"
-          }
-        ]
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "identifier": "exercise-how-to-perform"
-        },
-        "direction": "up"
-      }
-    },
-    {
-      "swipe": {
-        "direction": "up",
-        "count": 1
-      }
-    },
-    {
-      "tap": {
-        "identifier": "exercise-how-to-perform"
-      }
-    },
-    {
-      "wait": {
-        "identifier": "exercise-execution-movement"
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "identifier": "exercise-execution-starting-position"
-        },
-        "direction": "down"
-      }
-    },
-    {
-      "assert": {
-        "required": [
-          {
-            "identifier": "exercise-execution-starting-position",
-            "labelContains": "selected stack weight"
-          }
-        ],
-        "forbidden": [
-          {
-            "identifier": "exercise-execution-side-direction"
-          }
-        ]
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "identifier": "exercise-execution-movement"
-        },
-        "direction": "up"
-      }
-    },
-    {
-      "assert": {
-        "required": [
-          {
-            "identifier": "exercise-execution-movement",
-            "labelContains": "Curl your upper torso"
-          }
-        ],
-        "forbidden": [
-          {
-            "identifier": "exercise-execution-side-direction"
-          }
-        ]
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "identifier": "exercise-execution-endpoint"
-        },
-        "direction": "up"
-      }
-    },
-    {
-      "assert": {
-        "required": [
-          {
-            "identifier": "exercise-execution-endpoint",
-            "labelContains": "hips seated"
-          }
-        ],
-        "forbidden": [
-          {
-            "identifier": "exercise-execution-side-direction"
-          }
-        ]
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "identifier": "exercise-execution-return"
-        },
-        "direction": "up"
-      }
-    },
-    {
-      "assert": {
-        "required": [
-          {
-            "identifier": "exercise-execution-return",
-            "labelContains": "stack drop"
-          }
-        ],
-        "forbidden": [
-          {
-            "identifier": "exercise-execution-side-direction"
-          }
-        ]
-      }
-    },
-    {
-      "scrollTo": {
-        "selector": {
-          "identifier": "exercise-execution-support-posture"
-        },
-        "direction": "up"
-      }
-    },
-    {
-      "assert": {
-        "required": [
-          {
-            "identifier": "exercise-execution-support-posture",
-            "labelContains": "lower back supported"
-          }
-        ],
-        "forbidden": [
-          {
-            "identifier": "exercise-execution-side-direction"
-          }
-        ]
-      }
-    },
-    {
-      "relaunch": {
-        "reset": false,
-        "tab": "library",
-        "arguments": [
-          "--static-body",
-          "-settings.appearance",
-          "dark"
-        ]
-      }
-    },
-    {
-      "wait": {
-        "label": "Exercises",
-        "value": "Selected"
-      }
-    },
-    {
       "scrollTo": {
         "selector": {
           "labelRegex": "^Life\\ Fitness\\ Insignia\\ Machine\\ Glute\\ Bridge,"
@@ -246,7 +32,7 @@
     },
     {
       "wait": {
-        "label": "STRENGTH \u00b7 REPS"
+        "label": "STRENGTH · REPS"
       }
     },
     {
@@ -455,7 +241,7 @@
     },
     {
       "wait": {
-        "label": "STRENGTH \u00b7 REPS"
+        "label": "STRENGTH · REPS"
       }
     },
     {
@@ -681,7 +467,7 @@
     },
     {
       "wait": {
-        "label": "STRENGTH \u00b7 REPS"
+        "label": "STRENGTH · REPS"
       }
     },
     {

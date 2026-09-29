@@ -41,7 +41,7 @@ import SwiftData
                 ("Barbell Bench Press", 10, 105),
                 ("Lat Pulldown", 12, 75),
                 ("Lateral Raise", 12, 10),
-                ("Rope Face Pull with External Rotation", 12, 25),
+                ("Cable Rear-Delt Fly", 12, 25),
                 ("Supinated Straight-Bar Cable Curl", 12, 30),
                 ("Rope Cable Triceps Pushdown", 12, 30),
             ],

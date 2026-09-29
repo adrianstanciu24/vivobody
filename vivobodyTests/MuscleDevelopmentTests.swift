@@ -415,7 +415,7 @@ struct MuscleDevelopmentTests {
 
         let abductionSession = session(
             at: day(0),
-            [lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs, sets: 3, reps: 15, weight: 90)]
+            [lift("Technogym Seated Hip Abduction Machine", .legs, sets: 3, reps: 15, weight: 90)]
         )
         let abductionNodes = MuscleDevelopment.nodeIntensities(from: [abductionSession], now: day(0))
         let gluteMedDevelopment = abductionNodes["Gluteus_Medius_L"] ?? 0
@@ -467,21 +467,6 @@ struct MuscleDevelopmentTests {
         #expect(internalState.adaptation(.obliques) > 0)
         #expect((internalNodes["Gluteus_Medius_L"] ?? 0) > 0)
         #expect((internalNodes["Tensor_Fascia_Latae_L"] ?? 0) > 0)
-
-        let externalRotation = session(
-            at: day(0),
-            [lift("Therapist-Held Supine Band Hip External Rotation", .legs, sets: 3, reps: 10, weight: 0)]
-        )
-        let externalState = MuscleDevelopment.simulate(from: [externalRotation], now: day(0))
-        let externalNodes = MuscleDevelopment.nodeIntensities(from: [externalRotation], now: day(0))
-        #expect(externalState.adaptation(.obturatorInternusGemelli) > 0)
-        #expect(externalState.adaptation(.obturatorExternus) > 0)
-        #expect(externalState.adaptation(.piriformis) > 0)
-        #expect(externalState.adaptation(.quadratusFemoris) > 0)
-        #expect(externalState.adaptation(.obturatorExternus) < externalState.adaptation(.obturatorInternusGemelli))
-        #expect(externalState.adaptation(.obliques) > 0)
-        #expect(externalState.adaptation(.medialHamstrings) > 0)
-        #expect((externalNodes["External_Oblique_L"] ?? 0) > 0)
     }
 
     @Test func hipAndHingeBoundariesCreditMoversWithReducedStabilizerCredit() {

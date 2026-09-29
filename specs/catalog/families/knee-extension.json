@@ -307,46 +307,6 @@
   ],
   "exerciseRules": [
     {
-      "id": "reclined-leg-extension-uses-reviewed-hip-angle",
-      "description": "The reclined fixture uses the reviewed 40-degree hip-flexion target and promotes rectus femoris to primary.",
-      "when": {
-        "field": "variant.bodyPosition",
-        "operator": "equals",
-        "value": "reclined"
-      },
-      "then": [
-        {
-          "field": "variant.hipFlexionDegrees",
-          "value": 40
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": [],
-      "requireInvolvement": [
-        {
-          "muscle": "rectusFemoris",
-          "role": "primary"
-        }
-      ]
-    },
-    {
-      "id": "forty-degree-leg-extension-is-reclined",
-      "description": "The reviewed 40-degree hip-flexion fixture is the reclined condition.",
-      "when": {
-        "field": "variant.hipFlexionDegrees",
-        "operator": "equals",
-        "value": 40
-      },
-      "then": [
-        {
-          "field": "variant.bodyPosition",
-          "value": "reclined"
-        }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
       "id": "seated-leg-extension-uses-reviewed-hip-angle",
       "description": "The upright seated fixture uses 90 degrees of hip flexion and keeps rectus femoris secondary.",
       "when": {
@@ -447,75 +407,6 @@
     }
   },
   "exercises": [
-    {
-      "catalogID": "reclined-unilateral-machine-leg-extension",
-      "name": "Reclined Single-Leg Extension",
-      "aliases": [
-        "40-Degree Single-Leg Extension",
-        "Reclined Unilateral Machine Leg Extension"
-      ],
-      "equipment": "machine",
-      "laterality": "unilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0.0,
-      "defaultWeight": 20,
-      "defaultWeightKg": 10,
-      "reps": 12,
-      "searchPriority": 75,
-      "involvement": [
-        {
-          "muscle": "vasti",
-          "role": "primary"
-        },
-        {
-          "muscle": "rectusFemoris",
-          "role": "primary"
-        }
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "reclined",
-        "torsoSupport": "machinePad",
-        "pelvisSupport": "machineSeat",
-        "pelvisMotion": "positionHeld",
-        "spineMotion": "positionHeld",
-        "hipMotion": "positionHeld",
-        "hipFlexionDegrees": 40,
-        "kneeMotion": "extends",
-        "kneeStartFlexionDegrees": 110,
-        "kneeEndFlexionDegrees": 0,
-        "ankleMotion": "positionHeld",
-        "footMotion": "positionHeld",
-        "movingSegment": "lowerLeg",
-        "loadInterface": "distalShinPad",
-        "machineType": "leverKneeExtension",
-        "loadAccounting": "enteredExternalLoadSameFixtureOnly",
-        "fixedPath": true,
-        "lowerBodyContribution": "isolatedJointMotion"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "cybex-2008-mg500-manual",
-        "larsen-2025-leg-extension-hip-flexion",
-        "mitsuya-2023-leg-extension-hip-flexion"
-      ],
-      "execution": {
-        "startingPosition": "Sit in a single-leg knee-extension machine with the backrest reclined so your hip is bent near 40 degrees. Align your knee with the machine's pivot and place the lower shin against the pad.",
-        "movement": "Straighten the knee completely.",
-        "endpoint": "Finish with the knee completely straight.",
-        "returnPhase": "Return under control.",
-        "controlledJoints": "Keep your pelvis, back, hip, ankle, and foot still.",
-        "supportAndPosture": "Keep your back against the reclined machine pad and your pelvis on the seat.",
-        "disqualifyingCompensations": [
-          "Rocking the pelvis or arching the back to move the pad turns the leg extension into a trunk-driven heave.",
-          "Swinging the lower leg up with momentum turns the leg extension into a leg swing."
-        ],
-        "sideOrDirection": "Complete the set with one leg, then repeat with the other leg."
-      }
-    },
     {
       "catalogID": "upright-unilateral-machine-leg-extension",
       "name": "Upright Single-Leg Extension",

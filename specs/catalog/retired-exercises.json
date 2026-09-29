@@ -1,0 +1,407 @@
+{
+  "schemaVersion": 1,
+  "description": "Reserved identities of exercises retired from the bundled catalog. Never assign these catalogIDs to a new movement. Existing template and workout snapshots retain their original identity. Prior retirements were backfilled from the 458ae70 bundled runtime snapshot; retirement dates are included only when established.",
+  "retired": [
+    {
+      "catalogID": "banded-high-plank-clockface-tap",
+      "name": "Banded High-Plank Clockface Tap",
+      "retiredOn": "2026-09-29",
+      "familyID": "banded-high-plank-clockface-tap"
+    },
+    {
+      "catalogID": "barbell-good-morning-25-percent-body-mass",
+      "name": "25% Body-Mass Barbell Good Morning",
+      "retiredOn": "2026-09-27",
+      "familyID": "hip-hinge"
+    },
+    {
+      "catalogID": "barbell-rear-foot-elevated-split-squat",
+      "name": "Barbell Rear-Foot-Elevated Split Squat",
+      "familyID": "split-stance-squat"
+    },
+    {
+      "catalogID": "barbell-romanian-deadlift",
+      "name": "Floor-Touch Barbell Romanian Deadlift",
+      "familyID": "romanian-deadlift"
+    },
+    {
+      "catalogID": "barbell-romanian-deadlift-15-cm-step",
+      "name": "15 cm Step Barbell Romanian Deadlift",
+      "familyID": "romanian-deadlift"
+    },
+    {
+      "catalogID": "barbell-split-jerk",
+      "name": "Barbell Split Jerk",
+      "retiredOn": "2026-09-29",
+      "familyID": "split-jerk"
+    },
+    {
+      "catalogID": "barbell-split-squat",
+      "name": "Barbell Split Squat",
+      "familyID": "split-stance-squat"
+    },
+    {
+      "catalogID": "bilateral-30-degree-stabilization-shrug",
+      "name": "Arm-Raised Stabilization Shrug",
+      "retiredOn": "2026-09-29",
+      "familyID": "scapular-elevation"
+    },
+    {
+      "catalogID": "bodyweight-bulgarian-split-squat",
+      "name": "Bodyweight Bulgarian Split Squat",
+      "familyID": "split-stance-squat"
+    },
+    {
+      "catalogID": "bodyweight-forward-lunge",
+      "name": "Bodyweight Forward Lunge",
+      "familyID": "dynamic-lunge"
+    },
+    {
+      "catalogID": "bodyweight-reverse-lunge",
+      "name": "Bodyweight Reverse Lunge",
+      "familyID": "dynamic-lunge"
+    },
+    {
+      "catalogID": "bodyweight-split-squat",
+      "name": "Bodyweight Split Squat",
+      "familyID": "split-stance-squat"
+    },
+    {
+      "catalogID": "close-grip-neutral-lat-pulldown",
+      "name": "Close-Grip Neutral Lat Pulldown",
+      "familyID": "vertical-pull"
+    },
+    {
+      "catalogID": "dumbbell-high-plank-drag",
+      "name": "High-Plank Drag",
+      "retiredOn": "2026-09-29",
+      "familyID": "high-plank-crossbody-drag"
+    },
+    {
+      "catalogID": "dumbbell-weighted-supine-core-hold",
+      "name": "Dumbbell-Weighted Supine Core Hold",
+      "retiredOn": "2026-09-29",
+      "familyID": "dumbbell-weighted-supine-core-hold"
+    },
+    {
+      "catalogID": "flex-fitness-bilateral-prone-leg-curl",
+      "name": "Flex Fitness Bilateral Prone Leg Curl",
+      "retiredOn": "2026-09-29",
+      "familyID": "knee-flexion"
+    },
+    {
+      "catalogID": "foot-anchored-band-reverse-lunge",
+      "name": "Reverse Lunge with Band",
+      "familyID": "dynamic-lunge"
+    },
+    {
+      "catalogID": "forty-five-degree-bench-anchored-core-hold",
+      "name": "Bench-Anchored Core Hold",
+      "retiredOn": "2026-09-29",
+      "familyID": "bench-anchored-supine-trunk-hold"
+    },
+    {
+      "catalogID": "ghd-glute-ham-raise",
+      "name": "GHD Glute-Ham Raise",
+      "retiredOn": "2026-09-29",
+      "familyID": "glute-ham-raise"
+    },
+    {
+      "catalogID": "goblet-reverse-lunge",
+      "name": "Goblet Reverse Lunge",
+      "familyID": "dynamic-lunge"
+    },
+    {
+      "catalogID": "goblet-split-squat",
+      "name": "Goblet Split Squat",
+      "familyID": "split-stance-squat"
+    },
+    {
+      "catalogID": "hammer-strength-mtscp-single-arm-chest-press",
+      "name": "Hammer Strength MTSCP Single-Arm Chest Press",
+      "retiredOn": "2026-09-29",
+      "familyID": "horizontal-press"
+    },
+    {
+      "catalogID": "high-handle-trap-bar-farmer-carry",
+      "name": "High-Handle Trap-Bar Farmer Carry",
+      "retiredOn": "2026-09-29",
+      "familyID": "farmer-carry"
+    },
+    {
+      "catalogID": "high-pulley-rope-face-pull-with-external-rotation",
+      "name": "Rope Face Pull with External Rotation",
+      "retiredOn": "2026-09-29",
+      "familyID": "externally-rotating-face-pull"
+    },
+    {
+      "catalogID": "kettlebell-goblet-squat",
+      "name": "Kettlebell Goblet Squat",
+      "familyID": "bilateral-squat"
+    },
+    {
+      "catalogID": "kettlebell-high-plank-drag",
+      "name": "Kettlebell High-Plank Drag",
+      "familyID": "high-plank-crossbody-drag"
+    },
+    {
+      "catalogID": "landmine-punch",
+      "name": "Landmine Punch",
+      "retiredOn": "2026-09-29",
+      "familyID": "landmine-punch"
+    },
+    {
+      "catalogID": "lateral-shuffle-to-medicine-ball-throw",
+      "name": "Lateral Shuffle Rotational Medicine Ball Throw",
+      "retiredOn": "2026-09-29",
+      "familyID": "medicine-ball-lateral-shuffle-throw"
+    },
+    {
+      "catalogID": "life-fitness-insignia-ss-ab-abdominal-crunch",
+      "name": "Life Fitness Insignia Seated Abdominal Crunch",
+      "retiredOn": "2026-09-29",
+      "familyID": "seated-machine-abdominal-crunch"
+    },
+    {
+      "catalogID": "life-fitness-pro2-upper-arm-pad-pec-fly",
+      "name": "Upper-Arm-Pad Pec Fly",
+      "retiredOn": "2026-09-29",
+      "familyID": "upper-arm-pad-chest-fly"
+    },
+    {
+      "catalogID": "machine-hack-squat",
+      "name": "Maxicam Hack Squat",
+      "retiredOn": "2026-09-29",
+      "familyID": "machine-hack-squat"
+    },
+    {
+      "catalogID": "medicine-ball-weighted-leg-lower",
+      "name": "Medicine-Ball Arm-and-Leg Lower",
+      "retiredOn": "2026-09-29",
+      "familyID": "supine-medicine-ball-limb-lowering"
+    },
+    {
+      "catalogID": "neutral-grip-pull-up",
+      "name": "Neutral-Grip Pull-Up",
+      "familyID": "vertical-pull"
+    },
+    {
+      "catalogID": "one-arm-dumbbell-row",
+      "name": "One-Arm Dumbbell Row (Hand and Knee on Bench)",
+      "retiredOn": "2026-09-29",
+      "familyID": "shoulder-extension-row"
+    },
+    {
+      "catalogID": "paired-dumbbell-cmj",
+      "name": "Dumbbell Countermovement Jump",
+      "retiredOn": "2026-09-29",
+      "familyID": "vertical-countermovement-jump"
+    },
+    {
+      "catalogID": "partner-anchored-lateral-trunk-hold",
+      "name": "Partner-Anchored Lateral Trunk Hold",
+      "retiredOn": "2026-09-29",
+      "familyID": "partner-anchored-lateral-trunk-hold"
+    },
+    {
+      "catalogID": "partner-perturbation-manual-core-hold",
+      "name": "Partner-Perturbation Manual Core Hold",
+      "retiredOn": "2026-09-29",
+      "familyID": "multidirectional-manual-core-hold"
+    },
+    {
+      "catalogID": "partner-resisted-straight-punch-hold",
+      "name": "Partner-Resisted Straight Punch Hold",
+      "retiredOn": "2026-09-29",
+      "familyID": "partner-resisted-straight-punch-hold"
+    },
+    {
+      "catalogID": "pendlay-row",
+      "name": "Pendlay Row",
+      "retiredOn": "2026-09-29",
+      "familyID": "shoulder-extension-row"
+    },
+    {
+      "catalogID": "pressure-biofeedback-side-lying-hip-abduction",
+      "name": "Pressure-Biofeedback Side-Lying Hip Abduction",
+      "retiredOn": "2026-09-29",
+      "familyID": "hip-abduction"
+    },
+    {
+      "catalogID": "pronated-grip-machine-reverse-fly",
+      "name": "Pronated-Grip Machine Reverse Fly",
+      "familyID": "reverse-fly"
+    },
+    {
+      "catalogID": "quadruped-band-hip-extension",
+      "name": "Quadruped Hip Extension with Band",
+      "retiredOn": "2026-09-29",
+      "familyID": "quadruped-band-hip-knee-extension"
+    },
+    {
+      "catalogID": "reclined-unilateral-machine-leg-extension",
+      "name": "Reclined Single-Leg Extension",
+      "retiredOn": "2026-09-29",
+      "familyID": "knee-extension"
+    },
+    {
+      "catalogID": "repetitive-grip-trainer-close",
+      "name": "Repetitive Grip-Trainer Close",
+      "retiredOn": "2026-09-29",
+      "familyID": "finger-flexion-grip"
+    },
+    {
+      "catalogID": "seated-45-degree-cable-pulldown",
+      "name": "Seated Diagonal Cable Pulldown",
+      "retiredOn": "2026-09-29",
+      "familyID": "diagonal-pull"
+    },
+    {
+      "catalogID": "seated-upper-arm-pad-machine-lateral-raise",
+      "name": "Upper-Arm-Pad Machine Lateral Raise",
+      "retiredOn": "2026-09-29",
+      "familyID": "upper-arm-pad-shoulder-abduction"
+    },
+    {
+      "catalogID": "single-arm-dumbbell-front-raise",
+      "name": "Single-Arm Dumbbell Front Raise",
+      "familyID": "shoulder-flexion-raise"
+    },
+    {
+      "catalogID": "single-kettlebell-romanian-deadlift",
+      "name": "Kettlebell RDL",
+      "familyID": "romanian-deadlift"
+    },
+    {
+      "catalogID": "split-stance-rotational-medicine-ball-throw",
+      "name": "Split-Stance Rotational Medicine Ball Throw",
+      "retiredOn": "2026-09-29",
+      "familyID": "medicine-ball-stationary-rotational-throw"
+    },
+    {
+      "catalogID": "standing-band-shoulder-external-rotation",
+      "name": "Standing Band External Rotation",
+      "retiredOn": "2026-09-29",
+      "familyID": "shoulder-external-rotation"
+    },
+    {
+      "catalogID": "standing-dual-cable-crossover",
+      "name": "Standing Dual-Cable Crossover",
+      "retiredOn": "2026-09-29",
+      "familyID": "chest-fly"
+    },
+    {
+      "catalogID": "standing-dumbbell-wrist-radial-deviation",
+      "name": "Standing Dumbbell Radial Deviation",
+      "retiredOn": "2026-09-29",
+      "familyID": "wrist-radial-deviation"
+    },
+    {
+      "catalogID": "standing-dumbbell-wrist-ulnar-deviation",
+      "name": "Standing Dumbbell Ulnar Deviation",
+      "retiredOn": "2026-09-29",
+      "familyID": "wrist-ulnar-deviation"
+    },
+    {
+      "catalogID": "straight-leg-unanchored-sit-up",
+      "name": "Straight-Leg Unanchored Sit-Up",
+      "retiredOn": "2026-09-29",
+      "familyID": "straight-leg-sit-up"
+    },
+    {
+      "catalogID": "supine-dumbbell-scapular-punch",
+      "name": "Supine Dumbbell Scapular Punch",
+      "retiredOn": "2026-09-29",
+      "familyID": "scapular-protraction"
+    },
+    {
+      "catalogID": "tall-kneeling-medicine-ball-slam",
+      "name": "Tall-Kneeling Medicine Ball Slam",
+      "retiredOn": "2026-09-29",
+      "familyID": "medicine-ball-tall-kneeling-overhead-slam"
+    },
+    {
+      "catalogID": "tall-kneeling-rotational-medicine-ball-throw",
+      "name": "Tall-Kneeling Rotational Medicine Ball Throw",
+      "retiredOn": "2026-09-29",
+      "familyID": "medicine-ball-stationary-rotational-throw"
+    },
+    {
+      "catalogID": "therapist-held-supine-band-hip-external-rotation",
+      "name": "Therapist-Held Supine Band Hip External Rotation",
+      "retiredOn": "2026-09-29",
+      "familyID": "hip-external-rotation"
+    },
+    {
+      "catalogID": "trx-body-saw",
+      "name": "TRX Body Saw",
+      "retiredOn": "2026-09-29",
+      "familyID": "suspension-body-saw"
+    },
+    {
+      "catalogID": "trx-hip-press",
+      "name": "TRX Hip Press",
+      "retiredOn": "2026-09-29",
+      "familyID": "suspension-hip-press"
+    },
+    {
+      "catalogID": "trx-lateral-lunge",
+      "name": "TRX Lateral Lunge",
+      "familyID": "lateral-lunge"
+    },
+    {
+      "catalogID": "trx-reverse-fly",
+      "name": "TRX Reverse Fly",
+      "retiredOn": "2026-09-29",
+      "familyID": "suspension-horizontal-abduction"
+    },
+    {
+      "catalogID": "trx-reverse-lunge",
+      "name": "TRX Reverse Lunge",
+      "familyID": "dynamic-lunge"
+    },
+    {
+      "catalogID": "trx-y-fly",
+      "name": "TRX Y Fly",
+      "retiredOn": "2026-09-29",
+      "familyID": "suspension-overhead-y-raise"
+    },
+    {
+      "catalogID": "two-dumbbell-continuous-romanian-deadlift",
+      "name": "Two-Dumbbell Continuous Romanian Deadlift",
+      "familyID": "romanian-deadlift"
+    },
+    {
+      "catalogID": "underhand-lat-pulldown",
+      "name": "Underhand Lat Pulldown",
+      "familyID": "vertical-pull"
+    },
+    {
+      "catalogID": "unsupported-seated-dumbbell-overhead-press",
+      "name": "Seated Dumbbell Press (No Backrest)",
+      "retiredOn": "2026-09-29",
+      "familyID": "vertical-press"
+    },
+    {
+      "catalogID": "wall-balanced-single-leg-bodyweight-heel-raise",
+      "name": "Wall-Balanced Single-Leg Heel Raise",
+      "retiredOn": "2026-09-29",
+      "familyID": "ankle-plantarflexion"
+    },
+    {
+      "catalogID": "wide-grip-lat-pulldown",
+      "name": "Wide-Grip Lat Pulldown",
+      "familyID": "vertical-pull"
+    },
+    {
+      "catalogID": "wide-grip-pull-up",
+      "name": "Wide-Grip Pull-Up",
+      "familyID": "vertical-pull"
+    },
+    {
+      "catalogID": "wide-grip-straight-arm-cable-pulldown",
+      "name": "Wide-Grip Straight-Arm Cable Pulldown",
+      "familyID": "shoulder-extension-isolation"
+    }
+  ]
+}

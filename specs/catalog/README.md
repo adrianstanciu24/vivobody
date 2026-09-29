@@ -27,6 +27,8 @@ records past decisions. Do not maintain current totals in narrative guidance.
   authoritative technical standards supporting capability profiles and exact
   fixtures. A citation supports a rule; it does not turn EMG, a model estimate,
   or coaching guidance into a universal numeric contribution.
+- `retired-exercises.json` reserves removed bundled IDs so a later catalog
+  addition cannot reuse an identity already held by saved workouts or templates.
 - `family.schema.json` documents the strict JSON shape for one family and its
   explicitly reviewed exercises.
 - `fixtures/valid-family.json` is synthetic validator input. It is never emitted
@@ -414,11 +416,11 @@ declare more than one. The runtime stores those plane components in canonical
 does not apply the retired rule that classified every compound press as
 sagittal.
 
-Direction still requires an athlete-relative reviewed fixture. The active
-`diagonal-pull` record preserves Lorenzetti's source-defined 45-degree
-extended-arm start and chest-contact endpoint without converting the label into
-a universal numeric angle band. A room-space cable angle or commercial “high
-row” name cannot establish diagonal ownership by itself.
+Direction still requires an athlete-relative reviewed fixture. The retired
+`diagonal-pull` record used Lorenzetti's source-defined 45-degree extended-arm
+start and chest-contact endpoint without turning the label into a universal
+numeric angle band. A room-space cable angle or commercial “high row” name
+cannot establish diagonal ownership by itself.
 
 ## Validation
 

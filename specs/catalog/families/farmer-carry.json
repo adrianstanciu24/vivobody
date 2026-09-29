@@ -438,37 +438,11 @@
       "requireAbsent": ["variant.approximateHandleSpacingCm"]
     },
     {
-      "id": "trap-bar-carry-pins-high-handle-closed-frame",
-      "description": "The trap-bar fixture uses the high handles of a conventional closed dual-height frame and logs the complete frame and plates once.",
-      "when": {"field": "equipment", "operator": "equals", "value": "trapBar"},
-      "then": [
-        {"field": "variant.implementConfiguration", "value": "closedDualHeightHexFrame"},
-        {"field": "variant.loadPlacement", "value": "athleteInsideClosedFrameHandlesAtSides"},
-        {"field": "variant.gripClosure", "value": "closed"},
-        {"field": "variant.handleGeometry", "value": "parallelFrameSideHandles"},
-        {"field": "variant.frameGeometry", "value": "conventionalClosedDualHeightHexFrame"},
-        {"field": "variant.handleHeight", "value": "highHandlesApproximatelyTenCentimetersAboveLowCenters"},
-        {"field": "variant.approximateHandleSpacingCm", "value": 64},
-        {"field": "variant.pickupTopology", "value": "highHandleFloorLiftSetupNotCreditedRep"},
-        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"}
-      ],
-      "requirePresent": ["variant.approximateHandleSpacingCm"],
-      "requireAbsent": []
-    },
-    {
       "id": "per-implement-accounting-identifies-dumbbells",
       "description": "Per-implement accounting cannot be combined with the single trap-bar frame.",
       "when": {"field": "variant.loadAccounting", "operator": "equals", "value": "perImplement"},
       "then": [{"field": "equipment", "value": "dumbbell"}],
       "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "total-bar-accounting-identifies-trap-bar",
-      "description": "Total bar-and-plate accounting belongs only to the reviewed trap-bar carry.",
-      "when": {"field": "variant.loadAccounting", "operator": "equals", "value": "totalBarAndPlates"},
-      "then": [{"field": "equipment", "value": "trapBar"}],
-      "requirePresent": ["variant.approximateHandleSpacingCm"],
       "requireAbsent": []
     }
   ],
@@ -578,74 +552,6 @@
           "Carrying a single dumbbell turns the farmer carry into a suitcase carry.",
           "Using straps or hooks turns the carry into a grip-assisted walk."
         ],
-        "sideOrDirection": "Walk forward the whole time; avoid turning or marching in place."
-      }
-    },
-    {
-      "catalogID": "high-handle-trap-bar-farmer-carry",
-      "name": "High-Handle Trap-Bar Farmer Carry",
-      "aliases": ["Trap-Bar Farmer Carry", "Trap-Bar Farmer Walk", "Hex-Bar Farmer Carry"],
-      "equipment": "trapBar",
-      "laterality": "bilateral",
-      "modality": "isometricStrength",
-      "trackingMode": "duration",
-      "loadMode": "external",
-      "bodyweightFraction": 0,
-      "defaultWeight": 45,
-      "defaultWeightKg": 20,
-      "reps": 1,
-      "defaultDuration": 40,
-      "searchPriority": 94,
-      "involvement": [
-        {"muscle": "fingerFlexors", "role": "primary"},
-        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
-        {"muscle": "trapeziusUpper", "role": "stabilizer"},
-        {"muscle": "externalRotators", "role": "stabilizer"},
-        {"muscle": "triceps", "role": "stabilizer"},
-        {"muscle": "abs", "role": "stabilizer"},
-        {"muscle": "obliques", "role": "stabilizer"},
-        {"muscle": "lumbarExtensors", "role": "stabilizer"},
-        {"muscle": "gluteMed", "role": "stabilizer"},
-        {"muscle": "vasti", "role": "stabilizer"},
-        {"muscle": "soleus", "role": "stabilizer"}
-      ],
-      "variant": {
-        "kineticChain": "closed",
-        "bodyPosition": "standing",
-        "upperArmPosition": "atSide",
-        "humeralRotation": "neutral",
-        "carryPath": "continuousForwardWalk",
-        "loadSymmetry": "balancedBilateral",
-        "gripAssistance": "none",
-        "elbowMotion": "angleHeld",
-        "elbowPosture": "extended",
-        "forearmMotion": "angleHeld",
-        "forearmOrientation": "neutral",
-        "handTask": "staticImplementHold",
-        "implementConfiguration": "closedDualHeightHexFrame",
-        "loadPlacement": "athleteInsideClosedFrameHandlesAtSides",
-        "gripClosure": "closed",
-        "handleGeometry": "parallelFrameSideHandles",
-        "frameGeometry": "conventionalClosedDualHeightHexFrame",
-        "handleHeight": "highHandlesApproximatelyTenCentimetersAboveLowCenters",
-        "approximateHandleSpacingCm": 64,
-        "pickupTopology": "highHandleFloorLiftSetupNotCreditedRep",
-        "supportSurface": "levelSurface",
-        "loadAccounting": "totalBarAndPlates",
-        "spineMotion": "nonstandardized",
-        "lowerBodyContribution": "walkingPropulsion",
-        "fixedPath": false
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": ["lockie-lazar-2017-hexagonal-bar-technique", "ellestad-2024-loaded-carry-muscle-activation", "mcgill-2013-one-two-hand-carry", "stastny-2015-farmers-walk-lower-limb"],
-      "execution": {
-        "startingPosition": "Load both sleeves equally and log the complete trap-bar frame plus every plate on both sleeves once. Stand inside the closed frame, take the high handles with a closed neutral grip, and lift the bar from the floor to standing; this pickup is setup, not a credited deadlift repetition.",
-        "movement": "With both elbows extended and the frame controlled around the body, walk continuously forward on a level surface without letting the load swing.",
-        "endpoint": "When the set time ends, stop under control and lower the frame to the floor with the same high-handle deadlift posture; the set still records one timed carry, not a deadlift repetition.",
-        "controlledJoints": "Keep both arms straight, the high handles beside the body, and the frame balanced without straps or hooks.",
-        "supportAndPosture": "Keep the head and chest upright, avoid overstriding, and remain centered inside the closed frame.",
-        "disqualifyingCompensations": ["Using the low handles or an open frame leaves the reviewed fixture.", "Counting repeated floor pickups turns the set into trap-bar deadlifts.", "Standing still or marching in place turns the carry into a hold.", "Using straps or hooks turns it into a grip-assisted walk."],
         "sideOrDirection": "Walk forward the whole time; avoid turning or marching in place."
       }
     }

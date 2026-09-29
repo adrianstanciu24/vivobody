@@ -32,6 +32,7 @@ SPEC_ROOT = ROOT / "specs" / "catalog"
 TAXONOMY_PATH = SPEC_ROOT / "taxonomy.json"
 JOINT_ACTIONS_PATH = SPEC_ROOT / "joint-actions.json"
 EVIDENCE_PATH = SPEC_ROOT / "evidence.json"
+RETIRED_EXERCISES_PATH = SPEC_ROOT / "retired-exercises.json"
 FAMILY_SCHEMA_PATH = SPEC_ROOT / "family.schema.json"
 FAMILY_FIXTURE_PATH = SPEC_ROOT / "fixtures" / "valid-family.json"
 FAMILIES_ROOT = SPEC_ROOT / "families"
@@ -2893,12 +2894,36 @@ def discovered_family_paths() -> list[Path]:
     return sorted(FAMILIES_ROOT.glob("*.json"))
 
 
+def validate_retired_exercises(families: Iterable[dict[str, Any]]) -> None:
+    registry = load_json(RETIRED_EXERCISES_PATH)
+    require(registry.get("schemaVersion") == 1, "retired exercise schema version must be 1")
+    retired = registry.get("retired")
+    require(isinstance(retired, list), "retired exercise registry must contain a list")
+    retired_ids: set[str] = set()
+    for entry in retired:
+        require(isinstance(entry, dict), "retired exercise entry must be an object")
+        catalog_id = entry.get("catalogID")
+        require(isinstance(catalog_id, str) and catalog_id, "retired exercise ID is missing")
+        require(isinstance(entry.get("name"), str) and entry["name"], f"retired exercise name is missing: {catalog_id}")
+        require(isinstance(entry.get("familyID"), str) and entry["familyID"], f"retired exercise family is missing: {catalog_id}")
+        require(catalog_id not in retired_ids, f"duplicate retired exercise ID: {catalog_id}")
+        retired_ids.add(catalog_id)
+    active_ids = {
+        exercise["catalogID"]
+        for family in families
+        for exercise in family["exercises"]
+    }
+    reused = sorted(active_ids & retired_ids)
+    require(not reused, f"retired exercise IDs reused by active catalog: {', '.join(reused)}")
+
+
 def encoded_xcode_input_file_list(family_paths: Iterable[Path]) -> str:
     paths = [
         ROOT / "Scripts" / "catalog.py",
         TAXONOMY_PATH,
         JOINT_ACTIONS_PATH,
         EVIDENCE_PATH,
+        RETIRED_EXERCISES_PATH,
         FAMILY_SCHEMA_PATH,
         FAMILY_FIXTURE_PATH,
         *family_paths,
@@ -2978,6 +3003,7 @@ def main(argv: list[str] | None = None) -> int:
                 runtime_families.append(family)
 
         validate_family_set(real_families)
+        validate_retired_exercises(real_families)
         validate_evidence_coverage(foundation, real_families)
 
         runtime_catalog = encoded_runtime_catalog(

@@ -328,23 +328,10 @@ struct AntagonistBalanceTests {
         expectEqual(board.pair("vertical-push-pull")?.leftSets, 0)
     }
 
-    @Test func diagonalPullCountsBroadlyWithoutInventingDirectionalAncestry() {
-        let board = [
-            session(at: day(1), [
-                lift("Seated Diagonal Cable Pulldown", .back, sets: 3),
-            ]),
-        ].antagonistBalance(now: day(2))
-
-        expectEqual(board.pair("compound-push-pull")?.leftSets, 0)
-        expectEqual(board.pair("compound-push-pull")?.rightSets, 3)
-        expectEqual(board.pair("horizontal-push-pull")?.rightSets, 0)
-        expectEqual(board.pair("vertical-push-pull")?.rightSets, 0)
-    }
-
     @Test func hipAndLowerLegPairsKeepGradedMuscleCredit() {
         let board = [
             session(at: day(1), [
-                lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs, sets: 2),
+                lift("Technogym Seated Hip Abduction Machine", .legs, sets: 2),
                 lift("Standing Band Hip Adduction", .legs, sets: 3),
                 lift("Standing Single-Leg Machine Calf Raise", .legs, sets: 4),
                 lift("Seated Band Ankle Dorsiflexion", .legs, sets: 5),
@@ -365,7 +352,7 @@ struct AntagonistBalanceTests {
     @Test func rosterLimitedPairsNeverDriveAnImbalanceVerdict() {
         let sessions = (0 ..< 2).map { index in
             session(at: day(Double(index) * 5), [
-                lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs, sets: 3),
+                lift("Technogym Seated Hip Abduction Machine", .legs, sets: 3),
                 lift("Standing Single-Leg Machine Calf Raise", .legs, sets: 3),
             ])
         }
@@ -404,7 +391,7 @@ struct AntagonistBalanceTests {
         let board = [
             session(at: day(1), [
                 lift("Barbell Bench Press", .chest, sets: 2),
-                lift("One-Arm Dumbbell Row (Hand and Knee on Bench)", .back, sets: 3),
+                lift("One-Arm Dumbbell Row (Hand on Bench)", .back, sets: 3),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -436,11 +423,11 @@ struct AntagonistBalanceTests {
                 lift("Cable Lat Pulldown", .back),
                 lift("Barbell Back Squat", .legs),
                 lift("Barbell Hip Thrust", .legs),
-                lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs),
+                lift("Technogym Seated Hip Abduction Machine", .legs),
                 lift("Standing Band Hip Adduction", .legs),
                 lift("Standing Single-Leg Machine Calf Raise", .legs),
                 lift("Seated Band Ankle Dorsiflexion", .legs),
-                lift("One-Arm Dumbbell Row (Hand and Knee on Bench)", .back),
+                lift("One-Arm Dumbbell Row (Hand on Bench)", .back),
             ]),
         ].antagonistBalance(now: day(2))
 
