@@ -4,7 +4,7 @@
 //
 //  Pure Settings presentation branches and ordered interaction plans.
 //  SettingsScreen applies each command so UserDefaults, haptic/audio,
-//  HealthKit, and sheet effects retain one integration owner.
+//  and sheet effects retain one integration owner.
 //
 
 import Foundation
@@ -17,12 +17,6 @@ nonisolated struct SettingsPreferenceDefaults: Equatable {
     let defaultRestSeconds: Int
     let hapticsEnabled: Bool
     let soundsEnabled: Bool
-    let healthKitEnabled: Bool
-}
-
-nonisolated enum SettingsHealthKitPresentation: Equatable {
-    case unavailable
-    case available
 }
 
 nonisolated enum SettingsInteractionCommand: Equatable {
@@ -35,10 +29,7 @@ nonisolated enum SettingsInteractionCommand: Equatable {
     case setDefaultRestSeconds(Int)
     case setHapticsEnabled(Bool)
     case setSoundsEnabled(Bool)
-    case setHealthKitEnabled(Bool)
     case showCatalogResetConfirmation
-    case showHealthKitPriming(Bool)
-    case requestHealthKitAuthorization
 }
 
 nonisolated enum SettingsInteractionPolicy {
@@ -52,13 +43,8 @@ nonisolated enum SettingsInteractionPolicy {
             weightUnit: WeightUnit(rawValue: SettingsDefaults.weightUnit) ?? .lb,
             defaultRestSeconds: SettingsDefaults.defaultRestSeconds,
             hapticsEnabled: SettingsDefaults.hapticsEnabled,
-            soundsEnabled: SettingsDefaults.soundsEnabled,
-            healthKitEnabled: SettingsDefaults.healthKitEnabled
+            soundsEnabled: SettingsDefaults.soundsEnabled
         )
-    }
-
-    static func healthKitPresentation(isAvailable: Bool) -> SettingsHealthKitPresentation {
-        isAvailable ? .available : .unavailable
     }
 
     static func selectAppearance(_ appearance: AppAppearance) -> [SettingsInteractionCommand] {
@@ -95,39 +81,5 @@ nonisolated enum SettingsInteractionPolicy {
 
     static func requestCatalogReset() -> [SettingsInteractionCommand] {
         [.playSoftHaptic(playsSound: true), .showCatalogResetConfirmation]
-    }
-
-    static func disableHealthKit() -> [SettingsInteractionCommand] {
-        [.setHealthKitEnabled(false)]
-    }
-
-    static func beginHealthKitEnable() -> [SettingsInteractionCommand] {
-        [.setHealthKitEnabled(true)]
-    }
-
-    static func routeHealthKitEnable(
-        shouldPrime: Bool
-    ) -> [SettingsInteractionCommand] {
-        shouldPrime
-            ? [.showHealthKitPriming(true)]
-            : [.requestHealthKitAuthorization]
-    }
-
-    static func continueHealthKitPriming() -> [SettingsInteractionCommand] {
-        [.showHealthKitPriming(false), .requestHealthKitAuthorization]
-    }
-
-    static func declineHealthKitPriming() -> [SettingsInteractionCommand] {
-        [.setHealthKitEnabled(false), .showHealthKitPriming(false)]
-    }
-
-    static func settleHealthKitAuthorization(
-        granted: Bool
-    ) -> [SettingsInteractionCommand] {
-        var commands: [SettingsInteractionCommand] = [.setHealthKitEnabled(granted)]
-        if granted {
-            commands.append(.playSoftHaptic(playsSound: false))
-        }
-        return commands
     }
 }

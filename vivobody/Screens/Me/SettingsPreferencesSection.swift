@@ -22,11 +22,9 @@ struct SettingsPreferencesSection: View {
     @Binding var hapticsEnabled: Bool
     @Binding var soundsEnabled: Bool
     @Binding var restNotificationsEnabled: Bool
-    @Binding var healthKitEnabled: Bool
 
     let restOptions: [Int]
     let restNotificationsPresentation: SettingsRestNotificationsPresentation
-    let healthKitPresentation: SettingsHealthKitPresentation
     let bundledExerciseCount: Int
     let onRequestCatalogReset: () -> Void
 
@@ -52,10 +50,6 @@ struct SettingsPreferencesSection: View {
                 soundsRow
                 rowDivider
                 restNotificationsRow
-                if healthKitPresentation != .unavailable {
-                    rowDivider
-                    healthKitRow
-                }
             }
             .contentCard()
 
@@ -319,33 +313,6 @@ struct SettingsPreferencesSection: View {
             "Notify you when rest ends while Vivobody is in the background"
         case .denied:
             "Notifications are turned off in iOS Settings"
-        }
-    }
-
-    @ViewBuilder
-    private var healthKitRow: some View {
-        switch healthKitPresentation {
-        case .unavailable:
-            EmptyView()
-
-        case .available:
-            HStack {
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("Apple Health")
-                        .font(Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                    Text("Save finished workouts to the Health app")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                }
-                Spacer()
-                Toggle("", isOn: $healthKitEnabled)
-                    .labelsHidden()
-                    .tint(Tint.inProgress)
-                    .accessibilityLabel("Apple Health")
-            }
-            .padding(.horizontal, Space.lg)
-            .padding(.vertical, Space.md)
         }
     }
 

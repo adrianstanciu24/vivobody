@@ -12,7 +12,7 @@
 //  `SupportMail.mailtoURL` to the system.
 //
 //  This is the only file that imports MessageUI, matching the
-//  one-boundary-per-system-framework rule HealthKit and
+//  one-boundary-per-system-framework rule system integrations and
 //  SafariServices already follow.
 //
 

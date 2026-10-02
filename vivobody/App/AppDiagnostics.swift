@@ -4,7 +4,7 @@
 //
 //  Privacy-safe unified logging for load-bearing app boundaries. Events use
 //  stable machine-readable kinds and outcomes so Baguette scenarios can assert
-//  behavior without exposing user-owned workout or HealthKit data.
+//  behavior without exposing user-owned workout data.
 //
 
 import Foundation
@@ -17,7 +17,6 @@ nonisolated enum AppDiagnostics {
     private static let incomingAction = Logger(subsystem: subsystem, category: "incoming-action")
     private static let session = Logger(subsystem: subsystem, category: "session")
     private static let snapshot = Logger(subsystem: subsystem, category: "snapshot")
-    private static let healthKit = Logger(subsystem: subsystem, category: "healthkit")
     private static let audio = Logger(subsystem: subsystem, category: "audio")
     private static let catalog = Logger(subsystem: subsystem, category: "catalog")
     private static let spotlight = Logger(subsystem: subsystem, category: "spotlight")
@@ -108,19 +107,6 @@ nonisolated enum AppDiagnostics {
         let error = error as NSError
         snapshot.error(
             "event=analytics.snapshot_refresh outcome=failure error_domain=\(error.domain, privacy: .private) error_code=\(error.code, privacy: .public)"
-        )
-    }
-
-    static func healthKitOutcome(event: String, outcome: String) {
-        healthKit.notice(
-            "event=healthkit.\(event, privacy: .public) outcome=\(outcome, privacy: .public)"
-        )
-    }
-
-    static func healthKitFailed(event: String, error: any Error) {
-        let error = error as NSError
-        healthKit.error(
-            "event=healthkit.\(event, privacy: .public) outcome=failure error_domain=\(error.domain, privacy: .private) error_code=\(error.code, privacy: .public)"
         )
     }
 }

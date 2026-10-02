@@ -3,7 +3,12 @@
   "launch": {
     "reset": true,
     "tab": "today",
-    "arguments": ["--ui-test-active-partial"]
+    "arguments": [
+      "--ui-test-active-partial",
+      "-settings.healthKitEnabled",
+      "YES",
+      "--static-body"
+    ]
   },
   "steps": [
     {
@@ -55,6 +60,7 @@
     "event=session.transition kind=archive outcome=success"
   ],
   "forbiddenLogs": [
-    "event=storage.open outcome=fallback_memory"
+    "event=storage.open outcome=fallback_memory",
+    "event=healthkit."
   ]
 }

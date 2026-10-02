@@ -1,6 +1,26 @@
 # HealthKit Tier A — Design
 
-Status: Implemented integration design. Source-audit date: [spec index](index.md).
+Status: Historical integration design; removed from the app on October 2, 2026.
+Source-audit date: [spec index](index.md).
+
+## Current behavior
+
+Vivobody no longer imports HealthKit or CareKit, requests Health permissions,
+or exports workouts to Apple Health. Settings has no Apple Health control.
+Workout completion saves to Vivobody's local archive and continues to update
+widgets, Live Activities, and the app-review eligibility flow through
+[SessionSideEffects](../vivobody/App/SessionSideEffects.swift).
+
+The optional `healthKitWorkoutUUID` stored field remains in the current model
+and frozen V1 schema solely for database compatibility. It is unused; removing
+it would require a separate schema change. Previously exported workouts in
+Apple Health are not modified or deleted by this removal.
+
+The design below describes the retired implementation. Its service and priming
+sheet have been deleted, together with the entitlement keys, usage descriptions,
+settings preference, authorization flow, and HealthKit diagnostics.
+
+## Retired design
 
 Write one `HKWorkout` to HealthKit each time a workout is archived, so the
 session appears in the Apple Health app's workout history and is available to the

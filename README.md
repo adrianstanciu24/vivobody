@@ -19,7 +19,6 @@ The product is pre-1.0 and maintained by one developer.
   training load, consistency, symmetry, and exercise dominance.
 - Home Screen widgets, a Live Activity, and a Control Center start control in
   `vivobodyWidgets/`, fed by versioned App Group snapshots.
-- Opt-in HealthKit workout mirroring behind a narrow integration boundary.
 
 The public marketing site lives in a separate repository, `vivobody.web`.
 

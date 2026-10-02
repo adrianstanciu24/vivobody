@@ -14,7 +14,7 @@
 //  the user back exactly where they were.
 //
 //  This is the only file that imports SafariServices — the same
-//  one-boundary-per-system-framework rule HealthKit follows. Route
+//  one-boundary-per-system-framework rule other system integrations follow. Route
 //  any new web link through `WebPage` + `SafariView` rather than
 //  reaching for `Link` or `openURL`.
 //

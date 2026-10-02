@@ -27,7 +27,7 @@ Scenario files: 181.
 | [active-superset-completion](active-superset-completion.json) | today | `--ui-test-superset` |
 | [active-zero-set-recovery](active-zero-set-recovery.json) | today | `--ui-test-active-zero-set` |
 | [analytics-incremental-archive](analytics-incremental-archive.json) | today | `--ui-test-active-complete-summary --ui-test-widget-start-request --seed-history --static-body -settings.weightUnit lb -settings.appearance dark` |
-| [archive-to-history](archive-to-history.json) | today | `--ui-test-active-partial` |
+| [archive-to-history](archive-to-history.json) | today | `--ui-test-active-partial -settings.healthKitEnabled YES --static-body` |
 | [catalog-ab-wheel-expansion](catalog-ab-wheel-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-active-dead-hang](catalog-active-dead-hang.json) | library | `--static-body` |
 | [catalog-adductor-coverage](catalog-adductor-coverage.json) | library | `--static-body -settings.appearance dark` |
@@ -172,7 +172,7 @@ Scenario files: 181.
 | [receipt-metric-parity](receipt-metric-parity.json) | today | `--ui-test-active-partial --ui-test-receipt-summary --ui-test-widget-start-request --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [replace-active-exercise-blocked](replace-active-exercise-blocked.json) | today | `--ui-test-active-partial` |
 | [replace-active-exercise](replace-active-exercise.json) | today | `--ui-test-active-replaceable` |
-| [settings-preferences](settings-preferences.json) | me | `--static-body -settings.hapticsEnabled YES -settings.soundsEnabled YES` |
+| [settings-preferences](settings-preferences.json) | me | `--static-body -settings.hapticsEnabled YES -settings.soundsEnabled YES -settings.healthKitEnabled YES` |
 | [start-complete-rest](start-complete-rest.json) | today | `--ui-test-scheduled-template` |
 | [strength-routine-builder-hidden](strength-routine-builder-hidden.json) | library | None declared |
 | [strength-routine-builder-insufficient-catalog](strength-routine-builder-insufficient-catalog.json) | library | `--ui-test-strength-routine-builder` |

@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Settings orchestration pushed from Me. This root owns UserDefaults,
-//  HealthKit routing, catalog reset, alerts, sheets, URL/mail
+//  catalog reset, alerts, sheets, URL/mail
 //  presentation, and the footer. Focused sections receive only immutable
 //  presentation, bindings, and actions.
 //
@@ -39,15 +39,11 @@ struct SettingsScreen: View {
     @AppStorage(SettingsKey.appearance)
     private var appearanceRaw: String = SettingsDefaults.appearance
 
-    @AppStorage(SettingsKey.healthKitEnabled)
-    private var healthKitEnabled: Bool = SettingsDefaults.healthKitEnabled
-
     @AppStorage(SettingsKey.bodyDriftSpeed)
     private var bodyDriftSpeedRaw: String = SettingsDefaults.bodyDriftSpeed
 
     @State private var isConfirmingCatalogReset: Bool = false
     @State private var catalogSaveError: SaveErrorBox?
-    @State private var showHealthKitPriming: Bool = false
     @State private var activePage: WebPage?
     @State private var isComposingSupportMail: Bool = false
     @State private var restNotificationAuthorization: RestNotificationAuthorization?
@@ -75,12 +71,8 @@ struct SettingsScreen: View {
                     hapticsEnabled: hapticsBinding,
                     soundsEnabled: soundsBinding,
                     restNotificationsEnabled: restNotificationsBinding,
-                    healthKitEnabled: healthKitBinding,
                     restOptions: SettingsInteractionPolicy.restOptions,
                     restNotificationsPresentation: restNotificationsPresentation,
-                    healthKitPresentation: SettingsInteractionPolicy.healthKitPresentation(
-                        isAvailable: HealthKitWorkoutService.isAvailable
-                    ),
                     bundledExerciseCount: CatalogData.records.count,
                     onRequestCatalogReset: requestCatalogReset
                 )
@@ -124,16 +116,6 @@ struct SettingsScreen: View {
             Text("Restores the \(CatalogData.records.count) bundled exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
         }
         .saveErrorAlert($catalogSaveError)
-        .sheet(isPresented: $showHealthKitPriming) {
-            HealthKitPrimingSheet(
-                onContinue: {
-                    perform(SettingsInteractionPolicy.continueHealthKitPriming())
-                },
-                onNotNow: {
-                    perform(SettingsInteractionPolicy.declineHealthKitPriming())
-                }
-            )
-        }
         .sheet(item: $activePage) { page in
             SafariView(url: page.url)
                 .ignoresSafeArea()
@@ -187,22 +169,6 @@ struct SettingsScreen: View {
         Binding(
             get: { soundsEnabled },
             set: { perform(SettingsInteractionPolicy.setSounds($0)) }
-        )
-    }
-
-    private var healthKitBinding: Binding<Bool> {
-        Binding(
-            get: { healthKitEnabled },
-            set: { isEnabled in
-                guard isEnabled else {
-                    perform(SettingsInteractionPolicy.disableHealthKit())
-                    return
-                }
-                perform(SettingsInteractionPolicy.beginHealthKitEnable())
-                perform(SettingsInteractionPolicy.routeHealthKitEnable(
-                    shouldPrime: HealthKitWorkoutService.shouldPrime
-                ))
-            }
         )
     }
 
@@ -266,11 +232,6 @@ struct SettingsScreen: View {
         perform(SettingsInteractionPolicy.requestCatalogReset())
     }
 
-    private func requestHealthKitAuthorization() async {
-        let granted = await HealthKitWorkoutService.requestAuthorization()
-        perform(SettingsInteractionPolicy.settleHealthKitAuthorization(granted: granted))
-    }
-
     private func perform(_ commands: [SettingsInteractionCommand]) {
         for command in commands {
             if applyFeedback(command) { continue }
@@ -308,8 +269,6 @@ struct SettingsScreen: View {
             hapticsEnabled = value
         case let .setSoundsEnabled(value):
             soundsEnabled = value
-        case let .setHealthKitEnabled(value):
-            healthKitEnabled = value
         default:
             return false
         }
@@ -320,10 +279,6 @@ struct SettingsScreen: View {
         switch command {
         case .showCatalogResetConfirmation:
             isConfirmingCatalogReset = true
-        case let .showHealthKitPriming(isPresented):
-            showHealthKitPriming = isPresented
-        case .requestHealthKitAuthorization:
-            Task { await requestHealthKitAuthorization() }
         default:
             assertionFailure("Unhandled Settings interaction command")
         }

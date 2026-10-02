@@ -43,11 +43,6 @@ nonisolated enum SettingsKey {
     /// app root to drive `.preferredColorScheme`; "system" defers to
     /// the OS.
     static let appearance = "settings.appearance"
-    /// Bool — whether finished workouts are mirrored to Apple Health
-    /// (HealthKit Tier A). Opt-in; the Settings toggle requests write
-    /// authorization when first enabled, and the archive path reads
-    /// this flag before writing.
-    static let healthKitEnabled = "settings.healthKitEnabled"
     /// Bool — whether the first-launch welcome screen has been
     /// completed. Gates AppRoot between OnboardingScreen and the main
     /// tab hierarchy; flips true the moment the user taps Start.
@@ -94,7 +89,6 @@ nonisolated enum SettingsDefaults {
     static let hasSeenRestNotificationPrimer = false
     static let weightUnit = WeightUnit.lb.rawValue
     static let appearance = AppAppearance.system.rawValue
-    static let healthKitEnabled = false
     static let onboardingCompleted = false
     static let hasScrubbedNumber = false
     static let bodyDriftSpeed = BodyDriftSpeed.low.rawValue

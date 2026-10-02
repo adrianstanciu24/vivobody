@@ -38,7 +38,6 @@ sides moves into `VivoKit`; app-only behavior stays in the app.
 | `Models/Domain/` | SwiftData entities and domain value types | System-framework integration |
 | `Models/Insights/` | Pure analytics over session data through `SessionAnalytics` | Per-render store queries or writes |
 | `App/` | App shell, persistence bootstrap, session orchestration, entry points, and app-side adapters | Feature screens |
-| `HealthKit/` | Narrow system-framework boundaries | General UI or session ownership |
 
 For unfamiliar work, begin with `vivobody/Models/Domain/WorkoutSession.swift`,
 `vivobody/Models/Domain/WorkoutTemplate.swift`, `vivobody/App/AppRoot.swift`,
@@ -110,10 +109,9 @@ instead of adding screen-specific routing.
 ### Diagnostics
 
 `vivobody/App/AppDiagnostics.swift` is the unified-logging vocabulary. Storage,
-incoming-action, session, snapshot, and HealthKit boundaries emit stable event
-kinds and outcomes through it. Associated IDs, names, notes, loads, URLs, and
-HealthKit values never enter logs. Semantic scenarios may assert these events
-from their captured runtime log; ad-hoc `Logger` instances are structurally
+incoming-action, session, and snapshot boundaries emit stable event kinds and
+outcomes through it. Associated IDs, names, notes, loads, and URLs never enter
+logs. Semantic scenarios may assert these events from their captured runtime log; ad-hoc `Logger` instances are structurally
 forbidden outside this boundary.
 
 ### Widgets and shared state
@@ -146,7 +144,6 @@ The authoritative import and call-site allowlists live in
 
 | Concern | Boundary |
 |---|---|
-| HealthKit archive mirror | `vivobody/HealthKit/HealthKitWorkoutService.swift` |
 | StoreKit app-review requests | `vivobody/App/ReviewRequestController.swift` |
 | App review prompting | `vivobody/App/ReviewRequestController.swift` |
 | Notifications | `vivobody/App/RestNotificationController.swift` |

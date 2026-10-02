@@ -43,9 +43,9 @@ GLOBAL_FRAMEWORK_BOUNDARIES: dict[str, frozenset[str]] = {
     "CoreHaptics": frozenset({
         "vivobody/Components/Haptics/HapticPatternEngine.swift",
     }),
-    "HealthKit": frozenset({
-        "vivobody/HealthKit/HealthKitWorkoutService.swift",
-    }),
+    # Removed integrations must not regain a framework dependency.
+    "HealthKit": frozenset(),
+    "CareKit": frozenset(),
     "StoreKit": frozenset({
         "vivobody/App/ReviewRequestController.swift",
     }),
@@ -128,10 +128,6 @@ VALID_DIRECT_SAVE_SUPPRESSION = re.compile(
     rf"//\s*{re.escape(DIRECT_SAVE_SUPPRESSION)}\s*--\s*\S.+$"
 )
 LIFECYCLE_CALL_PATTERNS = (
-    (
-        re.compile(r"\bHealthKitWorkoutService\s*\.\s*saveWorkout\s*\("),
-        "HealthKit archive writes",
-    ),
     (
         re.compile(
             r"\bWorkoutLiveActivityController\s*\.\s*"

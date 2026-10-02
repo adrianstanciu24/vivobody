@@ -30,7 +30,7 @@ manual verification gap.
 
 - Does every user mutation persist, surface save failure, and preserve rollback
   behavior?
-- Can restoration repeat safely without duplicating sessions, HealthKit writes,
+- Can restoration repeat safely without duplicating sessions,
   Live Activities, notifications, or widget snapshots?
 - Does a model change match the policy in `vivobody/App/Persistence.swift` and
   preserve the fallback in `vivobody/vivobodyApp.swift`?
@@ -66,7 +66,7 @@ manual verification gap.
 - Are insights pure, deterministic, and fed through the shared analytics cache?
 - Do widget payload changes bump their contract and retain an old/missing-data
   fallback?
-- Are HealthKit and StoreKit behaviors idempotent and non-blocking to workout
+- Are system integration behaviors idempotent and non-blocking to workout
   logging?
 - Are App Group writes batched rather than added to per-keystroke paths?
 

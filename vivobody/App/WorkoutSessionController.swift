@@ -6,7 +6,7 @@
 //  discard, archive, minimize / expand. Extracted from AppState so
 //  AppState can shrink to shell-only concerns (tab selection,
 //  Spotlight presentation). Every side-effect fan-out (LiveActivity,
-//  widgets, HealthKit, notifications) routes through
+//  widgets, notifications) routes through
 //  SessionSideEffects so adding a future subscriber is one line.
 //
 //  Also owns active-draft persistence boundaries: semantic interactions save

@@ -126,12 +126,8 @@ final class WorkoutSession: Identifiable {
     /// `pendingPRValue`.
     var pendingPRUnit: String? = nil
 
-    /// UUID of the `HKWorkout` saved to HealthKit for this session,
-    /// if any. Stamped after a successful Tier A write so the save is
-    /// idempotent — a session that already carries a UUID is never
-    /// written to HealthKit again. Nil for sessions saved before the
-    /// integration, or when HealthKit sync is off / unauthorized.
-    /// Additive defaulted field — no migration.
+    /// Legacy export identifier retained for stored-schema compatibility.
+    /// The app no longer reads or writes this field.
     var healthKitWorkoutUUID: UUID? = nil
 
     init(

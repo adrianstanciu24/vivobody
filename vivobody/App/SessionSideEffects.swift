@@ -63,7 +63,6 @@ enum SessionSideEffects {
 
         case .archived:
             WorkoutLiveActivityController.end(for: session)
-            HealthKitWorkoutService.saveWorkout(for: session, in: context)
             WidgetSnapshotWriter.writeAll(in: context)
             ReviewRequestController.requestReviewIfEligible(afterArchiving: session, in: context)
 

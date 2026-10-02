@@ -52,10 +52,19 @@ class ArchitectureCheckerTests(unittest.TestCase):
 
     def test_sensitive_framework_import_inside_boundary_passes(self) -> None:
         rules = self.rules_for(
-            "vivobody/HealthKit/HealthKitWorkoutService.swift",
-            "import HealthKit\n",
+            "vivobody/App/ReviewRequestController.swift",
+            "import StoreKit\n",
         )
         self.assertNotIn("ARCH001", rules)
+
+    def test_removed_health_frameworks_have_no_allowed_boundary(self) -> None:
+        for framework in ("HealthKit", "CareKit"):
+            with self.subTest(framework=framework):
+                rules = self.rules_for(
+                    "vivobody/HealthKit/HealthKitWorkoutService.swift",
+                    f"import {framework}\n",
+                )
+                self.assertIn("ARCH001", rules)
 
     def test_widgets_cannot_open_swiftdata(self) -> None:
         rules = self.rules_for(

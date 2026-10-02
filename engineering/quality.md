@@ -115,7 +115,7 @@ smallest durable layer that can prevent recurrence:
 
 Diagnostics follow the same rule. Use `AppDiagnostics` stable event kinds and
 privacy-safe outcomes; never log workout names, exercise names, notes, loads,
-URLs, identifiers, or HealthKit sample values.
+URLs, or identifiers.
 
 ## Testing
 

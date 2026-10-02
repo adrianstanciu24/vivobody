@@ -59,7 +59,6 @@ App Store URL.
 > - Strength outlook and rep-range trends per exercise
 > - Consistency, intensity mix, and symmetry reports
 > - Unlimited workout templates
-> - Save finished workouts to Apple Health (write-only, never reads)
 > - Home Screen and Lock Screen widgets
 >
 > BUILT INTO iOS
@@ -89,9 +88,8 @@ Gambling and contests: No. Result should be 4+.
 
 - Does this app collect data? **No — "Data Not Collected."**
 - This matches the shipped `PrivacyInfo.xcprivacy` (no tracking, no
-  collected data types). Health data is written to Apple Health only at
-  the user's request and never leaves the device, which does not count
-  as collection by the developer.
+  collected data types). Workout data stays in the app's local database;
+  the developer does not receive it automatically.
 
 ## Pricing
 
@@ -103,9 +101,8 @@ purchase review screenshot is needed. The exact price is not yet selected.
 > Vivobody is fully on-device: no account or sign-in exists, so no demo
 > credentials are needed.
 >
-> HealthKit: the app requests WRITE-ONLY authorization, and only when
-> the user enables "Apple Health" in Settings. It saves finished workouts as HKWorkout samples. It never
-> reads Health data.
+> Health integration has been removed. This build does not use HealthKit or
+> CareKit, request Health permissions, or read or write Apple Health data.
 >
 > All functionality is included in the app price. There are no in-app purchases.
 >

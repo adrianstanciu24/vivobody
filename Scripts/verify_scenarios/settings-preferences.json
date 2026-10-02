@@ -8,6 +8,8 @@
       "-settings.hapticsEnabled",
       "YES",
       "-settings.soundsEnabled",
+      "YES",
+      "-settings.healthKitEnabled",
       "YES"
     ]
   },
@@ -80,6 +82,11 @@
             "label": "Sounds",
             "role": "AXCheckBox",
             "value": "1"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Apple Health"
           }
         ]
       }
@@ -174,6 +181,11 @@
             "label": "Sounds",
             "role": "AXCheckBox",
             "value": "0"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Apple Health"
           }
         ]
       }
@@ -319,6 +331,11 @@
             "role": "AXCheckBox",
             "value": "1"
           }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Apple Health"
+          }
         ]
       }
     },
@@ -360,6 +377,9 @@
     },
     {
       "label": "Restore Purchases"
+    },
+    {
+      "labelContains": "Apple Health"
     }
   ]
 }
