@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 190.
+Scenario files: 192.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -52,6 +52,8 @@ Scenario files: 190.
 | [catalog-forearm-stabilizers](catalog-forearm-stabilizers.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-goblet-squat-to-press-light](catalog-goblet-squat-to-press-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-horizontal-leg-press](catalog-horizontal-leg-press.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-jump-rope-dark-accessibility](catalog-jump-rope-dark-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-jump-rope-light](catalog-jump-rope-light.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-landmine-rotation-light](catalog-landmine-rotation-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-landmine-squat-light](catalog-landmine-squat-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-landmine-squat-to-press-accessibility-dark](catalog-landmine-squat-to-press-accessibility-dark.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |

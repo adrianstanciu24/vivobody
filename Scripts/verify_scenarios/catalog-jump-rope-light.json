@@ -1,0 +1,66 @@
+{
+  "name": "catalog-jump-rope-light",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Jump Rope"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Jump Rope,"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Jump Rope,"
+      }
+    },
+    {
+      "wait": {
+        "label": "POWER / EXPLOSIVE"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Jump Rope"
+    },
+    {
+      "labelContains": "Muscles used by Jump Rope"
+    }
+  ],
+  "forbidden": []
+}

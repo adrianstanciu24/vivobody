@@ -5491,6 +5491,45 @@
       "year": 2026,
       "url": "https://health.uconn.edu/wellness-center/wp-content/uploads/sites/182/2018/04/February.pdf",
       "scope": "Undated institutional exercise standard, registered with retrieval year 2026 rather than a claimed publication year. Specifies a high plank gripping two dumbbells beneath the shoulders, feet about shoulder-width apart, square hips and shoulders, an alternating pull toward the armpit with shoulder-blade retraction, a controlled floor return, and plank reset. Push-ups are explicitly an advanced modification rather than the baseline row. The catalog narrows to stable non-rolling equal dumbbells, neutral grip, and an upper-arm-at-torso endpoint; single-dumbbell load and each-row counting are product conventions. This source does not measure exact-fixture recruitment, force shares, or a per-arm maximum."
+    },
+    {
+      "id": "mullerpatan-2021-bounce-rope-skip",
+      "sourceType": "experimentalBiomechanicsStudy",
+      "title": "Lower extremity joint loading during Bounce rope skip in comparison to run and walk",
+      "authors": [
+        "Rajani Mullerpatan",
+        "Triveni Shetty",
+        "Yuvraj Singh",
+        "Bela Agarwal"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.jbmt.2020.12.014",
+      "pmid": "33992227",
+      "pmcid": "PMC9760008",
+      "url": "https://doi.org/10.1016/j.jbmt.2020.12.014",
+      "scope": "Measured bilateral bounce rope-skip hip, knee, and ankle kinematics and loading in 22 young adult women. Supports categorical absorption and propulsion; exact clearance, cadence, joint excursions, muscle rankings, and medical conclusions are not transferred to the catalog fixture."
+    },
+    {
+      "id": "crossfit-2026-single-under-standard",
+      "sourceType": "officialTechnicalStandard",
+      "title": "2026 CrossFit Level 1 Workout 4: Single-Under Movement Standard",
+      "authors": [
+        "CrossFit"
+      ],
+      "year": 2026,
+      "url": "https://games.crossfit.com/workouts/level-1/2026/4?division=1",
+      "scope": "Forward single-under geometry: the rope passes beneath the feet once per jump, and successful passages rather than attempts count. Event-specific score multipliers are not the catalog repetition convention."
+    },
+    {
+      "id": "lee-2007-jump-rope-basics",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Jump Rope Basics Part 2: More Preparation Phase, Plus Double-Under Tips",
+      "authors": [
+        "Buddy Lee"
+      ],
+      "year": 2007,
+      "url": "https://library.crossfit.com/premium/pdf/64_07_Jump_Rope_Basics_2.pdf?e=1681423889&h=6cf486336dd8aef230b5626cdbdd795b",
+      "scope": "CrossFit Journal technical instruction for conventional rope grip, trunk control, upright posture, low rope clearance, forefoot landings, and elbows near the sides. Double-under-specific wrist tips and endurance/adaptation prescriptions are not transferred."
     }
   ]
 }

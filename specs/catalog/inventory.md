@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 137 |
-| Exercises | 280 |
+| Reviewed families | 138 |
+| Exercises | 281 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 353 |
+| Evidence sources | 356 |
 
 ## Family roster
 
@@ -139,6 +139,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [standing-band-trunk-rotation](families/standing-band-trunk-rotation.json) | 1 |
 | [standing-suspension-rollout](families/standing-suspension-rollout.json) | 1 |
 | [stationary-pogo-hop](families/stationary-pogo-hop.json) | 1 |
+| [stationary-two-foot-jump-rope](families/stationary-two-foot-jump-rope.json) | 1 |
 | [step-up](families/step-up.json) | 2 |
 | [straight-leg-hip-flexion-sit-up](families/straight-leg-hip-flexion-sit-up.json) | 1 |
 | [suitcase-carry](families/suitcase-carry.json) | 1 |

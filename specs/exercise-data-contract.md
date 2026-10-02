@@ -186,6 +186,14 @@ Custom-exercise authoring exposes these three modalities through
 to reps; isometric strength is fixed to duration. Conditioning and mobility
 are outside the app's lifter-focused exercise catalog.
 
+The bundled Jump Rope entry is a fixture-specific counted-jump exception:
+a stationary two-foot bounce with a regular unweighted rope and one forward
+passage per jump uses `power`, `reps`, and `nonComparable` as logging
+conventions. It defaults to 30 successful jumps; timed conditioning,
+alternating-foot steps, double unders, and weighted ropes remain outside this
+fixture. Equipment uses the existing **Other** category, whose optional
+**Resistance** field should remain **Not set** for this unweighted fixture.
+
 Custom-exercise and bundled-default editors present adjustable load, duration,
 and bodyweight-fraction values as large scrubber numerals, with units kept
 visually secondary.

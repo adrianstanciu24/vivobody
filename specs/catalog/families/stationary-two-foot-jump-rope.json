@@ -1,0 +1,319 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "stationary-two-foot-jump-rope",
+  "name": "Stationary Two-Foot Jump Rope",
+  "definition": "A continuous in-place basic bounce with a regular unweighted rope, simultaneous two-foot takeoff and landing, and one forward rope passage per jump. Low clearance and synchronized rope turnover distinguish it from height-seeking pogos and discrete countermovement jumps. The squat pattern describes shared bilateral hip-and-knee flexion/extension during shallow repeated jumps; it does not prescribe squat depth or a strength repetition. Mullerpatan supports categorical lower-limb absorption and propulsion in a related bilateral bounce protocol, not the exact clearance, cadence, or joint excursions of this fixture. Calf emphasis, hip/knee secondary roles, trunk control, ankle/foot control, and sustained handle-grip roles are bounded anatomy-and-mechanics inferences, not exact-fixture EMG rankings. Rope turnover is described in instructions without inventing a single wrist action. Power and rep tracking are product conventions for counted jumps; no timed-conditioning, medical, adaptation, or quantitative performance claim is made.",
+  "evidenceRefs": [
+    "mullerpatan-2021-bounce-rope-skip",
+    "crossfit-2026-single-under-standard",
+    "lee-2007-jump-rope-basics",
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "mirakhorlo-2018-hand-wrist-model"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "other"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [],
+    "movementPhases": [
+      {
+        "id": "landing-absorption",
+        "name": "Landing Absorption",
+        "primeActions": [],
+        "yieldingActions": [
+          "hip.flexion",
+          "knee.flexion",
+          "ankle.dorsiflexion"
+        ]
+      },
+      {
+        "id": "takeoff",
+        "name": "Takeoff",
+        "primeActions": [
+          "hip.extension",
+          "knee.extension",
+          "ankle.plantarflexion"
+        ]
+      }
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "tibialisAnterior"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "soleus",
+        "gastrocnemius"
+      ],
+      "secondary": [
+        "vasti",
+        "gluteMax"
+      ],
+      "stabilizer": [
+        "abs",
+        "obliques",
+        "tibialisAnterior",
+        "fingerFlexors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "travel",
+      "valueType": "enum",
+      "required": true,
+      "description": "Remain stationary.",
+      "allowedValues": [
+        "inPlace"
+      ]
+    },
+    {
+      "id": "footSequence",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet take off and land together.",
+      "allowedValues": [
+        "simultaneousBilateral"
+      ]
+    },
+    {
+      "id": "implement",
+      "valueType": "enum",
+      "required": true,
+      "description": "Use a regular rope without weighted handles or added loading.",
+      "allowedValues": [
+        "unweightedRope"
+      ]
+    },
+    {
+      "id": "ropeRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The rope turns forward.",
+      "allowedValues": [
+        "forward"
+      ]
+    },
+    {
+      "id": "ropeTurnsPerJump",
+      "valueType": "enum",
+      "required": true,
+      "description": "One rope passage occurs beneath the feet per jump.",
+      "allowedValues": [
+        "one"
+      ]
+    },
+    {
+      "id": "jumpIntent",
+      "valueType": "enum",
+      "required": true,
+      "description": "Jump only high enough to clear the rope.",
+      "allowedValues": [
+        "ropeClearance"
+      ]
+    },
+    {
+      "id": "externalSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "No external body support.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The rope path is free of an external guide.",
+      "fixedValue": false
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 10,
+      "maximum": 50
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "jump-rope",
+      "name": "Jump Rope",
+      "aliases": [
+        "Rope Skipping",
+        "Skipping Rope",
+        "Single Unders",
+        "Basic Bounce Jump Rope"
+      ],
+      "equipment": "other",
+      "laterality": "bilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 30,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "soleus",
+          "role": "primary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "tibialisAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "travel": "inPlace",
+        "footSequence": "simultaneousBilateral",
+        "implement": "unweightedRope",
+        "ropeRotation": "forward",
+        "ropeTurnsPerJump": "one",
+        "jumpIntent": "ropeClearance",
+        "externalSupport": "none",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "mullerpatan-2021-bounce-rope-skip",
+        "crossfit-2026-single-under-standard",
+        "lee-2007-jump-rope-basics",
+        "arnold-2010-lower-limb",
+        "christophy-2012-lumbar-spine",
+        "mirakhorlo-2018-hand-wrist-model"
+      ],
+      "execution": {
+        "startingPosition": "Stand upright with feet close together, a regular unweighted rope behind your feet, and one handle in each hand. Leave rope weight unset.",
+        "movement": "Turn the rope forward and make small jumps with both feet together, clearing one rope pass beneath your feet per jump.",
+        "endpoint": "Count one rep when the rope passes beneath both feet once and you land on both feet. Do not count a caught rope or failed attempt.",
+        "returnPhase": "Land on the balls of both feet with soft knees and hips, then rebound into the next jump. If the rope catches, stop and reset before continuing.",
+        "controlledJoints": "Keep your trunk steady and knees tracking over your feet. Keep elbows close to your sides while turning the rope.",
+        "supportAndPosture": "Stay in place on a clear, level floor with room for the rope to turn freely. Use no external body support.",
+        "disqualifyingCompensations": [
+          "Alternating feet or using a boxer step changes the two-foot bounce.",
+          "Double unders or backward rope turns change the single forward pass.",
+          "Weighted ropes, weighted handles, or added body loads are outside this fixture.",
+          "Travelling, deep squat jumps, or tuck jumps change the low-clearance stationary bounce."
+        ]
+      }
+    }
+  ]
+}

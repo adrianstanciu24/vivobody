@@ -23381,6 +23381,121 @@
     ]
   },
   {
+    "familyID": "stationary-two-foot-jump-rope",
+    "familyName": "Stationary Two-Foot Jump Rope",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "ankle.dorsiflexion",
+        "name": "Ankle dorsiflexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "hip.flexion",
+        "name": "Hip flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      },
+      {
+        "actionID": "knee.flexion",
+        "name": "Knee flexion",
+        "plane": "sagittal",
+        "kind": "yielding"
+      }
+    ],
+    "catalogID": "jump-rope",
+    "name": "Jump Rope",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 30,
+    "trackingMode": "reps",
+    "equipment": "other",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Rope Skipping",
+      "Skipping Rope",
+      "Single Unders",
+      "Basic Bounce Jump Rope"
+    ],
+    "searchPriority": 97,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "nonComparable",
+    "execution": {
+      "startingPosition": "Stand upright with feet close together, a regular unweighted rope behind your feet, and one handle in each hand. Leave rope weight unset.",
+      "movement": "Turn the rope forward and make small jumps with both feet together, clearing one rope pass beneath your feet per jump.",
+      "endpoint": "Count one rep when the rope passes beneath both feet once and you land on both feet. Do not count a caught rope or failed attempt.",
+      "returnPhase": "Land on the balls of both feet with soft knees and hips, then rebound into the next jump. If the rope catches, stop and reset before continuing.",
+      "controlledJoints": "Keep your trunk steady and knees tracking over your feet. Keep elbows close to your sides while turning the rope.",
+      "supportAndPosture": "Stay in place on a clear, level floor with room for the rope to turn freely. Use no external body support.",
+      "disqualifyingCompensations": [
+        "Alternating feet or using a boxer step changes the two-foot bounce.",
+        "Double unders or backward rope turns change the single forward pass.",
+        "Weighted ropes, weighted handles, or added body loads are outside this fixture.",
+        "Travelling, deep squat jumps, or tuck jumps change the low-clearance stationary bounce."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "soleus",
+        "role": "primary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "primary"
+      },
+      {
+        "muscle": "vasti",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "step-up",
     "familyName": "Forward Step-Up",
     "movementActions": [
