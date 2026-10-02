@@ -18,7 +18,7 @@ import SwiftData
                 ("Barbell Bench Press", 8, 115),
                 ("Lat Pulldown", 10, 85),
                 ("Lateral Lunge", 12, 0),
-                ("Standing Shoulder-Pad Machine Calf Raise", 12, 80),
+                ("Standing Machine Calf Raise", 12, 80),
                 ("Kneeling Cable Crunch", 12, 35),
             ],
             [
@@ -49,7 +49,7 @@ import SwiftData
                 ("Barbell Hip Thrust", 12, 115),
                 ("Lateral Lunge", 12, 0),
                 ("Technogym Seated Hip Adduction Machine", 12, 50),
-                ("Seated Thigh-Pad Machine Calf Raise", 15, 60),
+                ("Seated Machine Calf Raise", 15, 60),
                 ("Technogym Seated Hip Abduction Machine", 12, 50),
                 ("Hanging Knee Raise", 12, 0),
             ],

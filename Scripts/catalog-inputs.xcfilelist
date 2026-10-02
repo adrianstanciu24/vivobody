@@ -27,6 +27,7 @@ $(SRCROOT)/specs/catalog/families/copenhagen-adduction.json
 $(SRCROOT)/specs/catalog/families/dead-bug.json
 $(SRCROOT)/specs/catalog/families/decline-press.json
 $(SRCROOT)/specs/catalog/families/dip.json
+$(SRCROOT)/specs/catalog/families/dumbbell-plank-row.json
 $(SRCROOT)/specs/catalog/families/dynamic-lunge.json
 $(SRCROOT)/specs/catalog/families/elbow-extension.json
 $(SRCROOT)/specs/catalog/families/elbow-flexion.json

@@ -7193,6 +7193,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "landmine-reverse-lunge-knee-drive",
             "banded-single-leg-hip-thrust",
             *REQUESTED_PLANK_FAMILY_IDS,
+            "dumbbell-plank-row",
             "partner-resisted-straight-punch-hold",
             "copenhagen-adduction", "anti-rotation-press", "dead-bug", "bird-dog",
             "forward-fast-pogo-shuffle", "lateral-skater-hop",
@@ -7206,7 +7207,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            279,
+            280,
         )
 
 
@@ -17840,12 +17841,12 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 279)
+        self.assertEqual(len(records), 280)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 136)
+        self.assertEqual(len({record["familyID"] for record in records}), 137)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -18040,6 +18041,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "medicine-ball-straight-leg-sit-up",
                 "straight-leg-hip-flexion-sit-up",
                         *REQUESTED_PLANK_FAMILY_IDS,
+            "dumbbell-plank-row",
             },
             "other": {
                 "farmer-carry", "finger-flexion-grip", "forearm-pronation",
@@ -18339,11 +18341,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 ("cybex-2008-mg500-manual", "arnold-2010-lower-limb"),
             ),
             "bilateral-standing-shoulder-pad-machine-calf-raise": (
-                "Standing Shoulder-Pad Machine Calf Raise",
+                "Standing Machine Calf Raise",
                 (
-                    "Standing Machine Calf Raise",
                     "Standing Calf Raise Machine",
                     "Bilateral Standing Shoulder-Pad Machine Calf Raise",
+                    "Standing Shoulder-Pad Machine Calf Raise",
                 ),
                 ("machine", "bilateral", "external", 20, 10, 10),
                 {"gastrocnemius": "primary", "soleus": "primary"},
@@ -18353,11 +18355,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
             ),
             "bilateral-seated-thigh-pad-machine-calf-raise": (
-                "Seated Thigh-Pad Machine Calf Raise",
+                "Seated Machine Calf Raise",
                 (
-                    "Seated Machine Calf Raise",
                     "Seated Calf Raise Machine",
                     "Bilateral Seated Thigh-Pad Machine Calf Raise",
+                    "Seated Thigh-Pad Machine Calf Raise",
                 ),
                 ("machine", "bilateral", "external", 20, 10, 10),
                 {"soleus": "primary", "gastrocnemius": "secondary"},
@@ -19528,8 +19530,8 @@ class RequestedPlankCatalogTests(unittest.TestCase):
 
     def test_requested_aliases_and_equipment_are_exact(self) -> None:
         expected_aliases = {
-            "Plank Row": "alternating-high-plank-shoulder-tap",
-            "Plank Row w/ Knee Touch": (
+            "Plank Shoulder Tap": "alternating-high-plank-shoulder-tap",
+            "Plank with Knee Touch": (
                 "alternating-high-plank-contralateral-knee-touch"
             ),
             "Lateral Plank Walks": "lateral-high-plank-walk",

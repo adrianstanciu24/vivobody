@@ -1,0 +1,546 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "dumbbell-plank-row",
+  "name": "Dumbbell Plank Row",
+  "definition": "An alternating dumbbell row from a high plank with two stable dumbbells beneath the shoulders and both feet about shoulder-width apart. One arm pulls toward the side of the torso while the opposite grounded dumbbell and both forefeet support the body; the working dumbbell returns to the floor before the other arm rows. Shoulder extension from flexion, scapular retraction, and elbow flexion produce the row. The spinal plane basis describes resisted extension and rotation, not prescribed trunk movement. UConn Health explicitly separates a push-up as an advanced modification; this family admits only the rowing repetition. The upper-arm-at-torso endpoint, neutral grip, stable non-rolling equal dumbbells, single-dumbbell load, and individual-row counting are disclosed catalog narrowings or logging conventions. Muscle roles combine the technical fixture with existing anatomy and supporting plank evidence; they are not exact-fixture EMG rankings or measured force shares. Shoulder taps, knee touches, floor drags, bench-supported rows, deliberate rotational rows, knee-supported rows, kettlebell versions, static planks, and row-plus-push-up combinations remain outside this contract.",
+  "evidenceRefs": [
+    "uconn-renegade-row-standard",
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "christophy-2012-lumbar-spine",
+    "arnold-2010-lower-limb",
+    "lehman-2005-stable-prone-bridge",
+    "can-2024-high-plank-support-emg"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "pull",
+    "pattern": "pull",
+    "direction": "horizontal",
+    "planes": [
+      "sagittal",
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension",
+      "spine.rotation"
+    ],
+    "primeActions": [
+      {
+        "action": "shoulder.extension",
+        "condition": "fromFlexedPosition"
+      },
+      "scapula.retraction",
+      "elbow.flexion"
+    ],
+    "resistedActions": [
+      "spine.extension",
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.horizontalAbduction",
+      "shoulder.horizontalAdduction",
+      "elbow.extension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "knee.flexion",
+      "knee.extension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "lats"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "teresMajor"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidPosterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "bicepsBrachii"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "brachioradialis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "rhomboids"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "lats"
+      ],
+      "secondary": [
+        "teresMajor",
+        "deltoidPosterior",
+        "bicepsBrachii",
+        "brachialis",
+        "brachioradialis",
+        "trapeziusMiddle",
+        "rhomboids",
+        "abs",
+        "obliques"
+      ],
+      "stabilizer": [
+        "subscapularis",
+        "externalRotators",
+        "deltoidAnterior",
+        "serratus",
+        "triceps",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMax",
+        "gluteMed",
+        "vasti",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "The rowing arm moves freely while the grounded arm supports the plank.",
+      "allowedValues": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "A high plank on two dumbbells and both feet is restored between rows.",
+      "allowedValues": [
+        "highPlank"
+      ]
+    },
+    {
+      "id": "startSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both dumbbells and both forefeet contact the floor before each pull.",
+      "allowedValues": [
+        "bilateralDumbbellsAndForefeet"
+      ]
+    },
+    {
+      "id": "rowSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The opposite grounded dumbbell and both forefeet support each unilateral row.",
+      "allowedValues": [
+        "singleDumbbellAndBothForefeet"
+      ]
+    },
+    {
+      "id": "footSpacing",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source baseline uses feet about shoulder-width apart.",
+      "allowedValues": [
+        "shoulderWidth"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both handles use a neutral grip throughout.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "dumbbellSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Stable non-rolling dumbbells provide the supporting hand contacts.",
+      "allowedValues": [
+        "stableNonRollingDumbbells"
+      ]
+    },
+    {
+      "id": "upperArmPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The working elbow stays close to the torso during the pull.",
+      "allowedValues": [
+        "tuckedTowardTorso"
+      ]
+    },
+    {
+      "id": "rowEndpoint",
+      "valueType": "enum",
+      "required": true,
+      "description": "The upper arm reaches the torso without continuing behind it.",
+      "allowedValues": [
+        "upperArmAtTorso"
+      ]
+    },
+    {
+      "id": "trunkMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hips and shoulders remain square while resisting extension and rotation.",
+      "allowedValues": [
+        "heldAgainstExtensionAndRotation"
+      ]
+    },
+    {
+      "id": "armSequence",
+      "valueType": "enum",
+      "required": true,
+      "description": "Return the working dumbbell to the floor before rowing with the opposite arm.",
+      "allowedValues": [
+        "alternatingAfterFloorReset"
+      ]
+    },
+    {
+      "id": "repetitionComposition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed repetition contains only a row and return.",
+      "allowedValues": [
+        "rowOnlyWithoutPushUp"
+      ]
+    },
+    {
+      "id": "repetitionCounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each individual row and floor return counts once; use an even total.",
+      "allowedValues": [
+        "eachRowAndReturn"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Enter the mass of one working dumbbell, with both dumbbells equally loaded.",
+      "allowedValues": [
+        "oneWorkingDumbbellEqualPair"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "No guide constrains the free dumbbell path."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 6,
+      "maximum": 16
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "alternating-dumbbell-plank-row",
+      "name": "Dumbbell Plank Row",
+      "aliases": [
+        "Plank Row",
+        "Renegade Row",
+        "Dumbbell Renegade Row"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 8,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "lats",
+          "role": "primary"
+        },
+        {
+          "muscle": "teresMajor",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidPosterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "secondary"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "secondary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "secondary"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "mixed",
+        "bodyPosition": "highPlank",
+        "startSupport": "bilateralDumbbellsAndForefeet",
+        "rowSupport": "singleDumbbellAndBothForefeet",
+        "footSpacing": "shoulderWidth",
+        "gripOrientation": "neutral",
+        "dumbbellSupport": "stableNonRollingDumbbells",
+        "upperArmPath": "tuckedTowardTorso",
+        "rowEndpoint": "upperArmAtTorso",
+        "trunkMotion": "heldAgainstExtensionAndRotation",
+        "armSequence": "alternatingAfterFloorReset",
+        "repetitionComposition": "rowOnlyWithoutPushUp",
+        "repetitionCounting": "eachRowAndReturn",
+        "loadAccounting": "oneWorkingDumbbellEqualPair",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "uconn-renegade-row-standard",
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "seth-2019-shoulder-work",
+        "christophy-2012-lumbar-spine",
+        "arnold-2010-lower-limb",
+        "lehman-2005-stable-prone-bridge",
+        "can-2024-high-plank-support-emg"
+      ],
+      "execution": {
+        "startingPosition": "Log the weight of one dumbbell, not the combined pair. Place two equally loaded, stable dumbbells directly beneath your shoulders, hold their handles with palms facing inward, and set a high plank with both feet about shoulder-width apart.",
+        "movement": "Shift your support onto one grounded dumbbell and both forefeet, then row the other dumbbell toward the side of your torso while keeping the working elbow close to your body.",
+        "endpoint": "Finish when the working upper arm reaches your torso and the shoulder blade draws back, without turning your hips or shoulders.",
+        "returnPhase": "Lower the working dumbbell under control to the floor and restore the two-hand plank before rowing with the opposite arm.",
+        "controlledJoints": "Keep the supporting elbow extended, your wrists steady, and your hips and shoulders square while resisting low-back sag and trunk rotation.",
+        "supportAndPosture": "Keep both forefeet planted and your trunk and legs in a straight high-plank line throughout each row.",
+        "sideOrDirection": "Alternate arms; count each individual row and return as one repetition and use an even total. A row on each arm counts as two repetitions.",
+        "disqualifyingCompensations": [
+          "Keep this exercise to alternating rows; do not add a push-up.",
+          "Touching the opposite shoulder or knee replaces the loaded row with a different exercise.",
+          "Dragging the dumbbell along the floor changes the lifted row path.",
+          "Keep your trunk square and your knees off the floor; do not use leg drive.",
+          "Enter the weight of one dumbbell; do not add both dumbbells together."
+        ]
+      }
+    }
+  ]
+}

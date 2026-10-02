@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 136 |
-| Exercises | 279 |
+| Reviewed families | 137 |
+| Exercises | 280 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 352 |
+| Evidence sources | 353 |
 
 ## Family roster
 
@@ -45,6 +45,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [dead-bug](families/dead-bug.json) | 1 |
 | [decline-press](families/decline-press.json) | 5 |
 | [dip](families/dip.json) | 3 |
+| [dumbbell-plank-row](families/dumbbell-plank-row.json) | 1 |
 | [dynamic-lunge](families/dynamic-lunge.json) | 2 |
 | [elbow-extension](families/elbow-extension.json) | 13 |
 | [elbow-flexion](families/elbow-flexion.json) | 14 |

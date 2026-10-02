@@ -1028,7 +1028,7 @@
         "movement": "Raise the heel as high as you can.",
         "endpoint": "Finish at the highest heel position you can reach.",
         "returnPhase": "Lower under control without straightening the knee or curling the toes.",
-        "controlledJoints": "Keep the working knee bent near 90 degrees and hold the hip, pelvis, back, knee, and foot still.",
+        "controlledJoints": "Keep the working knee bent near 90 degrees and hold your hip, pelvis, and back steady. Keep your toe posture and foot alignment unchanged, with the forefoot supported on the platform, as your heel rises and lowers.",
         "supportAndPosture": "Sit tall on the machine seat with the load pad resting on your lower thigh.",
         "disqualifyingCompensations": [
           "Straightening the knee turns the seated calf raise into a standing-style raise.",
@@ -1039,11 +1039,11 @@
     },
     {
       "catalogID": "bilateral-standing-shoulder-pad-machine-calf-raise",
-      "name": "Standing Shoulder-Pad Machine Calf Raise",
+      "name": "Standing Machine Calf Raise",
       "aliases": [
-        "Standing Machine Calf Raise",
         "Standing Calf Raise Machine",
-        "Bilateral Standing Shoulder-Pad Machine Calf Raise"
+        "Bilateral Standing Shoulder-Pad Machine Calf Raise",
+        "Standing Shoulder-Pad Machine Calf Raise"
       ],
       "equipment": "machine",
       "laterality": "bilateral",
@@ -1110,11 +1110,11 @@
     },
     {
       "catalogID": "bilateral-seated-thigh-pad-machine-calf-raise",
-      "name": "Seated Thigh-Pad Machine Calf Raise",
+      "name": "Seated Machine Calf Raise",
       "aliases": [
-        "Seated Machine Calf Raise",
         "Seated Calf Raise Machine",
-        "Bilateral Seated Thigh-Pad Machine Calf Raise"
+        "Bilateral Seated Thigh-Pad Machine Calf Raise",
+        "Seated Thigh-Pad Machine Calf Raise"
       ],
       "equipment": "machine",
       "laterality": "bilateral",
@@ -1170,7 +1170,7 @@
         "movement": "Raise both heels together as high as you can.",
         "endpoint": "Finish at the highest heel position you can reach while both knees remain bent.",
         "returnPhase": "Lower both heels together under control without straightening the knees or curling the toes.",
-        "controlledJoints": "Keep both knees bent near 90 degrees and hold the hips, pelvis, back, knees, and feet still.",
+        "controlledJoints": "Keep both knees bent near 90 degrees and hold your hips, pelvis, and back steady. Keep your toe posture and foot alignment unchanged, with both forefeet supported on the platform, as your heels rise and lower together.",
         "supportAndPosture": "Sit tall on the machine seat with the load pad resting on both lower thighs.",
         "disqualifyingCompensations": [
           "Moving one heel before the other leaves the simultaneous two-leg fixture.",

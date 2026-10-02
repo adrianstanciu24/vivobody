@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "high-plank-shoulder-tap",
   "name": "High-Plank Shoulder Tap",
-  "definition": "A dynamic bodyweight high-plank drill that begins with both palms and toes on the floor, transfers support to one palm and both feet, touches the free hand to the opposite shoulder, and returns before alternating. The branded Boxing Science standard calls this fixture Plank Row, but no rowing resistance or shoulder-extension pull occurs. The free arm performs a short horizontal-adduction and elbow-flexion path while the trunk resists extension and rotation. Abs and obliques are primary through that anti-motion task; moving-arm and support-chain roles are conservative evidence-and-mechanics assignments rather than a quantitative recruitment ranking. Dumbbell renegade rows, push-ups, forearm reaches, loaded drags, same-side taps, timed three-point holds, and deliberate trunk rotation remain outside this contract.",
+  "definition": "A dynamic bodyweight high-plank drill that begins with both palms and toes on the floor, transfers support to one palm and both feet, touches the free hand to the opposite shoulder, and returns before alternating. The historical Boxing Science transcription calls this fixture Plank Row, but that ambiguous label is excluded from catalog search aliases; no rowing resistance or shoulder-extension pull occurs. The free arm performs a short horizontal-adduction and elbow-flexion path while the trunk resists extension and rotation. Abs and obliques are primary through that anti-motion task; moving-arm and support-chain roles are conservative evidence-and-mechanics assignments rather than a quantitative recruitment ranking. Dumbbell renegade rows, push-ups, forearm reaches, loaded drags, same-side taps, timed three-point holds, and deliberate trunk rotation remain outside this contract.",
   "evidenceRefs": [
     "boxing-science-exercise-library",
     "boxing-science-2019-core-library",
@@ -43,7 +43,7 @@
   "exercises": [{
     "catalogID": "alternating-high-plank-shoulder-tap",
     "name": "High-Plank Shoulder Tap",
-    "aliases": ["Plank Row", "Plank Shoulder Tap", "Alternating High-Plank Shoulder Tap"],
+    "aliases": ["Plank Shoulder Tap", "Alternating High-Plank Shoulder Tap"],
     "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 16, "searchPriority": 95,
     "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "bicepsBrachii", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
     "variant": {"startSupport": "bilateralPalmsAndToes", "tapSupport": "singlePalmAndBothFeet", "footSpacing": "hipWidthOrWiderForControl", "handTarget": "oppositeShoulder", "trunkMotion": "heldAgainstExtensionAndRotation", "limbSequence": "alternatingOneAtATime", "repetitionCounting": "eachTouchAndReturn", "fixedPath": false},

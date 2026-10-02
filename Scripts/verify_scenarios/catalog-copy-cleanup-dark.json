@@ -1,0 +1,127 @@
+{
+  "name": "catalog-copy-cleanup-dark",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Seated Thigh-Pad Machine Calf Raise"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Seated Machine Calf Raise,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Seated Machine Calf Raise,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Seated Thigh-Pad Machine Calf Raise,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Seated Machine Calf Raise,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Seated Machine Calf Raise"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-controlled-joints"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercise-execution-controlled-joints"
+    },
+    {
+      "labelContains": "Keep both knees bent near 90 degrees and hold your hips, pelvis, and back steady. Keep your toe posture and foot alignment unchanged, with both forefeet supported on the platform, as your heels rise and lower together."
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Keep both knees bent near 90 degrees and hold the hips, pelvis, back, knees, and feet still."
+    }
+  ]
+}

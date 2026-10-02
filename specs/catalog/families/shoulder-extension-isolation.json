@@ -678,8 +678,8 @@
     },
     {
       "catalogID": "two-hand-single-dumbbell-pullover",
-      "name": "Two-Hand Single-Dumbbell Pullover",
-      "aliases": ["Dumbbell Pullover", "Flat-Bench Dumbbell Pullover", "Two-Hand Dumbbell Pullover"],
+      "name": "Dumbbell Pullover",
+      "aliases": ["Flat-Bench Dumbbell Pullover", "Two-Hand Dumbbell Pullover", "Two-Hand Single-Dumbbell Pullover"],
       "groupOverride": "chest",
       "equipment": "dumbbell",
       "laterality": "bilateral",

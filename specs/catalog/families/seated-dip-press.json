@@ -36,8 +36,8 @@
   "recommended": {"defaultReps": {"minimum": 6, "maximum": 15}},
   "exercises": [{
     "catalogID": "ergo-fit-vector-seated-dip-press",
-    "name": "ERGO-FIT VECTOR KRAFT Seated Dip Press",
-    "aliases": ["Seated Dip / Triceps Press Machine", "Seated Dip Press Machine", "Compound Triceps Press Machine"],
+    "name": "Seated Machine Dip Press",
+    "aliases": ["Seated Dip / Triceps Press Machine", "Seated Dip Press Machine", "Compound Triceps Press Machine", "ERGO-FIT VECTOR KRAFT Seated Dip Press"],
     "equipment": "machine", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "external", "bodyweightFraction": 0, "defaultWeight": 20, "defaultWeightKg": 10, "reps": 10, "searchPriority": 96,
     "involvement": [{"muscle": "triceps", "role": "primary"}, {"muscle": "pectoralisMajorSternocostal", "role": "secondary"}, {"muscle": "lats", "role": "secondary"}, {"muscle": "teresMajor", "role": "secondary"}, {"muscle": "deltoidPosterior", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "trapeziusMiddle", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}],
     "variant": {"kineticChain": "open", "bodyPosition": "seated", "torsoSupport": "posteriorBackPad", "machineFixture": "ergoFitVectorSeatedDip20201101", "loadInterface": "bilateralOuterHandlesPalmsInward", "leverArmConfiguration": "linked", "armSequence": "simultaneousBilateral", "upperArmPath": "shoulderHeightToDownward", "elbowMotion": "extends", "fixedPath": true, "lowerBodyContribution": "none", "loadAccounting": "enteredExternalLoadSameFixtureOnly"},

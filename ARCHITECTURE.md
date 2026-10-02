@@ -129,8 +129,10 @@ Insights are pure functions over immutable session snapshots and are shared
 through the fingerprint-keyed `SessionAnalytics` cache. `WorkoutInsightsFeeder`
 observes app-context saves as wake-up signals; a long-lived
 `AnalyticsSnapshotStore` ModelActor reads the archive and uses SwiftData
-persistent history to replace only changed session snapshots. Cold loads and
-expired history tokens rebuild off the main actor. Report replay and
+persistent history to replace only changed session snapshots. History fetches
+include only transactions touching sessions, exercises or sets; catalog-only
+reconciliation transactions are excluded before changes are materialized. Cold
+loads and expired history tokens rebuild off the main actor. Report replay and
 construction remain in the separate analytics worker. The app root injects the
 same snapshot store into the feeder and widget writer so widget publication
 cannot start a competing archive build. A new insight normally has a model

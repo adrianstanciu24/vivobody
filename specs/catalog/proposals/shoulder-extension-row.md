@@ -412,7 +412,7 @@ exercise-array order.
 | Face pull | Exclude | Adds deliberate shoulder external rotation and a higher pull target. |
 | Rear-delt fly | Exclude | Omits elbow flexion and belongs to a shoulder-horizontal-abduction isolation family. |
 | Upright row | Exclude | Shoulder elevation/abduction signature rather than horizontal shoulder extension. |
-| Renegade row | Defer | Adds a loaded plank, contralateral arm support, and anti-rotation demand that deserve an explicit hybrid contract. |
+| Renegade row | Owned separately | The rowing-only alternating dumbbell fixture belongs to [`dumbbell-plank-row`](../families/dumbbell-plank-row.json), activated 2026-10-02; the loaded plank and contralateral grounded-dumbbell support remain outside this horizontal-row contract. |
 | T-bar, landmine, or Meadows row | Defer | Pivot-guided path, stance, and equipment semantics are not represented by the initial axes. |
 | Seal or chest-supported barbell row | Defer | Valid mechanics, but unnecessary for initial axis coverage once the dumbbell supported branch exists; add only as a useful searchable movement. |
 | Suspension-handle or ring row | Defer | Independent moving handles and instability require an apparatus axis expansion and their own load anchor. |

@@ -133,6 +133,56 @@ struct AnalyticsSnapshotStoreTests {
         #expect(!prepared.containsSession(on: date(3)))
     }
 
+    @Test func catalogInstructionHistoryDoesNotInterruptArchiveUpdates() async throws {
+        let harness = try makeHarness()
+        let session = makeSession(name: "Archived", completedAt: date(1), reps: 5)
+        harness.context.insert(session)
+        let item = ExerciseCatalogItem(name: "Catalog fixture", group: .back, defaultWeight: 10)
+        item.execution = instructions(posture: "Initial posture")
+        harness.context.insert(item)
+        try harness.context.saveOrRollback()
+
+        let store = AnalyticsSnapshotStore(modelContainer: harness.container)
+        let initial = try await store.prepare()
+
+        // Reconciliation saves catalog changes separately from workout graphs.
+        item.execution = instructions(posture: "Revised posture")
+        try harness.context.saveOrRollback()
+
+        let catalogOnly = try await store.prepare()
+        #expect(!catalogOnly.usedFullReload)
+        #expect(catalogOnly.rebuiltSessionCount == 0)
+        #expect(catalogOnly.archiveRevision == initial.archiveRevision)
+        #expect(catalogOnly.snapshot == initial.snapshot)
+
+        // A cold store must also skip the newest catalog-only transaction.
+        let coldStore = AnalyticsSnapshotStore(modelContainer: harness.container)
+        let cold = try await coldStore.prepare()
+        #expect(cold.snapshot == initial.snapshot)
+
+        session.exercises[0].sets[0].reps = 9
+        try harness.context.saveOrRollback()
+        let updated = try await store.prepare()
+        #expect(!updated.usedFullReload)
+        #expect(updated.rebuiltSessionCount == 1)
+        #expect(updated.snapshot.sessions[0].exercises[0].sets[0].reps == 9)
+        let coldUpdated = try await coldStore.prepare()
+        #expect(coldUpdated.snapshot == updated.snapshot)
+    }
+
+    private func instructions(posture: String) -> ExecutionInstructions {
+        ExecutionInstructions(
+            startingPosition: "Fixture setup",
+            movement: "Fixture movement",
+            endpoint: "Fixture endpoint",
+            returnPhase: "Fixture return",
+            controlledJoints: "Fixture control",
+            supportAndPosture: posture,
+            disqualifyingCompensations: ["Fixture compensation"],
+            sideOrDirection: nil
+        )
+    }
+
     private struct Harness {
         let container: ModelContainer
         let context: ModelContext

@@ -31,4 +31,4 @@ The owner selected the straight hold first. `partner-resisted-straight-punch-hol
 
 ## Existing name skipped
 
-`Plank Row w/ Knee Touch` is already an exact alias of `alternating-high-plank-contralateral-knee-touch` in `high-plank-contralateral-knee-touch.json`. Its source page 14 describes the same opposite hand/knee lift and stability task, so no second record is needed.
+The historical source name `Plank Row w/ Knee Touch` was previously accepted for `alternating-high-plank-contralateral-knee-touch` in `high-plank-contralateral-knee-touch.json`. On 2026-10-02, the owner separated loaded plank rows from touch exercises and removed the two knee-touch aliases containing Row. The active name remains **High-Plank Opposite-Knee Touch**, with **Plank with Knee Touch** as a search alias. The source page 14 describes the opposite hand/knee lift and stability task; it does not justify treating this bodyweight touch as a loaded row.

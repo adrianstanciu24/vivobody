@@ -1,0 +1,411 @@
+{
+  "name": "catalog-copy-cleanup-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Standing Shoulder-Pad Machine Calf Raise"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Standing Machine Calf Raise,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Standing Machine Calf Raise,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Standing Shoulder-Pad Machine Calf Raise,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Standing Machine Calf Raise,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Standing Machine Calf Raise"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "ERGO-FIT VECTOR KRAFT Seated Dip Press"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Seated Machine Dip Press,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Seated Machine Dip Press,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^ERGO-FIT VECTOR KRAFT Seated Dip Press,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Seated Machine Dip Press,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Seated Machine Dip Press"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Standing Single-Arm Supinated Dumbbell Curl"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Standing Single-Arm Dumbbell Curl,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Standing Single-Arm Dumbbell Curl,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Standing Single-Arm Supinated Dumbbell Curl,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Standing Single-Arm Dumbbell Curl,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Standing Single-Arm Dumbbell Curl"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Two-Hand Single-Dumbbell Pullover"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Dumbbell Pullover,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Dumbbell Pullover,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Two-Hand Single-Dumbbell Pullover,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Dumbbell Pullover,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Dumbbell Pullover"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Seated Thigh-Pad Machine Calf Raise"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Seated Machine Calf Raise,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Seated Machine Calf Raise,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Seated Thigh-Pad Machine Calf Raise,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Seated Machine Calf Raise,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Seated Machine Calf Raise"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-controlled-joints"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercise-execution-controlled-joints"
+    },
+    {
+      "labelContains": "Keep both knees bent near 90 degrees and hold your hips, pelvis, and back steady. Keep your toe posture and foot alignment unchanged, with both forefeet supported on the platform, as your heels rise and lower together."
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Keep both knees bent near 90 degrees and hold the hips, pelvis, back, knees, and feet still."
+    }
+  ]
+}

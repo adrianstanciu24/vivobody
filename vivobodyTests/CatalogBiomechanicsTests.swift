@@ -16,7 +16,7 @@ import Testing
 struct CatalogBiomechanicsTests {
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
         #expect(CatalogData.records.count == 280)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 136)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 137)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "conventional-barbell-deadlift")?.familyID == "conventional-deadlift")
@@ -265,7 +265,7 @@ struct CatalogBiomechanicsTests {
             ),
             (
                 "two-hand-single-dumbbell-pullover",
-                "Two-Hand Single-Dumbbell Pullover",
+                "Dumbbell Pullover",
                 "shoulder-extension-isolation", .dumbbell, .dynamicStrength, .external
             ),
         ]

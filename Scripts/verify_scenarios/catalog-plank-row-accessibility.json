@@ -1,0 +1,107 @@
+{
+  "name": "catalog-plank-row-accessibility",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Plank Row"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Dumbbell Plank Row,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Dumbbell Plank Row,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^High-Plank Shoulder Tap,"
+          },
+          {
+            "labelRegex": "^High-Plank Opposite-Knee Touch,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Dumbbell Plank Row,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Dumbbell Plank Row"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercise-execution-starting-position"
+    },
+    {
+      "labelContains": "Log the weight of one dumbbell, not the combined pair. Place two equally loaded, stable dumbbells directly beneath your shoulders, hold their handles with palms facing inward, and set a high plank with both feet about shoulder-width apart."
+    }
+  ],
+  "forbidden": []
+}

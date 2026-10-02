@@ -24,7 +24,7 @@ import SwiftData
                 ("Barbell Back Squat", 8, 185),
                 ("Romanian Deadlift", 10, 135),
                 ("Upright Machine Leg Extension", 12, 80),
-                ("Standing Shoulder-Pad Machine Calf Raise", 12, 100),
+                ("Standing Machine Calf Raise", 12, 100),
                 ("Kneeling Cable Crunch", 12, 40),
             ]),
             Plan(name: "Upper Push", weekday: 3, lifts: [
@@ -38,7 +38,7 @@ import SwiftData
                 ("Barbell Front Squat", 8, 135),
                 ("Barbell Hip Thrust", 10, 155),
                 ("Seated Leg Curl", 12, 70),
-                ("Seated Thigh-Pad Machine Calf Raise", 12, 70),
+                ("Seated Machine Calf Raise", 12, 70),
                 ("Supine Reverse Crunch", 12, 0),
             ]),
             Plan(name: "Upper Pull", weekday: 6, lifts: [

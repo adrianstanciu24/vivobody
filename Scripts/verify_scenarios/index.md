@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 184.
+Scenario files: 190.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -38,6 +38,9 @@ Scenario files: 184.
 | [catalog-comprehensive-expansion](catalog-comprehensive-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-concise-names-dark](catalog-concise-names-dark.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-concise-names-light](catalog-concise-names-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-copy-cleanup-accessibility](catalog-copy-cleanup-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-copy-cleanup-dark](catalog-copy-cleanup-dark.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-copy-cleanup-light](catalog-copy-cleanup-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-core-strength-expansion](catalog-core-strength-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-essential-hold](catalog-essential-hold.json) | library | None declared |
 | [catalog-everyday-good-morning](catalog-everyday-good-morning.json) | library | `--static-body -settings.appearance dark` |
@@ -68,6 +71,9 @@ Scenario files: 184.
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
 | [catalog-plank-alias-search-accessibility](catalog-plank-alias-search-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-plank-knee-touch-dark](catalog-plank-knee-touch-dark.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-plank-row-accessibility](catalog-plank-row-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-plank-row-dark](catalog-plank-row-dark.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-plank-row-light](catalog-plank-row-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-plank-shoulder-tap-light](catalog-plank-shoulder-tap-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-plyometric-box-jump-dark](catalog-plyometric-box-jump-dark.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-plyometric-skater-jump-light-accessibility](catalog-plyometric-skater-jump-light-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |

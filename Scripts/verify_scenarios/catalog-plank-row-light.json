@@ -1,0 +1,281 @@
+{
+  "name": "catalog-plank-row-light",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Plank Shoulder Tap"
+    },
+    {
+      "wait": {
+        "labelRegex": "^High-Plank Shoulder Tap,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^High-Plank Shoulder Tap,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Dumbbell Plank Row,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^High-Plank Shoulder Tap,"
+      }
+    },
+    {
+      "wait": {
+        "label": "High-Plank Shoulder Tap"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Plank with Knee Touch"
+    },
+    {
+      "wait": {
+        "labelRegex": "^High-Plank Opposite-Knee Touch,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^High-Plank Opposite-Knee Touch,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Dumbbell Plank Row,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^High-Plank Opposite-Knee Touch,"
+      }
+    },
+    {
+      "wait": {
+        "label": "High-Plank Opposite-Knee Touch"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Plank Row"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Dumbbell Plank Row,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^Dumbbell Plank Row,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^High-Plank Shoulder Tap,"
+          },
+          {
+            "labelRegex": "^High-Plank Opposite-Knee Touch,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Dumbbell Plank Row,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Dumbbell Plank Row"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-starting-position"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Log the weight of one dumbbell, not the combined pair. Place two equally loaded, stable dumbbells directly beneath your shoulders, hold their handles with palms facing inward, and set a high plank with both feet about shoulder-width apart."
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-side-direction"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercise-execution-side-direction"
+    },
+    {
+      "labelContains": "Alternate arms; count each individual row and return as one repetition and use an even total. A row on each arm counts as two repetitions."
+    },
+    {
+      "labelContains": "Keep this exercise to alternating rows; do not add a push-up."
+    }
+  ],
+  "forbidden": []
+}

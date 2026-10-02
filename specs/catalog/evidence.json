@@ -5480,5 +5480,17 @@
       "year": 2026,
       "url": "https://www.nasm.org/resource-center/exercise-library/box-jumps",
       "scope": "Official technique page accessed in 2026 (not a claimed publication year) specifies controlled bilateral box landing followed by a careful step-down reset. It supports that reset choice for the Boxing Science 20–40 cm fixture, not the exact box-height interval, muscle ranking, or performance outcomes."
-    }]
+    },
+    {
+      "id": "uconn-renegade-row-standard",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Suggested Exercise of the Month: February — Renegade Row",
+      "authors": [
+        "UConn Health Wellness Center"
+      ],
+      "year": 2026,
+      "url": "https://health.uconn.edu/wellness-center/wp-content/uploads/sites/182/2018/04/February.pdf",
+      "scope": "Undated institutional exercise standard, registered with retrieval year 2026 rather than a claimed publication year. Specifies a high plank gripping two dumbbells beneath the shoulders, feet about shoulder-width apart, square hips and shoulders, an alternating pull toward the armpit with shoulder-blade retraction, a controlled floor return, and plank reset. Push-ups are explicitly an advanced modification rather than the baseline row. The catalog narrows to stable non-rolling equal dumbbells, neutral grip, and an upper-arm-at-torso endpoint; single-dumbbell load and each-row counting are product conventions. This source does not measure exact-fixture recruitment, force shares, or a per-arm maximum."
+    }
+  ]
 }

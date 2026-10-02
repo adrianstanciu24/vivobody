@@ -326,24 +326,44 @@ actor AnalyticsSnapshotStore {
     private func transactions(
         after token: DefaultHistoryToken?
     ) throws -> [DefaultHistoryTransaction] {
+        let archiveChanges = archiveHistoryPredicate()
         if let token {
             return try modelContext.fetchHistory(
                 HistoryDescriptor<DefaultHistoryTransaction>(
-                    predicate: #Predicate { $0.token > token }
+                    predicate: #Predicate {
+                        $0.token > token && archiveChanges.evaluate($0)
+                    }
                 )
             )
         }
         return try modelContext.fetchHistory(
-            HistoryDescriptor<DefaultHistoryTransaction>()
+            HistoryDescriptor<DefaultHistoryTransaction>(predicate: archiveChanges)
         )
     }
 
     private func latestHistoryToken() throws -> DefaultHistoryToken? {
         var descriptor = HistoryDescriptor<DefaultHistoryTransaction>(
+            predicate: archiveHistoryPredicate(),
             sortBy: [SortDescriptor(\.transactionIdentifier, order: .reverse)]
         )
         descriptor.fetchLimit = 1
         return try modelContext.fetchHistory(descriptor).first?.token
+    }
+
+    private func archiveHistoryPredicate() -> Predicate<DefaultHistoryTransaction> {
+        let entityNames = [
+            Schema.entityName(for: WorkoutSession.self),
+            Schema.entityName(for: Exercise.self),
+            Schema.entityName(for: WorkoutSet.self),
+        ]
+        // Filter before SwiftData materializes changes. Catalog reconciliation
+        // is unrelated to archive snapshots, and its nested Codable instruction
+        // updates can contain key paths SwiftData cannot materialize as history.
+        return #Predicate {
+            $0.changes.contains { change in
+                entityNames.contains(change.changedPersistentIdentifier.entityName)
+            }
+        }
     }
 
     private func makeSnapshot(
