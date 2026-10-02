@@ -1,0 +1,85 @@
+{
+  "name": "catalog-triceps-consolidation-light",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Barbell Lying Triceps Extension"
+    },
+    {
+      "wait": {
+        "labelRegex": "^EZ-Bar Skull Crusher,"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelRegex": "^EZ-Bar Skull Crusher,"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelRegex": "^Barbell Lying Triceps Extension,"
+          },
+          {
+            "labelRegex": "^Bilateral Barbell Lying Triceps Extension,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^EZ-Bar Skull Crusher,"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH \u00b7 REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "EZ-Bar Skull Crusher"
+    },
+    {
+      "labelContains": "Muscles used by EZ-Bar Skull Crusher"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Barbell Lying Triceps Extension"
+    }
+  ]
+}

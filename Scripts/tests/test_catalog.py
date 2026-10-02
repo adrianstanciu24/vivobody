@@ -248,7 +248,6 @@ MUST_HAVE_EXPANSION_RECORD_IDS = {
     "barbell-clean-and-jerk",
     "two-dumbbell-forward-lunge",
     "standing-ez-bar-curl",
-    "bilateral-barbell-lying-triceps-extension",
 }
 
 MUST_HAVE_EXPANSION_FAMILY_IDS = {"clean-and-jerk"}
@@ -2348,11 +2347,12 @@ class CatalogFoundationTests(unittest.TestCase):
             for family in self.real_families
             for exercise in family["exercises"]
         }
-        self.assertEqual(len(retired_ids), 71)
+        self.assertEqual(len(retired_ids), 72)
         self.assertTrue(retired_ids.isdisjoint(active_ids))
         self.assertIn("barbell-good-morning-25-percent-body-mass", retired_ids)
         self.assertIn("pendlay-row", retired_ids)
         self.assertIn("neutral-grip-pull-up", retired_ids)
+        self.assertIn("bilateral-barbell-lying-triceps-extension", retired_ids)
 
         reused = copy.deepcopy(self.valid_family)
         reused["exercises"][0]["catalogID"] = "pendlay-row"
@@ -7206,7 +7206,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            280,
+            279,
         )
 
 
@@ -7830,7 +7830,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         )
                     mutation_count += 1
 
-        self.assertEqual(mutation_count, 779)
+        self.assertEqual(mutation_count, 763)
 
     def test_conditioned_rotation_cannot_be_broadened_per_exercise(
         self,
@@ -7957,7 +7957,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "dumbbellHandle",
                 "straightCableBar",
                 "rope",
-                "barbellShapeUnreported",
                 "selfAdjustingMachineHandles",
                 "dumbbellHeadTwoHandHold",
                 "ezBarInsideGrip",
@@ -17841,7 +17840,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 280)
+        self.assertEqual(len(records), 279)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
@@ -18269,7 +18268,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 280)
+            self.assertEqual(len(emitted), 279)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},
@@ -18429,12 +18428,19 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertEqual(curl["variant"]["handleType"], "undulatedEZBarbell")
         self.assertEqual(curl["variant"]["wristPosture"], "unreported")
 
-        extension = exercises["bilateral-barbell-lying-triceps-extension"]
+        extension = exercises["ez-bar-skull-crusher"]
         self.assertEqual(
-            extension["variant"]["handleType"], "barbellShapeUnreported"
+            extension["variant"]["handleType"], "ezBarInsideGrip"
         )
         self.assertEqual(extension["variant"]["loadAccounting"], "totalBarAndPlates")
-        self.assertNotIn("Skull Crusher", extension["aliases"])
+        self.assertNotIn("bilateral-barbell-lying-triceps-extension", exercises)
+        self.assertTrue(
+            {
+                "Barbell Lying Triceps Extension",
+                "Lying Barbell Triceps Press",
+                "Bilateral Barbell Lying Triceps Extension",
+            } <= set(extension["aliases"])
+        )
 
         runtime_ids = {
             record["catalogID"]
@@ -18444,7 +18450,7 @@ class CatalogFoundationTests(unittest.TestCase):
         proposal = (
             catalog.SPEC_ROOT / "proposals" / "must-have-expansion-2026-08.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("Status: active as four source-bounded records", proposal)
+        self.assertIn("Status: historical addition record", proposal)
 
     def test_machine_catalog_expansion_is_source_exact_and_runtime_visible(
         self,

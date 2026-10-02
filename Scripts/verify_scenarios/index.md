@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 181.
+Scenario files: 184.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -94,6 +94,9 @@ Scenario files: 181.
 | [catalog-swiss-ball-stir-the-pot-light](catalog-swiss-ball-stir-the-pot-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-tfl-compound-development](catalog-tfl-compound-development.json) | today | `--ui-test-tfl-development --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-tfl-coverage](catalog-tfl-coverage.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-triceps-consolidation-accessibility](catalog-triceps-consolidation-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-triceps-consolidation-dark](catalog-triceps-consolidation-dark.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-triceps-consolidation-light](catalog-triceps-consolidation-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-trx-chest-press-accessibility](catalog-trx-chest-press-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-trx-suspended-plank-dark](catalog-trx-suspended-plank-dark.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-trx-suspended-push-up-light](catalog-trx-suspended-push-up-light.json) | library | `--static-body -settings.appearance light` |

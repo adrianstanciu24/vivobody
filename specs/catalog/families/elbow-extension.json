@@ -206,8 +206,7 @@
       "description": "The external surface directly supporting the torso; a seat without back contact is not torso support.",
       "allowedValues": [
         "none",
-        "bench",
-        "lyingSurfaceUnreported"
+        "bench"
       ]
     },
     {
@@ -217,8 +216,7 @@
       "description": "Whether external posterior support limits scapular translation along the thorax; this does not name a dynamic scapular action.",
       "allowedValues": [
         "free",
-        "supportConstrained",
-        "unstandardized"
+        "supportConstrained"
       ]
     },
     {
@@ -327,7 +325,6 @@
         "dumbbellHandle",
         "straightCableBar",
         "rope",
-        "barbellShapeUnreported",
         "selfAdjustingMachineHandles",
         "dumbbellHeadTwoHandHold",
         "ezBarInsideGrip",
@@ -626,7 +623,7 @@
     },
     {
       "id": "supine-extension-preserves-reviewed-support-and-flexed90-fixtures",
-      "description": "Both reviewed lying extensions hold the upper arm at 90 degrees of shoulder flexion; the dumbbell study reports bench support and neutral forearms while the barbell study leaves its support and forearm orientation unreported.",
+      "description": "The lying dumbbell and EZ-bar extensions use bench support and hold the upper arm at 90 degrees of shoulder flexion; the dumbbell fixture has neutral forearms while the EZ-bar fixture leaves forearm orientation unreported.",
       "when": {
         "field": "variant.bodyPosition",
         "operator": "equals",
@@ -643,15 +640,13 @@
         {
           "field": "variant.torsoSupport",
           "allowedValues": [
-            "bench",
-            "lyingSurfaceUnreported"
+            "bench"
           ]
         },
         {
           "field": "variant.scapularTranslation",
           "allowedValues": [
-            "supportConstrained",
-            "unstandardized"
+            "supportConstrained"
           ]
         },
         {
@@ -823,27 +818,6 @@
       "then": [{"field": "laterality", "value": "unilateral"}],
       "requirePresent": [],
       "requireAbsent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth", "variant.loadAccounting"]
-    },
-    {
-      "id": "unreported-barbell-shape-pins-bilateral-lying-fixture",
-      "description": "The unreported barbell interface belongs only to Brandao et al.'s bilateral lying triceps press and preserves every fixture detail the paper does not report.",
-      "when": {"field": "variant.handleType", "operator": "equals", "value": "barbellShapeUnreported"},
-      "then": [
-        {"field": "equipment", "value": "barbell"},
-        {"field": "laterality", "value": "bilateral"},
-        {"field": "variant.bodyPosition", "value": "supine"},
-        {"field": "variant.torsoSupport", "value": "lyingSurfaceUnreported"},
-        {"field": "variant.scapularTranslation", "value": "unstandardized"},
-        {"field": "variant.upperArmPosition", "value": "flexed90"},
-        {"field": "variant.forearmOrientation", "value": "unreported"},
-        {"field": "variant.wristPosture", "value": "unreported"},
-        {"field": "variant.resistanceGeometry", "value": "gravityLoadedBarbell"},
-        {"field": "variant.loadAccounting", "value": "totalBarAndPlates"},
-        {"field": "variant.fixedPath", "value": false},
-        {"field": "variant.lowerBodyContribution", "value": "none"}
-      ],
-      "requirePresent": ["variant.loadAccounting"],
-      "requireAbsent": ["variant.torsoInclination", "variant.upperArmTorsoRelationship", "variant.gripWidth"]
     },
     {
       "id": "rope-pins-bilateral-neutral-cable-fixtures",
@@ -2022,71 +1996,6 @@
       }
     },
     {
-      "catalogID": "bilateral-barbell-lying-triceps-extension",
-      "name": "Barbell Lying Triceps Extension",
-      "aliases": [
-        "Lying Barbell Triceps Press",
-        "Bilateral Barbell Lying Triceps Extension"
-      ],
-      "equipment": "barbell",
-      "laterality": "bilateral",
-      "modality": "dynamicStrength",
-      "trackingMode": "reps",
-      "loadMode": "external",
-      "bodyweightFraction": 0,
-      "defaultWeight": 30,
-      "defaultWeightKg": 15,
-      "reps": 10,
-      "searchPriority": 92,
-      "involvement": [
-        {"muscle": "triceps", "role": "primary"},
-        {"muscle": "brachioradialis", "role": "stabilizer"},
-        {"muscle": "fingerFlexors", "role": "stabilizer"},
-        {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
-        {"muscle": "externalRotators", "role": "stabilizer"},
-        {"muscle": "trapeziusMiddle", "role": "stabilizer"}
-      ],
-      "variant": {
-        "kineticChain": "open",
-        "bodyPosition": "supine",
-        "torsoSupport": "lyingSurfaceUnreported",
-        "scapularTranslation": "unstandardized",
-        "forearmSupport": "none",
-        "upperArmSupport": "none",
-        "hipContact": "unreported",
-        "upperArmPosition": "flexed90",
-        "elbowMotion": "extends",
-        "forearmMotion": "angleHeld",
-        "forearmOrientation": "unreported",
-        "wristMotion": "angleHeld",
-        "wristPosture": "unreported",
-        "handTask": "staticImplementHold",
-        "handleType": "barbellShapeUnreported",
-        "resistanceGeometry": "gravityLoadedBarbell",
-        "loadAccounting": "totalBarAndPlates",
-        "fixedPath": false,
-        "lowerBodyContribution": "none"
-      },
-      "additionalPrimeActions": [],
-      "additionalStabilityDemands": [],
-      "evidenceRefs": [
-        "brandao-2020-exercise-order"
-      ],
-      "execution": {
-        "startingPosition": "Lie on your back with your torso supported and hold one barbell with both hands above the chest. Record the total bar-and-plate load and use a comfortable grip.",
-        "movement": "Keep both upper arms at 90 degrees of shoulder flexion while bending both elbows together.",
-        "endpoint": "Stop when the elbows reach 90 degrees of flexion, matching the source's standardized displacement.",
-        "returnPhase": "Extend both elbows together to full extension without turning the movement into a press.",
-        "controlledJoints": "Keep the upper arms at the reviewed 90-degree shoulder position while the elbows move.",
-        "supportAndPosture": "Keep the torso supported and still, and maintain the same comfortable grip throughout the repetition.",
-        "disqualifyingCompensations": [
-          "Moving the upper arms toward the torso turns the extension into a close-grip press.",
-          "Moving one elbow before the other leaves the simultaneous two-arm fixture.",
-          "Lowering beyond the source's 90-degree elbow-flexion endpoint changes the reviewed displacement."
-        ]
-      }
-    },
-    {
       "catalogID": "bilateral-straight-bar-cable-triceps-pushdown",
       "name": "Straight-Bar Cable Triceps Pushdown",
       "aliases": ["Cable Triceps Pushdown", "Two-Arm Triceps Pushdown", "Bilateral Straight-Bar Cable Triceps Pushdown"],
@@ -2447,7 +2356,10 @@
       "name": "EZ-Bar Skull Crusher",
       "aliases": [
         "EZ-Bar Lying Triceps Extension",
-        "EZ Curl Bar Skull Crusher"
+        "EZ Curl Bar Skull Crusher",
+        "Barbell Lying Triceps Extension",
+        "Lying Barbell Triceps Press",
+        "Bilateral Barbell Lying Triceps Extension"
       ],
       "equipment": "barbell",
       "laterality": "bilateral",

@@ -4800,81 +4800,6 @@
         "kind": "produced"
       }
     ],
-    "catalogID": "bilateral-barbell-lying-triceps-extension",
-    "name": "Barbell Lying Triceps Extension",
-    "group": "arms",
-    "defaultWeight": 30,
-    "defaultWeightKg": 15,
-    "reps": 10,
-    "trackingMode": "reps",
-    "equipment": "barbell",
-    "mechanic": "isolation",
-    "trainingRole": "push",
-    "pattern": null,
-    "direction": null,
-    "planes": [
-      "sagittal"
-    ],
-    "laterality": "bilateral",
-    "aliases": [
-      "Lying Barbell Triceps Press",
-      "Bilateral Barbell Lying Triceps Extension"
-    ],
-    "searchPriority": 92,
-    "bodyweightFraction": 0,
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "execution": {
-      "startingPosition": "Lie on your back with your torso supported and hold one barbell with both hands above the chest. Record the total bar-and-plate load and use a comfortable grip.",
-      "movement": "Keep both upper arms at 90 degrees of shoulder flexion while bending both elbows together.",
-      "endpoint": "Stop when the elbows reach 90 degrees of flexion, matching the source's standardized displacement.",
-      "returnPhase": "Extend both elbows together to full extension without turning the movement into a press.",
-      "controlledJoints": "Keep the upper arms at the reviewed 90-degree shoulder position while the elbows move.",
-      "supportAndPosture": "Keep the torso supported and still, and maintain the same comfortable grip throughout the repetition.",
-      "disqualifyingCompensations": [
-        "Moving the upper arms toward the torso turns the extension into a close-grip press.",
-        "Moving one elbow before the other leaves the simultaneous two-arm fixture.",
-        "Lowering beyond the source's 90-degree elbow-flexion endpoint changes the reviewed displacement."
-      ]
-    },
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "brachioradialis",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "fingerFlexors",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "extensorCarpiRadialis",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "externalRotators",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "trapeziusMiddle",
-        "role": "stabilizer"
-      }
-    ]
-  },
-  {
-    "familyID": "elbow-extension",
-    "familyName": "Elbow Extension",
-    "movementActions": [
-      {
-        "actionID": "elbow.extension",
-        "name": "Elbow extension",
-        "plane": "sagittal",
-        "kind": "produced"
-      }
-    ],
     "catalogID": "bilateral-straight-bar-cable-triceps-pushdown",
     "name": "Straight-Bar Cable Triceps Pushdown",
     "group": "arms",
@@ -5376,7 +5301,10 @@
     "laterality": "bilateral",
     "aliases": [
       "EZ-Bar Lying Triceps Extension",
-      "EZ Curl Bar Skull Crusher"
+      "EZ Curl Bar Skull Crusher",
+      "Barbell Lying Triceps Extension",
+      "Lying Barbell Triceps Press",
+      "Bilateral Barbell Lying Triceps Extension"
     ],
     "searchPriority": 92,
     "bodyweightFraction": 0,
