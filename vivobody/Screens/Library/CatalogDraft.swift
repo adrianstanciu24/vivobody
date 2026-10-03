@@ -35,6 +35,16 @@ struct CatalogDraft {
     var laterality: Laterality
     var muscleInvolvementSnapshot: [String: Double]
 
+    /// A custom copy retains its approved source's load setting for this
+    /// equipment only. New constrained-equipment drafts retain their rules.
+    private var inheritedBodyweightLoadEquipment: Equipment?
+
+    var loadModeChoices: [ExerciseLoadMode] {
+        guard equipment.requiresNonComparableLoad else { return ExerciseLoadMode.allCases }
+        return inheritedBodyweightLoadEquipment == equipment
+            ? [.nonComparable, .bodyweightAdded] : [.nonComparable]
+    }
+
     /// Raw editor input for aliases — comma-separated free text.
     /// Parsed into `[String]` on save via `parsedAliases`. Keeping
     /// the raw form here lets the user keep typing without us
@@ -100,6 +110,7 @@ struct CatalogDraft {
         self.laterality = laterality
         self.muscleInvolvementSnapshot = muscleInvolvementSnapshot
         self.aliasesInput = aliasesInput
+        inheritedBodyweightLoadEquipment = nil
     }
 
     init(from item: ExerciseCatalogItem) {
@@ -124,6 +135,16 @@ struct CatalogDraft {
         // field reflects the stored list. Two-space readability for
         // long lists, but the parser tolerates either.
         self.aliasesInput = item.aliases.joined(separator: ", ")
+        let approvedSource = ExerciseResistanceCapability.permitsBundledBodyweightAddedLoad(
+            catalogID: item.catalogID,
+            equipment: item.equipment,
+            loadMode: item.loadMode,
+            bodyweightFraction: item.bodyweightFraction
+        )
+        let savedCopy = item.catalogID == nil
+            && (item.equipment == .abWheel || item.equipment == .suspensionTrainer)
+            && item.loadMode == .bodyweightAdded && item.bodyweightFraction == 1
+        inheritedBodyweightLoadEquipment = approvedSource || savedCopy ? item.equipment : nil
     }
 
     /// Draft prefilled to fork an existing catalog item into a
@@ -232,9 +253,11 @@ struct CatalogDraft {
     /// cannot be compared honestly.
     mutating func selectEquipment(_ equipment: Equipment) {
         self.equipment = equipment
-        if equipment.requiresNonComparableLoad {
+        if equipment.requiresNonComparableLoad, !loadModeChoices.contains(loadMode) {
             loadMode = .nonComparable
             bodyweightFraction = 0
+        } else if equipment.requiresNonComparableLoad, loadMode == .bodyweightAdded {
+            bodyweightFraction = 1
         }
     }
 
@@ -282,7 +305,7 @@ struct CatalogDraft {
         case .external, .nonComparable:
             bodyweightFraction = 0
         case .bodyweightAdded, .assistanceSubtracted:
-            if bodyweightFraction == 0 {
+            if bodyweightFraction == 0 || equipment.requiresNonComparableLoad {
                 bodyweightFraction = 1
             }
         }

@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "vertical-pull",
   "name": "Vertical Pull",
-  "definition": "A strict compound pull in which the humerus travels down from an overhead position through shoulder adduction with a sagittal extension component, the scapula retracts, and the elbow flexes. The family covers front/scapular-path pull-ups, assisted pull-ups, cable pulldowns, lever pulldowns, and the exact neutral-grip Speed Pull-Up fixture without deliberate trunk or lower-body propulsion. The speed fixture is a power exercise distinguished by maximal concentric intent and an immediate eccentric-to-concentric turnaround; it does not claim measured velocity. Straight-arm pulldowns, scapular pull-ups, flared horizontal-abduction high rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, and one-arm bodyweight pull-ups remain outside this contract. Flared high rows route to shoulder-horizontal-abduction-row; the measured 45-degree cable fixture routes to diagonal-pull; and product-named lever high rows remain excluded until their own geometry is reviewed. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. This correction applies only to the reviewed suspended pull-up/chin-up fixtures, including platform-assisted and speed variants; the seated pulldown rosters are unchanged. Assistance and grip orientation may change demand without implying equal activity. Radial and ulnar wrist flexors additionally receive stabilizer roles in the same suspended fixtures. Mannella measured both during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Suspension, assistance, and grip orientation differ from that protocol; exact-fixture transfer is a categorical anatomy-and-mechanics inference, not direct phase recruitment, uniformly high activity, muscle force, or adaptation. Forman bounds this transfer because wrist-flexor activity varies with wrist-force direction and can be low. No dynamic wrist-flexion prime action is added; seated pulldown rosters remain unchanged. The foot-loop band-assisted pull-up uses variable elastic assistance and non-comparable resistance, without inventing a constant assistance mass or effective bodyweight fraction. Its strict suspended anatomy and grip-control roles transfer categorically from the reviewed pull-up fixtures.",
+  "definition": "A strict compound pull in which the humerus travels down from an overhead position through shoulder adduction with a sagittal extension component, the scapula retracts, and the elbow flexes. The family covers front/scapular-path pull-ups, assisted pull-ups, cable pulldowns, lever pulldowns, and the exact neutral-grip Speed Pull-Up fixture without deliberate trunk or lower-body propulsion. The speed fixture is a power exercise distinguished by maximal concentric intent and an immediate eccentric-to-concentric turnaround; it does not claim measured velocity. Straight-arm pulldowns, scapular pull-ups, flared horizontal-abduction high rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, and one-arm bodyweight pull-ups remain outside this contract. Flared high rows route to shoulder-horizontal-abduction-row; the measured 45-degree cable fixture routes to diagonal-pull; and product-named lever high rows remain excluded until their own geometry is reviewed. Ulnar wrist extensors and finger extensors receive stabilizer credit as distinct grip-associated wrist/hand-control co-contributors. Krings measured ulnar and radial wrist extensors in deadlift and pull-up categories, but did not measure finger extensors. Forman measured extensor digitorum and wrist-extensor coactivation during grip/wrist-force tasks. Transfer to the reviewed loaded grips is a categorical anatomy-and-mechanics inference, not exact-fixture muscle force, equal recruitment, resisted finger extension, or measured training stimulus. This correction applies only to the reviewed suspended pull-up/chin-up fixtures, including platform-assisted and speed variants; the seated pulldown rosters are unchanged. Assistance and grip orientation may change demand without implying equal activity. Radial and ulnar wrist flexors additionally receive stabilizer roles in the same suspended fixtures. Mannella measured both during power grip with anticipated radial and ulnar perturbations in a supported, partially constrained robot setup. Suspension, assistance, and grip orientation differ from that protocol; exact-fixture transfer is a categorical anatomy-and-mechanics inference, not direct phase recruitment, uniformly high activity, muscle force, or adaptation. Forman bounds this transfer because wrist-flexor activity varies with wrist-force direction and can be low. No dynamic wrist-flexion prime action is added; seated pulldown rosters remain unchanged. The foot-loop band-assisted pull-up uses variable elastic assistance and non-comparable resistance, without inventing a constant assistance mass or effective bodyweight fraction. Its strict suspended anatomy and grip-control roles transfer categorically from the reviewed pull-up fixtures. Neutral-Grip Speed Pull-Up permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "andersen-2014-lat-pulldown-width",
@@ -53,12 +53,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "external",
-      "bodyweightAdded",
-      "assistanceSubtracted",
-      "nonComparable"
-    ],
+    "loadModes": ["external", "bodyweightAdded", "assistanceSubtracted", "nonComparable"],
     "lateralities": [
       "bilateral",
       "unilateral"
@@ -360,7 +355,7 @@
     },
     {
       "id": "bodyweight-added-requires-full-fraction",
-      "description": "Comparable added-load pull-ups count the athlete's full bodyweight fraction.",
+      "description": "Added-load suspended pulls use the full body-mass logging convention. Controlled pulls retain their reset; the power fixture retains its immediate turnaround.",
       "when": {
         "field": "loadMode",
         "operator": "equals",
@@ -369,7 +364,7 @@
       "then": [
         { "field": "equipment", "value": "bodyweight" },
         { "field": "bodyweightFraction", "value": 1 },
-        { "field": "variant.repetitionStyle", "value": "controlledReset" }
+        {"field": "variant.repetitionStyle", "allowedValues": ["controlledReset", "immediateTurnaround"]}
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -386,8 +381,8 @@
         { "field": "equipment", "value": "bodyweight" },
         { "field": "modality", "value": "power" },
         { "field": "trackingMode", "value": "reps" },
-        { "field": "loadMode", "value": "nonComparable" },
-        { "field": "bodyweightFraction", "value": 0 },
+        { "field": "loadMode", "value": "bodyweightAdded" },
+        { "field": "bodyweightFraction", "value": 1 },
         { "field": "laterality", "value": "bilateral" },
         { "field": "variant.gripOrientation", "value": "neutral" },
         { "field": "variant.relativeGripWidth", "value": "shoulderWidth" },
@@ -780,6 +775,27 @@
         {
           "field": "variant.pullPath",
           "value": "frontScapular"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
         }
       ],
       "requirePresent": [],
@@ -1389,8 +1405,8 @@
       "laterality": "bilateral",
       "modality": "power",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 5,
       "searchPriority": 98,

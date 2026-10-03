@@ -1,10 +1,10 @@
 {
   "$schema": "../family.schema.json", "schemaVersion": 1, "id": "kneeling-ab-wheel-rollout", "name": "Kneeling Ab-Wheel Rollout",
-  "definition": "A dynamic kneeling rollout in which both hands move an ab wheel away from the knees through shoulder flexion and hip extension while the trunk resists spinal extension, then actively reverse through shoulder extension and hip flexion to the kneeling start. It is not the static duration-based anti-extension plank family and does not invent a user-entered resistance value. Assisted ABslide devices, standing rollouts, partial wall rollouts, hip-held variants, and rollout holds remain outside this contract.",
+  "definition": "A dynamic kneeling rollout in which both hands move an ab wheel away from the knees through shoulder flexion and hip extension while the trunk resists spinal extension, then actively reverse through shoulder extension and hip flexion to the kneeling start. It is not the static duration-based anti-extension plank family and does not invent a user-entered resistance value. Assisted ABslide devices, standing rollouts, partial wall rollouts, hip-held variants, and rollout holds remain outside this contract. Kneeling Ab-Wheel Rollout permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": ["ruth-gourley-2020-rowing-strength-part2", "hildenbrand-2004-abslide", "arnold-2010-lower-limb", "holzbaur-2005-upper-extremity"],
   "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
   "groupPolicy": {"default": "core", "allowed": ["core"]},
-  "allowed": {"equipment": ["abWheel"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "allowed": {"equipment": ["abWheel"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["bodyweightAdded"], "lateralities": ["bilateral"]},
   "movementSignature": {"planeBasisActions": ["spine.extension"], "primeActions": ["shoulder.extension", "hip.flexion"], "resistedActions": ["spine.extension"], "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.upwardRotation", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.flexion", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "elbow.extension", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.lateralFlexion", "spine.rotation", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"], "stabilityDemands": ["scapula", "shoulder", "elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee"]},
   "musclePolicy": {"requirements": [{"anyOf": ["abs"], "minimumRole": "primary"}, {"anyOf": ["obliques"], "minimumRole": "secondary"}, {"anyOf": ["lats", "teresMajor"], "minimumRole": "secondary"}, {"anyOf": ["iliopsoas"], "minimumRole": "secondary"}, {"anyOf": ["triceps"], "minimumRole": "stabilizer"}, {"anyOf": ["serratus"], "minimumRole": "stabilizer"}, {"anyOf": ["vasti"], "minimumRole": "stabilizer"}], "allowedByRole": {"primary": ["abs"], "secondary": ["obliques", "lats", "teresMajor", "iliopsoas"], "stabilizer": ["serratus", "externalRotators", "triceps", "fingerFlexors", "extensorCarpiRadialis", "gluteMax", "vasti"]}},
   "variantAxes": [
@@ -18,14 +18,36 @@
     {"id": "hipMotion", "valueType": "enum", "required": true, "description": "The hips extend during rollout and flex during return.", "allowedValues": ["extendsThenFlexes"]},
     {"id": "shoulderMotion", "valueType": "enum", "required": true, "description": "The shoulders flex during rollout and extend during return.", "allowedValues": ["flexesThenExtends"]},
     {"id": "elbowMotion", "valueType": "enum", "required": true, "description": "The elbows stay near extension.", "allowedValues": ["angleHeld"]},
-    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "The wheel is equipment but not a resistance scalar.", "allowedValues": ["none"]},
+    {"id": "loadAccounting", "valueType": "enum", "required": true, "description": "Measured body mass plus optional entered added mass is the app logging convention; apparatus mass is not added load.", "allowedValues": ["bodyMassPlusAddedMass"]},
     {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "The wheel rolls freely."},
     {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "description": "Hip motion is part of the repetition while the knees remain supported.", "allowedValues": ["dynamicHipWithKneeSupport"]}
   ],
-  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 5, "maximum": 15}},
-  "exercises": [{"catalogID": "kneeling-ab-wheel-rollout", "name": "Kneeling Ab-Wheel Rollout", "aliases": ["Kneeling Ab Rollout"], "equipment": "abWheel", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 8, "searchPriority": 96,
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "abWheel"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ], "recommended": {"defaultReps": {"minimum": 5, "maximum": 15}},
+  "exercises": [{"catalogID": "kneeling-ab-wheel-rollout", "name": "Kneeling Ab-Wheel Rollout", "aliases": ["Kneeling Ab Rollout"], "equipment": "abWheel", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "bodyweightAdded", "bodyweightFraction": 1, "defaultWeight": 0, "reps": 8, "searchPriority": 96,
     "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "secondary"}, {"muscle": "lats", "role": "secondary"}, {"muscle": "teresMajor", "role": "secondary"}, {"muscle": "iliopsoas", "role": "secondary"}, {"muscle": "serratus", "role": "stabilizer"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "triceps", "role": "stabilizer"}, {"muscle": "fingerFlexors", "role": "stabilizer"}, {"muscle": "extensorCarpiRadialis", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}],
-    "variant": {"kineticChain": "mixedKneelingWheelContact", "bodyPosition": "kneeling", "kneeSupport": "bilateralFloor", "handInterface": "bilateralAbWheelHandles", "wheelPath": "forwardAndReturn", "endpointDistance": "controlledSourceUnreported", "spineMotion": "heldAgainstExtension", "hipMotion": "extendsThenFlexes", "shoulderMotion": "flexesThenExtends", "elbowMotion": "angleHeld", "loadAccounting": "none", "fixedPath": false, "lowerBodyContribution": "dynamicHipWithKneeSupport"}, "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ruth-gourley-2020-rowing-strength-part2", "hildenbrand-2004-abslide"],
-    "execution": {"startingPosition": "Kneel with both knees supported on the floor and hold both ab-wheel handles with the wheel beneath the shoulders. No resistance weight is logged for this fixture.", "movement": "Roll the wheel forward as the shoulders flex and hips extend while keeping the torso tight against spinal extension.", "endpoint": "Reach only the farthest controlled position that preserves the braced torso; the source does not prescribe a distance.", "returnPhase": "Reverse the wheel under control through shoulder extension and hip flexion until you return to the kneeling start.", "controlledJoints": "Keep the elbows near straight and prevent the lower back from sagging or arching.", "supportAndPosture": "Keep both knees in contact with the floor and both hands on the wheel.", "disqualifyingCompensations": ["Sagging or arching the spine leaves the braced rollout fixture.", "Holding the endpoint for time instead of completing repetitions turns the task into a rollout hold.", "Standing on the feet or using an assisted return device changes the reviewed fixture."]}
+    "variant": {"kineticChain": "mixedKneelingWheelContact", "bodyPosition": "kneeling", "kneeSupport": "bilateralFloor", "handInterface": "bilateralAbWheelHandles", "wheelPath": "forwardAndReturn", "endpointDistance": "controlledSourceUnreported", "spineMotion": "heldAgainstExtension", "hipMotion": "extendsThenFlexes", "shoulderMotion": "flexesThenExtends", "elbowMotion": "angleHeld", "loadAccounting": "bodyMassPlusAddedMass", "fixedPath": false, "lowerBodyContribution": "dynamicHipWithKneeSupport"}, "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ruth-gourley-2020-rowing-strength-part2", "hildenbrand-2004-abslide"],
+    "execution": {"startingPosition": "Kneel with both knees supported on the floor and hold both ab-wheel handles with the wheel beneath the shoulders. Log only optional added weight; do not enter the wheel mass.", "movement": "Roll the wheel forward as the shoulders flex and hips extend while keeping the torso tight against spinal extension.", "endpoint": "Reach only the farthest controlled position that preserves the braced torso; the source does not prescribe a distance.", "returnPhase": "Reverse the wheel under control through shoulder extension and hip flexion until you return to the kneeling start.", "controlledJoints": "Keep the elbows near straight and prevent the lower back from sagging or arching.", "supportAndPosture": "Keep both knees in contact with the floor and both hands on the wheel.", "disqualifyingCompensations": ["Sagging or arching the spine leaves the braced rollout fixture.", "Holding the endpoint for time instead of completing repetitions turns the task into a rollout hold.", "Standing on the feet or using an assisted return device changes the reviewed fixture."]}
   }]
 }

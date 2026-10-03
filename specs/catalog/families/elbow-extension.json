@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "elbow-extension",
   "name": "Elbow Extension",
-  "definition": "A strict elbow-extension isolation movement in which a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. Most fixtures are open-chain cable, dumbbell, barbell, or exact Life Fitness Pro 2 PSTE selectorized movements; the TRX Triceps Press is the one closed-chain fixture, using independent suspension handles and an inclined standing body while facing away from the anchor. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials. The exact rope, two-hand dumbbell, kickback, EZ-bar, and machine boundaries remain unchanged. These additions make no triceps-head ranking claim, and suspension chest presses or shoulder-moving extensions remain outside this family.",
+  "definition": "A strict elbow-extension isolation movement in which a reviewed upper-arm posture is held and shoulder, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every record. Most fixtures are open-chain cable, dumbbell, barbell, or exact Life Fitness Pro 2 PSTE selectorized movements; the TRX Triceps Press is the one closed-chain fixture, using independent suspension handles and an inclined standing body while facing away from the anchor. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials. The exact rope, two-hand dumbbell, kickback, EZ-bar, and machine boundaries remain unchanged. These additions make no triceps-head ranking claim, and suspension chest presses or shoulder-moving extensions remain outside this family. TRX Triceps Press permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "holzbaur-2005-upper-extremity",
     "alves-2018-triceps-shoulder-position",
@@ -45,10 +45,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "external",
-      "nonComparable"
-    ],
+    "loadModes": ["external", "bodyweightAdded"],
     "lateralities": [
       "unilateral",
       "bilateral"
@@ -1503,8 +1500,8 @@
       "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
       "then": [
         {"field": "laterality", "value": "bilateral"},
-        {"field": "loadMode", "value": "nonComparable"},
-        {"field": "bodyweightFraction", "value": 0},
+        {"field": "loadMode", "value": "bodyweightAdded"},
+        {"field": "bodyweightFraction", "value": 1},
         {"field": "variant.kineticChain", "value": "closed"},
         {"field": "variant.bodyPosition", "value": "inclinedStandingFacingAway"},
         {"field": "variant.torsoSupport", "value": "none"},
@@ -1544,6 +1541,27 @@
       "when": {"field": "variant.handleType", "operator": "equals", "value": "independentSuspensionHandles"},
       "then": [{"field": "equipment", "value": "suspensionTrainer"}],
       "requirePresent": ["variant.strapLength", "variant.bodyAngle"],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "suspensionTrainer"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
       "requireAbsent": []
     }
   ],
@@ -2446,8 +2464,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 10,
       "searchPriority": 99,

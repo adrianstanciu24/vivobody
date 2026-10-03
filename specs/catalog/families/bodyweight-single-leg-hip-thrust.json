@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "bodyweight-single-leg-hip-thrust",
   "name": "Bodyweight Single-Leg Hip Thrust",
-  "definition": "A one-leg bench-supported hip thrust from the Boxing Science exercise library. The upper back rests on a bench, one heel remains planted with toes lifted, and the opposite leg stays lifted with its knee near a right angle. Hip extension raises the pelvis to neutral. There is no external resistance or comparable load; the floor bridge and band-resisted thrust remain separate fixtures. Knee-extension and vasti roles are categorical transfers from the reviewed banded and barbell hip-thrust mechanics, not directly measured in this unweighted fixture.",
+  "definition": "A one-leg bench-supported hip thrust from the Boxing Science exercise library. The upper back rests on a bench, one heel remains planted with toes lifted, and the opposite leg stays lifted with its knee near a right angle. Hip extension raises the pelvis to neutral. The floor bridge and band-resisted thrust remain separate fixtures. Knee-extension and vasti roles are categorical transfers from the reviewed banded and barbell hip-thrust mechanics, not directly measured with optional added mass. Single-Leg Hip Thrust permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "boxing-science-exercise-library",
     "collings-2023-gluteal-muscle-forces",
@@ -34,9 +34,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "nonComparable"
-    ],
+    "loadModes": ["bodyweightAdded"],
     "lateralities": [
       "unilateral"
     ]
@@ -305,7 +303,7 @@
       "id": "loadPlacement",
       "valueType": "enum",
       "required": true,
-      "description": "Exact Boxing Science fixture: loadPlacement.",
+      "description": "Exact Boxing Science fixture: loadPlacement. A value of none describes the baseline fixture without a required load implement; optional added mass is entered separately.",
       "allowedValues": [
         "none"
       ]
@@ -314,7 +312,7 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "Exact Boxing Science fixture: loadInterface.",
+      "description": "Exact Boxing Science fixture: loadInterface. A value of none describes the baseline fixture without a required load implement; optional added mass is entered separately.",
       "allowedValues": [
         "none"
       ]
@@ -387,7 +385,29 @@
       "maximum": 15
     }
   },
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "bodyweight-single-leg-hip-thrust",
@@ -401,8 +421,8 @@
       "laterality": "unilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 8,
       "searchPriority": 95,

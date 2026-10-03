@@ -58,20 +58,20 @@ extension ExerciseDetailReadModel {
         history: ExerciseHistorySummary?,
         progress: ExerciseProgress?
     ) -> RecordSource? {
-        if let progress {
+        if let summary = progress?.summariesBySignature[exercise.performanceSignature] {
             let point: ExerciseProgressPoint? = if exercise.supportsPerformanceRecord {
-                progress.latestStrengthPRPoint
+                summary.latestStrengthPRPoint
             } else if exercise.trackingMode == .duration {
-                progress.bestDurationPoint
+                summary.bestDurationPoint
             } else if !exercise.tracksResistance {
-                progress.bestRepsPoint
+                summary.bestRepsPoint
             } else {
-                progress.bestWeightPoint
+                summary.bestWeightPoint
             }
             if let point { return RecordSource(point) }
-            return nil
         }
-        return history.map { RecordSource($0.mostRecentInstance) }
+        return history?.mostRecentInstance(matching: exercise.performanceSignature)
+            .map { RecordSource($0) }
     }
 
     @MainActor
@@ -157,13 +157,14 @@ extension ExerciseDetailReadModel {
         guard exercise.loadMode == .bodyweightAdded
             || exercise.loadMode == .assistanceSubtracted else { return nil }
 
-        let source: RecordSource? = if let progress,
-                                       let point = progress.latestStrengthPRPoint
-                                       ?? progress.latest
+        let source: RecordSource? = if let summary = progress?.summariesBySignature[exercise.performanceSignature],
+                                       let point = summary.latestStrengthPRPoint
+                                       ?? summary.latestPoint
         {
             RecordSource(point)
         } else {
-            history.map { RecordSource($0.mostRecentInstance) }
+            history?.mostRecentInstance(matching: exercise.performanceSignature)
+                .map { RecordSource($0) }
         }
         guard let source else { return nil }
 
@@ -188,10 +189,11 @@ extension ExerciseDetailReadModel {
         progress: ExerciseProgress?
     ) -> Double? {
         guard exercise.supportsEstimatedOneRepMax else { return nil }
-        if let progress {
-            return progress.bestE1RM > 0 ? progress.bestE1RM : nil
+        if let summary = progress?.summariesBySignature[exercise.performanceSignature] {
+            let estimate = summary.bestE1RMPoint?.estimated1RM ?? 0
+            return estimate > 0 ? estimate : nil
         }
-        guard let instance = history?.mostRecentInstance,
+        guard let instance = history?.mostRecentInstance(matching: exercise.performanceSignature),
               instance.representativeSet.reps > 0,
               let effectiveLoad = instance.effectiveRepresentativeLoad,
               effectiveLoad > 0 else { return nil }
@@ -207,7 +209,8 @@ extension ExerciseDetailReadModel {
     ) -> Double {
         if let measured = exercise.measuredOneRepMax { return measured }
         if let estimatedOneRepMax { return estimatedOneRepMax }
-        if let progress, progress.bestWeight > 0 { return progress.bestWeight }
+        if let weight = progress?.summariesBySignature[exercise.performanceSignature]?
+            .bestWeightPoint?.historyTopLoad, weight > 0 { return weight }
         let seed = ExerciseLoadProfile(
             mode: exercise.loadMode,
             bodyweightFraction: exercise.bodyweightFraction

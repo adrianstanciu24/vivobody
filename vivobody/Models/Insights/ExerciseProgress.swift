@@ -199,6 +199,9 @@ nonisolated struct ExerciseProgress: Identifiable, Hashable {
     /// chronological series. Exercise Detail can then format records and
     /// plateau state without walking the same history during every render.
     let summary: ExerciseProgressSummary
+    /// Signature-specific records are prepared on the analytics worker, so
+    /// catalog-setting changes do not require archive scans during rendering.
+    let summariesBySignature: [ExercisePerformanceSignature: ExerciseProgressSummary]
 
     init(
         catalogID: String? = nil,
@@ -235,7 +238,12 @@ nonisolated struct ExerciseProgress: Identifiable, Hashable {
         self.name = name
         self.group = group
         self.points = points
-        summary = ExerciseProgressSummary(points: points)
+        let computedSummary = ExerciseProgressSummary(points: points)
+        summary = computedSummary
+        let groups = Dictionary(grouping: points, by: \.performanceSignature)
+        summariesBySignature = groups.count == 1
+            ? groups.mapValues { _ in computedSummary }
+            : groups.mapValues { ExerciseProgressSummary(points: $0) }
     }
 
     /// How this exercise is measured. Derived from its points (a
@@ -530,15 +538,15 @@ nonisolated extension AnalyticsAccumulator {
         _ points: [ExerciseProgressPoint],
         isCancelled: @Sendable () -> Bool
     ) -> [ExerciseProgressPoint]? {
-        var runningBest: StrengthPerformance?
+        var runningBests: [PerformanceSemanticKind: StrengthPerformance] = [:]
         var flagged: [ExerciseProgressPoint] = []
         for var point in points.sorted(by: { $0.date < $1.date }) {
             guard !isCancelled() else { return nil }
             if let performance = point.strengthPerformance,
-               performance.advancement(over: runningBest) != nil
+               performance.advancement(over: runningBests[point.performanceSemanticKind]) != nil
             {
                 point.isStrengthPR = true
-                runningBest = performance
+                runningBests[point.performanceSemanticKind] = performance
             }
             flagged.append(point)
         }

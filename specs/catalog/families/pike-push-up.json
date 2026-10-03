@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "pike-push-up",
   "name": "Floor Pike Push-Up",
-  "definition": "A strict bilateral floor-supported closed-chain bodyweight shoulder-oriented press with hands and feet on the floor and the hips held flexed in an inverted V. NASM establishes the floor pike topology, slightly-wide hands, approximately 45-degree elbow path, head-near-floor endpoint and return short of elbow lockout. The shoulder/scapular actions and existing vertical-press mover hierarchy are transparent anatomy-and-mechanics transfer from Ackland and Seth, not pike-specific motion capture or EMG. Anterior deltoid is primary; triceps, scapular rotators and humeral elevators are secondary; clavicular pectoralis receives bounded secondary shoulder-flexion credit. NASM does not distinguish pectoralis regions, so no measured regional preference or comparative chest/shoulder loading is claimed. Hand/wrist and trunk stabilizer roles are categorical palm-support and posture-control inference. Load is non-comparable with no invented bodyweight percentage. Ordinary, decline, elevated-foot, wall-supported, freestanding, deficit, kipping and dynamic-hip pike variants remain outside. Gluteus maximus and vasti control the held lower-limb posture; gastrocnemius and soleus control the floor-supported ankle/foot. These are categorical support-mechanics inferences, not exact pike measurements.",
+  "definition": "A strict bilateral floor-supported closed-chain bodyweight shoulder-oriented press with hands and feet on the floor and the hips held flexed in an inverted V. NASM establishes the floor pike topology, slightly-wide hands, approximately 45-degree elbow path, head-near-floor endpoint and return short of elbow lockout. The shoulder/scapular actions and existing vertical-press mover hierarchy are transparent anatomy-and-mechanics transfer from Ackland and Seth, not pike-specific motion capture or EMG. Anterior deltoid is primary; triceps, scapular rotators and humeral elevators are secondary; clavicular pectoralis receives bounded secondary shoulder-flexion credit. NASM does not distinguish pectoralis regions, so no measured regional preference or comparative chest/shoulder loading is claimed. Hand/wrist and trunk stabilizer roles are categorical palm-support and posture-control inference. No measured lifted-body percentage is claimed. Ordinary, decline, elevated-foot, wall-supported, freestanding, deficit, kipping and dynamic-hip pike variants remain outside. Gluteus maximus and vasti control the held lower-limb posture; gastrocnemius and soleus control the floor-supported ankle/foot. These are categorical support-mechanics inferences, not exact pike measurements. Pike Push-Up permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "nasm-undated-pike-push-up",
     "ackland-2008-shoulder-moment-arms",
@@ -37,9 +37,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "nonComparable"
-    ],
+    "loadModes": ["bodyweightAdded"],
     "lateralities": [
       "bilateral"
     ]
@@ -386,7 +384,29 @@
       "maximum": 15
     }
   },
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "pike-push-up",
@@ -399,8 +419,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 5,
       "searchPriority": 90,

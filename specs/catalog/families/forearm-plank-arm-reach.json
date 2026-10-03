@@ -1,10 +1,10 @@
 {
   "$schema": "../family.schema.json", "schemaVersion": 1, "id": "forearm-plank-arm-reach", "name": "Forearm-Plank Arm Reach",
-  "definition": "A dynamic low-plank drill that begins on both forearms and toes, lifts one forearm, extends that elbow while reaching the arm straight forward, returns it to support, and alternates while resisting spinal extension and rotation. Shoulder flexion, scapular upward rotation, and elbow extension describe the reach; they do not turn the exercise into a shoulder raise or press. The ACE standard owns the forearm support and forward reach. High-plank reaches, shoulder taps, rows, drags, leg lifts, and timed-only three-point holds remain outside this family.",
+  "definition": "A dynamic low-plank drill that begins on both forearms and toes, lifts one forearm, extends that elbow while reaching the arm straight forward, returns it to support, and alternates while resisting spinal extension and rotation. Shoulder flexion, scapular upward rotation, and elbow extension describe the reach; they do not turn the exercise into a shoulder raise or press. The ACE standard owns the forearm support and forward reach. High-plank reaches, shoulder taps, rows, drags, leg lifts, and timed-only three-point holds remain outside this family. Forearm Plank Arm Reach permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": ["ace-2026-plank-arm-reach", "lehman-2005-stable-prone-bridge", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity"],
   "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal", "transverse"]},
   "groupPolicy": {"default": "core", "allowed": ["core"]},
-  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["unilateral"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["bodyweightAdded"], "lateralities": ["unilateral"]},
   "movementSignature": {
     "planeBasisActions": ["spine.extension", "spine.rotation"], "primeActions": ["shoulder.flexion", "scapula.upwardRotation", "elbow.extension"], "resistedActions": ["spine.extension", "spine.rotation"],
     "forbiddenPrimeActions": ["scapula.elevation", "scapula.depression", "scapula.protraction", "scapula.retraction", "scapula.downwardRotation", "scapula.anteriorTilt", "scapula.posteriorTilt", "shoulder.extension", "shoulder.abduction", "shoulder.adduction", "shoulder.horizontalAdduction", "shoulder.horizontalAbduction", "shoulder.internalRotation", "shoulder.externalRotation", "elbow.flexion", "forearm.pronation", "forearm.supination", "wrist.flexion", "wrist.extension", "wrist.radialDeviation", "wrist.ulnarDeviation", "hand.fingerFlexion", "hand.fingerExtension", "spine.flexion", "spine.extension", "spine.lateralFlexion", "spine.rotation", "hip.flexion", "hip.extension", "hip.abduction", "hip.adduction", "hip.internalRotation", "hip.externalRotation", "knee.flexion", "knee.extension", "ankle.plantarflexion", "ankle.dorsiflexion", "ankle.inversion", "ankle.eversion", "foot.toeFlexion", "foot.toeExtension"],
@@ -24,10 +24,32 @@
     {"id": "repetitionCounting", "valueType": "enum", "required": true, "description": "Each reach and return counts once.", "allowedValues": ["eachArmReach"]},
     {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No guide constrains the reach."}
   ],
-  "exerciseRules": [], "recommended": {"defaultReps": {"minimum": 6, "maximum": 16}},
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ], "recommended": {"defaultReps": {"minimum": 6, "maximum": 16}},
   "exercises": [{
     "catalogID": "alternating-forearm-plank-arm-reach", "name": "Forearm Plank Arm Reach", "aliases": ["Plank with Arm Reach", "Plank and Reach", "Alternating Forearm-Plank Arm Reach"],
-    "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable", "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
+    "equipment": "bodyweight", "laterality": "unilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "bodyweightAdded", "bodyweightFraction": 1, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
     "involvement": [{"muscle": "abs", "role": "primary"}, {"muscle": "obliques", "role": "primary"}, {"muscle": "deltoidAnterior", "role": "secondary"}, {"muscle": "serratus", "role": "secondary"}, {"muscle": "triceps", "role": "secondary"}, {"muscle": "externalRotators", "role": "stabilizer"}, {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "vasti", "role": "stabilizer"}, {"muscle": "soleus", "role": "stabilizer"}],
     "variant": {"startSupport": "bilateralForearmsAndToes", "reachSupport": "singleForearmAndBothFeet", "armPath": "forwardToTorsoHeight", "elbowPosition": "extended", "trunkMotion": "heldAgainstExtensionAndRotation", "limbSequence": "alternatingOneAtATime", "repetitionCounting": "eachArmReach", "fixedPath": false},
     "additionalPrimeActions": [], "additionalStabilityDemands": [], "evidenceRefs": ["ace-2026-plank-arm-reach", "lehman-2005-stable-prone-bridge", "seth-2019-shoulder-work", "holzbaur-2005-upper-extremity"],

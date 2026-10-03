@@ -17,6 +17,68 @@ import Testing
 struct ExerciseDetailReadModelTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
 
+    @Test func loadedHoldRecordsStartAfterLegacyTimeOnlyRecords() throws {
+        let report = reports([
+            session(daysAgo: 3, bodyweight: 180, exercise: exercise(
+                weight: 0, reps: 1, duration: 60,
+                modality: .isometricStrength, trackingMode: .duration,
+                loadMode: .nonComparable
+            )),
+            session(daysAgo: 2, bodyweight: 180, exercise: exercise(
+                weight: 20, reps: 1, duration: 30,
+                modality: .isometricStrength, trackingMode: .duration,
+                loadMode: .bodyweightAdded, bodyweightFraction: 1
+            )),
+            session(daysAgo: 1, bodyweight: 180, exercise: exercise(
+                weight: 25, reps: 1, duration: 20,
+                modality: .isometricStrength, trackingMode: .duration,
+                loadMode: .bodyweightAdded, bodyweightFraction: 1
+            )),
+        ])
+        let progress = try #require(report.progress)
+        #expect(progress.points.map(\.isStrengthPR) == [true, true, true])
+        #expect(progress.summary.evaluableCount == 2)
+        #expect(progress.summary.standingPerformance == .isometric(effectiveLoad: 205, duration: 20))
+        let model = readModel(
+            exercise: descriptor(
+                modality: .isometricStrength, trackingMode: .duration,
+                loadMode: .bodyweightAdded, bodyweightFraction: 1
+            ),
+            history: report.history, progress: progress
+        )
+        #expect(model.sessionCount == 3)
+        #expect(model.bestSet.value == "BW + 25")
+        #expect(model.effectiveLoad?.value == 205)
+        #expect(model.recentSessions.count == 3)
+    }
+
+    @Test func newCatalogLoadSettingDoesNotReinterpretLegacyHoldHistory() {
+        let report = reports([
+            session(daysAgo: 2, bodyweight: 180, exercise: exercise(
+                weight: 0, reps: 1, duration: 40,
+                modality: .isometricStrength, trackingMode: .duration,
+                loadMode: .nonComparable
+            )),
+            session(daysAgo: 1, bodyweight: 180, exercise: exercise(
+                weight: 0, reps: 1, duration: 60,
+                modality: .isometricStrength, trackingMode: .duration,
+                loadMode: .nonComparable
+            )),
+        ])
+        let model = readModel(
+            exercise: descriptor(
+                modality: .isometricStrength, trackingMode: .duration,
+                loadMode: .bodyweightAdded, bodyweightFraction: 1
+            ),
+            history: report.history, progress: report.progress
+        )
+        #expect(model.sessionCount == 2)
+        #expect(model.bestSet.value == "—")
+        #expect(model.effectiveLoad == nil)
+        #expect(model.plateauStatus == nil)
+        #expect(model.recentSessions.count == 2)
+    }
+
     private var calendar: Calendar {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!

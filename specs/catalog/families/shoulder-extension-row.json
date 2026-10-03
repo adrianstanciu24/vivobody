@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "shoulder-extension-row",
   "name": "Horizontal Row",
-  "definition": "A strict compound horizontal pull whose concentric phase combines shoulder extension from a flexed start, scapular retraction, and elbow flexion while the torso and lower body resist rather than propel the load. The admitted upper-arm path remains tucked or within a modest scapular corridor. Unilateral dumbbell fixtures distinguish hand-only bench support with both feet planted from hand-and-knee bench support. Wide or deliberately flared horizontal-abduction rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, face pulls, momentum rows, renegade rows, and unreviewed bodyweight inclinations or apparatuses remain outside this contract. The measured 45-degree fixture routes to diagonal-pull; product-named lever high rows do not inherit that ownership without geometry review. The anchored-bar branch is only the unsupported bilateral close-neutral-grip landmine T-bar row, with tucked elbows and an anchored lever arc; other landmine rows remain excluded.",
+  "definition": "A strict compound horizontal pull whose concentric phase combines shoulder extension from a flexed start, scapular retraction, and elbow flexion while the torso and lower body resist rather than propel the load. The admitted upper-arm path remains tucked or within a modest scapular corridor. Unilateral dumbbell fixtures distinguish hand-only bench support with both feet planted from hand-and-knee bench support. Wide or deliberately flared horizontal-abduction rows, the source-exact seated 45-degree cable pulldown, unreviewed commercial lever high rows, face pulls, momentum rows, renegade rows, and unreviewed bodyweight inclinations or apparatuses remain outside this contract. The measured 45-degree fixture routes to diagonal-pull; product-named lever high rows do not inherit that ownership without geometry review. The anchored-bar branch is only the unsupported bilateral close-neutral-grip landmine T-bar row, with tucked elbows and an anchored lever arc; other landmine rows remain excluded. TRX Low Row permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "fennell-2016-shoulder-retractor-row",
@@ -51,11 +51,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "external",
-      "bodyweightAdded",
-      "nonComparable"
-    ],
+    "loadModes": ["external", "bodyweightAdded"],
     "lateralities": [
       "bilateral",
       "unilateral"
@@ -405,16 +401,6 @@
   ],
   "exerciseRules": [
     {
-      "id": "non-comparable-row-is-suspension-only",
-      "description": "Only the suspension low row uses a non-comparable load; external and fixed-bar bodyweight rows retain their authored load modes.",
-      "when": {"field": "loadMode", "operator": "equals", "value": "nonComparable"},
-      "then": [
-        {"field": "equipment", "value": "suspensionTrainer"}
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
       "id": "bodyweight-uses-closed-chain-load-semantics",
       "description": "Bodyweight rows use a closed chain, feet-supported suspended body, and explicit apparatus and leverage without pinning grip or upper-arm path.",
       "when": {
@@ -496,8 +482,8 @@
       "description": "The suspension branch is a closed-chain inclined standing row with neutral independent handles, tucked elbows, and no invented load value.",
       "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
       "then": [
-        {"field": "loadMode", "value": "nonComparable"},
-        {"field": "bodyweightFraction", "value": 0},
+        {"field": "loadMode", "value": "bodyweightAdded"},
+        {"field": "bodyweightFraction", "value": 1},
         {"field": "variant.kineticChain", "value": "closed"},
         {"field": "variant.bodyPosition", "value": "inclinedStandingFacingAnchor"},
         {"field": "variant.lowerBodySupport", "value": "feet"},
@@ -1146,6 +1132,26 @@
         {
           "field": "variant.barbellSetup",
           "value": "landmine"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "allowedValues": [
+            "bodyweight",
+            "suspensionTrainer"
+          ]
         }
       ],
       "requirePresent": [],
@@ -2044,8 +2050,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 10,
       "searchPriority": 96,

@@ -56,7 +56,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
                 self.assertEqual(catalog.validate_family(family, self.foundation, owner), [])
 
     def test_unquantified_fixtures_do_not_invent_loads(self):
-        for catalog_id in ("band-assisted-pull-up", "pike-push-up"):
+        for catalog_id in ("band-assisted-pull-up",):
             with self.subTest(exercise=catalog_id):
                 _, exercise = self.fixture(catalog_id)
                 self.assertEqual(exercise["loadMode"], "nonComparable")
@@ -100,7 +100,7 @@ class RequestedCatalogGapTests(unittest.TestCase):
                                      ("variant.loadAccounting", "perImplement")],
             "cable-pull-through": [("laterality", "unilateral"),
                                    ("equipment", "barbell")],
-            "pike-push-up": [("loadMode", "bodyweightAdded"),
+            "pike-push-up": [("loadMode", "external"),
                              ("equipment", "machine")],
         }
         for catalog_id, changes in mutations.items():

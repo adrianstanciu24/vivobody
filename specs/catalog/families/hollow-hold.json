@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "hollow-hold",
   "name": "Hollow Hold",
-  "definition": "A strict bilateral bodyweight isometric in which the athlete lies supine, fixes a posterior pelvic tilt with no lumbar gap, raises the shoulder blades and straight unsupported legs from the floor, and holds locked knees and elbows with the arms beside the ears. Gravity tends to extend the spine and hips; those are resisted tendencies rather than dynamic flexion repetitions. CrossFit directly defines the long-lever fixture. Drysdale supports abdominal participation in posterior pelvic control, and Okubo supports hip-flexor and abdominal participation during a straight-leg raise and hold. The categorical muscle roles are bounded anatomy-and-mechanics inferences, not an exact-fixture EMG ranking. Tuck holds, hollow rocks, V-sits, dead bugs, leg raises, curl-ups, prone planks, bent limbs, and deliberate rocking remain outside this contract.",
+  "definition": "A strict bilateral bodyweight isometric in which the athlete lies supine, fixes a posterior pelvic tilt with no lumbar gap, raises the shoulder blades and straight unsupported legs from the floor, and holds locked knees and elbows with the arms beside the ears. Gravity tends to extend the spine and hips; those are resisted tendencies rather than dynamic flexion repetitions. CrossFit directly defines the long-lever fixture. Drysdale supports abdominal participation in posterior pelvic control, and Okubo supports hip-flexor and abdominal participation during a straight-leg raise and hold. The categorical muscle roles are bounded anatomy-and-mechanics inferences, not an exact-fixture EMG ranking. Tuck holds, hollow rocks, V-sits, dead bugs, leg raises, curl-ups, prone planks, bent limbs, and deliberate rocking remain outside this contract. Hollow Hold permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
@@ -38,9 +38,7 @@
     "trackingModes": [
       "duration"
     ],
-    "loadModes": [
-      "nonComparable"
-    ],
+    "loadModes": ["bodyweightAdded"],
     "lateralities": [
       "bilateral"
     ]
@@ -319,7 +317,29 @@
       ]
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "hollow-hold",
@@ -331,8 +351,8 @@
       "laterality": "bilateral",
       "modality": "isometricStrength",
       "trackingMode": "duration",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 1,
       "defaultDuration": 30,

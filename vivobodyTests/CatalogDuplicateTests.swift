@@ -16,6 +16,48 @@ import Testing
 
 @MainActor
 struct CatalogDuplicateTests {
+    @Test func approvedConstrainedCopiesRetainAddedLoadAfterReopening() {
+        for (catalogID, equipment) in [
+            ("trx-low-row", Equipment.suspensionTrainer),
+            ("kneeling-ab-wheel-rollout", Equipment.abWheel),
+        ] {
+            let source = makePullUpItem()
+            source.catalogID = catalogID
+            source.equipment = equipment
+            source.bodyweightFraction = 1
+            var draft = CatalogDraft(duplicating: source, defaultWeight: 0)
+            draft.selectEquipment(equipment)
+            #expect(draft.loadMode == .bodyweightAdded)
+            #expect(draft.loadModeChoices == [.nonComparable, .bodyweightAdded])
+            #expect(CatalogDraftValidation(draft: draft, occupiedSearchTerms: []).canSave)
+            draft.selectLoadMode(.nonComparable)
+            draft.selectLoadMode(.bodyweightAdded)
+            #expect(draft.bodyweightFraction == 1)
+            draft.selectEquipment(.bodyweight)
+            draft.bodyweightFraction = 0.35
+            draft.selectEquipment(equipment)
+            #expect(draft.bodyweightFraction == 1)
+            let saved = makePullUpItem()
+            saved.catalogID = nil
+            saved.isUserCreated = true
+            saved.name = draft.name
+            saved.equipment = draft.equipment
+            saved.loadMode = draft.loadMode
+            saved.bodyweightFraction = draft.bodyweightFraction
+            let reopened = CatalogDraft(from: saved)
+            #expect(reopened.loadModeChoices == [.nonComparable, .bodyweightAdded])
+            #expect(CatalogDraftValidation(draft: reopened, occupiedSearchTerms: []).canSave)
+            draft.selectEquipment(.stabilityBall)
+            #expect(draft.loadMode == .nonComparable)
+            #expect(draft.bodyweightFraction == 0)
+        }
+        var fresh = CatalogDraft.empty
+        fresh.selectEquipment(.suspensionTrainer)
+        #expect(fresh.loadModeChoices == [.nonComparable])
+        fresh.selectEquipment(.abWheel)
+        #expect(fresh.loadModeChoices == [.nonComparable])
+    }
+
     /// A bundled bodyweight-plus-load compound. Between this and the
     /// plank fixture, every field the draft carries holds a value that
     /// differs from `CatalogDraft.empty`, so a missing copy cannot

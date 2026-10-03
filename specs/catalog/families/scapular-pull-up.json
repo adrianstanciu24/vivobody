@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "scapular-pull-up",
   "name": "Scapular Pull-Up",
-  "definition": "A strict bilateral suspended repetition performed from a closed pronated grip on a horizontal pull-up bar with unsupported feet and fully extended elbows. Each repetition begins with the scapulae naturally elevated, pulls them down and back so the straight-arm body rises slightly, pauses briefly at the source-explicit endpoint, and returns under control to naturally elevated suspension. Shoulder-width grip and no deliberate swing are conservative catalog narrowings rather than reported Army or LA County measurements. The source-exact prime signature combines scapular depression and retraction; gravity also tends to open the fingers throughout the set. Lower-trapezius, grip, and support-chain roles are anatomy-and-mechanics inferences rather than exact-fixture muscle rankings. Active and Passive Dead Hangs, full Pull-Ups, flexed-arm holds, kipping, weighted or assisted variants, climbing-edge hangs, and depression without retraction remain outside this narrow contract.",
+  "definition": "A strict bilateral suspended repetition performed from a closed pronated grip on a horizontal pull-up bar with unsupported feet and fully extended elbows. Each repetition begins with the scapulae naturally elevated, pulls them down and back so the straight-arm body rises slightly, pauses briefly at the source-explicit endpoint, and returns under control to naturally elevated suspension. Shoulder-width grip and no deliberate swing are conservative catalog narrowings rather than reported Army or LA County measurements. The source-exact prime signature combines scapular depression and retraction; gravity also tends to open the fingers throughout the set. Lower-trapezius, grip, and support-chain roles are anatomy-and-mechanics inferences rather than exact-fixture muscle rankings. Active and Passive Dead Hangs, full Pull-Ups, flexed-arm holds, kipping, assisted variants, climbing-edge hangs, and depression without retraction remain outside this narrow contract. Scapular Pull-Up permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "gaffney-2014-trapezius-subdivisions",
     "seth-2019-shoulder-work",
@@ -29,7 +29,7 @@
     "equipment": ["bodyweight"],
     "modalities": ["dynamicStrength"],
     "trackingModes": ["reps"],
-    "loadModes": ["nonComparable"],
+    "loadModes": ["bodyweightAdded"],
     "lateralities": ["bilateral"]
   },
   "recommended": {
@@ -122,7 +122,29 @@
     {"id": "fixedPath", "valueType": "boolean", "required": true, "fixedValue": false, "description": "No rail or lever guides the suspended body."},
     {"id": "lowerBodyContribution", "valueType": "enum", "required": true, "allowedValues": ["none"], "description": "The lower body does not propel or assist the repetition."}
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "scapular-pull-up",
@@ -132,8 +154,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 8,
       "searchPriority": 94,

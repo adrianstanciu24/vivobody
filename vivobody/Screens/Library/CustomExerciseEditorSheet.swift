@@ -322,9 +322,7 @@ struct CustomExerciseEditorSheet: View {
         case .loadMode:
             CatalogChoiceSheet(
                 title: "Load Interpretation",
-                options: draft.equipment.requiresNonComparableLoad
-                    ? [ExerciseLoadMode.nonComparable]
-                    : ExerciseLoadMode.allCases,
+                options: draft.loadModeChoices,
                 label: { $0.customExerciseChoiceLabel },
                 isSelected: { draft.loadMode == $0 },
                 onSelect: { draft.selectLoadMode($0) }

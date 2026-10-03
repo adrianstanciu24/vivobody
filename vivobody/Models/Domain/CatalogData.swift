@@ -321,6 +321,12 @@ nonisolated enum CatalogData {
 
     /// Rejects equipment whose catalog identity does not define a comparable load.
     private static func validateEquipmentLoad(_ record: CatalogRecord) throws {
+        if ExerciseResistanceCapability.permitsBundledBodyweightAddedLoad(
+            catalogID: record.catalogID,
+            equipment: record.equipment,
+            loadMode: record.loadMode,
+            bodyweightFraction: record.bodyweightFraction
+        ) { return }
         switch record.equipment {
         case .band where record.loadMode != .nonComparable:
             throw ValidationError.comparableBandLoad(record.catalogID)

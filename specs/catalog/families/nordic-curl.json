@@ -3,11 +3,11 @@
   "schemaVersion": 1,
   "id": "nordic-curl",
   "name": "Nordic Curl",
-  "definition": "A bilateral partner-anchored tall-kneeling isolation in which neutral hips and trunk are held while the knees yield into extension for three seconds and then actively flex for a three-second unassisted return over the achieved range. The lower-leg anchor is support topology rather than loaded equipment. Hand-assisted resets, eccentric-only repetitions, hip-breaking razor curls or glute-ham raises, external load, and Reverse Nordic remain outside this family. Categorical muscle roles are disclosed action and region inferences from measured activity, not measured rankings.",
+  "definition": "A bilateral partner-anchored tall-kneeling isolation in which neutral hips and trunk are held while the knees yield into extension for three seconds and then actively flex for a three-second unassisted return over the achieved range. The lower-leg anchor is support topology rather than loaded equipment. Hand-assisted resets, eccentric-only repetitions, hip-breaking razor curls or glute-ham raises, and Reverse Nordic remain outside this family. Categorical muscle roles are disclosed action and region inferences from measured activity, not measured rankings. Nordic Curl permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "narouei-2018-nordic-hamstring", "sarabon-2019-nordic-variations"],
   "fixed": {"mechanic": "isolation", "trainingRole": "legs", "pattern": null, "direction": null, "planes": ["sagittal"]},
   "groupPolicy": {"default": "legs", "allowed": ["legs"]},
-  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["bodyweightAdded"], "lateralities": ["bilateral"]},
   "movementSignature": {
     "planeBasisActions": ["knee.flexion"],
     "primeActions": [],
@@ -49,15 +49,37 @@
     {"id": "rangeOfMotion", "valueType": "enum", "required": true, "description": "The participant-controlled available range.", "allowedValues": ["achievedControlledRange"]},
     {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether a rail guides the torso.", "fixedValue": false}
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "recommended": {"defaultReps": {"minimum": 1, "maximum": 8}},
   "exercises": [
     {
       "catalogID": "nordic-curl",
       "name": "Nordic Curl",
       "aliases": [],
-      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable",
-      "bodyweightFraction": 0, "defaultWeight": 0, "reps": 5, "searchPriority": 92,
+      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1, "defaultWeight": 0, "reps": 5, "searchPriority": 92,
       "involvement": [
         {"muscle": "bicepsFemoris", "role": "primary"}, {"muscle": "medialHamstrings", "role": "primary"},
         {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "obliques", "role": "stabilizer"}, {"muscle": "lumbarExtensors", "role": "stabilizer"}

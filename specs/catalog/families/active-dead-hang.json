@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "active-dead-hang",
   "name": "Active Dead Hang",
-  "definition": "A strict bilateral timed hang from a horizontal pull-up bar using a shoulder-width closed pronated grip, unsupported feet, fully extended elbows, no deliberate swing, and the shoulder blades held down so the shoulders remain away from the ears. Gravity tends to elevate the scapulae and open the fingers; scapula.elevation and hand.fingerExtension are resisted tendencies, not dynamic repetitions. Army and CrossFit standards directly establish the bar, grip, straight-arm suspension, and active shoulder boundary. Lower-trapezius, grip, and support-chain roles are conservative anatomy-and-mechanics inferences rather than exact-fixture rankings. Passive Dead Hang, Scapular Pull-Up, flexed-arm holds, Pull-Ups, climbing-edge hangs, weighted hangs, swinging, and foot-assisted hangs remain outside this contract.",
+  "definition": "A strict bilateral timed hang from a horizontal pull-up bar using a shoulder-width closed pronated grip, unsupported feet, fully extended elbows, no deliberate swing, and the shoulder blades held down so the shoulders remain away from the ears. Gravity tends to elevate the scapulae and open the fingers; scapula.elevation and hand.fingerExtension are resisted tendencies, not dynamic repetitions. Army and CrossFit standards directly establish the bar, grip, straight-arm suspension, and active shoulder boundary. Lower-trapezius, grip, and support-chain roles are conservative anatomy-and-mechanics inferences rather than exact-fixture rankings. Passive Dead Hang, Scapular Pull-Up, flexed-arm holds, Pull-Ups, climbing-edge hangs, swinging, and foot-assisted hangs remain outside this contract. Active Dead Hang permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "gaffney-2014-trapezius-subdivisions",
     "holzbaur-2005-upper-extremity",
@@ -39,9 +39,7 @@
     "trackingModes": [
       "duration"
     ],
-    "loadModes": [
-      "nonComparable"
-    ],
+    "loadModes": ["bodyweightAdded"],
     "lateralities": [
       "bilateral"
     ]
@@ -305,7 +303,29 @@
       ]
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "active-dead-hang",
@@ -315,8 +335,8 @@
       "laterality": "bilateral",
       "modality": "isometricStrength",
       "trackingMode": "duration",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 1,
       "defaultDuration": 30,

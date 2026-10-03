@@ -44,8 +44,9 @@ struct CatalogDraftValidation: Equatable {
         hasMovementPlanes = !draft.planes.isEmpty
 
         if draft.equipment.requiresNonComparableLoad {
-            hasValidLoadProfile = draft.loadMode == .nonComparable
-                && draft.bodyweightFraction == 0
+            hasValidLoadProfile = draft.loadModeChoices.contains(draft.loadMode)
+                && ((draft.loadMode == .nonComparable && draft.bodyweightFraction == 0)
+                    || (draft.loadMode == .bodyweightAdded && draft.bodyweightFraction == 1))
         } else {
             switch draft.loadMode {
             case .external, .nonComparable:

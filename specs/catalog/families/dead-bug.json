@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "dead-bug",
   "name": "Dead Bug",
-  "definition": "A supine alternating contralateral arm-and-leg drill with the lumbar position held. The unsupported limbs increase the external spinal-extension tendency while the trunk remains still. Hip flexion and shoulder extension from a flexed position describe the return against gravity; knee extension and scapular upward rotation describe the outward reach. These produced actions occur at different points of a repetition, not as a simultaneous concentric phase. Lowering the leg and arm is not relabeled as a hip-extension or shoulder-flexion strengthening action. Abs are primary, obliques secondary, and limb contributors are bounded anatomy-and-mechanics inferences. No quantitative bodyweight fraction is assigned. The app does not separately represent transversus abdominis. Heel taps, weighted versions, hollow holds, crunches and simultaneous four-limb reaches remain excluded.",
+  "definition": "A supine alternating contralateral arm-and-leg drill with the lumbar position held. The unsupported limbs increase the external spinal-extension tendency while the trunk remains still. Hip flexion and shoulder extension from a flexed position describe the return against gravity; knee extension and scapular upward rotation describe the outward reach. These produced actions occur at different points of a repetition, not as a simultaneous concentric phase. Lowering the leg and arm is not relabeled as a hip-extension or shoulder-flexion strengthening action. Abs are primary, obliques secondary, and limb contributors are bounded anatomy-and-mechanics inferences. No measured lifted-body fraction is assigned. The app does not separately represent transversus abdominis. Heel taps, hollow holds, crunches and simultaneous four-limb reaches remain excluded. Dead Bug permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "christophy-2012-lumbar-spine",
     "arnold-2010-lower-limb",
@@ -37,9 +37,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "nonComparable"
-    ],
+    "loadModes": ["bodyweightAdded"],
     "lateralities": [
       "unilateral"
     ]
@@ -301,7 +299,29 @@
       ]
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "dead-bug",
@@ -314,8 +334,8 @@
       "laterality": "unilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 10,
       "searchPriority": 85,

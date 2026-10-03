@@ -3,11 +3,11 @@
   "schemaVersion": 1,
   "id": "wall-sit",
   "name": "Wall Sit",
-  "definition": "A bilateral duration-tracked isometric squat hold with the back supported by a wall, the thighs approximately horizontal, and the hips and knees near ninety degrees. The fixture universally resists the tendency toward knee flexion; hip and ankle torque directions vary with foot and pressure geometry and are not generalized. Load is non-comparable.",
+  "definition": "A bilateral duration-tracked isometric squat hold with the back supported by a wall, the thighs approximately horizontal, and the hips and knees near ninety degrees. The fixture universally resists the tendency toward knee flexion; hip and ankle torque directions vary with foot and pressure geometry and are not generalized. The entered weight is optional added mass. Wall Sit permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": ["arnold-2010-lower-limb", "biscarini-2020-wall-squat-torques", "dyer-2024-wall-sit-fatigue"],
   "fixed": {"mechanic": "compound", "trainingRole": "legs", "pattern": "squat", "direction": null, "planes": ["sagittal"]},
   "groupPolicy": {"default": "legs", "allowed": ["legs"]},
-  "allowed": {"equipment": ["bodyweight"], "modalities": ["isometricStrength"], "trackingModes": ["duration"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["isometricStrength"], "trackingModes": ["duration"], "loadModes": ["bodyweightAdded"], "lateralities": ["bilateral"]},
   "movementSignature": {
     "planeBasisActions": ["knee.flexion"],
     "primeActions": [],
@@ -38,15 +38,37 @@
     {"id": "holdType", "valueType": "enum", "required": true, "description": "The recorded performance type.", "allowedValues": ["timedIsometric"]},
     {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "Whether an apparatus mechanically guides the hold.", "fixedValue": false}
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "recommended": {"defaultDuration": {"minimum": 10, "maximum": 120}},
   "exercises": [
     {
       "catalogID": "wall-sit",
       "name": "Wall Sit",
       "aliases": ["Wall Squat Hold", "Wall Chair Hold"],
-      "equipment": "bodyweight", "laterality": "bilateral", "modality": "isometricStrength", "trackingMode": "duration", "loadMode": "nonComparable",
-      "bodyweightFraction": 0, "defaultWeight": 0, "reps": 1, "defaultDuration": 30, "searchPriority": 96,
+      "equipment": "bodyweight", "laterality": "bilateral", "modality": "isometricStrength", "trackingMode": "duration", "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1, "defaultWeight": 0, "reps": 1, "defaultDuration": 30, "searchPriority": 96,
       "involvement": [
         {"muscle": "vasti", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"},
         {"muscle": "gluteMax", "role": "stabilizer"}, {"muscle": "gluteMed", "role": "stabilizer"},

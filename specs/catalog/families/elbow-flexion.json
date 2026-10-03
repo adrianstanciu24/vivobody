@@ -3,13 +3,13 @@
   "schemaVersion": 1,
   "id": "elbow-flexion",
   "name": "Elbow Flexion",
-  "definition": "An elbow-flexion isolation in which the reviewed fixture holds its upper-arm posture, forearm orientation, and wrist posture. Thirteen externally loaded open-chain fixtures cover three standing cable grips, separate standing straight-bar and undulated EZ-bar curls, standing single-arm and simultaneous bilateral supinated dumbbell curls, a simultaneous bilateral neutral-grip dumbbell curl, a seated barbell preacher curl with unreported bar shape and pad angle, a bilateral supinated dumbbell curl against a 45-degree posterior bench, the exact Life Fitness Insignia SS-BCD dependent selectorized machine preacher curl, a seated concentration curl, and a unilateral dumbbell preacher curl. A fourteenth closed-chain suspension fixture uses independent handles, a supinated grip, and an inclined straight body while the upper arms remain held in front of the torso. The EZ-bar source reports near-semipronated forearms but not grip width, wrist posture, or a universal upper-arm angle; those facts remain unreported rather than being borrowed from the straight-bar fixture. Brachialis is the orientation-neutral primary baseline; biceps brachii is co-primary in the reviewed supinated and EZ-bar records and secondary in the neutral and pronated standing records. Rotating or alternating curls, unsupported preacher shapes, alternate-arm incline curls, other machines, and variants adding shoulder or scapular prime actions remain outside this contract.",
+  "definition": "An elbow-flexion isolation in which the reviewed fixture holds its upper-arm posture, forearm orientation, and wrist posture. Thirteen externally loaded open-chain fixtures cover three standing cable grips, separate standing straight-bar and undulated EZ-bar curls, standing single-arm and simultaneous bilateral supinated dumbbell curls, a simultaneous bilateral neutral-grip dumbbell curl, a seated barbell preacher curl with unreported bar shape and pad angle, a bilateral supinated dumbbell curl against a 45-degree posterior bench, the exact Life Fitness Insignia SS-BCD dependent selectorized machine preacher curl, a seated concentration curl, and a unilateral dumbbell preacher curl. A fourteenth closed-chain suspension fixture uses independent handles, a supinated grip, and an inclined straight body while the upper arms remain held in front of the torso. The EZ-bar source reports near-semipronated forearms but not grip width, wrist posture, or a universal upper-arm angle; those facts remain unreported rather than being borrowed from the straight-bar fixture. Brachialis is the orientation-neutral primary baseline; biceps brachii is co-primary in the reviewed supinated and EZ-bar records and secondary in the neutral and pronated standing records. Rotating or alternating curls, unsupported preacher shapes, alternate-arm incline curls, other machines, and variants adding shoulder or scapular prime actions remain outside this contract. TRX Biceps Curl permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "holzbaur-2005-upper-extremity", "murray-1995-elbow-forearm-moment-arms", "coratella-2023-curl-handgrips", "kleiber-2015-elbow-flexion-hand-position", "marcolin-2018-curl-variants", "oliveira-2009-dumbbell-curl-shoulder-position", "nunes-2020-barbell-preacher-curl", "zabaleta-korta-2023-incline-dumbbell-curl", "ace-2026-hammer-curl", "parpa-2025-traditional-dumbbell-bayesian-curl", "life-fitness-2024-insignia-series-manual", "trx-2026-suspension-exercise-guide", "usmc-2026-trx-strength-library"
   ],
   "fixed": {"mechanic": "isolation", "trainingRole": "pull", "pattern": null, "direction": null, "planes": ["sagittal"]},
   "groupPolicy": {"default": "arms", "allowed": ["arms"]},
-  "allowed": {"equipment": ["cable", "barbell", "dumbbell", "machine", "suspensionTrainer"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external", "nonComparable"], "lateralities": ["bilateral", "unilateral"]},
+  "allowed": {"equipment": ["cable", "barbell", "dumbbell", "machine", "suspensionTrainer"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["external", "bodyweightAdded"], "lateralities": ["bilateral", "unilateral"]},
   "movementSignature": {
     "planeBasisActions": ["elbow.flexion"],
     "primeActions": ["elbow.flexion"],
@@ -56,24 +56,14 @@
   "recommended": {"defaultReps": {"minimum": 8, "maximum": 15}},
   "exerciseRules": [
     {
-      "id": "non-comparable-curl-is-suspension-only",
-      "description": "Only the suspension curl uses a non-comparable load; cable, free-weight, and machine fixtures remain externally loaded.",
-      "when": {"field": "loadMode", "operator": "equals", "value": "nonComparable"},
-      "then": [
-        {"field": "equipment", "value": "suspensionTrainer"}
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
       "id": "standing-suspension-supinated-fixture",
       "description": "Pins the bilateral suspension curl with supinated independent handles, an inclined straight body, and upper arms held while only the elbows create the repetition.",
       "when": {"field": "variant.curlFixture", "operator": "equals", "value": "standingSuspensionSupinated"},
       "then": [
         {"field": "equipment", "value": "suspensionTrainer"},
         {"field": "laterality", "value": "bilateral"},
-        {"field": "loadMode", "value": "nonComparable"},
-        {"field": "bodyweightFraction", "value": 0},
+        {"field": "loadMode", "value": "bodyweightAdded"},
+        {"field": "bodyweightFraction", "value": 1},
         {"field": "variant.kineticChain", "value": "closed"},
         {"field": "variant.bodyPosition", "value": "inclinedStandingFacingAnchor"},
         {"field": "variant.torsoSupport", "value": "none"},
@@ -437,6 +427,27 @@
           "role": "stabilizer"
         }
       ]
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "suspensionTrainer"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -686,8 +697,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 10,
       "searchPriority": 96,

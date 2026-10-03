@@ -34,9 +34,9 @@
     "laterality": "bilateral",
     "aliases": [],
     "searchPriority": 92,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "isometricStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Take a shoulder-width closed overhand grip on a horizontal pull-up bar, fully extend both elbows, and lift your feet clear of the floor.",
       "movement": "Pull your shoulders slightly away from your ears and hold the shoulder blades down without bending your elbows.",
@@ -602,9 +602,9 @@
       "Forearm Plank"
     ],
     "searchPriority": 98,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "isometricStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Place both forearms on a stable floor with your elbows below your shoulders and your upper arms pointing straight down.",
       "movement": "Support the lower body on both feet and align the spine, pelvis, hips, and knees in one neutral straight line.",
@@ -768,9 +768,9 @@
       "Lateral Plank Hold"
     ],
     "searchPriority": 94,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "isometricStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Lie on one side and support your body on that forearm, with both your shoulder and elbow at about 90 degrees. Straighten both legs, place the top foot in front of the lower foot, and place the free hand on the opposite shoulder.",
       "movement": "Lift your body into a straight line from shoulder through hip to feet.",
@@ -2429,9 +2429,9 @@
       "Single-Leg Hip Thrusts"
     ],
     "searchPriority": 95,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Rest the upper back on the edge of a bench. Set the feet about hip-width apart with the working ankle under its knee, then lift the other leg and hold that knee near a right angle.",
       "movement": "Press through the planted heel with its toes lifted and raise the pelvis by extending the working hip.",
@@ -3358,9 +3358,9 @@
       "Alternating Dead Bug"
     ],
     "searchPriority": 85,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Lie on your back with arms pointing upward, hips and knees bent to 90 degrees.",
       "movement": "Reach one arm overhead as you straighten the opposite leg toward the floor.",
@@ -5545,9 +5545,9 @@
       "Suspended Triceps Extension"
     ],
     "searchPriority": 99,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Set the straps to mid-length, face away from the anchor with the palms down, step forward into a controlled lean, and begin with both arms straight at about eye level.",
       "movement": "Bend both elbows to bring the hands toward the temples while keeping the upper arms still.",
@@ -6654,9 +6654,9 @@
       "Suspension Trainer Curl"
     ],
     "searchPriority": 96,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Face the anchor with one handle in each hand, palms up, feet forward, body straight and inclined, and upper arms held in front of the torso.",
       "movement": "Keep the upper arms still and bend both elbows to bring the handles toward the temples or forehead.",
@@ -6867,9 +6867,9 @@
       "Alternating Forearm-Plank Arm Reach"
     ],
     "searchPriority": 94,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Set a straight forearm plank with elbows below the shoulders and both feet on the floor.",
       "movement": "Lift one forearm and reach that arm straight forward while keeping the shoulders and hips square.",
@@ -8109,9 +8109,9 @@
       "Hanging Bent-Knee Raise"
     ],
     "searchPriority": 94,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Hang from the overhead bar with the legs straight below you and attempt to keep the spine neutral.",
       "movement": "Over two seconds, raise the knees while bending them until both hips and knees reach ninety degrees.",
@@ -8208,9 +8208,9 @@
       "Hanging Leg Raise with Straight Legs"
     ],
     "searchPriority": 92,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Hang from the overhead bar with both legs straight and attempt to keep the spine neutral.",
       "movement": "Over two seconds, raise both straight legs until the hips reach ninety degrees.",
@@ -8555,9 +8555,9 @@
       "Alternating High-Plank Shoulder Tap"
     ],
     "searchPriority": 95,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Set a high plank with both palms below the shoulders and the feet about hip-width apart; widen the feet only as needed to keep the body still.",
       "movement": "Shift onto one palm and both feet, then slowly lift the free hand across the chest toward the opposite shoulder.",
@@ -8716,9 +8716,9 @@
       "Bodyweight Side-Lying Hip Abduction"
     ],
     "searchPriority": 90,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Lie on your side on a mat with both legs straight and stacked. Rest your head on the lower arm and your upper hand on your hip.",
       "movement": "Raise the top leg out to the side without turning the kneecap upward or rolling your hips.",
@@ -9088,9 +9088,9 @@
       "Bent-Knee Prone Hip Extension"
     ],
     "searchPriority": 62,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Lie face down with your torso and pelvis supported on a table and your working thigh hanging beyond its edge. Begin with your thigh angled 30 degrees downward.",
       "movement": "Lift the thigh until it reaches 5 degrees behind your body.",
@@ -9290,9 +9290,9 @@
       "Bodyweight Active Straight-Leg Raise"
     ],
     "searchPriority": 68,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Lie on your back with your torso and pelvis supported on a table and both legs straight.",
       "movement": "Raise the working leg as far as you can while keeping the knee straight.",
@@ -9783,9 +9783,9 @@
       "Hollow Body Hold"
     ],
     "searchPriority": 94,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "isometricStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Lie on your back with both legs straight and both arms extended beside your ears.",
       "movement": "Tilt your pelvis back, press your lower back into the floor, and raise your shoulder blades and straight legs from the floor.",
@@ -11005,9 +11005,9 @@
       "Suspension Trainer Chest Press"
     ],
     "searchPriority": 96,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Face away from the anchor with one handle in each hand at shoulder height, palms down, feet behind you, and the body straight and leaning forward.",
       "movement": "Bend both elbows along a controlled path and lower the chest between the handles while the shoulder blades move naturally.",
@@ -11550,9 +11550,9 @@
       "TRX Suspended Push-Up"
     ],
     "searchPriority": 99,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Set the straps to mid-calf, place both toes in the foot cradles, and set both hands on the floor slightly wider than the shoulders in a straight high plank.",
       "movement": "Bend both elbows and lower the chest toward the floor while keeping the legs and trunk aligned.",
@@ -12317,11 +12317,11 @@
       "Kneeling Ab Rollout"
     ],
     "searchPriority": 96,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
-      "startingPosition": "Kneel with both knees supported on the floor and hold both ab-wheel handles with the wheel beneath the shoulders. No resistance weight is logged for this fixture.",
+      "startingPosition": "Kneel with both knees supported on the floor and hold both ab-wheel handles with the wheel beneath the shoulders. Log only optional added weight; do not enter the wheel mass.",
       "movement": "Roll the wheel forward as the shoulders flex and hips extend while keeping the torso tight against spinal extension.",
       "endpoint": "Reach only the farthest controlled position that preserves the braced torso; the source does not prescribe a distance.",
       "returnPhase": "Reverse the wheel under control through shoulder extension and hip flexion until you return to the kneeling start.",
@@ -15106,9 +15106,9 @@
     "laterality": "bilateral",
     "aliases": [],
     "searchPriority": 92,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Kneel tall with both lower legs held firmly by a partner, the hips and trunk neutral, and the arms reaching forward without touching the floor.",
       "movement": "Keep the hips and trunk aligned while lowering forward from the knees for three seconds through the range you can control.",
@@ -15278,9 +15278,9 @@
     "laterality": "bilateral",
     "aliases": [],
     "searchPriority": 94,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "isometricStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Take a shoulder-width closed overhand grip on a horizontal pull-up bar, fully extend both elbows, and lift your feet clear of the floor.",
       "movement": "Keep a secure grip and remain still while allowing your shoulders to rise naturally toward your ears.",
@@ -15372,9 +15372,9 @@
       "Pike Press-Up"
     ],
     "searchPriority": 90,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Place your hands slightly wider than shoulder width on the floor and keep your feet on the floor. Raise your hips to form an inverted V and brace your trunk.",
       "movement": "Bend both elbows and lower your head toward the floor, keeping the elbows about 45 degrees from your body.",
@@ -18148,9 +18148,9 @@
       "Straight-Arm Scapular Pull-Up"
     ],
     "searchPriority": 94,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Take a shoulder-width closed overhand grip on a horizontal pull-up bar, fully extend both elbows, lift the feet clear of the floor, and let the shoulder blades rise naturally.",
       "movement": "Keep both elbows straight and pull both shoulder blades down and back so the body rises slightly without swinging.",
@@ -20444,9 +20444,9 @@
       "TRX Tucked-Elbow Row"
     ],
     "searchPriority": 96,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Face the anchor with one handle in each hand, palms facing, feet forward, arms long, and the body straight and inclined.",
       "movement": "Pull the handles toward the lower chest and ribs while keeping both elbows tucked beside the torso.",
@@ -21456,9 +21456,9 @@
       "TRX Flared-Elbow Row"
     ],
     "searchPriority": 96,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Face the anchor with one handle in each hand, palms facing, feet forward, body straight and inclined, and arms reaching toward the anchor.",
       "movement": "Pull the upper arms out at shoulder height and bend the elbows to about 90 degrees while drawing the shoulder blades together.",
@@ -22452,9 +22452,9 @@
       "30-Degree Curl-Up"
     ],
     "searchPriority": 82,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Lie on your back in a stable position with your hips held still. Begin with your torso resting on the floor.",
       "movement": "Curl your head, shoulders, and upper back off the floor without lifting from your hips.",
@@ -23777,9 +23777,9 @@
       "Straight Arm Straight Leg Sit-Ups"
     ],
     "searchPriority": 95,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Lie on your back with legs straight and together, feet unanchored, and both straight arms reaching toward the ceiling.",
       "movement": "Keep the spine neutral as you flex at the hips and raise the torso to upright sitting with the arms remaining straight.",
@@ -24127,9 +24127,9 @@
       "Pelvic Reverse Curl"
     ],
     "searchPriority": 98,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Lie on your back with arms spread and palms down, and hold both hips and knees at 90 degrees.",
       "movement": "Keep the knee angle unchanged while curling the pelvis and lower spine toward the ribs without swinging the legs.",
@@ -28421,9 +28421,9 @@
       "Speed Pull-Up"
     ],
     "searchPriority": 98,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "power",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Hang from parallel handles with a shoulder-width neutral grip, straight elbows, slight hip and knee flexion held still, and the trunk braced.",
       "movement": "Pull as fast as possible by driving the elbows down while keeping the hips and legs still.",
@@ -28802,9 +28802,9 @@
       "Wall Chair Hold"
     ],
     "searchPriority": 96,
-    "bodyweightFraction": 0,
+    "bodyweightFraction": 1,
     "modality": "isometricStrength",
-    "loadMode": "nonComparable",
+    "loadMode": "bodyweightAdded",
     "execution": {
       "startingPosition": "Place your back flat against a wall with both feet fully planted about shoulder-width apart and positioned in front of you.",
       "movement": "Slide down until the thighs are approximately horizontal and the hips and knees are each near ninety degrees.",

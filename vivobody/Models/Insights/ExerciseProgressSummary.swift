@@ -9,6 +9,7 @@
 import Foundation
 
 nonisolated struct ExerciseProgressSummary: Hashable {
+    let latestPoint: ExerciseProgressPoint?
     let bestWeightPoint: ExerciseProgressPoint?
     let bestDurationPoint: ExerciseProgressPoint?
     let bestRepsPoint: ExerciseProgressPoint?
@@ -32,6 +33,7 @@ nonisolated struct ExerciseProgressSummary: Hashable {
         var runningPerformance: StrengthPerformance?
         var evaluated = 0
         var lastRecord = -1
+        let currentKind = points.last?.performanceSemanticKind
 
         for point in points {
             if let load = point.historyTopLoad,
@@ -59,7 +61,9 @@ nonisolated struct ExerciseProgressSummary: Hashable {
                 runningE1RM = estimate
                 e1RMRecordIDs.insert(point.id)
             }
-            if let performance = point.strengthPerformance {
+            if point.performanceSemanticKind == currentKind,
+               let performance = point.strengthPerformance
+            {
                 if performance.advancement(over: runningPerformance) != nil {
                     runningPerformance = performance
                     lastRecord = evaluated
@@ -69,6 +73,7 @@ nonisolated struct ExerciseProgressSummary: Hashable {
         }
 
         bestWeightPoint = bestWeight
+        latestPoint = points.last
         bestDurationPoint = bestDuration
         bestRepsPoint = bestReps
         bestE1RMPoint = bestE1RM
@@ -78,6 +83,14 @@ nonisolated struct ExerciseProgressSummary: Hashable {
         evaluableCount = evaluated
         lastRecordIndex = lastRecord
         standingPerformance = runningPerformance
+    }
+
+    func plateauStatus(threshold: Int) -> PlateauStatus? {
+        guard evaluableCount > threshold, lastRecordIndex >= 0,
+              let standingPerformance else { return nil }
+        let stale = (evaluableCount - 1) - lastRecordIndex
+        guard stale >= threshold else { return nil }
+        return PlateauStatus(sessions: stale, performance: standingPerformance)
     }
 }
 
@@ -133,13 +146,8 @@ nonisolated extension ExerciseProgress {
     }
 
     func plateauStatus(threshold: Int) -> PlateauStatus? {
-        guard performanceSemanticKind.supportsRecord,
-              summary.evaluableCount > threshold,
-              summary.lastRecordIndex >= 0,
-              let runningBest = summary.standingPerformance else { return nil }
-        let stale = (summary.evaluableCount - 1) - summary.lastRecordIndex
-        guard stale >= threshold else { return nil }
-        return PlateauStatus(sessions: stale, performance: runningBest)
+        guard performanceSemanticKind.supportsRecord else { return nil }
+        return summary.plateauStatus(threshold: threshold)
     }
 
     /// Both bounds use binary search, making a range change

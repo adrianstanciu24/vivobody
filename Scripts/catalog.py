@@ -206,6 +206,17 @@ LATERALITIES = {"bilateral", "unilateral"}
 TRACKING_MODES = {"reps", "duration"}
 MODALITIES = {"dynamicStrength", "isometricStrength", "power"}
 LOAD_MODES = {"external", "bodyweightAdded", "assistanceSubtracted", "nonComparable"}
+# These owner-approved fixtures use body mass plus added mass as a logging
+# convention, not a measured force or lifted-body fraction.
+BUNDLED_BODYWEIGHT_ADDED_EQUIPMENT = {
+    "kneeling-ab-wheel-rollout": "abWheel",
+    "trx-triceps-press": "suspensionTrainer",
+    "trx-biceps-curl": "suspensionTrainer",
+    "trx-chest-press": "suspensionTrainer",
+    "trx-suspended-push-up": "suspensionTrainer",
+    "trx-low-row": "suspensionTrainer",
+    "trx-high-row": "suspensionTrainer",
+}
 ROLES = {"primary", "secondary", "stabilizer"}
 ROLE_RANK = {"stabilizer": 1, "secondary": 2, "primary": 3}
 OFFICIAL_TECHNICAL_SOURCE_TYPES = {"officialTechnicalStandard"}
@@ -1958,9 +1969,14 @@ def validate_exercise(
         require(bodyweight_fraction > 0, f"{context} {load_mode} load requires positive bodyweightFraction")
     if exercise["equipment"] == "band":
         require(load_mode == "nonComparable", f"{context} band resistance must remain nonComparable")
-    if exercise["equipment"] == "abWheel":
+    approved_added_load = (
+        BUNDLED_BODYWEIGHT_ADDED_EQUIPMENT.get(exercise["catalogID"]) == exercise["equipment"]
+        and load_mode == "bodyweightAdded"
+        and bodyweight_fraction == 1
+    )
+    if exercise["equipment"] == "abWheel" and not approved_added_load:
         require(load_mode == "nonComparable", f"{context} ab-wheel load must remain nonComparable")
-    if exercise["equipment"] == "suspensionTrainer":
+    if exercise["equipment"] == "suspensionTrainer" and not approved_added_load:
         require(load_mode == "nonComparable", f"{context} suspension-trainer load must remain nonComparable")
     if exercise["equipment"] == "stabilityBall":
         require(load_mode == "nonComparable", f"{context} stability-ball load must remain nonComparable")

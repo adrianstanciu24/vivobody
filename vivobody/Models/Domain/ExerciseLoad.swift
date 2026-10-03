@@ -184,9 +184,28 @@ extension Equipment {
 }
 
 /// Whether a fixture has a user-entered resistance axis. Bands remain editable,
-/// while unloaded bodyweight, ab-wheel, GHD, suspension-trainer, and
-/// stability-ball fixtures do not invent a pound value.
+/// while non-comparable bodyweight, ab-wheel, GHD, suspension-trainer, and
+/// stability-ball fixtures do not have a load axis. Approved bodyweight-added
+/// fixtures use the existing added-load control.
 nonisolated enum ExerciseResistanceCapability {
+    /// Exact bundled exceptions to equipment-only load constraints. The
+    /// coefficient is an owner-selected body-mass logging convention.
+    static func permitsBundledBodyweightAddedLoad(
+        catalogID: String?,
+        equipment: Equipment,
+        loadMode: ExerciseLoadMode,
+        bodyweightFraction: Double
+    ) -> Bool {
+        guard loadMode == .bodyweightAdded, bodyweightFraction == 1 else { return false }
+        let expectedEquipment: Equipment? = switch catalogID {
+        case "kneeling-ab-wheel-rollout": .abWheel
+        case "trx-triceps-press", "trx-biceps-curl", "trx-chest-press",
+             "trx-suspended-push-up", "trx-low-row", "trx-high-row": .suspensionTrainer
+        default: nil
+        }
+        return expectedEquipment == equipment
+    }
+
     static func tracksResistance(
         loadMode: ExerciseLoadMode,
         equipment: Equipment?

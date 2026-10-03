@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "hip-flexion",
   "name": "Hip Flexion Isolation",
-  "definition": "Unilateral open-chain hip-flexion isolation with the working knee held straight. The supine table-supported bodyweight branch retains its active end range and nonstandardized pelvic/spinal motion from Okubo. The standing cable branch selects the supported straight-leg fixture in Speediance's technical instructions: low pulley behind, ankle cuff, upright controlled trunk and pelvis, and a thigh-horizontal or earlier form-limited endpoint. Iliopsoas is primary; rectus femoris and tensor fasciae latae are secondary. Yamane measured TFL during held supine straight-leg raises; transfer to these dynamic fixtures is an explicit categorical anatomy-and-mechanics inference, not exact-protocol EMG or a recruitment ranking. The iliopsoas region combines psoas major and iliacus. Abs and obliques control the trunk/pelvis; gluteus medius receives standing-branch pelvic-control credit. Sartorius and adductors remain outside this focused role expansion. Bent-knee marches, hanging or captain-chair raises, sit-ups, V-ups, bands, machines, unsupported cable raises, and deliberately spinal or pelvic driven lifts remain outside this contract.",
+  "definition": "Unilateral open-chain hip-flexion isolation with the working knee held straight. The supine table-supported bodyweight branch retains its active end range and nonstandardized pelvic/spinal motion from Okubo. The standing cable branch selects the supported straight-leg fixture in Speediance's technical instructions: low pulley behind, ankle cuff, upright controlled trunk and pelvis, and a thigh-horizontal or earlier form-limited endpoint. Iliopsoas is primary; rectus femoris and tensor fasciae latae are secondary. Yamane measured TFL during held supine straight-leg raises; transfer to these dynamic fixtures is an explicit categorical anatomy-and-mechanics inference, not exact-protocol EMG or a recruitment ranking. The iliopsoas region combines psoas major and iliacus. Abs and obliques control the trunk/pelvis; gluteus medius receives standing-branch pelvic-control credit. Sartorius and adductors remain outside this focused role expansion. Bent-knee marches, hanging or captain-chair raises, sit-ups, V-ups, bands, machines, unsupported cable raises, and deliberately spinal or pelvic driven lifts remain outside this contract. Active Straight-Leg Raise permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "okubo-2021-end-range-active-straight-leg-raise",
@@ -36,10 +36,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "nonComparable",
-      "external"
-    ],
+    "loadModes": ["external", "bodyweightAdded"],
     "lateralities": [
       "unilateral"
     ]
@@ -261,7 +258,7 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "The fixture-specific load interface; branch rules preserve the supine and supported cable setups.",
+      "description": "The fixture-specific load interface; branch rules preserve the supine and supported cable setups. A value of none describes the baseline fixture without a required load implement; optional added mass is entered separately.",
       "allowedValues": [
         "none",
         "ankleCuff"
@@ -317,7 +314,7 @@
       "when": {"field": "variant.bodyPosition", "operator": "equals", "value": "supine"},
       "then": [
         {"field": "equipment", "value": "bodyweight"},
-        {"field": "loadMode", "value": "nonComparable"},
+        {"field": "loadMode", "value": "bodyweightAdded"},
         {"field": "variant.torsoSupport", "value": "table"},
         {"field": "variant.pelvisSupport", "value": "table"},
         {"field": "variant.pelvisMotion", "value": "nonstandardized"},
@@ -355,6 +352,27 @@
       "requireInvolvement": [
         {"muscle": "gluteMed", "role": "stabilizer"}
       ]
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -369,8 +387,8 @@
       "laterality": "unilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 10,
       "searchPriority": 68,

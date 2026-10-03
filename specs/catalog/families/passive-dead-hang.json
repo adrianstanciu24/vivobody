@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "passive-dead-hang",
   "name": "Passive Dead Hang",
-  "definition": "A strict bilateral timed hang from a horizontal pull-up bar using a shoulder-width closed pronated grip, unsupported feet, fully extended elbows, and no deliberate swing. The athlete maintains a secure grip while allowing the shoulders to rise naturally toward the ears and does not deliberately depress or cycle the shoulder blades. The only resisted action is hand.fingerExtension; the shoulder position is a held fixture, not an authored scapular action. Army and CrossFit standards directly establish the grip, straight-arm suspension, and passive shoulder boundary. Grip and support-chain roles are conservative anatomy-and-mechanics inferences rather than exact bar-hang rankings, and the involvement roster is not an exhaustive tissue-load atlas. Active Dead Hang, Scapular Pull-Up, flexed-arm holds, Pull-Ups, climbing-edge hangs, weighted hangs, swinging, and foot-assisted hangs remain outside this contract.",
+  "definition": "A strict bilateral timed hang from a horizontal pull-up bar using a shoulder-width closed pronated grip, unsupported feet, fully extended elbows, and no deliberate swing. The athlete maintains a secure grip while allowing the shoulders to rise naturally toward the ears and does not deliberately depress or cycle the shoulder blades. The only resisted action is hand.fingerExtension; the shoulder position is a held fixture, not an authored scapular action. Army and CrossFit standards directly establish the grip, straight-arm suspension, and passive shoulder boundary. Grip and support-chain roles are conservative anatomy-and-mechanics inferences rather than exact bar-hang rankings, and the involvement roster is not an exhaustive tissue-load atlas. Active Dead Hang, Scapular Pull-Up, flexed-arm holds, Pull-Ups, climbing-edge hangs, swinging, and foot-assisted hangs remain outside this contract. Passive Dead Hang permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "gaffney-2014-trapezius-subdivisions",
     "holzbaur-2005-upper-extremity",
@@ -38,9 +38,7 @@
     "trackingModes": [
       "duration"
     ],
-    "loadModes": [
-      "nonComparable"
-    ],
+    "loadModes": ["bodyweightAdded"],
     "lateralities": [
       "bilateral"
     ]
@@ -295,7 +293,29 @@
       ]
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "passive-dead-hang",
@@ -305,8 +325,8 @@
       "laterality": "bilateral",
       "modality": "isometricStrength",
       "trackingMode": "duration",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 1,
       "defaultDuration": 30,

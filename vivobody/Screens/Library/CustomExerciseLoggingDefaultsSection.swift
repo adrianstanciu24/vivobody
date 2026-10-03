@@ -24,8 +24,8 @@ struct CustomExerciseLoggingDefaultsSection: View {
             loadModeField
                 .id(CatalogDraftValidation.Anchor.loadMode)
 
-            if draft.loadMode == .bodyweightAdded
-                || draft.loadMode == .assistanceSubtracted
+            if !draft.equipment.requiresNonComparableLoad,
+               draft.loadMode == .bodyweightAdded || draft.loadMode == .assistanceSubtracted
             {
                 bodyweightFractionField
                     .transition(.move(edge: .top).combined(with: .opacity))

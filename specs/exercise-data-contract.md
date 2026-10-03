@@ -242,6 +242,25 @@ ball defines the path and safety boundary of ballistic throws and slams.
   movement from load-based record and tonnage comparisons. A duration-tracked
   isometric may still compare duration within its own duration-only series.
 
+The 29 owner-approved bodyweight exercises use the existing Pull-Up entry
+behavior: zero added load displays **BW**; positive added load displays
+**BW + entered weight**. Their `bodyweightAdded` coefficient is `1` as an
+explicit app convention: measured body mass plus entered added mass. This
+coefficient does not claim a measured lifted-body share, joint force, or muscle
+resistance for supported or limb movements. The convention enables the existing
+dynamic-strength load records, tonnage, and estimated 1RM behavior. Timed
+strength uses load-first, duration-second records. Neutral-Grip Speed Pull-Up
+retains power classification and remains outside strength records and estimated
+1RM. See the [approved logging scope](catalog/proposals/bodyweight-added-load-logging.md).
+
+Only the approved six suspension-trainer fixtures and Kneeling Ab-Wheel Rollout
+can use this convention under their constrained equipment identities. Their
+custom copies retain the setting. Other constrained fixtures keep their existing
+load restrictions. Load mode and coefficient remain frozen in saved template
+and workout snapshots. Reselect an exercise to use its updated catalog setting.
+Current Detail records use the current performance signature. Old time-only
+records and new loaded-hold records remain separate comparison series.
+
 The custom editor presents `assistanceSubtracted` as **Assistance**, with an
 assisted pull-up/chin-up machine as its concrete example. During the workout,
 the entered machine setting remains visible as Assistance and carries the cue

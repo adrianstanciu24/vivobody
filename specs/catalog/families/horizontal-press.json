@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "horizontal-press",
   "name": "Horizontal Press",
-  "definition": "A compound press whose concentric phase combines shoulder horizontal adduction with elbow extension in either an open or closed kinetic chain. The resistance path is approximately perpendicular to the torso's longitudinal axis; inclined, declined, vertical, and elbow-isolation presses belong to other families. The close-grip barbell record owns one source-defined narrow spacing relative to individual latissimus and triceps landmarks, while the generic barbell bench press remains grip-width unspecified. Feet-elevated and hands-elevated push-ups remain future incline-press and decline-press variants.",
+  "definition": "A compound press whose concentric phase combines shoulder horizontal adduction with elbow extension in either an open or closed kinetic chain. The resistance path is approximately perpendicular to the torso's longitudinal axis; inclined, declined, vertical, and elbow-isolation presses belong to other families. The close-grip barbell record owns one source-defined narrow spacing relative to individual latissimus and triceps landmarks, while the generic barbell bench press remains grip-width unspecified. Feet-elevated and hands-elevated push-ups remain future incline-press and decline-press variants. TRX Chest Press permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "borges-2019-bench-machine-scapula",
@@ -49,11 +49,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "external",
-      "bodyweightAdded",
-      "nonComparable"
-    ],
+    "loadModes": ["external", "bodyweightAdded"],
     "lateralities": [
       "bilateral",
       "unilateral"
@@ -284,16 +280,6 @@
   ],
   "exerciseRules": [
     {
-      "id": "non-comparable-horizontal-press-is-suspension-only",
-      "description": "Only the suspension chest press uses a non-comparable load; bodyweight and external-load fixtures retain their authored load modes.",
-      "when": {"field": "loadMode", "operator": "equals", "value": "nonComparable"},
-      "then": [
-        {"field": "equipment", "value": "suspensionTrainer"}
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
       "id": "bodyweight-closed-chain",
       "description": "Bodyweight horizontal presses use a closed kinetic chain, bodyweight-derived loading, free scapular translation, and an explicit lower-body support point.",
       "when": {
@@ -359,8 +345,8 @@
       "description": "The suspension branch is a closed-chain forward-leaning standing chest press facing away from the anchor, with independent handles and no invented load value.",
       "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
       "then": [
-        {"field": "loadMode", "value": "nonComparable"},
-        {"field": "bodyweightFraction", "value": 0},
+        {"field": "loadMode", "value": "bodyweightAdded"},
+        {"field": "bodyweightFraction", "value": 1},
         {"field": "variant.kineticChain", "value": "closed"},
         {"field": "variant.torsoSupport", "value": "none"},
         {"field": "variant.scapularTranslation", "value": "free"},
@@ -585,6 +571,26 @@
       "when": {"field": "variant.gripWidthReference", "operator": "equals", "value": "indexFingerDistanceBetweenLatissimusTricepsIntersections"},
       "then": [{"field": "variant.relativeGripWidth", "value": "narrow"}],
       "requirePresent": ["variant.relativeGripWidth"], "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "allowedValues": [
+            "bodyweight",
+            "suspensionTrainer"
+          ]
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "recommended": {
@@ -1539,8 +1545,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 10,
       "searchPriority": 96,

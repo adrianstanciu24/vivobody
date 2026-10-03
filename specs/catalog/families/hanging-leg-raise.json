@@ -3,11 +3,11 @@
   "schemaVersion": 1,
   "id": "hanging-leg-raise",
   "name": "Hanging Leg Raise",
-  "definition": "A suspended bilateral core movement in which the hips flex to ninety degrees from an overhead-bar hang while the anterior trunk resists spinal extension and a neutral spine is attempted. The bent-knee record also flexes the knees dynamically; the straight-leg record holds them extended. Kipping, deliberate spinal curling, unsupported grip variants, and endpoints above ninety degrees remain outside this family.",
+  "definition": "A suspended bilateral core movement in which the hips flex to ninety degrees from an overhead-bar hang while the anterior trunk resists spinal extension and a neutral spine is attempted. The bent-knee record also flexes the knees dynamically; the straight-leg record holds them extended. Kipping, deliberate spinal curling, unsupported grip variants, and endpoints above ninety degrees remain outside this family. Hanging Knee Raise, Hanging Straight-Leg Raise permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "holzbaur-2005-upper-extremity", "mcgill-2014-hanging-leg-raise"],
   "fixed": {"mechanic": "compound", "trainingRole": "core", "pattern": "core", "direction": null, "planes": ["sagittal"]},
   "groupPolicy": {"default": "core", "allowed": ["core"]},
-  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["nonComparable"], "lateralities": ["bilateral"]},
+  "allowed": {"equipment": ["bodyweight"], "modalities": ["dynamicStrength"], "trackingModes": ["reps"], "loadModes": ["bodyweightAdded"], "lateralities": ["bilateral"]},
   "movementSignature": {
     "planeBasisActions": ["hip.flexion"],
     "primeActions": ["hip.flexion"],
@@ -66,6 +66,27 @@
       "requirePresent": [],
       "requireAbsent": [],
       "requireAdditionalPrimeActions": []
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "recommended": {"defaultReps": {"minimum": 5, "maximum": 15}},
@@ -74,8 +95,8 @@
       "catalogID": "hanging-knee-raise",
       "name": "Hanging Knee Raise",
       "aliases": ["Bent-Knee Hanging Leg Raise", "Hanging Bent-Knee Raise"],
-      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable",
-      "bodyweightFraction": 0, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
+      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1, "defaultWeight": 0, "reps": 10, "searchPriority": 94,
       "involvement": [
         {"muscle": "abs", "role": "primary"}, {"muscle": "iliopsoas", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"},
         {"muscle": "medialHamstrings", "role": "secondary"}, {"muscle": "bicepsFemoris", "role": "secondary"},
@@ -102,8 +123,8 @@
       "catalogID": "hanging-straight-leg-raise",
       "name": "Hanging Straight-Leg Raise",
       "aliases": ["Straight-Leg Hanging Raise", "Hanging Leg Raise with Straight Legs"],
-      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "nonComparable",
-      "bodyweightFraction": 0, "defaultWeight": 0, "reps": 8, "searchPriority": 92,
+      "equipment": "bodyweight", "laterality": "bilateral", "modality": "dynamicStrength", "trackingMode": "reps", "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1, "defaultWeight": 0, "reps": 8, "searchPriority": 92,
       "involvement": [
         {"muscle": "abs", "role": "primary"}, {"muscle": "iliopsoas", "role": "primary"}, {"muscle": "rectusFemoris", "role": "secondary"},
         {"muscle": "obliques", "role": "secondary"},

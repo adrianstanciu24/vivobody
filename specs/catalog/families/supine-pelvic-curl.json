@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "supine-pelvic-curl",
   "name": "Supine Pelvic Curl",
-  "definition": "A floor-supported reverse-crunch fixture that begins with both hips and knees at 90 degrees, holds the knee angle, and curls the pelvis and spine toward the ribs before returning until the pelvis rests on the floor and the knees are directly over the hips. The arms remain out with palms down and the legs do not swing. Iliopsoas and rectus-femoris stabilizer roles are conservative anatomy-and-mechanics inferences for the held leg geometry, not Willett- or ACE-measured rankings. Upper-trunk curl-ups, full sit-ups, hanging leg raises, glute bridges, leg swings, and elbow reverse curls remain outside this family.",
+  "definition": "A floor-supported reverse-crunch fixture that begins with both hips and knees at 90 degrees, holds the knee angle, and curls the pelvis and spine toward the ribs before returning until the pelvis rests on the floor and the knees are directly over the hips. The arms remain out with palms down and the legs do not swing. Iliopsoas and rectus-femoris stabilizer roles are conservative anatomy-and-mechanics inferences for the held leg geometry, not Willett- or ACE-measured rankings. Upper-trunk curl-ups, full sit-ups, hanging leg raises, glute bridges, leg swings, and elbow reverse curls remain outside this family. Supine Reverse Crunch permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": ["arnold-2010-lower-limb", "christophy-2012-lumbar-spine", "willett-2001-reverse-curl", "ace-2026-reverse-crunch"],
   "fixed": {
     "mechanic": "compound",
@@ -17,7 +17,7 @@
     "equipment": ["bodyweight"],
     "modalities": ["dynamicStrength"],
     "trackingModes": ["reps"],
-    "loadModes": ["nonComparable"],
+    "loadModes": ["bodyweightAdded"],
     "lateralities": ["bilateral"]
   },
   "movementSignature": {
@@ -97,7 +97,29 @@
     {"id": "momentum", "valueType": "enum", "required": true, "description": "The pelvis is curled without a leg swing.", "allowedValues": ["controlledNoSwing"]},
     {"id": "fixedPath", "valueType": "boolean", "required": true, "description": "No external guide constrains the legs or pelvis.", "fixedValue": false}
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
   "exercises": [
     {
       "catalogID": "supine-reverse-crunch",
@@ -107,8 +129,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 10,
       "searchPriority": 98,

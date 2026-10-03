@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "spine-flexion",
   "name": "Spine Flexion",
-  "definition": "A strict bilateral trunk isolation in which the spine dynamically flexes and then returns under control while deliberate hip and pelvic motion do not create the repetition. The roster contains two exact fixtures: a bodyweight supine curl-up ending at the directly reviewed 30-degree trunk elevation, and a tall-kneeling high-rope cable crunch with the rope held beside the head and an unquantified strict trunk-flexion range. Rectus abdominis is primary and the combined internal-and-external-oblique region is secondary. Ha and Shin directly measured abdominal activity during controlled curl-ups; ACE directly defines the conventional cable fixture. Cable support-chain roles are bounded anatomy-and-mechanics inferences, not measured rankings. Full sit-ups, machine crunches, reverse crunches, leg raises, diagonal curl-ups, spinal rotation, lateral flexion, isometric holds, unstable surfaces, arm-driven cable pulls, and unreviewed curl-up angles remain outside this contract.",
+  "definition": "A strict bilateral trunk isolation in which the spine dynamically flexes and then returns under control while deliberate hip and pelvic motion do not create the repetition. The roster contains two exact fixtures: a bodyweight supine curl-up ending at the directly reviewed 30-degree trunk elevation, and a tall-kneeling high-rope cable crunch with the rope held beside the head and an unquantified strict trunk-flexion range. Rectus abdominis is primary and the combined internal-and-external-oblique region is secondary. Ha and Shin directly measured abdominal activity during controlled curl-ups; ACE directly defines the conventional cable fixture. Cable support-chain roles are bounded anatomy-and-mechanics inferences, not measured rankings. Full sit-ups, machine crunches, reverse crunches, leg raises, diagonal curl-ups, spinal rotation, lateral flexion, isometric holds, unstable surfaces, arm-driven cable pulls, and unreviewed curl-up angles remain outside this contract. Partial Curl-Up permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "christophy-2012-lumbar-spine",
@@ -39,10 +39,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "nonComparable",
-      "external"
-    ],
+    "loadModes": ["external", "bodyweightAdded"],
     "lateralities": [
       "bilateral"
     ]
@@ -204,7 +201,7 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "Where an external resistance implement contacts the athlete; the reviewed bodyweight curl-up has none.",
+      "description": "Where an external resistance implement contacts the athlete; the reviewed bodyweight curl-up has none. A value of none describes the baseline fixture without a required load implement; optional added mass is entered separately.",
       "allowedValues": [
         "none",
         "ropeBesideHead"
@@ -295,7 +292,7 @@
         },
         {
           "field": "loadMode",
-          "value": "nonComparable"
+          "value": "bodyweightAdded"
         },
         {
           "field": "variant.bodyPosition",
@@ -472,6 +469,27 @@
         "hip",
         "knee"
       ]
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -487,8 +505,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 12,
       "searchPriority": 82,

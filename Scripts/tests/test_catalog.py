@@ -383,6 +383,7 @@ DEFAULT_CANDIDATE_FOLLOW_UP_RULE_IDS = {
     "paired-dumbbell-configuration-is-simultaneous-bilateral",
     "trap-bar-carry-pins-high-handle-closed-frame",
     "total-bar-accounting-identifies-trap-bar",
+    "bodyweight-added-uses-approved-logging-profile",
 }
 
 CORE_ENDURANCE_RECORD_IDS = {
@@ -1385,7 +1386,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "Prone Table Hip Extension",
                     "Bent-Knee Prone Hip Extension",
                 ],
-                "setup": ("bodyweight", "unilateral", "nonComparable", 0, None, 10),
+                "setup": ("bodyweight", "unilateral", "bodyweightAdded", 0, None, 10),
                 "roles": {
                     "gluteMax": "primary",
                     "medialHamstrings": "secondary",
@@ -2306,6 +2307,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "prone-bodyweight-fixture-pins-table-range",
                 "standing-cable-fixture-pins-ankle-cuff-and-support",
                 "machine-fixture-pins-technogym-selection-glute",
+                "bodyweight-added-uses-approved-logging-profile",
             ],
             "ankle-plantarflexion": [
                     "standing-calf-raise-uses-extended-knee-setup",
@@ -5421,7 +5423,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "leverPulldown", ("pelvis",),
                 ),
                 "speed-pull-up": (
-                    "bodyweight", "bilateral", "nonComparable", 0,
+                    "bodyweight", "bilateral", "bodyweightAdded", 0,
                     "closed", "suspended", "none", "neutral",
                     "shoulderWidth", "free", None, ("pelvis",),
                 ),
@@ -5773,7 +5775,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 for rule in self.shoulder_extension_row["exerciseRules"]
             ],
             [
-                "non-comparable-row-is-suspension-only",
                 "bodyweight-uses-closed-chain-load-semantics",
                 "parallel-feet-floor-pins-bodyweight-load",
                 "fixed-bar-apparatus-requires-bodyweight",
@@ -5811,6 +5812,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "free-bar-setup",
                 "landmine-bar-setup",
                 "landmine-arc-requires-anchored-bar",
+                "bodyweight-added-uses-approved-logging-profile",
             ],
         )
 
@@ -6206,7 +6208,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 ]
             ],
             [
-                "non-comparable-high-row-is-suspension-only",
                 "suspension-high-row-fixture",
                 "machine-requires-fixed-path-and-type",
                 "non-machine-requires-free-path",
@@ -6222,6 +6223,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "hip-hinged-requires-posterior-chain-stability",
                 "unsupported-requires-trunk-stability",
                 "linked-lever-arms-are-bilateral",
+                "bodyweight-added-uses-approved-logging-profile",
             ],
         )
 
@@ -10833,7 +10835,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     ("bodyweight", "cable"),
                     ("dynamicStrength",),
                     ("reps",),
-                    ("nonComparable", "external"),
+                    ("external", "bodyweightAdded"),
                     ("unilateral",),
                 ),
                 "basis": ("hip.flexion",),
@@ -11053,7 +11055,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "unilateral",
                     "dynamicStrength",
                     "reps",
-                    "nonComparable",
+                    "bodyweightAdded",
                     0,
                     0,
                     None,
@@ -11356,9 +11358,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 "laterality": "unilateral",
                 "modality": "dynamicStrength",
                 "trackingMode": "reps",
-                "loadMode": "nonComparable",
+                "loadMode": "bodyweightAdded",
                 "defaultWeight": 0,
-                "bodyweightFraction": 0,
+                "bodyweightFraction": 1,
                 "reps": 10,
                 "searchPriority": 68,
             },
@@ -14113,7 +14115,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "Thirty-Degree Curl-Up", "30-Degree Partial Curl-Up",
                     "30-Degree Curl-Up",
                 ],
-                "domain": ("bodyweight", "bilateral", "dynamicStrength", "reps", "nonComparable"),
+                "domain": ("bodyweight", "bilateral", "dynamicStrength", "reps", "bodyweightAdded"),
                 "seed": (0, None, 12, None, 82),
                 "roles": {"abs": "primary", "obliques": "secondary"},
                 "evidence": ["ha-2020-curl-up-angle"],
@@ -14187,7 +14189,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "family": "anti-extension",
                 "name": "Stable Forearm Plank",
                 "aliases": ["Plank", "Front Plank", "Forearm Plank"],
-                "domain": ("bodyweight", "bilateral", "isometricStrength", "duration", "nonComparable"),
+                "domain": ("bodyweight", "bilateral", "isometricStrength", "duration", "bodyweightAdded"),
                 "seed": (0, None, 1, 30, 98),
                 "roles": {
                     "abs": "primary", "obliques": "secondary",
@@ -14201,7 +14203,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "family": "anti-lateral-flexion",
                 "name": "Side Plank",
                 "aliases": ["Side Bridge", "Side Plank Hold", "Lateral Plank Hold"],
-                "domain": ("bodyweight", "unilateral", "isometricStrength", "duration", "nonComparable"),
+                "domain": ("bodyweight", "unilateral", "isometricStrength", "duration", "bodyweightAdded"),
                 "seed": (0, None, 1, 30, 94),
                 "roles": {
                     "obliques": "primary", "quadratusLumborum": "secondary",
@@ -14308,7 +14310,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     ),
                     wanted["seed"],
                 )
-                self.assertEqual(exercise["bodyweightFraction"], 0)
+                self.assertEqual(exercise["bodyweightFraction"], 1 if wanted["domain"][-1] == "bodyweightAdded" else 0)
                 self.assertEqual(
                     {item["muscle"]: item["role"] for item in exercise["involvement"]},
                     wanted["roles"],
@@ -15939,7 +15941,7 @@ class CatalogFoundationTests(unittest.TestCase):
         expected = {
             "nordic-curl": (
                 "Nordic Curl", "nordic-curl", [], "bodyweight",
-                "dynamicStrength", "nonComparable", 0, None, 5, 92,
+                "dynamicStrength", "bodyweightAdded", 0, None, 5, 92,
             ),
             "kneeling-cable-crunch": (
                 "Kneeling Cable Crunch", "spine-flexion", [], "cable",
@@ -15970,17 +15972,17 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             "hollow-hold": (
                 "Hollow Hold", "hollow-hold", ["Hollow Body Hold"],
-                "bodyweight", "isometricStrength", "nonComparable",
+                "bodyweight", "isometricStrength", "bodyweightAdded",
                 0, None, 1, 94,
             ),
             "passive-dead-hang": (
                 "Passive Dead Hang", "passive-dead-hang", [],
-                "bodyweight", "isometricStrength", "nonComparable",
+                "bodyweight", "isometricStrength", "bodyweightAdded",
                 0, None, 1, 94,
             ),
             "active-dead-hang": (
                 "Active Dead Hang", "active-dead-hang", [],
-                "bodyweight", "isometricStrength", "nonComparable",
+                "bodyweight", "isometricStrength", "bodyweightAdded",
                 0, None, 1, 92,
             ),
         }
@@ -16139,7 +16141,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     ),
                     (
                         "bodyweight", "isometricStrength", "duration",
-                        "nonComparable", 0, 1, 30,
+                        "bodyweightAdded", 0, 1, 30,
                     ),
                 )
                 self.assertEqual(
@@ -16199,6 +16201,7 @@ class CatalogFoundationTests(unittest.TestCase):
             {
                 "supineThirtyDegreeBodyweightCurlUp",
                 "tallKneelingHighRopeCableCrunch",
+                "bodyweightAdded",
             },
         )
         self.assertEqual(
@@ -16594,7 +16597,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                                                     'variant.loadAccounting')},
              'bodyweight-abduction-pins-floor-fixture': {'when': ('equipment', 'equals', 'bodyweight'),
                                                          'then': {'laterality': 'unilateral',
-                                                                  'loadMode': 'nonComparable',
+                                                                  'loadMode': "bodyweightAdded",
                                                                   'variant.bodyPosition': 'sideLying',
                                                                   'variant.torsoSupport': 'floor',
                                                                   'variant.pelvisSupport': 'floor',
@@ -18764,9 +18767,9 @@ class CatalogFoundationTests(unittest.TestCase):
             for item in catalog.compile_runtime_catalog(self.real_families)
         }
         expected = {
-            "bodyweight-active-straight-leg-raise": ("hip-flexion", "bodyweight", "nonComparable"),
+            "bodyweight-active-straight-leg-raise": ("hip-flexion", "bodyweight", "bodyweightAdded"),
             "supported-standing-cable-hip-flexion": ("hip-flexion", "cable", "external"),
-            "bodyweight-side-lying-hip-abduction": ("hip-abduction", "bodyweight", "nonComparable"),
+            "bodyweight-side-lying-hip-abduction": ("hip-abduction", "bodyweight", "bodyweightAdded"),
             "ankle-band-lateral-walk": ("lateral-band-walk", "band", "nonComparable"),
         }
         for catalog_id, (family_id, equipment, load_mode) in expected.items():
@@ -18775,7 +18778,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 self.assertEqual(record["familyID"], family_id)
                 self.assertEqual(record["equipment"], equipment)
                 self.assertEqual(record["loadMode"], load_mode)
-                self.assertEqual(record["bodyweightFraction"], 0)
+                self.assertEqual(record["bodyweightFraction"], 1 if load_mode == "bodyweightAdded" else 0)
                 self.assertEqual(record["laterality"], "unilateral")
                 self.assertEqual(record["modality"], "dynamicStrength")
                 self.assertEqual(record["trackingMode"], "reps")
@@ -18928,7 +18931,7 @@ class CatalogFoundationTests(unittest.TestCase):
             'standing-dumbbell-calf-raise': ('ankle-plantarflexion', 'dumbbell', 'bilateral', 'external'),
             'leg-press-calf-raise': ('ankle-plantarflexion', 'machine', 'bilateral', 'external'),
             'cable-pallof-press': ('anti-rotation-press', 'cable', 'unilateral', 'external'),
-            'dead-bug': ('dead-bug', 'bodyweight', 'unilateral', 'nonComparable'),
+            'dead-bug': ('dead-bug', 'bodyweight', 'unilateral', "bodyweightAdded"),
             'bird-dog': ('bird-dog', 'bodyweight', 'unilateral', 'nonComparable'),
         }
         found = {}
@@ -18942,7 +18945,7 @@ class CatalogFoundationTests(unittest.TestCase):
             family, exercise = found[fixture]
             with self.subTest(fixture=fixture):
                 self.assertEqual((family['id'], exercise['equipment'], exercise['laterality'], exercise['loadMode']), values)
-                self.assertEqual((exercise['modality'], exercise['trackingMode'], exercise['bodyweightFraction']), ('dynamicStrength', 'reps', 0))
+                self.assertEqual((exercise['modality'], exercise['trackingMode'], exercise['bodyweightFraction']), ('dynamicStrength', 'reps', 1 if values[-1] == "bodyweightAdded" else 0))
                 if exercise['loadMode'] == 'nonComparable':
                     self.assertEqual(exercise['defaultWeight'], 0)
                     self.assertNotIn('defaultWeightKg', exercise)
@@ -19337,7 +19340,7 @@ class CoreStrengthExpansionCatalogTests(unittest.TestCase):
             with self.subTest(record=record["catalogID"]):
                 self.assertEqual(record["modality"], "dynamicStrength")
                 self.assertEqual(record["trackingMode"], "reps")
-                self.assertEqual(record["bodyweightFraction"], 0)
+                self.assertEqual(record["bodyweightFraction"], 1 if record["catalogID"] in {"alternating-forearm-plank-arm-reach", "straight-arm-straight-leg-sit-up"} else 0)
 
     def test_load_and_side_semantics_are_exact(self) -> None:
         external_ids = {
@@ -19354,7 +19357,7 @@ class CoreStrengthExpansionCatalogTests(unittest.TestCase):
 
         for catalog_id in self.RECORD_IDS - external_ids:
             with self.subTest(record=catalog_id):
-                self.assertEqual(self.runtime[catalog_id]["loadMode"], "nonComparable")
+                self.assertEqual(self.runtime[catalog_id]["loadMode"], "bodyweightAdded" if catalog_id in {"alternating-forearm-plank-arm-reach", "straight-arm-straight-leg-sit-up"} else "nonComparable")
 
         self.assertEqual(
             self.authored["kneeling-barbell-rollout"]["variant"]["loadAccounting"],
@@ -19526,8 +19529,8 @@ class RequestedPlankCatalogTests(unittest.TestCase):
             with self.subTest(record=record["catalogID"]):
                 self.assertEqual(record["modality"], "dynamicStrength")
                 self.assertEqual(record["trackingMode"], "reps")
-                self.assertEqual(record["loadMode"], "nonComparable")
-                self.assertEqual(record["bodyweightFraction"], 0)
+                self.assertEqual(record["loadMode"], "bodyweightAdded" if record["catalogID"] == "alternating-high-plank-shoulder-tap" else "nonComparable")
+                self.assertEqual(record["bodyweightFraction"], 1 if record["catalogID"] == "alternating-high-plank-shoulder-tap" else 0)
                 self.assertEqual(record["defaultWeight"], 0)
 
     def test_requested_aliases_and_equipment_are_exact(self) -> None:
@@ -19846,7 +19849,7 @@ class RequestedPullCatalogTests(unittest.TestCase):
         speed = self.authored["speed-pull-up"]
         self.assertEqual(
             (speed["modality"], speed["trackingMode"], speed["loadMode"]),
-            ("power", "reps", "nonComparable"),
+            ("power", "reps", "bodyweightAdded"),
         )
         self.assertEqual(speed["variant"]["gripOrientation"], "neutral")
         self.assertEqual(speed["variant"]["repetitionStyle"], "immediateTurnaround")

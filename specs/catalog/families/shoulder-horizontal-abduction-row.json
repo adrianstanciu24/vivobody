@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "shoulder-horizontal-abduction-row",
   "name": "Shoulder-Height Row",
-  "definition": "A strict compound horizontal pull at a canonical 90-degree upper-arm elevation whose concentric phase combines shoulder horizontal abduction, scapular retraction, and elbow flexion while the torso and lower body resist rather than propel the load. The admitted path is deliberately flared and transverse. Tucked or modest-scapular shoulder-extension rows, 60-degree mixed-path rows, straight-arm reverse flies, externally rotating face pulls, depressed-scapula low rows, the measured seated 45-degree cable pulldown, unreviewed commercial lever high rows, momentum rows, and unreviewed bodyweight setups remain outside this contract. Qualified rear-delt high-row aliases remain here; the Lorenzetti fixture routes to diagonal-pull.",
+  "definition": "A strict compound horizontal pull at a canonical 90-degree upper-arm elevation whose concentric phase combines shoulder horizontal abduction, scapular retraction, and elbow flexion while the torso and lower body resist rather than propel the load. The admitted path is deliberately flared and transverse. Tucked or modest-scapular shoulder-extension rows, 60-degree mixed-path rows, straight-arm reverse flies, externally rotating face pulls, depressed-scapula low rows, the measured seated 45-degree cable pulldown, unreviewed commercial lever high rows, momentum rows, and unreviewed bodyweight setups remain outside this contract. Qualified rear-delt high-row aliases remain here; the Lorenzetti fixture routes to diagonal-pull. TRX High Row permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "fennell-2016-shoulder-retractor-row",
@@ -48,7 +48,7 @@
     ],
     "loadModes": [
       "external",
-      "nonComparable"
+      "bodyweightAdded"
     ],
     "lateralities": [
       "bilateral",
@@ -345,22 +345,12 @@
   ],
   "exerciseRules": [
     {
-      "id": "non-comparable-high-row-is-suspension-only",
-      "description": "Only the suspension high row uses a non-comparable load; barbell, dumbbell, cable, and machine fixtures remain external.",
-      "when": {"field": "loadMode", "operator": "equals", "value": "nonComparable"},
-      "then": [
-        {"field": "equipment", "value": "suspensionTrainer"}
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
       "id": "suspension-high-row-fixture",
       "description": "The suspension branch is a closed-chain inclined high row with neutral handles, flared upper arms, elbow flexion, and no invented load value.",
       "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
       "then": [
-        {"field": "loadMode", "value": "nonComparable"},
-        {"field": "bodyweightFraction", "value": 0},
+        {"field": "loadMode", "value": "bodyweightAdded"},
+        {"field": "bodyweightFraction", "value": 1},
         {"field": "variant.kineticChain", "value": "closed"},
         {"field": "variant.bodyPosition", "value": "inclinedStandingFacingAnchor"},
         {"field": "variant.lowerBodySupport", "value": "feet"},
@@ -632,6 +622,27 @@
       "then": [
         { "field": "equipment", "value": "machine" },
         { "field": "laterality", "value": "bilateral" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "suspensionTrainer"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -1052,8 +1063,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 10,
       "searchPriority": 96,

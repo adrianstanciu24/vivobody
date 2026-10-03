@@ -59,9 +59,9 @@ struct CatalogBiomechanicsTests {
 
         let nordic = try #require(CatalogData.record(forCatalogID: "nordic-curl"))
         let nordicItem = ExerciseCatalogItem(record: nordic, createdAt: .distantPast)
-        #expect(!nordicItem.tracksResistance)
+        #expect(nordicItem.tracksResistance)
         #expect(nordic.modality == .dynamicStrength)
-        #expect(nordic.loadMode == .nonComparable)
+        #expect(nordic.loadMode == .bodyweightAdded)
 
         for catalogID in [
             "barbell-mid-thigh-clean-pull",
@@ -102,9 +102,9 @@ struct CatalogBiomechanicsTests {
             let item = ExerciseCatalogItem(record: record, createdAt: .distantPast)
             #expect(record.trackingMode == .duration)
             #expect(record.modality == .isometricStrength)
-            #expect(record.loadMode == .nonComparable)
+            #expect(record.loadMode == .bodyweightAdded)
             #expect(record.defaultDuration == 30)
-            #expect(!item.tracksResistance)
+            #expect(item.tracksResistance)
         }
     }
 
@@ -200,8 +200,8 @@ struct CatalogBiomechanicsTests {
         )
         let item = ExerciseCatalogItem(record: rollout, createdAt: .distantPast)
         #expect(rollout.equipment == .abWheel)
-        #expect(rollout.loadMode == .nonComparable)
-        #expect(!item.tracksResistance)
+        #expect(rollout.loadMode == .bodyweightAdded)
+        #expect(item.tracksResistance)
     }
 
     @Test func defaultCatalogGapFixturesReachTheRuntimeProjection() throws {
@@ -236,7 +236,7 @@ struct CatalogBiomechanicsTests {
             (
                 "supine-reverse-crunch",
                 "Supine Reverse Crunch",
-                "supine-pelvic-curl", .bodyweight, .dynamicStrength, .nonComparable
+                "supine-pelvic-curl", .bodyweight, .dynamicStrength, .bodyweightAdded
             ),
             (
                 "bodyweight-lateral-lunge-60-percent-height",
@@ -383,7 +383,13 @@ struct CatalogBiomechanicsTests {
                 || record.equipment == .stabilityBall
                 || record.equipment == .suspensionTrainer
             {
-                #expect(record.loadMode == .nonComparable)
+                let approved = ExerciseResistanceCapability.permitsBundledBodyweightAddedLoad(
+                    catalogID: record.catalogID,
+                    equipment: record.equipment,
+                    loadMode: record.loadMode,
+                    bodyweightFraction: record.bodyweightFraction
+                )
+                #expect(record.loadMode == .nonComparable || approved)
             }
 
             switch record.mechanic {
@@ -852,7 +858,7 @@ struct CatalogBiomechanicsTests {
         #expect(hipFlexion.mechanic == .isolation)
         #expect(hipFlexion.pattern == nil)
         #expect(hipFlexion.planes == [.sagittal])
-        #expect(hipFlexion.loadMode == .nonComparable)
+        #expect(hipFlexion.loadMode == .bodyweightAdded)
         #expect(hipFlexion.muscleInvolvement.role(for: .iliopsoas) == .primary)
         #expect(hipFlexion.muscleInvolvement.role(for: .rectusFemoris) == .secondary)
         #expect(hipFlexion.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)

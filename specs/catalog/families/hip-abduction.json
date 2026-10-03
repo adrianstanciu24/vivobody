@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "hip-abduction",
   "name": "Hip Abduction",
-  "definition": "Strict open-chain hip-abduction isolation with four bounded fixtures: the pressure-biofeedback side-lying cuff-weight task, bilateral Technogym seated isotonic machine at eighty degrees of hip flexion, ordinary unloaded floor side-lying abduction, and unsupported standing low-cable ankle-cuff abduction. Support, endpoint, knee posture, load interface, path constraint, and cadence remain branch-specific. Gluteus medius is primary and tensor fasciae latae secondary. ACE anchors the floor geometry; the roles transfer categorically from existing anatomy and McBeth's loaded side-lying EMG, not an exact unloaded measurement or muscle ranking. The floor endpoint is limited by pelvic control rather than an invented universal angle. Other machines, other standing, band, rotated, clamshell, lateral-walk, closed-chain, and multi-joint variants remain outside this contract. The unsupported standing cable branch of open-chain hip-abduction isolation. An ankle cuff on the leg farther from a lateral lowest-position pulley resists a sideward leg raise while the opposite foot stays planted. The arms remain at the sides. This narrow admission contract separates standing balance demands from the supported side-lying and seated hip-abduction roster; it does not claim a different hip action. ACE establishes setup and sideward travel. Gluteus medius primary and TFL secondary transfer categorically from existing anatomy and hip-abduction evidence. Trunk control is a mechanics inference; no exact standing-cable EMG, ranking, adaptation or numeric endpoint is claimed. Return control and a pelvis-control stopping point are explicit product adaptations. Within the standing cable branch, hand-supported, band, machine-lever, side-lying, clamshell and compound stepping variants are excluded. Neutral hip rotation, held pelvis/spine/knee and a pelvis-control endpoint are authored technique targets inferred from the illustrated fixture, not measured kinematics. Stance-side gastrocnemius and soleus receive categorical ankle/foot-control stabilizer roles, not working-leg abduction credit.",
+  "definition": "Strict open-chain hip-abduction isolation with three bounded fixtures: bilateral Technogym seated isotonic machine at eighty degrees of hip flexion, ordinary floor side-lying abduction, and unsupported standing low-cable ankle-cuff abduction. Support, endpoint, knee posture, load interface, path constraint, and cadence remain branch-specific. Gluteus medius is primary and tensor fasciae latae secondary. ACE anchors the floor geometry; the roles transfer categorically from existing anatomy and McBeth's loaded side-lying EMG, not an exact unloaded measurement or muscle ranking. The floor endpoint is limited by pelvic control rather than an invented universal angle. Other machines, other standing, band, rotated, clamshell, lateral-walk, closed-chain, and multi-joint variants remain outside this contract. The unsupported standing cable branch of open-chain hip-abduction isolation. An ankle cuff on the leg farther from a lateral lowest-position pulley resists a sideward leg raise while the opposite foot stays planted. The arms remain at the sides. This narrow admission contract separates standing balance demands from the supported side-lying and seated hip-abduction roster; it does not claim a different hip action. ACE establishes setup and sideward travel. Gluteus medius primary and TFL secondary transfer categorically from existing anatomy and hip-abduction evidence. Trunk control is a mechanics inference; no exact standing-cable EMG, ranking, adaptation or numeric endpoint is claimed. Return control and a pelvis-control stopping point are explicit product adaptations. Within the standing cable branch, hand-supported, band, machine-lever, side-lying, clamshell and compound stepping variants are excluded. Neutral hip rotation, held pelvis/spine/knee and a pelvis-control endpoint are authored technique targets inferred from the illustrated fixture, not measured kinematics. Stance-side gastrocnemius and soleus receive categorical ankle/foot-control stabilizer roles, not working-leg abduction credit. Side-Lying Hip Abduction permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "mcbeth-2012-side-lying-hip-abduction",
@@ -39,10 +39,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "external",
-      "nonComparable"
-    ],
+    "loadModes": ["external", "bodyweightAdded"],
     "lateralities": [
       "unilateral",
       "bilateral"
@@ -310,7 +307,7 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "The fixture-specific load interface pinned separately for cuff, machine, and bodyweight floor setups.",
+      "description": "The fixture-specific load interface pinned separately for cuff, machine, and bodyweight floor setups. A value of none describes the baseline fixture without a required load implement; optional added mass is entered separately.",
       "allowedValues": [
         "cuffJustAboveAnkle",
         "lateralThighPads",
@@ -502,7 +499,7 @@
         },
         {
           "field": "loadMode",
-          "value": "nonComparable"
+          "value": "bodyweightAdded"
         },
         {
           "field": "variant.bodyPosition",
@@ -750,6 +747,27 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "recommended": {
@@ -798,8 +816,8 @@
       "laterality": "unilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 12,
       "searchPriority": 90,

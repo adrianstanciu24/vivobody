@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 196.
+Scenario files: 199.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -32,6 +32,9 @@ Scenario files: 196.
 | [catalog-active-dead-hang](catalog-active-dead-hang.json) | library | `--static-body` |
 | [catalog-adductor-coverage](catalog-adductor-coverage.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-adductor-machine-light](catalog-adductor-machine-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-bodyweight-added-load-accessibility](catalog-bodyweight-added-load-accessibility.json) | library | `--static-body -settings.appearance dark -settings.weightUnit lb -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-bodyweight-added-load-dark](catalog-bodyweight-added-load-dark.json) | library | `--static-body -settings.appearance dark -settings.weightUnit lb` |
+| [catalog-bodyweight-added-load-light](catalog-bodyweight-added-load-light.json) | library | `--static-body -settings.appearance light -settings.weightUnit lb` |
 | [catalog-boxing-press-batch-accessibility](catalog-boxing-press-batch-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [catalog-common-machines-light](catalog-common-machines-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-common-machines](catalog-common-machines.json) | library | `--static-body -settings.appearance dark` |

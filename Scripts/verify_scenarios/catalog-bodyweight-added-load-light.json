@@ -1,0 +1,315 @@
+{
+  "name": "catalog-bodyweight-added-load-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-settings.weightUnit",
+      "lb"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "role": "AXTextField",
+          "value": "Search exercises"
+        },
+        "direction": "down",
+        "maxSwipes": 3
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Hanging Knee Raise"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Hanging Knee Raise,"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Hanging Knee Raise,"
+      }
+    },
+    {
+      "tap": {
+        "label": "More options",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercise Defaults"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Added load",
+          "role": "AXSlider"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "wait": {
+        "label": "Added load",
+        "role": "AXSlider"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Added load",
+            "role": "AXSlider",
+            "valueContains": "0"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Resistance",
+            "role": "AXSlider"
+          },
+          {
+            "label": "Weight",
+            "role": "AXSlider"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light",
+          "-settings.weightUnit",
+          "lb"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "role": "AXTextField",
+          "value": "Search exercises"
+        },
+        "direction": "down",
+        "maxSwipes": 3
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Active Dead Hang"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Active Dead Hang,"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Active Dead Hang,"
+      }
+    },
+    {
+      "tap": {
+        "label": "More options",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercise Defaults"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Added load",
+          "role": "AXSlider"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "wait": {
+        "label": "Added load",
+        "role": "AXSlider"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Added load",
+            "role": "AXSlider",
+            "valueContains": "0"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Resistance",
+            "role": "AXSlider"
+          },
+          {
+            "label": "Weight",
+            "role": "AXSlider"
+          }
+        ]
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Hold",
+            "role": "AXSlider"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light",
+          "-settings.weightUnit",
+          "lb"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "role": "AXTextField",
+          "value": "Search exercises"
+        },
+        "direction": "down",
+        "maxSwipes": 3
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "TRX Low Row"
+    },
+    {
+      "wait": {
+        "labelRegex": "^TRX Low Row,"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^TRX Low Row,"
+      }
+    },
+    {
+      "tap": {
+        "label": "More options",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercise Defaults"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Added load",
+          "role": "AXSlider"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "wait": {
+        "label": "Added load",
+        "role": "AXSlider"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Added load",
+            "role": "AXSlider",
+            "valueContains": "0"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Resistance",
+            "role": "AXSlider"
+          },
+          {
+            "label": "Weight",
+            "role": "AXSlider"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Added load",
+      "role": "AXSlider"
+    },
+    {
+      "label": "Save",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

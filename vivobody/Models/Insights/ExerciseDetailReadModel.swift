@@ -30,6 +30,16 @@ nonisolated struct ExerciseDetailReadModel: Hashable {
         /// Canonical pounds; zero is the existing unknown sentinel.
         let currentBodyweight: Double
 
+        var performanceSignature: ExercisePerformanceSignature {
+            ExercisePerformanceSignature(
+                modality: modality,
+                trackingMode: trackingMode,
+                loadMode: loadMode,
+                bodyweightFraction: bodyweightFraction,
+                tracksResistance: tracksResistance
+            )
+        }
+
         var performanceSemanticKind: PerformanceSemanticKind {
             modality.performanceSemanticKind(
                 for: trackingMode,
@@ -255,7 +265,8 @@ nonisolated struct ExerciseDetailReadModel: Hashable {
             progress: progress,
             estimatedOneRepMax: estimate
         )
-        plateauStatus = progress?.plateauStatus(threshold: plateauThreshold)
+        plateauStatus = progress?.summariesBySignature[exercise.performanceSignature]?
+            .plateauStatus(threshold: plateauThreshold)
         recentSessions = Self.recentSessions(
             history: history,
             supportsPerformanceRecord: exercise.supportsPerformanceRecord,

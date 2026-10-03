@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "anti-lateral-flexion",
   "name": "Anti-Lateral Flexion",
-  "definition": "A strict unilateral isometric trunk family in which gravity tends to laterally flex the spine while the athlete maintains a straight side bridge between one forearm and both feet. The stable fixture places both feet on the floor with the free hand on the opposite shoulder. The suspension fixture places both toes in mid-calf foot cradles with the top foot forward, keeps the supporting forearm on the floor, and raises the free arm. Each fixture is performed one side at a time and trained on both sides; spine.lateralFlexion is the external tendency being resisted, not a dynamic repetition. Obliques are primary. The exact, visibly mapped quadratusLumborum region is secondary through its reviewed lateral-flexion capability; it is not a proxy for the study's erector-spinae signal. Neither the action vocabulary nor the body mesh can encode loaded versus contralateral side. Abs, gluteus medius, and rectus femoris are directly measured stabilizers in the stable fixture and transfer categorically to the same suspended side-bridge task. The study reports an unheaded deltoid signal, so deltoidLateral receives mechanics-derived shoulder-abductor stabilizer credit rather than direct head-specific attribution. Serratus, triceps, and soleus conservatively close the materially loaded scapular, elbow, ankle, and foot support chain through anatomy and mechanics. Kneeling, elevated, weighted, rowing, hip-abduction, Copenhagen, reach-through, hip-dip, and other moving side-plank variants remain outside this contract.",
+  "definition": "A strict unilateral isometric trunk family in which gravity tends to laterally flex the spine while the athlete maintains a straight side bridge between one forearm and both feet. The stable fixture places both feet on the floor with the free hand on the opposite shoulder. The suspension fixture places both toes in mid-calf foot cradles with the top foot forward, keeps the supporting forearm on the floor, and raises the free arm. Each fixture is performed one side at a time and trained on both sides; spine.lateralFlexion is the external tendency being resisted, not a dynamic repetition. Obliques are primary. The exact, visibly mapped quadratusLumborum region is secondary through its reviewed lateral-flexion capability; it is not a proxy for the study's erector-spinae signal. Neither the action vocabulary nor the body mesh can encode loaded versus contralateral side. Abs, gluteus medius, and rectus femoris are directly measured stabilizers in the stable fixture and transfer categorically to the same suspended side-bridge task. The study reports an unheaded deltoid signal, so deltoidLateral receives mechanics-derived shoulder-abductor stabilizer credit rather than direct head-specific attribution. Serratus, triceps, and soleus conservatively close the materially loaded scapular, elbow, ankle, and foot support chain through anatomy and mechanics. Kneeling, elevated, rowing, hip-abduction, Copenhagen, reach-through, hip-dip, and other moving side-plank variants remain outside this contract. Side Plank permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged. The suspension-plank record retains its unweighted, non-comparable setting.",
   "evidenceRefs": [
     "christophy-2012-lumbar-spine",
     "ackland-2008-shoulder-moment-arms",
@@ -40,9 +40,7 @@
     "trackingModes": [
       "duration"
     ],
-    "loadModes": [
-      "nonComparable"
-    ],
+    "loadModes": ["nonComparable", "bodyweightAdded"],
     "lateralities": [
       "unilateral"
     ]
@@ -381,12 +379,7 @@
       "id": "floor-side-plank-pins-stable-support",
       "description": "The bodyweight side plank keeps both feet on the floor, places the free hand on the opposite shoulder, and uses no straps.",
       "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
-      "then": [
-        {"field": "variant.supportSurface", "value": "floor"},
-        {"field": "variant.lowerBodySupport", "value": "feet"},
-        {"field": "variant.strapLength", "value": "notApplicable"},
-        {"field": "variant.freeArmPosition", "value": "handOnOppositeShoulder"}
-      ],
+      "then": [{"field": "variant.supportSurface", "value": "floor"}, {"field": "variant.lowerBodySupport", "value": "feet"}, {"field": "variant.strapLength", "value": "notApplicable"}, {"field": "variant.freeArmPosition", "value": "handOnOppositeShoulder"}, {"field": "loadMode", "value": "bodyweightAdded"}, {"field": "bodyweightFraction", "value": 1}],
       "requirePresent": [],
       "requireAbsent": []
     },
@@ -394,11 +387,27 @@
       "id": "suspension-side-plank-pins-foot-cradles",
       "description": "The suspension side plank keeps one forearm on the floor, places both toes in mid-calf foot cradles, and raises the free arm.",
       "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [{"field": "variant.supportSurface", "value": "floorAndSuspensionTrainer"}, {"field": "variant.lowerBodySupport", "value": "toesInFootCradles"}, {"field": "variant.strapLength", "value": "midCalf"}, {"field": "variant.freeArmPosition", "value": "raisedToCeiling"}, {"field": "loadMode", "value": "nonComparable"}, {"field": "bodyweightFraction", "value": 0}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
       "then": [
-        {"field": "variant.supportSurface", "value": "floorAndSuspensionTrainer"},
-        {"field": "variant.lowerBodySupport", "value": "toesInFootCradles"},
-        {"field": "variant.strapLength", "value": "midCalf"},
-        {"field": "variant.freeArmPosition", "value": "raisedToCeiling"}
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -417,8 +426,8 @@
       "laterality": "unilateral",
       "modality": "isometricStrength",
       "trackingMode": "duration",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 1,
       "defaultDuration": 30,

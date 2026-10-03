@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "anti-extension",
   "name": "Anti-Extension",
-  "definition": "A strict isometric trunk family in which gravity tends to extend the neutral spine while the athlete maintains a straight prone bridge between bilateral forearm and foot contacts. The floor fixture uses stable foot contact; the suspension fixture places both toes in mid-calf foot cradles beneath the anchor while preserving the same forearm support and timed hold. Neither fixture has a deliberate spinal, pelvic, hip, knee, shoulder, or elbow repetition: spine.extension is the external tendency being resisted, not a dynamic spine.flexion action. Stable-surface EMG measured greater mean external- and internal-oblique activity than rectus-abdominis activity. The abs-primary and obliques-secondary hierarchy is therefore a practical training-emphasis judgment grounded in the authors' description of rectus abdominis as a prime mover, not an EMG-amplitude ranking. Suspension-plank evidence supports retaining categorical abdominal involvement but does not justify cross-muscle force rankings. The measured erector-spinae signal remains non-mapping context because it did not establish a categorical stabilizer-volume role; the lumbarExtensors region represents that anatomy truthfully but remains deliberately unassigned here. Serratus, external rotators, triceps, gluteus maximus, vasti, and soleus receive conservative stabilizer credit because the forearm-and-foot bridge materially loads and controls the scapular, shoulder, elbow, hip, knee, ankle, and foot support chain. Those support roles are anatomy-and-mechanics-derived rather than Lehman EMG findings. High-plank, kneeling, weighted, long-lever, reaching, shoulder-tap, rowing, dragging, moving suspension, and leg-lift variants remain outside this contract.",
+  "definition": "A strict isometric trunk family in which gravity tends to extend the neutral spine while the athlete maintains a straight prone bridge between bilateral forearm and foot contacts. The floor fixture uses stable foot contact; the suspension fixture places both toes in mid-calf foot cradles beneath the anchor while preserving the same forearm support and timed hold. Neither fixture has a deliberate spinal, pelvic, hip, knee, shoulder, or elbow repetition: spine.extension is the external tendency being resisted, not a dynamic spine.flexion action. Stable-surface EMG measured greater mean external- and internal-oblique activity than rectus-abdominis activity. The abs-primary and obliques-secondary hierarchy is therefore a practical training-emphasis judgment grounded in the authors' description of rectus abdominis as a prime mover, not an EMG-amplitude ranking. Suspension-plank evidence supports retaining categorical abdominal involvement but does not justify cross-muscle force rankings. The measured erector-spinae signal remains non-mapping context because it did not establish a categorical stabilizer-volume role; the lumbarExtensors region represents that anatomy truthfully but remains deliberately unassigned here. Serratus, external rotators, triceps, gluteus maximus, vasti, and soleus receive conservative stabilizer credit because the forearm-and-foot bridge materially loads and controls the scapular, shoulder, elbow, hip, knee, ankle, and foot support chain. Those support roles are anatomy-and-mechanics-derived rather than Lehman EMG findings. High-plank, kneeling, long-lever, reaching, shoulder-tap, rowing, dragging, moving suspension, and leg-lift variants remain outside this contract. Stable Forearm Plank permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged. The suspension-plank record retains its unweighted, non-comparable setting.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "arnold-2010-lower-limb",
@@ -41,9 +41,7 @@
     "trackingModes": [
       "duration"
     ],
-    "loadModes": [
-      "nonComparable"
-    ],
+    "loadModes": ["nonComparable", "bodyweightAdded"],
     "lateralities": [
       "bilateral"
     ]
@@ -340,11 +338,7 @@
       "id": "floor-plank-pins-stable-support",
       "description": "The bodyweight plank keeps both support contacts on the floor and uses no straps.",
       "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
-      "then": [
-        {"field": "variant.supportSurface", "value": "floor"},
-        {"field": "variant.lowerBodySupport", "value": "feet"},
-        {"field": "variant.strapLength", "value": "notApplicable"}
-      ],
+      "then": [{"field": "variant.supportSurface", "value": "floor"}, {"field": "variant.lowerBodySupport", "value": "feet"}, {"field": "variant.strapLength", "value": "notApplicable"}, {"field": "loadMode", "value": "bodyweightAdded"}, {"field": "bodyweightFraction", "value": 1}],
       "requirePresent": [],
       "requireAbsent": []
     },
@@ -352,10 +346,27 @@
       "id": "suspension-plank-pins-foot-cradles",
       "description": "The suspension plank keeps both forearms on the floor while the toes use mid-calf foot cradles.",
       "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
+      "then": [{"field": "variant.supportSurface", "value": "floorAndSuspensionTrainer"}, {"field": "variant.lowerBodySupport", "value": "toesInFootCradles"}, {"field": "variant.strapLength", "value": "midCalf"}, {"field": "loadMode", "value": "nonComparable"}, {"field": "bodyweightFraction", "value": 0}],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
       "then": [
-        {"field": "variant.supportSurface", "value": "floorAndSuspensionTrainer"},
-        {"field": "variant.lowerBodySupport", "value": "toesInFootCradles"},
-        {"field": "variant.strapLength", "value": "midCalf"}
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -374,8 +385,8 @@
       "laterality": "bilateral",
       "modality": "isometricStrength",
       "trackingMode": "duration",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 1,
       "defaultDuration": 30,

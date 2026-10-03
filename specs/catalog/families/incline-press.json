@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "incline-press",
   "name": "Incline Press",
-  "definition": "A chest-oriented compound press whose reviewed path is inclined relative to the torso. The family owns supported open-chain barbell, dumbbell, and machine fixtures at positive press angles plus two closed-chain feet-elevated push-up fixtures: one with both feet on a 30.48-centimeter horizontal support and one with both toes in mid-calf suspension foot cradles. The concentric phase combines shoulder horizontal adduction, shoulder flexion, and elbow extension; both elevated push-ups additionally allow free shoulder-blade travel through protraction. Their two pectoralis-major regions are co-primary because the exact fixtures do not establish angle-specific regional emphasis. The stable fixture's 0.70 body-mass coefficient is an exact-fixture upper-limb force proxy; the suspension fixture is non-comparable because strap geometry and body position change effective load. Flat, declined, vertical, fly, unilateral, knee-supported, differently elevated, hands-suspended, and unsupported open-chain presses remain outside this family.",
+  "definition": "A chest-oriented compound press whose reviewed path is inclined relative to the torso. The family owns supported open-chain barbell, dumbbell, and machine fixtures at positive press angles plus two closed-chain feet-elevated push-up fixtures: one with both feet on a 30.48-centimeter horizontal support and one with both toes in mid-calf suspension foot cradles. The concentric phase combines shoulder horizontal adduction, shoulder flexion, and elbow extension; both elevated push-ups additionally allow free shoulder-blade travel through protraction. Their two pectoralis-major regions are co-primary because the exact fixtures do not establish angle-specific regional emphasis. The stable fixture's 0.70 body-mass coefficient is an exact-fixture upper-limb force proxy; the suspension fixture uses the owner-selected body-mass logging convention rather than a strap-force estimate. Flat, declined, vertical, fly, unilateral, knee-supported, differently elevated, hands-suspended, and unsupported open-chain presses remain outside this family. TRX Feet-Suspended Push-Up permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "borges-2019-bench-machine-scapula",
@@ -49,11 +49,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "external",
-      "bodyweightAdded",
-      "nonComparable"
-    ],
+    "loadModes": ["external", "bodyweightAdded"],
     "lateralities": [
       "bilateral"
     ]
@@ -461,8 +457,8 @@
       "description": "The suspension branch is exactly the mid-calf toes-in-cradles push-up with both hands on the floor and no portable load scalar.",
       "when": {"field": "equipment", "operator": "equals", "value": "suspensionTrainer"},
       "then": [
-        {"field": "loadMode", "value": "nonComparable"},
-        {"field": "bodyweightFraction", "value": 0},
+        {"field": "loadMode", "value": "bodyweightAdded"},
+        {"field": "bodyweightFraction", "value": 1},
         {"field": "variant.kineticChain", "value": "closed"},
         {"field": "variant.torsoSupport", "value": "none"},
         {"field": "variant.scapularTranslation", "value": "free"},
@@ -487,6 +483,26 @@
       ],
       "requireAdditionalPrimeActions": ["scapula.protraction"],
       "requireAdditionalStabilityDemands": ["spine", "pelvis", "hip", "knee", "ankle", "foot"]
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "allowedValues": [
+            "bodyweight",
+            "suspensionTrainer"
+          ]
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "recommended": {
@@ -847,8 +863,8 @@
       "laterality": "bilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 8,
       "searchPriority": 99,

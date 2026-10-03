@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "hip-extension",
   "name": "Hip Extension Isolation",
-  "definition": "A strict unilateral open-chain isolation movement in which the femur extends relative to a position-held pelvis while the spine and knee postures remain held. The roster owns a prone-table bent-knee fixture, a supported low-pulley ankle-cuff fixture, and the Technogym Selection Glute machine triangulated from Stien's Selection kickback trial and the matching manufacturer manual. The study moves from approximately 90 degrees of hip flexion to neutral with the knee held near 170 degrees; the manual pins the pad, platform, roller, handgrip, and selectorized cable-lever topology. Pelvis and spine position-held semantics narrow the manual's instructed pad contact and are not measured kinematics. Gluteus maximus is primary and medial hamstrings are secondary by anatomy-mechanics inference. Stien measured a biceps-femoris site, while the app combines long and short heads in one visible mesh; that combined app region remains stabilizer-only. Bridges, hip thrusts, hinges, quadruped kickbacks, other machines, bands, unsupported cable variants, and movements driven by the pelvis or spine remain outside this contract.",
+  "definition": "A strict unilateral open-chain isolation movement in which the femur extends relative to a position-held pelvis while the spine and knee postures remain held. The roster owns a prone-table bent-knee fixture, a supported low-pulley ankle-cuff fixture, and the Technogym Selection Glute machine triangulated from Stien's Selection kickback trial and the matching manufacturer manual. The study moves from approximately 90 degrees of hip flexion to neutral with the knee held near 170 degrees; the manual pins the pad, platform, roller, handgrip, and selectorized cable-lever topology. Pelvis and spine position-held semantics narrow the manual's instructed pad contact and are not measured kinematics. Gluteus maximus is primary and medial hamstrings are secondary by anatomy-mechanics inference. Stien measured a biceps-femoris site, while the app combines long and short heads in one visible mesh; that combined app region remains stabilizer-only. Bridges, hip thrusts, hinges, quadruped kickbacks, other machines, bands, unsupported cable variants, and movements driven by the pelvis or spine remain outside this contract. Prone Table Bent-Knee Hip Extension permits optional added mass. Its coefficient of 1 is an owner-selected app logging convention: measured body mass plus entered added mass. It is not a measured lifted-body share, joint force, or muscle resistance. The original movement geometry and categorical anatomy remain unchanged.",
   "evidenceRefs": [
     "arnold-2010-lower-limb",
     "jeon-2016-prone-table-hip-extension",
@@ -38,10 +38,7 @@
     "trackingModes": [
       "reps"
     ],
-    "loadModes": [
-      "nonComparable",
-      "external"
-    ],
+    "loadModes": ["external", "bodyweightAdded"],
     "lateralities": [
       "unilateral"
     ]
@@ -274,7 +271,7 @@
       "id": "loadInterface",
       "valueType": "enum",
       "required": true,
-      "description": "Where an external resistance implement contacts the athlete; the reviewed gravity-loaded limb has no external interface.",
+      "description": "Where an external resistance implement contacts the athlete; the reviewed gravity-loaded limb has no external interface. A value of none describes the baseline fixture without a required load implement; optional added mass is entered separately.",
       "allowedValues": [
         "none",
         "ankleCuffAboveAnkle",
@@ -341,7 +338,7 @@
       "description": "The prone fixture preserves its exact table support, 30-to-5-degree range, and 90-degree knee posture.",
       "when": {"field": "equipment", "operator": "equals", "value": "bodyweight"},
       "then": [
-        {"field": "loadMode", "value": "nonComparable"}, {"field": "variant.bodyPosition", "value": "prone"},
+        {"field": "loadMode", "value": "bodyweightAdded"}, {"field": "variant.bodyPosition", "value": "prone"},
         {"field": "variant.torsoSupport", "value": "table"}, {"field": "variant.pelvisSupport", "value": "table"},
         {"field": "variant.hipStartFlexionDegrees", "value": 30}, {"field": "variant.hipEndExtensionDegrees", "value": 5},
         {"field": "variant.rangeOfMotion", "value": "thirtyFlexionToFiveExtension"}, {"field": "variant.kneePosture", "value": "ninetyDegreesFlexed"},
@@ -382,6 +379,27 @@
       ],
       "requirePresent": ["variant.kneeFlexionDegrees", "variant.machineFixture", "variant.loadAccounting"],
       "requireAbsent": ["variant.hipEndExtensionDegrees"]
+    },
+    {
+      "id": "bodyweight-added-uses-approved-logging-profile",
+      "description": "Added-load records retain their approved equipment and owner-selected body-mass logging convention.",
+      "when": {
+        "field": "loadMode",
+        "operator": "equals",
+        "value": "bodyweightAdded"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "bodyweight"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
     }
   ],
   "exercises": [
@@ -396,8 +414,8 @@
       "laterality": "unilateral",
       "modality": "dynamicStrength",
       "trackingMode": "reps",
-      "loadMode": "nonComparable",
-      "bodyweightFraction": 0,
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
       "defaultWeight": 0,
       "reps": 10,
       "searchPriority": 62,
