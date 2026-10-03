@@ -67,7 +67,11 @@ class RequestedCatalogGapTests(unittest.TestCase):
         families = [catalog.load_json(p) for p in catalog.FAMILIES_ROOT.glob("*.json")]
         records = catalog.compile_runtime_catalog(families)
         ids = {record["catalogID"] for record in records}
-        self.assertEqual(len(records), 325)
+        self.assertEqual(ids, {
+            exercise["catalogID"]
+            for family in families
+            for exercise in family["exercises"]
+        })
         self.assertEqual(len(ids), len(records))
         self.assertTrue({
             "barbell-good-morning", "barbell-back-squat", "chin-up",

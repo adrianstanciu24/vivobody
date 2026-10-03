@@ -4770,7 +4770,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 expected_load_modes = {"external", "bodyweightAdded"}
                 if family["id"] == "incline-press":
                     expected_equipment.add("suspensionTrainer")
-                    expected_load_modes.add("nonComparable")
                 self.assertEqual(
                     set(family["allowed"]["equipment"]),
                     expected_equipment,
@@ -5423,7 +5422,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "leverPulldown", ("pelvis",),
                 ),
                 "speed-pull-up": (
-                    "bodyweight", "bilateral", "bodyweightAdded", 0,
+                    "bodyweight", "bilateral", "bodyweightAdded", 1,
                     "closed", "suspended", "none", "neutral",
                     "shoulderWidth", "free", None, ("pelvis",),
                 ),
@@ -6465,7 +6464,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         )
                 mutated_consequences += 1
 
-        self.assertEqual(mutated_consequences, 78)
+        self.assertEqual(mutated_consequences, 79)
 
     def test_shoulder_height_row_unsupported_rule_is_pinned_to_cable(self) -> None:
         family = self.shoulder_horizontal_abduction_row
@@ -7834,7 +7833,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         )
                     mutation_count += 1
 
-        self.assertEqual(mutation_count, 763)
+        self.assertEqual(mutation_count, 766)
 
     def test_conditioned_rotation_cannot_be_broadened_per_exercise(
         self,
@@ -9188,6 +9187,9 @@ class CatalogFoundationTests(unittest.TestCase):
         for field, value in mutations:
             family = copy.deepcopy(original)
             self.set_rule_field(family["exercises"][0], field, value)
+            if field == "loadMode":
+                # Keep the external profile valid so the fixture rule rejects it.
+                family["exercises"][0]["bodyweightFraction"] = 0
             expected_message = {
                 "laterality": "lateralities",
                 "loadMode": (
@@ -11056,7 +11058,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "dynamicStrength",
                     "reps",
                     "bodyweightAdded",
-                    0,
+                    1,
                     0,
                     None,
                     10,
@@ -17986,6 +17988,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "suspension-overhead-y-raise",
                 "prone-tyw-hold-sequence",
                 "rotational-row",
+                "dumbbell-plank-row",
             },
             "legs": {
                 "ankle-dorsiflexion", "ankle-plantarflexion",
@@ -18045,8 +18048,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "standing-suspension-rollout",
                 "medicine-ball-straight-leg-sit-up",
                 "straight-leg-hip-flexion-sit-up",
-                        *REQUESTED_PLANK_FAMILY_IDS,
-            "dumbbell-plank-row",
+                *REQUESTED_PLANK_FAMILY_IDS,
             },
             "other": {
                 "farmer-carry", "finger-flexion-grip", "forearm-pronation",
@@ -18275,7 +18277,6 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 279)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},

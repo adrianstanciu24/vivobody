@@ -29,7 +29,7 @@ class MovementProjectionTests(unittest.TestCase):
             self.assertEqual(len(actual), len(record["movementActions"]))
         carry = by_family["suitcase-carry"]["movementActions"]
         self.assertTrue(all(action["kind"] == "resisted" for action in carry))
-        phases = by_family["glute-ham-raise"]["movementActions"]
+        phases = by_family["nordic-curl"]["movementActions"]
         self.assertEqual({a["kind"] for a in phases}, {"produced", "yielding"})
 
     def test_names_and_planes_come_from_joint_action_taxonomy(self):
