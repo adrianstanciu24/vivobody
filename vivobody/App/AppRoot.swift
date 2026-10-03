@@ -384,6 +384,7 @@ struct AppRoot: View {
                 NavigationStack {
                     LibraryScreen(appState: appState)
                         .navigationTitle("Library")
+                        .navigationBarTitleDisplayMode(.large)
                 }
             }
 

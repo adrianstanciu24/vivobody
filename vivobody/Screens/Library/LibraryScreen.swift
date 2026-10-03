@@ -17,14 +17,10 @@
 //    • Exercises segment → opens CustomExerciseEditorSheet in
 //      .create mode → adds a new entry to the catalog.
 //
-//  Search uses the native .searchable modifier with .toolbar
-//  placement and .searchToolbarBehavior(.minimize) — the search
-//  field lives in the bottom toolbar and collapses to a compact
-//  button on scroll-down, expanding on tap. This replaces the
-//  previous custom pill, eliminating a redundant chrome layer so
-//  search, MiniBar, and tab bar share one unified Liquid Glass
-//  surface. The system also provides the "no results" state
-//  automatically.
+//  Search uses the native .searchable navigation-bar drawer below
+//  the Library title. The field stays visible. SwiftUI owns text
+//  clearing, focus, and search cancellation. Each segment owns
+//  its search results and empty states.
 //
 //  Both segments speak the same ledger-block language as History:
 //  content cards on black, monospaced numerals, orange reserved for
@@ -43,6 +39,7 @@
 
 import SwiftData
 import SwiftUI
+import UIKit
 import VivoKit
 
 struct LibraryScreen: View {
@@ -122,16 +119,12 @@ struct LibraryScreen: View {
             }
         }
         .screenBackground()
-        // Native search in the bottom toolbar with minimize-on-scroll:
-        // the field collapses to a compact button when inactive and
-        // scrolling, expanding on tap — the same behavior the custom
-        // pill had, but now sharing the tab bar's Liquid Glass surface
-        // instead of stacking an extra safeAreaInset layer.
-        .searchable(text: $searchText, placement: .toolbar, prompt: Text(searchPrompt))
-        .searchToolbarBehavior(.minimize)
-        // The contextual "+" lives in the top navigation bar so it's
-        // always visible, independent of the search field's minimize
-        // state in the bottom toolbar.
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: Text(searchPrompt)
+        )
+        // The contextual "+" stays in the top navigation bar.
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 if !suppressesPlus {
@@ -143,6 +136,12 @@ struct LibraryScreen: View {
                     .accessibilityLabel(plusAccessibilityLabel)
                 }
             }
+        }
+        .background {
+            LibraryNavigationLayout()
+                .frame(width: 0, height: 0)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
         }
         // Switching segments swaps in a fresh scroll view at the top,
         // so the search prompt should update to reflect the new scope.
@@ -205,6 +204,53 @@ struct LibraryScreen: View {
     }
 }
 
+// MARK: - Initial native navigation layout
+
+/// On iOS 27, an always-visible search drawer can omit the large-title area
+/// from the first navigation-bar layout. Re-entering the tab fixes its height.
+/// Refresh that native presentation before first appearance only when UIKit's
+/// own size calculation reports a taller bar. UIKit owns all frames and search
+/// behavior; subsequent appearances retain the user's scroll position.
+private struct LibraryNavigationLayout: UIViewControllerRepresentable {
+    func makeUIViewController(context _: Context) -> Controller {
+        Controller()
+    }
+
+    func updateUIViewController(_: Controller, context _: Context) {}
+
+    final class Controller: UIViewController {
+        private var hasPreparedBar = false
+
+        override func loadView() {
+            view = UIView(frame: .zero)
+        }
+
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+
+            guard #available(iOS 27.0, *),
+                  !hasPreparedBar,
+                  let navigationController,
+                  !navigationController.isNavigationBarHidden,
+                  let item = navigationController.topViewController?.navigationItem,
+                  item.largeTitleDisplayMode == .always,
+                  !item.hidesSearchBarWhenScrolling,
+                  let searchController = item.searchController,
+                  !searchController.isActive
+            else { return }
+
+            hasPreparedBar = true
+            let bar = navigationController.navigationBar
+            guard bar.prefersLargeTitles,
+                  bar.sizeThatFits(bar.bounds.size).height > bar.bounds.height
+            else { return }
+
+            navigationController.setNavigationBarHidden(true, animated: false)
+            navigationController.setNavigationBarHidden(false, animated: false)
+        }
+    }
+}
+
 // MARK: - Segment enum
 
 enum LibrarySegment: String, CaseIterable, Identifiable {
@@ -226,6 +272,7 @@ enum LibrarySegment: String, CaseIterable, Identifiable {
     NavigationStack {
         LibraryScreen(appState: AppState())
             .navigationTitle("Library")
+            .navigationBarTitleDisplayMode(.large)
     }
     .preferredColorScheme(.dark)
 }

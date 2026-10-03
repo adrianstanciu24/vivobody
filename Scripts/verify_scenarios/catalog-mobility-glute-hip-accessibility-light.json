@@ -13,7 +13,6 @@
   },
   "steps": [
     {"wait": {"label": "Exercises", "value": "Selected"}},
-    {"tap": {"label": "Search"}},
     {"wait": {"role": "AXTextField", "value": "Search exercises"}},
     {"tap": {"role": "AXTextField", "value": "Search exercises"}},
     {"typeText": "Above-Knee Band Lateral Walk"},

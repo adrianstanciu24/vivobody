@@ -17,11 +17,6 @@
       }
     },
     {
-      "tap": {
-        "label": "Search"
-      }
-    },
-    {
       "wait": {
         "role": "AXTextField",
         "value": "Search exercises"
@@ -88,11 +83,6 @@
       }
     },
     {
-      "tap": {
-        "label": "Search"
-      }
-    },
-    {
       "wait": {
         "role": "AXTextField",
         "value": "Search exercises"
@@ -156,11 +146,6 @@
       "wait": {
         "label": "Exercises",
         "value": "Selected"
-      }
-    },
-    {
-      "tap": {
-        "label": "Search"
       }
     },
     {

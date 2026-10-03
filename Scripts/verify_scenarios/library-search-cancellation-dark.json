@@ -1,0 +1,271 @@
+{
+  "name": "library-search-cancellation-dark",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "--ui-test-template-starting-loads"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "dead bug"
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXButton",
+            "labelRegex": "^Dead Bug,"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "labelRegex": "^Flat Dumbbell Fly,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "label": "Clear text"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXTextField",
+            "value": "Search exercises"
+          },
+          {
+            "role": "AXButton",
+            "labelRegex": "^Flat Dumbbell Fly,"
+          },
+          {
+            "role": "AXButton",
+            "label": "Close"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "label": "Clear text"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "dead bug"
+    },
+    {
+      "wait": {
+        "role": "AXButton",
+        "labelRegex": "^Dead Bug,"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "label": "Close"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXTextField",
+            "value": "Search exercises"
+          },
+          {
+            "role": "AXButton",
+            "labelRegex": "^Flat Dumbbell Fly,"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "label": "Close"
+          },
+          {
+            "role": "AXButton",
+            "label": "Clear text"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search templates"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXButton",
+        "labelContains": "Load Test",
+        "labelRegex": "^(?!Start).*"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search templates"
+      }
+    },
+    {
+      "typeText": "load"
+    },
+    {
+      "wait": {
+        "role": "AXButton",
+        "labelContains": "Load Test",
+        "labelRegex": "^(?!Start).*"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "label": "Clear text"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXTextField",
+            "value": "Search templates"
+          },
+          {
+            "role": "AXButton",
+            "labelContains": "Load Test",
+            "labelRegex": "^(?!Start).*"
+          },
+          {
+            "role": "AXButton",
+            "label": "Close"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "label": "Clear text"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search templates"
+      }
+    },
+    {
+      "typeText": "zzzzzz"
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXButton",
+            "label": "Close"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "labelContains": "Load Test",
+            "labelRegex": "^(?!Start).*"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "label": "Close"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXTextField",
+            "value": "Search templates"
+          },
+          {
+            "role": "AXButton",
+            "labelContains": "Load Test",
+            "labelRegex": "^(?!Start).*"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "label": "Close"
+          },
+          {
+            "role": "AXButton",
+            "label": "Clear text"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "role": "AXTextField",
+      "value": "Search templates"
+    },
+    {
+      "role": "AXButton",
+      "labelContains": "Load Test",
+      "labelRegex": "^(?!Start).*"
+    }
+  ],
+  "forbidden": [
+    {
+      "role": "AXButton",
+      "label": "Close"
+    },
+    {
+      "role": "AXButton",
+      "label": "Clear text"
+    }
+  ]
+}

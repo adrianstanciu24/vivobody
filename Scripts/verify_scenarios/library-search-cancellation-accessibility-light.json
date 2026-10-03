@@ -1,0 +1,148 @@
+{
+  "name": "library-search-cancellation-accessibility-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "dead bug"
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXButton",
+            "labelRegex": "^Dead Bug,"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "labelRegex": "^Flat Dumbbell Fly,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "label": "Clear text"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXTextField",
+            "value": "Search exercises"
+          },
+          {
+            "role": "AXButton",
+            "labelRegex": "^Flat Dumbbell Fly,"
+          },
+          {
+            "role": "AXButton",
+            "label": "Close"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "label": "Clear text"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "dead bug"
+    },
+    {
+      "wait": {
+        "role": "AXButton",
+        "labelRegex": "^Dead Bug,"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "label": "Close"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXTextField",
+            "value": "Search exercises"
+          },
+          {
+            "role": "AXButton",
+            "labelRegex": "^Flat Dumbbell Fly,"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "label": "Close"
+          },
+          {
+            "role": "AXButton",
+            "label": "Clear text"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "role": "AXTextField",
+      "value": "Search exercises"
+    },
+    {
+      "role": "AXButton",
+      "labelRegex": "^Flat Dumbbell Fly,"
+    }
+  ],
+  "forbidden": [
+    {
+      "role": "AXButton",
+      "label": "Close"
+    },
+    {
+      "role": "AXButton",
+      "label": "Clear text"
+    }
+  ]
+}

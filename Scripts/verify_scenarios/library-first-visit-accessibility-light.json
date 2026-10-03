@@ -1,0 +1,62 @@
+{
+  "name": "library-first-visit-accessibility-light",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "role": "AXHeading",
+        "label": "Today"
+      }
+    },
+    {
+      "tapAt": {
+        "xFraction": 0.5,
+        "yFraction": 0.94
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    }
+  ],
+  "required": [
+    {
+      "role": "AXHeading",
+      "label": "Library"
+    },
+    {
+      "role": "AXButton",
+      "label": "Create custom exercise"
+    },
+    {
+      "role": "AXButton",
+      "labelRegex": "^Flat Dumbbell Fly,"
+    },
+    {
+      "role": "AXTextField",
+      "value": "Search exercises"
+    }
+  ],
+  "forbidden": [
+    {
+      "role": "AXButton",
+      "label": "Close"
+    },
+    {
+      "role": "AXButton",
+      "label": "Clear text"
+    }
+  ]
+}

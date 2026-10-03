@@ -17,11 +17,6 @@
       }
     },
     {
-      "tap": {
-        "label": "Search"
-      }
-    },
-    {
       "wait": {
         "role": "AXTextField",
         "value": "Search exercises"
