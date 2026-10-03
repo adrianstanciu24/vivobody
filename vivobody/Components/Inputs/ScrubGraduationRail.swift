@@ -2,15 +2,17 @@
 //  ScrubGraduationRail.swift
 //  vivobody
 //
-//  A shaded roller with etched graduations and a fixed index. Subdivisions
-//  keep short rails legible without changing the scrubber's value detents.
+//  A drum of fine graduations with a fixed index. At rest it stays neutral and
+//  low-contrast beside the value; it brightens only while the value moves.
+//  Subdivisions keep short rails legible without changing the scrubber's
+//  value detents.
 //
 
 import SwiftUI
 import VivoKit
 
 struct ScrubGraduationRail: View {
-    static let width: CGFloat = 28
+    static let width: CGFloat = 16
 
     let value: Double
     let step: Double
@@ -22,99 +24,94 @@ struct ScrubGraduationRail: View {
     @Environment(\.colorSchemeContrast) private var contrast
 
     var body: some View {
-        Canvas { context, size in
-            drawRoller(in: &context, size: size)
-            drawGraduations(in: &context, size: size)
-            drawIndex(in: &context, size: size)
+        ZStack {
+            Canvas { context, size in
+                drawGraduations(in: &context, size: size)
+            }
+            .opacity(engaged ? 1 : restingScaleOpacity)
+
+            // The index outspans every graduation, so its shape still marks
+            // the value when the accent color is not perceived.
+            Capsule()
+                .fill(engaged ? Tint.primaryText : Ink.tertiary)
+                .frame(width: Self.width, height: engaged ? 2 : 1.5)
         }
         .frame(width: Self.width)
-        .mask {
-            LinearGradient(
-                stops: [
-                    .init(color: .clear, location: 0),
-                    .init(color: .black, location: 0.20),
-                    .init(color: .black, location: 0.80),
-                    .init(color: .clear, location: 1),
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        }
-        .padding(.vertical, 3)
         .opacity(visible ? 1 : 0)
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.16), value: visible)
+        .animation(stateAnimation, value: visible)
+        .animation(stateAnimation, value: engaged)
         .allowsHitTesting(false)
         .accessibilityHidden(true)
     }
 
-    private func drawRoller(in context: inout GraphicsContext, size: CGSize) {
-        let rect = CGRect(x: 7, y: 0, width: size.width - 7, height: size.height)
-        var roller = context
-        roller.clip(to: Path(roundedRect: rect, cornerRadius: 5))
-        roller.fill(
-            Path(rect),
-            with: .linearGradient(
-                Gradient(stops: [
-                    .init(color: Ink.primary.opacity(0.02), location: 0),
-                    .init(color: Ink.primary.opacity(engaged ? 0.14 : 0.10), location: 0.48),
-                    .init(color: Ink.primary.opacity(0.025), location: 1),
-                ]),
-                startPoint: CGPoint(x: rect.minX, y: 0),
-                endPoint: CGPoint(x: rect.maxX, y: 0)
-            )
-        )
+    private var stateAnimation: Animation? {
+        reduceMotion ? nil : .easeOut(duration: 0.18)
+    }
+
+    private var restingScaleOpacity: Double {
+        contrast == .increased ? 0.8 : 0.5
     }
 
     private func drawGraduations(in context: inout GraphicsContext, size: CGSize) {
         let midY = size.height / 2
-        // At least ten intervals in a compact reps rail. Intermediate marks
-        // carry no values; curvature only changes their visual spacing.
-        let subdivisions = max(1, Int(ceil(spacing / max(3, min(6, size.height / 10)))))
+        guard midY > 0 else { return }
+        // Short rails subdivide each detent so a compact reps rail still reads
+        // as a scale. Intermediate marks carry no values.
+        let targetPitch = max(4, min(7, size.height / 9))
+        let subdivisions = max(1, Int((spacing / targetPitch).rounded()))
         let pitch = spacing / CGFloat(subdivisions)
         let position = value / max(step, .ulpOfOne) * Double(subdivisions)
         let baseIndex = Int(position.rounded(.down))
         let fraction = CGFloat(position - Double(baseIndex))
         let reach = Int(midY / pitch) + 2
+        let increasedContrast = contrast == .increased
 
         for offset in -reach ... reach {
-            let index = baseIndex + offset
             let distance = (CGFloat(offset) - fraction) * pitch
-            let normalized = distance / max(midY, 1)
+            let normalized = distance / midY
             guard abs(normalized) < 1 else { continue }
+            // Sine spacing compresses marks toward the ends, as on a drum.
             let y = midY + sin(normalized * .pi / 2) * midY
-            let isDetent = index.isMultiple(of: subdivisions)
-            let isMajor = index.isMultiple(of: subdivisions * 5)
-            let length: CGFloat = isMajor ? 17 : (isDetent ? 12 : 8)
-            let edgeFade = pow(cos(normalized * .pi / 2), 0.8)
-            let strength = contrast == .increased ? 1.0 : (isDetent ? 0.72 : 0.46)
-            let x = size.width - length - 2
-            let rect = CGRect(x: x, y: y - 0.5, width: length, height: 1)
-            context.fill(
-                Path(rect.offsetBy(dx: 0, dy: 1)),
-                with: .color(Surface.background.opacity(edgeFade * 0.85))
-            )
-            context.fill(Path(rect), with: .color(Ink.primary.opacity(strength * edgeFade)))
+            let mark = Mark(index: baseIndex + offset, subdivisions: subdivisions)
+            let edgeFade = pow(cos(normalized * .pi / 2), 1.4)
+            // Marks pass beneath the index instead of doubling it.
+            let indexClearance = min(1, abs(y - midY) / 3)
+            let opacity = mark.strength(increasedContrast: increasedContrast) * edgeFade * indexClearance
+            guard opacity > 0.01 else { continue }
+            let rect = CGRect(x: size.width - mark.length, y: y - 0.5, width: mark.length, height: 1)
+            context.fill(Path(rect), with: .color(Ink.primary.opacity(opacity)))
         }
     }
 
-    private func drawIndex(in context: inout GraphicsContext, size: CGSize) {
-        let midY = size.height / 2
-        let marker = CGRect(x: 5, y: midY - 1, width: size.width - 5, height: 2)
-        context.fill(
-            Path(marker.insetBy(dx: -1, dy: -1)),
-            with: .color(Surface.background)
-        )
-        context.fill(
-            Path(roundedRect: marker, cornerRadius: 1),
-            with: .color(Tint.primaryText)
-        )
-        // A stationary pointer sits outside the moving scale, like an index
-        // on a physical dial. Its shape preserves the cue without color.
-        var pointer = Path()
-        pointer.move(to: CGPoint(x: 0, y: midY - 3))
-        pointer.addLine(to: CGPoint(x: 4, y: midY))
-        pointer.addLine(to: CGPoint(x: 0, y: midY + 3))
-        pointer.closeSubpath()
-        context.fill(pointer, with: .color(Tint.primaryText))
+    private enum Mark {
+        case major
+        case detent
+        case subdivision
+
+        init(index: Int, subdivisions: Int) {
+            if index.isMultiple(of: subdivisions * 5) {
+                self = .major
+            } else if index.isMultiple(of: subdivisions) {
+                self = .detent
+            } else {
+                self = .subdivision
+            }
+        }
+
+        var length: CGFloat {
+            switch self {
+            case .major: 9
+            case .detent: 6
+            case .subdivision: 3.5
+            }
+        }
+
+        func strength(increasedContrast: Bool) -> Double {
+            switch self {
+            case .major: increasedContrast ? 1 : 0.85
+            case .detent: increasedContrast ? 0.9 : 0.6
+            case .subdivision: increasedContrast ? 0.6 : 0.34
+            }
+        }
     }
 }

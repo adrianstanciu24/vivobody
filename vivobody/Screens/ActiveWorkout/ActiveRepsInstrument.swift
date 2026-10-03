@@ -67,6 +67,7 @@ struct ActiveRepsInstrument: View {
                     hitSlop: 12,
                     showsRail: true,
                     keepsRailVisible: true,
+                    railEdge: .leading,
                     cancellationID: input.instrument.scrubCancellationID,
                     onScrubEnded: onScrubEnded
                 )
@@ -120,6 +121,7 @@ struct ActiveRepsInstrument: View {
                     hitSlop: 18,
                     showsRail: true,
                     keepsRailVisible: true,
+                    railEdge: .leading,
                     cancellationID: input.instrument.scrubCancellationID,
                     onScrubEnded: onScrubEnded
                 )
@@ -152,6 +154,7 @@ struct ActiveRepsInstrument: View {
                 hitSlop: 12,
                 showsRail: true,
                 keepsRailVisible: true,
+                railEdge: .leading,
                 cancellationID: input.instrument.scrubCancellationID,
                 onScrubEnded: onScrubEnded
             )
@@ -160,10 +163,6 @@ struct ActiveRepsInstrument: View {
 
     private var repsRow: some View {
         HStack(alignment: .center, spacing: Space.sm) {
-            Text("×")
-                .font(Typography.statValue)
-                .foregroundStyle(Ink.secondary)
-                .accessibilityHidden(true)
             BareScrubber(
                 value: $reps,
                 range: 1 ... 30,
@@ -174,11 +173,13 @@ struct ActiveRepsInstrument: View {
                 unitFontSize: 14,
                 numberColor: Ink.primary.opacity(Opacity.strong),
                 unitColor: Ink.secondary,
+                compactPrefix: "×",
                 accessibilityLabel: "Reps",
                 showsScrubHint: input.instrument.isActivePage,
                 hitSlop: 18,
                 showsRail: true,
                 keepsRailVisible: true,
+                railEdge: .leading,
                 cancellationID: input.instrument.scrubCancellationID,
                 onScrubEnded: onScrubEnded
             )

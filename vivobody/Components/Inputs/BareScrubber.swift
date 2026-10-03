@@ -20,6 +20,8 @@ struct BareScrubber: View {
     var unitFontSize: CGFloat = 14
     var numberColor: Color = Ink.primary
     var unitColor: Color = Ink.tertiary
+    /// Optional operator after the rail on compact, intrinsic-width readouts.
+    var compactPrefix: String = ""
     var formatter: ((Double) -> String)? = nil
     /// Contextual VoiceOver noun, such as "Weight" or "Reps".
     var accessibilityLabel: String? = nil
@@ -39,6 +41,8 @@ struct BareScrubber: View {
     var showsRail: Bool = false
     /// Keeps the rail visible as an enduring invitation to scrub.
     var keepsRailVisible: Bool = false
+    /// Places the rail on the selected side of the number and unit.
+    var railEdge: HorizontalEdge = .trailing
     /// Optional extra clearance beyond the rail's standard reserved lane.
     var railClearance: CGFloat = 0
     /// Invalidates motion before completion, archive, and discard transitions.
@@ -67,19 +71,14 @@ struct BareScrubber: View {
     @State private var hasNudged = false
     @State private var nudgeTask: Task<Void, Never>?
 
-    /// Value-settle spring. When Reduce Motion is on, skip the
-    /// decorative spring so the number snaps to its new value.
-    /// Suppressed entirely mid-drag: a live scrub must track the
-    /// finger 1:1 — the half-second spring made fast scrubs lag and
-    /// keep rolling after the finger stopped. Suppressed mid-coast
-    /// too: flywheel detents click, they don't smear.
+    /// Animate settled values only. Live drags and coasts must track detents
+    /// without lag; Reduce Motion skips the decorative spring.
     private var valueAnimation: Animation? {
         guard !isDragging, !isCoasting else { return nil }
         return reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.75)
     }
 
-    /// Drag-state transition (scale). When Reduce Motion is on,
-    /// snap between states instead of springing.
+    /// Animate drag scale unless Reduce Motion requires an immediate change.
     private var dragStateAnimation: Animation? {
         reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7)
     }
@@ -157,9 +156,8 @@ struct BareScrubber: View {
 
     // MARK: - Hero layout
 
-    /// The number + its unit. Rendered with the rolling DigitTicker,
-    /// which is an HStack of per-glyph Texts — so it can't be reined in
-    /// with `minimumScaleFactor`; width is handled by `fitsWidth`.
+    /// DigitTicker's per-glyph layout requires `fitsWidth` for scaling
+    /// instead of `minimumScaleFactor`.
     private var numberUnitRow: some View {
         HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
             DigitTicker(
@@ -187,11 +185,8 @@ struct BareScrubber: View {
         }
     }
 
-    /// When `fitsWidth` is off, the number keeps its intrinsic width
-    /// (galleries, editors). When on, a single GeometryReader supplies the
-    /// offered width while deterministic font metrics provide the live and
-    /// worst-case row sizes. No geometry value is written into view state, so
-    /// insertion needs one layout transaction rather than a measurement loop.
+    /// Keep intrinsic width unless `fitsWidth` is on. Fit through deterministic
+    /// font metrics and one GeometryReader, without a state measurement loop.
     @ViewBuilder
     private var heroLayout: some View {
         if fitsWidth {
@@ -224,8 +219,10 @@ struct BareScrubber: View {
                             : proxy.size.width) - reservedRailWidth),
                     alignment: fittedContentAlignment
                 )
-                .padding(.trailing, reservedRailWidth)
-                .overlay(alignment: .trailing) { graduationRail }
+                .padding(railEdge == .leading ? .leading : .trailing, reservedRailWidth)
+                .overlay(alignment: railEdge == .leading ? .leading : .trailing) {
+                    graduationRail(scale: scale)
+                }
                 .frame(
                     maxWidth: .infinity,
                     maxHeight: .infinity,
@@ -243,18 +240,26 @@ struct BareScrubber: View {
             }
         } else {
             HStack(alignment: .center, spacing: Space.sm) {
+                if !compactPrefix.isEmpty {
+                    Text(compactPrefix)
+                        .font(Typography.statValue)
+                        .foregroundStyle(unitColor)
+                        .accessibilityHidden(true)
+                }
                 numberUnitRow
                 hintChevrons
             }
-            .padding(.trailing, reservedRailWidth)
-            .overlay(alignment: .trailing) { graduationRail }
+            .padding(railEdge == .leading ? .leading : .trailing, reservedRailWidth)
+            .overlay(alignment: railEdge == .leading ? .leading : .trailing) {
+                graduationRail(scale: 1)
+            }
         }
     }
 
     /// Persistent rails sit beside their readout; the outer layout retains
     /// its full gesture target and its stable worst-case digit scale.
     @ViewBuilder
-    private var graduationRail: some View {
+    private func graduationRail(scale: CGFloat) -> some View {
         if showsRail {
             ScrubGraduationRail(
                 value: value,
@@ -263,7 +268,15 @@ struct BareScrubber: View {
                 visible: keepsRailVisible || isDragging || isCoasting,
                 engaged: isDragging || isCoasting
             )
+            .frame(height: railHeight * scale)
+            .scaleEffect(x: railEdge == .leading ? -1 : 1, y: 1)
         }
+    }
+
+    /// Slightly taller than the digits' cap height, so the rail reads as part
+    /// of the numeral rather than a separate column beside the line box.
+    private var railHeight: CGFloat {
+        UIFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .bold).capHeight * 1.25
     }
 
     /// Uniform shrink factor (≤ 1) that fits the worst-case number row

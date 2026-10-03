@@ -103,6 +103,7 @@ struct ActiveDurationInstrument: View {
                     hitSlop: 18,
                     showsRail: true,
                     keepsRailVisible: true,
+                    railEdge: .leading,
                     cancellationID: input.instrument.scrubCancellationID,
                     onScrubEnded: onScrubEnded
                 )
@@ -144,6 +145,7 @@ struct ActiveDurationInstrument: View {
                         hitSlop: 18,
                         showsRail: true,
                         keepsRailVisible: true,
+                        railEdge: .leading,
                         cancellationID: input.instrument.scrubCancellationID,
                         onScrubEnded: onScrubEnded
                     )

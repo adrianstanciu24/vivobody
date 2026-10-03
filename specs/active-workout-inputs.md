@@ -17,11 +17,19 @@ editable value signals vertical scrubbing before the person touches it.
   text may grow and scroll. Completion feedback retains its stronger accent.
 - Keep graduation rails visible while an active value is idle, being dragged,
   or coasting, including after the first-use gesture has been learned.
-- Use a fixed index, shaded roller, and graduations that recede toward the
-  ends. Compact controls include intermediate marks so the reps rail remains
+- Use a fixed index and fine graduations that compress and fade toward the
+  ends, like a drum, with no filled roller behind them. Size each rail to
+  slightly more than its digits' cap height. At rest, graduations and index
+  stay neutral and low-contrast so the value leads; while the value is dragged
+  or coasting, the graduations brighten and the index takes the accent color.
+  The index is longer than every graduation, so the cue does not rely on hue.
+  Compact controls include intermediate marks so the reps rail remains
   recognizable. Those marks do not introduce fractional reps or change steps.
 - Reserve horizontal space for the rail so digits and units cannot overlap
-  it. Place persistent rails directly beside their values at every size;
+  it. Put load and repetition rails to the left of their values. Place
+  the compact reps multiplication symbol after the rail, before the value,
+  so the load and reps rails share the same leading alignment. Place
+  persistent rails directly beside their values at every size;
   the full-width primary scrub target and stable worst-case digit scale remain.
   Persistent rails replace the temporary first-use chevrons on these controls.
   The primary number retains its one-time nudge.
