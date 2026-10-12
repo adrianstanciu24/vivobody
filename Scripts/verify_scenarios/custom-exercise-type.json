@@ -89,12 +89,41 @@
           }
         ]
       }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "1s",
+          "role": "AXButton"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "label": "1s",
+        "role": "AXButton"
+      }
     }
   ],
   "required": [
     {
-      "label": "Exercise type",
-      "value": "Strength · Hold"
+      "label": "Hold step",
+      "role": "AXGroup"
+    },
+    {
+      "label": "10s",
+      "role": "AXButton"
+    },
+    {
+      "label": "Weight step",
+      "role": "AXGroup"
     }
   ],
   "forbidden": [

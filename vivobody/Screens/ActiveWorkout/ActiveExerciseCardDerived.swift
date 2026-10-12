@@ -23,6 +23,7 @@ extension ActiveExerciseCard {
             tracksResistance: exercise.tracksResistance,
             unit: unit,
             weightStep: weightStep,
+            durationStep: durationStep,
             isActivePage: isActive,
             scrubCancellationID: effectiveScrubCancellationID,
             orderedSets: sets.map { set in

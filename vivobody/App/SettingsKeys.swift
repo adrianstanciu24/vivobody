@@ -39,6 +39,14 @@ nonisolated enum SettingsKey {
         return "settings.weightStep.custom.\(catalogItemID.uuidString)"
     }
 
+    /// Per-exercise duration scrub step in seconds, keyed like `weightStep`.
+    static func durationStep(catalogID: String?, catalogItemID: UUID) -> String {
+        if let catalogID, !catalogID.isEmpty {
+            return "settings.durationStep.catalog.\(catalogID)"
+        }
+        return "settings.durationStep.custom.\(catalogItemID.uuidString)"
+    }
+
     /// Stores `AppAppearance.rawValue`. Read via @AppStorage at the
     /// app root to drive `.preferredColorScheme`; "system" defers to
     /// the OS.

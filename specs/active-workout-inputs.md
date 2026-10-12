@@ -36,6 +36,13 @@ editable value signals vertical scrubbing before the person touches it.
 - Keep the configured increments, vertical gesture ownership, flywheel,
   boundary feedback, and save-on-settle behavior. A completed value is a
   readout and does not display an editable rail.
+- The STEP control beside the set count cycles the scrub increment for the
+  current exercise and remembers it per exercise. Loaded rep exercises cycle
+  the unit's weight steps. Timed exercises cycle 1s, 5s, and 10s (default
+  5s); Edit Set uses the same time step. Changing the time step does not round
+  the current time, and a logged time can be as short as 1s. The exercise
+  editor sets the same per-exercise steps. Template target editors keep the
+  fixed 5s step.
 - Rails are decorative and hidden from accessibility. The existing adjustable
   value exposes its label, exact value, range, and actions. Support light,
   dark, increased contrast, and Reduce Motion without relying on hue alone.

@@ -52,9 +52,12 @@ extension ActiveExerciseCard {
                         guard let set = workoutSet(id: id) else { return }
                         removeSet(set)
                     },
-                    selectWeightStep: { step in
+                    selectStep: { step in
                         Haptics.selection()
-                        setWeightStep(step)
+                        switch exercise.trackingMode {
+                        case .reps: setWeightStep(step)
+                        case .duration: setDurationStep(step)
+                        }
                     }
                 )
             )

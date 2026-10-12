@@ -28,9 +28,34 @@
         "role": "AXButton",
         "value": "not completed"
       }
+    },
+    {
+      "wait": {
+        "label": "Time increment",
+        "role": "AXButton",
+        "value": "5 seconds"
+      }
+    },
+    {
+      "tap": {
+        "label": "Time increment",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Time increment",
+        "role": "AXButton",
+        "value": "10 seconds"
+      }
     }
   ],
   "required": [
+    {
+      "label": "Time increment",
+      "role": "AXButton",
+      "value": "10 seconds"
+    },
     {
       "label": "Weighted Hang Fixture"
     },

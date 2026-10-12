@@ -19,7 +19,7 @@ struct ActiveSetIndicatorActions {
 struct ActiveExerciseConfigurationActions {
     let addSet: () -> Void
     let removeSet: (UUID) -> Void
-    let selectWeightStep: (Double) -> Void
+    let selectStep: (Double) -> Void
 }
 
 struct ActiveExerciseNameSection<MenuContent: View>: View {
@@ -168,13 +168,13 @@ struct ActiveExerciseConfigurationSection: View {
                 setCountControls
             }
 
-            if let increment = input.weightIncrement {
+            if let increment = input.stepIncrement {
                 VStack(alignment: .leading, spacing: Space.sm) {
                     Text("STEP")
                         .panelLegendType()
                         .foregroundStyle(Ink.secondary)
                         .accessibilityHidden(true)
-                    weightStepButton(increment)
+                    stepButton(increment)
                 }
             }
         }
@@ -229,10 +229,10 @@ struct ActiveExerciseConfigurationSection: View {
         .accessibilityInputLabels([Text("Remove a set"), Text("Remove Set"), Text("Remove")])
     }
 
-    private func weightStepButton(_ increment: ActiveWeightIncrementInput) -> some View {
+    private func stepButton(_ increment: ActiveStepIncrementInput) -> some View {
         let setStepperWidth = (Space.tapMin * 2) + 22
         return Button {
-            actions.selectWeightStep(increment.next())
+            actions.selectStep(increment.next())
         } label: {
             Text(increment.label)
                 .font(Typography.metricUnit)
@@ -244,8 +244,8 @@ struct ActiveExerciseConfigurationSection: View {
         }
         .buttonStyle(.plain)
         .coloredGlassControl(cornerRadius: Radius.pill)
-        .accessibilityLabel("Weight increment")
-        .accessibilityValue(increment.label)
+        .accessibilityLabel(increment.accessibilityLabel)
+        .accessibilityValue(increment.accessibilityValue)
         .accessibilityHint("Cycles through the available increments")
     }
 }

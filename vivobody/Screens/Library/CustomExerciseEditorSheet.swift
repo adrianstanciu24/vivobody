@@ -54,6 +54,9 @@ struct CustomExerciseEditorSheet: View {
     @Query private var catalogItems: [ExerciseCatalogItem]
 
     @State private var draft: CatalogDraft
+    /// Scrub increments are preferences, not catalog data: they stay out of
+    /// the draft and are written to UserDefaults only after a committed save.
+    @State private var scrubSteps: ExerciseScrubSteps
 
     @State private var saveError: SaveErrorBox? = nil
     @State private var isMuscleEditorPresented = false
@@ -78,14 +81,21 @@ struct CustomExerciseEditorSheet: View {
         switch target {
         case .create:
             _draft = State(initialValue: CatalogDraft.empty)
+            _scrubSteps = State(initialValue: ExerciseScrubSteps())
         case let .edit(item):
             _draft = State(initialValue: CatalogDraft(from: item))
+            _scrubSteps = State(initialValue: Self.storedSteps(for: item))
         case let .duplicate(item):
             _draft = State(initialValue: CatalogDraft(
                 duplicating: item,
                 defaultWeight: item.defaultWeightSeed
             ))
+            _scrubSteps = State(initialValue: Self.storedSteps(for: item))
         }
+    }
+
+    private static func storedSteps(for item: ExerciseCatalogItem) -> ExerciseScrubSteps {
+        ExerciseScrubStepStore.load(catalogID: item.catalogID, catalogItemID: item.id)
     }
 
     private var isEditMode: Bool {
@@ -141,7 +151,11 @@ struct CustomExerciseEditorSheet: View {
                         if isBundledEdit {
                             bundledIdentitySummary
                             if draft.showsLoggingDefaults {
-                                CustomExerciseDefaultsRow(draft: $draft, unit: unit)
+                                CustomExerciseDefaultsRow(
+                                    draft: $draft,
+                                    steps: $scrubSteps,
+                                    unit: unit
+                                )
                             }
                         } else {
                             if let source = duplicateSource {
@@ -230,6 +244,7 @@ struct CustomExerciseEditorSheet: View {
         )
         CustomExerciseLoggingDefaultsSection(
             draft: $draft,
+            steps: $scrubSteps,
             validation: validation,
             showsValidationErrors: showsValidationErrors,
             unit: unit,
@@ -358,11 +373,18 @@ struct CustomExerciseEditorSheet: View {
     private func save() {
         guard validation.canSave else { return }
         do {
-            try CatalogMutationBoundary(context: modelContext).save(
+            let result = try CatalogMutationBoundary(context: modelContext).save(
                 draft.mutationInput(using: validation),
                 target: mutationTarget,
                 unit: unit
             )
+            if let item = result.savedItem {
+                ExerciseScrubStepStore.store(
+                    scrubSteps,
+                    catalogID: item.catalogID,
+                    catalogItemID: item.id
+                )
+            }
         } catch {
             saveError = SaveErrorBox(error)
             return

@@ -59,6 +59,19 @@ struct EditSetSheet: View {
         self.set.exercise?.tracksResistance ?? true
     }
 
+    /// Shares the per-exercise step chosen on the active card.
+    private var durationStep: Double {
+        guard let exercise = set.exercise, let itemID = exercise.catalogItemID else {
+            return DurationFormatter.scrubStep
+        }
+        return DurationFormatter.resolvedStep(
+            preferred: ExerciseScrubStepStore.load(
+                catalogID: exercise.catalogID,
+                catalogItemID: itemID
+            ).duration
+        )
+    }
+
     /// 1-based position of this set inside its exercise — the sheet
     /// names what it's editing ("Set 2 of 3") so a pip tap never
     /// opens onto an anonymous number.
@@ -183,8 +196,8 @@ struct EditSetSheet: View {
                             .panelLegend()
                         BareScrubber(
                             value: durationBinding,
-                            range: DurationFormatter.scrubRange,
-                            step: DurationFormatter.scrubStep,
+                            range: DurationFormatter.loggedScrubRange,
+                            step: durationStep,
                             pointsPerStep: 10,
                             fontSize: 96,
                             numberColor: Ink.primary,

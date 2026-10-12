@@ -24,7 +24,7 @@ struct ActiveExerciseInstrumentInputTests {
         #expect(input.configuration.setCount == 0)
         #expect(input.configuration.setLegend == "SETS")
         #expect(input.configuration.removableSetID == nil)
-        #expect(input.configuration.weightIncrement == nil)
+        #expect(input.configuration.stepIncrement == nil)
         #expect(input.metric == .empty)
         #expect(!input.effortAction.showsRIRControl)
         #expect(input.effortAction.primaryAction == .addFirstSet)
@@ -46,7 +46,7 @@ struct ActiveExerciseInstrumentInputTests {
         #expect(input.identity.sets[1].visibleReading == "140 x 7")
         #expect(input.identity.sets[2].accessibilityValue == "Current")
         #expect(input.configuration.removableSetID == thirdID)
-        #expect(try #require(input.configuration.weightIncrement).label == "5 lb")
+        #expect(try #require(input.configuration.stepIncrement).label == "5 lb")
     }
 
     @Test func pendingSetsRemainRemovableButMinusTargetsTheLastPendingSet() {
@@ -243,13 +243,40 @@ struct ActiveExerciseInstrumentInputTests {
 
     @Test func weightIncrementCyclesWithinTheSelectedUnit() throws {
         let input = source(unit: .kg, weightStep: 2.5).makeInput()
-        let increment = try #require(input.configuration.weightIncrement)
+        let increment = try #require(input.configuration.stepIncrement)
 
         let expectedLabel = 2.5.formatted(
             .number.precision(.fractionLength(0 ... 2))
         ) + " kg"
         #expect(increment.label == expectedLabel)
         #expect(increment.next() == 5)
+    }
+
+    @Test func durationIncrementCyclesThroughOneFiveAndTenSeconds() throws {
+        let input = source(
+            trackingMode: .duration,
+            modality: .isometricStrength,
+            tracksResistance: false,
+            durationStep: 10,
+            sets: [set(firstID, weight: 0, reps: 0, duration: 23)]
+        ).makeInput()
+        let increment = try #require(input.configuration.stepIncrement)
+
+        #expect(increment.label == "10s")
+        #expect(increment.accessibilityLabel == "Time increment")
+        #expect(increment.accessibilityValue == "10 seconds")
+        #expect(increment.next() == 1)
+        guard case let .duration(duration) = input.metric else {
+            Issue.record("Expected duration instrument")
+            return
+        }
+        #expect(duration.instrument.durationStep == 10)
+    }
+
+    @Test func durationStepPreferenceFallsBackToFiveSeconds() {
+        #expect(DurationFormatter.resolvedStep(preferred: nil) == 5)
+        #expect(DurationFormatter.resolvedStep(preferred: 2.5) == 5)
+        #expect(DurationFormatter.resolvedStep(preferred: 1) == 1)
     }
 
     private func source(
@@ -259,6 +286,7 @@ struct ActiveExerciseInstrumentInputTests {
         tracksResistance: Bool = true,
         unit: WeightUnit = .lb,
         weightStep: Double = 5,
+        durationStep: Double = 5,
         sets: [ActiveExerciseSetSnapshot]? = nil,
         activeSetID: UUID? = nil,
         pendingCompletionSetID: UUID? = nil
@@ -273,6 +301,7 @@ struct ActiveExerciseInstrumentInputTests {
             tracksResistance: tracksResistance,
             unit: unit,
             weightStep: weightStep,
+            durationStep: durationStep,
             isActivePage: true,
             scrubCancellationID: 7,
             orderedSets: resolvedSets,

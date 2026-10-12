@@ -32,8 +32,8 @@ struct ActiveDurationInstrument: View {
                 .foregroundStyle(Ink.secondary)
             BareScrubber(
                 value: $duration,
-                range: DurationFormatter.scrubRange,
-                step: DurationFormatter.scrubStep,
+                range: DurationFormatter.loggedScrubRange,
+                step: input.instrument.durationStep,
                 pointsPerStep: 10,
                 fontSize: 104,
                 numberColor: Ink.primary,

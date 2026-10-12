@@ -79,6 +79,7 @@ struct ActiveExerciseCard: View {
     /// Per-exercise increment preference loaded from UserDefaults.
     /// Exercises without a catalog identity keep it for this card only.
     @State var sessionOnlyStep: Double? = nil
+    @State var sessionOnlyDurationStep: Double? = nil
 
     var body: some View {
         Group {
@@ -118,7 +119,7 @@ struct ActiveExerciseCard: View {
         } message: { setToDelete in
             Text("\(exercise.setLabel(setToDelete, unit: unit)). This can't be undone.")
         }
-        .onAppear { loadWeightStepPreference() }
+        .onAppear { loadStepPreferences() }
         .onDisappear { completionCoordinator.cancel() }
         .onChange(of: scrubCancellationID) { _, _ in
             completionCoordinator.cancel()
@@ -151,12 +152,37 @@ struct ActiveExerciseCard: View {
         )
     }
 
-    // MARK: - Weight increment
+    // MARK: - Scrub increments
 
-    private func loadWeightStepPreference() {
-        guard sessionOnlyStep == nil, let itemID = exercise.catalogItemID else { return }
-        let key = SettingsKey.weightStep(catalogID: exercise.catalogID, catalogItemID: itemID)
-        sessionOnlyStep = (UserDefaults.standard.object(forKey: key) as? NSNumber)?.doubleValue
+    private func loadStepPreferences() {
+        guard let itemID = exercise.catalogItemID else { return }
+        let stored = ExerciseScrubStepStore.load(
+            catalogID: exercise.catalogID,
+            catalogItemID: itemID
+        )
+        if sessionOnlyStep == nil { sessionOnlyStep = stored.weight }
+        if sessionOnlyDurationStep == nil { sessionOnlyDurationStep = stored.duration }
+    }
+
+    private func storeSteps(_ steps: ExerciseScrubSteps) {
+        guard let itemID = exercise.catalogItemID else { return }
+        ExerciseScrubStepStore.store(
+            steps,
+            catalogID: exercise.catalogID,
+            catalogItemID: itemID
+        )
+    }
+
+    /// Current duration scrub step for this exercise, in seconds.
+    var durationStep: Double {
+        DurationFormatter.resolvedStep(preferred: sessionOnlyDurationStep)
+    }
+
+    /// Persist a picked duration step. Unlike weight, the active time is not
+    /// snapped onto the new grid: a logged 23s must not silently become 20s.
+    func setDurationStep(_ step: Double) {
+        sessionOnlyDurationStep = step
+        storeSteps(ExerciseScrubSteps(duration: step))
     }
 
     /// Current scrub step for this exercise in display units.
@@ -168,12 +194,7 @@ struct ActiveExerciseCard: View {
     /// the new grid.
     func setWeightStep(_ step: Double) {
         sessionOnlyStep = step
-        if let itemID = exercise.catalogItemID {
-            UserDefaults.standard.set(
-                step,
-                forKey: SettingsKey.weightStep(catalogID: exercise.catalogID, catalogItemID: itemID)
-            )
-        }
+        storeSteps(ExerciseScrubSteps(weight: step))
 
         if session.activeSet(for: exercise) != nil {
             let display = WeightFormatter.toDisplay(displayedWeight, unit: unit)

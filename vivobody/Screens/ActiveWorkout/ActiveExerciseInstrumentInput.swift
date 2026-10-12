@@ -49,15 +49,42 @@ nonisolated struct ActiveExerciseIdentityInput: Equatable {
     let sets: [ActiveSetIndicatorInput]
 }
 
-nonisolated struct ActiveWeightIncrementInput: Equatable {
+nonisolated struct ActiveStepIncrementInput: Equatable {
+    enum Kind: Equatable {
+        case weight(WeightUnit)
+        case duration
+    }
+
+    let kind: Kind
     let selected: Double
     let options: [Double]
-    let unit: WeightUnit
 
     var label: String {
-        selected.formatted(
-            .number.precision(.fractionLength(0 ... 2))
-        ) + " \(unit.symbol)"
+        switch kind {
+        case let .weight(unit):
+            selected.formatted(
+                .number.precision(.fractionLength(0 ... 2))
+            ) + " \(unit.symbol)"
+        case .duration:
+            DurationFormatter.stepLabel(selected)
+        }
+    }
+
+    var accessibilityLabel: String {
+        switch kind {
+        case .weight: "Weight increment"
+        case .duration: "Time increment"
+        }
+    }
+
+    var accessibilityValue: String {
+        switch kind {
+        case .weight:
+            return label
+        case .duration:
+            let seconds = Int(selected.rounded())
+            return seconds == 1 ? "1 second" : "\(seconds) seconds"
+        }
     }
 
     func next() -> Double {
@@ -69,7 +96,7 @@ nonisolated struct ActiveWeightIncrementInput: Equatable {
 nonisolated struct ActiveExerciseConfigurationInput: Equatable {
     let setCount: Int
     let removableSetID: UUID?
-    let weightIncrement: ActiveWeightIncrementInput?
+    let stepIncrement: ActiveStepIncrementInput?
 
     var setLegend: String {
         setCount == 1 ? "SET" : "SETS"
@@ -88,6 +115,7 @@ nonisolated struct ActiveExerciseInstrumentInput: Equatable {
     let tracksResistance: Bool
     let unit: WeightUnit
     let weightStep: Double
+    let durationStep: Double
     let isActivePage: Bool
     let scrubCancellationID: Int
 
@@ -201,6 +229,7 @@ nonisolated struct ActiveExerciseCardSource: Equatable {
     let tracksResistance: Bool
     let unit: WeightUnit
     let weightStep: Double
+    let durationStep: Double
     let isActivePage: Bool
     let scrubCancellationID: Int
     let orderedSets: [ActiveExerciseSetSnapshot]
@@ -235,19 +264,14 @@ nonisolated struct ActiveExerciseCardSource: Equatable {
             tracksResistance: tracksResistance,
             unit: unit,
             weightStep: weightStep,
+            durationStep: durationStep,
             isActivePage: isActivePage,
             scrubCancellationID: scrubCancellationID
         )
         let configuration = ActiveExerciseConfigurationInput(
             setCount: orderedSets.count,
             removableSetID: removableSetID,
-            weightIncrement: activeSet != nil && trackingMode == .reps && tracksResistance
-                ? ActiveWeightIncrementInput(
-                    selected: weightStep,
-                    options: unit.strengthStepOptions,
-                    unit: unit
-                )
-                : nil
+            stepIncrement: activeSet == nil ? nil : makeStepIncrement()
         )
         let metric = makeMetricInput(instrument: instrument, activeSet: activeSet)
         let action = makePrimaryAction(activeSet: activeSet, activeIndex: activeIndex)
@@ -266,6 +290,24 @@ nonisolated struct ActiveExerciseCardSource: Equatable {
                 primaryAction: action
             )
         )
+    }
+
+    private func makeStepIncrement() -> ActiveStepIncrementInput? {
+        switch trackingMode {
+        case .reps:
+            guard tracksResistance else { return nil }
+            return ActiveStepIncrementInput(
+                kind: .weight(unit),
+                selected: weightStep,
+                options: unit.strengthStepOptions
+            )
+        case .duration:
+            return ActiveStepIncrementInput(
+                kind: .duration,
+                selected: durationStep,
+                options: DurationFormatter.stepOptions
+            )
+        }
     }
 
     private func makeMetricInput(

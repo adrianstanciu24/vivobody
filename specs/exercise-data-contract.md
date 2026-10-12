@@ -346,6 +346,13 @@ biomechanical truths. Machine-stack values are not portable between machines.
 New template exercises use compatible recorded loads or an explicitly entered
 first-workout load rather than catalog weights; see [template starting loads](template-starting-loads.md).
 
+The exercise editor (custom exercises and bundled **Exercise Defaults**) shows
+a step selector under the default values: time cycles 1s, 5s, and 10s; weight
+uses the unit's step options. The choice is a per-exercise preference saved
+after the exercise saves, not catalog data. The active workout STEP control
+and Edit Set read and write the same preference; see
+[active workout inputs](active-workout-inputs.md).
+
 An anatomy review may use anatomical action, kinematics, force measurements,
 and exercise-specific activation studies to establish roles. Evidence does not
 justify pretending the catalog's categorical roles are exact physiological

@@ -49,8 +49,30 @@ nonisolated enum DurationFormatter {
     /// meaningless — weight, not time, is what's optional here).
     static let scrubRange: ClosedRange<Double> = 5 ... 600
 
+    /// Range for logged sets (active workout and Edit Set). A finished
+    /// effort can be any whole second, so the floor is 1s rather than
+    /// the 5s template floor.
+    static let loggedScrubRange: ClosedRange<Double> = 1 ... 600
+
     /// Scrubber step, in seconds. 5s is the natural increment for
     /// holds — fine enough to dial in a plank, coarse enough that a
-    /// short drag spans a useful range.
+    /// short drag spans a useful range. Template and default editors
+    /// use it directly; logged sets default to it.
     static let scrubStep: Double = 5
+
+    /// Per-exercise step choices for logged sets: 1s for exact short
+    /// holds, 5s by default, 10s for long carries and planks.
+    static let stepOptions: [Double] = [1, 5, 10]
+
+    /// Resolve a stored per-exercise step preference. Nil (never chosen)
+    /// and unknown values fall back to the 5s default.
+    static func resolvedStep(preferred: Double?) -> Double {
+        guard let preferred, stepOptions.contains(preferred) else { return scrubStep }
+        return preferred
+    }
+
+    /// Compact step label for the STEP control: "1s", "5s", "10s".
+    static func stepLabel(_ step: Double) -> String {
+        "\(Int(step.rounded()))s"
+    }
 }
