@@ -86,6 +86,60 @@ struct ExerciseCatalogBrowserTests {
         #expect(browser.isSearching)
         #expect(browser.sections.isEmpty)
         #expect(browser.searchResults.map(\.name) == ["Band Row"])
+        #expect(browser.hiddenMatchCount == 0)
+    }
+
+    @Test func hiddenMatchesAreCountedOnlyWhenTheFilterHidesEveryMatch() {
+        let barbell = item("Barbell Row", equipment: .barbell)
+        let band = item("Band Row", equipment: .band)
+        let hidden = snapshot(items: [barbell, band], query: "barbell", filter: .equipment(.band))
+        #expect(hidden.searchResults.isEmpty)
+        #expect(hidden.hiddenMatchCount == 1)
+
+        let unfiltered = snapshot(items: [barbell, band], query: "zzz", filter: .all)
+        #expect(unfiltered.searchResults.isEmpty)
+        #expect(unfiltered.hiddenMatchCount == 0)
+    }
+
+    @Test func correctionUsesEveryEligibleItemAndIsReportedWithResults() {
+        let barbell = item("Barbell Row", equipment: .barbell)
+        let band = item("Band Row", equipment: .band)
+        let corrected = snapshot(items: [barbell, band], query: "barbel row", filter: .all)
+        #expect(corrected.searchResults.map(\.name) == ["Barbell Row"])
+        #expect(corrected.searchCorrection == nil)
+
+        let typo = snapshot(items: [barbell, band], query: "brabell", filter: .equipment(.barbell))
+        #expect(typo.searchResults.map(\.name) == ["Barbell Row"])
+        #expect(typo.searchCorrection == "barbell")
+
+        let hiddenTypo = snapshot(items: [barbell, band], query: "brabell", filter: .equipment(.band))
+        #expect(hiddenTypo.searchCorrection == nil)
+        #expect(hiddenTypo.hiddenMatchCount == 1)
+    }
+
+    @Test func closestMatchesAreNamedAboveResults() {
+        let barbell = item("Barbell Row", equipment: .barbell)
+        let band = item("Band Row", equipment: .band)
+        let exact = snapshot(items: [barbell, band], query: "band row", filter: .all)
+        #expect(!exact.isClosestMatch)
+        #expect(exact.searchNote == nil)
+
+        let closest = snapshot(items: [barbell, band], query: "band cable row", filter: .all)
+        #expect(closest.searchResults.map(\.name) == ["Band Row"])
+        #expect(closest.isClosestMatch)
+        #expect(closest.searchNote == "No exact matches. Showing closest results.")
+
+        let typo = snapshot(items: [barbell, band], query: "brabell", filter: .all)
+        #expect(typo.searchNote == "Results for \"barbell\"")
+    }
+
+    @Test func closestMatchesHiddenByTheFilterAreCounted() {
+        let barbell = item("Barbell Row", equipment: .barbell)
+        let band = item("Band Row", equipment: .band)
+        let hidden = snapshot(items: [barbell, band], query: "band cable row", filter: .equipment(.barbell))
+        #expect(hidden.searchResults.isEmpty)
+        #expect(!hidden.isClosestMatch)
+        #expect(hidden.hiddenMatchCount == 1)
     }
 
     @Test func historyLookupAlsoSuppliesSearchTieBreaker() throws {

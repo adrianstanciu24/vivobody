@@ -8,14 +8,27 @@
 //  catalog items + query + the user's tracked-exercise keys — no
 //  SwiftData, no UI — so it is unit-tested directly.
 //
-//  Ranking tiers (best -> worst), evaluated per query token.
-//  An item matches only if EVERY token matches at least at the
-//  substring tier; the item's score is the worst (highest) token
+//  A search has three stages. Typo correction (ExerciseSearchCorrector)
+//  replaces a query word that no catalog word contains with the closest
+//  catalog word, and the plan reports the corrected query so the UI can
+//  name it. Synonym rewrites (ExerciseSearchVocabulary) add alternative
+//  queries, such as "one leg" for "single leg". Ranking scores the
+//  literal query and each rewrite; a rewrite ranks just below the
+//  literal query at the same tier.
+//
+//  Ranking tiers (best -> worst), evaluated per query token, in any
+//  word order. An item matches only if EVERY token matches at least at
+//  the substring tier; the item's score is the worst (highest) token
 //  score, so "lat pull" ranks "Lat Pulldown" above single-token
-//  noise. Conservative singular/plural stemming makes "squats" match
-//  "Squat" without fuzzy typo matching. Within a tier: favorites,
-//  the bundled editorial prior, tracked exercises, shorter names,
-//  then alphabetical order.
+//  noise. When no item in the index matches every token of a query of
+//  two or more words, the plan becomes a closest-match plan: an item
+//  may miss one word, and items that miss a common word ("leg") rank
+//  above items that miss a rare word ("split"), so "split leg squat"
+//  still finds Split Squat. Words written together match hyphenated or
+//  spaced names ("singleleg", "pushup"), and conservative singular/plural
+//  stemming makes "squats" match "Squat". Within a tier: favorites, the bundled
+//  editorial prior, tracked exercises, shorter names, then
+//  alphabetical order.
 //
 
 import Foundation
@@ -30,113 +43,165 @@ enum ExerciseSearch {
         query: String,
         trackedKeys: Set<String> = []
     ) -> [ExerciseCatalogItem] {
-        let tokens = words(of: normalized(query))
+        let index = ExerciseSearchIndex(items: items)
+        return index.rank(index.plan(for: query), trackedKeys: trackedKeys)
+    }
+}
 
-        guard !tokens.isEmpty else { return items }
+/// One query, prepared for ranking.
+struct ExerciseSearchPlan {
+    /// The literal query (after typo correction) first, then synonym rewrites.
+    let alternatives: [[ExerciseSearchToken]]
+    /// The searched query when typo correction changed a word; otherwise nil.
+    let correctedQuery: String?
+    /// How many indexed items each query word matches. Set only for a
+    /// closest-match plan, which lets an item miss one word.
+    let wordFrequency: [ExerciseSearchToken: Int]?
 
-        let scored: [Scored] = items.compactMap { item in
-            guard let score = combinedScore(item: item, tokens: tokens) else { return nil }
-            let tracked = trackedKeys.contains(item.historyKey)
-            return Scored(
+    var isEmpty: Bool {
+        alternatives.first?.isEmpty ?? true
+    }
+
+    /// True when no indexed item matched every word, so results miss one word.
+    var isClosestMatch: Bool {
+        wordFrequency != nil
+    }
+}
+
+/// Normalized names and aliases for every item the user may find. Rank
+/// any subset of it, so typo correction uses the whole catalog even when
+/// a filter chip limits the results.
+struct ExerciseSearchIndex {
+    private struct Entry {
+        let item: ExerciseCatalogItem
+        let fields: [ExerciseSearchField]
+    }
+
+    private let entries: [Entry]
+    private let corrector: ExerciseSearchCorrector
+
+    init(items: [ExerciseCatalogItem]) {
+        let entries = items.map { item in
+            Entry(
                 item: item,
-                score: score,
-                isFavorite: item.isFavorite,
-                searchPriority: item.searchPriority,
-                isTracked: tracked
+                fields: [ExerciseSearchField(item.name, source: 0)]
+                    + item.aliases.map { ExerciseSearchField($0, source: 1) }
             )
         }
+        self.entries = entries
+        corrector = ExerciseSearchCorrector(fields: entries.map(\.fields))
+    }
 
+    func plan(for query: String) -> ExerciseSearchPlan {
+        let typed = ExerciseSearchText.words(of: ExerciseSearchText.normalized(query))
+        let corrected = typed.map { word in
+            corrector.correction(for: ExerciseSearchToken(word)) ?? word
+        }
+        let alternatives = ExerciseSearchVocabulary.alternatives(
+            for: corrected.map { ExerciseSearchToken($0) }
+        )
+        let correctedQuery = corrected == typed ? nil : corrected.joined(separator: " ")
+        let exact = ExerciseSearchPlan(
+            alternatives: alternatives,
+            correctedQuery: correctedQuery,
+            wordFrequency: nil
+        )
+        guard corrected.count > 1,
+              !entries.contains(where: { Self.match($0.fields, plan: exact) != nil })
+        else { return exact }
+
+        let tokens = Set(alternatives.joined())
+        return ExerciseSearchPlan(
+            alternatives: alternatives,
+            correctedQuery: correctedQuery,
+            wordFrequency: Dictionary(uniqueKeysWithValues: tokens.map { token in
+                (token, entries.count { entry in
+                    entry.fields.contains { $0.score(for: token) != nil }
+                })
+            })
+        )
+    }
+
+    /// Included items sorted by relevance to `plan`. An empty plan
+    /// returns the included items in their original order.
+    func rank(
+        _ plan: ExerciseSearchPlan,
+        trackedKeys: Set<String> = [],
+        where includes: (ExerciseCatalogItem) -> Bool = { _ in true }
+    ) -> [ExerciseCatalogItem] {
+        let included = entries.filter { includes($0.item) }
+        guard !plan.isEmpty else { return included.map(\.item) }
+
+        let scored: [Scored] = included.compactMap { entry in
+            guard let match = Self.match(entry.fields, plan: plan) else { return nil }
+            return Scored(
+                item: entry.item,
+                match: match,
+                isFavorite: entry.item.isFavorite,
+                searchPriority: entry.item.searchPriority,
+                isTracked: trackedKeys.contains(entry.item.historyKey)
+            )
+        }
         return scored.sorted().map(\.item)
     }
 
     // MARK: - Scoring
 
-    /// Worst (highest) per-token score across all tokens. `nil` means
-    /// at least one token didn't match name or any alias -> exclude.
-    private static func combinedScore(item: ExerciseCatalogItem, tokens: [String]) -> Int? {
+    /// How well one item answers a plan. Lower is better.
+    private struct Match: Comparable {
+        let score: Int
+        /// How many indexed items match the word this item misses; nil
+        /// when it matches every word. Missing a common word costs less
+        /// than missing a rare, specific word.
+        let missedWordFrequency: Int?
+
+        static func < (lhs: Match, rhs: Match) -> Bool {
+            switch (lhs.missedWordFrequency, rhs.missedWordFrequency) {
+            case (nil, .some): true
+            case (.some, nil): false
+            case let (lhsMissed?, rhsMissed?) where lhsMissed != rhsMissed:
+                lhsMissed > rhsMissed
+            default: lhs.score < rhs.score
+            }
+        }
+    }
+
+    /// Best match across the literal query and its rewrites. A literal
+    /// query that equals a whole name or alias ranks first, because word
+    /// pairs can otherwise tie it with a looser match. A rewrite adds one
+    /// step, so it never outranks the literal query at the same tier.
+    private static func match(_ fields: [ExerciseSearchField], plan: ExerciseSearchPlan) -> Match? {
+        let literal = plan.alternatives.first?.map(\.text).joined() ?? ""
+        if let exact = fields.filter({ $0.joined == literal }).map(\.source).min() {
+            return Match(score: exact * 2, missedWordFrequency: nil)
+        }
+        return plan.alternatives.enumerated().compactMap { index, tokens in
+            combinedMatch(fields, tokens: tokens, wordFrequency: plan.wordFrequency).map {
+                Match(score: $0.score * 2 + (index == 0 ? 0 : 1), missedWordFrequency: $0.missedWordFrequency)
+            }
+        }.min()
+    }
+
+    /// Worst (highest) per-token score across all tokens. `nil` means a
+    /// token didn't match the name or any alias, except that a
+    /// closest-match plan forgives one missed token of a multi-word query.
+    private static func combinedMatch(
+        _ fields: [ExerciseSearchField],
+        tokens: [ExerciseSearchToken],
+        wordFrequency: [ExerciseSearchToken: Int]?
+    ) -> Match? {
         var worst = 0
+        var missed: ExerciseSearchToken?
         for token in tokens {
-            guard let s = tokenScore(item: item, token: token) else { return nil }
-            worst = max(worst, s)
+            if let score = fields.compactMap({ $0.score(for: token) }).min() {
+                worst = max(worst, score)
+            } else if wordFrequency != nil, tokens.count > 1, missed == nil {
+                missed = token
+            } else {
+                return nil
+            }
         }
-        return worst
-    }
-
-    /// Best (lowest) score for a single token vs the item's name and
-    /// aliases. Name matches beat alias matches at the same tier
-    /// (source weight 0 vs 1). Returns `nil` if the token matches
-    /// neither name nor any alias.
-    private static func tokenScore(item: ExerciseCatalogItem, token: String) -> Int? {
-        let nameScore = stringTier(item.name, token: token).map { $0 * 2 + 0 }
-        let aliasScore = item.aliases
-            .compactMap { stringTier($0, token: token).map { $0 * 2 + 1 } }
-            .min()
-        return [nameScore, aliasScore].compactMap(\.self).min()
-    }
-
-    /// Tier (0-3) for one candidate string vs a normalized token.
-    /// 0 exact · 1 phrase-prefix/word-exact · 2 word-prefix · 3 substring.
-    /// Prefix and word-exact intentionally share a tier: for a broad
-    /// movement query, "Squat Jump" isn't inherently a better answer
-    /// than "Barbell Back Squat" just because its name starts with the
-    /// token. The editorial and personal signals resolve that ambiguity.
-    /// `nil` when the token doesn't appear at all.
-    private static func stringTier(_ value: String, token: String) -> Int? {
-        let s = normalized(value)
-        if s == token { return 0 }
-        let words = words(of: s)
-        if s.hasPrefix(token) || words.contains(token) { return 1 }
-        if words.contains(where: { $0.hasPrefix(token) }) { return 2 }
-
-        // Match only ordinary English inflections, not arbitrary edit
-        // distance. This covers squat/squats, lunge/lunges,
-        // press/presses, curl/curls, and fly/flies without letting a
-        // typo silently select an unrelated exercise.
-        let stemmedToken = singularStem(token)
-        let stemmedWords = words.map(singularStem)
-        if stemmedWords.contains(stemmedToken) { return 1 }
-
-        if s.contains(token) { return 3 }
-        return nil
-    }
-
-    private static func normalized(_ value: String) -> String {
-        value
-            .folding(
-                options: [.diacriticInsensitive, .widthInsensitive],
-                locale: Locale(identifier: "en_US_POSIX")
-            )
-            .lowercased()
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
-    /// Small, deterministic English inflector for exercise vocabulary.
-    /// Search only needs singular equivalence; it doesn't attempt full
-    /// natural-language stemming (which would turn "press" into "pres").
-    private static func singularStem(_ word: String) -> String {
-        guard word.count > 2 else { return word }
-
-        if word.hasSuffix("ies"), word.count > 3 {
-            return String(word.dropLast(3)) + "y"
-        }
-
-        let esSuffixes = ["sses", "shes", "ches", "xes", "zes"]
-        if esSuffixes.contains(where: word.hasSuffix) {
-            return String(word.dropLast(2))
-        }
-
-        if word.hasSuffix("s"), !word.hasSuffix("ss") {
-            return String(word.dropLast())
-        }
-
-        return word
-    }
-
-    /// Split on any non-alphanumeric boundary so "Pull-Up" and
-    /// "Lat Pulldown" both tokenize to clean words.
-    private static func words(of s: String) -> [String] {
-        s.split(omittingEmptySubsequences: true, whereSeparator: { !$0.isLetter && !$0.isNumber })
-            .map(String.init)
+        return Match(score: worst, missedWordFrequency: missed.map { wordFrequency?[$0] ?? 0 })
     }
 
     // MARK: - Sort wrapper
@@ -146,13 +211,13 @@ enum ExerciseSearch {
     /// then beat the default catalog prior, followed by workout history.
     private struct Scored: Comparable {
         let item: ExerciseCatalogItem
-        let score: Int
+        let match: Match
         let isFavorite: Bool
         let searchPriority: Int
         let isTracked: Bool
 
         static func < (lhs: Scored, rhs: Scored) -> Bool {
-            if lhs.score != rhs.score { return lhs.score < rhs.score }
+            if lhs.match != rhs.match { return lhs.match < rhs.match }
             if lhs.isFavorite != rhs.isFavorite { return lhs.isFavorite }
             if lhs.searchPriority != rhs.searchPriority {
                 return lhs.searchPriority > rhs.searchPriority

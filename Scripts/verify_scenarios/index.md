@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 199.
+Scenario files: 201.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -178,6 +178,8 @@ Scenario files: 199.
 | [library-rear-delt-search-light](library-rear-delt-search-light.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [library-search-cancellation-accessibility-light](library-search-cancellation-accessibility-light.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [library-search-cancellation-dark](library-search-cancellation-dark.json) | library | `--static-body -settings.appearance dark --ui-test-template-starting-loads` |
+| [library-search-matching-accessibility-light](library-search-matching-accessibility-light.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [library-search-matching-dark](library-search-matching-dark.json) | library | `--static-body -settings.appearance dark` |
 | [library-training-role-filters](library-training-role-filters.json) | library | None declared |
 | [me-showcase](me-showcase.json) | me | `--ui-test-me-showcase --static-body -settings.weightUnit lb` |
 | [onboarding-first-workout-accessibility](onboarding-first-workout-accessibility.json) | today | `--ui-test-onboarding -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |

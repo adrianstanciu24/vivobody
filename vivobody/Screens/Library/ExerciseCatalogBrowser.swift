@@ -65,6 +65,15 @@ struct ExerciseCatalogBrowserSnapshot {
 
     let eligibleItems: [ExerciseCatalogItem]
     let searchResults: [ExerciseCatalogItem]
+    /// The query as searched, set only when typo correction changed a
+    /// word and the results are not empty.
+    let searchCorrection: String?
+    /// True when no item matches every query word and the results are
+    /// the closest matches, which each miss one word.
+    let isClosestMatch: Bool
+    /// Matches outside the selected filter, counted only when the
+    /// filter hides every match.
+    let hiddenMatchCount: Int
     let sections: [Section]
     let availableEquipment: Set<Equipment>
     let isSearching: Bool
@@ -81,7 +90,6 @@ struct ExerciseCatalogBrowserSnapshot {
         includes: (ExerciseCatalogItem) -> Bool = { _ in true }
     ) {
         let eligibleItems = items.filter(includes)
-        let scopedItems = eligibleItems.filter(filter.matches)
         let isSearching = !query.trimmingCharacters(in: .whitespaces).isEmpty
 
         self.eligibleItems = eligibleItems
@@ -91,17 +99,40 @@ struct ExerciseCatalogBrowserSnapshot {
         self.unit = unit
 
         if isSearching {
-            searchResults = ExerciseSearch.rank(
-                items: scopedItems,
-                query: query,
-                trackedKeys: Set(lastInstanceLookup.keys)
+            // Index every eligible item, not only the filtered ones, so a
+            // typo is corrected against the whole catalog and hidden
+            // matches can be counted.
+            let index = ExerciseSearchIndex(items: eligibleItems)
+            let plan = index.plan(for: query)
+            let results = index.rank(
+                plan,
+                trackedKeys: Set(lastInstanceLookup.keys),
+                where: filter.matches
             )
+            searchResults = results
+            searchCorrection = results.isEmpty ? nil : plan.correctedQuery
+            isClosestMatch = !results.isEmpty && plan.isClosestMatch
+            hiddenMatchCount = results.isEmpty && filter != .all ? index.rank(plan).count : 0
             sections = []
         } else {
             searchResults = []
-            sections = scopedItems.groupedByMuscle.map {
+            searchCorrection = nil
+            isClosestMatch = false
+            hiddenMatchCount = 0
+            sections = eligibleItems.filter(filter.matches).groupedByMuscle.map {
                 Section(group: $0.group, items: $0.items)
             }
+        }
+    }
+
+    /// The line above search results that names a correction or says the
+    /// results are only close. Nil when the results need no explanation.
+    var searchNote: String? {
+        switch (searchCorrection, isClosestMatch) {
+        case let (correction?, true): "Closest results for \"\(correction)\""
+        case (nil, true): "No exact matches. Showing closest results."
+        case let (correction?, false): "Results for \"\(correction)\""
+        case (nil, false): nil
         }
     }
 

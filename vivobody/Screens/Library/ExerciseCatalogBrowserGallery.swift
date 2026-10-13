@@ -2,7 +2,8 @@
 //  ExerciseCatalogBrowserGallery.swift
 //  vivobody
 //
-//  DEBUG gallery for the shared catalog filter strip and long-press row menu.
+//  DEBUG gallery for the shared catalog filter strip, long-press row menu,
+//  and search feedback (correction note and hidden-matches empty state).
 //
 
 #if DEBUG
@@ -40,6 +41,15 @@
                     .padding(.horizontal, Space.lg)
                     .contentCard()
                     .exerciseCatalogActions(for: item, actions: actions)
+
+                ExerciseSearchNote(text: "Results for \"single leg\"")
+                    .padding(.horizontal, Space.gutter)
+
+                ExerciseSearchHiddenMatchesState(
+                    filter: filter == .all ? .trainingRole(.push) : filter,
+                    matchCount: 15,
+                    onShowAll: { filter = .all }
+                )
             }
             .padding(.vertical, Space.xl)
             .screenBackground()

@@ -160,10 +160,19 @@ struct ExercisePickerSheet: View {
         _ browser: ExerciseCatalogBrowserSnapshot,
         actions: ExerciseCatalogBrowserActions
     ) -> some View {
-        if browser.searchResults.isEmpty {
+        if browser.hiddenMatchCount > 0 {
+            ExerciseSearchHiddenMatchesState(
+                filter: filter,
+                matchCount: browser.hiddenMatchCount,
+                onShowAll: { filter = .all }
+            )
+        } else if browser.searchResults.isEmpty {
             emptyState
         } else {
             VStack(spacing: 0) {
+                if let note = browser.searchNote {
+                    ExerciseSearchNote(text: note)
+                }
                 ForEach(Array(browser.searchResults.enumerated()), id: \.element.id) { idx, item in
                     if idx > 0 { SectionDivider() }
                     pickerRow(item, browser: browser, actions: actions)

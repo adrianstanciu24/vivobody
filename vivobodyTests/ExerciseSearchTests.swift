@@ -184,11 +184,11 @@ struct ExerciseSearchTests {
         ]
 
         for (name, catalogID) in expected {
-            #expect(catalog.filter { $0.name == name }.count == 1)
+            #expect(catalog.count(where: { $0.name == name }) == 1)
             #expect(ExerciseSearch.rank(items: catalog, query: name).first?.catalogID == catalogID)
         }
 
-        let retiredIDs: Set<String> = [
+        let retiredIDs: Set = [
             "pronated-grip-machine-reverse-fly",
             "kettlebell-high-plank-drag",
             "single-arm-dumbbell-front-raise",
@@ -222,11 +222,11 @@ struct ExerciseSearchTests {
         ]
 
         for (name, catalogID) in expected {
-            #expect(catalog.filter { $0.name == name }.count == 1)
+            #expect(catalog.count(where: { $0.name == name }) == 1)
             #expect(ExerciseSearch.rank(items: catalog, query: name).first?.catalogID == catalogID)
         }
 
-        let retiredIDs: Set<String> = [
+        let retiredIDs: Set = [
             "kettlebell-goblet-squat",
             "close-grip-neutral-lat-pulldown",
             "underhand-lat-pulldown",
@@ -399,5 +399,143 @@ struct ExerciseSearchTests {
         ]
         let ranked = ExerciseSearch.rank(items: catalog, query: "abs")
         #expect(names(ranked) == ["Abs Crunch"])
+    }
+
+    // MARK: - Joined words
+
+    @Test func singleLegMatchesSpacedHyphenatedAndJoinedForms() {
+        let catalog = bundledCatalog()
+        let spaced = names(ExerciseSearch.rank(items: catalog, query: "single leg"))
+        #expect(!spaced.isEmpty)
+        #expect(spaced.allSatisfy { $0.contains("Single-Leg") })
+        #expect(names(ExerciseSearch.rank(items: catalog, query: "single-leg")) == spaced)
+        #expect(names(ExerciseSearch.rank(items: catalog, query: "singleleg")) == spaced)
+    }
+
+    @Test func joinedQueryMatchesHyphenatedName() {
+        let catalog = [item("Push-Up"), item("Push Press")]
+        let ranked = ExerciseSearch.rank(items: catalog, query: "pushup")
+        #expect(names(ranked) == ["Push-Up"])
+    }
+
+    @Test func exactAliasBeatsLooserWordPairMatch() {
+        let catalog = [
+            item("Band-Assisted Pull-Up"),
+            item("Machine-Assisted Pull-Up", aliases: ["Assisted Pullup"]),
+        ]
+        let ranked = ExerciseSearch.rank(items: catalog, query: "assisted pullup")
+        #expect(ranked.first?.name == "Machine-Assisted Pull-Up")
+    }
+
+    // MARK: - Synonyms
+
+    @Test func equivalentPhrasesFindTheSameExercises() {
+        let catalog = bundledCatalog()
+        let singleLeg = Set(names(ExerciseSearch.rank(items: catalog, query: "single leg")))
+        for query in ["one leg", "single legged", "1 leg"] {
+            let ranked = Set(names(ExerciseSearch.rank(items: catalog, query: query)))
+            #expect(singleLeg.isSubset(of: ranked), "\(query)")
+        }
+        #expect(names(ExerciseSearch.rank(items: catalog, query: "sl rdl")).contains("Kettlebell Single-Leg RDL"))
+        #expect(names(ExerciseSearch.rank(items: catalog, query: "db press")).contains("Dumbbell Bench Press"))
+    }
+
+    @Test func synonymAbbreviationMustMatchAWholeWord() {
+        let catalog = [item("Medicine Ball Slam"), item("Single-Leg Hip Thrust")]
+        let ranked = ExerciseSearch.rank(items: catalog, query: "single leg")
+        #expect(names(ranked) == ["Single-Leg Hip Thrust"])
+    }
+
+    @Test func broadTermIsOneWay() {
+        let catalog = [
+            item("Single-Arm Cable Row"),
+            item("Single-Leg Curl", group: .legs),
+            item("Unilateral Band Row"),
+        ]
+        let unilateral = Set(names(ExerciseSearch.rank(items: catalog, query: "unilateral")))
+        #expect(unilateral == ["Single-Arm Cable Row", "Single-Leg Curl", "Unilateral Band Row"])
+        #expect(names(ExerciseSearch.rank(items: catalog, query: "single leg")) == ["Single-Leg Curl"])
+    }
+
+    @Test func literalPhraseBeatsSynonymAtTheSameTier() {
+        let catalog = [item("Single-Leg Bridge"), item("One-Leg Bridge")]
+        let ranked = ExerciseSearch.rank(items: catalog, query: "one leg")
+        #expect(ranked.first?.name == "One-Leg Bridge")
+    }
+
+    // MARK: - Typo correction
+
+    @Test func unknownWordIsCorrectedAndReported() {
+        let index = ExerciseSearchIndex(items: bundledCatalog())
+        for typo in ["sinle leg", "singel leg", "signle leg"] {
+            let plan = index.plan(for: typo)
+            #expect(plan.correctedQuery == "single leg", "\(typo)")
+            #expect(names(index.rank(plan)).allSatisfy { $0.contains("Single-Leg") }, "\(typo)")
+        }
+        #expect(index.plan(for: "dumbell press").correctedQuery == "dumbbell press")
+    }
+
+    @Test func knownWordsAndPrefixesAreNeverCorrected() {
+        let index = ExerciseSearchIndex(items: bundledCatalog())
+        for query in ["press", "squats", "single le", "kettlebel", "ohp", "45 leg press"] {
+            #expect(index.plan(for: query).correctedQuery == nil, "\(query)")
+        }
+    }
+
+    @Test func shortWordsAreNotCorrected() {
+        let index = ExerciseSearchIndex(items: [item("Single-Leg Curl", group: .legs)])
+        let plan = index.plan(for: "single lge")
+        #expect(plan.correctedQuery == nil)
+        #expect(plan.isClosestMatch)
+    }
+
+    // MARK: - Closest matches
+
+    @Test func extraWordStillFindsTheExercise() {
+        let index = ExerciseSearchIndex(items: bundledCatalog())
+        let plan = index.plan(for: "split leg squat")
+        #expect(plan.isClosestMatch)
+        let ranked = names(index.rank(plan))
+        #expect(ranked.first?.contains("Split Squat") == true)
+    }
+
+    @Test func wordOrderDoesNotMatter() {
+        let catalog = bundledCatalog()
+        let inOrder = Set(names(ExerciseSearch.rank(items: catalog, query: "split squat")))
+        #expect(!inOrder.isEmpty)
+        #expect(Set(names(ExerciseSearch.rank(items: catalog, query: "squat split"))) == inOrder)
+    }
+
+    @Test func closestMatchPrefersMissingTheCommonWord() {
+        let catalog = [
+            item("Single-Leg Squat", group: .legs),
+            item("Split Squat", group: .legs),
+            item("Leg Press", group: .legs),
+            item("Leg Curl", group: .legs),
+        ]
+        let ranked = ExerciseSearch.rank(items: catalog, query: "split leg squat")
+        #expect(names(ranked) == ["Split Squat", "Single-Leg Squat"])
+    }
+
+    @Test func closestMatchOnlyWhenNoItemMatchesEveryWord() {
+        let catalog = [item("Split Squat", group: .legs), item("Single-Leg Squat", group: .legs)]
+        let index = ExerciseSearchIndex(items: catalog)
+        let plan = index.plan(for: "leg squat")
+        #expect(!plan.isClosestMatch)
+        #expect(names(index.rank(plan)) == ["Single-Leg Squat"])
+        #expect(!index.plan(for: "zzz").isClosestMatch)
+        #expect(index.rank(index.plan(for: "zzz")).isEmpty)
+    }
+
+    @Test func closestMatchMissesAtMostOneWord() {
+        let catalog = [item("Split Squat", group: .legs)]
+        #expect(ExerciseSearch.rank(items: catalog, query: "split zzz qqq").isEmpty)
+    }
+
+    @Test func editDistanceCountsAdjacentSwapAsOneEdit() {
+        #expect(ExerciseSearchText.editDistance("singel", "single", limit: 1) == 1)
+        #expect(ExerciseSearchText.editDistance("sinle", "single", limit: 1) == 1)
+        #expect(ExerciseSearchText.editDistance("deadlfit", "deadlift", limit: 2) == 1)
+        #expect(ExerciseSearchText.editDistance("bench", "lunge", limit: 2) == nil)
     }
 }

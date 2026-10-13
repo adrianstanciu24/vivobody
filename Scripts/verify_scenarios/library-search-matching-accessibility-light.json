@@ -1,0 +1,145 @@
+{
+  "name": "library-search-matching-accessibility-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPush"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "sing"
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "valueRegex": "(?i)^sing$"
+      }
+    },
+    {
+      "typeText": "le leg"
+    },
+    {
+      "typeText": " "
+    },
+    {
+      "wait": {
+        "labelContains": "No matches in Push"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXButton",
+            "labelRegex": "^Show [0-9]+ Match(es)? in All$"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "labelContains": "Single-Leg"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "labelRegex": "^Show [0-9]+ Match(es)? in All$"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXButton",
+            "labelContains": "Single-Leg"
+          },
+          {
+            "identifier": "libraryExerciseFilterAll",
+            "value": "Selected"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "No matches in"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": true,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.appearance",
+          "light",
+          "-UIPreferredContentSizeCategoryName",
+          "UICTContentSizeCategoryAccessibilityL"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "sinle leg"
+    },
+    {
+      "typeText": " "
+    },
+    {
+      "wait": {
+        "identifier": "exerciseSearchCorrection"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exerciseSearchCorrection",
+      "label": "Results for \"single leg\""
+    },
+    {
+      "role": "AXButton",
+      "labelContains": "Single-Leg"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "No exercises match"
+    }
+  ]
+}

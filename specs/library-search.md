@@ -16,6 +16,45 @@ segment as the user types.
 - Search remains a native `searchable` control. SwiftUI owns clearing, focus,
   and cancellation; Library does not supply custom close buttons or reset logic.
 
+## Matching
+
+Library and the exercise pickers share one ranker,
+[ExerciseSearch](../vivobody/Models/Domain/ExerciseSearch.swift). Every query
+word must match the exercise name or an alias. Word order does not change a
+match.
+
+- When no exercise matches every word of a query of two or more words, the
+  results are the closest matches: exercises that miss one word. An exercise
+  that misses a common word ranks above one that misses a rare word, so
+  "split leg squat" finds split squats before single-leg squats. The results
+  start with "No exact matches. Showing closest results." An exercise never
+  misses two words.
+
+- Case, accents, hyphens, and spaces do not change a match. "single leg",
+  "single-leg", and "singleleg" find the same exercises.
+- Plural and singular forms match, for example "squats" and "squat".
+- The [search vocabulary](../vivobody/Models/Domain/ExerciseSearchVocabulary.swift)
+  holds phrases that apply to many exercises, such as "single leg" = "one leg"
+  = "SL" and "DB" = "dumbbell". A query with one phrase also searches for the
+  others. A match through a synonym ranks just below a literal match. Broad
+  terms are one-way: "unilateral" finds single-leg and single-arm exercises,
+  but "single leg" does not find single-arm exercises. A name for one exercise
+  belongs in its catalog aliases, not in this vocabulary.
+- An exact name or alias ranks first.
+- Typo correction applies only to a word that no catalog word or synonym
+  contains. It replaces the word with the closest catalog word: one edit for
+  words of 4 to 7 letters, and two edits for 8 letters or more. A swap of two
+  adjacent letters is one edit. Words of three letters or fewer, and words
+  with digits, stay as typed. When a correction changes the query, the results
+  start with "Results for" and the corrected query, or with "Closest results
+  for" when the results are also closest matches. A correction never changes
+  the results silently.
+
+The selected filter limits the results. When the filter hides every match, a
+card below the filters names the filter. Its one button shows the number of
+matches in All and selects All. The card stays above the keyboard at large
+text sizes.
+
 The title mode is set by [AppRoot](../vivobody/App/AppRoot.swift). Search is in
 [LibraryScreen](../vivobody/Screens/Library/LibraryScreen.swift). Exercise
 filtering is owned by

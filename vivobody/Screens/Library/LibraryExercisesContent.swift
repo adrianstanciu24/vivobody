@@ -126,9 +126,11 @@ struct LibraryExercisesContent: View {
                     .padding(.horizontal, -Space.gutter)
 
                 if browser.searchResults.isEmpty {
-                    emptyState
-                        .padding(.top, Space.xxl)
+                    searchEmptyState(browser)
                 } else {
+                    if let note = browser.searchNote {
+                        ExerciseSearchNote(text: note)
+                    }
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(Array(browser.searchResults.enumerated()), id: \.element.id) { idx, item in
                             if idx > 0 { insetRowDivider }
@@ -324,6 +326,20 @@ struct LibraryExercisesContent: View {
     }
 
     // MARK: - Empty state
+
+    @ViewBuilder
+    private func searchEmptyState(_ browser: ExerciseCatalogBrowserSnapshot) -> some View {
+        if browser.hiddenMatchCount > 0 {
+            ExerciseSearchHiddenMatchesState(
+                filter: exerciseFilter,
+                matchCount: browser.hiddenMatchCount,
+                onShowAll: { exerciseFilter = .all }
+            )
+        } else {
+            emptyState
+                .padding(.top, Space.xxl)
+        }
+    }
 
     /// The Favorites scope gets a teaching empty state (title +
     /// smaller description, no CTA) — creating a new exercise
