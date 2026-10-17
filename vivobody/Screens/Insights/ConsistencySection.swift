@@ -211,7 +211,7 @@ struct ConsistencySection: View {
     }
 
     private func formatRIR(_ value: Double) -> String {
-        String(format: "%.1f", value)
+        value.formatted(.number.precision(.fractionLength(1)))
     }
 
     // MARK: - Heatmap legend

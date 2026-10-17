@@ -420,8 +420,6 @@ extension MePresentation {
             delta = nil
         }
 
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d"
         return .populated(BodyWeightSummary(
             value: WeightFormatter.string(
                 latest.canonicalPounds,
@@ -432,7 +430,7 @@ extension MePresentation {
             unit: unit.symbol,
             delta: delta,
             firstEntryLabel: delta == nil
-                ? "First entry · \(formatter.string(from: latest.date))"
+                ? "First entry · \(latest.date.formatted(.dateTime.month(.abbreviated).day()))"
                 : nil,
             sparkValues: bounded.reversed().map(\.canonicalPounds)
         ))

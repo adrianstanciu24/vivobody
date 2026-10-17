@@ -186,7 +186,7 @@ extension [WorkoutSession] {
     var monthlyRecap: MonthlyRecap {
         let cal = Calendar.current
         let interval = cal.dateInterval(of: .month, for: Date())
-        let label = Self.monthFormatter.string(from: Date())
+        let label = Date().formatted(.dateTime.month(.wide))
 
         let monthSessions = filter { session in
             guard let done = session.completedAt, let interval else { return false }
@@ -213,14 +213,6 @@ extension [WorkoutSession] {
             prs: prs
         )
     }
-
-    // MARK: - Formatters
-
-    private static let monthFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "LLLL"
-        return f
-    }()
 }
 
 // MARK: - Standing records
@@ -267,7 +259,9 @@ enum JourneyFormatting {
         calendar: Calendar = .current
     ) -> String? {
         guard let since else { return nil }
-        let sinceLabel = monthYearFormatter.string(from: since)
+        let sinceLabel = since.formatted(
+            Date.FormatStyle(calendar: calendar, timeZone: calendar.timeZone).month(.abbreviated).year()
+        )
 
         let startDay = calendar.startOfDay(for: since)
         let nowDay = calendar.startOfDay(for: now)
@@ -288,12 +282,6 @@ enum JourneyFormatting {
         }
         return "Training since \(sinceLabel) · \(age)"
     }
-
-    private static let monthYearFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "MMM yyyy"
-        return f
-    }()
 }
 
 // MARK: - Milestone builders

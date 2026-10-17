@@ -2,12 +2,14 @@
 //  MiniChart.swift
 //  vivobody
 //
-//  Tiny line chart for at-a-glance progress on Me-tab rows. Path-
-//  based rather than SwiftUI Charts so it stays sparkline-tight: no
-//  axes, no labels, no gridlines, no padding chrome. Just the curve,
-//  a soft gradient fill below it, and optional PR pips.
+//  Tiny Swift Charts sparkline for at-a-glance progress on Me-tab rows.
+//  All chart chrome is hidden so it stays sparkline-tight: no axes, no
+//  labels, no gridlines, no legend, no plot padding. Just the curve, a
+//  soft gradient fill below it, and optional PR pips. The chart reads as
+//  one VoiceOver element carrying the caller's summary label.
 //
 
+import Charts
 import SwiftUI
 import VivoKit
 
@@ -22,27 +24,22 @@ struct MiniChart: View {
     /// pass a concise summary (e.g. "Body weight trend, 178 to 185 lb").
     var accessibilityLabel: String? = nil
 
-    var body: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            let h = geo.size.height
-            let normalized = Self.normalize(values, height: h)
+    /// Reserve 4pt of headroom top and bottom so dots and line ends
+    /// don't kiss the chart frame.
+    private static let verticalInset: CGFloat = 4
 
-            ZStack {
+    var body: some View {
+        let domain = Self.yDomain(for: values)
+        Chart {
+            ForEach(values.indices, id: \.self) { index in
                 // Filled area under the curve — fades to clear so it
                 // reads as a soft underglow rather than a solid block.
-                Path { path in
-                    guard let first = normalized.first else { return }
-                    let stepX = stepX(width: w, count: normalized.count)
-                    path.move(to: CGPoint(x: 0, y: h))
-                    path.addLine(to: CGPoint(x: 0, y: first))
-                    for (i, y) in normalized.enumerated().dropFirst() {
-                        path.addLine(to: CGPoint(x: CGFloat(i) * stepX, y: y))
-                    }
-                    path.addLine(to: CGPoint(x: w, y: h))
-                    path.closeSubpath()
-                }
-                .fill(
+                AreaMark(
+                    x: .value("Index", index),
+                    yStart: .value("Floor", domain.lowerBound),
+                    yEnd: .value("Value", values[index])
+                )
+                .foregroundStyle(
                     LinearGradient(
                         colors: [fillColor.opacity(0.30), fillColor.opacity(0)],
                         startPoint: .top,
@@ -50,31 +47,34 @@ struct MiniChart: View {
                     )
                 )
 
-                // The line itself.
-                Path { path in
-                    guard let first = normalized.first else { return }
-                    let stepX = stepX(width: w, count: normalized.count)
-                    path.move(to: CGPoint(x: 0, y: first))
-                    for (i, y) in normalized.enumerated().dropFirst() {
-                        path.addLine(to: CGPoint(x: CGFloat(i) * stepX, y: y))
-                    }
-                }
-                .stroke(lineColor.opacity(0.85), style: StrokeStyle(lineWidth: 1.4, lineCap: .round, lineJoin: .round))
+                LineMark(
+                    x: .value("Index", index),
+                    y: .value("Value", values[index])
+                )
+                .foregroundStyle(lineColor.opacity(0.85))
+                .lineStyle(StrokeStyle(lineWidth: 1.4, lineCap: .round, lineJoin: .round))
+            }
 
-                // PR pips — small solid dots on flagged points.
-                if !prIndices.isEmpty {
-                    ForEach(Array(prIndices), id: \.self) { i in
-                        if i >= 0, i < normalized.count {
-                            let stepX = stepX(width: w, count: normalized.count)
-                            Circle()
-                                .fill(prColor)
-                                .frame(width: 5, height: 5)
-                                .position(x: CGFloat(i) * stepX, y: normalized[i])
-                        }
-                    }
-                }
+            ForEach(prIndices.filter(values.indices.contains).sorted(), id: \.self) { index in
+                PointMark(
+                    x: .value("Index", index),
+                    y: .value("Value", values[index])
+                )
+                .symbolSize(CGSize(width: 5, height: 5))
+                .foregroundStyle(prColor)
             }
         }
+        .chartXAxis(.hidden)
+        .chartYAxis(.hidden)
+        .chartLegend(.hidden)
+        .chartXScale(
+            domain: 0 ... max(values.count - 1, 1),
+            range: .plotDimension(padding: 0)
+        )
+        .chartYScale(
+            domain: domain,
+            range: .plotDimension(startPadding: Self.verticalInset, endPadding: Self.verticalInset)
+        )
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel ?? "Trend chart")
     }
@@ -83,30 +83,13 @@ struct MiniChart: View {
         Color(.sRGB, red: 1.0, green: 0.78, blue: 0.30, opacity: 1.0)
     }
 
-    private func stepX(width: CGFloat, count: Int) -> CGFloat {
-        guard count > 1 else { return 0 }
-        return width / CGFloat(count - 1)
-    }
-
-    /// Map values to Y coordinates in the chart's frame. Higher
-    /// values produce smaller Y (closer to the top edge). When all
-    /// values are equal, we plant the line at the vertical center
-    /// so it doesn't collapse onto the top or bottom edge.
-    private static func normalize(_ values: [Double], height: CGFloat) -> [CGFloat] {
-        guard let minV = values.min(), let maxV = values.max() else { return [] }
-        let range = maxV - minV
-        // Reserve 4pt of headroom top and bottom so dots and line
-        // ends don't kiss the chart frame.
-        let usable = max(1, height - 8)
-        let topPad: CGFloat = 4
-
-        if range == 0 {
-            return values.map { _ in height / 2 }
-        }
-        return values.map { v in
-            let t = (v - minV) / range // 0…1, higher = bigger value
-            return topPad + (1 - CGFloat(t)) * usable
-        }
+    /// The value range the plot spans. When all values are equal, the
+    /// range widens symmetrically so the line sits at the vertical
+    /// center instead of collapsing onto the top or bottom edge.
+    private static func yDomain(for values: [Double]) -> ClosedRange<Double> {
+        guard let minV = values.min(), let maxV = values.max() else { return 0 ... 1 }
+        guard maxV > minV else { return (minV - 1) ... (minV + 1) }
+        return minV ... maxV
     }
 }
 
@@ -123,6 +106,13 @@ struct MiniChart: View {
 
         MiniChart(values: [200, 195, 190, 195, 200, 205, 210], prIndices: [0, 5, 6])
             .frame(width: 120, height: 40)
+
+        MiniChart(
+            values: [178, 179.4, 178.8, 177.9, 177.6],
+            lineColor: Tint.inProgress,
+            fillColor: Tint.inProgress
+        )
+        .frame(width: 96, height: 36)
     }
     .padding(Space.xxl)
     .background(Color.black)

@@ -73,14 +73,12 @@ private struct StaminaPatternBeam: View {
                 Text("\(Int((pattern.retention * 100).rounded()))%")
                     .font(Typography.statValueCompact).foregroundStyle(Tint.primary).monospacedDigit()
             }
-            GeometryReader { proxy in
-                ZStack(alignment: .leading) {
-                    Capsule().fill(Surface.cardTintBright)
-                    Capsule().fill(Tint.primary.gradient)
-                        .frame(width: proxy.size.width * pattern.retention / scale)
-                }
-            }
-            .frame(height: InstrumentBarHeight.standard)
+            FractionBar(
+                value: pattern.retention / scale,
+                track: Surface.cardTintBright,
+                fill: Tint.primary.gradient,
+                height: InstrumentBarHeight.standard
+            )
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(pattern.pattern.displayName), holds \(Int((pattern.retention * 100).rounded())) percent of first-set reps, \(pattern.series.count) series, all time")

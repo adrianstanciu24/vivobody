@@ -4,7 +4,7 @@
 //
 //  Supporting view types for the History screen: the carded weekly
 //  hero (volume-led), week cadence strip, carded date-group sections,
-//  session rows, date grouping logic, and shared formatters.
+//  session rows, and date grouping logic.
 //  Extracted from HistoryScreen.swift. The ember dot the strip plots
 //  lives in Components/Displays/CadenceDot.swift — Today's consistency
 //  strip draws the same day.
@@ -114,7 +114,7 @@ struct WeeklyHero: View {
 
     var rirLabel: String {
         guard let rir = averageRIR else { return "—" }
-        return String(format: "%.1f", rir)
+        return rir.formatted(.number.precision(.fractionLength(1)))
     }
 
     var isRIROnTarget: Bool {
@@ -180,7 +180,7 @@ struct WeekCadenceStrip: View {
         let isPR = prDays.contains(start)
 
         return VStack(spacing: Space.sm) {
-            Text(Self.weekdayLetter.string(from: day))
+            Text(day, format: .dateTime.weekday(.narrow))
                 .font(Typography.caption)
                 .foregroundStyle(isWorkout ? Ink.secondary : Ink.primary.opacity(Opacity.soft))
             CadenceDot(
@@ -189,21 +189,9 @@ struct WeekCadenceStrip: View {
             )
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Self.accessibilityDay.string(from: day))
+        .accessibilityLabel(day.formatted(.dateTime.weekday(.wide)))
         .accessibilityValue(isWorkout ? (isPR ? "Trained, personal record" : "Trained") : "Rest")
     }
-
-    static let weekdayLetter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "EEEEE"
-        return f
-    }()
-
-    static let accessibilityDay: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "EEEE"
-        return f
-    }()
 }
 
 // MARK: - Date group section
@@ -417,12 +405,12 @@ struct SessionRow: View {
 
     var dateLine: String {
         let date = session.completedAt ?? session.startedAt
-        return HistoryFormatters.compactDay.string(from: date)
+        return date.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day())
     }
 
     var timeString: String {
         let date = session.completedAt ?? session.startedAt
-        return HistoryFormatters.time.string(from: date)
+        return date.formatted(.dateTime.hour().minute())
     }
 }
 
@@ -527,9 +515,10 @@ struct HistoryDateGroup: Identifiable {
         case .thisWeek: return "Earlier this week"
         case .lastWeek: return "Last week"
         case let .month(date):
-            let f = DateFormatter()
-            f.dateFormat = Calendar.current.isDate(date, equalTo: Date(), toGranularity: .year) ? "LLLL" : "LLLL yyyy"
-            return f.string(from: date)
+            let month = Date.FormatStyle.dateTime.month(.wide)
+            return Calendar.current.isDate(date, equalTo: Date(), toGranularity: .year)
+                ? date.formatted(month)
+                : date.formatted(month.year())
         }
     }
 
@@ -556,18 +545,4 @@ extension WorkoutSession {
         }
         return ordered
     }
-}
-
-enum HistoryFormatters {
-    static let time: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "h:mm a"
-        return f
-    }()
-
-    static let compactDay: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "EEE MMM d"
-        return f
-    }()
 }

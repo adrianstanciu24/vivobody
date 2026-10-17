@@ -240,10 +240,8 @@ struct TrainingLoadSection: View {
     // MARK: - Formatting and color
 
     private func format(_ value: Double) -> String {
-        if abs(value.rounded() - value) < 0.05 {
-            return String(format: "%.0f", value)
-        }
-        return String(format: "%.1f", value)
+        let digits = abs(value.rounded() - value) < 0.05 ? 0 : 1
+        return value.formatted(.number.precision(.fractionLength(digits)))
     }
 
     private func formatMeasure(_ value: Double) -> String {

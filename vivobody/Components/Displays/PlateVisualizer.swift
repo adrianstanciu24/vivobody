@@ -165,7 +165,7 @@ struct PlateVisualizer: View {
     private func formatted(_ value: Double) -> String {
         value.truncatingRemainder(dividingBy: 1) == 0
             ? "\(Int(value))"
-            : String(format: "%.1f", value)
+            : value.formatted(.number.precision(.fractionLength(1)).grouping(.never))
     }
 
     private var barGradient: LinearGradient {

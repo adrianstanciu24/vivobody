@@ -31,7 +31,7 @@ extension ExerciseDetailReadModel {
         guard exercise.supportsEstimatedOneRepMax, let summary else {
             return nil
         }
-        let average = String(format: "RIR %.1f", summary.avgRIR)
+        let average = "RIR \(oneDecimal(summary.avgRIR))"
         let setNoun = summary.lastSessionSetCount == 1 ? "set" : "sets"
         let last = "Last · \(summary.lastSessionSetCount) \(setNoun)"
         return Effort(
@@ -149,11 +149,11 @@ extension ExerciseDetailReadModel {
     }
 
     static func setsLabel(_ value: Double) -> String {
-        value <= 0 ? "0" : String(format: "%.1f", value)
+        value <= 0 ? "0" : oneDecimal(value)
     }
 
     static func oneDecimal(_ value: Double) -> String {
-        String(format: "%.1f", value)
+        value.formatted(.number.precision(.fractionLength(1)))
     }
 
     static func dayCountText(

@@ -24,7 +24,8 @@ struct DigitTicker: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var formattedString: String {
-        formatter?(value) ?? String(format: "%.\(fractionalDigits)f", value)
+        formatter?(value)
+            ?? value.formatted(.number.precision(.fractionLength(fractionalDigits)).grouping(.never))
     }
 
     var body: some View {

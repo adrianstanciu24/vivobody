@@ -156,7 +156,7 @@ struct BodyWeightDetail: View {
             }
 
             if let latest {
-                Text("Last logged \(Self.dayFormatter.string(from: latest.date))")
+                Text("Last logged \(Self.dayLabel(latest.date))")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
             } else {
@@ -363,7 +363,7 @@ struct BodyWeightDetail: View {
 
     private func recentRow(_ entry: BodyWeightEntry) -> some View {
         HStack(spacing: 12) {
-            Text(Self.dayFormatter.string(from: entry.date))
+            Text(Self.dayLabel(entry.date))
                 .font(Typography.metricUnit)
                 .foregroundStyle(Ink.tertiary)
                 .frame(width: 110, alignment: .leading)
@@ -429,11 +429,11 @@ struct BodyWeightDetail: View {
         return samples
     }
 
-    private static let dayFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "MMM d  ·  yy"
-        return f
-    }()
+    private static func dayLabel(_ date: Date) -> String {
+        date.formatted(.dateTime.month(.abbreviated).day())
+            + "  ·  "
+            + date.formatted(.dateTime.year(.twoDigits))
+    }
 }
 
 /// Keeps SwiftData subscriptions proportional to what this screen can show:

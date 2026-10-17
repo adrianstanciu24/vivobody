@@ -568,7 +568,7 @@ struct BareScrubber: View {
     private func format(_ v: Double) -> String {
         if let formatter { return formatter(v) }
         let d = displayFractionDigits(for: v)
-        return d == 0 ? "\(Int(v))" : String(format: "%.\(d)f", v)
+        return d == 0 ? "\(Int(v))" : v.formatted(.number.precision(.fractionLength(d)).grouping(.never))
     }
 
     /// Bare readouts drop a whole value's trailing ".0" (60, not 60.0);
@@ -582,7 +582,7 @@ struct BareScrubber: View {
     private func templateFormat(_ v: Double) -> String {
         if let formatter { return formatter(v) }
         let d = WeightUnit.fractionDigits(forStep: step, value: v)
-        return d == 0 ? "\(Int(v))" : String(format: "%.\(d)f", v)
+        return d == 0 ? "\(Int(v))" : v.formatted(.number.precision(.fractionLength(d)).grouping(.never))
     }
 
     private var fillFraction: Double {

@@ -29,9 +29,7 @@
                             selection: $weightStep,
                             options: [1.0, 2.5, 5.0]
                         ) { value in
-                            value.truncatingRemainder(dividingBy: 1) == 0
-                                ? "\(Int(value)) lb"
-                                : String(format: "%.1f lb", value)
+                            "\(value.formatted(.number.precision(.fractionLength(0 ... 1)))) lb"
                         }
                     }
 

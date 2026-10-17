@@ -46,9 +46,7 @@ struct StreakCalendar: View {
     }
 
     private var monthLabel: String {
-        let f = DateFormatter()
-        f.dateFormat = "LLLL yyyy"
-        return f.string(from: month)
+        month.formatted(.dateTime.month(.wide).year())
     }
 
     var body: some View {
@@ -131,10 +129,7 @@ struct StreakCalendar: View {
     /// Out-of-month days are announced with just the date so they don't
     /// clutter the calendar's actual month.
     private func dayAccessibilityLabel(date: Date, isWorkout: Bool, isPR: Bool, isInMonth: Bool) -> String {
-        let f = DateFormatter()
-        f.dateFormat = "MMMM d"
-        let datePart = f.string(from: date)
-        var parts = [datePart]
+        var parts = [date.formatted(.dateTime.month(.wide).day())]
         if isInMonth {
             parts.append(isWorkout ? "workout" : "rest")
             if isPR { parts.append("personal record") }

@@ -224,9 +224,6 @@ nonisolated extension AnalyticsAccumulator {
             0
         }
 
-        let monthFormatter = DateFormatter()
-        monthFormatter.dateFormat = "LLLL"
-
         // A first workout should read as 1.0/week, not an extrapolated
         // 7.0/week. After the first seven days the denominator expands
         // continuously through `now`, so this remains a true lifetime
@@ -253,7 +250,9 @@ nonisolated extension AnalyticsAccumulator {
             streak: WorkoutStreak.compute(dates: dates, now: now, calendar: calendar),
             consistencyHistory: consistencyHistory,
             monthlyRecap: MonthlyRecap(
-                monthLabel: monthFormatter.string(from: now),
+                monthLabel: now.formatted(
+                    Date.FormatStyle(calendar: calendar, timeZone: calendar.timeZone).month(.wide)
+                ),
                 workouts: monthWorkouts,
                 volume: monthTonnage.knownSubtotal,
                 volumeAvailability: monthTonnage.availability,

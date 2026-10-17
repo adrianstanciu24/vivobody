@@ -14,16 +14,13 @@ enum InsightsFormat {
     /// One decimal place for an effective-set count, with a clean "0"
     /// for an untrained muscle.
     static func setsLabel(_ value: Double) -> String {
-        value <= 0 ? "0" : String(format: "%.1f", value)
+        value <= 0 ? "0" : value.formatted(.number.precision(.fractionLength(1)))
     }
 
     /// Sessions per week, dropping a redundant decimal when the
     /// one-decimal value is a whole number.
     nonisolated static func perWeekLabel(_ value: Double) -> String {
         let oneDecimal = (value * 10).rounded() / 10
-        if oneDecimal == oneDecimal.rounded() {
-            return String(format: "%.0f", oneDecimal)
-        }
-        return String(format: "%.1f", oneDecimal)
+        return oneDecimal.formatted(.number.precision(.fractionLength(0 ... 1)))
     }
 }

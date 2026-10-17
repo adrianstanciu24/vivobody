@@ -403,6 +403,25 @@ These parts have no good native replacement, or the custom code is the product:
   passed on iPhone Air, iOS 26.5. `custom-exercise-type` is flaky: the editor
   sheet often does not open at launch. The pre-B3 commit fails the same way. A
   manual run showed the native menu with the three allowed types.
-- [ ] B4. Charts and formats.
+- [x] B4. Charts and formats. Done on 2026-10-17. All fixed `DateFormatter`
+  patterns use `Date.FormatStyle`; the "  ·  " separators stay. In en_US, times
+  get a narrow no-break space before AM or PM, and History rows read
+  "Sun, May 3". Display `String(format:)` uses number format styles; seeder
+  UUIDs, `WeightFormatter`, `DurationFormatter`, and one DEBUG gallery counter
+  keep printf. `MiniChart` uses Swift Charts. The rhythm staircase and the
+  consistency heatmap stay custom: the staircase draw-in and staggered dots
+  have no Charts equivalent, and the heatmap is a calendar grid. A shared
+  `FractionBar` (`ProgressView` with a custom style) replaces three
+  single-value bars. Split, segmented, and vertical bars stay custom.
+  `insights-movement-coverage`, `insights-muscle-directness`,
+  `insights-rhythm-cadence`, `insights-stamina`, `insights-stamina-light`,
+  `exercise-detail-hero`, and `archive-to-history` passed on iPhone Air,
+  iOS 26.5. `me-showcase`, `insights-showcase`, and `insights-accessibility`
+  fail the same way on the pre-B4 commit: their fixture values and scroll
+  stops are out of date. A temporary scenario showed the body weight
+  sparkline in light and dark. The simulator region (Romania) uses decimal
+  commas and 24-hour time. `WeightFormatter` still prints "12.5k" and forces
+  "," grouping, so one screen can mix decimal marks. Fix that in a later
+  change, not in this plan.
 - [ ] B5. Active workout interactions.
 - [ ] B6. App Intents and Spotlight.

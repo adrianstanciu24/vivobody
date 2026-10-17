@@ -222,15 +222,8 @@ private struct ExerciseSourceShareRow: View {
                     .font(Typography.statValueCompact).foregroundStyle(tint)
                     .monospacedDigit().fixedSize()
             }
-            GeometryReader { proxy in
-                ZStack(alignment: .leading) {
-                    Capsule().fill(Surface.edge)
-                    Capsule().fill(tint.gradient)
-                        .frame(width: proxy.size.width * share)
-                }
-            }
-            .frame(height: InstrumentBarHeight.micro)
-            .accessibilityHidden(true)
+            FractionBar(value: share, track: Surface.edge, fill: tint.gradient, height: InstrumentBarHeight.micro)
+                .accessibilityHidden(true)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(source.name), \(percentage) percent of \(roleLabel)")

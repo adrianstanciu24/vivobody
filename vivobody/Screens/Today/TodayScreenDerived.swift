@@ -156,27 +156,10 @@ extension TodayScreen {
         } else if calendar.isDateInYesterday(date) {
             "Yesterday"
         } else {
-            Self.dayFormatter.string(from: date)
+            date.formatted(.dateTime.weekday(.abbreviated))
+                + "  ·  "
+                + date.formatted(.dateTime.month(.abbreviated).day())
         }
-        return day + "  ·  " + Self.timeFormatter.string(from: date)
+        return day + "  ·  " + date.formatted(.dateTime.hour().minute())
     }
-
-    // MARK: - Formatters
-
-    /// Weekday + month/day for sessions older than yesterday. Today
-    /// and yesterday are resolved by hand in `lastWorkoutMeta` —
-    /// `doesRelativeDateFormatting` silently yields an empty string
-    /// when paired with a custom `dateFormat`, which is why the date
-    /// used to render blank.
-    static let dayFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "EEE  ·  MMM d"
-        return f
-    }()
-
-    static let timeFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "h:mm a"
-        return f
-    }()
 }

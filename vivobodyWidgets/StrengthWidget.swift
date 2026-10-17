@@ -330,7 +330,7 @@ struct TrainingLoadWidgetView: View {
                 let thousands = value / 1000
                 return thousands.rounded() == thousands
                     ? "\(Int(thousands))k"
-                    : String(format: "%.1fk", thousands)
+                    : "\(thousands.formatted(.number.precision(.fractionLength(1)).grouping(.never)))k"
             }
             return "\(Int(value.rounded()))"
         }
@@ -340,6 +340,6 @@ struct TrainingLoadWidgetView: View {
     private func formatSetCount(_ value: Double) -> String {
         abs(value.rounded() - value) < 0.05
             ? "\(Int(value.rounded()))"
-            : String(format: "%.1f", value)
+            : value.widgetOneDecimal
     }
 }

@@ -408,14 +408,12 @@ struct WorkoutSummaryCard: View {
 
     private var dateString: String {
         let date = session.completedAt ?? session.startedAt
-        return Self.dateFormatter.string(from: date)
+        return [
+            date.formatted(.dateTime.weekday(.wide)),
+            date.formatted(.dateTime.month(.abbreviated).day()),
+            date.formatted(.dateTime.hour().minute()),
+        ].joined(separator: "  ·  ")
     }
-
-    private static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "EEEE  ·  MMM d  ·  h:mm a"
-        return f
-    }()
 
     // MARK: - Entrance animation
 

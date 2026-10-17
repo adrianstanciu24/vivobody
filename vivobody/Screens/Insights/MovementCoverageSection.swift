@@ -68,14 +68,7 @@ struct MovementCoverageSection: View {
                 Text(direction(plane))
                     .font(Typography.caption).foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-                GeometryReader { proxy in
-                    Capsule().fill(Ink.quaternary)
-                        .overlay(alignment: .leading) {
-                            Capsule().fill(Tint.primary)
-                                .frame(width: proxy.size.width * report.share(plane))
-                        }
-                }
-                .frame(height: InstrumentBarHeight.micro)
+                FractionBar(value: report.share(plane), track: Ink.quaternary, fill: Tint.primary, height: InstrumentBarHeight.micro)
             }
         }
         .accessibilityElement(children: .ignore)

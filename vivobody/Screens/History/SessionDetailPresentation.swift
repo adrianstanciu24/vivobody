@@ -105,7 +105,11 @@ struct SessionDetailPresentation {
         default: "Full body"
         }
         let date = session.completedAt ?? session.startedAt
-        dateLine = SessionDetailPresentation.dateFormatter.string(from: date)
+        dateLine = [
+            date.formatted(.dateTime.weekday(.wide)),
+            date.formatted(.dateTime.month(.abbreviated).day()),
+            date.formatted(.dateTime.hour().minute()),
+        ].joined(separator: "  ·  ")
         durationMinutes = max(0, Int(session.duration / 60))
         totalSets = setCount
         totalReps = repCount
@@ -172,10 +176,4 @@ struct SessionDetailPresentation {
         }
         return "—"
     }
-
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE  ·  MMM d  ·  h:mm a"
-        return formatter
-    }()
 }

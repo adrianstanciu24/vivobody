@@ -308,7 +308,7 @@ struct HeatmapLegend: View {
 
 extension Double {
     var widgetOneDecimal: String {
-        String(format: "%.1f", self)
+        formatted(.number.precision(.fractionLength(1)).grouping(.never))
     }
 }
 
@@ -325,7 +325,7 @@ enum WidgetFormat {
             let k = display / 1000
             return k.truncatingRemainder(dividingBy: 1) == 0
                 ? "\(Int(k))k"
-                : String(format: "%.1fk", k)
+                : "\(k.widgetOneDecimal)k"
         }
         return NumberFormatter.widgetVolume.string(from: NSNumber(value: Int(display.rounded())))
             ?? "\(Int(display.rounded()))"

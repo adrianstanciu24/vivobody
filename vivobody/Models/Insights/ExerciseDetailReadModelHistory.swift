@@ -88,8 +88,6 @@ extension ExerciseDetailReadModel {
 
     static func perWeekLabel(_ value: Double) -> String {
         let oneDecimal = (value * 10).rounded() / 10
-        return oneDecimal == oneDecimal.rounded()
-            ? String(format: "%.0f", oneDecimal)
-            : String(format: "%.1f", oneDecimal)
+        return oneDecimal.formatted(.number.precision(.fractionLength(0 ... 1)))
     }
 }

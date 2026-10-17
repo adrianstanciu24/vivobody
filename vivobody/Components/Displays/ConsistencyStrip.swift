@@ -170,7 +170,7 @@ struct ConsistencyStrip: View {
     }
 
     private func dayLabel(_ day: Date, isToday: Bool) -> String {
-        isToday ? "Today" : Self.dayFormatter.string(from: day)
+        isToday ? "Today" : day.formatted(.dateTime.weekday(.wide).month(.wide).day())
     }
 
     private var accessibilitySummary: String {
@@ -183,12 +183,6 @@ struct ConsistencyStrip: View {
         }
         return "\(count). Training days: \(dates.joined(separator: "; "))"
     }
-
-    private static let dayFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "EEEE, MMMM d"
-        return f
-    }()
 }
 
 #Preview("Two weeks") {

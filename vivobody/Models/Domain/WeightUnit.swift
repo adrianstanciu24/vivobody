@@ -170,7 +170,7 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     /// Short label for a step value: "±2.5 kg", "±1 lb", etc.
     static func stepLabel(_ step: Double, unit: String) -> String {
         let d = digits(step)
-        let v = d == 0 ? "\(Int(step))" : String(format: "%.\(d)f", step)
+        let v = d == 0 ? "\(Int(step))" : step.formatted(.number.precision(.fractionLength(d)))
         return "±\(v) \(unit)"
     }
 }
