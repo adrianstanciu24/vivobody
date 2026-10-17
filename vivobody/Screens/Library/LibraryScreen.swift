@@ -33,8 +33,8 @@
 //  splits rows by recency — anything lifted in the last 14 days
 //  reads prominent with a larger weight×reps numeral, the rest
 //  tighter. An all-time best renders its numeral in gold. The
-//  segmented control is a Liquid Glass track with a sliding orange
-//  thumb.
+//  scope switch is the shared SegmentedPicker: a Liquid Glass track
+//  with a sliding orange thumb.
 //
 
 import SwiftData

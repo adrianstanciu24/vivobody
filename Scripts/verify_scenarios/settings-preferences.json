@@ -60,9 +60,13 @@
       }
     },
     {
-      "tap": {
-        "label": "Haptics",
-        "role": "AXCheckBox"
+      "tapIn": {
+        "selector": {
+          "label": "Haptics",
+          "role": "AXCheckBox"
+        },
+        "xFraction": 0.92,
+        "yFraction": 0.5
       }
     },
     {
@@ -92,9 +96,13 @@
       }
     },
     {
-      "tap": {
-        "label": "Sounds",
-        "role": "AXCheckBox"
+      "tapIn": {
+        "selector": {
+          "label": "Sounds",
+          "role": "AXCheckBox"
+        },
+        "xFraction": 0.92,
+        "yFraction": 0.5
       }
     },
     {
@@ -152,9 +160,13 @@
       }
     },
     {
-      "tap": {
-        "label": "Haptics",
-        "role": "AXCheckBox"
+      "tapIn": {
+        "selector": {
+          "label": "Haptics",
+          "role": "AXCheckBox"
+        },
+        "xFraction": 0.92,
+        "yFraction": 0.5
       }
     },
     {
@@ -191,9 +203,13 @@
       }
     },
     {
-      "tap": {
-        "label": "Sounds",
-        "role": "AXCheckBox"
+      "tapIn": {
+        "selector": {
+          "label": "Sounds",
+          "role": "AXCheckBox"
+        },
+        "xFraction": 0.92,
+        "yFraction": 0.5
       }
     },
     {

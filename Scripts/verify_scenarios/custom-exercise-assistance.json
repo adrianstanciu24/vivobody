@@ -11,6 +11,18 @@
   },
   "steps": [
     {
+      "wait": {
+        "label": "New Exercise",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "down",
+        "count": 1
+      }
+    },
+    {
       "scrollTo": {
         "selector": {
           "label": "Load interpretation",
@@ -28,26 +40,51 @@
     {
       "wait": {
         "label": "Assistance · Assisted pull-up/chin-up machine",
-        "value": "Not selected"
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "External Load",
+            "role": "AXButton"
+          },
+          {
+            "label": "Bodyweight + Load",
+            "role": "AXButton"
+          },
+          {
+            "label": "Assistance · Assisted pull-up/chin-up machine",
+            "role": "AXButton"
+          },
+          {
+            "label": "Non-comparable",
+            "role": "AXButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Assistance · Assisted pull-up/chin-up machine",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Load interpretation",
+        "value": "Assistance"
       }
     }
   ],
   "required": [
     {
-      "label": "External Load",
-      "value": "Selected"
+      "label": "Load interpretation",
+      "value": "Assistance"
     },
     {
-      "label": "Bodyweight + Load",
-      "value": "Not selected"
-    },
-    {
-      "label": "Assistance · Assisted pull-up/chin-up machine",
-      "value": "Not selected"
-    },
-    {
-      "label": "Non-comparable",
-      "value": "Not selected"
+      "label": "Bodyweight carried"
     }
   ]
 }

@@ -176,6 +176,51 @@ class VerifyScenarioTests(unittest.TestCase):
         with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "non-empty strings"):
             verify_scenario.validate_scenario_definition(scenario)
 
+    def test_element_point_uses_fractions_of_the_visible_frame(self) -> None:
+        snapshot = tree(element(label="Haptics", frame=(36, 300, 348, 40)))
+        node = verify_scenario.find_matches(snapshot, {"label": "Haptics"})[0].node
+
+        self.assertEqual(verify_scenario.element_point(node, snapshot, 0.5, 0.5), (210, 320))
+        self.assertEqual(verify_scenario.element_point(node, snapshot, 1, 0), (384, 300))
+
+    def test_tap_in_accepts_selector_and_fractions(self) -> None:
+        scenario = {
+            "name": "tap-in",
+            "launch": {},
+            "steps": [
+                {
+                    "tapIn": {
+                        "selector": {"label": "Haptics", "role": "AXCheckBox"},
+                        "xFraction": 0.92,
+                        "yFraction": 0.5,
+                    }
+                },
+            ],
+            "required": [],
+            "forbidden": [],
+        }
+
+        verify_scenario.validate_scenario_definition(scenario)
+
+    def test_tap_in_rejects_missing_selector_and_out_of_range_fraction(self) -> None:
+        def scenario(payload: dict[str, object]) -> dict[str, object]:
+            return {
+                "name": "invalid-tap-in",
+                "launch": {},
+                "steps": [{"tapIn": payload}],
+                "required": [],
+                "forbidden": [],
+            }
+
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "selector must be an object"):
+            verify_scenario.validate_scenario_definition(
+                scenario({"xFraction": 0.5, "yFraction": 0.5})
+            )
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "from 0 through 1"):
+            verify_scenario.validate_scenario_definition(
+                scenario({"selector": {"label": "Haptics"}, "xFraction": 1.2, "yFraction": 0.5})
+            )
+
     def test_relaunch_tap_accepts_semantic_calibration_and_delay(self) -> None:
         scenario = {
             "name": "relaunch-tap",

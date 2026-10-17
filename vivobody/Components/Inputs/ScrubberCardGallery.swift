@@ -25,7 +25,7 @@
                             .tracking(2)
                             .foregroundStyle(Ink.tertiary)
 
-                        StepSelector(
+                        SegmentedPicker(
                             selection: $weightStep,
                             options: [1.0, 2.5, 5.0]
                         ) { value in

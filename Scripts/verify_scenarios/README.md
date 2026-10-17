@@ -76,6 +76,10 @@ framework chatter or user-owned values.
 - `wait`: poll until at least one visible element matches a selector.
 - `waitAbsent`: poll until no visible element matches a selector.
 - `tap`: require one visible match and tap its on-screen midpoint.
+- `tapIn`: like `tap`, but tap at `xFraction` and `yFraction` of the match's
+  visible frame. Use it when the element is wider than its hit target, such as a
+  native `Toggle` row whose title does not toggle; the switch sits at the
+  trailing edge.
 - `relaunchTap`: resolve its semantic `selector` on the current deterministic
   screen, terminate and relaunch with the scenario's original launch options,
   then tap the calibrated position after `delaySeconds` without querying the

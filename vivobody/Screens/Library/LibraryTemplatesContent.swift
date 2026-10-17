@@ -86,7 +86,7 @@ struct LibraryTemplatesContent: View {
         List {
             // First scrolling row — the segment moves up with the
             // content on scroll, so the large title collapses cleanly.
-            SegmentedControl(selection: $segment)
+            LibrarySegmentPicker(selection: $segment)
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: Space.sm, leading: Space.gutter, bottom: Space.lg, trailing: Space.gutter))

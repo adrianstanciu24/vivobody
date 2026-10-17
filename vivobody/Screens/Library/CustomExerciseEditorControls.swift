@@ -4,7 +4,8 @@
 //
 //  Feature-local row and validation primitives shared by the focused custom
 //  exercise editor sections so their interaction and accessibility semantics
-//  stay identical.
+//  stay identical. Choice rows open a native menu picker; picker rows open
+//  a dedicated editor sheet.
 //
 
 import SwiftUI
@@ -57,6 +58,58 @@ struct CustomExercisePickerRow: View {
     }
 }
 
+/// A card row whose tap opens a native menu of single choices. The system
+/// draws the options and the checkmark; the row keeps the card look and
+/// speaks its title and current value.
+struct CustomExerciseChoiceRow<Option: Hashable>: View {
+    let title: String
+    let value: String
+    @Binding var selection: Option
+    let options: [Option]
+    let label: (Option) -> String
+
+    var body: some View {
+        Menu {
+            Picker(title, selection: pickedSelection) {
+                ForEach(options, id: \.self) { option in
+                    Text(label(option)).tag(option)
+                }
+            }
+            .pickerStyle(.inline)
+            .labelsHidden()
+        } label: {
+            KitRow(title: title) {
+                HStack(spacing: Space.sm) {
+                    Text(value)
+                        .font(Typography.body)
+                        .foregroundStyle(Ink.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.quaternary)
+                }
+            }
+        }
+        .menuOrder(.fixed)
+        .buttonStyle(.plain)
+        .accessibilityLabel(title)
+        .accessibilityValue(value)
+        .accessibilityHint("Shows choices")
+    }
+
+    private var pickedSelection: Binding<Option> {
+        Binding(
+            get: { selection },
+            set: { option in
+                Haptics.selection()
+                selection = option
+            }
+        )
+    }
+}
+
 struct CustomExerciseValidationMessage: View {
     let message: String
 
@@ -70,12 +123,17 @@ struct CustomExerciseValidationMessage: View {
 
 #if DEBUG
     private struct CustomExerciseEditorControlsGallery: View {
+        @State private var modality: ExerciseModality = .dynamicStrength
+
         var body: some View {
             VStack(alignment: .leading, spacing: Space.lg) {
-                CustomExercisePickerRow(
+                CustomExerciseChoiceRow(
                     title: "Exercise type",
-                    value: "Strength · Reps"
-                ) {}
+                    value: modality.displayName,
+                    selection: $modality,
+                    options: ExerciseModality.customExerciseChoices,
+                    label: { $0.displayName }
+                )
                 CustomExercisePickerRow(
                     title: "Muscles worked",
                     subtitle: "Chest · Primary"

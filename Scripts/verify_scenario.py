@@ -95,11 +95,20 @@ def element_midpoint(
     node: Mapping[str, Any],
     root: Mapping[str, Any],
 ) -> tuple[float, float]:
+    return element_point(node, root, 0.5, 0.5)
+
+
+def element_point(
+    node: Mapping[str, Any],
+    root: Mapping[str, Any],
+    x_fraction: float,
+    y_fraction: float,
+) -> tuple[float, float]:
     intersection = visible_intersection(node, root)
     if intersection is None:
         raise ScenarioFailure("Cannot tap an element without a visible on-screen frame.")
     x, y, width, height = intersection
-    return x + width / 2, y + height / 2
+    return x + width * x_fraction, y + height * y_fraction
 
 
 def swipe_points(
@@ -541,11 +550,16 @@ class ScenarioRunner:
         detail = "; ".join(last_failures) or "no matching runtime events"
         raise ScenarioFailure(f"Timed out waiting for runtime log assertions: {detail}")
 
-    def tap(self, selector: Mapping[str, Any]) -> None:
+    def tap(
+        self,
+        selector: Mapping[str, Any],
+        x_fraction: float = 0.5,
+        y_fraction: float = 0.5,
+    ) -> None:
         tree, match = self.wait_for_stable_selector(selector)
         if match.node.get("enabled") is False:
             raise ScenarioFailure(f"Matched element is disabled: {describe_node(match)}")
-        x, y = element_midpoint(match.node, tree)
+        x, y = element_point(match.node, tree, x_fraction, y_fraction)
         root_frame = node_frame(tree)
         if root_frame is None:
             raise ScenarioFailure("Application accessibility root has no usable frame.")
@@ -760,6 +774,10 @@ class ScenarioRunner:
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} tap payload must be a selector object.")
             self.tap(payload)
+        elif action == "tapIn":
+            if not isinstance(payload, Mapping):
+                raise ScenarioFailure(f"Step {index} tapIn payload must be an object.")
+            self.tap(payload["selector"], payload["xFraction"], payload["yFraction"])
         elif action == "relaunchTap":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(
@@ -931,6 +949,31 @@ def validate_launch_configuration(configuration: Any, field: str) -> None:
         raise ScenarioFailure(f"Scenario {field}.arguments must be an array of strings.")
 
 
+def _validate_fraction_payload(
+    index: int,
+    action: str,
+    payload: Any,
+    allowed: set[str],
+) -> None:
+    if not isinstance(payload, Mapping):
+        raise ScenarioFailure(f"Step {index} {action} payload must be an object.")
+    unknown = set(payload) - allowed
+    if unknown:
+        raise ScenarioFailure(
+            f"Step {index} {action} has unsupported field(s): {', '.join(sorted(unknown))}."
+        )
+    for field in ("xFraction", "yFraction"):
+        value = payload.get(field)
+        if (
+            not isinstance(value, (int, float))
+            or isinstance(value, bool)
+            or not 0 <= value <= 1
+        ):
+            raise ScenarioFailure(
+                f"Step {index} {action}.{field} must be a number from 0 through 1."
+            )
+
+
 def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
     unknown = set(scenario) - {
         "name",
@@ -989,24 +1032,15 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
                     f"Step {index} relaunchTap.delaySeconds must be a number from 0 through 5."
                 )
         elif action == "tapAt":
-            if not isinstance(payload, Mapping):
-                raise ScenarioFailure(f"Step {index} tapAt payload must be an object.")
-            unknown_tap_at = set(payload) - {"xFraction", "yFraction"}
-            if unknown_tap_at:
-                raise ScenarioFailure(
-                    f"Step {index} tapAt has unsupported field(s): "
-                    f"{', '.join(sorted(unknown_tap_at))}."
-                )
-            for field in ("xFraction", "yFraction"):
-                value = payload.get(field)
-                if (
-                    not isinstance(value, (int, float))
-                    or isinstance(value, bool)
-                    or not 0 <= value <= 1
-                ):
-                    raise ScenarioFailure(
-                        f"Step {index} tapAt.{field} must be a number from 0 through 1."
-                    )
+            _validate_fraction_payload(index, action, payload, {"xFraction", "yFraction"})
+        elif action == "tapIn":
+            _validate_fraction_payload(
+                index, action, payload, {"selector", "xFraction", "yFraction"}
+            )
+            selector = payload.get("selector")
+            if not isinstance(selector, Mapping):
+                raise ScenarioFailure(f"Step {index} tapIn.selector must be an object.")
+            validate_selector(selector)
         elif action == "assert":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} assert payload must be an object.")

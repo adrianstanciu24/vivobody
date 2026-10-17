@@ -14,7 +14,6 @@ struct CustomExerciseBasicsSection: View {
     let validation: CatalogDraftValidation
     let showsValidationErrors: Bool
     let nameFieldFocus: FocusState<Bool>.Binding
-    let onPresentPicker: (CatalogPicker) -> Void
     let onPresentMuscleEditor: () -> Void
 
     var body: some View {
@@ -55,9 +54,16 @@ struct CustomExerciseBasicsSection: View {
     }
 
     private var muscleGroupField: some View {
-        CustomExercisePickerRow(title: "Muscle group", value: draft.group.displayName) {
-            onPresentPicker(.muscleGroup)
-        }
+        CustomExerciseChoiceRow(
+            title: "Muscle group",
+            value: draft.group.displayName,
+            selection: Binding(
+                get: { draft.group },
+                set: { draft.selectMuscleGroup($0) }
+            ),
+            options: MuscleGroup.allCases,
+            label: { $0.displayName }
+        )
     }
 
     private var muscleInvolvementField: some View {
@@ -78,8 +84,15 @@ struct CustomExerciseBasicsSection: View {
     }
 
     private var equipmentField: some View {
-        CustomExercisePickerRow(title: "Equipment", value: draft.equipment.displayName) {
-            onPresentPicker(.equipment)
-        }
+        CustomExerciseChoiceRow(
+            title: "Equipment",
+            value: draft.equipment.displayName,
+            selection: Binding(
+                get: { draft.equipment },
+                set: { draft.selectEquipment($0) }
+            ),
+            options: Equipment.allCases,
+            label: { $0.displayName }
+        )
     }
 }

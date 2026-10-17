@@ -390,7 +390,19 @@ These parts have no good native replacement, or the custom code is the product:
   `me-showcase` failed: the fixture shows "Week streak, 10 of 12", but the
   scenario expects 11 of 12. B2 does not change streak math. No product screen
   uses the card scrubber; only DEBUG galleries do.
-- [ ] B3. Forms, pickers, and links.
+- [x] B3. Forms, pickers, and links. Done on 2026-10-17. Decisions: one shared
+  custom picker (`SegmentedPicker`, 44pt, orange thumb) replaces all seven copies,
+  including `StepSelector` and the Library scope; Settings keeps the card look
+  with native `Toggle`s. Catalog single choices are native menu pickers; plane
+  chips are `.button` toggles. The privacy link uses
+  `openURL(_:prefersInApp: true)`; `SafariView` is deleted. The scenario
+  runner gained `tapIn` because a native `Toggle` row's title does not toggle.
+  `settings-preferences`, `library-first-visit-dark`,
+  `library-first-visit-accessibility-light`, `custom-exercise-assistance`,
+  `onboarding-first-workout-light`, and `onboarding-first-workout-accessibility`
+  passed on iPhone Air, iOS 26.5. `custom-exercise-type` is flaky: the editor
+  sheet often does not open at launch. The pre-B3 commit fails the same way. A
+  manual run showed the native menu with the three allowed types.
 - [ ] B4. Charts and formats.
 - [ ] B5. Active workout interactions.
 - [ ] B6. App Intents and Spotlight.

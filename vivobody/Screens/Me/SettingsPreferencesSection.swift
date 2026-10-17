@@ -4,6 +4,8 @@
 //
 //  Binding-driven Settings controls with no persistence or system-service
 //  access. SettingsScreen supplies values, ordered setters, and actions.
+//  Choices use SegmentedPicker and switches use native Toggle inside the
+//  Settings cards.
 //
 
 import SwiftUI
@@ -45,9 +47,19 @@ struct SettingsPreferencesSection: View {
                 .contentCard()
 
             VStack(alignment: .leading, spacing: 0) {
-                hapticsRow
+                toggleRow(
+                    title: "Haptics",
+                    subtitle: "Taps and patterns throughout the app",
+                    accessibilityLabel: "Haptics",
+                    isOn: $hapticsEnabled
+                )
                 rowDivider
-                soundsRow
+                toggleRow(
+                    title: "Sounds",
+                    subtitle: "Feedback sounds paired with haptics",
+                    accessibilityLabel: "Sounds",
+                    isOn: $soundsEnabled
+                )
                 rowDivider
                 restNotificationsRow
             }
@@ -58,261 +70,145 @@ struct SettingsPreferencesSection: View {
         }
     }
 
+    /// The bindings' setters already play the selection haptic through
+    /// SettingsInteractionPolicy, so the pickers suppress their own.
     private var appearanceRow: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Appearance")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text("Light, dark, or follow the system")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(AppAppearance.allCases) { option in
-                        appearanceChip(option)
-                    }
-                }
-            }
+        choiceRow(title: "Appearance", subtitle: "Light, dark, or follow the system") {
+            SegmentedPicker(
+                selection: $appearance,
+                options: AppAppearance.allCases,
+                font: Typography.sectionLabel,
+                feedback: { _ in },
+                stacksAtAccessibilitySizes: true,
+                label: \.label
+            )
         }
-        .padding(.horizontal, Space.lg)
-        .padding(.vertical, Space.md)
-    }
-
-    private func appearanceChip(_ option: AppAppearance) -> some View {
-        let isSelected = option == appearance
-        return Button {
-            appearance = option
-        } label: {
-            Text(option.label)
-                .font(Typography.sectionLabel)
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .coloredGlassControl(cornerRadius: Radius.chip, fill: isSelected ? Tint.inProgress : nil)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(option.label)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private var bodyDriftSpeedRow: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Model Rotation")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text("How fast the body model turns on its own")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(BodyDriftSpeed.allCases) { option in
-                        bodyDriftSpeedChip(option)
-                    }
-                }
-            }
+        choiceRow(title: "Model Rotation", subtitle: "How fast the body model turns on its own") {
+            SegmentedPicker(
+                selection: $bodyDriftSpeed,
+                options: BodyDriftSpeed.allCases,
+                font: Typography.sectionLabel,
+                feedback: { _ in },
+                stacksAtAccessibilitySizes: true,
+                label: \.label
+            )
         }
-        .padding(.horizontal, Space.lg)
-        .padding(.vertical, Space.md)
-    }
-
-    private func bodyDriftSpeedChip(_ option: BodyDriftSpeed) -> some View {
-        let isSelected = option == bodyDriftSpeed
-        return Button {
-            bodyDriftSpeed = option
-        } label: {
-            Text(option.label)
-                .font(Typography.sectionLabel)
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .coloredGlassControl(cornerRadius: Radius.chip, fill: isSelected ? Tint.inProgress : nil)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(option.label)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private var weightUnitRow: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Weight Unit")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text("Displayed across the app — storage stays canonical")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(WeightUnit.allCases) { unit in
-                        weightUnitChip(unit)
-                    }
+        choiceRow(title: "Weight Unit", subtitle: "Displayed across the app — storage stays canonical") {
+            SegmentedPicker(
+                selection: $weightUnit,
+                options: WeightUnit.allCases,
+                accessibilityLabel: \.displayName,
+                feedback: { _ in },
+                stacksAtAccessibilitySizes: true,
+                minSegmentHeight: 52
+            ) { unit, _ in
+                VStack(spacing: 2) {
+                    Text(unit.symbol)
+                        .font(Typography.metricUnit)
+                    Text(unit.displayName)
+                        .font(Typography.micro)
+                        .opacity(Opacity.emphasis)
                 }
             }
         }
-        .padding(.horizontal, Space.lg)
-        .padding(.vertical, Space.md)
-    }
-
-    private func weightUnitChip(_ unit: WeightUnit) -> some View {
-        let isSelected = unit == weightUnit
-        return Button {
-            weightUnit = unit
-        } label: {
-            VStack(spacing: 2) {
-                Text(unit.symbol)
-                    .font(Typography.metricUnit)
-                Text(unit.displayName)
-                    .font(Typography.micro)
-                    .opacity(Opacity.emphasis)
-            }
-            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-            .frame(maxWidth: .infinity, minHeight: 52)
-            .coloredGlassControl(cornerRadius: Radius.chip, fill: isSelected ? Tint.inProgress : nil)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(unit.displayName)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private var restRow: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             HStack {
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("Default Rest")
-                        .font(Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                    Text("Between sets — used by the rest timer")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                }
+                rowTitle("Default Rest", subtitle: "Between sets — used by the rest timer")
                 Spacer()
                 Text("\(defaultRestSeconds)s")
                     .font(Typography.metricInline)
                     .foregroundStyle(Ink.primary)
             }
-            .padding(.horizontal, Space.lg)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                GlassEffectContainer(spacing: Space.sm) {
-                    HStack(spacing: Space.sm) {
-                        ForEach(restOptions, id: \.self) { seconds in
-                            restChip(seconds: seconds)
-                        }
-                    }
-                }
-                .padding(.vertical, Space.md)
+            SegmentedPicker(
+                selection: $defaultRestSeconds,
+                options: restOptions,
+                accessibilityLabel: { "\($0) second rest" },
+                feedback: { _ in },
+                stacksAtAccessibilitySizes: true
+            ) { seconds, isSelected in
+                SegmentedPickerText(text: "\(seconds)s", font: Typography.metricUnit, isSelected: isSelected)
             }
-            .padding(.vertical, -Space.md)
-            .contentMargins(.horizontal, Space.lg, for: .scrollContent)
-        }
-        .padding(.vertical, Space.md)
-    }
-
-    private func restChip(seconds: Int) -> some View {
-        let isSelected = defaultRestSeconds == seconds
-        return Button {
-            defaultRestSeconds = seconds
-        } label: {
-            Text("\(seconds)s")
-                .font(Typography.metricUnit)
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .frame(minWidth: 56, minHeight: 44)
-                .padding(.horizontal, Space.md + 2)
-                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("\(seconds) second rest")
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-
-    private var hapticsRow: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Haptics")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text("Taps and patterns throughout the app")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            Spacer()
-            Toggle("", isOn: $hapticsEnabled)
-                .labelsHidden()
-                .tint(Tint.inProgress)
-                .accessibilityLabel("Haptics")
         }
         .padding(.horizontal, Space.lg)
         .padding(.vertical, Space.md)
     }
 
-    private var soundsRow: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Sounds")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text("Feedback sounds paired with haptics")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            Spacer()
-            Toggle("", isOn: $soundsEnabled)
-                .labelsHidden()
-                .tint(Tint.inProgress)
-                .accessibilityLabel("Sounds")
+    private func choiceRow(
+        title: String,
+        subtitle: String,
+        @ViewBuilder picker: () -> some View
+    ) -> some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            rowTitle(title, subtitle: subtitle)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            picker()
         }
         .padding(.horizontal, Space.lg)
         .padding(.vertical, Space.md)
     }
 
+    private func toggleRow(
+        title: String,
+        subtitle: String,
+        accessibilityLabel: String,
+        isOn: Binding<Bool>
+    ) -> some View {
+        Toggle(isOn: isOn) {
+            rowTitle(title, subtitle: subtitle)
+        }
+        .tint(Tint.inProgress)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(subtitle)
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
+    }
+
+    @ViewBuilder
     private var restNotificationsRow: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Rest Alerts")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text(restNotificationsSubtitle)
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            Spacer(minLength: Space.md)
-
-            switch restNotificationsPresentation {
-            case .available:
-                Toggle("", isOn: $restNotificationsEnabled)
-                    .labelsHidden()
-                    .tint(Tint.inProgress)
-                    .accessibilityLabel("Rest alerts")
-            case .denied:
+        switch restNotificationsPresentation {
+        case .available:
+            toggleRow(
+                title: "Rest Alerts",
+                subtitle: "Notify you when rest ends while Vivobody is in the background",
+                accessibilityLabel: "Rest alerts",
+                isOn: $restNotificationsEnabled
+            )
+        case .denied:
+            HStack {
+                rowTitle("Rest Alerts", subtitle: "Notifications are turned off in iOS Settings")
+                Spacer(minLength: Space.md)
                 Button("Open Settings") {
                     restNotificationsEnabled = true
                 }
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Tint.primary)
-                .frame(minHeight: 44)
+                .frame(minHeight: Space.tapMin)
                 .accessibilityHint("Opens iOS Settings to allow notifications")
             }
+            .padding(.horizontal, Space.lg)
+            .padding(.vertical, Space.md)
         }
-        .padding(.horizontal, Space.lg)
-        .padding(.vertical, Space.md)
     }
 
-    private var restNotificationsSubtitle: String {
-        switch restNotificationsPresentation {
-        case .available:
-            "Notify you when rest ends while Vivobody is in the background"
-        case .denied:
-            "Notifications are turned off in iOS Settings"
+    private func rowTitle(_ title: String, subtitle: String) -> some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text(title)
+                .font(Typography.sectionHeading)
+                .foregroundStyle(Ink.primary)
+            Text(subtitle)
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 

@@ -16,7 +16,6 @@ struct CustomExerciseLoggingDefaultsSection: View {
     let validation: CatalogDraftValidation
     let showsValidationErrors: Bool
     let unit: WeightUnit
-    let onPresentPicker: (CatalogPicker) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.md) {
@@ -40,12 +39,16 @@ struct CustomExerciseLoggingDefaultsSection: View {
 
     private var loadModeField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            CustomExercisePickerRow(
+            CustomExerciseChoiceRow(
                 title: "Load interpretation",
-                value: draft.loadMode.customExerciseChoiceName
-            ) {
-                onPresentPicker(.loadMode)
-            }
+                value: draft.loadMode.customExerciseChoiceName,
+                selection: Binding(
+                    get: { draft.loadMode },
+                    set: { draft.selectLoadMode($0) }
+                ),
+                options: draft.loadModeChoices,
+                label: { $0.customExerciseChoiceLabel }
+            )
 
             if showsValidationErrors, !validation.hasValidLoadProfile {
                 CustomExerciseValidationMessage(
@@ -95,7 +98,7 @@ struct CustomExerciseDefaultsRow: View {
 
                 if draft.trackingMode == .duration {
                     stepField(label: "\(draft.modality.durationLabel) step") {
-                        StepSelector(
+                        SegmentedPicker(
                             selection: durationStepBinding,
                             options: DurationFormatter.stepOptions,
                             label: DurationFormatter.stepLabel
@@ -104,7 +107,7 @@ struct CustomExerciseDefaultsRow: View {
                 }
                 if draft.tracksResistance {
                     stepField(label: "\(draft.loadMode.inputLabel) step") {
-                        StepSelector(
+                        SegmentedPicker(
                             selection: weightStepBinding,
                             options: unit.strengthStepOptions,
                             label: weightStepLabel

@@ -3,8 +3,9 @@
 //  vivobody
 //
 //  Root orchestration for creating, editing, or duplicating a catalog entry.
-//  It owns SwiftData, presentation, save failure, focus, and picker routing;
-//  focused sections render and edit the value-type CatalogDraft.
+//  It owns SwiftData, presentation, save failure, focus, and the muscle
+//  editor sheet; focused sections render and edit the value-type
+//  CatalogDraft, with single choices in native menu pickers.
 //
 
 import SwiftData
@@ -28,19 +29,6 @@ enum CatalogEditorTarget: Identifiable {
     }
 }
 
-enum CatalogPicker: String, Identifiable {
-    case muscleGroup
-    case equipment
-    case modality
-    case trainingRole
-    case movementPattern
-    case loadMode
-
-    var id: String {
-        rawValue
-    }
-}
-
 struct CustomExerciseEditorSheet: View {
     let target: CatalogEditorTarget
 
@@ -60,7 +48,6 @@ struct CustomExerciseEditorSheet: View {
 
     @State private var saveError: SaveErrorBox? = nil
     @State private var isMuscleEditorPresented = false
-    @State private var activePicker: CatalogPicker? = nil
     @State private var showsValidationErrors = false
     /// One-shot guard for the duplicate name prefill — onAppear fires
     /// again when child sheets dismiss, and the user's typed name
@@ -217,9 +204,6 @@ struct CustomExerciseEditorSheet: View {
                 draft.muscleInvolvementSnapshot = snapshot
             }
         }
-        .sheet(item: $activePicker) { picker in
-            pickerSheet(for: picker)
-        }
         .saveErrorAlert($saveError)
     }
 
@@ -230,7 +214,6 @@ struct CustomExerciseEditorSheet: View {
             validation: validation,
             showsValidationErrors: showsValidationErrors,
             nameFieldFocus: $nameFieldFocused,
-            onPresentPicker: presentPicker,
             onPresentMuscleEditor: {
                 nameFieldFocused = false
                 isMuscleEditorPresented = true
@@ -239,16 +222,14 @@ struct CustomExerciseEditorSheet: View {
         CustomExerciseClassificationSection(
             draft: $draft,
             validation: validation,
-            showsValidationErrors: showsValidationErrors,
-            onPresentPicker: presentPicker
+            showsValidationErrors: showsValidationErrors
         )
         CustomExerciseLoggingDefaultsSection(
             draft: $draft,
             steps: $scrubSteps,
             validation: validation,
             showsValidationErrors: showsValidationErrors,
-            unit: unit,
-            onPresentPicker: presentPicker
+            unit: unit
         )
         CustomExerciseSearchSection(
             draft: $draft,
@@ -279,70 +260,6 @@ struct CustomExerciseEditorSheet: View {
             .font(Typography.caption)
             .foregroundStyle(Ink.quaternary)
             .fixedSize(horizontal: false, vertical: true)
-    }
-
-    private func presentPicker(_ picker: CatalogPicker) {
-        nameFieldFocused = false
-        activePicker = picker
-    }
-
-    @ViewBuilder
-    private func pickerSheet(for picker: CatalogPicker) -> some View {
-        switch picker {
-        case .muscleGroup:
-            CatalogChoiceSheet(
-                title: "Muscle Group",
-                options: MuscleGroup.allCases,
-                label: { $0.displayName },
-                isSelected: { draft.group == $0 },
-                onSelect: { draft.selectMuscleGroup($0) }
-            )
-
-        case .equipment:
-            CatalogChoiceSheet(
-                title: "Equipment",
-                options: Equipment.allCases,
-                label: { $0.displayName },
-                isSelected: { draft.equipment == $0 },
-                onSelect: { draft.selectEquipment($0) }
-            )
-
-        case .modality:
-            CatalogChoiceSheet(
-                title: "Exercise Type",
-                options: ExerciseModality.customExerciseChoices,
-                label: { $0.displayName },
-                isSelected: { draft.modality == $0 },
-                onSelect: { draft.selectModality($0) }
-            )
-
-        case .trainingRole:
-            CatalogChoiceSheet(
-                title: "Training Role",
-                options: TrainingRole.allCases,
-                label: { $0.displayName },
-                isSelected: { draft.trainingRole == $0 },
-                onSelect: { draft.trainingRole = $0 }
-            )
-
-        case .movementPattern:
-            CatalogChoiceSheet(
-                title: "Movement Pattern",
-                options: MovementPattern.allCases,
-                label: { $0.displayName },
-                isSelected: { draft.pattern == $0 },
-                onSelect: { draft.selectPattern($0) }
-            )
-
-        case .loadMode:
-            CatalogChoiceSheet(
-                title: "Load Interpretation",
-                options: draft.loadModeChoices,
-                label: { $0.customExerciseChoiceLabel },
-                isSelected: { draft.loadMode == $0 },
-                onSelect: { draft.selectLoadMode($0) }
-            )
-        }
     }
 
     private func attemptSave(using scrollProxy: ScrollViewProxy) {

@@ -5,7 +5,7 @@
 //  Picks reps-in-reserve for a set — how many more reps the lifter
 //  felt they had left at the end. A 0…5 pill (0 = to failure, 5 =
 //  many left in the tank); 0…5 is the usable RIR range, beyond which
-//  the self-estimate is noise. Reuses the app's standard StepSelector
+//  the self-estimate is noise. Reuses the app's standard SegmentedPicker
 //  pill so it reads like every other "pick one of a small set" control
 //  (weight step, units). A plain-language label names what the pill's
 //  selected number measures without requiring the RIR abbreviation.
@@ -45,12 +45,12 @@ struct RIRSelector: View {
                     .foregroundStyle(Ink.secondary)
             }
 
-            StepSelector(
+            SegmentedPicker(
                 selection: $value,
                 options: options,
-                label: { Self.displayLabel($0) },
                 feedback: { Self.effortFeedback(for: $0) },
-                feedbackOnReselection: true
+                feedbackOnReselection: true,
+                label: { Self.displayLabel($0) }
             )
         }
         // This control is already compact. Preserve its ideal vertical

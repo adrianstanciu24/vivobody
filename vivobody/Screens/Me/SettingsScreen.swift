@@ -3,8 +3,8 @@
 //  vivobody
 //
 //  Settings orchestration pushed from Me. This root owns UserDefaults,
-//  catalog reset, alerts, sheets, URL/mail
-//  presentation, and the footer. Focused sections receive only immutable
+//  catalog reset, alerts, the mail sheet, in-app URL presentation, and
+//  the footer. Focused sections receive only immutable
 //  presentation, bindings, and actions.
 //
 
@@ -44,7 +44,6 @@ struct SettingsScreen: View {
 
     @State private var isConfirmingCatalogReset: Bool = false
     @State private var catalogSaveError: SaveErrorBox?
-    @State private var activePage: WebPage?
     @State private var isComposingSupportMail: Bool = false
     @State private var restNotificationAuthorization: RestNotificationAuthorization?
 
@@ -79,7 +78,7 @@ struct SettingsScreen: View {
                 .settleIn(0)
 
                 SettingsAboutSection(
-                    onOpenPrivacyPolicy: { open(PublicLinks.privacyPolicy) },
+                    onOpenPrivacyPolicy: { openURL(PublicLinks.privacyPolicy, prefersInApp: true) },
                     onComposeSupportMail: composeSupportMail
                 )
                 .padding(.top, Space.section)
@@ -116,10 +115,6 @@ struct SettingsScreen: View {
             Text("Restores the \(CatalogData.records.count) bundled exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
         }
         .saveErrorAlert($catalogSaveError)
-        .sheet(item: $activePage) { page in
-            SafariView(url: page.url)
-                .ignoresSafeArea()
-        }
         .sheet(isPresented: $isComposingSupportMail) {
             MailComposeView(
                 recipient: SupportMail.recipient,
@@ -281,14 +276,6 @@ struct SettingsScreen: View {
             isConfirmingCatalogReset = true
         default:
             assertionFailure("Unhandled Settings interaction command")
-        }
-    }
-
-    private func open(_ url: URL) {
-        if let page = WebPage(url) {
-            activePage = page
-        } else {
-            openURL(url)
         }
     }
 

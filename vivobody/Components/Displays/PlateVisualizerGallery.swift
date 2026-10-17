@@ -23,7 +23,7 @@
                         .tracking(2)
                         .foregroundStyle(.white.opacity(0.45))
 
-                    StepSelector(
+                    SegmentedPicker(
                         selection: $weightStep,
                         options: [1.0, 2.5, 5.0]
                     ) { value in

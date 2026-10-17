@@ -13,7 +13,6 @@ struct CustomExerciseClassificationSection: View {
     @Binding var draft: CatalogDraft
     let validation: CatalogDraftValidation
     let showsValidationErrors: Bool
-    let onPresentPicker: (CatalogPicker) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -45,9 +44,16 @@ struct CustomExerciseClassificationSection: View {
     }
 
     private var modalityField: some View {
-        CustomExercisePickerRow(title: "Exercise type", value: draft.modality.displayName) {
-            onPresentPicker(.modality)
-        }
+        CustomExerciseChoiceRow(
+            title: "Exercise type",
+            value: draft.modality.displayName,
+            selection: Binding(
+                get: { draft.modality },
+                set: { draft.selectModality($0) }
+            ),
+            options: ExerciseModality.customExerciseChoices,
+            label: { $0.displayName }
+        )
     }
 
     private var mechanicField: some View {
@@ -67,22 +73,31 @@ struct CustomExerciseClassificationSection: View {
     }
 
     private var trainingRoleField: some View {
-        CustomExercisePickerRow(
+        CustomExerciseChoiceRow(
             title: "Training role",
-            value: draft.trainingRole.displayName
-        ) {
-            onPresentPicker(.trainingRole)
-        }
+            value: draft.trainingRole.displayName,
+            selection: $draft.trainingRole,
+            options: TrainingRole.allCases,
+            label: { $0.displayName }
+        )
     }
 
     private var patternField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            CustomExercisePickerRow(
+            CustomExerciseChoiceRow(
                 title: "Movement pattern",
-                value: draft.pattern?.displayName ?? "Choose"
-            ) {
-                onPresentPicker(.movementPattern)
-            }
+                value: draft.pattern?.displayName ?? "Choose",
+                selection: Binding(
+                    get: { draft.pattern },
+                    set: { pattern in
+                        if let pattern {
+                            draft.selectPattern(pattern)
+                        }
+                    }
+                ),
+                options: MovementPattern.allCases.map(Optional.some),
+                label: { $0?.displayName ?? "Choose" }
+            )
 
             if showsValidationErrors, !validation.hasValidMovementPattern {
                 CustomExerciseValidationMessage(

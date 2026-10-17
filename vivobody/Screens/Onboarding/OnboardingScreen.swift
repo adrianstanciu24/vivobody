@@ -57,12 +57,6 @@ struct OnboardingScreen: View {
     @State private var isSaving = false
     @State private var saveError: SaveErrorBox? = nil
 
-    /// Shared identity for the single tinted glass "thumb" that morphs
-    /// across the unit chips. Lives in one GlassEffectContainer so the
-    /// container can slide the lensing between cells on selection.
-    @Namespace private var glassNamespace
-
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
@@ -263,61 +257,36 @@ struct OnboardingScreen: View {
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
 
-            GlassEffectContainer(spacing: Space.sm) {
-                if dynamicTypeSize.isAccessibilitySize {
-                    VStack(spacing: Space.sm) {
-                        ForEach(WeightUnit.allCases) { unit in
-                            unitChip(unit)
-                        }
-                    }
-                } else {
-                    HStack(spacing: Space.sm) {
-                        ForEach(WeightUnit.allCases) { unit in
-                            unitChip(unit)
-                        }
-                    }
+            SegmentedPicker(
+                selection: unitSelection,
+                options: WeightUnit.allCases,
+                accessibilityLabel: \.displayName,
+                stacksAtAccessibilitySizes: true,
+                minSegmentHeight: Space.rowMin
+            ) { unit, _ in
+                HStack(spacing: Space.xs) {
+                    Text(unit.symbol)
+                        .font(Typography.metricInline)
+                    Text(unit.displayName)
+                        .font(Typography.micro)
+                        .opacity(Opacity.emphasis)
                 }
             }
             .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? 360 : 260)
         }
     }
 
-    private func unitChip(_ unit: WeightUnit) -> some View {
-        let isSelected = unit == weightUnit
-        let shape = RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
-        return Button {
-            Haptics.selection()
-            let selectUnit = {
+    /// Changing units also resets the body-weight increment and snaps the
+    /// value to it, so the scrubber never shows an off-grid number.
+    private var unitSelection: Binding<WeightUnit> {
+        Binding(
+            get: { weightUnit },
+            set: { unit in
                 weightUnitRaw = unit.rawValue
                 bodyWeightStep = unit.bodyWeightStep
                 snapBodyWeight(to: unit.bodyWeightStep, unit: unit)
             }
-            // Drive the assignment through an animation transaction so
-            // the shared-ID glass thumb morphs to the new cell instead
-            // of snapping. Reduce Motion takes the instant path.
-            if reduceMotion {
-                selectUnit()
-            } else {
-                withAnimation(.spring(response: 0.35, dampingFraction: 0.72)) {
-                    selectUnit()
-                }
-            }
-        } label: {
-            HStack(spacing: Space.xs) {
-                Text(unit.symbol)
-                    .font(Typography.metricInline)
-                Text(unit.displayName)
-                    .font(Typography.micro)
-                    .opacity(Opacity.emphasis)
-            }
-            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-            .frame(maxWidth: .infinity, minHeight: Space.rowMin)
-            .modifier(UnitChipSurface(isSelected: isSelected, shape: shape, namespace: glassNamespace))
-            .contentShape(shape)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(unit.displayName)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        )
     }
 
     // MARK: - Start
@@ -431,28 +400,6 @@ private struct OnboardingStateVisibility: ViewModifier {
             .allowsHitTesting(isVisible)
             .accessibilityHidden(!isVisible)
             .disabled(!isVisible)
-    }
-}
-
-/// The per-chip surface. The selected chip wears the tinted Liquid
-/// Glass behind its own label (so the label always renders on top and
-/// stays readable), and carries the single shared `glassEffectID` —
-/// the GlassEffectContainer morphs that one tinted blob across the gap
-/// to the newly-selected chip. Unselected chips get a plain resting
-/// content fill, no glass, so only the selection floats.
-private struct UnitChipSurface: ViewModifier {
-    let isSelected: Bool
-    let shape: RoundedRectangle
-    let namespace: Namespace.ID
-
-    func body(content: Content) -> some View {
-        if isSelected {
-            content
-                .glassTinted(Tint.inProgress, interactive: true, in: shape)
-                .glassEffectID("unitSelection", in: namespace)
-        } else {
-            content.background { shape.fill(Surface.cardTint) }
-        }
     }
 }
 

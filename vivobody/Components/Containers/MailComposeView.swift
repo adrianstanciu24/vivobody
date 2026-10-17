@@ -12,8 +12,8 @@
 //  `SupportMail.mailtoURL` to the system.
 //
 //  This is the only file that imports MessageUI, matching the
-//  one-boundary-per-system-framework rule system integrations and
-//  SafariServices already follow.
+//  one-boundary-per-system-framework rule other system integrations
+//  follow.
 //
 
 import MessageUI
@@ -104,9 +104,9 @@ struct MailComposeView: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_: MFMailComposeViewController, context: Context) {
-        // Same reasoning as SafariView: the coordinator is built once
-        // while `dismiss` is refreshed every update, so re-bind the
-        // closure instead of capturing a stale one.
+        // The coordinator is built once while `dismiss` is refreshed
+        // every update, so re-bind the closure instead of capturing a
+        // stale one.
         context.coordinator.onFinish = { dismiss() }
     }
 
