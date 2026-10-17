@@ -51,7 +51,7 @@ import SwiftData
         private static func emphasizeLegsAndBack(_ sessions: [WorkoutSession], in context: ModelContext) {
             let replacements: [(name: String, pounds: Double)] = [
                 ("Barbell Back Squat", 165),
-                ("Shoulder-Width Straight-Arm Cable Pulldown", 60),
+                ("Straight-Arm Pulldown", 60),
                 ("Barbell Hip Thrust", 185),
                 ("Seated Leg Curl", 80),
             ]
@@ -109,7 +109,7 @@ import SwiftData
                 ["Barbell Back Squat", "Barbell Hip Thrust", "Kneeling Cable Crunch"],
                 ["Barbell Bench Press", "Seated Dumbbell Overhead Press", "Prone Dumbbell Reverse Fly"],
                 ["Barbell Front Squat", "Barbell Hip Thrust", "Hanging Knee Raise"],
-                ["Cable Lat Pulldown", "Barbell Bent-Over Row", "Hanging Knee Raise"],
+                ["Lat Pulldown", "Barbell Bent-Over Row", "Hanging Knee Raise"],
             ]
             for (index, names) in plans.enumerated() {
                 let id = UUID(uuidString: String(format: "D0600000-0000-4000-8000-%012d", index + 1))!
