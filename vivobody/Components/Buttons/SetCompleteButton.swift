@@ -5,13 +5,17 @@
 //  The signature interaction: one big tap to complete a set.
 //  Owns no business state — emits a toggle event, animates from `isComplete`.
 //
+//  A native Button with a custom press style, so scroll views cancel a
+//  touch that turns into a swipe and VoiceOver, Voice Control, and
+//  Full Keyboard Access get standard button behavior.
+//
 //  Composition of effects on idle → complete:
 //    1. The shared set-completion recording over a crescendo — or,
 //       on the exercise's last set, the same recording over a swell.
 //    2. The dim volt tint floods with the full completion accent.
 //    3. Numbers spring-overshoot (1.0 → 1.06 → 1.0).
 //    4. A checkmark draws on only after completion.
-//    5. A single radial ring expands from the tap point and fades.
+//    5. A single radial ring expands from the button's center and fades.
 //
 //  Complete → idle (undo): Haptics.soft() and the same path in reverse.
 //
@@ -58,17 +62,8 @@ struct SetCompleteButton: View {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
-    @State private var pressScale: CGFloat = 1
     @State private var numberScale: CGFloat = 1
     @State private var rippleId: Int = 0
-    @State private var ripplePoint: CGPoint = .zero
-    @State private var size: CGSize = .zero
-
-    /// Sticky flag — once we've decided this gesture is a drag (not a
-    /// tap), we stay decided for the rest of the gesture. Otherwise a
-    /// user who drifts past the threshold and then slows back inside
-    /// could "rescue" a tap they didn't actually intend.
-    @State private var dragCanceled: Bool = false
 
     /// The flood-fill colour the moment the set is completed. Same
     /// accent as the live state — completion reads through the solid
@@ -79,30 +74,27 @@ struct SetCompleteButton: View {
     private let liveAccent = Tint.inProgress
 
     var body: some View {
-        ZStack {
-            background
-            ripple
-            content
-        }
-        .frame(maxWidth: .infinity)
-        // A verb-only action stays generous without outweighing the working
-        // values. Numeric rows keep their taller footprint; enlarged action
-        // text can grow in the accessibility layout's scrolling viewport.
-        .frame(
-            minHeight: dynamicTypeSize.isAccessibilitySize || title == nil ? 96 : 64,
-            idealHeight: dynamicTypeSize.isAccessibilitySize ? nil : (title == nil ? 96 : 72),
-            maxHeight: dynamicTypeSize.isAccessibilitySize ? nil : (title == nil ? 96 : 72)
-        )
-        .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
-        .scaleEffect(pressScale)
-        .background(
-            GeometryReader { geo in
-                Color.clear.onAppear { size = geo.size }
-                    .onChange(of: geo.size) { _, new in size = new }
+        Button(action: fire) {
+            ZStack {
+                background
+                ripple
+                content
             }
-        )
-        .gesture(tapGesture)
-        .accessibilityElement(children: .ignore)
+            .frame(maxWidth: .infinity)
+            // A verb-only action stays generous without outweighing the working
+            // values. Numeric rows keep their taller footprint; enlarged action
+            // text can grow in the accessibility layout's scrolling viewport.
+            .frame(
+                minHeight: dynamicTypeSize.isAccessibilitySize || title == nil ? 96 : 64,
+                idealHeight: dynamicTypeSize.isAccessibilitySize ? nil : (title == nil ? 96 : 72),
+                maxHeight: dynamicTypeSize.isAccessibilitySize ? nil : (title == nil ? 96 : 72)
+            )
+            .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
+        }
+        .buttonStyle(SetCompletePressStyle(reduceMotion: reduceMotion))
+        // The Button already merges its label into one accessibility
+        // element; `.accessibilityElement(children: .ignore)` here would
+        // wrap it in a new element and drop the button trait and action.
         .accessibilityLabel(
             accessibilityLabelOverride
                 ?? loadMode.completionAccessibilityLabel(
@@ -112,14 +104,8 @@ struct SetCompleteButton: View {
                 )
         )
         .accessibilityValue(isComplete ? "completed" : "not completed")
-        .accessibilityAddTraits(.isButton)
         .accessibilityInputLabels(inputLabelValues)
         .accessibilityHint(isComplete ? "Double tap to undo." : "Double tap to complete the set.")
-        .accessibilityAction {
-            fire(at: CGPoint(x: size.width / 2, y: size.height / 2))
-        }
-        .focusable()
-        .accessibilityRespondsToUserInteraction(true)
     }
 
     // MARK: - Layers
@@ -147,7 +133,10 @@ struct SetCompleteButton: View {
     }
 
     private var ripple: some View {
-        Ripple(triggerId: rippleId, origin: ripplePoint, color: .white, reduceMotion: reduceMotion)
+        Ripple(triggerId: rippleId, color: .white, reduceMotion: reduceMotion)
+            // Fill the button so the clip below bounds the expanding ring
+            // to the card rather than to the ring's own 60pt frame.
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .allowsHitTesting(false)
             .clipShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
     }
@@ -215,21 +204,13 @@ struct SetCompleteButton: View {
                     .fill(Tint.onAccent.opacity(0.12))
                     .frame(width: 44, height: 44)
 
-                Checkmark()
-                    .trim(from: 0, to: 1)
-                    .stroke(
-                        Tint.onAccent,
-                        style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round)
-                    )
-                    .frame(width: 18, height: 14)
-                    .transition(
-                        reduceMotion
-                            ? .opacity
-                            : .asymmetric(
-                                insertion: .modifier(active: StrokeDrawIn(progress: 0), identity: StrokeDrawIn(progress: 1)),
-                                removal: .opacity.combined(with: .scale(scale: 0.6))
-                            )
-                    )
+                if reduceMotion {
+                    checkmark
+                        .transition(.opacity)
+                } else {
+                    checkmark
+                        .transition(.symbolEffect(.drawOn))
+                }
             }
         }
         // Reserve the completion lamp's footprint so its arrival never
@@ -238,83 +219,15 @@ struct SetCompleteButton: View {
         .animation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.62), value: isComplete)
     }
 
-    // MARK: - Gesture
-
-    /// Actual-translation threshold for "this is a drag, not a tap."
-    /// 10pt matches what UIButton inside UIScrollView uses internally.
-    private let dragCancelDistance: CGFloat = 10
-
-    /// Predicted-end-translation threshold for "this is a flick" —
-    /// catches short fast swipes that travel less than 10pt before
-    /// lift-off but have enough momentum to commit a card change in
-    /// the SwipePager. Anything above this is unmistakably a swipe.
-    private let flickCancelDistance: CGFloat = 35
-
-    private var tapGesture: some Gesture {
-        DragGesture(minimumDistance: 0)
-            .onChanged { value in
-                // Lock in "drag" the moment we cross the threshold.
-                // Sticky — a drift past 10pt that returns inside
-                // shouldn't reanimate a "tap" that the user didn't
-                // intend.
-                if !dragCanceled, isOverDragThreshold(value) {
-                    dragCanceled = true
-                }
-                let inside = isInside(value.location)
-                let target: CGFloat = (inside && !dragCanceled) ? 0.975 : 1
-                if pressScale != target {
-                    if reduceMotion {
-                        pressScale = target
-                    } else {
-                        withAnimation(.spring(response: 0.22, dampingFraction: 0.7)) {
-                            pressScale = target
-                        }
-                    }
-                }
-                if inside { ripplePoint = value.location }
-            }
-            .onEnded { value in
-                defer { dragCanceled = false }
-                if reduceMotion {
-                    pressScale = 1
-                } else {
-                    withAnimation(.spring(response: 0.32, dampingFraction: 0.55)) {
-                        pressScale = 1
-                    }
-                }
-                // Fire only if (a) we haven't already decided this is
-                // a drag, (b) the release wasn't a fast flick, and
-                // (c) the finger lifted inside the button.
-                if !dragCanceled,
-                   !isFlick(value),
-                   isInside(value.location)
-                {
-                    fire(at: value.location)
-                }
-            }
+    private var checkmark: some View {
+        Image(systemName: "checkmark")
+            .font(.system(size: 17, weight: .bold))
+            .foregroundStyle(Tint.onAccent)
     }
 
-    private func isInside(_ p: CGPoint) -> Bool {
-        guard size.width > 0, size.height > 0 else { return false }
-        return p.x >= 0 && p.x <= size.width && p.y >= 0 && p.y <= size.height
-    }
+    // MARK: - Action
 
-    private func isOverDragThreshold(_ value: DragGesture.Value) -> Bool {
-        let dx = abs(value.translation.width)
-        let dy = abs(value.translation.height)
-        return max(dx, dy) > dragCancelDistance
-    }
-
-    /// Catches short fast flicks — the predictedEndTranslation
-    /// reflects velocity, so even a 6pt actual swipe will have a
-    /// large predicted value if the user threw their finger.
-    private func isFlick(_ value: DragGesture.Value) -> Bool {
-        let pdx = abs(value.predictedEndTranslation.width)
-        let pdy = abs(value.predictedEndTranslation.height)
-        return max(pdx, pdy) > flickCancelDistance
-    }
-
-    private func fire(at point: CGPoint) {
+    private func fire() {
         if isComplete {
             Haptics.soft()
         } else {
@@ -326,7 +239,6 @@ struct SetCompleteButton: View {
             case .peak: Haptics.swell(sound: .setCompletion)
             }
         }
-        ripplePoint = point
         rippleId &+= 1
 
         if reduceMotion {
@@ -362,11 +274,29 @@ struct SetCompleteButton: View {
     }
 }
 
+// MARK: - Press style
+
+private struct SetCompletePressStyle: ButtonStyle {
+    let reduceMotion: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.975 : 1)
+            .animation(pressAnimation(isPressed: configuration.isPressed), value: configuration.isPressed)
+    }
+
+    private func pressAnimation(isPressed: Bool) -> Animation? {
+        guard !reduceMotion else { return nil }
+        return isPressed
+            ? .spring(response: 0.22, dampingFraction: 0.7)
+            : .spring(response: 0.32, dampingFraction: 0.55)
+    }
+}
+
 // MARK: - Ripple
 
 private struct Ripple: View {
     let triggerId: Int
-    let origin: CGPoint
     let color: Color
     var reduceMotion: Bool = false
 
@@ -377,7 +307,6 @@ private struct Ripple: View {
         Circle()
             .stroke(color, lineWidth: 2)
             .frame(width: 60, height: 60)
-            .position(origin == .zero ? CGPoint(x: 0, y: 0) : origin)
             .scaleEffect(reduceMotion ? 1.0 : scale, anchor: .center)
             .opacity(opacity)
             .onChange(of: triggerId) { _, _ in
@@ -391,34 +320,5 @@ private struct Ripple: View {
                     opacity = 0
                 }
             }
-    }
-}
-
-// MARK: - Checkmark path
-
-private nonisolated struct Checkmark: Shape {
-    func path(in rect: CGRect) -> Path {
-        var p = Path()
-        p.move(to: CGPoint(x: rect.minX, y: rect.midY + rect.height * 0.05))
-        p.addLine(to: CGPoint(x: rect.minX + rect.width * 0.35, y: rect.maxY))
-        p.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-        return p
-    }
-}
-
-private struct StrokeDrawIn: ViewModifier, Animatable {
-    var progress: Double
-    var animatableData: Double {
-        get { progress }
-        set { progress = newValue }
-    }
-
-    func body(content: Content) -> some View {
-        content.mask(
-            GeometryReader { geo in
-                Rectangle()
-                    .frame(width: geo.size.width * progress, height: geo.size.height)
-            }
-        )
     }
 }

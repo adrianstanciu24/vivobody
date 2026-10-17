@@ -150,32 +150,6 @@ struct ActiveWorkoutScreen: View {
             )
             .zIndex(20)
         }
-        .accessibilityHidden(showDiscardConfirm)
-        .allowsHitTesting(!showDiscardConfirm)
-        .overlay {
-            if showDiscardConfirm {
-                EndWorkoutConfirmationDialog(
-                    title: endWorkoutAlertTitle,
-                    message: session.totalSets > 0
-                        ? "Save \(session.totalSets) set\(session.totalSets == 1 ? "" : "s") to History. You can't resume it."
-                        : "This workout will be removed.",
-                    finishTitle: session.totalSets > 0
-                        ? (session.isAllComplete ? "Finish Workout" : "Finish Early")
-                        : nil,
-                    onFinish: {
-                        showDiscardConfirm = false
-                        Haptics.soft()
-                        finishScrubbing(then: onDismiss)
-                    },
-                    onDiscard: {
-                        showDiscardConfirm = false
-                        Haptics.soft()
-                        finishScrubbing(then: onDiscard)
-                    },
-                    onCancel: { showDiscardConfirm = false }
-                )
-            }
-        }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: session.isResting)
         // While a PR celebration is on screen, lock the sheet's
         // drag-to-dismiss. Otherwise an accidental downward swipe
@@ -403,6 +377,23 @@ struct ActiveWorkoutScreen: View {
         .accessibilityLabel(session.totalSets > 0 ? "End workout" : "Cancel workout")
         .accessibilityInputLabels([Text("End workout"), Text("End"), Text("Finish"), Text("Cancel workout"), Text("Cancel")])
         .accessibilityIdentifier("endWorkoutButton")
+        .confirmationDialog(endWorkoutAlertTitle, isPresented: $showDiscardConfirm, titleVisibility: .visible) {
+            if session.totalSets > 0 {
+                Button(session.isAllComplete ? "Finish Workout" : "Finish Early") {
+                    Haptics.soft()
+                    finishScrubbing(then: onDismiss)
+                }
+            }
+            Button("Discard", role: .destructive) {
+                Haptics.soft()
+                finishScrubbing(then: onDiscard)
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text(session.totalSets > 0
+                ? "Save \(session.totalSets) set\(session.totalSets == 1 ? "" : "s") to History. You can't resume it."
+                : "This workout will be removed.")
+        }
     }
 
     // MARK: - Pager

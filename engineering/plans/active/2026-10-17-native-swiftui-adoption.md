@@ -423,5 +423,23 @@ These parts have no good native replacement, or the custom code is the product:
   commas and 24-hour time. `WeightFormatter` still prints "12.5k" and forces
   "," grouping, so one screen can mix decimal marks. Fix that in a later
   change, not in this plan.
-- [ ] B5. Active workout interactions.
+- [x] B5. Active workout interactions. Done on 2026-10-17. Decisions: the
+  ripple starts at the center; the end workout dialog is a native
+  `.confirmationDialog` (a popover from the end button on iOS 26);
+  `EndWorkoutConfirmationDialog.swift` is deleted. `SetCompleteButton` is a
+  native `Button` with a press style, and the checkmark uses
+  `.symbolEffect(.drawOn)`. The set count keeps its 44pt buttons: the native
+  `Stepper` segments are 32pt tall, so a `Stepper` is only the accessibility
+  representation. The step increment is a `Menu` with a `Picker`.
+  `SwipePager` is a native paging `ScrollView`. Scrubbers inside it share
+  their drag (`scrubberSharesDrags`); scrubbers elsewhere keep exclusive
+  drags. One swipe moves one page. `start-complete-rest`,
+  `active-superset-completion`, `active-superset-add-partner`,
+  `active-completion-restoration`, `replace-active-exercise`,
+  `active-zero-set-recovery`, and `archive-to-history` passed on iPhone Air,
+  iOS 26.5. Temporary scenarios showed the workout screen and the dialog in
+  light and dark. The paging gate is not closed: the user must test paging,
+  scrubbing near the sheet edge, and set completion on a device. If a
+  downward scrub moves the sheet, remove `scrubberSharesDrags` from
+  `SwipePager` first; if that fails, restore the old `SwipePager`.
 - [ ] B6. App Intents and Spotlight.

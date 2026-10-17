@@ -2,8 +2,9 @@
 //  ActiveExerciseIdentitySection.swift
 //  vivobody
 //
-//  Focused identity, set-timeline, and set-count controls for the active
-//  exercise instrument. It consumes immutable values and emits UUID actions.
+//  Focused identity, set-timeline, set-count stepper, and step-increment
+//  menu for the active exercise instrument. It consumes immutable values and
+//  emits UUID actions.
 //
 
 import SwiftUI
@@ -182,57 +183,78 @@ struct ActiveExerciseConfigurationSection: View {
 
     private var setCountControls: some View {
         HStack(spacing: 0) {
-            removeSetButton
+            setCountButton("minus", action: removeSetAction)
 
             Text("\(input.setCount)")
                 .font(Typography.metricUnit)
                 .monospacedDigit()
                 .foregroundStyle(Ink.secondary)
                 .frame(minWidth: 22)
-                .accessibilityHidden(true)
 
-            addSetButton
+            setCountButton("plus", action: actions.addSet)
         }
         .coloredGlassControl(cornerRadius: Radius.pill)
         .fixedSize(horizontal: true, vertical: false)
-    }
-
-    private var addSetButton: some View {
-        Button(action: actions.addSet) {
-            Image(systemName: "plus")
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.secondary)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
+        // The native Stepper's segments are shorter than 44pt, so it serves
+        // only as the accessibility element over the 44pt visual buttons.
+        .accessibilityRepresentation {
+            Stepper("Sets", value: setCountBinding, in: setCountRange)
+                .accessibilityInputLabels([Text("Sets"), Text("Set count")])
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Add a set")
-        .accessibilityInputLabels([Text("Add a set"), Text("Add Set"), Text("Add")])
     }
 
-    private var removeSetButton: some View {
+    private var setCountBinding: Binding<Int> {
+        Binding(
+            get: { input.setCount },
+            set: { newCount in
+                if newCount > input.setCount {
+                    actions.addSet()
+                } else if newCount < input.setCount {
+                    removeSetAction?()
+                }
+            }
+        )
+    }
+
+    /// Pins the lower bound to the current count when no set can be removed,
+    /// which disables the Stepper's decrement.
+    private var setCountRange: ClosedRange<Int> {
+        (input.removableSetID == nil ? input.setCount : 0) ... Int.max
+    }
+
+    private func setCountButton(_ systemImage: String, action: (() -> Void)?) -> some View {
         Button {
-            guard let setID = input.removableSetID else { return }
-            actions.removeSet(setID)
+            action?()
         } label: {
-            Image(systemName: "minus")
+            Image(systemName: systemImage)
                 .font(Typography.sectionLabel)
-                .foregroundStyle(
-                    input.removableSetID == nil ? Ink.quaternary : Ink.secondary
-                )
+                .foregroundStyle(action == nil ? Ink.quaternary : Ink.secondary)
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .disabled(input.removableSetID == nil)
-        .accessibilityLabel("Remove a set")
-        .accessibilityInputLabels([Text("Remove a set"), Text("Remove Set"), Text("Remove")])
+        .disabled(action == nil)
+    }
+
+    private var removeSetAction: (() -> Void)? {
+        guard let setID = input.removableSetID else { return nil }
+        let removeSet = actions.removeSet
+        return { removeSet(setID) }
     }
 
     private func stepButton(_ increment: ActiveStepIncrementInput) -> some View {
         let setStepperWidth = (Space.tapMin * 2) + 22
-        return Button {
-            actions.selectStep(increment.next())
+        let selection = Binding(
+            get: { increment.selected },
+            set: { actions.selectStep($0) }
+        )
+        return Menu {
+            Picker(increment.accessibilityLabel, selection: selection) {
+                ForEach(increment.options, id: \.self) { option in
+                    Text(increment.label(for: option)).tag(option)
+                }
+            }
+            .pickerStyle(.inline)
         } label: {
             Text(increment.label)
                 .font(Typography.metricUnit)
@@ -242,10 +264,12 @@ struct ActiveExerciseConfigurationSection: View {
                 .frame(minWidth: setStepperWidth, minHeight: Space.tapMin)
                 .contentShape(Capsule())
         }
+        .menuStyle(.button)
         .buttonStyle(.plain)
+        .menuIndicator(.hidden)
         .coloredGlassControl(cornerRadius: Radius.pill)
         .accessibilityLabel(increment.accessibilityLabel)
         .accessibilityValue(increment.accessibilityValue)
-        .accessibilityHint("Cycles through the available increments")
+        .accessibilityHint("Shows the available increments")
     }
 }

@@ -2,10 +2,12 @@
 //  SwipePager.swift
 //  vivobody
 //
-//  Horizontal pager with center-locked active card and a peek of the
+//  Horizontal pager with a center-locked active card and a peek of the
 //  neighbors on each side — the Stories-style interaction, applied to
-//  workout exercises. Drag with momentum, rubber-band at the edges,
-//  haptic tick when crossing into a new card, rigid bump at the walls.
+//  workout exercises. A native paging ScrollView supplies the drag,
+//  momentum, and edge bounce. The pager adds the neighbor styling,
+//  selection sync, and haptics: a tick when the focus crosses into a new
+//  card, a soft tap when a swipe lands, and a rigid bump at the walls.
 //
 //  Use:
 //      @State private var index = 0
@@ -18,6 +20,14 @@
 import SwiftUI
 import VivoKit
 
+extension EnvironmentValues {
+    /// Set inside SwipePager so nested scrubbers let its horizontal scroll
+    /// recognize alongside their touch-down drags. Elsewhere scrubbers keep
+    /// exclusive drags, so an enclosing vertical scroll view or form cannot
+    /// move during a scrub.
+    @Entry var scrubberSharesDrags = false
+}
+
 struct SwipePager<Content: View>: View {
     @Binding var selection: Int
     let count: Int
@@ -27,25 +37,17 @@ struct SwipePager<Content: View>: View {
     var spacing: CGFloat = 12
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @AppStorage(SettingsKey.hapticsEnabled) private var hapticsEnabled = SettingsDefaults.hapticsEnabled
 
-    @State private var dragOffset: CGFloat = 0
-    @State private var lastCrossedIndex: Int = -1
-    @State private var didEdgeHaptic: Bool = false
-    @State private var isDragging: Bool = false
-
-    /// Compensation applied when `selection` is written externally
-    /// mid-drag (the superset auto-advance): the base shifts by one
-    /// stride so the content keeps tracking the finger instead of
-    /// teleporting, and the release projection stays honest.
-    @State private var dragBase: CGFloat = 0
-
-    /// Axis-claim for the current drag.
-    ///   nil   — drag just started, not enough movement to decide
-    ///   true  — horizontally dominant; SwipePager owns the gesture
-    ///   false — vertically dominant; SwipePager yields, letting
-    ///           nested gestures (BareScrubber) handle it
-    /// Reset to nil on every onEnded so each new drag re-decides.
-    @State private var horizontalAxisLocked: Bool? = nil
+    /// The page under the scroll view's center. It tracks the finger live;
+    /// `selection` follows it only when a user scroll comes to rest, so the
+    /// session sees one page change per swipe, as before.
+    @State private var scrolledIndex: Int?
+    @State private var scrollPhase: ScrollPhase = .idle
+    @State private var userScrolled = false
+    @State private var crossings = 0
+    @State private var landings = 0
+    @State private var edgeBumps = 0
 
     init(
         selection: Binding<Int>,
@@ -59,44 +61,72 @@ struct SwipePager<Content: View>: View {
         self.peekWidth = peekWidth
         self.spacing = spacing
         self.content = content
+        self._scrolledIndex = State(initialValue: selection.wrappedValue)
     }
 
     var body: some View {
         GeometryReader { geo in
-            let containerWidth = geo.size.width
-            let containerHeight = geo.size.height
-            let cardWidth = max(0, containerWidth - 2 * (peekWidth + spacing))
-            let stride = cardWidth + spacing
-            let virtual = Double(selection) - Double(dragOffset) / Double(stride)
+            let inset = peekWidth + spacing
+            let cardWidth = max(0, geo.size.width - 2 * inset)
+            let haptics = hapticsEnabled
 
-            HStack(spacing: spacing) {
-                ForEach(0 ..< count, id: \.self) { i in
-                    page(i, width: cardWidth, height: containerHeight)
-                        .scaleEffect(reduceMotion ? 1.0 : scale(for: i, virtual: virtual))
-                        .opacity(opacity(for: i, virtual: virtual))
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal) {
+                    HStack(spacing: spacing) {
+                        ForEach(0 ..< count, id: \.self) { i in
+                            page(i, width: cardWidth, height: geo.size.height)
+                        }
+                    }
+                    .scrollTargetLayout()
+                }
+                // The initial scroll position is ignored when the first layout
+                // has no width yet, so place the selected page once it does.
+                .onScrollGeometryChange(for: CGFloat.self, of: \.containerSize.width) { oldWidth, newWidth in
+                    guard newWidth > 0, newWidth != oldWidth, !isUserScrolling else { return }
+                    proxy.scrollTo(selection, anchor: .center)
+                }
+                .onAppear {
+                    proxy.scrollTo(selection, anchor: .center)
                 }
             }
-            .frame(width: cardWidth * CGFloat(count) + spacing * CGFloat(max(0, count - 1)), alignment: .leading)
-            .offset(x: (containerWidth - cardWidth) / 2 - CGFloat(selection) * stride + dragOffset)
-            .contentShape(Rectangle())
-            // simultaneousGesture (not gesture) so vertical drags can
-            // also bubble up to an enclosing .sheet for swipe-down
-            // dismissal AND to a nested BareScrubber for vertical
-            // value-scrubbing. The axis-claim inside `dragGesture`
-            // gates the pager so it only acts on horizontally-
-            // dominant drags — vertical scrubs pass through cleanly.
-            .simultaneousGesture(dragGesture(stride: stride))
-            .animation(settleAnimation, value: selection)
-            // A programmatic page change while the user's finger is
-            // down would otherwise yank the content out from under the
-            // drag (offset is a function of `selection`). Re-baseline
-            // so the visual position is unchanged and the drag keeps
-            // tracking 1:1; the gesture's own settle logic then wins.
-            .onChange(of: selection) { oldValue, newValue in
-                guard isDragging else { return }
-                let shift = CGFloat(newValue - oldValue) * stride
-                dragBase += shift
-                dragOffset += shift
+            .contentMargins(.horizontal, inset, for: .scrollContent)
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .alwaysByOne))
+            .scrollPosition(id: $scrolledIndex, anchor: .center)
+            .scrollIndicators(.hidden)
+            // Card shadows and scaled neighbors extend past the scroll bounds.
+            .scrollClipDisabled()
+            .environment(\.scrubberSharesDrags, true)
+            .onScrollPhaseChange { _, phase in
+                handleScrollPhase(phase)
+            }
+            .onScrollGeometryChange(for: Bool.self, of: { geometry in
+                // Native rubber-banding moves the content about half as far
+                // as the finger, so 16pt here matches the old 28pt pull.
+                let x = geometry.contentOffset.x
+                let leadingRest = -geometry.contentInsets.leading
+                let trailingRest = geometry.contentSize.width
+                    + geometry.contentInsets.trailing
+                    - geometry.containerSize.width
+                return x < leadingRest - 16 || x > trailingRest + 16
+            }) { _, isPastEdge in
+                if isPastEdge, scrollPhase == .interacting {
+                    edgeBumps += 1
+                }
+            }
+            .onChange(of: scrolledIndex) { _, _ in
+                if isUserScrolling { crossings += 1 }
+            }
+            .onChange(of: selection) { _, newValue in
+                follow(newValue)
+            }
+            .sensoryFeedback(trigger: crossings) { _, _ in
+                haptics ? .impact(weight: .light, intensity: 0.6) : nil
+            }
+            .sensoryFeedback(trigger: landings) { _, _ in
+                haptics ? .impact(flexibility: .soft) : nil
+            }
+            .sensoryFeedback(trigger: edgeBumps) { _, _ in
+                haptics ? .impact(flexibility: .rigid) : nil
             }
         }
     }
@@ -105,8 +135,15 @@ struct SwipePager<Content: View>: View {
     /// survives selection changes. Collapse and hide neighboring semantics so
     /// only the selected page participates in accessibility.
     private func page(_ index: Int, width: CGFloat, height: CGFloat) -> some View {
-        content(index)
+        let scalesNeighbors = !reduceMotion
+        return content(index)
             .frame(width: width, height: height)
+            .scrollTransition(.interactive, axis: .horizontal) { effect, phase in
+                let distance = min(1, abs(phase.value))
+                return effect
+                    .scaleEffect(scalesNeighbors ? CGFloat(1 - 0.08 * distance) : 1)
+                    .opacity(1 - 0.45 * distance)
+            }
             // Collapsing an off-screen page before hiding it prevents SwiftUI
             // from leaking its transformed descendants into the accessibility
             // tree while preserving the rendered card's structural identity.
@@ -114,140 +151,36 @@ struct SwipePager<Content: View>: View {
             .accessibilityHidden(index != selection)
     }
 
-    private var settleAnimation: Animation? {
-        reduceMotion ? nil : .spring(response: 0.32, dampingFraction: 0.86)
+    private var isUserScrolling: Bool {
+        scrollPhase == .interacting || scrollPhase == .decelerating
     }
 
-    // MARK: - Gesture
+    // MARK: - Selection sync
 
-    private func dragGesture(stride: CGFloat) -> some Gesture {
-        DragGesture(minimumDistance: 5)
-            .onChanged { value in
-                let tw = value.translation.width
-                let th = value.translation.height
-
-                // Decide the dominant axis on the first unambiguous
-                // movement. The 8pt threshold filters out the tiny
-                // jitter that can otherwise lock to the wrong axis
-                // when a drag begins with a near-diagonal flick.
-                if horizontalAxisLocked == nil {
-                    let totalMag = max(abs(tw), abs(th))
-                    guard totalMag >= 8 else { return }
-                    horizontalAxisLocked = abs(tw) > abs(th)
-                }
-
-                // Vertical drag won the axis claim — yield. The
-                // BareScrubber (or any other nested vertical
-                // gesture) is the rightful owner; SwipePager stays
-                // still for the rest of this drag.
-                guard horizontalAxisLocked == true else { return }
-
-                if !isDragging {
-                    isDragging = true
-                    lastCrossedIndex = selection
-                }
-                let raw = dragBase + tw
-                let damped = applyEdgeRubberBand(raw, stride: stride)
-                dragOffset = damped
-
-                // Edge haptic — fire once when the user starts pulling past a wall.
-                let isAtLeftEdge = selection == 0 && raw > 0
-                let isAtRightEdge = selection == count - 1 && raw < 0
-                let atEdge = isAtLeftEdge || isAtRightEdge
-
-                if atEdge, abs(raw) > 28, !didEdgeHaptic {
-                    Haptics.rigid(playsSound: false)
-                    didEdgeHaptic = true
-                } else if !atEdge {
-                    didEdgeHaptic = false
-                }
-
-                // Crossing haptic — when the effective focus changes frames.
-                let effective = Double(selection) - Double(damped) / Double(stride)
-                let frame = Int(effective.rounded())
-                if frame != lastCrossedIndex, frame >= 0, frame < count {
-                    Haptics.tick(playsSound: false)
-                    lastCrossedIndex = frame
-                }
-            }
-            .onEnded { value in
-                let wasHorizontal = horizontalAxisLocked == true
-                horizontalAxisLocked = nil
-                isDragging = false
-
-                // No-op if the drag was claimed by the vertical axis
-                // (or never reached the decision threshold) — there's
-                // nothing to settle. dragOffset was never touched.
-                guard wasHorizontal else { return }
-
-                let translated = Double(dragBase) + Double(value.translation.width)
-                let predicted = Double(dragBase) + Double(value.predictedEndTranslation.width)
-                let actual = Double(selection) - translated / Double(stride)
-                let projected = Double(selection) - predicted / Double(stride)
-
-                // Native paging physics: a deliberate drag can travel
-                // any number of pages, but momentum carries at most
-                // one page past where the finger actually released.
-                // Unclamped, a brisk flick projects 2+ strides and
-                // skips the neighboring card entirely.
-                let anchor = Int(actual.rounded())
-                let momentumTarget = Int(projected.rounded())
-                let railed = max(anchor - 1, min(anchor + 1, momentumTarget))
-                let target = max(0, min(count - 1, railed))
-
-                let landed = target != selection
-                dragBase = 0
-                settle(on: target, landed: landed)
-                if landed {
-                    Haptics.soft(playsSound: false)
-                }
-                lastCrossedIndex = target
-                didEdgeHaptic = false
-            }
-    }
-
-    private func settle(on target: Int, landed: Bool) {
-        if landed {
-            // Selection drives the pager's single settle animation. Avoid
-            // wrapping this write in a second spring: competing transactions
-            // produce a long, ghosted tail.
-            selection = target
-            dragOffset = 0
-        } else {
-            withAnimation(settleAnimation) {
-                dragOffset = 0
-            }
+    private func handleScrollPhase(_ phase: ScrollPhase) {
+        scrollPhase = phase
+        if phase == .interacting { userScrolled = true }
+        guard phase == .idle else { return }
+        let landedFromUserScroll = userScrolled
+        userScrolled = false
+        guard landedFromUserScroll, let landed = scrolledIndex else {
+            follow(selection)
+            return
+        }
+        if landed != selection {
+            selection = landed
+            landings += 1
         }
     }
 
-    // MARK: - Rubber band
-
-    private func applyEdgeRubberBand(_ raw: CGFloat, stride: CGFloat) -> CGFloat {
-        let range = stride * 0.5
-        if raw > 0, selection == 0 {
-            return rubberBand(raw, range: range)
+    /// Scroll to an externally written selection (page dots, superset
+    /// auto-advance). A user scroll in flight keeps the position: its landing
+    /// commits the page the finger chose, as the old drag re-baseline did.
+    private func follow(_ index: Int) {
+        guard !isUserScrolling, scrolledIndex != index else { return }
+        withAnimation(reduceMotion ? nil : .spring(response: 0.32, dampingFraction: 0.86)) {
+            scrolledIndex = index
         }
-        if raw < 0, selection == count - 1 {
-            return -rubberBand(-raw, range: range)
-        }
-        return raw
-    }
-
-    /// Asymptotic decay — distance never exceeds `range`.
-    private func rubberBand(_ x: CGFloat, range: CGFloat) -> CGFloat {
-        range * (1 - exp(-x / range))
-    }
-
-    // MARK: - Peek styling
-
-    private func scale(for index: Int, virtual: Double) -> CGFloat {
-        let distance = min(1.0, abs(Double(index) - virtual))
-        return CGFloat(1.0 - 0.08 * distance) // 1.00 → 0.92
-    }
-
-    private func opacity(for index: Int, virtual: Double) -> Double {
-        let distance = min(1.0, abs(Double(index) - virtual))
-        return 1.0 - 0.45 * distance // 1.00 → 0.55
     }
 }
 

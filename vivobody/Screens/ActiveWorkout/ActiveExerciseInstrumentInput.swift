@@ -60,13 +60,17 @@ nonisolated struct ActiveStepIncrementInput: Equatable {
     let options: [Double]
 
     var label: String {
+        label(for: selected)
+    }
+
+    func label(for option: Double) -> String {
         switch kind {
         case let .weight(unit):
-            selected.formatted(
+            option.formatted(
                 .number.precision(.fractionLength(0 ... 2))
             ) + " \(unit.symbol)"
         case .duration:
-            DurationFormatter.stepLabel(selected)
+            DurationFormatter.stepLabel(option)
         }
     }
 

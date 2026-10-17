@@ -61,6 +61,7 @@ struct BareScrubber: View {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.scrubberSharesDrags) private var sharesDrags
 
     @AppStorage(SettingsKey.hasScrubbedNumber) private var hasScrubbed: Bool = SettingsDefaults.hasScrubbedNumber
 
@@ -105,7 +106,10 @@ struct BareScrubber: View {
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: showsScrubHint)
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: hasScrubbed)
             .contentShape(RoundedRectangle(cornerRadius: presentation == .card ? Radius.card : 0).inset(by: -hitSlop))
-            .gesture(scrubGesture)
+            // A touch-down drag would block an enclosing pager's scroll, so
+            // pagers share it; the axis claim still keeps paging and scrubbing apart.
+            .gesture(scrubGesture, including: sharesDrags ? .subviews : .all)
+            .simultaneousGesture(scrubGesture, including: sharesDrags ? .all : .subviews)
             .onChange(of: gestureActive) { _, active in
                 // Cancellation bypasses onEnded; discard its stale drag anchor.
                 if !active, isDragging || dragState.axisClaim != .undecided {
