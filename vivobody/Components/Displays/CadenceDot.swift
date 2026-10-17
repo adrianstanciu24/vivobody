@@ -52,8 +52,6 @@ struct CadenceDot: View {
     @State private var ignited = false
     /// Brightness overshoot decaying after ignition.
     @State private var flash = false
-    /// The PR glow ring's slow pulse.
-    @State private var pulsing = false
 
     private var shouldIgnite: Bool {
         isWorkout && ignitionOrder != nil && !reduceMotion
@@ -91,8 +89,13 @@ struct CadenceDot: View {
             Circle()
                 .stroke(ringColor, lineWidth: 1.5)
                 .frame(width: Self.size + 7, height: Self.size + 7)
-                .scaleEffect(shouldPulse && pulsing ? 1.08 : 1)
-                .opacity(shouldPulse && pulsing ? 0.55 : 1)
+                .phaseAnimator(shouldPulse ? [false, true] : [false]) { content, pulsing in
+                    content
+                        .scaleEffect(shouldPulse && pulsing ? 1.08 : 1)
+                        .opacity(shouldPulse && pulsing ? 0.55 : 1)
+                } animation: { _ in
+                    shouldPulse ? .easeInOut(duration: 1.2) : nil
+                }
         }
         // Fixed layout frame: the ring draws past it without moving
         // the row.
@@ -103,11 +106,6 @@ struct CadenceDot: View {
     }
 
     private func appear() {
-        if shouldPulse, !pulsing {
-            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                pulsing = true
-            }
-        }
         guard !ignited else { return }
         guard shouldIgnite else {
             ignited = true

@@ -43,7 +43,7 @@ struct SwipePager<Content: View>: View {
     ///   nil   — drag just started, not enough movement to decide
     ///   true  — horizontally dominant; SwipePager owns the gesture
     ///   false — vertically dominant; SwipePager yields, letting
-    ///           nested gestures (NumberScrubber) handle it
+    ///           nested gestures (BareScrubber) handle it
     /// Reset to nil on every onEnded so each new drag re-decides.
     @State private var horizontalAxisLocked: Bool? = nil
 
@@ -81,7 +81,7 @@ struct SwipePager<Content: View>: View {
             .contentShape(Rectangle())
             // simultaneousGesture (not gesture) so vertical drags can
             // also bubble up to an enclosing .sheet for swipe-down
-            // dismissal AND to a nested NumberScrubber for vertical
+            // dismissal AND to a nested BareScrubber for vertical
             // value-scrubbing. The axis-claim inside `dragGesture`
             // gates the pager so it only acts on horizontally-
             // dominant drags — vertical scrubs pass through cleanly.
@@ -137,7 +137,7 @@ struct SwipePager<Content: View>: View {
                 }
 
                 // Vertical drag won the axis claim — yield. The
-                // NumberScrubber (or any other nested vertical
+                // BareScrubber (or any other nested vertical
                 // gesture) is the rightful owner; SwipePager stays
                 // still for the rest of this drag.
                 guard horizontalAxisLocked == true else { return }

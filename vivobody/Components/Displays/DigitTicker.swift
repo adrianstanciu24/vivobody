@@ -2,20 +2,7 @@
 //  DigitTicker.swift
 //  vivobody
 //
-//  Odometer-style numeric display. Each digit rolls independently: a
-//  digit that doesn't change holds still while its neighbor slides.
-//  Direction follows the value — rising rolls up, falling rolls down.
-//
-//  Implementation: each character becomes a clipped ZStack whose inner
-//  Text carries an .id tied to its current digit. When the digit
-//  changes, the .id changes, and SwiftUI does a remove + insert with a
-//  direction-aware .move transition. Unchanged digits stay put because
-//  their .id is stable, so no transition fires.
-//
-//  Use:
-//      DigitTicker(value: 195)
-//      DigitTicker(value: 2.5, fractionalDigits: 1,
-//                  font: Typography.bigMetric)
+//  Native numeric Text with instant updates during scrubbing.
 //
 
 import SwiftUI
@@ -27,103 +14,37 @@ struct DigitTicker: View {
     var color: Color = Ink.primary
     var fractionalDigits: Int = 0
     var animation: Animation = .spring(response: 0.34, dampingFraction: 0.74)
-    /// When false, digits swap in place instantly instead of rolling.
-    /// Scrubbers pass `false` while a finger is down: at fast scrub
-    /// rates the restarted roll transitions pile into overlapping
-    /// ghost glyphs, and an in-place swap is what a mechanical
-    /// counter at speed looks like anyway. The roll returns for
-    /// single steps and settles the moment the drag ends.
+    /// Scrubbers disable motion during both dragging and flywheel detents.
     var rolls: Bool = true
-    /// Optional custom formatter. When provided, takes precedence over
-    /// `fractionalDigits`. Non-digit characters in the result (`:`, `.`,
-    /// `,`) stay still while digits around them roll independently.
+    /// Overrides fractionalDigits for formatted values such as mm:ss.
     var formatter: ((Double) -> String)? = nil
 
-    @State private var previousValue: Double = .nan
-    /// Keeps the value already displayed at the end of a scrub from
-    /// retroactively rolling when animated changes are re-enabled in the
-    /// same render transaction as the final detent.
-    @State private var rollsWereEnabled: Bool = true
-
+    /// Do not animate a final detent batched with the release transaction.
+    @State private var rollsWereEnabled = true
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var formattedString: String {
         formatter?(value) ?? String(format: "%.\(fractionalDigits)f", value)
     }
 
-    private enum RollDirection { case up, down }
-
-    private var bodyAnimation: Animation {
-        reduceMotion ? .easeInOut(duration: 0.1) : animation
-    }
-
     var body: some View {
-        let direction: RollDirection = (previousValue.isNaN || value >= previousValue) ? .up : .down
-        let chars = Array(formattedString)
-        let animatesValueChange = rolls && rollsWereEnabled
+        let animatesValueChange = rolls && rollsWereEnabled && !reduceMotion
 
-        HStack(spacing: 0) {
-            ForEach(0 ..< chars.count, id: \.self) { i in
-                charSlot(char: chars[i], direction: direction)
+        Text(formattedString)
+            .font(font)
+            .foregroundStyle(color)
+            .monospacedDigit()
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
+            .contentTransition(.numericText(value: value))
+            .animation(animatesValueChange ? animation : nil, value: value)
+            .transaction { transaction in
+                guard !animatesValueChange else { return }
+                transaction.animation = nil
+                transaction.disablesAnimations = true
             }
-        }
-        .animation(animatesValueChange ? bodyAnimation : nil, value: value)
-        .transaction { transaction in
-            guard !animatesValueChange else { return }
-            // An identity transition alone does not neutralize an animation
-            // inherited by the outgoing glyph. Live scrub detents must replace
-            // digits in place instead of leaving overlapping roll frames.
-            transaction.animation = nil
-            transaction.disablesAnimations = true
-        }
-        .onAppear {
-            previousValue = value
-            rollsWereEnabled = rolls
-        }
-        .onChange(of: value) { _, new in
-            previousValue = new
-        }
-        .onChange(of: rolls) { _, enabled in
-            rollsWereEnabled = enabled
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(formattedString)
-    }
-
-    @ViewBuilder
-    private func charSlot(char: Character, direction: RollDirection) -> some View {
-        if char.isNumber {
-            ZStack {
-                Text(String(char))
-                    .font(font)
-                    .foregroundStyle(color)
-                    .monospacedDigit()
-                    .id("digit-\(char)")
-                    .transition(directedTransition(direction))
-            }
-            .clipped()
-        } else {
-            Text(String(char))
-                .font(font)
-                .foregroundStyle(color)
-                .monospacedDigit()
-        }
-    }
-
-    private func directedTransition(_ direction: RollDirection) -> AnyTransition {
-        guard rolls else { return .identity }
-        if reduceMotion { return .opacity }
-        switch direction {
-        case .up:
-            return .asymmetric(
-                insertion: .move(edge: .bottom).combined(with: .opacity),
-                removal: .move(edge: .top).combined(with: .opacity)
-            )
-        case .down:
-            return .asymmetric(
-                insertion: .move(edge: .top).combined(with: .opacity),
-                removal: .move(edge: .bottom).combined(with: .opacity)
-            )
-        }
+            .onAppear { rollsWereEnabled = rolls }
+            .onChange(of: rolls) { _, enabled in rollsWereEnabled = enabled }
+            .accessibilityLabel(formattedString)
     }
 }

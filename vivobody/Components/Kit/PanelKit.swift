@@ -88,9 +88,7 @@ struct LEDLamp: View {
     @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
 
     @State private var overdrive: Bool = false
-    @State private var breathDim: Bool = false
     @State private var overdriveTask: Task<Void, Never>? = nil
-    @State private var breathTask: Task<Void, Never>? = nil
 
     var body: some View {
         ZStack {
@@ -103,9 +101,15 @@ struct LEDLamp: View {
                 Circle()
                     .stroke(Tint.inProgress, lineWidth: 3)
                     .frame(width: size + 2, height: size + 2)
-                    .opacity(breathDim ? 0.42 : 1.0)
-                    .scaleEffect(breathDim ? 0.86 : 1.06)
-                    .shadow(color: Tint.inProgress.opacity(breathDim ? 0.05 : 0.45), radius: breathDim ? 2 : 7)
+                    .phaseAnimator(reduceMotion ? [false] : [false, true]) { content, breathDim in
+                        let isDim = !reduceMotion && breathDim
+                        content
+                            .opacity(isDim ? 0.42 : 1.0)
+                            .scaleEffect(isDim ? 0.86 : 1.06)
+                            .shadow(color: Tint.inProgress.opacity(isDim ? 0.05 : 0.45), radius: isDim ? 2 : 7)
+                    } animation: { _ in
+                        reduceMotion ? nil : .easeInOut(duration: 1.15)
+                    }
             case (_, .lit):
                 litLamp
             case (.segment, .off):
@@ -116,8 +120,14 @@ struct LEDLamp: View {
                 Capsule(style: .continuous)
                     .stroke(Tint.inProgress, lineWidth: 2.5)
                     .frame(width: 28, height: 9)
-                    .opacity(breathDim ? 0.68 : 1.0)
-                    .shadow(color: Tint.inProgress.opacity(breathDim ? 0.10 : 0.30), radius: 4)
+                    .phaseAnimator(reduceMotion ? [false] : [false, true]) { content, breathDim in
+                        let isDim = !reduceMotion && breathDim
+                        content
+                            .opacity(isDim ? 0.68 : 1.0)
+                            .shadow(color: Tint.inProgress.opacity(isDim ? 0.10 : 0.30), radius: 4)
+                    } animation: { _ in
+                        reduceMotion ? nil : .easeInOut(duration: 1.15)
+                    }
             }
 
             if differentiateWithoutColor {
@@ -157,16 +167,9 @@ struct LEDLamp: View {
         )
         .onChange(of: state) { old, new in
             if new == .lit, old != .lit { fireOverdrive() }
-            if new == .armed {
-                startBreathing()
-            } else if old == .armed {
-                stopBreathing()
-            }
         }
-        .onAppear { if state == .armed { startBreathing() } }
         .onDisappear {
             overdriveTask?.cancel()
-            breathTask?.cancel()
         }
     }
 
@@ -215,27 +218,6 @@ struct LEDLamp: View {
             guard !Task.isCancelled else { return }
             withAnimation(.easeOut(duration: 0.7)) { overdrive = false }
         }
-    }
-
-    private func startBreathing() {
-        guard !reduceMotion else { return }
-        breathTask?.cancel()
-        breathDim = false
-        // A repeatForever animation started inside the same transaction
-        // that mounts the lamp gets swallowed; one runloop hop later it
-        // reliably latches.
-        breathTask = Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(16))
-            guard !Task.isCancelled, state == .armed else { return }
-            withAnimation(.easeInOut(duration: 1.15).repeatForever(autoreverses: true)) {
-                breathDim = true
-            }
-        }
-    }
-
-    private func stopBreathing() {
-        breathTask?.cancel()
-        withAnimation(.easeOut(duration: 0.2)) { breathDim = false }
     }
 }
 

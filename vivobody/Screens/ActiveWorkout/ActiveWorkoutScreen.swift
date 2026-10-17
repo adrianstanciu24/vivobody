@@ -32,7 +32,7 @@ struct ActiveWorkoutScreen: View {
     /// Minimizing the screen (so the user can browse other tabs
     /// while their workout continues) is handled by the sheet's
     /// grabber + drag-down gesture; no screen-wide drag-to-minimize
-    /// because vertical-drag controls (NumberScrubber) would
+    /// because vertical-drag controls (BareScrubber) would
     /// conflict.
     private let onDismiss: (() -> Void)?
 

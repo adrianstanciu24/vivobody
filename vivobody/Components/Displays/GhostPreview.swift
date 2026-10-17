@@ -56,16 +56,15 @@ struct GhostCard<Content: View>: View {
     @ViewBuilder var content: () -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var breathing = false
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         content()
-            .opacity(breathing ? 1.0 : 0.66)
-            .animation(
-                reduceMotion ? nil : .easeInOut(duration: 2.4).repeatForever(autoreverses: true),
-                value: breathing
-            )
+            .phaseAnimator(reduceMotion ? [true] : [false, true]) { content, breathing in
+                content.opacity(reduceMotion || breathing ? 1.0 : 0.66)
+            } animation: { _ in
+                reduceMotion ? nil : .easeInOut(duration: 2.4)
+            }
             .padding(padding)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background { shape.fill(Surface.cardTint) }
@@ -86,7 +85,6 @@ struct GhostCard<Content: View>: View {
             }
             .allowsHitTesting(false)
             .accessibilityHidden(true)
-            .onAppear { breathing = true }
     }
 }
 

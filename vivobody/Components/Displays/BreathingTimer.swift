@@ -39,9 +39,7 @@ struct BreathingTimer: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var endTime: Date
-    @State private var startTime: Date
     @State private var totalDuration: TimeInterval
-    @State private var secondsRemaining: Int
     @State private var hasFinished: Bool = false
     @State private var hasFiredWarning: Bool = false
     @State private var lastTickSecond: Int = -1
@@ -49,11 +47,6 @@ struct BreathingTimer: View {
     @State private var dragOffset: CGFloat = 0
     @State private var pastSkipThreshold: Bool = false
     @State private var pastExtendThreshold: Bool = false
-
-    /// Drives the idle drift on the swipe affordances — the Skip chevron
-    /// floats down, the +30s chevron floats up, on a slow repeat loop so
-    /// the gestures advertise themselves without shouting.
-    @State private var affordanceNudge = false
 
     private let threshold: CGFloat = 90
     private let maxDrag: CGFloat = 140
@@ -76,51 +69,44 @@ struct BreathingTimer: View {
         let now = Date()
         let end = now.addingTimeInterval(duration)
         let total = max(duration, totalDuration ?? duration)
-        self._startTime = State(initialValue: now.addingTimeInterval(duration - total))
         self._endTime = State(initialValue: end)
         self._totalDuration = State(initialValue: total)
-        self._secondsRemaining = State(initialValue: Int(duration.rounded(.up)))
     }
 
     var body: some View {
         Group {
-            if reduceMotion {
-                let remainingExact = max(0, endTime.timeIntervalSince(Date()))
-                let progress = min(1, max(0, 1 - remainingExact / totalDuration))
-                content(breath: 1.0, progress: progress, remaining: remainingExact)
+            if hasFinished {
+                content(progress: 1, remaining: 0)
             } else {
-                TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { context in
-                    let now = context.date
-                    let remainingExact = max(0, endTime.timeIntervalSince(now))
-                    let elapsed = max(0, now.timeIntervalSince(startTime))
-                    let accelerated = remainingExact > 0 && remainingExact <= 10
-                    let breath = hasFinished ? 1.0 : breathScale(elapsed: elapsed, accelerated: accelerated)
-                    let progress = min(1, max(0, 1 - remainingExact / totalDuration))
-                    content(breath: breath, progress: progress, remaining: remainingExact)
+                TimelineView(.periodic(from: endTime.addingTimeInterval(-totalDuration.rounded(.up)), by: 1)) { context in
+                    let remaining = max(0, endTime.timeIntervalSince(context.date))
+                    let progress = totalDuration > 0 ? min(1, max(0, 1 - remaining / totalDuration)) : 1
+                    content(progress: progress, remaining: remaining)
+                        .onChange(of: Self.wholeSeconds(remaining)) { _, seconds in
+                            handleSecondTick(seconds)
+                        }
                 }
             }
         }
-        .onAppear {
-            Haptics.prepare()
-            guard !reduceMotion else { return }
-            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                affordanceNudge = true
-            }
-        }
-        .onChange(of: secondsRemaining) { _, new in handleSecondTick(new) }
+        .onAppear { Haptics.prepare() }
         .task(id: endTime) {
-            while !Task.isCancelled {
-                let r = max(0, Int(endTime.timeIntervalSinceNow.rounded(.up)))
-                if r != secondsRemaining { secondsRemaining = r }
-                if r == 0 { break }
-                try? await Task.sleep(nanoseconds: 50_000_000)
+            let deadline = endTime
+            do {
+                try await Task.sleep(for: .seconds(max(0, deadline.timeIntervalSinceNow)))
+            } catch {
+                return
             }
+            guard !Task.isCancelled, endTime == deadline, !hasFinished else { return }
+            hasFinished = true
+            Haptics.success(sound: .timerExpired)
+            UIAccessibility.post(notification: .announcement, argument: "Rest complete. Go.")
+            onComplete()
         }
     }
 
     // MARK: - Content
 
-    private func content(breath: Double, progress: Double, remaining: TimeInterval) -> some View {
+    private func content(progress: Double, remaining: TimeInterval) -> some View {
         ZStack {
             Surface.background.ignoresSafeArea()
 
@@ -130,7 +116,7 @@ struct BreathingTimer: View {
 
                 Spacer()
 
-                timeHero(remaining: remaining, breath: breath)
+                timeHero(remaining: remaining)
                 ofTotalLine
                     .padding(.top, Space.sm)
                 progressBar(progress: progress)
@@ -161,7 +147,7 @@ struct BreathingTimer: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Rest timer")
         .accessibilityIdentifier("restTimerOverlay")
-        .accessibilityValue(accessibilityValue)
+        .accessibilityValue(accessibilityValue(remaining: Self.wholeSeconds(remaining)))
         .accessibilityAddTraits(.updatesFrequently)
         .accessibilityAction(named: hasFinished ? "Return to workout" : "Skip rest") { skipNow() }
         .accessibilityAction(named: "Add 30 seconds") { extend(by: 30) }
@@ -186,23 +172,29 @@ struct BreathingTimer: View {
     /// The live time is an unobstructed readout. In the final 10 seconds the digits
     /// switch to Volt with a glow — the machine raising its voice —
     /// without a single glyph moving (panel discipline).
-    private func timeHero(remaining: TimeInterval, breath: Double) -> some View {
+    private func timeHero(remaining: TimeInterval) -> some View {
         let urgent = !hasFinished && remaining > 0 && remaining <= 10
-        return DigitTicker(
-            value: remaining,
-            font: Typography.bigMetric,
-            color: urgent ? Tint.inProgress : Ink.primary,
-            formatter: { Self.timeString($0) }
-        )
+        return Group {
+            if hasFinished {
+                Text(formatted(0))
+            } else {
+                Text(
+                    timerInterval: endTime.addingTimeInterval(-totalDuration) ... endTime,
+                    countsDown: true,
+                    showsHours: false
+                )
+            }
+        }
+        .font(Typography.bigMetric)
+        .monospacedDigit()
+        .foregroundStyle(urgent ? Tint.inProgress : Ink.primary)
         .shadow(color: urgent ? Tint.inProgress.opacity(0.35) : .clear, radius: 14)
-        .scaleEffect(reduceMotion ? 1.0 : breath, anchor: .leading)
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: breath)
+        .phaseAnimator(reduceMotion || hasFinished ? [false] : [false, true]) { content, expanded in
+            content.scaleEffect(!reduceMotion && !hasFinished && expanded ? (urgent ? 1.03 : 1.02) : 1, anchor: .leading)
+        } animation: { _ in
+            reduceMotion || hasFinished ? nil : .easeInOut(duration: urgent ? 1 : 2.5)
+        }
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: urgent)
-    }
-
-    private static func timeString(_ time: TimeInterval) -> String {
-        let total = Int(time.rounded(.up))
-        return String(format: "%d:%02d", total / 60, total % 60)
     }
 
     private var ofTotalLine: some View {
@@ -324,7 +316,11 @@ struct BreathingTimer: View {
     private func affordanceChevron(symbol: String, drift: CGFloat) -> some View {
         Image(systemName: symbol)
             .font(.system(.title, weight: .semibold))
-            .offset(y: reduceMotion ? 0 : (affordanceNudge ? drift : 0))
+            .phaseAnimator(reduceMotion ? [false] : [false, true]) { content, nudged in
+                content.offset(y: !reduceMotion && nudged ? drift : 0)
+            } animation: { _ in
+                reduceMotion ? nil : .easeInOut(duration: 1.2)
+            }
     }
 
     private func affordanceLabel(_ label: String) -> some View {
@@ -399,24 +395,14 @@ struct BreathingTimer: View {
         case 3: Haptics.tick()
         case 2: Haptics.soft()
         case 1: Haptics.thunk()
-        case 0:
-            if !hasFinished {
-                hasFinished = true
-                Haptics.success(sound: .timerExpired)
-                UIAccessibility.post(
-                    notification: .announcement,
-                    argument: "Rest complete. Go."
-                )
-                onComplete()
-            }
         default: break
         }
     }
 
-    private var accessibilityValue: String {
-        let remaining = "\(secondsRemaining) seconds remaining of \(formatted(totalDuration))"
-        guard let nextSetLabel else { return remaining }
-        return "\(remaining). Next: \(nextSetLabel)"
+    private func accessibilityValue(remaining: Int) -> String {
+        let value = "\(remaining) seconds remaining of \(formatted(totalDuration))"
+        guard let nextSetLabel else { return value }
+        return "\(value). Next: \(nextSetLabel)"
     }
 
     private func skipNow() {
@@ -449,17 +435,6 @@ struct BreathingTimer: View {
 
     // MARK: - Math
 
-    /// Gentle breath to set a calming pace.
-    /// 12 BPM normal (5s period), ~30 BPM accelerated (2s period).
-    /// Amplitudes are deliberately tiny on a numeral (vs the old orb)
-    /// so the hero pulses, never bounces. (1 - cos) phase starts at 1.0.
-    private func breathScale(elapsed: Double, accelerated: Bool) -> Double {
-        let period = accelerated ? 2.0 : 5.0
-        let amplitude = accelerated ? 0.03 : 0.02
-        let phase = (1 - cos(2 * .pi * elapsed / period)) / 2
-        return 1.0 + amplitude * phase
-    }
-
     private enum DragDirection { case up, down }
 
     private func hintVisibility(_ offset: CGFloat, direction: DragDirection) -> Double {
@@ -468,10 +443,15 @@ struct BreathingTimer: View {
         return min(1, Double(signed / threshold))
     }
 
+    /// Timeline dates land on whole seconds before `endTime`, so Date
+    /// arithmetic can yield 5.0000001; rounding that up would skip a second
+    /// and its countdown haptic.
+    private static func wholeSeconds(_ remaining: TimeInterval) -> Int {
+        max(0, Int((remaining - 0.001).rounded(.up)))
+    }
+
     private func formatted(_ seconds: TimeInterval) -> String {
-        let total = Int(seconds.rounded(.up))
-        let m = total / 60
-        let s = total % 60
-        return String(format: "%d:%02d", m, s)
+        Duration.seconds(Int(seconds.rounded(.up)))
+            .formatted(.time(pattern: .minuteSecond).locale(Locale(identifier: "en_US_POSIX")))
     }
 }

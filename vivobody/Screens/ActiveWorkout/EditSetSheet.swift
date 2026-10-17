@@ -84,7 +84,7 @@ struct EditSetSheet: View {
         self.set.exercise?.orderedSets.count ?? 0
     }
 
-    /// NumberScrubber operates on Double; reps live as Int in the
+    /// BareScrubber operates on Double; reps live as Int in the
     /// model. Round on every set so the model stays integer-clean.
     private var repsBinding: Binding<Double> {
         Binding(

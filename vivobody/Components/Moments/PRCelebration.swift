@@ -48,7 +48,6 @@ struct PRCelebration: View {
     @State private var underlineProgress: CGFloat = 0
     @State private var detailVisible: Bool = false
     @State private var promptVisible: Bool = false
-    @State private var breathing: CGFloat = 1.0
     @State private var isDismissing: Bool = false
     @AccessibilityFocusState private var isAccessibilityFocused: Bool
 
@@ -175,7 +174,11 @@ struct PRCelebration: View {
             Circle()
                 .fill(Tint.inProgress.opacity(0.85))
                 .frame(width: 5, height: 5)
-                .scaleEffect(reduceMotion ? 1.0 : breathing)
+                .phaseAnimator(promptVisible && !reduceMotion ? [false, true] : [false]) { content, breathing in
+                    content.scaleEffect(promptVisible && !reduceMotion && breathing ? 1.02 : 1.0)
+                } animation: { _ in
+                    reduceMotion ? nil : .easeInOut(duration: 2.4)
+                }
                 .accessibilityHidden(true)
             Text("Tap to continue")
                 .font(Typography.sectionLabel)
@@ -207,11 +210,6 @@ struct PRCelebration: View {
             revealDetail()
             guard await wait(milliseconds: 780) else { return }
             revealPrompt()
-            if !reduceMotion {
-                withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
-                    breathing = 1.02
-                }
-            }
         }
     }
 
@@ -284,7 +282,6 @@ struct PRCelebration: View {
             // Reset for next presentation.
             valueScale = 0.55
             underlineProgress = 0
-            breathing = 1.0
             isDismissing = false
         }
     }

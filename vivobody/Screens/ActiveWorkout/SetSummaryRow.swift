@@ -36,10 +36,6 @@ struct SetSummaryRow: View {
     /// because completion has a single semantic across all exercises.
     private let completedGreen = Tint.success
 
-    /// Subtle pulse on the active marker's inner dot so the row
-    /// reads as "live" without competing with the hero's animation.
-    @State private var pulse: Double = 0.55
-
     var body: some View {
         HStack(spacing: 12) {
             statusChip
@@ -71,12 +67,6 @@ struct SetSummaryRow: View {
         .padding(.horizontal, Space.md + 2)
         .padding(.vertical, Space.sm + 2)
         .background(rowBackground)
-        .onAppear {
-            guard isActive, !reduceMotion else { return }
-            withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
-                pulse = 1.0
-            }
-        }
         .accessibilityElement()
         .accessibilityLabel("Set \(index)")
         .accessibilityValue(accessibilityValueText)
@@ -116,7 +106,11 @@ struct SetSummaryRow: View {
                 Circle()
                     .fill(Tint.primary)
                     .frame(width: 9, height: 9)
-                    .opacity(pulse)
+                    .phaseAnimator(reduceMotion ? [false] : [false, true]) { content, pulse in
+                        content.opacity(!reduceMotion && pulse ? 1.0 : 0.55)
+                    } animation: { _ in
+                        reduceMotion ? nil : .easeInOut(duration: 1.1)
+                    }
             } else {
                 Circle()
                     .fill(isCompleted ? completedGreen : Surface.cardTintBright)

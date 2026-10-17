@@ -193,7 +193,6 @@ private struct DayDot: View {
     let size: CGFloat
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var pulse = false
     @State private var overdrive = false
 
     private var shouldPulse: Bool {
@@ -218,17 +217,19 @@ private struct DayDot: View {
         }
         .frame(width: size, height: size)
         .opacity(isInMonth ? 1.0 : 0.18)
-        .scaleEffect(shouldPulse ? (pulse ? 1.06 : 1.0) : 1.0)
-        .shadow(
-            color: shouldPulse ? fillColor.opacity(pulse ? 0.35 : 0) : .clear,
-            radius: pulse ? 8 : 0
-        )
+        .phaseAnimator(shouldPulse ? [false, true] : [false]) { content, pulse in
+            let isBright = shouldPulse && pulse
+            content
+                .scaleEffect(isBright ? 1.06 : 1.0)
+                .shadow(
+                    color: isBright ? fillColor.opacity(0.35) : .clear,
+                    radius: isBright ? 8 : 0
+                )
+        } animation: { _ in
+            shouldPulse ? .easeInOut(duration: 1.2) : nil
+        }
         .onAppear {
             if isWorkout, !reduceMotion { fireOverdrive() }
-            guard shouldPulse else { return }
-            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                pulse = true
-            }
         }
         .onChange(of: isWorkout) { _, lit in
             if lit, !reduceMotion { fireOverdrive() }

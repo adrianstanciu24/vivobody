@@ -138,34 +138,11 @@ struct ExerciseInstructionsScreen: View {
 
 private struct PulsingWarningIcon: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var isExpanded = false
-    @State private var animationTask: Task<Void, Never>?
 
     var body: some View {
         Image(systemName: "exclamationmark.triangle.fill")
-            .scaleEffect(reduceMotion ? 1 : (isExpanded ? 1.12 : 0.78))
+            .symbolEffect(.breathe, isActive: !reduceMotion)
             .accessibilityHidden(true)
-            .onAppear(perform: startPulsing)
-            .onDisappear {
-                animationTask?.cancel()
-                animationTask = nil
-                isExpanded = false
-            }
-            .onChange(of: reduceMotion) { _, _ in startPulsing() }
-    }
-
-    private func startPulsing() {
-        animationTask?.cancel()
-        isExpanded = false
-        guard !reduceMotion else { return }
-
-        animationTask = Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(16))
-            guard !Task.isCancelled else { return }
-            withAnimation(.easeInOut(duration: 0.75).repeatForever(autoreverses: true)) {
-                isExpanded = true
-            }
-        }
     }
 }
 

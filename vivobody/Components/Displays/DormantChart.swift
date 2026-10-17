@@ -41,7 +41,10 @@ struct DormantSlotDot: View {
     let state: DormantSlotState
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var breathing = false
+
+    private var shouldBreathe: Bool {
+        state == .next && !reduceMotion
+    }
 
     var body: some View {
         Circle()
@@ -58,15 +61,10 @@ struct DormantSlotDot: View {
                 color: state == .filled ? Tint.primary.opacity(0.58) : .clear,
                 radius: 7
             )
-            .opacity(state == .next && !breathing ? 0.45 : 1.0)
-            .animation(
-                state == .next && !reduceMotion
-                    ? .easeInOut(duration: 2.4).repeatForever(autoreverses: true)
-                    : nil,
-                value: breathing
-            )
-            .onAppear {
-                if state == .next { breathing = true }
+            .phaseAnimator(shouldBreathe ? [false, true] : [true]) { content, breathing in
+                content.opacity(shouldBreathe && !breathing ? 0.45 : 1.0)
+            } animation: { _ in
+                shouldBreathe ? .easeInOut(duration: 2.4) : nil
             }
             .accessibilityHidden(true)
     }

@@ -95,44 +95,23 @@ struct BuildingSignalDot: View {
     var size: CGFloat = 8
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var isBright = false
-    @State private var animationTask: Task<Void, Never>?
 
     var body: some View {
         Circle()
             .fill(Tint.inProgress)
             .frame(width: size, height: size)
-            .opacity(reduceMotion || isBright ? 1.0 : 0.62)
-            .scaleEffect(reduceMotion || isBright ? 1.0 : 0.82)
-            .shadow(
-                color: Tint.inProgress.opacity(reduceMotion || isBright ? 0.45 : 0.12),
-                radius: reduceMotion || isBright ? size * 0.5 : size * 0.25
-            )
+            .phaseAnimator(reduceMotion ? [true] : [false, true]) { content, isBright in
+                content
+                    .opacity(reduceMotion || isBright ? 1.0 : 0.62)
+                    .scaleEffect(reduceMotion || isBright ? 1.0 : 0.82)
+                    .shadow(
+                        color: Tint.inProgress.opacity(reduceMotion || isBright ? 0.45 : 0.12),
+                        radius: reduceMotion || isBright ? size * 0.5 : size * 0.25
+                    )
+            } animation: { _ in
+                reduceMotion ? nil : .easeInOut(duration: 1.2)
+            }
             .accessibilityHidden(true)
-            .onAppear { startBreathing() }
-            .onDisappear {
-                animationTask?.cancel()
-                animationTask = nil
-                isBright = false
-            }
-            .onChange(of: reduceMotion) { _, _ in startBreathing() }
-    }
-
-    private func startBreathing() {
-        animationTask?.cancel()
-        isBright = reduceMotion
-        guard !reduceMotion else { return }
-
-        // Mount-time repeating animations can be swallowed by the same
-        // transaction that inserts a section. One run-loop hop makes the
-        // breathing cue reliable when a long screen scrolls it into view.
-        animationTask = Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(16))
-            guard !Task.isCancelled else { return }
-            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                isBright = true
-            }
-        }
     }
 }
 

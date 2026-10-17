@@ -2,7 +2,7 @@
 //  BareScrubber.swift
 //  vivobody
 //
-//  Effect host and accessible hero layout for the vertical numeric scrubber.
+//  Shared vertical numeric scrubber with bare and liquid-card presentations.
 //  Pure drag and flywheel calculations live in ScrubMotionPolicy.
 //
 
@@ -47,8 +47,16 @@ struct BareScrubber: View {
     var railClearance: CGFloat = 0
     /// Invalidates motion before completion, archive, and discard transitions.
     var cancellationID: Int = 0
+    var presentation: Presentation = .bare
+    var cardLabel: String? = nil
+    var cardVerticalPadding: CGFloat = 28
     /// Flushes coalesced state after a drag or its coast fully settles.
     var onScrubEnded: () -> Void = {}
+
+    enum Presentation {
+        case bare
+        case card
+    }
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -84,25 +92,22 @@ struct BareScrubber: View {
     }
 
     var body: some View {
-        heroLayout
-            .overlay(alignment: .top) {
-                if wallFlashEdge == .top { wallFlashLine }
-            }
-            .overlay(alignment: .bottom) {
-                if wallFlashEdge == .bottom { wallFlashLine }
-            }
-            .offset(y: rubberOffset + nudgeOffset)
-            .scaleEffect(reduceMotion ? 1.0 : (isDragging ? 1.04 : 1.0))
+        movingReadout
+            .modifier(ScrubberCardSurface(
+                isPresented: presentation == .card,
+                label: cardLabel,
+                verticalPadding: cardVerticalPadding,
+                fraction: fillFraction,
+                isDragging: isDragging
+            ))
             .animation(valueAnimation, value: value)
             .animation(dragStateAnimation, value: isDragging)
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: showsScrubHint)
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: hasScrubbed)
-            .contentShape(Rectangle().inset(by: -hitSlop))
+            .contentShape(RoundedRectangle(cornerRadius: presentation == .card ? Radius.card : 0).inset(by: -hitSlop))
             .gesture(scrubGesture)
             .onChange(of: gestureActive) { _, active in
-                // A cancelled drag never reaches onEnded; without this
-                // sweep the next touch would inherit a stale anchor and
-                // teleport the value.
+                // Cancellation bypasses onEnded; discard its stale drag anchor.
                 if !active, isDragging || dragState.axisClaim != .undecided {
                     dragState.axisClaim = .undecided
                     if isDragging {
@@ -119,34 +124,27 @@ struct BareScrubber: View {
                 if active {
                     if performsScrubNudge { startNudge() }
                 } else {
-                    // Leaving the active surface: abort any in-flight
-                    // nudge so its tick never lands on an off-screen card.
                     nudgeTask?.cancel()
                     nudgeOffset = 0
                 }
             }
             .onChange(of: cancellationID) { _, _ in
-                // The owner changes this token only when it is already saving,
-                // archiving, or discarding the current in-memory state.
+                // The owner already saves or discards during this transition.
                 cancelActiveInteraction(notifyEnd: false)
             }
             .onChange(of: scenePhase) { oldPhase, phase in
                 guard oldPhase == .active, phase != .active else { return }
-                // Stop the producer before AppRoot's active→inactive save.
-                // No coast detent can then land after the forced save.
+                // Stop detents before AppRoot's active→inactive save.
                 cancelActiveInteraction(notifyEnd: false)
             }
             .onDisappear {
                 nudgeTask?.cancel()
                 cancelActiveInteraction()
             }
-            // Give assistive technologies a real ranged control rather than a
-            // custom element that only looks adjustable. This supplies finite
-            // min/max/current values to the accessibility runtime (and avoids
-            // the `nan` value some inspectors emitted for the custom action).
+            // A native ranged control supplies finite min/max/current values.
             .accessibilityRepresentation {
                 Slider(value: accessibilitySliderBinding, in: range, step: step) {
-                    Text(accessibilityLabel ?? "Adjustable value")
+                    Text(accessibilityLabel ?? cardLabel ?? "Adjustable value")
                 }
                 .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
                 .accessibilityHint("Swipe up or down to change")
@@ -154,15 +152,25 @@ struct BareScrubber: View {
             .accessibilityRespondsToUserInteraction(true)
     }
 
+    private var movingReadout: some View {
+        heroLayout
+            .overlay(alignment: .top) {
+                if wallFlashEdge == .top { wallFlashLine }
+            }
+            .overlay(alignment: .bottom) {
+                if wallFlashEdge == .bottom { wallFlashLine }
+            }
+            .offset(y: rubberOffset + nudgeOffset)
+            .scaleEffect(reduceMotion || !isDragging ? 1 : (presentation == .card ? 1.03 : 1.04))
+    }
+
     // MARK: - Hero layout
 
-    /// DigitTicker's per-glyph layout requires `fitsWidth` for scaling
-    /// instead of `minimumScaleFactor`.
     private var numberUnitRow: some View {
         HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
             DigitTicker(
                 value: value,
-                font: .system(size: fontSize, weight: .bold),
+                font: .system(size: fontSize, weight: .bold, design: presentation == .card ? .rounded : .default),
                 color: numberColor,
                 fractionalDigits: displayFractionDigits(for: value),
                 rolls: !isDragging && !isCoasting,
@@ -171,7 +179,8 @@ struct BareScrubber: View {
 
             if !unit.isEmpty {
                 Text(unit)
-                    .font(.system(size: unitFontSize, weight: .semibold, design: .monospaced))
+                    .font(presentation == .card ? Typography.metricUnit
+                        : .system(size: unitFontSize, weight: .semibold, design: .monospaced))
                     .foregroundStyle(unitColor)
             }
         }
@@ -185,8 +194,8 @@ struct BareScrubber: View {
         }
     }
 
-    /// Keep intrinsic width unless `fitsWidth` is on. Fit through deterministic
-    /// font metrics and one GeometryReader, without a state measurement loop.
+    /// Native Text can shrink itself, but range-based fitting keeps the
+    /// active instrument's font size stable across live detents.
     @ViewBuilder
     private var heroLayout: some View {
         if fitsWidth {
@@ -256,8 +265,6 @@ struct BareScrubber: View {
         }
     }
 
-    /// Persistent rails sit beside their readout; the outer layout retains
-    /// its full gesture target and its stable worst-case digit scale.
     @ViewBuilder
     private func graduationRail(scale: CGFloat) -> some View {
         if showsRail {
@@ -273,16 +280,13 @@ struct BareScrubber: View {
         }
     }
 
-    /// Slightly taller than the digits' cap height, so the rail reads as part
-    /// of the numeral rather than a separate column beside the line box.
+    /// Slightly taller than the cap height, so the rail reads as part of the numeral.
     private var railHeight: CGFloat {
         UIFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .bold).capHeight * 1.25
     }
 
-    /// Uniform shrink factor (≤ 1) that fits the worst-case number row
-    /// into the offered width, reserving a little room for the
-    /// rail and any first-use chevrons. Constant during a
-    /// scrub because it depends on the range, not the live value.
+    /// Depends on the range, not the live value, so the scale stays
+    /// constant during a scrub.
     private nonisolated static func fitScale(
         availableWidth: CGFloat,
         templateWidth: CGFloat,
@@ -323,15 +327,7 @@ struct BareScrubber: View {
 
     // MARK: - First-use hint
 
-    // The adjacent ScrubHintChevrons view owns its repeating animation state.
-
-    /// One-time first-use nudge: the number bobs up one notch and
-    /// settles back, with a tick at the apex — motion + haptic
-    /// demonstrating "this digit moves vertically" without a word of
-    /// onboarding. Runs only while the gesture is still unlearned and
-    /// not under Reduce Motion (which skips decorative motion; the
-    /// chevrons alone carry the cue there). Aborts the instant a real
-    /// drag begins so the bob never fights the user's finger.
+    /// A one-time nudge teaches the gesture; real drags cancel it immediately.
     private func startNudge() {
         guard !hasScrubbed, !hasNudged, isEnabled, !reduceMotion else { return }
         hasNudged = true
@@ -407,7 +403,8 @@ struct BareScrubber: View {
                 let momentum = drag.predictedEndTranslation.height - drag.translation.height
                 let touchDuration = drag.time.timeIntervalSince(dragClaimTime)
                 finishDrag()
-                if let plan = ScrubMotionPolicy.coastPlan(
+                // Cards keep their established stop-on-release behavior.
+                if presentation == .bare, let plan = ScrubMotionPolicy.coastPlan(
                     momentumPoints: momentum,
                     touchDuration: touchDuration,
                     isEnabled: isEnabled,
@@ -442,11 +439,9 @@ struct BareScrubber: View {
                 rubberOffset = 0
             }
         }
-        // The first scrub that actually moved the value
-        // retires the first-use affordance app-wide. Animate
-        // the flag so the chevrons fade, not snap, away.
+        // The first scrub that moves the value retires the first-use hint app-wide.
         if !hasScrubbed, value != dragState.startValue {
-            withAnimation(.easeOut(duration: 0.4)) { hasScrubbed = true }
+            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.4)) { hasScrubbed = true }
         }
     }
 
@@ -521,11 +516,10 @@ struct BareScrubber: View {
 
     // MARK: - Wall flash
 
-    /// Light the end-stop: instant on, lamp-decay off. Fired in the
-    /// same frame as the rigid haptic + sound so the wall is one
-    /// event across all three senses.
+    /// Fires in the same frame as the rigid haptic and sound, so the wall
+    /// reads as one event.
     private func fireWallFlash(_ edge: Edge) {
-        guard !reduceMotion else { return }
+        guard presentation == .bare, !reduceMotion else { return }
         var snap = Transaction()
         snap.disablesAnimations = true
         withTransaction(snap) {
@@ -571,29 +565,29 @@ struct BareScrubber: View {
         )
     }
 
-    /// Live readout. A whole value drops the step's trailing ".0"
-    /// (60, not 60.0); any off-grid value keeps the precision it
-    /// needs (62.5) so the number always tells the truth.
     private func format(_ v: Double) -> String {
         if let formatter { return formatter(v) }
         let d = displayFractionDigits(for: v)
         return d == 0 ? "\(Int(v))" : String(format: "%.\(d)f", v)
     }
 
-    /// Fraction digits for a live value: the step's precision, unless
-    /// the value is whole — then none.
+    /// Bare readouts drop a whole value's trailing ".0" (60, not 60.0);
+    /// off-grid values keep the step's precision (62.5).
     private func displayFractionDigits(for v: Double) -> Int {
         let d = WeightUnit.fractionDigits(forStep: step, value: v)
-        return d > 0 && abs(v - v.rounded()) < 0.001 ? 0 : d
+        return presentation == .bare && d > 0 && abs(v - v.rounded()) < 0.001 ? 0 : d
     }
 
-    /// Worst-case sizing keeps the step's precision even when the
-    /// upper bound is whole: a mid-scrub value can always grow a
-    /// fraction (275 → 272.5), and the fit scale must already
-    /// account for it.
+    /// Reserve fractional width even when the range's upper bound is whole.
     private func templateFormat(_ v: Double) -> String {
         if let formatter { return formatter(v) }
         let d = WeightUnit.fractionDigits(forStep: step, value: v)
         return d == 0 ? "\(Int(v))" : String(format: "%.\(d)f", v)
+    }
+
+    private var fillFraction: Double {
+        let span = range.upperBound - range.lowerBound
+        guard span > 0 else { return 0 }
+        return max(0.06, min(1, (value - range.lowerBound) / span))
     }
 }

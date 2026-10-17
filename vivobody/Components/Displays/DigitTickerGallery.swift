@@ -1,14 +1,11 @@
-#if DEBUG
 //
-    //  DigitTickerGallery.swift
-    //  vivobody
+//  DigitTickerGallery.swift
+//  vivobody
 //
-    //  Four tickers at different scales (PR-hero, scrubber-readout,
-    //  metadata, fine). Each has +/- buttons; one SCRAMBLE button at the
-    //  bottom changes everything to random values at once so you can feel
-    //  big multi-digit cascades.
+//  Native numeric transitions at multiple scales, with instant-swap mode.
 //
 
+#if DEBUG
     import SwiftUI
     import VivoKit
 
@@ -17,11 +14,15 @@
         @State private var reps: Double = 8
         @State private var pr: Double = 225
         @State private var fine: Double = 2.5
+        @State private var rolls = true
 
         var body: some View {
             ScrollView {
                 VStack(alignment: .leading, spacing: Space.section) {
                     header
+
+                    Toggle("Animate value changes", isOn: $rolls)
+                        .frame(minHeight: 44)
 
                     section(
                         label: "WEIGHT  ·  scrubber readout",
@@ -69,7 +70,7 @@
                 .padding(.bottom, Space.xxl)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.ignoresSafeArea())
+            .background(Surface.background.ignoresSafeArea())
             .onAppear { Haptics.prepare() }
         }
 
@@ -78,13 +79,13 @@
                 Text("DIGIT TICKER")
                     .font(Typography.metricMicro)
                     .tracking(2)
-                    .foregroundStyle(.white.opacity(0.45))
-                Text("Numbers roll, they don't fade.")
+                    .foregroundStyle(Ink.tertiary)
+                Text("Native number motion.")
                     .font(Typography.display)
-                    .foregroundStyle(.white)
-                Text("Each digit moves independently. Only the digits that change animate. Direction follows the value.")
+                    .foregroundStyle(Ink.primary)
+                Text("Compare numeric transitions with instant swaps. Reduce Motion disables the animation.")
                     .font(Typography.sectionLabel)
-                    .foregroundStyle(.white.opacity(0.45))
+                    .foregroundStyle(Ink.tertiary)
                     .padding(.top, 2)
             }
         }
@@ -102,18 +103,19 @@
                 Text(label.uppercased())
                     .font(Typography.metricMicro)
                     .tracking(2)
-                    .foregroundStyle(.white.opacity(0.40))
+                    .foregroundStyle(Ink.tertiary)
 
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     DigitTicker(
                         value: value.wrappedValue,
                         font: font,
-                        fractionalDigits: fractionalDigits
+                        fractionalDigits: fractionalDigits,
+                        rolls: rolls
                     )
                     if let unit {
                         Text(unit)
                             .font(Typography.metricUnit)
-                            .foregroundStyle(.white.opacity(0.4))
+                            .foregroundStyle(Ink.tertiary)
                     }
                     Spacer()
                     stepper(value: value, step: step, range: range)
@@ -122,7 +124,7 @@
             .padding(Space.xl)
             .background(
                 RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
-                    .fill(Color.white.opacity(0.04))
+                    .fill(Ink.primary.opacity(0.04))
             )
         }
 
@@ -153,9 +155,9 @@
             Button(action: action) {
                 Image(systemName: symbol)
                     .font(Typography.sectionLabel)
-                    .foregroundStyle(.white.opacity(0.85))
-                    .frame(width: 38, height: 38)
-                    .background(Color.white.opacity(0.08))
+                    .foregroundStyle(Ink.primary)
+                    .frame(width: 44, height: 44)
+                    .background(Ink.primary.opacity(0.08))
                     .clipShape(Circle())
             }
             .buttonStyle(.plain)
@@ -176,16 +178,16 @@
                         .font(Typography.metricUnit)
                         .tracking(2)
                 }
-                .foregroundStyle(.white.opacity(0.88))
+                .foregroundStyle(Ink.primary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
-                        .fill(Color.white.opacity(0.08))
+                        .fill(Ink.primary.opacity(0.08))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
-                        .stroke(Color.white.opacity(0.10), lineWidth: 0.5)
+                        .stroke(Ink.primary.opacity(0.10), lineWidth: 0.5)
                 )
             }
             .buttonStyle(.plain)
@@ -195,6 +197,11 @@
     #Preview("Digit Ticker") {
         DigitTickerGallery()
             .preferredColorScheme(.dark)
+    }
+
+    #Preview("Digit Ticker · Light") {
+        DigitTickerGallery()
+            .preferredColorScheme(.light)
     }
 
     #Preview("Solo · big") {
@@ -209,6 +216,7 @@
                 Button("+100") { value += 100 }
             }
             .buttonStyle(.borderedProminent)
+            .controlSize(.large)
             .tint(.gray)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -2,8 +2,8 @@
 //  WeightScrubber.swift
 //  vivobody
 //
-//  Unit-aware wrapper around the app's card and bare scrubbers for
-//  weight values.
+//  Unit-aware wrapper around BareScrubber's card and bare presentations
+//  for weight values.
 //  The bound canonical value is always in lb; this view reads the
 //  user's WeightUnit preference, converts the value to the display
 //  unit for scrubbing, and converts back on write. Step and range
@@ -42,9 +42,7 @@ struct WeightScrubber: View {
     var label: String? = "Weight"
 
     /// Drag points required per step (smaller = faster scrubbing).
-    /// Defaults to 12 to match the underlying NumberScrubber's
-    /// general-purpose feel; the active-workout sites pass 8 for
-    /// snappier in-context adjustments.
+    /// Defaults to 12 for cards; active-workout sites pass 8.
     var pointsPerStep: CGFloat = 12
 
     var valueFontSize: CGFloat = 64
@@ -81,16 +79,17 @@ struct WeightScrubber: View {
     var body: some View {
         switch presentation {
         case .card:
-            NumberScrubber(
+            BareScrubber(
                 value: displayBinding,
                 range: displayRange,
                 step: step,
                 pointsPerStep: pointsPerStep,
+                fontSize: valueFontSize,
                 unit: unit.symbol,
-                label: label,
-                valueFontSize: valueFontSize,
-                verticalPadding: verticalPadding,
                 tickTone: .deep,
+                presentation: .card,
+                cardLabel: label,
+                cardVerticalPadding: verticalPadding,
                 onScrubEnded: onScrubEnded
             )
         case .bare:

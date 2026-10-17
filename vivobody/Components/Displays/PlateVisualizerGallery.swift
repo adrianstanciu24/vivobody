@@ -1,12 +1,11 @@
-#if DEBUG
 //
-    //  PlateVisualizerGallery.swift
-    //  vivobody
+//  PlateVisualizerGallery.swift
+//  vivobody
 //
-    //  Drag the scrubber, watch the plates arrange themselves on the bar.
-    //  This is the gallery composition that proves the components compose.
+//  Shared liquid-card scrubber composed with live plate loading.
 //
 
+#if DEBUG
     import SwiftUI
     import VivoKit
 
@@ -34,13 +33,16 @@
                     }
                 }
 
-                NumberScrubber(
+                BareScrubber(
                     value: $weight,
                     range: 0 ... 600,
                     step: weightStep,
                     pointsPerStep: pointsPerStep(for: weightStep),
+                    fontSize: 64,
                     unit: "lb",
-                    label: "weight"
+                    tickTone: .deep,
+                    presentation: .card,
+                    cardLabel: "Weight"
                 )
 
                 Spacer().frame(height: 8)

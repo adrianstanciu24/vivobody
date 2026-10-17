@@ -207,14 +207,12 @@ struct ActiveWorkoutMiniBar: View {
 
 /// Self-contained indicator that breathes like an armed LED. When
 /// `isPulsing` is true, glow and brightness ease back and forth at
-/// standby rate; when false, settles to a steady dot. State lives
-/// inside so a parent can flip the flag without thinking about
-/// animation lifecycles.
+/// standby rate; when false, settles to a steady dot. SwiftUI owns
+/// the pulse lifecycle independently of the parent.
 private struct PulseDot: View {
     let color: Color
     let isPulsing: Bool
 
-    @State private var phase: Bool = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -224,25 +222,20 @@ private struct PulseDot: View {
             .overlay(
                 Circle().stroke(Ink.quaternary, lineWidth: 0.5)
             )
-            .brightness(phase ? 0.18 : 0)
-            .shadow(color: color.opacity(phase ? 0.55 : 0.12), radius: phase ? 5 : 2)
-            .animation(animation, value: phase)
-            .onAppear { phase = isPulsing && !reduceMotion }
-            .onChange(of: isPulsing) { _, newValue in
-                phase = newValue && !reduceMotion
+            .phaseAnimator(isPulsing && !reduceMotion ? [false, true] : [false]) { content, phase in
+                let isBright = isPulsing && !reduceMotion && phase
+                content
+                    .brightness(isBright ? 0.18 : 0)
+                    .shadow(color: color.opacity(isBright ? 0.55 : 0.12), radius: isBright ? 5 : 2)
+            } animation: { _ in
+                if reduceMotion {
+                    nil
+                } else if isPulsing {
+                    .easeInOut(duration: 1.4)
+                } else {
+                    .easeOut(duration: 0.3)
+                }
             }
-            .onChange(of: reduceMotion) { _, shouldReduce in
-                phase = shouldReduce ? false : isPulsing
-            }
-    }
-
-    private var animation: Animation? {
-        if isPulsing, !reduceMotion {
-            return .easeInOut(duration: 1.4).repeatForever(autoreverses: true)
-        } else if !reduceMotion {
-            return .easeOut(duration: 0.3)
-        }
-        return nil
     }
 }
 

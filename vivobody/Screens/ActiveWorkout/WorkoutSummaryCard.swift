@@ -33,6 +33,8 @@ import VivoKit
 struct WorkoutSummaryCard: View {
     @Bindable var session: WorkoutSession
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
@@ -70,7 +72,7 @@ struct WorkoutSummaryCard: View {
     }
 
     private var displayMinutes: Double {
-        isHistorical ? session.duration / 60 : animatedMinutes
+        isHistorical || reduceMotion ? session.duration / 60 : animatedMinutes
     }
 
     private var receiptMetric: WorkoutReceiptMetric {
@@ -194,13 +196,17 @@ struct WorkoutSummaryCard: View {
                 .fill(Surface.edge)
                 .frame(height: 1)
                 .accessibilityHidden(true)
-            StatStrip(stats: summaryStats, edgeAligned: true)
-                // The strip's vertical dividers are height-flexible
-                // Rectangles; in this screen-height VStack they soak up
-                // spare space and inflate the band. Pin the strip to
-                // its content height so only the Spacer below expands.
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.vertical, Space.md)
+            SummaryDurationStatStrip(
+                minutes: displayMinutes,
+                finalMinutes: Int((session.duration / 60).rounded()),
+                stats: summaryStats
+            )
+            // The strip's vertical dividers are height-flexible
+            // Rectangles; in this screen-height VStack they soak up
+            // spare space and inflate the band. Pin the strip to
+            // its content height so only the Spacer below expands.
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.vertical, Space.md)
             Rectangle()
                 .fill(Surface.edge)
                 .frame(height: 1)
@@ -210,11 +216,10 @@ struct WorkoutSummaryCard: View {
 
     /// The core counts as a StatStrip — the same value-over-label
     /// grammar the History receipt uses, so the live summary and the
-    /// record agree. Duration keeps its entrance count-up through
-    /// `displayMinutes`; a partial session reads "12/15" over SETS.
+    /// record agree. Duration is supplied by the animatable strip;
+    /// a partial session reads "12/15" over SETS.
     private var summaryStats: [Stat] {
         var stats = [
-            Stat(value: "\(Int(displayMinutes.rounded()))", unit: "min", label: "Duration"),
             Stat(value: setsValue, label: "Sets"),
         ]
         if session.totalReps > 0 {
@@ -425,41 +430,46 @@ struct WorkoutSummaryCard: View {
         let isFirstVisit = fromMin == 0
         let minDuration = isFirstVisit ? 0.9 : 0.5
 
-        Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(180))
-
-            await countUp(
-                from: fromMin,
-                to: targetMin,
-                duration: minDuration,
-                set: { animatedMinutes = $0 }
-            )
-
+        withAnimation(
+            reduceMotion ? nil : .timingCurve(1.0 / 3, 1, 2.0 / 3, 1, duration: minDuration).delay(0.18),
+            completionCriteria: .logicallyComplete
+        ) {
+            animatedMinutes = targetMin
+        } completion: {
             if isComplete, !didCelebrate {
                 Haptics.success()
                 didCelebrate = true
             }
         }
     }
+}
 
-    private func countUp(
-        from start: Double,
-        to target: Double,
-        duration: Double,
-        set: @escaping (Double) -> Void
-    ) async {
-        let frameRate: Double = 60
-        let steps = max(1, Int(duration * frameRate))
-        let stepNs = UInt64(1_000_000_000.0 / frameRate)
-        let delta = target - start
+/// Interpolates every displayed minute while VoiceOver reads only the final duration.
+private struct SummaryDurationStatStrip: View, Animatable {
+    var minutes: Double
+    let finalMinutes: Int
+    let stats: [Stat]
 
-        for i in 1 ... steps {
-            let t = Double(i) / Double(steps)
-            let eased = 1 - pow(1 - t, 3) // ease-out cubic
-            set(start + delta * eased)
-            try? await Task.sleep(nanoseconds: stepNs)
-        }
-        set(target)
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var animatableData: Double {
+        get { minutes }
+        set { minutes = newValue }
+    }
+
+    var body: some View {
+        let duration = Stat(
+            value: "\(reduceMotion ? finalMinutes : Int(minutes.rounded()))",
+            unit: "min",
+            label: "Duration",
+            accessibilityLabel: "Duration, \(finalMinutes) min"
+        )
+        StatStrip(stats: [duration] + stats, edgeAligned: true)
+            // Interpolated frames replace the text directly, without nested cell transitions.
+            .transaction {
+                $0.animation = nil
+                $0.disablesAnimations = true
+            }
     }
 }
 
