@@ -101,11 +101,23 @@ analytics, write SwiftData, or fan out session side effects.
 
 ### External entry points
 
-URLs, Handoff, Spotlight, widgets, Siri, and App Intent mailboxes normalize to
-`IncomingAction`. `IncomingActionParser` parses them and the controller's
-`handle(_:)` method is the single dispatch point. New sources extend that path
-instead of adding screen-specific routing.
+URLs, Handoff, legacy Spotlight items, widgets, controls, Siri, and Spotlight
+entities normalize to `IncomingAction`. The controller's `handle(_:)` method is
+the single dispatch point. New sources extend that path instead of adding
+screen-specific routing.
 
+`IncomingActionParser` parses URLs, Handoff activities, and taps on legacy
+CoreSpotlight items. App Intents call `AppIntentRouter` through
+`AppDependencyManager`; `vivobodyApp.swift` registers it in `App.init`, so
+every intent that reads a dependency must run in the app process. The shared
+VivoKit intents use `.foreground(.immediate)` (Start Workout) or are a
+`LiveActivityIntent` with `.background` (Complete Set). The widget extension
+only builds intent values and registers no dependency.
+
+The router holds foreground actions in memory until `AppRoot` attaches it
+after it restores the active workout. Background Complete Set does not wait for
+a scene: the router wires the main context, restores the session, and completes
+the set without presenting the workout.
 ### Diagnostics
 
 `vivobody/App/AppDiagnostics.swift` is the unified-logging vocabulary. Storage,
@@ -119,8 +131,8 @@ forbidden outside this boundary.
 The app writes versioned Codable snapshots through
 `vivobody/App/WidgetSnapshotWriter.swift` into the App Group. Widgets read
 those snapshots and render a sane fallback for missing or old versions.
-Interactive controls hand intent back to the app rather than opening SwiftData.
-Payload-shape changes require coordinated app, widget, fallback, and versioning
+Interactive controls run App Intents in the app process rather than opening
+SwiftData from the extension.Payload-shape changes require coordinated app, widget, fallback, and versioning
 work.
 
 ### Insights
@@ -150,7 +162,8 @@ The authoritative import and call-site allowlists live in
 | App review prompting | `vivobody/App/ReviewRequestController.swift` |
 | Notifications | `vivobody/App/RestNotificationController.swift` |
 | Live Activity app control | `vivobody/App/WorkoutLiveActivityController.swift` |
-| Spotlight indexing and parsing | `vivobody/App/SpotlightIndexer.swift` and `vivobody/App/IncomingAction.swift` |
+| Spotlight indexing, entities, and legacy parsing | `vivobody/App/SpotlightIndexer.swift`, the entity files, and `vivobody/App/IncomingAction.swift` |
+| App Intent routing | `vivobody/App/AppIntentRouter.swift` |
 | Widget snapshot publication | `vivobody/App/WidgetSnapshotWriter.swift` |
 | Interaction audio engine | `vivobody/Components/Haptics/SoundEngine.swift` |
 | Custom haptic engine | `vivobody/Components/Haptics/HapticPatternEngine.swift` |
@@ -174,12 +187,11 @@ Only work required for first paint belongs on the synchronous launch path.
 `AppRoot` starts catalog reconciliation through its model actor while onboarding
 remains interactive; a matching generated fingerprint skips the actor entirely.
 When reconciliation is required, catalog-dependent main UI appears only after
-the transaction commits. Active-session restoration and pending action
-consumption remain coordinated in `AppRoot`. Non-critical indexing and snapshot
+the transaction commits. Active-session restoration and `AppIntentRouter`
+attachment remain coordinated in `AppRoot`. Non-critical indexing and snapshot
 refreshes are deferred or throttled. `SpotlightIndexStore` performs launch-time
-SwiftData reads and searchable-value projection on its `ModelActor`; the main
-actor only creates the CoreSpotlight system objects in bounded, yielding batches.
-Unchanged active-workout widget payloads do not request another WidgetKit reload.
+SwiftData reads and builds the template and exercise `IndexedEntity` values on
+its `ModelActor`; the main actor only awaits the CoreSpotlight index calls.Unchanged active-workout widget payloads do not request another WidgetKit reload.
 Interaction feedback is best-effort: `SoundEngine` and `HapticPatternEngine`
 own their system engines on dedicated actors, and cold preparation may drop the
 first sound or custom pattern rather than delay the associated control action.

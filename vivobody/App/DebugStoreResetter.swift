@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftData
-import VivoKit
 
 #if DEBUG
 
@@ -28,8 +27,7 @@ import VivoKit
         static func reset(
             ifRequested request: DebugStoreResetRequest?,
             in context: ModelContext,
-            defaults: UserDefaults = .standard,
-            sharedDefaults: UserDefaults? = UserDefaults(suiteName: WidgetShared.appGroup)
+            defaults: UserDefaults = .standard
         ) {
             guard let request else { return }
             prepareDefaults(ifRequested: request, defaults: defaults)
@@ -43,9 +41,6 @@ import VivoKit
             deleteAll(ExerciseCatalogItem.self, in: context)
             CatalogDeletionTombstones.clear(in: defaults)
             CatalogLaunchReconciler.invalidate(in: defaults)
-            sharedDefaults?.removeObject(forKey: WidgetShared.startWorkoutRequestKey)
-            sharedDefaults?.removeObject(forKey: WidgetShared.completeSetRequestKey)
-            sharedDefaults?.removeObject(forKey: WidgetShared.startTemplateWorkoutRequestKey)
             try? context.saveOrRollback()
         }
 

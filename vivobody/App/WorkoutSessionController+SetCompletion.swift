@@ -25,15 +25,18 @@ extension WorkoutSessionController {
 
     /// External/widget completion shares the transaction while retaining its
     /// pre-presentation superset positioning. No animation runs while the
-    /// expanded workout is absent.
-    func completeActiveSet() {
+    /// expanded workout is absent. A background Live Activity completion
+    /// passes `presentsWorkout: false` so the app stays where it is.
+    func completeActiveSet(presentsWorkout: Bool = true) {
         guard let session = activeSession else { return }
         let exercises = session.orderedExercises
         guard exercises.indices.contains(session.activeExerciseIndex) else { return }
         let exercise = exercises[session.activeExerciseIndex]
         guard let set = session.activeSet(for: exercise) else {
             guard saveActiveSessionChanges(for: session.id) else { return }
-            presentActiveWorkoutAfterExternalCompletion()
+            if presentsWorkout {
+                presentActiveWorkoutAfterExternalCompletion()
+            }
             return
         }
 
@@ -61,7 +64,7 @@ extension WorkoutSessionController {
                 }
             }
         )
-        guard case .committed = result else { return }
+        guard case .committed = result, presentsWorkout else { return }
         presentActiveWorkoutAfterExternalCompletion()
     }
 

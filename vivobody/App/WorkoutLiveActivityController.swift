@@ -65,7 +65,7 @@ enum WorkoutLiveActivityController {
             do {
                 _ = try Activity.request(
                     attributes: attributes,
-                    content: ActivityContent(state: requestState, staleDate: nil),
+                    content: activityContent(for: requestState),
                     pushType: nil
                 )
                 // If end() canceled us while ActivityKit was accepting the
@@ -120,6 +120,22 @@ enum WorkoutLiveActivityController {
             pendingInteractiveState = nil
             enqueueUpdate(state)
         }
+    }
+
+    /// Wait until requested lifecycle work and queued updates reach
+    /// ActivityKit. A background intent awaits this because the system can
+    /// suspend the process as soon as the intent returns.
+    static func flush() async {
+        if let state = pendingInteractiveState {
+            cancelPendingInteractiveUpdate()
+            enqueueUpdate(state)
+        }
+        var awaitedPump: Task<Void, Never>?
+        repeat {
+            await waitForLifecycle(end: endTask, start: startTask)
+            awaitedPump = updatePumpTask
+            await awaitedPump?.value
+        } while updatePumpTask != nil && updatePumpTask != awaitedPump
     }
 
     static func end(for session: WorkoutSession?) {
@@ -214,7 +230,7 @@ enum WorkoutLiveActivityController {
 
     private static func deliver(_ state: ContentState, generation: Int) async {
         inFlightUpdateState = state
-        let content = ActivityContent(state: state, staleDate: nil)
+        let content = activityContent(for: state)
         let activities = Activity<WorkoutActivityAttributes>.activities
         for activity in activities where canDeliver(generation) {
             await activity.update(content)
@@ -222,6 +238,13 @@ enum WorkoutLiveActivityController {
         guard canDeliver(generation) else { return }
         if !activities.isEmpty { lastDeliveredState = state }
         inFlightUpdateState = nil
+    }
+
+    /// Resting content goes stale at the rest deadline. The presentation
+    /// then offers Complete, because the app may not be running to end
+    /// the rest itself.
+    private static func activityContent(for state: ContentState) -> ActivityContent<ContentState> {
+        ActivityContent(state: state, staleDate: state.isResting ? state.restEndsAt : nil)
     }
 
     private static func canDeliver(_ generation: Int) -> Bool {

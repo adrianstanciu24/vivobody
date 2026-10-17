@@ -6,6 +6,10 @@
 //  workout. Shows the current exercise, set number, set spec, and
 //  a rest-timer countdown when resting.
 //
+//  Resting content goes stale at the rest deadline. Stale content shows
+//  the ready-for-the-next-set layout with Complete, because the app may
+//  not be running to end the rest and publish that state itself.
+//
 
 import ActivityKit
 import AppIntents
@@ -25,12 +29,13 @@ private func restTimerRange(endingAt end: Date) -> ClosedRange<Date> {
 struct ActiveWorkoutLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: WorkoutActivityAttributes.self) { context in
-            ActiveWorkoutActivityView(state: context.state)
+            ActiveWorkoutActivityView(state: context.state, isStale: context.isStale)
         } dynamicIsland: { context in
+            let showsRest = context.state.isResting && !context.isStale
             let island = DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     Group {
-                        if context.state.isResting {
+                        if showsRest {
                             restTimerBlock(context.state)
                         } else {
                             setSpecBlock(context.state)
@@ -46,7 +51,7 @@ struct ActiveWorkoutLiveActivity: Widget {
                         Text("Set \(context.state.setNumber)/\(context.state.plannedSets)")
                             .font(Typography.metricUnit)
                             .foregroundStyle(Ink.secondary)
-                        if !context.state.isResting {
+                        if !showsRest {
                             if context.state.isExerciseComplete {
                                 Label("Done", systemImage: "checkmark")
                                     .font(Typography.caption)
@@ -70,7 +75,7 @@ struct ActiveWorkoutLiveActivity: Widget {
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                     .overlay(alignment: .leading) {
-                        if context.state.isResting {
+                        if showsRest {
                             RestTransitionArrow()
                                 .offset(x: -(Space.xl + Space.sm))
                         }
@@ -79,7 +84,7 @@ struct ActiveWorkoutLiveActivity: Widget {
                     .environment(\.colorScheme, .dark)
             } compactTrailing: {
                 Group {
-                    if context.state.isResting {
+                    if showsRest {
                         HStack(spacing: Space.lg) {
                             Circle()
                                 .fill(Tint.primary)
@@ -100,7 +105,7 @@ struct ActiveWorkoutLiveActivity: Widget {
                 Circle().fill(Tint.primary).frame(width: 7, height: 7)
                     .environment(\.colorScheme, .dark)
             }
-            if context.state.isResting {
+            if showsRest {
                 return island
                     .contentMargins(.leading, 38, for: .compactLeading)
                     .contentMargins(.leading, 4, for: .compactTrailing)
@@ -162,6 +167,7 @@ private struct RestTransitionArrow: View {
 struct ActiveWorkoutActivityView: View {
     @Environment(\.colorScheme) private var systemColorScheme
     let state: WorkoutActivityAttributes.ContentState
+    var isStale = false
 
     private var effectiveColorScheme: ColorScheme {
         switch state.appearance ?? .system {
@@ -186,7 +192,7 @@ struct ActiveWorkoutActivityView: View {
 
     private var content: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            if state.isResting, let restEndsAt = state.restEndsAt {
+            if state.isResting, !isStale, let restEndsAt = state.restEndsAt {
                 Text(state.exerciseName)
                     .font(Typography.sectionLabel)
                     .foregroundStyle(Ink.tertiary)

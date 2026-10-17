@@ -8,16 +8,20 @@
 
 import Foundation
 import SwiftData
-import VivoKit
 
 #if DEBUG
 
     @MainActor
     enum DebugSeedCoordinator {
+        /// Returns the App Intent actions the steps request, in step order.
+        /// AppRoot sends them through AppIntentRouter so they take the same
+        /// queued path as a real intent.
+        @discardableResult
         static func seedLaunchFixtures(
             _ steps: [DebugLaunchStep],
             in context: ModelContext
-        ) {
+        ) -> [IncomingAction] {
+            var intentActions: [IncomingAction] = []
             for step in steps {
                 if seedSpecialFixture(step, in: context) { continue }
                 if DebugActiveWorkoutSeeder.handleCore(step, in: context) { continue }
@@ -25,9 +29,13 @@ import VivoKit
                 if DebugArchivedHistorySeeder.handle(step, in: context) { continue }
                 if DebugInsightsSeeder.handle(step, in: context) { continue }
                 if DebugTemplateSeeder.handle(step, in: context) { continue }
-                if handleWidgetRequest(step) { continue }
+                if let action = intentAction(for: step) {
+                    intentActions.append(action)
+                    continue
+                }
                 assertionFailure("Unhandled debug launch step: \(step)")
             }
+            return intentActions
         }
 
         private static func seedSpecialFixture(
@@ -74,14 +82,8 @@ import VivoKit
             }
         }
 
-        private static func handleWidgetRequest(_ step: DebugLaunchStep) -> Bool {
-            guard step == .widgetStartRequest else { return false }
-            // AppRoot consumes this mailbox through the real parser handoff.
-            UserDefaults(suiteName: WidgetShared.appGroup)?.set(
-                Date().timeIntervalSince1970,
-                forKey: WidgetShared.startWorkoutRequestKey
-            )
-            return true
+        private static func intentAction(for step: DebugLaunchStep) -> IncomingAction? {
+            step == .widgetStartRequest ? .startTodaysWorkout : nil
         }
     }
 

@@ -18,10 +18,11 @@ import WidgetKit
 
 @MainActor
 enum WidgetSnapshotWriter {
-    private enum WriteOutcome: Equatable {
-        case written
+    /// Raw values are the diagnostic outcome names.
+    private enum WriteOutcome: String {
+        case written = "success"
         case unchanged
-        case failed
+        case failed = "failure"
     }
 
     /// The app's central analytics coordinator. AppRoot wires it once
@@ -112,27 +113,28 @@ enum WidgetSnapshotWriter {
         pendingWriteActiveTask = Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(200))
             guard !Task.isCancelled else { return }
-            let unit = WeightUnit.current
-            mirrorPreferences(unit: unit)
-            let writeOutcome = write(
-                activeWorkoutSnapshot(
-                    session: fetchActiveSession(in: context),
-                    unit: unit
-                ),
-                key: WidgetShared.activeWorkoutSnapshotKey
-            )
-            let diagnosticOutcome = switch writeOutcome {
-            case .written: "success"
-            case .unchanged: "unchanged"
-            case .failed: "failure"
-            }
-            AppDiagnostics.snapshotWrite(
-                kind: "active_workout",
-                outcome: diagnosticOutcome
-            )
-            guard reload, writeOutcome == .written else { return }
-            WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
+            publishActiveWorkout(in: context, reload: reload)
         }
+    }
+
+    /// Publish without the coalescing delay, for a background intent that
+    /// the system can suspend as soon as it returns.
+    static func writeActiveWorkoutNow(in context: ModelContext) {
+        pendingWriteActiveTask?.cancel()
+        pendingWriteActiveTask = nil
+        publishActiveWorkout(in: context, reload: true)
+    }
+
+    private static func publishActiveWorkout(in context: ModelContext, reload: Bool) {
+        let unit = WeightUnit.current
+        mirrorPreferences(unit: unit)
+        let writeOutcome = write(
+            activeWorkoutSnapshot(session: fetchActiveSession(in: context), unit: unit),
+            key: WidgetShared.activeWorkoutSnapshotKey
+        )
+        AppDiagnostics.snapshotWrite(kind: "active_workout", outcome: writeOutcome.rawValue)
+        guard reload, writeOutcome == .written else { return }
+        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
     }
 
     static func reloadUpNext() {
@@ -207,17 +209,6 @@ enum WidgetSnapshotWriter {
             (
                 WidgetShared.activeWorkoutSnapshotKey,
                 encode(activeWorkoutSnapshot(session: active, unit: unit))
-            ),
-            (
-                WidgetShared.templatesSnapshotKey,
-                encode(
-                    templates.map {
-                        TemplateEntitySnapshot(
-                            id: $0.id.uuidString,
-                            name: $0.name
-                        )
-                    }
-                )
             ),
         ]
 
@@ -589,6 +580,15 @@ enum WidgetSnapshotWriter {
             defaults.set(data, forKey: snapshot.key)
         }
         return true
+    }
+
+    /// Delete App Group payloads that no release writes anymore, including
+    /// the former template-name list.
+    static func removeRetiredKeys() {
+        guard let defaults = UserDefaults(suiteName: WidgetShared.appGroup) else { return }
+        for key in WidgetShared.retiredKeys {
+            defaults.removeObject(forKey: key)
+        }
     }
 
     private static func mirrorPreferences(unit: WeightUnit) {

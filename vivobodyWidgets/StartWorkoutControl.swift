@@ -4,8 +4,8 @@
 //
 //  A Control Center / Lock Screen / Action Button control that
 //  starts today's workout. Reuses the existing StartTodaysWorkoutIntent
-//  (shared WidgetIntents) which sets the App Group handoff flag and
-//  opens the app. On iPhone 16+ the user assigns this in
+//  (shared WidgetIntents), which opens the app and starts the workout
+//  there. On iPhone 16+ the user assigns this in
 //  Settings > Action Button > Control.
 //
 

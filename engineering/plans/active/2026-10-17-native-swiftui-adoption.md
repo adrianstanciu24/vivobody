@@ -442,4 +442,19 @@ These parts have no good native replacement, or the custom code is the product:
   scrubbing near the sheet edge, and set completion on a device. If a
   downward scrub moves the sheet, remove `scrubberSharesDrags` from
   `SwipePager` first; if that fails, restore the old `SwipePager`.
-- [ ] B6. App Intents and Spotlight.
+- [x] B6. App Intents and Spotlight. Done on 2026-10-17. Detailed plan:
+  [B6 plan](2026-10-17-b6-app-intents-and-spotlight.md). Decisions:
+  `IndexedEntity` for templates and exercises; Live Activity Complete Set runs
+  in the background and the app stays closed. App Group mailboxes are gone:
+  intents call the app-only `AppIntentRouter` through `AppDependencyManager`.
+  Start Workout uses `.foreground(.immediate)`; Complete Set is a
+  `LiveActivityIntent` with `.background`. `AppState` is created in
+  `VivobodyApp`. Template and exercise queries read SwiftData; `OpenIntent`s
+  route Spotlight taps; the template snapshot is deleted. The app scheme build,
+  `build-for-testing`, `check_naming.py`, `check_architecture.py`, and
+  `check_source_sizes.py` passed. `widget-start-handoff`,
+  `deep-link-insights`, `start-complete-rest`, and `active-restoration` passed
+  on iPhone Air, iOS 26.5. A stale system "Open in Vivobody?" prompt from an
+  earlier URL run blocked the first scenario runs; dismissing it fixed them.
+  The user must test Siri, Shortcuts, Control Center, the widget, the Live
+  Activity, and Spotlight on a device (see the B6 plan).

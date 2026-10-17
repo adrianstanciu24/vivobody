@@ -62,8 +62,10 @@ APP_FRAMEWORK_BOUNDARIES: dict[str, frozenset[str]] = {
     }),
     "CoreSpotlight": frozenset({
         "vivobody/App/AppRoot.swift",
+        "vivobody/App/ExerciseEntity.swift",
         "vivobody/App/IncomingAction.swift",
         "vivobody/App/SpotlightIndexer.swift",
+        "vivobody/App/WorkoutTemplateEntity.swift",
     }),
     "WidgetKit": frozenset({
         "vivobody/App/WidgetSnapshotWriter.swift",

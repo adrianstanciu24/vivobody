@@ -43,6 +43,23 @@ enum SessionSideEffects {
         WidgetSnapshotWriter.writeActiveWorkout(in: context)
     }
 
+    /// Publish the active workout to the widget, the Live Activity, and
+    /// optionally the rest notification before returning. A background App
+    /// Intent awaits this because iOS can suspend the process as soon as
+    /// `perform()` returns, before coalesced or queued work runs.
+    static func flushExternalPresentation(
+        for session: WorkoutSession?,
+        schedulingRestNotification: Bool,
+        in context: ModelContext
+    ) async {
+        WidgetSnapshotWriter.writeActiveWorkoutNow(in: context)
+        let notification = schedulingRestNotification
+            ? RestNotificationController.scheduleIfResting(for: session)
+            : nil
+        await WorkoutLiveActivityController.flush()
+        await notification?.value
+    }
+
     static func handle(
         _ event: SessionEvent,
         session: WorkoutSession,

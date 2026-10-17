@@ -3,7 +3,8 @@
 //  vivobody
 //
 //  The single dispatch boundary for IncomingAction values normalized from
-//  URLs, Handoff, Spotlight, widgets, Siri, and App Intent mailboxes.
+//  URLs, Handoff, Spotlight, and App Intents (widgets, controls, Siri)
+//  routed through AppIntentRouter.
 //
 
 import Foundation
@@ -27,7 +28,10 @@ extension WorkoutSessionController {
         case let .showExercise(id):
             handleShowExercise(id)
         case .completeActiveSet:
-            completeActiveSet()
+            // Only the Live Activity sends this, and the user stays where
+            // they are.
+            guard endRestForExternalCompletion() else { return }
+            completeActiveSet(presentsWorkout: false)
         }
     }
 

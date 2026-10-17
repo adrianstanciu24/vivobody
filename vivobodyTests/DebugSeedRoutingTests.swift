@@ -210,23 +210,16 @@ import VivoKit
             try context.saveOrRollback()
 
             let defaultsName = "DebugSeedRoutingTests.defaults.\(UUID().uuidString)"
-            let sharedName = "DebugSeedRoutingTests.shared.\(UUID().uuidString)"
             let defaults = try #require(UserDefaults(suiteName: defaultsName))
-            let sharedDefaults = try #require(UserDefaults(suiteName: sharedName))
             defer {
                 defaults.removePersistentDomain(forName: defaultsName)
-                sharedDefaults.removePersistentDomain(forName: sharedName)
             }
             CatalogDeletionTombstones.record("fixture", in: defaults)
-            sharedDefaults.set(1, forKey: WidgetShared.startWorkoutRequestKey)
-            sharedDefaults.set(1, forKey: WidgetShared.completeSetRequestKey)
-            sharedDefaults.set(1, forKey: WidgetShared.startTemplateWorkoutRequestKey)
 
             DebugStoreResetter.reset(
                 ifRequested: DebugStoreResetRequest(shouldShowOnboarding: true),
                 in: context,
-                defaults: defaults,
-                sharedDefaults: sharedDefaults
+                defaults: defaults
             )
 
             let sessions = try context.fetch(FetchDescriptor<WorkoutSession>())
@@ -239,9 +232,6 @@ import VivoKit
             #expect(catalogItems.isEmpty)
             #expect(defaults.bool(forKey: SettingsKey.onboardingCompleted) == false)
             #expect(CatalogDeletionTombstones.ids(in: defaults).isEmpty)
-            #expect(sharedDefaults.object(forKey: WidgetShared.startWorkoutRequestKey) == nil)
-            #expect(sharedDefaults.object(forKey: WidgetShared.completeSetRequestKey) == nil)
-            #expect(sharedDefaults.object(forKey: WidgetShared.startTemplateWorkoutRequestKey) == nil)
         }
 
         @Test func generalHistoryHasFixedDurationsAndKeepsDayFourteenContained() throws {

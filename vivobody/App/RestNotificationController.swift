@@ -4,10 +4,11 @@
 //
 //  Local "rest over" notification for the one moment the in-app rest
 //  timer can't cover: the phone is locked or the app is backgrounded
-//  when the countdown hits zero. Scheduled from AppRoot when the
-//  scene leaves .active during a rest, cancelled the moment the scene
-//  returns — so in the foreground the BreathingTimer remains the only
-//  voice, and the notification never double-fires behind it.
+//  when the countdown hits zero. Scheduled when the scene leaves
+//  .active during a rest, and by SessionSideEffects when a background
+//  Live Activity completion starts a rest. Cancelled the moment the
+//  scene returns — so in the foreground the BreathingTimer remains the
+//  only voice, and the notification never double-fires behind it.
 //
 //  The chime is sfx-rest-done.caf (Scripts/generate_sounds.py), the
 //  same synth voice as the in-app sounds, so the identity carries to
@@ -58,17 +59,20 @@ enum RestNotificationController {
 
     /// Schedule the rest-over chime at the session's rest deadline.
     /// No-ops unless a rest is actually running with time remaining.
-    static func scheduleIfResting(for session: WorkoutSession?) {
+    /// Returns the scheduling task so a caller that can be suspended
+    /// right after it returns can await the request.
+    @discardableResult
+    static func scheduleIfResting(for session: WorkoutSession?) -> Task<Void, Never>? {
         cancelPending()
         guard
             let session, session.isResting,
             let endsAt = session.restEndsAt
-        else { return }
+        else { return nil }
 
         let interval = endsAt.timeIntervalSinceNow
-        guard interval > 1 else { return }
+        guard interval > 1 else { return nil }
 
-        schedulingTask = Task { @MainActor in
+        let task = Task { @MainActor in
             let status = await authorizationStatus()
             guard !Task.isCancelled else { return }
             let defaults = UserDefaults.standard
@@ -106,6 +110,8 @@ enum RestNotificationController {
             )
             try? await UNUserNotificationCenter.current().add(request)
         }
+        schedulingTask = task
+        return task
     }
 
     /// Drop any scheduled chime and clear a delivered one from the

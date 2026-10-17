@@ -3,11 +3,15 @@
 //  vivobody
 //
 //  App entry point. Creates the canonical SwiftData container with its
-//  recoverable in-memory fallback, then installs AppRoot into the main scene.
+//  recoverable in-memory fallback, the process-wide AppState and
+//  AppIntentRouter, registers App Intent dependencies, then installs AppRoot
+//  into the main scene.
 //
 
+import AppIntents
 import SwiftData
 import SwiftUI
+import VivoKit
 
 @main
 struct VivobodyApp: App {
@@ -16,6 +20,20 @@ struct VivobodyApp: App {
         let analyticsSnapshotStore: AnalyticsSnapshotStore
         let catalogReconciliationStore: CatalogReconciliationStore
         let spotlightIndexStore: SpotlightIndexStore
+        /// Created here rather than in AppRoot so an intent that launches the
+        /// app in the background reaches the same state a later scene shows.
+        let appState: AppState
+        let router: AppIntentRouter
+
+        init(container: ModelContainer) {
+            self.container = container
+            analyticsSnapshotStore = AnalyticsSnapshotStore(modelContainer: container)
+            catalogReconciliationStore = CatalogReconciliationStore(modelContainer: container)
+            spotlightIndexStore = SpotlightIndexStore(modelContainer: container)
+            let appState = AppState()
+            self.appState = appState
+            router = AppIntentRouter(appState: appState, container: container)
+        }
     }
 
     /// The SwiftData container. Holds every archived workout. The
@@ -34,18 +52,7 @@ struct VivobodyApp: App {
                 named: "vivobody",
                 isStoredInMemoryOnly: false
             )
-            return Dependencies(
-                container: container,
-                analyticsSnapshotStore: AnalyticsSnapshotStore(
-                    modelContainer: container
-                ),
-                catalogReconciliationStore: CatalogReconciliationStore(
-                    modelContainer: container
-                ),
-                spotlightIndexStore: SpotlightIndexStore(
-                    modelContainer: container
-                )
-            )
+            return Dependencies(container: container)
         } catch {
             AppDiagnostics.storageFallbackAttempt(error: error)
             // A failed on-disk store open must not crash every launch.
@@ -59,18 +66,7 @@ struct VivobodyApp: App {
                     isStoredInMemoryOnly: true
                 )
                 AppDiagnostics.storageFallbackSucceeded()
-                return Dependencies(
-                    container: memory,
-                    analyticsSnapshotStore: AnalyticsSnapshotStore(
-                        modelContainer: memory
-                    ),
-                    catalogReconciliationStore: CatalogReconciliationStore(
-                        modelContainer: memory
-                    ),
-                    spotlightIndexStore: SpotlightIndexStore(
-                        modelContainer: memory
-                    )
-                )
+                return Dependencies(container: memory)
             } catch {
                 AppDiagnostics.storageUnavailable(error: error)
             }
@@ -81,6 +77,7 @@ struct VivobodyApp: App {
     }()
 
     init() {
+        registerIntentDependencies()
         #if DEBUG
             // AppRoot reads this default while it initializes. Store mutation
             // belongs to DebugLaunchRoot's explicit bootstrap phase instead of
@@ -91,6 +88,26 @@ struct VivobodyApp: App {
         #endif
     }
 
+    /// Every intent that reads a dependency runs in this process, so each one
+    /// must be registered here before the system can call `perform()`.
+    private func registerIntentDependencies() {
+        let manager = AppDependencyManager.shared
+        guard let dependencies else {
+            // Storage failed entirely. A missing dependency crashes the
+            // intent, so register an inert router that drops every action;
+            // the scene shows StorageRecoveryView instead.
+            let router = AppIntentRouter(appState: AppState(), container: nil)
+            let actions = router.workoutIntentActions
+            manager.add(dependency: actions)
+            manager.add(dependency: router)
+            return
+        }
+        let router = dependencies.router
+        let actions = router.workoutIntentActions
+        manager.add(dependency: actions)
+        manager.add(dependency: router)
+    }
+
     var body: some Scene {
         WindowGroup {
             if let dependencies {
@@ -98,14 +115,18 @@ struct VivobodyApp: App {
                     DebugLaunchRoot(
                         analyticsSnapshotStore: dependencies.analyticsSnapshotStore,
                         catalogReconciliationStore: dependencies.catalogReconciliationStore,
-                        spotlightIndexStore: dependencies.spotlightIndexStore
+                        spotlightIndexStore: dependencies.spotlightIndexStore,
+                        appState: dependencies.appState,
+                        router: dependencies.router
                     )
                     .modelContainer(dependencies.container)
                 #else
                     AppRoot(
                         analyticsSnapshotStore: dependencies.analyticsSnapshotStore,
                         catalogReconciliationStore: dependencies.catalogReconciliationStore,
-                        spotlightIndexStore: dependencies.spotlightIndexStore
+                        spotlightIndexStore: dependencies.spotlightIndexStore,
+                        appState: dependencies.appState,
+                        router: dependencies.router
                     )
                     .modelContainer(dependencies.container)
                 #endif
@@ -125,6 +146,8 @@ struct VivobodyApp: App {
         let analyticsSnapshotStore: AnalyticsSnapshotStore
         let catalogReconciliationStore: CatalogReconciliationStore
         let spotlightIndexStore: SpotlightIndexStore
+        let appState: AppState
+        let router: AppIntentRouter
 
         @Environment(\.modelContext) private var modelContext
         @State private var isPrepared: Bool
@@ -134,11 +157,15 @@ struct VivobodyApp: App {
         init(
             analyticsSnapshotStore: AnalyticsSnapshotStore,
             catalogReconciliationStore: CatalogReconciliationStore,
-            spotlightIndexStore: SpotlightIndexStore
+            spotlightIndexStore: SpotlightIndexStore,
+            appState: AppState,
+            router: AppIntentRouter
         ) {
             self.analyticsSnapshotStore = analyticsSnapshotStore
             self.catalogReconciliationStore = catalogReconciliationStore
             self.spotlightIndexStore = spotlightIndexStore
+            self.appState = appState
+            self.router = router
             let route = UITestSupport.route()
             self.route = route
             _isPrepared = State(initialValue: route.resetRequest == nil && route.manualFixture == nil)
@@ -150,7 +177,9 @@ struct VivobodyApp: App {
                     AppRoot(
                         analyticsSnapshotStore: analyticsSnapshotStore,
                         catalogReconciliationStore: catalogReconciliationStore,
-                        spotlightIndexStore: spotlightIndexStore
+                        spotlightIndexStore: spotlightIndexStore,
+                        appState: appState,
+                        router: router
                     )
                 } else {
                     bootstrapPlaceholder

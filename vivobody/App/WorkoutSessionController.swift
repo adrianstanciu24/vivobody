@@ -52,9 +52,11 @@ final class WorkoutSessionController {
     var lastSaveError: SaveErrorBox? = nil
 
     /// Lazily-assigned reference to the SwiftData write context.
-    /// AppRoot wires this on first appear; mutations to history go
-    /// through here. Held as an opt-in so previews that don't supply
-    /// a context still build and render.
+    /// AppRoot wires this on first appear, or AppIntentRouter wires the
+    /// same main context when a background intent arrives before any
+    /// scene connects; mutations to history go through here. Held as an
+    /// opt-in so previews that don't supply a context still build and
+    /// render.
     var modelContext: ModelContext?
 
     /// Weak back-reference to AppState for tab navigation and
@@ -194,18 +196,36 @@ final class WorkoutSessionController {
     /// expanded workout's rest overlay owns expiry while it is
     /// presented (a skip-to-zero deliberately waits for confirmation).
     @discardableResult
-    func endExpiredRestIfNeeded(now: Date = Date()) -> Bool {
+    func endExpiredRestIfNeeded(now: Date = Date(), playsFeedback: Bool = true) -> Bool {
         guard pendingDiscardSession == nil,
               let session = activeSession,
               session.isResting,
               hasRestElapsed(session, now: now)
         else { return false }
 
-        Haptics.swell()
-        UIAccessibility.post(
-            notification: .announcement,
-            argument: "Rest complete. Ready for the next set."
-        )
+        if playsFeedback {
+            Haptics.swell()
+            UIAccessibility.post(
+                notification: .announcement,
+                argument: "Rest complete. Ready for the next set."
+            )
+        }
+        session.skipRest()
+        return saveActiveSessionChanges(for: session.id)
+    }
+
+    /// A Live Activity Complete tap can arrive during a rest: the app was
+    /// not running to end an elapsed rest, or the system showed the stale
+    /// content slightly before the deadline. An elapsed rest ends through
+    /// the expiry transition without its rest-over cue, since a completion
+    /// follows at once. An early tap ends the rest as the overlay's skip
+    /// does, because the tap explicitly asks for the next set.
+    func endRestForExternalCompletion(now: Date = Date()) -> Bool {
+        guard pendingDiscardSession == nil, let session = activeSession else { return false }
+        guard session.isResting else { return true }
+        if hasRestElapsed(session, now: now) {
+            return endExpiredRestIfNeeded(now: now, playsFeedback: false)
+        }
         session.skipRest()
         return saveActiveSessionChanges(for: session.id)
     }

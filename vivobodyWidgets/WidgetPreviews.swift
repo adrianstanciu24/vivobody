@@ -54,6 +54,26 @@ import WidgetKit
     .background(Color.black)
 }
 
+#Preview("Live Activity Rest Over") {
+    ActiveWorkoutActivityView(
+        state: WorkoutActivityAttributes.ContentState(
+            exerciseName: "Barbell Bench Press",
+            exerciseIndex: 0,
+            setNumber: 3,
+            plannedSets: 5,
+            setSpec: "225 x 5",
+            isResting: true,
+            restEndsAt: Date().addingTimeInterval(-5),
+            restDuration: 120,
+            totalVolume: 8420,
+            totalSetsCompleted: 12,
+            isExerciseComplete: false
+        ),
+        isStale: true
+    )
+    .background(Color.black)
+}
+
 #Preview("Live Activity Set") {
     ActiveWorkoutActivityView(
         state: WorkoutActivityAttributes.ContentState(

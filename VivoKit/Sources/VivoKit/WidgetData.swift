@@ -26,10 +26,14 @@ public nonisolated enum WidgetShared {
     public static let activeWorkoutSnapshotKey = "widgets.activeWorkout.snapshot"
     public static let weightUnitKey = "settings.weightUnit"
     public static let appearanceKey = "settings.appearance"
-    public static let startWorkoutRequestKey = "widgets.intent.startWorkoutRequestedAt"
-    public static let completeSetRequestKey = "widgets.intent.completeSetRequestedAt"
-    public static let startTemplateWorkoutRequestKey = "widgets.intent.startTemplateId"
-    public static let templatesSnapshotKey = "widgets.templates.snapshot"
+    /// Keys from the retired App Group intent handoff and template-name
+    /// list. Nothing reads them; the app deletes them at launch.
+    public static let retiredKeys = [
+        "widgets.intent.startWorkoutRequestedAt",
+        "widgets.intent.completeSetRequestedAt",
+        "widgets.intent.startTemplateId",
+        "widgets.templates.snapshot",
+    ]
 }
 
 /// The app-owned appearance preference mirrored into the App Group so widgets

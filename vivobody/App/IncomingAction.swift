@@ -3,16 +3,15 @@
 //  vivobody
 //
 //  Unified representation of every external entry point into the app:
-//  URL scheme, Handoff / NSUserActivity, Spotlight taps, and widget /
-//  Siri UserDefaults mailboxes. Each source has a tiny parser that
-//  returns an `IncomingAction`; the controller's `handle(_:)` is the
-//  single dispatch site. New deep links or widget intents become one
-//  case + one parser line.
+//  URL scheme, Handoff / NSUserActivity, Spotlight taps, and App Intents
+//  (widgets, controls, Siri). URL, Handoff, and Spotlight sources each
+//  have a tiny parser that returns an `IncomingAction`; App Intents build
+//  the action directly and route it through AppIntentRouter. The
+//  controller's `handle(_:)` is the single dispatch site.
 //
 
 import CoreSpotlight
 import Foundation
-import VivoKit
 
 enum IncomingAction: Equatable {
     /// Switch to a tab (URL scheme, generic deep link).
@@ -27,7 +26,7 @@ enum IncomingAction: Equatable {
     case continueSession(UUID)
     /// Present a catalog exercise's detail as a modal sheet.
     case showExercise(UUID)
-    /// Complete the active set on the current exercise (widget tap).
+    /// Complete the active set on the current exercise (Live Activity tap).
     case completeActiveSet
 
     /// Privacy-safe case name for diagnostics. Associated UUIDs and other
@@ -88,8 +87,9 @@ enum IncomingActionParser {
 
     // MARK: Spotlight
 
-    /// Spotlight search-result tap. The indexed uniqueIdentifier is
-    /// `"template:<uuid>"` or `"exercise:<uuid>"`.
+    /// Tap on a legacy CoreSpotlight item, whose uniqueIdentifier is
+    /// `"template:<uuid>"` or `"exercise:<uuid>"`. Indexed entities route
+    /// through their OpenIntents instead.
     static func fromSpotlightActivity(_ activity: NSUserActivity) -> IncomingAction? {
         guard activity.activityType == CSSearchableItemActionType else { return nil }
         guard let uniqueID = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String
@@ -101,36 +101,5 @@ enum IncomingActionParser {
         case "exercise": return .showExercise(uuid)
         default: return nil
         }
-    }
-
-    // MARK: Widget / Siri UserDefaults mailboxes
-
-    /// Widget "Start" tap — resolves the template from UpNext at
-    /// handle time, not parse time. Clears the mailbox flag.
-    static func fromWidgetStartRequest() -> IncomingAction? {
-        guard let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
-              defaults.object(forKey: WidgetShared.startWorkoutRequestKey) != nil
-        else { return nil }
-        defaults.removeObject(forKey: WidgetShared.startWorkoutRequestKey)
-        return .startTodaysWorkout
-    }
-
-    /// Siri "Start <template>" shortcut. Clears the mailbox flag.
-    static func fromTemplateStartRequest() -> IncomingAction? {
-        guard let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
-              let idString = defaults.string(forKey: WidgetShared.startTemplateWorkoutRequestKey),
-              let uuid = UUID(uuidString: idString)
-        else { return nil }
-        defaults.removeObject(forKey: WidgetShared.startTemplateWorkoutRequestKey)
-        return .startTemplate(uuid)
-    }
-
-    /// Widget "Complete set" tap. Clears the mailbox flag.
-    static func fromCompleteSetRequest() -> IncomingAction? {
-        guard let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
-              defaults.object(forKey: WidgetShared.completeSetRequestKey) != nil
-        else { return nil }
-        defaults.removeObject(forKey: WidgetShared.completeSetRequestKey)
-        return .completeActiveSet
     }
 }

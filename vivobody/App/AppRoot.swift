@@ -2,9 +2,9 @@
 //  AppRoot.swift
 //  vivobody
 //
-//  Top-level container. Owns the AppState (tab selection + Spotlight
-//  presentation) and wires together three native iOS 26 chrome
-//  elements:
+//  Top-level container. Presents the process-wide AppState (tab selection +
+//  Spotlight presentation) that VivobodyApp creates, and wires together three
+//  native iOS 26 chrome elements:
 //
 //    1. Five-tab TabView with Tab(…) — Liquid Glass floating tab bar, large
 //       per-tab nav titles, minimize-on-scroll behavior.
@@ -24,10 +24,11 @@
 //  controls whether the full screen is presented. A workout can be
 //  minimized and resumed any number of times before it's archived.
 //
-//  Every external entry point (URL scheme, Handoff, Spotlight, widget
-//  / Siri mailboxes) is parsed by IncomingActionParser into an
-//  IncomingAction and dispatched through workout.handle(_:) — the
-//  single routing site.
+//  Every external entry point becomes an IncomingAction dispatched through
+//  workout.handle(_:) — the single routing site. URL scheme, Handoff, and
+//  Spotlight taps are parsed by IncomingActionParser; App Intents (widgets,
+//  controls, Siri) arrive through AppIntentRouter, which AppRoot attaches once
+//  the active workout is restored.
 //
 
 import CoreSpotlight
@@ -46,15 +47,20 @@ struct AppRoot: View {
     let analyticsSnapshotStore: AnalyticsSnapshotStore
     let catalogReconciliationStore: CatalogReconciliationStore
     let spotlightIndexStore: SpotlightIndexStore
+    private let router: AppIntentRouter
 
     init(
         analyticsSnapshotStore: AnalyticsSnapshotStore,
         catalogReconciliationStore: CatalogReconciliationStore,
-        spotlightIndexStore: SpotlightIndexStore
+        spotlightIndexStore: SpotlightIndexStore,
+        appState: AppState,
+        router: AppIntentRouter
     ) {
         self.analyticsSnapshotStore = analyticsSnapshotStore
         self.catalogReconciliationStore = catalogReconciliationStore
         self.spotlightIndexStore = spotlightIndexStore
+        _appState = Bindable(appState)
+        self.router = router
     }
 
     #if DEBUG
@@ -68,10 +74,13 @@ struct AppRoot: View {
             spotlightIndexStore = SpotlightIndexStore(
                 modelContainer: previewContainer
             )
+            let appState = AppState()
+            _appState = Bindable(appState)
+            router = AppIntentRouter(appState: appState, container: previewContainer)
         }
     #endif
 
-    @State private var appState = AppState()
+    @Bindable private var appState: AppState
     @State private var catalogPreparationState: CatalogPreparationState =
         CatalogLaunchReconciler.requiresReconciliation() ? .preparing : .ready
     @State private var catalogPreparationAttempt = 0
@@ -156,13 +165,15 @@ struct AppRoot: View {
             }
             .onAppear {
                 // Wire the UI context, restore any in-flight workout (MiniBar),
-                // and drain pending deep links. Catalog reconciliation has
-                // already committed through CatalogReconciliationStore.
+                // and attach the intent router so queued App Intent actions
+                // run. Catalog reconciliation has already committed through
+                // CatalogReconciliationStore.
                 appState.storageFallbackActive = StorageHealth.shared.didFallbackToInMemory
                 WidgetSnapshotWriter.configure(analytics: appState.analytics)
                 WidgetSnapshotWriter.configure(
                     snapshotStore: analyticsSnapshotStore
                 )
+                WidgetSnapshotWriter.removeRetiredKeys()
                 if workout.modelContext == nil {
                     workout.modelContext = modelContext
                 }
@@ -170,10 +181,13 @@ struct AppRoot: View {
                     let debugRoute = UITestSupport.route()
                 #endif
                 #if DEBUG
-                    DebugSeedCoordinator.seedLaunchFixtures(
+                    let launchActions = DebugSeedCoordinator.seedLaunchFixtures(
                         debugRoute.launchSteps,
                         in: modelContext
                     )
+                    for action in launchActions {
+                        router.perform(action)
+                    }
                     if debugRoute.resetRequest != nil || !debugRoute.launchSteps.isEmpty {
                         // A reset can replace history with the same count and
                         // completion high-water mark. Reject any report the
@@ -186,7 +200,7 @@ struct AppRoot: View {
                 #endif
                 workout.restoreActiveWorkoutIfNeeded()
                 AppearanceSideEffects.sync(appearance)
-                consumeIncomingActions()
+                router.attach()
 
                 let catalogItemIDsToRemove = removedCatalogItemIDs
                 removedCatalogItemIDs.removeAll()
@@ -194,11 +208,13 @@ struct AppRoot: View {
                 // This call only performs its cheap fingerprint check and
                 // schedules the writer's existing coalesced publication.
                 WidgetSnapshotWriter.writeAllIfStale(in: modelContext)
-                scheduleSpotlightMaintenance(removing: catalogItemIDsToRemove)
+                SpotlightIndexer.scheduleLaunchMaintenance(
+                    removing: catalogItemIDsToRemove,
+                    store: spotlightIndexStore
+                )
             }
             .onChange(of: scenePhase) { oldPhase, phase in
                 if phase == .active {
-                    consumeIncomingActions()
                     WidgetSnapshotWriter.writeAllIfStale(in: modelContext)
                     RestNotificationController.cancelPending()
                 } else if oldPhase == .active, workout.activeSession != nil {
@@ -332,21 +348,6 @@ struct AppRoot: View {
         catalogPreparationAttempt &+= 1
     }
 
-    private func scheduleSpotlightMaintenance(removing identifiers: [UUID]) {
-        let store = spotlightIndexStore
-        Task.detached(priority: .utility) {
-            do {
-                let payload = try await store.prepareReindexIfNeeded()
-                await SpotlightIndexer.applyLaunchMaintenance(
-                    removing: identifiers,
-                    reindex: payload
-                )
-            } catch {
-                AppDiagnostics.spotlightReindexFailed(error: error)
-            }
-        }
-    }
-
     /// The session the accessory pill should render, if any. Today owns
     /// the active workout itself: its pinned CTA becomes "Resume
     /// Workout" so the screen never stacks a start bar, a pill, and the
@@ -411,22 +412,6 @@ struct AppRoot: View {
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
-    }
-
-    /// Consume pending widget / Siri requests on launch and each
-    /// foreground transition. Each parser clears its UserDefaults
-    /// mailbox before returning; the handler no-ops if the action
-    /// can't be processed (e.g., no active session for complete-set).
-    private func consumeIncomingActions() {
-        if let action = IncomingActionParser.fromWidgetStartRequest() {
-            appState.workout.handle(action)
-        }
-        if let action = IncomingActionParser.fromTemplateStartRequest() {
-            appState.workout.handle(action)
-        }
-        if let action = IncomingActionParser.fromCompleteSetRequest() {
-            appState.workout.handle(action)
-        }
     }
 }
 
