@@ -15,8 +15,8 @@
 //    Tap the bar to expand back to the full ActiveWorkoutScreen.
 //
 //  States it renders:
-//    • RESTING    — live countdown like "REST 0:47" ticking down
-//                   once per second via TimelineView. Pulsing dot in
+//    • RESTING    — live countdown like "REST 0:47" drawn by the
+//                   system timer text. Pulsing dot in
 //                   muscle-group color. Haptic + state-flip when the
 //                   countdown reaches zero.
 //    • READY      — between sets but not resting. Pulsing dot in
@@ -50,21 +50,15 @@ struct ActiveWorkoutMiniBar: View {
     @Environment(\.tabViewBottomAccessoryPlacement) private var placement
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: 1.0)) { context in
-            barContent(now: context.date)
-        }
-    }
-
-    private func barContent(now: Date) -> some View {
         Button(action: {
             Haptics.soft()
             onExpand()
         }) {
             switch placement {
             case .expanded:
-                expandedLayout(now: now)
+                expandedLayout
             default:
-                compactLayout(now: now)
+                compactLayout
             }
         }
         .buttonStyle(.plain)
@@ -75,8 +69,8 @@ struct ActiveWorkoutMiniBar: View {
         .accessibilityInputLabels([Text("Workout"), Text("Active workout"), Text("Resume")])
     }
 
-    private func compactLayout(now: Date) -> some View {
-        barRow(now: now)
+    private var compactLayout: some View {
+        barRow
             .padding(.horizontal, Space.lg)
             .padding(.vertical, Space.sm)
             .contentShape(Rectangle())
@@ -86,19 +80,19 @@ struct ActiveWorkoutMiniBar: View {
     /// placement — `.expanded` only grants more horizontal room, not
     /// vertical. So both placements render one horizontal row;
     /// stacking the badge on a second line overflows and clips it.
-    private func expandedLayout(now: Date) -> some View {
-        barRow(now: now)
+    private var expandedLayout: some View {
+        barRow
             .padding(.horizontal, Space.lg)
             .padding(.vertical, Space.sm)
             .contentShape(Rectangle())
     }
 
-    private func barRow(now: Date) -> some View {
+    private var barRow: some View {
         HStack(spacing: 12) {
             PulseDot(color: dotColor, isPulsing: shouldPulse)
             labels
             Spacer(minLength: 8)
-            statusBadge(now: now)
+            statusBadge
             Image(systemName: "chevron.up")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
@@ -130,19 +124,18 @@ struct ActiveWorkoutMiniBar: View {
     /// Right-side state badge — switches between Rest countdown, Ready,
     /// or Tap to finish. Tinted to match its meaning.
     @ViewBuilder
-    private func statusBadge(now _: Date) -> some View {
+    private var statusBadge: some View {
         if session.isAllComplete {
-            badgeText("Tap to finish", tint: completedGreen)
-        } else if session.isResting {
-            let remaining = max(0, Int(session.restRemaining.rounded(.up)))
-            badgeText("Rest \(formatTime(remaining))", tint: restTint)
+            badgeText(Text("Tap to finish"), tint: completedGreen)
+        } else if let countdown = restCountdown {
+            badgeText(Text("Rest \(countdown)"), tint: restTint)
         } else {
-            badgeText("Ready", tint: readyTint)
+            badgeText(Text("Ready"), tint: readyTint)
         }
     }
 
-    private func badgeText(_ text: String, tint: Color) -> some View {
-        Text(text)
+    private func badgeText(_ text: Text, tint: Color) -> some View {
+        text
             .panelLegendType()
             .foregroundStyle(tint)
             .monospacedDigit()
@@ -192,24 +185,21 @@ struct ActiveWorkoutMiniBar: View {
         return "All sets done"
     }
 
-    private var accessibilityDescription: String {
-        var parts: [String] = []
-        parts.append(titleText)
-        parts.append(subtitleText)
-        if session.isResting {
-            parts.append("Resting \(Int(session.restRemaining)) seconds")
-        } else if session.isAllComplete {
-            parts.append("Workout complete")
-        } else {
-            parts.append("Ready for next set")
-        }
-        return parts.joined(separator: ". ")
+    /// Live rest countdown. The system redraws it, so the bar has no
+    /// per-second clock of its own.
+    private var restCountdown: Text? {
+        guard let deadline = session.restDeadline else { return nil }
+        return Text(timerInterval: min(.now, deadline) ... deadline, countsDown: true)
     }
 
-    private func formatTime(_ seconds: Int) -> String {
-        let m = seconds / 60
-        let s = seconds % 60
-        return String(format: "%d:%02d", m, s)
+    private var accessibilityDescription: Text {
+        let summary = "\(titleText). \(subtitleText)"
+        if let countdown = restCountdown {
+            return Text("\(summary). Resting \(countdown)")
+        } else if session.isAllComplete {
+            return Text("\(summary). Workout complete")
+        }
+        return Text("\(summary). Ready for next set")
     }
 }
 

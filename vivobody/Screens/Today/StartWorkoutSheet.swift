@@ -102,7 +102,7 @@ struct StartWorkoutSheet: View {
     private func scheduledSection(_ template: WorkoutTemplate) -> some View {
         PrimaryActionButton(
             title: "Start Today's Plan",
-            subtitle: template.name,
+            subtitle: Text(template.name),
             icon: nil,
             inputLabels: ["Start Today's Plan", "Start Plan", "Start Workout"],
             sound: .commit

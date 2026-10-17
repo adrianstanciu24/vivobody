@@ -3,8 +3,8 @@
 //  vivobody
 //
 //  The "do the thing" button. Used as the START WORKOUT call-to-action
-//  on the Today screen and (eventually) for other one-shot primary
-//  actions throughout the app.
+//  on the Today screen and for other one-shot primary actions
+//  throughout the app.
 //
 //  Distinct from SetCompleteButton: that one is stateful (toggle to
 //  complete/undo) and reads a value pair. This one is fire-and-forget
@@ -15,11 +15,14 @@
 //      beat as SetCompleteButton's "this is a deliberate action" feedback).
 //      `sound` swaps the voice that rides along — Today's START WORKOUT uses
 //      its own.
-//    • The tinted Liquid Glass surface, padding, shadows, and press-scale
-//      feedback all come from `PrimaryButtonStyle` — this view just supplies
-//      the label content and the accent color.
+//    • The surface is the system prominent glass button through
+//      `primaryButtonStyle`, shared by every primary CTA in the app. The
+//      system owns the glass, press feedback, and Reduce Motion handling.
 //    • Default accent is the app's electric-orange primary so the
 //      button reads as "the thing you want to do right now."
+//    • VoiceOver reads the title as the label and the subtitle as the
+//      value, so live clocks never change the label that callers and
+//      Voice Control match on.
 //
 
 import SwiftUI
@@ -27,7 +30,7 @@ import VivoKit
 
 struct PrimaryActionButton: View {
     let title: String
-    var subtitle: String? = nil
+    var subtitle: Text? = nil
     var icon: String? = "arrow.right"
     var accent: Color = Tint.primary
     /// Voice Control synonyms — short, speakable labels ordered by
@@ -37,23 +40,15 @@ struct PrimaryActionButton: View {
     var sound: Sounds.Effect = .crescendo
     let action: () -> Void
 
-    private static let labelSpacing: CGFloat = 3
-
-    /// Height the subtitle line adds to the label stack, measured at the
-    /// current text size. Half of it is trimmed from the style's vertical
-    /// padding on each edge so a subtitled CTA stands exactly as tall as a
-    /// title-only one — Today swaps between the two in the same slot.
-    @State private var subtitleHeight: CGFloat = 0
-
     var body: some View {
         Button {
             action()
             Haptics.crescendo(sound: sound)
         } label: {
             HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: Self.labelSpacing) {
+                VStack(alignment: .leading, spacing: 3) {
                     if let subtitle {
-                        Text(subtitle)
+                        subtitle
                             .font(Typography.caption)
                             .foregroundStyle(Tint.onAccent.opacity(Opacity.medium))
                             // Subtitles carry live clocks (elapsed
@@ -61,11 +56,6 @@ struct PrimaryActionButton: View {
                             // reflow the button as digits change.
                             .monospacedDigit()
                             .lineLimit(1)
-                            .onGeometryChange(for: CGFloat.self) { proxy in
-                                proxy.size.height
-                            } action: { height in
-                                subtitleHeight = height
-                            }
                     }
                     Text(title)
                         .font(Typography.title)
@@ -78,22 +68,30 @@ struct PrimaryActionButton: View {
                     Image(systemName: icon)
                         .font(Typography.sectionHeading)
                         .foregroundStyle(Tint.onAccent.opacity(Opacity.strong))
+                        .accessibilityHidden(true)
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, -subtitleInset)
         }
-        .buttonStyle(PrimaryButtonStyle(accent: accent))
-        .accessibilityElement()
+        .primaryButtonStyle(accent: accent)
         .accessibilityLabel(title)
-        .accessibilityHint(subtitle ?? "Activates primary action")
-        .accessibilityAddTraits(.isButton)
+        .accessibilityValue(subtitle ?? Text(verbatim: ""))
         .accessibilityInputLabels((inputLabels ?? [title]).map { Text($0) })
     }
+}
 
-    private var subtitleInset: CGFloat {
-        guard subtitle != nil, subtitleHeight > 0 else { return 0 }
-        return (subtitleHeight + Self.labelSpacing) / 2
+extension View {
+    /// The app's primary call to action: the system prominent glass
+    /// button in the card shape, tinted with the accent. `compact` drops
+    /// to headline type for inline prompts where the hero scale would
+    /// overwhelm the surrounding content. Both sizes stay above 44pt.
+    func primaryButtonStyle(accent: Color = Tint.primary, compact: Bool = false) -> some View {
+        buttonStyle(.glassProminent)
+            .buttonBorderShape(.roundedRectangle(radius: Radius.card))
+            .controlSize(compact ? .large : .extraLarge)
+            .tint(accent)
+            .font(compact ? Typography.headline : Typography.title)
+            .foregroundStyle(Tint.onAccent)
     }
 }
 
@@ -101,7 +99,7 @@ struct PrimaryActionButton: View {
     VStack(spacing: 20) {
         PrimaryActionButton(
             title: "Start Workout",
-            subtitle: "Push Day · 4 exercises"
+            subtitle: Text("Push Day · 4 exercises")
         ) {}
 
         PrimaryActionButton(
@@ -111,9 +109,12 @@ struct PrimaryActionButton: View {
 
         PrimaryActionButton(
             title: "Custom Accent",
-            subtitle: "blue variant",
+            subtitle: Text("blue variant"),
             accent: Color(red: 0.46, green: 0.74, blue: 0.96)
         ) {}
+
+        Button("Compact prompt") {}
+            .primaryButtonStyle(compact: true)
     }
     .padding(Space.xxl)
     .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -143,10 +143,6 @@ extension TodayScreen {
     static let developmentLegendClearance: CGFloat = 88
     static let pinnedStartBarClearance: CGFloat = 104
 
-    var pinnedStartBarScrollClearance: CGFloat {
-        usesAccessibilityLayout ? 160 : Self.pinnedStartBarClearance
-    }
-
     func streakText(_ streak: WorkoutStreak) -> String? {
         guard streak.current > 0 else { return nil }
         return "\(streak.current) \(streak.current == 1 ? "week" : "weeks") in a row"

@@ -358,7 +358,7 @@ struct ExercisePickerSheet: View {
                 } label: {
                     Text("Create custom exercise")
                 }
-                .buttonStyle(PrimaryButtonStyle())
+                .primaryButtonStyle()
             }
         } else {
             ContentUnavailableView(emptyStateMessage, systemImage: "dumbbell")

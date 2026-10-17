@@ -307,6 +307,13 @@ final class WorkoutSession: Identifiable {
         return max(0, restDuration - Date().timeIntervalSince(start))
     }
 
+    /// The moment the current rest ends, or nil when not resting. Live
+    /// countdown text and the shell's rest expiry task use it.
+    var restDeadline: Date? {
+        guard isResting else { return nil }
+        return restEndsAt ?? restStartedAt?.addingTimeInterval(restDuration)
+    }
+
     /// Extend the single session-level rest deadline. Both the full
     /// overlay and MiniBar countdown read `restRemaining`, so they stay
     /// in sync after an extension.

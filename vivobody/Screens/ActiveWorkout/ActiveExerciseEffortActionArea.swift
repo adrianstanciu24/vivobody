@@ -71,7 +71,7 @@ struct ActiveExerciseActionArea: View {
             }
             .frame(maxWidth: .infinity)
         }
-        .buttonStyle(PrimaryButtonStyle())
+        .primaryButtonStyle()
         .accessibilityLabel("Add a set")
         .accessibilityHint("Creates the first set using this exercise's planned values")
         .accessibilityIdentifier("addFirstSetButton")

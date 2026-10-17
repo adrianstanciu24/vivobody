@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "VivoKit",
     platforms: [
-        .iOS("26.0"),
+        .iOS("26.1"),
         .macOS("14.0"),
     ],
     products: [

@@ -246,7 +246,7 @@ struct ConfigureExerciseSheet: View {
     private var commitBar: some View {
         PrimaryActionButton(
             title: isEditing ? "Save Changes" : "Add to Template",
-            subtitle: previewLine,
+            subtitle: Text(previewLine),
             inputLabels: isEditing
                 ? ["Save Changes", "Save", "Done"]
                 : ["Add to Template", "Add", "Save"]

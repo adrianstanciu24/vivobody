@@ -191,11 +191,10 @@ struct TodayScreen: View {
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollIndicators(.hidden)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-        .safeAreaPadding(.bottom, pinnedStartBarScrollClearance)
-        // START is pinned in the native iOS 26 safe-area bar,
-        // never part of the scroll. The matching safe-area
-        // padding above reserves its occupied height so body
-        // copy never sits underneath the CTA or tab chrome.
+        // START is pinned in the native safe-area bar, never part of
+        // the scroll. The bar insets the scroll content by its own
+        // height at every text size, and the soft edge effect fades
+        // content beneath it.
         .safeAreaBar(edge: .bottom, spacing: 0) {
             pinnedStartBar
         }

@@ -142,11 +142,13 @@ struct AppRoot: View {
                     RestExpiryTicker(workout: workout)
                 }
             }
-            .miniBarAccessory(
-                session: miniBarSession(workout),
-                onExpand: { workout.expandWorkout() }
-            )
+            .tabViewBottomAccessory(isEnabled: miniBarSession(workout) != nil) {
+                if let session = miniBarSession(workout) {
+                    ActiveWorkoutMiniBar(session: session, onExpand: { workout.expandWorkout() })
+                }
+            }
             .saveErrorAlert($workout.lastSaveError)
+            .reviewRequestPresenter()
             .overlay(alignment: .top) {
                 if appState.storageFallbackActive {
                     StorageFallbackBanner()
@@ -428,46 +430,33 @@ struct AppRoot: View {
     }
 }
 
-// MARK: - Conditional MiniBar accessory
-
-/// Applies `.tabViewBottomAccessory` only when a session is active.
-/// iOS 26's TabView reserves the accessory slot whenever the modifier
-/// is attached — even with empty content — so the only reliable way
-/// to hide the pill when there's no workout is to not apply the
-/// modifier at all.
-private extension View {
-    @ViewBuilder
-    func miniBarAccessory(
-        session: WorkoutSession?,
-        onExpand: @escaping () -> Void
-    ) -> some View {
-        if let session {
-            self.tabViewBottomAccessory {
-                ActiveWorkoutMiniBar(session: session, onExpand: onExpand)
-            }
-        } else {
-            self
-        }
-    }
-}
-
 // MARK: - Rest expiry clock
 
-/// A one-second tick that asks the controller to end an elapsed rest.
-/// Mounted zero-size in the shell so the countdown keeps running behind
-/// whichever bottom bar the selected tab happens to show.
+/// Sleeps until the current rest deadline, then asks the controller to end
+/// the rest. Mounted zero-size in the shell so expiry fires behind whichever
+/// bottom bar the selected tab happens to show. An extended rest changes the
+/// deadline, which restarts the task.
 private struct RestExpiryTicker: View {
     let workout: WorkoutSessionController
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: 1.0)) { context in
-            Color.clear
-                .frame(width: 0, height: 0)
-                .task(id: context.date) {
-                    workout.endExpiredRestIfNeeded(now: context.date)
+        let deadline = workout.activeSession?.restDeadline
+        Color.clear
+            .frame(width: 0, height: 0)
+            .task(id: deadline) {
+                guard let deadline else { return }
+                // Loop because a sleep can return slightly before the
+                // deadline, and the task would not run again for this id.
+                while !Task.isCancelled {
+                    let remaining = deadline.timeIntervalSinceNow
+                    if remaining <= 0 {
+                        workout.endExpiredRestIfNeeded()
+                        return
+                    }
+                    try? await Task.sleep(for: .seconds(remaining))
                 }
-        }
-        .accessibilityHidden(true)
+            }
+            .accessibilityHidden(true)
     }
 }
 

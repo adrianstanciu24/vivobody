@@ -132,7 +132,7 @@ struct InsightsScreen: View {
 
             PrimaryActionButton(
                 title: "Go to Today",
-                subtitle: "Your next workout is one tap away",
+                subtitle: Text("Your next workout is one tap away"),
                 icon: "arrow.right"
             ) {
                 appState.selectedTab = .today

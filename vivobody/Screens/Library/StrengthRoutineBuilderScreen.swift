@@ -317,7 +317,7 @@ struct StrengthRoutineBuilderScreen: View {
             Text(title)
                 .frame(maxWidth: .infinity)
         }
-        .buttonStyle(PrimaryButtonStyle())
+        .primaryButtonStyle()
         .disabled(!enabled)
         .opacity(enabled ? 1 : 0.45)
         .accessibilityIdentifier(identifier)

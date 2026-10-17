@@ -46,7 +46,7 @@ private struct MeBodyWeightEmptyCard: View {
             Button(action: action) {
                 Text(presentation.actionLabel)
             }
-            .buttonStyle(PrimaryButtonStyle(compact: true))
+            .primaryButtonStyle(compact: true)
         }
         .padding(Space.lg)
         .frame(maxWidth: .infinity, alignment: .leading)

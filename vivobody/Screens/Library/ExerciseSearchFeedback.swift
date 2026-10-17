@@ -44,7 +44,7 @@ struct ExerciseSearchHiddenMatchesState: View {
             } label: {
                 Text(matchCount == 1 ? "Show 1 Match in All" : "Show \(matchCount) Matches in All")
             }
-            .buttonStyle(PrimaryButtonStyle(compact: true))
+            .primaryButtonStyle(compact: true)
         }
         .padding(Space.lg)
         .frame(maxWidth: .infinity, alignment: .leading)

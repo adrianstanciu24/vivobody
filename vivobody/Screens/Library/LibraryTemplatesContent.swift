@@ -167,7 +167,7 @@ struct LibraryTemplatesContent: View {
             } label: {
                 Text("Create Template")
             }
-            .buttonStyle(PrimaryButtonStyle())
+            .primaryButtonStyle()
         }
     }
 

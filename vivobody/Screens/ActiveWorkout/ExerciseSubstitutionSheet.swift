@@ -222,7 +222,7 @@ struct ExerciseSubstitutionSheet: View {
                     Button("Show any equipment") {
                         selectedEquipment = nil
                     }
-                    .buttonStyle(PrimaryButtonStyle(compact: true))
+                    .primaryButtonStyle(compact: true)
                 }
             }
         } else {
@@ -314,7 +314,7 @@ struct ExerciseSubstitutionSheet: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Space.sm)
         }
-        .buttonStyle(PrimaryButtonStyle(compact: true))
+        .primaryButtonStyle(compact: true)
         .disabled(isBlocked || selectedRecommendation == nil)
         .opacity(isBlocked || selectedRecommendation == nil ? 0.45 : 1)
         .accessibilityLabel(commitAccessibilityLabel)

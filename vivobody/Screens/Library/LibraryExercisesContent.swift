@@ -363,7 +363,7 @@ struct LibraryExercisesContent: View {
                 } label: {
                     Text("Create custom exercise")
                 }
-                .buttonStyle(PrimaryButtonStyle())
+                .primaryButtonStyle()
             }
         }
     }

@@ -345,9 +345,9 @@ struct OnboardingScreen: View {
     }
 
     private var startButton: some View {
-        // No extra softElevation: PrimaryButtonStyle already carries
-        // its own accent-glow + black shadows, and this static screen
-        // has no scrolling content the CTA needs to lift off of.
+        // No extra softElevation: the prominent glass button draws its
+        // own depth, and this static screen has no scrolling content
+        // the CTA needs to lift off of.
         PrimaryActionButton(
             title: "Start",
             icon: "arrow.right",
