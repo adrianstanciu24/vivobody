@@ -1,0 +1,128 @@
+{
+  "name": "catalog-plank-drag-active-weight",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-settings.weightUnit",
+      "kg"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Fresh Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Fresh Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "Add Exercise",
+        "role": "AXGroup"
+      }
+    },
+    {
+      "tap": {
+        "label": "Search",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Plank Drag"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Plank Drag, Other · Core"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Plank Drag, Other · Core"
+      }
+    },
+    {
+      "wait": {
+        "label": "Add to Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Add to Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Plank Drag",
+        "role": "AXHeading"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Plank Drag",
+      "role": "AXHeading"
+    },
+    {
+      "label": "Weight",
+      "role": "AXSlider",
+      "value": "10"
+    },
+    {
+      "label": "Reps",
+      "role": "AXSlider",
+      "value": "10"
+    },
+    {
+      "identifier": "completeSetButton",
+      "label": "10 reps at 10.0 kilograms",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Resistance",
+      "visible": true
+    },
+    {
+      "label": "Added load",
+      "visible": true
+    },
+    {
+      "label": "Bodyweight",
+      "visible": true
+    },
+    {
+      "identifier": "Add Exercise",
+      "visible": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

@@ -39,7 +39,6 @@ RETIRED_2026_09_29_FAMILY_IDS = {
     "externally-rotating-face-pull",
     "finger-flexion-grip",
     "glute-ham-raise",
-    "high-plank-crossbody-drag",
     "hip-external-rotation",
     "landmine-punch",
     "machine-hack-squat",
@@ -7202,6 +7201,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "vertical-countermovement-jump",
             "stationary-two-foot-jump-rope",
             "high-plank-hold",
+            "high-plank-crossbody-drag",
             *MOBILITY_GLUTE_HIP_FAMILY_IDS,
         }
         self.assertEqual(
@@ -7210,7 +7210,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            282,
+            283,
         )
 
 
@@ -17848,12 +17848,12 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 282)
+        self.assertEqual(len(records), 283)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 139)
+        self.assertEqual(len({record["familyID"] for record in records}), 140)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),

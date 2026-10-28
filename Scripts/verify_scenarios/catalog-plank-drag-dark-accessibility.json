@@ -1,0 +1,68 @@
+{
+  "name": "catalog-plank-drag-dark-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Plank Pull-Through"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Plank Drag, Other · Core"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Plank Drag, Other · Core"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Plank Drag"
+    },
+    {
+      "label": "STRENGTH · REPS"
+    },
+    {
+      "labelContains": "Muscles used by Plank Drag"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Muscles used by Dumbbell Plank Row"
+    }
+  ]
+}

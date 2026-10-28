@@ -5541,6 +5541,19 @@
       "year": 2026,
       "url": "https://www.nasm.org/resource-center/exercise-library/straight-arm-plank",
       "scope": "Undated official standard accessed 28 October 2026; year denotes retrieval. A prone isometric hold with the hands directly under the shoulders, arms fully extended, feet hip-width apart, a straight head-to-heel line with neutral spine and no hip drop, held for a set duration. Establishes fixture geometry and the timed anti-extension hold, not muscle roles, an anti-rotation demand, a scapular cue as a required action, comparative core demand, or back-pain claims."
+    },
+    {
+      "id": "nsca-2019-bridge-pull-through",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Practical Exercise Programming for Wildland Fire Suppression Aids",
+      "authors": [
+        "Megan McGuire",
+        "Matthew Moreno",
+        "Robert Lockie"
+      ],
+      "year": 2019,
+      "url": "https://www.nsca.com/globalassets/education/tsac-report/tsac-report-54.pdf",
+      "scope": "NSCA TSAC Report 54 describes the bridge pull-through with a sandbag, filled water bottle, pack, or other equipment and gives dumbbell instructions: begin in a high plank with palms flat and elbows straight, place the weight behind one hand, shift weight onto that hand, lift the opposite hand, pull the weight through to the lifting arm's shoulder, set it down, return to the high plank, and repeat with the opposite arm while keeping the shoulders and hips parallel to the ground to prevent twisting. It supports the fixture geometry, implement breadth, and the alternating anti-rotation task. It does not require floor contact during the pull or establish joint-action rankings, categorical muscle roles, exact drag distance, or an effective-resistance model."
     }
   ]
 }

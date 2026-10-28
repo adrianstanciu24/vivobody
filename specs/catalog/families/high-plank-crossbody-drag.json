@@ -1,0 +1,408 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "high-plank-crossbody-drag",
+  "name": "Plank Drag",
+  "definition": "An alternating high-plank anti-rotation drill. The athlete holds a high plank on both palms with the elbows straight, a single weight rests on the floor just behind one hand, the opposite hand drags it along the floor beneath the torso to the other side, and the athlete re-establishes two-palm support before the other arm drags it back. The NSCA bridge pull-through defines the high-plank start, the weight placement behind one hand, the alternating pull-through, and the cue to keep the shoulders and hips parallel to the floor without twisting. It names a sandbag, filled water bottle, pack, or other equipment and gives dumbbell instructions, so any single draggable weight belongs to this contract. Keeping the weight in floor contact is a catalog narrowing of that standard. The training-defining task is resisting spinal extension and rotation while support changes; the arm drag is not assigned an unsupported prime joint action. Can et al. measured serratus-anterior, triceps, and infraspinatus activity in four-point high planks and reduced-support plank tasks; the serratus, external-rotator, and triceps stabilizer roles are consistent with that supporting evidence, not exact-fixture measurements. The wrist, hand, and lower-body stabilizer roles are anatomy-and-mechanics assignments, not measured findings. Plank Drag logs the mass of the single dragged weight as an owner-selected logging convention: that mass is the comparable load within this exercise only. Floor surface, implement shape, and drag distance still change the demand, so the value is not a measured resistance or joint force. Renegade rows, multiple-implement transfers, forearm planks, push-ups, carries, and same-side pulls remain outside this family.",
+  "evidenceRefs": [
+    "nsca-2019-bridge-pull-through",
+    "can-2024-high-plank-support-emg",
+    "lehman-2005-stable-prone-bridge",
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity",
+    "arnold-2010-lower-limb"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "other"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension",
+      "spine.rotation"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "spine.extension",
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "abs",
+        "obliques"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "serratus",
+        "externalRotators",
+        "triceps",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMax",
+        "gluteMed",
+        "vasti",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "startSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The repetition starts in a two-palm high plank.",
+      "allowedValues": [
+        "bilateralPalmsAndToes"
+      ]
+    },
+    {
+      "id": "dragSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "One palm and both feet support the body during the drag.",
+      "allowedValues": [
+        "singlePalmAndBothFeet"
+      ]
+    },
+    {
+      "id": "implement",
+      "valueType": "enum",
+      "required": true,
+      "description": "Any single weight that can slide across the floor, such as a dumbbell, kettlebell, weight plate, or sandbag.",
+      "allowedValues": [
+        "anySingleDraggableWeight"
+      ]
+    },
+    {
+      "id": "implementPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The opposite hand drags the implement beneath the torso to the other side.",
+      "allowedValues": [
+        "alternatingCrossbodyFloorDrag"
+      ]
+    },
+    {
+      "id": "trunkMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The shoulders and hips stay square.",
+      "allowedValues": [
+        "heldAgainstExtensionAndRotation"
+      ]
+    },
+    {
+      "id": "implementCount",
+      "valueType": "enum",
+      "required": true,
+      "description": "Only one implement is used.",
+      "allowedValues": [
+        "single"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Log the mass of the single dragged weight once.",
+      "allowedValues": [
+        "singleImplement"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both arms drag in alternation.",
+      "allowedValues": [
+        "bothSidesAlternating"
+      ]
+    },
+    {
+      "id": "repetitionCounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "Each completed drag counts once.",
+      "allowedValues": [
+        "eachDrag"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "The implement slides freely across the floor."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 6,
+      "maximum": 20
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "plank-drag",
+      "name": "Plank Drag",
+      "aliases": [
+        "Plank Pull-Through",
+        "High-Plank Drag",
+        "High-Plank Pull-Through",
+        "Dumbbell Plank Drag",
+        "Dumbbell Plank Pull-Through",
+        "Kettlebell Plank Drag",
+        "Kettlebell Plank Pull-Through",
+        "Plate Plank Drag",
+        "Cross-Body Plank Drag"
+      ],
+      "equipment": "other",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "startSupport": "bilateralPalmsAndToes",
+        "dragSupport": "singlePalmAndBothFeet",
+        "implement": "anySingleDraggableWeight",
+        "implementPath": "alternatingCrossbodyFloorDrag",
+        "trunkMotion": "heldAgainstExtensionAndRotation",
+        "implementCount": "single",
+        "loadAccounting": "singleImplement",
+        "trainingSidePrescription": "bothSidesAlternating",
+        "repetitionCounting": "eachDrag",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "nsca-2019-bridge-pull-through",
+        "can-2024-high-plank-support-emg"
+      ],
+      "execution": {
+        "startingPosition": "Set a high plank with both palms flat, elbows straight, and a weight on the floor just behind one hand. Log the weight's mass.",
+        "movement": "Shift support onto the hand beside the weight, lift the opposite hand, and drag the weight along the floor under your body to the other side.",
+        "endpoint": "Set the weight down on the far side with your hips and shoulders still parallel to the floor.",
+        "returnPhase": "Replace the dragging hand to re-establish the two-palm high plank before the other arm drags the weight back.",
+        "controlledJoints": "Keep the supporting elbow straight and resist low-back sag and trunk rotation throughout the drag.",
+        "supportAndPosture": "Keep the supporting palm and both feet firmly planted.",
+        "sideOrDirection": "Alternate arms; count each completed drag as one repetition and use an even total.",
+        "disqualifyingCompensations": [
+          "Rowing the weight off the floor changes the exercise.",
+          "Using two weights changes the single-implement setup.",
+          "Turning the hips toward the load loses the anti-rotation task."
+        ]
+      }
+    }
+  ]
+}

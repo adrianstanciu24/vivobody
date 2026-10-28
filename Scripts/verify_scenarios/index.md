@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 203.
+Scenario files: 206.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -77,6 +77,9 @@ Scenario files: 203.
 | [catalog-must-have-expansion](catalog-must-have-expansion.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-nordic-curl](catalog-nordic-curl.json) | library | `--static-body` |
 | [catalog-plank-alias-search-accessibility](catalog-plank-alias-search-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-plank-drag-active-weight](catalog-plank-drag-active-weight.json) | today | `--static-body -settings.appearance dark -settings.weightUnit kg` |
+| [catalog-plank-drag-dark-accessibility](catalog-plank-drag-dark-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-plank-drag-light](catalog-plank-drag-light.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-plank-knee-touch-dark](catalog-plank-knee-touch-dark.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-plank-row-accessibility](catalog-plank-row-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-plank-row-dark](catalog-plank-row-dark.json) | library | `--static-body -settings.appearance dark` |

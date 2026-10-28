@@ -1,0 +1,145 @@
+{
+  "name": "catalog-plank-drag-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "Plank Drag"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Plank Drag, Other · Core"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Plank Drag, Other · Core"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Plank Drag"
+          },
+          {
+            "label": "STRENGTH · REPS"
+          },
+          {
+            "labelContains": "Muscles used by Plank Drag"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Muscles used by Dumbbell Plank Row"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "Log the weight's mass"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "drag the weight along the floor"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-compensations"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "Using two weights"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-side-direction"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercise-execution-side-direction",
+      "labelContains": "Alternate arms"
+    }
+  ],
+  "forbidden": []
+}

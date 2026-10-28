@@ -8406,6 +8406,116 @@
     ]
   },
   {
+    "familyID": "high-plank-crossbody-drag",
+    "familyName": "Plank Drag",
+    "movementActions": [
+      {
+        "actionID": "spine.extension",
+        "name": "Spinal extension",
+        "plane": "sagittal",
+        "kind": "resisted"
+      },
+      {
+        "actionID": "spine.rotation",
+        "name": "Spinal rotation",
+        "plane": "transverse",
+        "kind": "resisted"
+      }
+    ],
+    "catalogID": "plank-drag",
+    "name": "Plank Drag",
+    "group": "core",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "other",
+    "mechanic": "compound",
+    "trainingRole": "core",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal",
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Plank Pull-Through",
+      "High-Plank Drag",
+      "High-Plank Pull-Through",
+      "Dumbbell Plank Drag",
+      "Dumbbell Plank Pull-Through",
+      "Kettlebell Plank Drag",
+      "Kettlebell Plank Pull-Through",
+      "Plate Plank Drag",
+      "Cross-Body Plank Drag"
+    ],
+    "searchPriority": 94,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Set a high plank with both palms flat, elbows straight, and a weight on the floor just behind one hand. Log the weight's mass.",
+      "movement": "Shift support onto the hand beside the weight, lift the opposite hand, and drag the weight along the floor under your body to the other side.",
+      "endpoint": "Set the weight down on the far side with your hips and shoulders still parallel to the floor.",
+      "returnPhase": "Replace the dragging hand to re-establish the two-palm high plank before the other arm drags the weight back.",
+      "controlledJoints": "Keep the supporting elbow straight and resist low-back sag and trunk rotation throughout the drag.",
+      "supportAndPosture": "Keep the supporting palm and both feet firmly planted.",
+      "disqualifyingCompensations": [
+        "Rowing the weight off the floor changes the exercise.",
+        "Using two weights changes the single-implement setup.",
+        "Turning the hips toward the load loses the anti-rotation task."
+      ],
+      "sideOrDirection": "Alternate arms; count each completed drag as one repetition and use an even total."
+    },
+    "involvement": [
+      {
+        "muscle": "abs",
+        "role": "primary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "high-plank-hold",
     "familyName": "High Plank",
     "movementActions": [
