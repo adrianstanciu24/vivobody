@@ -242,7 +242,7 @@ ball defines the path and safety boundary of ballistic throws and slams.
   movement from load-based record and tonnage comparisons. A duration-tracked
   isometric may still compare duration within its own duration-only series.
 
-The 29 owner-approved bodyweight exercises use the existing Pull-Up entry
+The 30 approved bodyweight exercises use the existing Pull-Up entry
 behavior: zero added load displays **BW**; positive added load displays
 **BW + entered weight**. Their `bodyweightAdded` coefficient is `1` as an
 explicit app convention: measured body mass plus entered added mass. This

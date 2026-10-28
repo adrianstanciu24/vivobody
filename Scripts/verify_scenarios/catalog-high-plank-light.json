@@ -1,0 +1,68 @@
+{
+  "name": "catalog-high-plank-light",
+  "launch": {
+    "reset": false,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "High Plank"
+    },
+    {
+      "wait": {
+        "labelRegex": "^High Plank, Bodyweight · Core"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^High Plank, Bodyweight · Core"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · HOLD"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "High Plank"
+    },
+    {
+      "label": "STRENGTH · HOLD"
+    },
+    {
+      "labelContains": "Muscles used by High Plank"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Muscles used by Stable Forearm Plank"
+    }
+  ]
+}

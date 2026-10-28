@@ -7201,6 +7201,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "lateral-skater-hop-to-vertical-jump", "stationary-pogo-hop",
             "vertical-countermovement-jump",
             "stationary-two-foot-jump-rope",
+            "high-plank-hold",
             *MOBILITY_GLUTE_HIP_FAMILY_IDS,
         }
         self.assertEqual(
@@ -7209,7 +7210,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            281,
+            282,
         )
 
 
@@ -17847,12 +17848,12 @@ class CatalogFoundationTests(unittest.TestCase):
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 281)
+        self.assertEqual(len(records), 282)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 138)
+        self.assertEqual(len({record["familyID"] for record in records}), 139)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -18043,7 +18044,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "medicine-ball-carioca-throw",
                 "russian-twist", "landmine-rotation",
                 "forearm-plank-arm-reach", "forearm-plank-hip-drop",
-                "high-plank-crossbody-drag", "high-plank-rotation",
+                "high-plank-crossbody-drag", "high-plank-hold",
+                "high-plank-rotation",
                 "kneeling-barbell-rollout", "standing-band-trunk-rotation",
                 "standing-suspension-rollout",
                 "medicine-ball-straight-leg-sit-up",

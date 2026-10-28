@@ -43,6 +43,7 @@ $(SRCROOT)/specs/catalog/families/hang-power-clean.json
 $(SRCROOT)/specs/catalog/families/hang-power-snatch.json
 $(SRCROOT)/specs/catalog/families/hanging-leg-raise.json
 $(SRCROOT)/specs/catalog/families/high-plank-contralateral-knee-touch.json
+$(SRCROOT)/specs/catalog/families/high-plank-hold.json
 $(SRCROOT)/specs/catalog/families/high-plank-rotation.json
 $(SRCROOT)/specs/catalog/families/high-plank-shoulder-tap.json
 $(SRCROOT)/specs/catalog/families/hip-abduction.json

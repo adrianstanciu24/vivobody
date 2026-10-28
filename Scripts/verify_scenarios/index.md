@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 201.
+Scenario files: 203.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -54,6 +54,8 @@ Scenario files: 201.
 | [catalog-forearm-development](catalog-forearm-development.json) | today | `--ui-test-forearm-development --static-body -settings.appearance dark` |
 | [catalog-forearm-stabilizers](catalog-forearm-stabilizers.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-goblet-squat-to-press-light](catalog-goblet-squat-to-press-light.json) | library | `--static-body -settings.appearance light` |
+| [catalog-high-plank-dark-accessibility](catalog-high-plank-dark-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [catalog-high-plank-light](catalog-high-plank-light.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-horizontal-leg-press](catalog-horizontal-leg-press.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-jump-rope-dark-accessibility](catalog-jump-rope-dark-accessibility.json) | library | `--static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-jump-rope-light](catalog-jump-rope-light.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |

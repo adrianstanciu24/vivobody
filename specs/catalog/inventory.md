@@ -12,12 +12,12 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 
 | Measure | Count |
 |---|---:|
-| Reviewed families | 138 |
-| Exercises | 281 |
+| Reviewed families | 139 |
+| Exercises | 282 |
 | Muscle regions | 58 |
 | Unique trainable mesh bases | 60 |
 | Joint actions | 44 |
-| Evidence sources | 356 |
+| Evidence sources | 357 |
 
 ## Family roster
 
@@ -61,6 +61,7 @@ runtime parity. The synthetic validator fixture is excluded from this inventory.
 | [hang-power-snatch](families/hang-power-snatch.json) | 1 |
 | [hanging-leg-raise](families/hanging-leg-raise.json) | 2 |
 | [high-plank-contralateral-knee-touch](families/high-plank-contralateral-knee-touch.json) | 1 |
+| [high-plank-hold](families/high-plank-hold.json) | 1 |
 | [high-plank-rotation](families/high-plank-rotation.json) | 1 |
 | [high-plank-shoulder-tap](families/high-plank-shoulder-tap.json) | 1 |
 | [hip-abduction](families/hip-abduction.json) | 3 |

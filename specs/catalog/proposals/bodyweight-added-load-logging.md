@@ -1,7 +1,7 @@
 # Bodyweight plus added-load logging
 
 - Status: Active owner-approved catalog setting
-- Scope: The 29 exercises below; other records retain their current settings
+- Scope: The 30 exercises below; other records retain their current settings
 
 Use the existing Pull-Up load control. Zero added weight displays BW. Positive
 added weight displays BW plus the entered weight. Keep each exercise's reps or
@@ -23,6 +23,7 @@ resistance fractions for supported or limb movements.
 | Hanging Straight-Leg Raise | Reps |
 | Pike Push-Up | Reps |
 | Stable Forearm Plank | Time |
+| High Plank | Time; follows Stable Forearm Plank |
 | Side Plank | Time |
 | Hollow Hold | Time |
 | Wall Sit | Time |

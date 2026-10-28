@@ -5160,7 +5160,7 @@
       "doi": "10.1519/JSC.0000000000004622",
       "pmid": "37815235",
       "url": "https://doi.org/10.1519/JSC.0000000000004622",
-      "scope": "Twenty-one healthy men performed ten low- and high-plank variations spanning four-point, three-point, and diagonal two-point bodyweight support while surface EMG measured lower, middle, and upper trapezius, biceps, triceps, infraspinatus, and serratus anterior. It directly supports categorical shoulder-girdle participation during shoulder taps and nearby reduced-support plank tasks, not the five active fixtures' exact loads, spinal moments, unmeasured lower-body roles, between-muscle force ranking, adaptation, or medical benefit."
+      "scope": "Twenty-one healthy men performed ten low- and high-plank variations spanning four-point, three-point, and diagonal two-point bodyweight support while surface EMG measured lower, middle, and upper trapezius, biceps, triceps, infraspinatus, and serratus anterior. It directly supports categorical shoulder-girdle participation during the four-point high-plank hold, shoulder taps, and nearby reduced-support plank tasks, including higher triceps and lower-trapezius activation in high than low planks. It does not establish the active fixtures' exact loads, spinal moments, unmeasured lower-body roles, between-muscle force ranking, adaptation, or medical benefit."
     },
     {
       "id": "youdas-2018-fitness-ball-plank",
@@ -5530,6 +5530,17 @@
       "year": 2007,
       "url": "https://library.crossfit.com/premium/pdf/64_07_Jump_Rope_Basics_2.pdf?e=1681423889&h=6cf486336dd8aef230b5626cdbdd795b",
       "scope": "CrossFit Journal technical instruction for conventional rope grip, trunk control, upright posture, low rope clearance, forefoot landings, and elbows near the sides. Double-under-specific wrist tips and endurance/adaptation prescriptions are not transferred."
+    },
+    {
+      "id": "nasm-2026-straight-arm-plank",
+      "sourceType": "officialTechnicalStandard",
+      "title": "Straight-Arm Plank",
+      "authors": [
+        "National Academy of Sports Medicine"
+      ],
+      "year": 2026,
+      "url": "https://www.nasm.org/resource-center/exercise-library/straight-arm-plank",
+      "scope": "Undated official standard accessed 28 October 2026; year denotes retrieval. A prone isometric hold with the hands directly under the shoulders, arms fully extended, feet hip-width apart, a straight head-to-heel line with neutral spine and no hip drop, held for a set duration. Establishes fixture geometry and the timed anti-extension hold, not muscle roles, an anti-rotation demand, a scapular cue as a required action, comparative core demand, or back-pain claims."
     }
   ]
 }

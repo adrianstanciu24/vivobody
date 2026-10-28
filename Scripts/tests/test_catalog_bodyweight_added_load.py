@@ -19,9 +19,9 @@ APPROVED_IDS = {
     "dead-bug", "alternating-forearm-plank-arm-reach",
     "alternating-high-plank-shoulder-tap", "supine-reverse-crunch",
     "trx-chest-press", "trx-low-row", "trx-high-row", "trx-biceps-curl",
-    "trx-triceps-press", "trx-suspended-push-up",
+    "trx-triceps-press", "trx-suspended-push-up", "high-plank",
 }
-TIMED_IDS = {"active-dead-hang", "passive-dead-hang", "plank", "side-plank", "hollow-hold", "wall-sit"}
+TIMED_IDS = {"active-dead-hang", "passive-dead-hang", "plank", "high-plank", "side-plank", "hollow-hold", "wall-sit"}
 
 
 class BodyweightAddedLoadTests(unittest.TestCase):
@@ -33,7 +33,7 @@ class BodyweightAddedLoadTests(unittest.TestCase):
         cls.records = {r["catalogID"]: r for r in catalog.compile_runtime_catalog(cls.families)}
 
     def test_approved_scope_keeps_zero_added_load_and_tracking(self):
-        self.assertEqual(len(APPROVED_IDS), 29)
+        self.assertEqual(len(APPROVED_IDS), 30)
         for identity in APPROVED_IDS:
             with self.subTest(identity=identity):
                 record = self.records[identity]
