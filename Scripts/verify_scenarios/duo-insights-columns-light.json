@@ -1,0 +1,99 @@
+{
+  "name": "duo-insights-columns-light",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-showcase",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Training signature",
+            "role": "AXGenericElement"
+          },
+          {
+            "identifier": "insightsExerciseMixLink",
+            "labelContains": "Other exercises",
+            "role": "AXButton"
+          },
+          {
+            "identifier": "insightsMovementCoverageCard"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "insightsEmptyState"
+          },
+          {
+            "identifier": "insightsLoadInstrument"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceAllLink",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 6,
+        "lane": {
+          "identifier": "insightsRepMixLink"
+        }
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsBalanceAllLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceAllInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tapAt": {
+        "xFraction": 0.948,
+        "yFraction": 0.221
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceAllLink",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsBalanceAllLink",
+      "labelContains": "All comparisons",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    },
+    {
+      "identifier": "insightsLockedPreview"
+    }
+  ]
+}

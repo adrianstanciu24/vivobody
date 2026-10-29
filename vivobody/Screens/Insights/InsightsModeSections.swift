@@ -2,45 +2,14 @@
 //  InsightsModeSections.swift
 //  vivobody
 //
-//  Focused section compositions for the Insights screen. Shape keeps the
-//  lifetime bloom dominant, with compact name/share previews linking to recent
-//  exercise and rep distributions. Balance keeps only the priority tug-of-war
-//  beams in the main scroll and moves the qualified roster one level deeper.
+//  Focused section compositions for the Insights screen. Shape's compact
+//  name/share previews link to recent exercise and rep distributions. Balance
+//  keeps only the priority tug-of-war beams in the main scroll and moves the
+//  qualified roster one level deeper.
 //
 
 import SwiftUI
 import VivoKit
-
-struct ShapeInsightsSection: View {
-    let signature: TrainingSignature
-    let dominance: ExerciseDominanceBoard
-    let composition: CompositionSplit
-    let intensity: IntensityMix
-    let intensityWeeks: [IntensityWeek]
-    let migration: RepRangeMigrationReport
-    let coverage: MovementCoverage
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            SignatureSection(signature: signature)
-
-            GroupSeparator(verticalPadding: Space.section)
-
-            VStack(spacing: Space.lg) {
-                VStack(spacing: Space.sm) {
-                    ExerciseMixLink(board: dominance, split: composition)
-                    RepMixLink(
-                        mix: intensity,
-                        weeks: intensityWeeks,
-                        migration: migration
-                    )
-                }
-                MovementCoverageSection(report: coverage)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
 
 struct BalanceInsightsSection: View {
     let board: AntagonistBoard
@@ -75,7 +44,7 @@ struct BalanceInsightsSection: View {
 
 // MARK: - Shape drill-outs
 
-private struct ExerciseMixLink: View {
+struct ExerciseMixLink: View {
     let board: ExerciseDominanceBoard
     let split: CompositionSplit
 
@@ -128,7 +97,7 @@ private struct ExerciseMixLink: View {
     }
 }
 
-private struct RepMixLink: View {
+struct RepMixLink: View {
     let mix: IntensityMix
     let weeks: [IntensityWeek]
     let migration: RepRangeMigrationReport

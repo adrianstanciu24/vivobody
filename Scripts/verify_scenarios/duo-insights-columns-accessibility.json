@@ -1,0 +1,126 @@
+{
+  "name": "duo-insights-columns-accessibility",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-showcase",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsExerciseMixLink",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "insightsEmptyState"
+          },
+          {
+            "identifier": "insightsLoadInstrument"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsLoadInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceAllLink",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsBalanceAllLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceAllInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tapAt": {
+        "xFraction": 0.948,
+        "yFraction": 0.221
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceAllLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsRhythmInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsMuscleDirectnessLink",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 30
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsMuscleDirectnessLink",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

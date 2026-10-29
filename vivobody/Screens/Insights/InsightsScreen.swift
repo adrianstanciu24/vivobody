@@ -5,12 +5,15 @@
 //  Personal analytics as one ordered instrument scroll: Shape, Load, Rhythm, then
 //  Balance. Each instrument keeps its own scope and dominant visual while
 //  secondary distributions and the full balance roster live in drill-outs.
+//  A wide, regular-width window lays the same cards in two lanes beside the
+//  fold (InsightsCardLayout.swift); every other window keeps one column.
 //
 import SwiftUI
 import VivoKit
 
 struct InsightsScreen: View {
     @Bindable var appState: AppState
+    @Environment(\.appDisplayLayout) private var displayLayout
 
     var body: some View {
         Group {
@@ -35,60 +38,22 @@ struct InsightsScreen: View {
 
     // MARK: - Instrument shell
 
+    @ViewBuilder
     private func instrumentShell(
         reports: SessionAnalytics.InsightsReports
     ) -> some View {
-        ScrollView(.vertical) {
-            reportContent(reports)
-                .padding(.top, Space.lg)
-                .padding(.bottom, Space.xxl)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-        .scrollEdgeEffectStyle(.soft, for: .bottom)
-    }
-
-    private func reportContent(
-        _ reports: SessionAnalytics.InsightsReports
-    ) -> some View {
-        let core = reports.core
-        let deep = reports.deep
-
-        return LazyVStack(alignment: .leading, spacing: 0) {
-            ShapeInsightsSection(
-                signature: TrainingSignature(
-                    groupVolume: core.groupVolume,
-                    cadence: core.overview.averageWorkoutsPerWeek
-                ),
-                dominance: deep.dominance,
-                composition: deep.composition,
-                intensity: deep.intensity,
-                intensityWeeks: deep.intensityWeeks,
-                migration: deep.migration,
-                coverage: deep.movementCoverage
-            )
-
-            GroupSeparator(verticalPadding: Space.section)
-
-            TrainingLoadSection(report: core.load)
-
-            StaminaSection(report: core.stamina)
-                .padding(.top, Space.xl)
-
-            GroupSeparator(verticalPadding: Space.section)
-
-            ConsistencySection(
-                report: deep.consistency,
-                allTimeSessionsPerWeek: core.overview.averageWorkoutsPerWeek
-            )
-
-            GroupSeparator(verticalPadding: Space.section)
-
-            BalanceInsightsSection(board: deep.symmetry)
-
-            MuscleDirectnessSection(report: deep.muscleDirectness)
-                .padding(.top, Space.xl)
+        if displayLayout.showsDashboardColumns, #available(iOS 27.1, *) {
+            InsightsCardLanes(reports: reports)
+        } else {
+            ScrollView(.vertical) {
+                InsightsCardColumn(reports: reports)
+                    .padding(.top, Space.lg)
+                    .padding(.bottom, Space.xxl)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+            .scrollEdgeEffectStyle(.soft, for: .bottom)
         }
     }
 

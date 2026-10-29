@@ -1,0 +1,190 @@
+{
+  "name": "duo-insights-columns",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-showcase",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Training signature",
+            "role": "AXGenericElement"
+          },
+          {
+            "identifier": "insightsExerciseMixLink",
+            "labelContains": "Other exercises",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifierContains": "insightsMode"
+          },
+          {
+            "identifier": "insightsEmptyState"
+          },
+          {
+            "identifier": "insightsLoadInstrument"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsExerciseMixLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsExerciseMixInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tapAt": {
+        "xFraction": 0.948,
+        "yFraction": 0.221
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsExerciseMixLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsLoadInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 4,
+        "lane": {
+          "identifier": "insightsStaminaLink"
+        }
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsRepMixLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsRepMixInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tapAt": {
+        "xFraction": 0.948,
+        "yFraction": 0.221
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsRepMixLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsRhythmInstrument",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 6,
+        "lane": {
+          "identifier": "insightsStaminaLink"
+        }
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsRhythmInstrument",
+            "role": "AXHeading"
+          },
+          {
+            "identifier": "insightsBalanceAllLink",
+            "role": "AXButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsBalanceAllLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceAllInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tapAt": {
+        "xFraction": 0.948,
+        "yFraction": 0.221
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceAllLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsMuscleDirectnessLink",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsMuscleDirectnessLink",
+      "labelContains": "All time",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifierContains": "insightsMode"
+    },
+    {
+      "identifier": "insightsEmptyState"
+    },
+    {
+      "identifier": "insightsLockedPreview"
+    },
+    {
+      "identifier": "insightsUnlockButton"
+    }
+  ]
+}
