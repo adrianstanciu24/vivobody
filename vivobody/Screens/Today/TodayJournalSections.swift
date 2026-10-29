@@ -117,7 +117,7 @@ struct TodayLastWorkoutSection: View {
         .padding(Space.xl)
         .contentCard()
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Last workout. No workouts yet. \(Self.placeholderCaption)")
+        .accessibilityLabel("No workouts yet. \(Self.placeholderCaption)")
         .accessibilityIdentifier("todayLastWorkoutPlaceholder")
     }
 }

@@ -91,7 +91,7 @@
           },
           {
             "identifier": "todayLastWorkoutPlaceholder",
-            "label": "Last workout. No workouts yet. Finish a workout to see its time, volume, and sets.",
+            "label": "No workouts yet. Finish a workout to see its time, volume, and sets.",
             "role": "AXGenericElement"
           },
           {
