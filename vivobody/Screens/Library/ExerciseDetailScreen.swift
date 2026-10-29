@@ -74,6 +74,10 @@ struct ExerciseDetailScreen: View {
     /// surfaces like a standalone "Library" tab).
     let onPickAndDismiss: ((ExerciseCatalogItem) -> Void)?
 
+    /// Runs after a committed delete or hide instead of `dismiss()`, for a
+    /// host whose detail is a column root rather than a pushed screen.
+    let onRemoved: (() -> Void)?
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.sessionAnalytics) var sessionAnalytics
@@ -104,10 +108,12 @@ struct ExerciseDetailScreen: View {
     init(
         item: ExerciseCatalogItem,
         allowsComparison: Bool = true,
+        onRemoved: (() -> Void)? = nil,
         onPickAndDismiss: ((ExerciseCatalogItem) -> Void)?
     ) {
         self.item = item
         self.allowsComparison = allowsComparison
+        self.onRemoved = onRemoved
         self.onPickAndDismiss = onPickAndDismiss
 
         var latestBodyweight = FetchDescriptor<BodyWeightEntry>(
@@ -395,6 +401,10 @@ struct ExerciseDetailScreen: View {
             return
         }
         Haptics.thunk()
-        dismiss()
+        if let onRemoved {
+            onRemoved()
+        } else {
+            dismiss()
+        }
     }
 }

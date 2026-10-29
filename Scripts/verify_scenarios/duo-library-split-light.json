@@ -1,0 +1,152 @@
+{
+  "name": "duo-library-split-light",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-template-starting-loads",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXStaticText",
+        "label": "Flat Dumbbell Fly"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPull"
+      }
+    },
+    {
+      "waitAbsent": {
+        "role": "AXStaticText",
+        "label": "Flat Dumbbell Fly"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "libraryExerciseFilterPull",
+            "value": "Selected"
+          },
+          {
+            "label": "More options",
+            "role": "AXPopUpButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXButton",
+            "labelRegex": "^Flat Dumbbell Fly,"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterFavorites"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXStaticText",
+        "label": "No favorite exercises yet"
+      }
+    },
+    {
+      "waitAbsent": {
+        "label": "More options",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterAll"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXStaticText",
+        "label": "Flat Dumbbell Fly"
+      }
+    },
+    {
+      "tap": {
+        "label": "More options",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Hide from Library"
+      }
+    },
+    {
+      "tap": {
+        "label": "Hide",
+        "role": "AXButton"
+      }
+    },
+    {
+      "waitAbsent": {
+        "role": "AXButton",
+        "labelRegex": "^Flat Dumbbell Fly,"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXStaticText",
+        "label": "Standing Band Fly"
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXButton",
+        "labelContains": "Start Workout"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Templates",
+      "value": "Selected"
+    },
+    {
+      "role": "AXButton",
+      "labelContains": "Start Workout"
+    }
+  ],
+  "forbidden": [
+    {
+      "role": "AXStaticText",
+      "label": "Flat Dumbbell Fly"
+    },
+    {
+      "identifier": "BackButton"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

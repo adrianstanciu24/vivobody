@@ -1,0 +1,99 @@
+{
+  "name": "duo-library-split-accessibility",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-template-starting-loads",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXStaticText",
+        "label": "Flat Dumbbell Fly"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "labelRegex": "^Standing Band Fly,"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXStaticText",
+        "label": "Standing Band Fly"
+      }
+    },
+    {
+      "assert": {
+        "forbidden": [
+          {
+            "role": "AXStaticText",
+            "label": "Flat Dumbbell Fly"
+          },
+          {
+            "identifier": "BackButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXButton",
+        "labelContains": "Start Workout"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "labelContains": "Start Workout"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXHeading",
+        "label": "Active workout"
+      }
+    }
+  ],
+  "required": [
+    {
+      "role": "AXHeading",
+      "label": "Active workout"
+    },
+    {
+      "role": "AXHeading",
+      "label": "Barbell Bench Press"
+    },
+    {
+      "label": "Weight",
+      "role": "AXSlider",
+      "valueContains": "135"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

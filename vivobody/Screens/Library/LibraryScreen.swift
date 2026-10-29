@@ -36,6 +36,10 @@
 //  scope switch is the shared SegmentedPicker: a Liquid Glass track
 //  with a sliding orange thumb.
 //
+//  In regular width the selected exercise or template shows beside the
+//  list, and a template opens as its live detail there. Compact width
+//  keeps the list-then-push flow and opens templates in the editor sheet.
+//
 
 import SwiftData
 import SwiftUI
@@ -46,16 +50,17 @@ struct LibraryScreen: View {
     @Bindable var appState: AppState
 
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appDisplayLayout) private var displayLayout
 
-    /// Count-only mirror of the templates store, used solely to decide
-    /// whether the toolbar "+" is redundant. On the empty Templates
-    /// screen the centered "Create Template" CTA is the single create
-    /// path, so the toolbar "+" is suppressed — two create buttons for
-    /// one action read as clutter.
-    @Query private var allTemplates: [WorkoutTemplate]
+    /// Every template in manual order. It feeds the Templates rows and also
+    /// decides whether the toolbar "+" is redundant: on the empty Templates
+    /// screen the centered "Create Template" CTA is the single create path.
+    @Query(sort: [SortDescriptor(\WorkoutTemplate.sortOrder)])
+    private var templates: [WorkoutTemplate]
 
     @State private var segment: LibrarySegment = .exercises
     @State private var searchText: String = ""
+    @State private var selectedItemID: LibraryItemID?
 
     /// Catalog chip selection for the Exercises segment. Lives here
     /// (not in LibraryExercisesContent) because the segment switch
@@ -92,25 +97,74 @@ struct LibraryScreen: View {
     }()
 
     var body: some View {
-        // Each content view owns its own SwiftData query + filter
-        // state and hosts the segmented control as the FIRST element
-        // inside its own scroll view. That keeps the scroll view the
-        // direct content under the navigation bar, so the large
-        // "Library" title collapses correctly on scroll and the
-        // segment scrolls away with the content instead of staying
-        // pinned and colliding with the title.
+        // The catalog host wraps both columns, so the rows, the selection
+        // rule, and the detail all read the same post-mutation snapshot.
+        ExerciseCatalogBrowserHost(
+            query: searchText,
+            filter: exerciseFilter,
+            onEdit: { customExerciseTarget = .edit($0) },
+            onDuplicate: { customExerciseTarget = .duplicate($0) }
+        ) { browser, actions in
+            let listing = LibraryListing(
+                segment: segment,
+                browser: browser,
+                templates: templates,
+                searchText: searchText
+            )
+            BrowserColumns(selection: $selectedItemID) { navigation in
+                sidebar(listing, actions: actions, navigation: navigation)
+            } detail: { id, navigation in
+                detail(for: id, in: listing, navigation: navigation)
+            }
+            .onChange(of: listing.orderedIDs, initial: true) { _, ids in
+                reconcileSelection(ids)
+            }
+            .onChange(of: displayLayout.showsBrowserDetail) {
+                reconcileSelection(listing.orderedIDs)
+            }
+        }
+        // Create + edit both run through the same modal builder: a
+        // name field, a configured-exercise list, and an "Add
+        // exercise" flow that picks from the catalog then drops into
+        // a configure sheet. Nothing persists until Save.
+        .sheet(item: $templateEditorTarget) { target in
+            TemplateEditorScreen(target: target)
+        }
+        .sheet(item: $customExerciseTarget) { target in
+            CustomExerciseEditorSheet(target: target)
+        }
+        .sheet(isPresented: $showsStrengthRoutineBuilder) {
+            StrengthRoutineBuilderScreen(appState: appState)
+        }
+    }
+
+    /// Each content view hosts the segmented control as the FIRST element
+    /// inside its own scroll view. That keeps the scroll view the direct
+    /// content under the navigation bar, so the large "Library" title
+    /// collapses correctly on scroll and the segment scrolls away with the
+    /// content instead of staying pinned and colliding with the title.
+    private func sidebar(
+        _ listing: LibraryListing,
+        actions: ExerciseCatalogBrowserActions,
+        navigation: BrowserNavigation<LibraryItemID>
+    ) -> some View {
         Group {
             switch segment {
             case .templates:
                 LibraryTemplatesContent(
                     appState: appState,
-                    searchText: searchText,
+                    templates: listing.templates,
+                    rows: listing.templateRows,
+                    navigation: navigation,
                     segment: $segment,
                     templateEditorTarget: $templateEditorTarget,
                     onCreateTemplate: { presentNewTemplate() }
                 )
             case .exercises:
                 LibraryExercisesContent(
+                    browser: listing.browser,
+                    actions: actions,
+                    navigation: navigation,
                     searchText: searchText,
                     segment: $segment,
                     customExerciseTarget: $customExerciseTarget,
@@ -119,6 +173,8 @@ struct LibraryScreen: View {
             }
         }
         .screenBackground()
+        .navigationTitle("Library")
+        .navigationBarTitleDisplayMode(.large)
         .searchable(
             text: $searchText,
             placement: .navigationBarDrawer(displayMode: .always),
@@ -143,21 +199,37 @@ struct LibraryScreen: View {
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
         }
-        // Switching segments swaps in a fresh scroll view at the top,
-        // so the search prompt should update to reflect the new scope.
-        // Create + edit both run through the same modal builder: a
-        // name field, a configured-exercise list, and an "Add
-        // exercise" flow that picks from the catalog then drops into
-        // a configure sheet. Nothing persists until Save.
-        .sheet(item: $templateEditorTarget) { target in
-            TemplateEditorScreen(target: target)
+    }
+
+    // MARK: - Detail
+
+    @ViewBuilder
+    private func detail(
+        for id: LibraryItemID?,
+        in listing: LibraryListing,
+        navigation: BrowserNavigation<LibraryItemID>
+    ) -> some View {
+        switch id.flatMap(listing.record) {
+        case let .exercise(item):
+            ExerciseDetailScreen(item: item, onRemoved: navigation.showList, onPickAndDismiss: nil)
+        case let .template(template):
+            TemplateDetailScreen(template: template, appState: appState, onStarted: navigation.showList)
+        case nil:
+            Color.clear.screenBackground()
         }
-        .sheet(item: $customExerciseTarget) { target in
-            CustomExerciseEditorSheet(target: target)
-        }
-        .sheet(isPresented: $showsStrengthRoutineBuilder) {
-            StrengthRoutineBuilderScreen(appState: appState)
-        }
+    }
+
+    /// Beside the list, keeps the selection on a visible row, else selects
+    /// the first. A compact selection is only ever what the user opened, so
+    /// it stays put: replacing it would swap a pushed detail whose row a
+    /// search, filter, or unfavorite just hid.
+    private func reconcileSelection(_ ids: [LibraryItemID]) {
+        guard displayLayout.showsBrowserDetail else { return }
+        selectedItemID = BrowserSelection.retainOrFirst(
+            selectedItemID,
+            isValid: ids.contains,
+            first: ids.first
+        )
     }
 
     // MARK: - Create action
@@ -165,7 +237,7 @@ struct LibraryScreen: View {
     /// Hide the create "+" only on the empty Templates screen, where
     /// the centered CTA already owns the create action.
     private var suppressesPlus: Bool {
-        segment == .templates && allTemplates.isEmpty
+        segment == .templates && templates.isEmpty
     }
 
     private func handlePlus() {
@@ -269,10 +341,6 @@ enum LibrarySegment: String, CaseIterable, Identifiable {
 }
 
 #Preview("Exercises") {
-    NavigationStack {
-        LibraryScreen(appState: AppState())
-            .navigationTitle("Library")
-            .navigationBarTitleDisplayMode(.large)
-    }
-    .preferredColorScheme(.dark)
+    LibraryScreen(appState: AppState())
+        .preferredColorScheme(.dark)
 }

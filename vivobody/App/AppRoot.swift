@@ -381,11 +381,7 @@ struct AppRoot: View {
                 systemImage: AppTab.library.icon,
                 value: AppTab.library)
             {
-                NavigationStack {
-                    LibraryScreen(appState: appState)
-                        .navigationTitle("Library")
-                        .navigationBarTitleDisplayMode(.large)
-                }
+                LibraryScreen(appState: appState)
             }
 
             Tab(AppTab.insights.label,

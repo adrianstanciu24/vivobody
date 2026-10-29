@@ -5,7 +5,8 @@
 //  Exercises segment content for the Library screen. Extracted
 //  from LibraryScreen.swift for file size management. Shared catalog queries,
 //  history projection, filtering, and row actions live in
-//  ExerciseCatalogBrowserHost; this file owns Library-specific hierarchy.
+//  ExerciseCatalogBrowserHost, which LibraryScreen owns; this file owns
+//  Library-specific hierarchy.
 //
 
 import SwiftUI
@@ -14,12 +15,15 @@ import VivoKit
 // MARK: - Exercises content
 
 /// Exercises segment — browsable catalog. Tap an exercise row to
-/// push its detail screen (no commit CTA in this context). Long-
+/// open its detail screen (no commit CTA in this context). Long-
 /// press for Favorite / Edit / Duplicate / Delete via context menu. The filter
 /// strip offers training-role and equipment scopes plus prominent
 /// Favorites and Core shortcuts; favorited rows carry a star next
 /// to the name.
 struct LibraryExercisesContent: View {
+    let browser: ExerciseCatalogBrowserSnapshot
+    let actions: ExerciseCatalogBrowserActions
+    let navigation: BrowserNavigation<LibraryItemID>
     let searchText: String
     @Binding var segment: LibrarySegment
     @Binding var customExerciseTarget: CatalogEditorTarget?
@@ -31,25 +35,16 @@ struct LibraryExercisesContent: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        ExerciseCatalogBrowserHost(
-            query: searchText,
-            filter: exerciseFilter,
-            onEdit: { customExerciseTarget = .edit($0) },
-            onDuplicate: { customExerciseTarget = .duplicate($0) }
-        ) { browser, actions in
-            Group {
-                if browser.isSearching {
-                    searchList(browser, actions: actions)
-                } else if browser.sections.isEmpty {
-                    VStack(spacing: 0) {
-                        LibrarySegmentBar(selection: $segment)
-                        catalogFilterStrip(browser)
-                        emptyState
-                    }
-                } else {
-                    exerciseList(browser, actions: actions)
-                }
+        if browser.isSearching {
+            searchList(browser, actions: actions)
+        } else if browser.sections.isEmpty {
+            VStack(spacing: 0) {
+                LibrarySegmentBar(selection: $segment)
+                catalogFilterStrip(browser)
+                emptyState
             }
+        } else {
+            exerciseList(browser, actions: actions)
         }
     }
 
@@ -214,7 +209,7 @@ struct LibraryExercisesContent: View {
             return days <= 14
         }()
 
-        return rowLink(item: item, actions: actions) {
+        return rowButton(item: item, actions: actions) {
             exerciseRow(
                 item: item,
                 last: last,
@@ -224,21 +219,21 @@ struct LibraryExercisesContent: View {
         }
     }
 
-    /// Detail screen receives no onPickAndDismiss callback — in the
-    /// Library context there's nothing to "pick into," so the
-    /// detail's bottom CTA hides automatically. Extracted so both
-    /// row tiers share one navigation site + one context menu.
-    private func rowLink(
+    /// Extracted so both row tiers share one navigation site + one
+    /// context menu.
+    private func rowButton(
         item: ExerciseCatalogItem,
         actions: ExerciseCatalogBrowserActions,
         @ViewBuilder label: () -> some View
     ) -> some View {
-        NavigationLink {
-            ExerciseDetailScreen(item: item, onPickAndDismiss: nil)
+        let id = LibraryItemID.exercise(item.id)
+        return Button {
+            navigation.open(id)
         } label: {
             label()
         }
         .buttonStyle(.plain)
+        .browserRowSelection(navigation.isHighlighted(id))
         .exerciseCatalogActions(for: item, actions: actions)
     }
 
@@ -284,10 +279,12 @@ struct LibraryExercisesContent: View {
 
             rowTrailing(last: last, prominent: prominent, unit: browser.unit)
 
-            Image(systemName: "chevron.right")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.quaternary)
-                .accessibilityHidden(true)
+            if !navigation.showsDetailBeside {
+                Image(systemName: "chevron.right")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.quaternary)
+                    .accessibilityHidden(true)
+            }
         }
         .frame(minHeight: prominent ? 64 : Space.rowMin, alignment: .leading)
         .padding(.horizontal, Space.lg)

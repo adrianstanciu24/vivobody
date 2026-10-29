@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 209.
+Scenario files: 212.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -126,6 +126,9 @@ Scenario files: 209.
 | [duo-history-split-accessibility](duo-history-split-accessibility.json) | history | `--seed-history --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [duo-history-split-light](duo-history-split-light.json) | history | `--static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-history-split](duo-history-split.json) | history | `--seed-history --static-body -settings.weightUnit lb -settings.appearance dark` |
+| [duo-library-split-accessibility](duo-library-split-accessibility.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [duo-library-split-light](duo-library-split-light.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance light` |
+| [duo-library-split](duo-library-split.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [exercise-comparison-active-workout-hidden](exercise-comparison-active-workout-hidden.json) | today | `--ui-test-active-partial --static-body` |
 | [exercise-comparison-picker-filters-accessibility](exercise-comparison-picker-filters-accessibility.json) | library | `-UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [exercise-comparison-picker-filters-light](exercise-comparison-picker-filters-light.json) | library | `-settings.appearance light` |

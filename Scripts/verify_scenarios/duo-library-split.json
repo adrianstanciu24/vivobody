@@ -1,0 +1,224 @@
+{
+  "name": "duo-library-split",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-template-starting-loads",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXStaticText",
+        "label": "Flat Dumbbell Fly"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "labelRegex": "^Standing Band Fly,"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXStaticText",
+        "label": "Standing Band Fly"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXButton",
+            "labelRegex": "^Flat Dumbbell Fly,"
+          }
+        ],
+        "forbidden": [
+          {
+            "role": "AXStaticText",
+            "label": "Flat Dumbbell Fly"
+          },
+          {
+            "identifier": "BackButton"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up",
+        "maxSwipes": 2,
+        "lane": {
+          "role": "AXStaticText",
+          "label": "Standing Band Fly"
+        }
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "BackButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXButton",
+            "labelRegex": "^Standing Band Fly,"
+          },
+          {
+            "label": "Exercises",
+            "value": "Selected"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "BackButton"
+      }
+    },
+    {
+      "waitAbsent": {
+        "identifier": "BackButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXButton",
+        "labelContains": "Start Workout"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXButton",
+            "label": "Barbell Bench Press, Chest"
+          },
+          {
+            "role": "AXButton",
+            "labelContains": "Load Test",
+            "labelRegex": "^(?!Start).*"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-how-to-perform"
+          },
+          {
+            "identifier": "BackButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "label": "Barbell Bench Press, Chest"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "templateLoadPolicy"
+      }
+    },
+    {
+      "tap": {
+        "label": "Use last workout"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "templateLastUsedLoad",
+        "labelContains": "Set 1: 155 lb"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": [
+          "--static-body",
+          "-settings.weightUnit",
+          "lb",
+          "-settings.appearance",
+          "dark"
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXButton",
+        "labelContains": "Start Workout"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXButton",
+        "label": "Barbell Bench Press, Chest"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "templateLoadPolicy",
+        "value": "Use last workout"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "templateLoadPolicy",
+      "value": "Use last workout"
+    },
+    {
+      "identifier": "templateLastUsedLoad",
+      "labelContains": "Set 1: 155 lb"
+    },
+    {
+      "label": "Templates",
+      "value": "Selected"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

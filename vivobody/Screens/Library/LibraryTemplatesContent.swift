@@ -14,40 +14,25 @@ import VivoKit
 // MARK: - Templates content
 
 /// Templates segment — list of saved workout plans. Tap a row to
-/// edit it in the modal builder; swipe-right (or long-press) to
-/// start a workout from it; swipe-left to delete. Empty state offers
-/// an inline create button. Inherits search text from the parent and
-/// filters by name.
+/// edit it: in the modal builder in compact width, or as the live
+/// detail beside the list in regular width. Swipe-right (or long-press)
+/// to start a workout from it; swipe-left to delete. Empty state offers
+/// an inline create button.
 struct LibraryTemplatesContent: View {
     @Bindable var appState: AppState
-    let searchText: String
+    /// Every template in manual order; deletion renumbers these.
+    let templates: [WorkoutTemplate]
+    /// The search-matched rows in display order.
+    let rows: [WorkoutTemplate]
+    let navigation: BrowserNavigation<LibraryItemID>
     @Binding var segment: LibrarySegment
     @Binding var templateEditorTarget: TemplateEditorTarget?
     let onCreateTemplate: () -> Void
 
     @Environment(\.modelContext) private var modelContext
 
-    @Query(sort: [SortDescriptor(\WorkoutTemplate.sortOrder)])
-    private var templates: [WorkoutTemplate]
-
     @State private var deletingTemplate: WorkoutTemplate? = nil
     @State private var saveError: SaveErrorBox? = nil
-
-    private var filtered: [WorkoutTemplate] {
-        let trimmed = searchText.trimmingCharacters(in: .whitespaces).lowercased()
-        if trimmed.isEmpty { return templates }
-        return templates.filter { $0.name.lowercased().contains(trimmed) }
-    }
-
-    /// Display order: anything scheduled for today floats to the top
-    /// (the list's implicit "what's next" answer), the rest keep the
-    /// user's manual sortOrder. Both partitions are stable.
-    private var displayed: [WorkoutTemplate] {
-        let today = Calendar.current.component(.weekday, from: Date())
-        let base = filtered
-        return base.filter { $0.isScheduled(on: today) }
-            + base.filter { !$0.isScheduled(on: today) }
-    }
 
     var body: some View {
         Group {
@@ -56,7 +41,7 @@ struct LibraryTemplatesContent: View {
                     LibrarySegmentBar(selection: $segment)
                     emptyState
                 }
-            } else if filtered.isEmpty {
+            } else if rows.isEmpty {
                 VStack(spacing: 0) {
                     LibrarySegmentBar(selection: $segment)
                     noMatchesState
@@ -92,11 +77,12 @@ struct LibraryTemplatesContent: View {
                 .listRowInsets(EdgeInsets(top: Space.sm, leading: Space.gutter, bottom: Space.lg, trailing: Space.gutter))
 
             let today = Calendar.current.component(.weekday, from: Date())
-            ForEach(displayed) { template in
+            ForEach(rows) { template in
                 let isToday = template.isScheduled(on: today)
                 TemplateCard(
                     template: template,
-                    onOpen: { templateEditorTarget = .edit(template) },
+                    isSelected: navigation.isHighlighted(.template(template.id)),
+                    onOpen: { open(template) },
                     onStart: isToday ? { startWorkout(from: template) } : nil
                 )
                 .listRowBackground(Color.clear)
@@ -136,7 +122,7 @@ struct LibraryTemplatesContent: View {
                         Label("Start workout", systemImage: "play.fill")
                     }
                     Button {
-                        templateEditorTarget = .edit(template)
+                        open(template)
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
@@ -176,6 +162,17 @@ struct LibraryTemplatesContent: View {
     }
 
     // MARK: - Plumbing
+
+    /// Beside the list, a template opens as its live detail, which saves
+    /// each edit as it happens. In compact width it opens the draft
+    /// editor sheet, which saves on Save.
+    private func open(_ template: WorkoutTemplate) {
+        if navigation.showsDetailBeside {
+            navigation.open(.template(template.id))
+        } else {
+            templateEditorTarget = .edit(template)
+        }
+    }
 
     private var deleteAlertBinding: Binding<Bool> {
         Binding(
@@ -225,6 +222,8 @@ struct LibraryTemplatesContent: View {
 /// filled, today's day glowing).
 struct TemplateCard: View {
     let template: WorkoutTemplate
+    /// True when this template's detail shows beside the list.
+    var isSelected = false
     let onOpen: () -> Void
     var onStart: (() -> Void)? = nil
 
@@ -242,6 +241,12 @@ struct TemplateCard: View {
             .padding(.vertical, isToday ? Space.lg : Space.md)
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentCard(bright: isToday)
+            .overlay {
+                if isSelected {
+                    RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
+                        .strokeBorder(Tint.primaryDim, lineWidth: 1.5)
+                }
+            }
     }
 
     /// Open-editor and Start are SIBLING buttons, not nested — a
@@ -256,6 +261,7 @@ struct TemplateCard: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
             if isToday, onStart != nil {
                 startButton
             }

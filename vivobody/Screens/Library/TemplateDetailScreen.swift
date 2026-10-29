@@ -31,6 +31,9 @@ import VivoKit
 struct TemplateDetailScreen: View {
     @Bindable var template: WorkoutTemplate
     @Bindable var appState: AppState
+    /// Runs after Start requests the workout, instead of `dismiss()`, for
+    /// a host whose detail is a column root rather than a pushed screen.
+    var onStarted: (() -> Void)? = nil
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -241,7 +244,11 @@ struct TemplateDetailScreen: View {
             sound: .commit
         ) {
             appState.workout.startWorkoutFromTemplate(template)
-            dismiss()
+            if let onStarted {
+                onStarted()
+            } else {
+                dismiss()
+            }
         }
         .padding(.horizontal, Space.gutter)
         .padding(.top, 12)
