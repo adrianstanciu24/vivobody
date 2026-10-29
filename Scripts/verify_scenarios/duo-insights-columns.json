@@ -132,30 +132,6 @@
       }
     },
     {
-      "tap": {
-        "identifier": "insightsBalanceAllLink",
-        "role": "AXButton"
-      }
-    },
-    {
-      "wait": {
-        "identifier": "insightsBalanceAllInstrument",
-        "role": "AXHeading"
-      }
-    },
-    {
-      "tapAt": {
-        "xFraction": 0.948,
-        "yFraction": 0.221
-      }
-    },
-    {
-      "wait": {
-        "identifier": "insightsBalanceAllLink",
-        "role": "AXButton"
-      }
-    },
-    {
       "scrollTo": {
         "selector": {
           "identifier": "insightsMuscleDirectnessLink",

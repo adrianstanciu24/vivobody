@@ -44,27 +44,14 @@
       }
     },
     {
-      "scrollTo": {
-        "selector": {
-          "identifier": "insightsBalanceAllLink",
-          "role": "AXButton"
-        },
-        "direction": "up",
-        "maxSwipes": 6,
-        "lane": {
-          "identifier": "insightsRepMixLink"
-        }
-      }
-    },
-    {
       "tap": {
-        "identifier": "insightsBalanceAllLink",
+        "identifier": "insightsExerciseMixLink",
         "role": "AXButton"
       }
     },
     {
       "wait": {
-        "identifier": "insightsBalanceAllInstrument",
+        "identifier": "insightsExerciseMixInstrument",
         "role": "AXHeading"
       }
     },
@@ -76,8 +63,21 @@
     },
     {
       "wait": {
-        "identifier": "insightsBalanceAllLink",
+        "identifier": "insightsExerciseMixLink",
         "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalanceAllLink",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 6,
+        "lane": {
+          "identifier": "insightsRepMixLink"
+        }
       }
     }
   ],
