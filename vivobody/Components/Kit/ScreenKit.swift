@@ -163,7 +163,8 @@ struct GroupSeparator: View {
 /// it never jitters.
 struct Stat: Identifiable {
     let id = UUID()
-    let value: String
+    /// Nil until the value exists; the strip then shows a quiet dash.
+    let value: String?
     var unit: String? = nil
     let label: String
     /// Optional spoken copy for values whose display shorthand omits
@@ -261,9 +262,9 @@ struct StatStrip: View {
     private func cell(_ stat: Stat, alignment: HorizontalAlignment) -> some View {
         VStack(alignment: alignment, spacing: Space.xs + 2) {
             HStack(alignment: .lastTextBaseline, spacing: 3) {
-                Text(stat.value)
+                Text(stat.value ?? Self.placeholderValue)
                     .font(valueFont)
-                    .foregroundStyle(stat.accent ? Tint.primary : Ink.primary)
+                    .foregroundStyle(valueColor(for: stat))
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
@@ -303,16 +304,24 @@ struct StatStrip: View {
         .accessibilityLabel(accessibilityLabel(for: stat))
     }
 
+    private static let placeholderValue = "–"
+
+    private func valueColor(for stat: Stat) -> Color {
+        if stat.value == nil { return Ink.quaternary }
+        return stat.accent ? Tint.primary : Ink.primary
+    }
+
     private func accessibilityLabel(for stat: Stat) -> String {
-        stat.accessibilityLabel
-            ?? "\(stat.value)\(stat.unit.map { " \($0)" } ?? "") \(stat.label)"
+        if let label = stat.accessibilityLabel { return label }
+        guard let value = stat.value else { return "\(stat.label), none yet" }
+        return "\(value)\(stat.unit.map { " \($0)" } ?? "") \(stat.label)"
     }
 
     private func accessibleValue(_ stat: Stat) -> some View {
         HStack(alignment: .lastTextBaseline, spacing: 3) {
-            Text(stat.value)
+            Text(stat.value ?? Self.placeholderValue)
                 .font(valueFont)
-                .foregroundStyle(stat.accent ? Tint.primary : Ink.primary)
+                .foregroundStyle(valueColor(for: stat))
                 .monospacedDigit()
             if let unit = stat.unit {
                 Text(unit)
