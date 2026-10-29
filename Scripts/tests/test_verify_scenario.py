@@ -4,8 +4,9 @@
 #  vivobody
 #
 #  Unit tests for semantic scenario selection, on-screen filtering, constraint
-#  diagnostics, and frame-based tap and container-scoped swipe resolution. These tests use tiny fixture
-#  trees and require neither Baguette nor a booted simulator.
+#  diagnostics, frame-based tap and lane-scoped swipe resolution, and the
+#  mapping from a sideways interface to framebuffer points. These tests use
+#  tiny fixture trees and require neither Baguette nor a booted simulator.
 #
 
 from __future__ import annotations
@@ -120,57 +121,106 @@ class VerifyScenarioTests(unittest.TestCase):
         upward = verify_scenario.swipe_points(snapshot, "up")
         downward = verify_scenario.swipe_points(snapshot, "down")
 
-        self.assertEqual(upward, (201, 594.32, 201, 279.68, 402, 874))
-        self.assertEqual(downward, (201, 279.68, 201, 594.32, 402, 874))
+        self.assertEqual(upward, (201, 594.32, 201, 279.68))
+        self.assertEqual(downward, (201, 279.68, 201, 594.32))
 
-    def test_container_swipe_stays_inside_the_container_in_root_coordinates(self) -> None:
-        pane = element(identifier="historyDetailPane", role="AXGroup", frame=(202, 100, 200, 400))
-        snapshot = tree(pane)
+    def test_lane_swipe_follows_the_lane_center_over_the_screen_span(self) -> None:
+        heading = element(label="Session", role="AXHeading", frame=(232, 30, 140, 20))
+        snapshot = tree(heading)
 
-        upward = verify_scenario.swipe_points(snapshot, "up", pane)
-        downward = verify_scenario.swipe_points(snapshot, "down", pane)
+        upward = verify_scenario.swipe_points(snapshot, "up", heading)
+        downward = verify_scenario.swipe_points(snapshot, "down", heading)
 
-        for actual, expected in zip(upward, (302, 372, 302, 228, 402, 874)):
+        for actual, expected in zip(upward, (302, 594.32, 302, 279.68)):
             self.assertAlmostEqual(actual, expected)
-        for actual, expected in zip(downward, (302, 228, 302, 372, 402, 874)):
+        for actual, expected in zip(downward, (302, 279.68, 302, 594.32)):
             self.assertAlmostEqual(actual, expected)
 
-    def test_container_swipe_uses_the_visible_part_of_the_container(self) -> None:
-        pane = element(identifier="libraryDetailPane", role="AXGroup", frame=(302, 100, 200, 400))
-        snapshot = tree(pane)
+    def test_lane_swipe_uses_the_visible_part_of_the_lane(self) -> None:
+        card = element(label="Volume", role="AXGroup", frame=(302, 100, 200, 400))
+        snapshot = tree(card)
 
-        start_x, _, end_x, _, _, _ = verify_scenario.swipe_points(snapshot, "up", pane)
+        start_x, _, end_x, _ = verify_scenario.swipe_points(snapshot, "up", card)
 
         self.assertAlmostEqual(start_x, 352)
         self.assertAlmostEqual(end_x, 352)
 
-    def test_swipe_container_requires_one_visible_match(self) -> None:
+    def test_sideways_interface_reads_landscape_frames_and_taps_portrait_points(self) -> None:
+        tab = element(label="History", role="AXRadioButton", frame=(613, 310, 30, 40))
+        raw = tree(tab)
+        raw["frame"] = {"x": 0, "y": 8, "width": 466, "height": 662}
+
+        self.assertFalse(verify_scenario.find_matches(raw, {"label": "History"}))
+        snapshot = verify_scenario.interface_tree(raw, "counterclockwise")
+        node = verify_scenario.find_matches(snapshot, {"label": "History"})[0].node
+        x, y = verify_scenario.element_midpoint(node, snapshot)
+
+        self.assertEqual(
+            verify_scenario.framebuffer_point(snapshot, "counterclockwise", x, y),
+            (330, 34),
+        )
+        self.assertEqual(verify_scenario.framebuffer_size(snapshot, "counterclockwise"), (466, 662))
+
+    def test_sideways_interface_swipe_up_moves_left_across_the_framebuffer(self) -> None:
+        raw = tree()
+        raw["frame"] = {"x": 0, "y": 8, "width": 466, "height": 662}
+        snapshot = verify_scenario.interface_tree(raw, "counterclockwise")
+
+        start_x, start_y, end_x, end_y = verify_scenario.swipe_points(snapshot, "up")
+        start = verify_scenario.framebuffer_point(snapshot, "counterclockwise", start_x, start_y)
+        end = verify_scenario.framebuffer_point(snapshot, "counterclockwise", end_x, end_y)
+
+        for actual, expected in zip((*start, *end), (316.88, 331, 149.12, 331)):
+            self.assertAlmostEqual(actual, expected)
+
+    def test_upright_interface_taps_reported_points(self) -> None:
+        snapshot = verify_scenario.interface_tree(tree(), None)
+
+        self.assertEqual(verify_scenario.framebuffer_point(snapshot, None, 201, 437), (201, 437))
+        self.assertEqual(verify_scenario.framebuffer_size(snapshot, None), (402, 874))
+
+    def test_interface_rotation_accepts_only_known_values(self) -> None:
+        scenario = {
+            "name": "sideways-display",
+            "interfaceRotation": "counterclockwise",
+            "launch": {},
+            "steps": [],
+            "required": [],
+            "forbidden": [],
+        }
+        verify_scenario.validate_scenario_definition(scenario)
+
+        scenario["interfaceRotation"] = "clockwise"
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "interfaceRotation must be one of"):
+            verify_scenario.validate_scenario_definition(scenario)
+
+    def test_swipe_lane_requires_one_visible_match(self) -> None:
         snapshot = tree(
             element(identifier="pane", role="AXGroup", frame=(0, 0, 200, 400)),
             element(identifier="pane", role="AXGroup", frame=(202, 0, 200, 400)),
             element(identifier="offscreenPane", role="AXGroup", frame=(500, 0, 200, 400)),
         )
 
-        self.assertIsNone(verify_scenario.swipe_container(snapshot, None))
-        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "containers must be unique"):
-            verify_scenario.swipe_container(snapshot, {"identifier": "pane"})
-        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "No visible swipe container"):
-            verify_scenario.swipe_container(snapshot, {"identifier": "offscreenPane"})
-        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "No visible swipe container"):
-            verify_scenario.swipe_container(snapshot, {"identifier": "missingPane"})
+        self.assertIsNone(verify_scenario.swipe_lane(snapshot, None))
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "lanes must be unique"):
+            verify_scenario.swipe_lane(snapshot, {"identifier": "pane"})
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "No visible swipe lane"):
+            verify_scenario.swipe_lane(snapshot, {"identifier": "offscreenPane"})
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "No visible swipe lane"):
+            verify_scenario.swipe_lane(snapshot, {"identifier": "missingPane"})
 
-    def test_scroll_and_swipe_accept_an_optional_container_selector(self) -> None:
+    def test_scroll_and_swipe_accept_an_optional_lane_selector(self) -> None:
         scenario = {
-            "name": "container-swipes",
+            "name": "lane-swipes",
             "launch": {},
             "steps": [
                 {
                     "scrollTo": {
                         "selector": {"identifier": "historySessionRow"},
-                        "container": {"identifier": "historyListPane"},
+                        "lane": {"label": "History", "role": "AXHeading"},
                     }
                 },
-                {"swipe": {"direction": "down", "container": {"identifier": "historyDetailPane"}}},
+                {"swipe": {"direction": "down", "lane": {"label": "Session", "role": "AXHeading"}}},
             ],
             "required": [],
             "forbidden": [],
@@ -178,32 +228,32 @@ class VerifyScenarioTests(unittest.TestCase):
 
         verify_scenario.validate_scenario_definition(scenario)
 
-    def test_malformed_container_selectors_fail_early(self) -> None:
+    def test_malformed_lane_selectors_fail_early(self) -> None:
         def scenario(step: dict[str, object]) -> dict[str, object]:
             return {
-                "name": "invalid-container",
+                "name": "invalid-lane",
                 "launch": {},
                 "steps": [step],
                 "required": [],
                 "forbidden": [],
             }
 
-        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "container must be a selector object"):
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "lane must be a selector object"):
             verify_scenario.validate_scenario_definition(
-                scenario({"swipe": {"container": "historyListPane"}})
+                scenario({"swipe": {"lane": "History"}})
             )
         with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "Unsupported selector"):
             verify_scenario.validate_scenario_definition(
                 scenario({
                     "scrollTo": {
                         "selector": {"identifier": "row"},
-                        "container": {"testID": "historyListPane"},
+                        "lane": {"testID": "historyListPane"},
                     }
                 })
             )
         with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "must include an identifier"):
             verify_scenario.validate_scenario_definition(
-                scenario({"swipe": {"container": {"visible": True}}})
+                scenario({"swipe": {"lane": {"visible": True}}})
             )
 
     def test_ambiguous_tap_selector_fails_with_candidates(self) -> None:

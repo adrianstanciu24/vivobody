@@ -60,6 +60,17 @@ literal substrings. These assertions read the captured unified `runtime.log`
 and are reserved for stable privacy-safe `AppDiagnostics` events, not Apple
 framework chatter or user-owned values.
 
+## Sideways displays
+
+The iPhone Duo open display draws its interface sideways in a portrait
+framebuffer. Baguette then reports element frames in landscape interface
+points, while taps and swipes take portrait framebuffer points. A scenario for
+that display sets the top-level `"interfaceRotation": "counterclockwise"`.
+Selectors, visibility, and swipe directions then use interface points, and
+the harness converts each gesture to framebuffer points. Run the scenario with
+`SIMULATOR_NAME='iPhone Duo' SIMULATOR_OS=27.1`. Without the field, frames and
+gestures share one coordinate space, as on every other iPhone.
+
 ## Launch
 
 - `reset`: adds `--ui-test-reset` when true.
@@ -94,11 +105,14 @@ framework chatter or user-owned values.
 - `swipe`: perform `count` blind swipes in the declared `direction` with no
   selector. Use it to nudge content clear of the tab bar before tapping a
   row that `scrollTo` leaves half-covered at the screen edge.
-- `scrollTo` and `swipe` accept an optional `container` selector. The
-  swipe then runs through the middle of that element's visible frame instead
-  of the application's. Use it when one screen shows several scroll areas side
-  by side, such as a list and its detail on a wide display. The container must
-  match exactly one visible element on every swipe.
+- `scrollTo` and `swipe` accept an optional `lane` selector. The swipe
+  then runs down the vertical center line of that element's visible frame
+  instead of the application's, over the usual screen-height span. Use it when
+  one screen shows several scroll areas side by side, such as a list and its
+  detail on a wide display. Baguette reports a flat list of leaf elements, so
+  name an element that stays visible in the target area, such as the pane's
+  navigation title. The lane must match exactly one visible element on every
+  swipe.
 - `typeText`: type a non-empty US-ASCII string into the currently focused
   field. Tap the field semantically before using it.
 - `assert`: poll `required` and `forbidden` selector arrays together.

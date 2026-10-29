@@ -38,6 +38,7 @@ SUPPORTED_SELECTOR_FIELDS = {
     "enabled",
     "visible",
 }
+INTERFACE_ROTATIONS = ("counterclockwise",)
 
 
 class ScenarioFailure(RuntimeError):
@@ -111,44 +112,75 @@ def element_point(
     return x + width * x_fraction, y + height * y_fraction
 
 
+def interface_tree(tree: Mapping[str, Any], rotation: str | None) -> Mapping[str, Any]:
+    """Puts the root frame in the interface points its children use.
+
+    On a display whose interface runs sideways in the framebuffer, such as the
+    iPhone Duo open display, Baguette reports child frames in landscape
+    interface points but the root frame in portrait framebuffer points.
+    """
+    frame = node_frame(tree)
+    if rotation is None or frame is None:
+        return tree
+    _, _, width, height = frame
+    return {**tree, "frame": {"x": 0.0, "y": 0.0, "width": height, "height": width}}
+
+
+def framebuffer_size(root: Mapping[str, Any], rotation: str | None) -> tuple[float, float]:
+    frame = node_frame(root)
+    if frame is None:
+        raise ScenarioFailure("Application accessibility root has no usable frame.")
+    _, _, width, height = frame
+    if rotation is None:
+        return width, height
+    return height, width
+
+
+def framebuffer_point(
+    root: Mapping[str, Any],
+    rotation: str | None,
+    x: float,
+    y: float,
+) -> tuple[float, float]:
+    """Converts an interface point into the framebuffer point Baguette taps."""
+    if rotation is None:
+        return x, y
+    frame = node_frame(root)
+    if frame is None:
+        raise ScenarioFailure("Application accessibility root has no usable frame.")
+    _, _, width, _ = frame
+    return y, width - x
+
+
 def swipe_points(
     root: Mapping[str, Any],
     direction: str,
-    container: Mapping[str, Any] | None = None,
-) -> tuple[float, float, float, float, float, float]:
+    lane: Mapping[str, Any] | None = None,
+) -> tuple[float, float, float, float]:
+    """Swipes down the center line of the lane element, or of the screen.
+
+    Baguette reports a flat list of leaf elements, so a pane is named by any
+    visible element in it. The vertical span always comes from the screen.
+    """
     root_frame = node_frame(root)
     if root_frame is None:
         raise ScenarioFailure("Application accessibility root has no usable frame.")
-    _, _, root_width, root_height = root_frame
-    if container is None:
-        x, y, width, height = root_frame
-    else:
-        area = visible_intersection(container, root)
+    x, y, width, height = root_frame
+    center_x = x + width * 0.5
+    if lane is not None:
+        area = visible_intersection(lane, root)
         if area is None:
-            raise ScenarioFailure("Swipe container has no visible on-screen frame.")
-        x, y, width, height = area
+            raise ScenarioFailure("Swipe lane has no visible on-screen frame.")
+        lane_x, _, lane_width, _ = area
+        center_x = lane_x + lane_width * 0.5
     if direction == "up":
-        return (
-            x + width * 0.5,
-            y + height * 0.68,
-            x + width * 0.5,
-            y + height * 0.32,
-            root_width,
-            root_height,
-        )
+        return center_x, y + height * 0.68, center_x, y + height * 0.32
     if direction == "down":
-        return (
-            x + width * 0.5,
-            y + height * 0.32,
-            x + width * 0.5,
-            y + height * 0.68,
-            root_width,
-            root_height,
-        )
+        return center_x, y + height * 0.32, center_x, y + height * 0.68
     raise ScenarioFailure("scrollTo.direction must be 'up' or 'down'.")
 
 
-def swipe_container(
+def swipe_lane(
     tree: Mapping[str, Any],
     selector: Mapping[str, Any] | None,
 ) -> Mapping[str, Any] | None:
@@ -159,11 +191,11 @@ def swipe_container(
         return matches[0].node
     rendered = json.dumps(selector, sort_keys=True)
     if not matches:
-        raise ScenarioFailure(f"No visible swipe container matched selector {rendered}.")
+        raise ScenarioFailure(f"No visible swipe lane matched selector {rendered}.")
     candidates = "\n".join(f"  - {describe_node(match)}" for match in matches[:8])
     raise ScenarioFailure(
-        f"Swipe container {rendered} matched {len(matches)} visible elements; "
-        f"containers must be unique:\n{candidates}"
+        f"Swipe lane {rendered} matched {len(matches)} visible elements; "
+        f"lanes must be unique:\n{candidates}"
     )
 
 
@@ -311,6 +343,7 @@ class ScenarioRunner:
         self.output_dir = output_dir
         self.baguette = baguette
         self.timeout = timeout
+        self.interface_rotation: str | None = scenario.get("interfaceRotation")
         self.current_tree_path = output_dir / "current-ui.json"
         self.actions_path = output_dir / "actions.log"
         self.runtime_path = output_dir / "runtime.log"
@@ -437,7 +470,59 @@ class ScenarioRunner:
             raise ScenarioFailure(f"Invalid accessibility tree at {destination}: {error}") from error
         if not isinstance(tree, Mapping):
             raise ScenarioFailure("Accessibility tree root must be a JSON object.")
-        return tree
+        return interface_tree(tree, self.interface_rotation)
+
+    def send_tap(self, tree: Mapping[str, Any], x: float, y: float) -> None:
+        device_x, device_y = framebuffer_point(tree, self.interface_rotation, x, y)
+        width, height = framebuffer_size(tree, self.interface_rotation)
+        self.command([
+            self.baguette,
+            "tap",
+            "--udid",
+            self.udid,
+            "--x",
+            f"{device_x:.3f}",
+            "--y",
+            f"{device_y:.3f}",
+            "--width",
+            f"{width:.3f}",
+            "--height",
+            f"{height:.3f}",
+        ])
+
+    def send_swipe(
+        self,
+        tree: Mapping[str, Any],
+        points: tuple[float, float, float, float],
+    ) -> None:
+        start_x, start_y, end_x, end_y = points
+        device_start_x, device_start_y = framebuffer_point(
+            tree, self.interface_rotation, start_x, start_y
+        )
+        device_end_x, device_end_y = framebuffer_point(
+            tree, self.interface_rotation, end_x, end_y
+        )
+        width, height = framebuffer_size(tree, self.interface_rotation)
+        self.command([
+            self.baguette,
+            "swipe",
+            "--udid",
+            self.udid,
+            "--start-x",
+            f"{device_start_x:.3f}",
+            "--start-y",
+            f"{device_start_y:.3f}",
+            "--end-x",
+            f"{device_end_x:.3f}",
+            "--end-y",
+            f"{device_end_y:.3f}",
+            "--width",
+            f"{width:.3f}",
+            "--height",
+            f"{height:.3f}",
+            "--duration",
+            "0.75",
+        ])
 
     def wait_until(
         self,
@@ -587,25 +672,8 @@ class ScenarioRunner:
         if match.node.get("enabled") is False:
             raise ScenarioFailure(f"Matched element is disabled: {describe_node(match)}")
         x, y = element_point(match.node, tree, x_fraction, y_fraction)
-        root_frame = node_frame(tree)
-        if root_frame is None:
-            raise ScenarioFailure("Application accessibility root has no usable frame.")
-        _, _, width, height = root_frame
         self.log(f"TAP {describe_node(match)} at ({x:.2f}, {y:.2f})")
-        self.command([
-            self.baguette,
-            "tap",
-            "--udid",
-            self.udid,
-            "--x",
-            f"{x:.3f}",
-            "--y",
-            f"{y:.3f}",
-            "--width",
-            f"{width:.3f}",
-            "--height",
-            f"{height:.3f}",
-        ])
+        self.send_tap(tree, x, y)
 
     def relaunch_tap(self, configuration: Mapping[str, Any]) -> None:
         selector = configuration["selector"]
@@ -614,10 +682,6 @@ class ScenarioRunner:
         if match.node.get("enabled") is False:
             raise ScenarioFailure(f"Matched element is disabled: {describe_node(match)}")
         x, y = element_midpoint(match.node, tree)
-        root_frame = node_frame(tree)
-        if root_frame is None:
-            raise ScenarioFailure("Application accessibility root has no usable frame.")
-        _, _, width, height = root_frame
         launch = self.scenario.get("launch", {})
         if not isinstance(launch, Mapping):
             raise ScenarioFailure("Scenario launch must be an object.")
@@ -641,20 +705,7 @@ class ScenarioRunner:
             f"RELAUNCH TAP {describe_node(match)} at ({x:.2f}, {y:.2f}) "
             f"{elapsed:.3f}s after launch returned"
         )
-        self.command([
-            self.baguette,
-            "tap",
-            "--udid",
-            self.udid,
-            "--x",
-            f"{x:.3f}",
-            "--y",
-            f"{y:.3f}",
-            "--width",
-            f"{width:.3f}",
-            "--height",
-            f"{height:.3f}",
-        ])
+        self.send_tap(tree, x, y)
 
     def tap_at(self, configuration: Mapping[str, Any]) -> None:
         tree = self.describe_tree()
@@ -670,20 +721,7 @@ class ScenarioRunner:
             f"TAP normalized point ({x_fraction:.3f}, {y_fraction:.3f}) "
             f"at ({x:.2f}, {y:.2f})"
         )
-        self.command([
-            self.baguette,
-            "tap",
-            "--udid",
-            self.udid,
-            "--x",
-            f"{x:.3f}",
-            "--y",
-            f"{y:.3f}",
-            "--width",
-            f"{width:.3f}",
-            "--height",
-            f"{height:.3f}",
-        ])
+        self.send_tap(tree, x, y)
 
     def scroll_to(self, configuration: Mapping[str, Any]) -> None:
         selector = configuration.get("selector")
@@ -696,7 +734,7 @@ class ScenarioRunner:
         max_swipes = configuration.get("maxSwipes", 6)
         if not isinstance(max_swipes, int) or isinstance(max_swipes, bool) or max_swipes < 1:
             raise ScenarioFailure("scrollTo.maxSwipes must be a positive integer.")
-        container = _optional_container(configuration, "scrollTo")
+        lane = _optional_lane(configuration, "scrollTo")
 
         for attempt in range(max_swipes + 1):
             tree = self.describe_tree()
@@ -709,33 +747,12 @@ class ScenarioRunner:
                 return
             if attempt == max_swipes:
                 break
-            start_x, start_y, end_x, end_y, width, height = swipe_points(
-                tree, direction, swipe_container(tree, container)
-            )
+            points = swipe_points(tree, direction, swipe_lane(tree, lane))
             self.log(
                 f"SWIPE {direction} toward {json.dumps(selector, sort_keys=True)} "
                 f"({attempt + 1}/{max_swipes})"
             )
-            self.command([
-                self.baguette,
-                "swipe",
-                "--udid",
-                self.udid,
-                "--start-x",
-                f"{start_x:.3f}",
-                "--start-y",
-                f"{start_y:.3f}",
-                "--end-x",
-                f"{end_x:.3f}",
-                "--end-y",
-                f"{end_y:.3f}",
-                "--width",
-                f"{width:.3f}",
-                "--height",
-                f"{height:.3f}",
-                "--duration",
-                "0.75",
-            ])
+            self.send_swipe(tree, points)
             time.sleep(POLL_INTERVAL)
         raise ScenarioFailure(
             f"Could not scroll {direction} to selector "
@@ -749,34 +766,13 @@ class ScenarioRunner:
         count = configuration.get("count", 1)
         if not isinstance(count, int) or isinstance(count, bool) or count < 1:
             raise ScenarioFailure("swipe.count must be a positive integer.")
-        container = _optional_container(configuration, "swipe")
+        lane = _optional_lane(configuration, "swipe")
 
         for iteration in range(count):
             tree = self.describe_tree()
-            start_x, start_y, end_x, end_y, width, height = swipe_points(
-                tree, direction, swipe_container(tree, container)
-            )
+            points = swipe_points(tree, direction, swipe_lane(tree, lane))
             self.log(f"SWIPE {direction} ({iteration + 1}/{count})")
-            self.command([
-                self.baguette,
-                "swipe",
-                "--udid",
-                self.udid,
-                "--start-x",
-                f"{start_x:.3f}",
-                "--start-y",
-                f"{start_y:.3f}",
-                "--end-x",
-                f"{end_x:.3f}",
-                "--end-y",
-                f"{end_y:.3f}",
-                "--width",
-                f"{width:.3f}",
-                "--height",
-                f"{height:.3f}",
-                "--duration",
-                "0.75",
-            ])
+            self.send_swipe(tree, points)
             time.sleep(POLL_INTERVAL)
 
     def type_text(self, value: str) -> None:
@@ -945,14 +941,14 @@ class ScenarioRunner:
         return 0 if status == "passed" else 1
 
 
-def _optional_container(payload: Mapping[str, Any], action: str) -> Mapping[str, Any] | None:
-    container = payload.get("container")
-    if container is None:
+def _optional_lane(payload: Mapping[str, Any], action: str) -> Mapping[str, Any] | None:
+    lane = payload.get("lane")
+    if lane is None:
         return None
-    if not isinstance(container, Mapping):
-        raise ScenarioFailure(f"{action}.container must be a selector object.")
-    validate_selector(container)
-    return container
+    if not isinstance(lane, Mapping):
+        raise ScenarioFailure(f"{action}.lane must be a selector object.")
+    validate_selector(lane)
+    return lane
 
 
 def _selector_list(value: Any, field: str) -> list[Mapping[str, Any]]:
@@ -1026,10 +1022,16 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
         "forbidden",
         "requiredLogs",
         "forbiddenLogs",
+        "interfaceRotation",
     }
     if unknown:
         raise ScenarioFailure(
             f"Scenario has unsupported top-level field(s): {', '.join(sorted(unknown))}."
+        )
+    rotation = scenario.get("interfaceRotation")
+    if rotation is not None and rotation not in INTERFACE_ROTATIONS:
+        raise ScenarioFailure(
+            f"Scenario interfaceRotation must be one of: {', '.join(INTERFACE_ROTATIONS)}."
         )
     validate_launch_configuration(scenario.get("launch", {}), "launch")
     required = _selector_list(scenario.get("required", []), "required")
@@ -1099,7 +1101,7 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
         elif action == "scrollTo":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} scrollTo payload must be an object.")
-            unknown_scroll = set(payload) - {"selector", "direction", "maxSwipes", "container"}
+            unknown_scroll = set(payload) - {"selector", "direction", "maxSwipes", "lane"}
             if unknown_scroll:
                 raise ScenarioFailure(
                     f"Step {index} scrollTo has unsupported field(s): "
@@ -1114,11 +1116,11 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
             max_swipes = payload.get("maxSwipes", 6)
             if not isinstance(max_swipes, int) or isinstance(max_swipes, bool) or max_swipes < 1:
                 raise ScenarioFailure(f"Step {index} scrollTo.maxSwipes must be a positive integer.")
-            _optional_container(payload, f"Step {index} scrollTo")
+            _optional_lane(payload, f"Step {index} scrollTo")
         elif action == "swipe":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} swipe payload must be an object.")
-            unknown_swipe = set(payload) - {"direction", "count", "container"}
+            unknown_swipe = set(payload) - {"direction", "count", "lane"}
             if unknown_swipe:
                 raise ScenarioFailure(
                     f"Step {index} swipe has unsupported field(s): "
@@ -1129,7 +1131,7 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
             swipe_count = payload.get("count", 1)
             if not isinstance(swipe_count, int) or isinstance(swipe_count, bool) or swipe_count < 1:
                 raise ScenarioFailure(f"Step {index} swipe.count must be a positive integer.")
-            _optional_container(payload, f"Step {index} swipe")
+            _optional_lane(payload, f"Step {index} swipe")
         elif action == "typeText":
             if not isinstance(payload, str) or not payload:
                 raise ScenarioFailure(
