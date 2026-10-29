@@ -181,6 +181,16 @@ priorities live in [workout-app-principles.md](workout-app-principles.md); the
 maintainability and accessibility bar lives in
 [engineering/quality.md](engineering/quality.md).
 
+How much hierarchy a tab shows at once comes from one rule,
+[AppDisplayLayout](vivobody/App/AppDisplayLayout.swift). `AppRoot` measures the
+window above its `TabView` and publishes the result; screens read
+`\.appDisplayLayout` and never test size classes, orientation, idiom, or
+`UIScreen`. History and Library show list and detail through
+[BrowserColumns](vivobody/Components/Containers/BrowserColumns.swift), which owns
+only the visible column while each feature owns its selection as a plain ID.
+Today and Insights split into two columns only in a wide, regular-width window
+on iOS 27.1 or later.
+
 ## Launch path
 
 Only work required for first paint belongs on the synchronous launch path.

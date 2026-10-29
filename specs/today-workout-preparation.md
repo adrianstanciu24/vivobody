@@ -96,14 +96,38 @@ calculation: available development colors are applied initially, and later
 analytics updates cross-fade the existing scene to its new muscle colors over
 1.2 seconds.
 
+## Wide display
+
+On a wide, regular-width window on iOS 27.1 or later, such as the open iPhone
+Duo display held wide, Today shows two panes clear of the fold. The leading
+pane holds the body model, the Training development legend, and the one pinned
+start or resume action. The trailing pane scrolls Up next, Consistency, and
+Last workout on its own; while a workout is active it starts at Consistency
+with no divider above it. Up next and View detail still push over the whole
+tab. Every other window, including the tall open pose and the outer display,
+keeps the single scrolling column.
+
+The figure keeps one size while the user works in the panes. Its height
+latches to the tallest container seen at the current width, so a collapsing
+title or a minimized tab bar does not re-scale the model. In the leading pane
+the height is also capped so the turntable fits the pane width.
+
 ## Evidence
 
 Use the focused [Today scenario](../Scripts/verify_scenarios/today-up-next.json)
 for the scheduled preview and pinned action, and
 [today-actions](../Scripts/verify_scenarios/today-actions.json) for the empty
 placeholders. Inspect dark, light, and large Dynamic Type states. Repeat-option, compatible-history, and active-workout
-behavior also require focused evidence when those paths change.
+behavior also require focused evidence when those paths change. The wide panes
+use [duo-today-split](../Scripts/verify_scenarios/duo-today-split.json) with
+its [light](../Scripts/verify_scenarios/duo-today-split-light.json) and
+[Accessibility Large](../Scripts/verify_scenarios/duo-today-split-accessibility.json)
+variants on the iPhone Duo simulator, and
+[TodayHeroSizingTests](../vivobodyTests/TodayHeroSizingTests.swift) pins the
+figure height. Folding and unfolding with a pushed detail need a device check.
 
 Implementation: [Today](../vivobody/Screens/Today/TodayScreen.swift),
-[selection](../vivobody/Screens/Today/TodayScreenDerived.swift), and
-[presentation](../vivobody/Screens/Today/TodayUpNextPresentation.swift).
+[selection](../vivobody/Screens/Today/TodayScreenDerived.swift),
+[presentation](../vivobody/Screens/Today/TodayUpNextPresentation.swift),
+[wide panes](../vivobody/Screens/Today/TodaySplitContent.swift), and
+[figure height](../vivobody/Screens/Today/TodayHeroSizing.swift).

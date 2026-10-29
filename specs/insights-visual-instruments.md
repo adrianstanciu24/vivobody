@@ -30,6 +30,19 @@ labels.
 - Balance shows a focused set of comparisons first and links to the full
   comparison board when more qualified pairs exist.
 - Empty and loading states continue to replace the instrument panel as a whole.
+- On a wide, regular-width window on iOS 27.1 or later, such as the open
+  iPhone Duo display held wide, the same nine cards share the one vertical
+  scroll in two lanes. They alternate by reading order. The training
+  signature, Rep mix, Training load, Training rhythm, and How muscles are
+  trained take the leading lane. Exercise mix, Movement coverage,
+  Set-series stamina, and Training balance take the trailing lane. Each
+  lane stacks its own cards from the top, so a tall card never moves a later
+  card to the other lane. Both lanes move together with the one scroll.
+- The lanes keep one gutter on each side of an active fold division that
+  crosses the window, so no card spans an active fold. Without an active
+  division they split the width evenly with section spacing between them.
+  Every other window, including the tall open pose and the outer display,
+  keeps the single column with its group separators.
 - Keep the navigation and status-bar background opaque in both appearances so
   scrolled charts and labels cannot show through behind the screen title or time.
 
@@ -178,7 +191,10 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
 ## Accessibility and verification
 
 - Shape, Load, Rhythm, and Balance expose stable, unique section headings in
-  their visual and accessibility order.
+  their accessibility order. In the two lanes, Training balance can sit above
+  Training rhythm on screen; each card is a contained accessibility group with
+  a descending sort priority, so VoiceOver still reads the cards in the
+  single-column order rather than one lane after the other.
 - Every chart or custom drawing exposes the decision, comparison, values,
   units, and timeframe without relying on color.
 - Repeated child nodes must not inherit a section identifier. Harness IDs live
@@ -187,6 +203,14 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
   Differentiate Without Color are required review states.
 - The deterministic populated fixture must render all four modes quickly and
   must not depend on an intermediate History-screen launch.
+- The wide lanes use [duo-insights-columns](../Scripts/verify_scenarios/duo-insights-columns.json)
+  with its [light](../Scripts/verify_scenarios/duo-insights-columns-light.json)
+  and [Accessibility Large](../Scripts/verify_scenarios/duo-insights-columns-accessibility.json)
+  variants on the iPhone Duo simulator. Lane membership, independent lane
+  stacking, and fold clearance are pinned by
+  [InsightsCardLayoutTests](../vivobodyTests/InsightsCardLayoutTests.swift).
+  The simulator reports its fold as inactive, so clearance of an active fold
+  and the VoiceOver reading order need a device check.
 
 ## Training dimensions
 
@@ -280,6 +304,10 @@ All reports are interactive and included in the [upfront app price](paid-app.md)
 
 - The populated tab presents Shape, Load, Rhythm, and Balance as one ordered
   vertical instrument scroll with clear section separators and no mode control.
+  [InsightsCards](../vivobody/Screens/Insights/InsightsCards.swift) owns the
+  one card order that both compositions render, and
+  [InsightsCardLayout](../vivobody/Screens/Insights/InsightsCardLayout.swift)
+  places the wide lanes.
 - Exercise mix, Rep mix, and the full balance roster are visual drill-outs.
 - `--ui-test-insights-showcase` supplies a focused deterministic history for
   normal, locked, light, and accessibility verification.

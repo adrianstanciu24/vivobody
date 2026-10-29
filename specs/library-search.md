@@ -16,6 +16,22 @@ segment as the user types.
 - Search remains a native `searchable` control. SwiftUI owns clearing, focus,
   and cancellation; Library does not supply custom close buttons or reset logic.
 
+## List and detail in regular width
+
+In a regular-width window, such as the open iPhone Duo display, Library keeps
+its segments, search field, filters, and rows in the leading column and shows
+the selected item beside them. The first visible row is selected when Library
+opens. A selection stays while its row is visible. When a filter, a search,
+hiding, or deleting removes that row, the first visible row is selected
+instead, and the detail clears when no row is left. An exercise shows its
+Exercise Detail. A template shows its live Template Detail, which saves each
+edit as it happens and offers Start Workout. Compact width keeps the list,
+the pushed Exercise Detail, and the template draft editor sheet, which saves
+on Save.
+
+One navigation split view serves both widths, so folding or unfolding keeps
+the segment, search text, filter, and selection.
+
 ## Matching
 
 Library and the exercise pickers share one ranker,
@@ -78,3 +94,15 @@ semantics alone do not distinguish a large title from a small title.
 The search checks are
 [dark cancellation](../Scripts/verify_scenarios/library-search-cancellation-dark.json)
 and [light cancellation with large text](../Scripts/verify_scenarios/library-search-cancellation-accessibility-light.json).
+
+The regular-width list and detail use
+[duo-library-split](../Scripts/verify_scenarios/duo-library-split.json) with
+its [light](../Scripts/verify_scenarios/duo-library-split-light.json) and
+[Accessibility Large](../Scripts/verify_scenarios/duo-library-split-accessibility.json)
+variants on the iPhone Duo simulator.
+[LibraryListing](../vivobody/Screens/Library/LibraryListing.swift) owns the
+visible rows and their selection IDs, and
+[LibraryListingTests](../vivobodyTests/LibraryListingTests.swift) pins them.
+Baguette cannot type into the search field on that simulator, and the
+simulator cannot fold, so a wide search and the state kept across a fold are
+checked on a device.
