@@ -1,0 +1,74 @@
+{
+  "name": "duo-history-split-accessibility",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "history",
+    "arguments": [
+      "--seed-history",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "14880 pounds of volume"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifierContains": "historySessionRow",
+          "labelContains": "14640 pounds of volume",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 6,
+        "lane": {
+          "label": "History",
+          "role": "AXHeading"
+        }
+      }
+    },
+    {
+      "tap": {
+        "identifierContains": "historySessionRow",
+        "labelContains": "14640 pounds of volume",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "14640 pounds of volume"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "History",
+      "role": "AXHeading"
+    },
+    {
+      "identifierContains": "historySessionRow",
+      "labelContains": "14640 pounds of volume",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "14880 pounds of volume"
+    },
+    {
+      "identifier": "BackButton"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

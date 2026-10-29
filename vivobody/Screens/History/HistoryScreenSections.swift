@@ -25,7 +25,7 @@ extension HistoryContent {
 
     // MARK: - Content
 
-    var content: some View {
+    func content(navigation: BrowserNavigation<UUID>) -> some View {
         let groups = groupedSessions
         let prSet = sessionsWithPR
 
@@ -46,7 +46,8 @@ extension HistoryContent {
                     DateGroupSection(
                         group: group,
                         unit: unit,
-                        prSessions: prSet
+                        prSessions: prSet,
+                        navigation: navigation
                     )
                     .settleIn(index + 1)
                 }

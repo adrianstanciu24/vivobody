@@ -1,0 +1,101 @@
+{
+  "name": "duo-history-split-light",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "history",
+    "arguments": [
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "No workouts yet"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "History",
+            "role": "AXHeading"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifierContains": "historySessionRow"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "history",
+        "arguments": [
+          "-years",
+          "--static-body",
+          "-settings.weightUnit",
+          "lb",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "labelRegex": "^[0-9]+ pounds of volume$"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Session",
+            "role": "AXHeading"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^[A-Z][a-z]+ 20[0-9]{2}$",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 80,
+        "lane": {
+          "label": "History",
+          "role": "AXHeading"
+        }
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "History",
+      "role": "AXHeading"
+    },
+    {
+      "labelRegex": "^[0-9]+ pounds of volume$"
+    },
+    {
+      "labelRegex": "^[A-Z][a-z]+ 20[0-9]{2}$",
+      "role": "AXHeading"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "BackButton"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

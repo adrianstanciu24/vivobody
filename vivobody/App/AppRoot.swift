@@ -374,10 +374,7 @@ struct AppRoot: View {
                 systemImage: AppTab.history.icon,
                 value: AppTab.history)
             {
-                NavigationStack {
-                    HistoryScreen(appState: appState)
-                        .navigationTitle("History")
-                }
+                HistoryScreen(appState: appState)
             }
 
             Tab(AppTab.library.label,

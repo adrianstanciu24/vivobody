@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 206.
+Scenario files: 209.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -123,6 +123,9 @@ Scenario files: 206.
 | [custom-exercise-assistance](custom-exercise-assistance.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
 | [custom-exercise-type](custom-exercise-type.json) | library | `--ui-test-custom-exercise-editor -settings.appearance dark` |
 | [deep-link-insights](deep-link-insights.json) | today | None declared |
+| [duo-history-split-accessibility](duo-history-split-accessibility.json) | history | `--seed-history --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [duo-history-split-light](duo-history-split-light.json) | history | `--static-body -settings.weightUnit lb -settings.appearance light` |
+| [duo-history-split](duo-history-split.json) | history | `--seed-history --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [exercise-comparison-active-workout-hidden](exercise-comparison-active-workout-hidden.json) | today | `--ui-test-active-partial --static-body` |
 | [exercise-comparison-picker-filters-accessibility](exercise-comparison-picker-filters-accessibility.json) | library | `-UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [exercise-comparison-picker-filters-light](exercise-comparison-picker-filters-light.json) | library | `-settings.appearance light` |

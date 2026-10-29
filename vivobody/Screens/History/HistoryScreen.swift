@@ -24,9 +24,11 @@
 //  PR sessions carry a small outlined "PR" tag beside the title —
 //  the lone accent in the list, so it never dilutes.
 //
-//  Tapping any row pushes a detail view that reuses
+//  Tapping any row opens a detail view that reuses
 //  WorkoutSummaryCard — the same "receipt" the user saw at the end
-//  of the workout, now as a permanent record.
+//  of the workout, now as a permanent record. In compact width the
+//  receipt pushes over the list; in regular width it shows beside the
+//  list, with the newest session selected until the user picks another.
 //
 
 import SwiftData
@@ -53,6 +55,7 @@ struct HistoryContent: View {
     @State private var olderSessions: [WorkoutSession] = []
     @State private var reachedArchiveEnd = false
     @State private var isLoadingPage = false
+    @State private var selectedSessionID: UUID?
 
     @AppStorage(SettingsKey.weightUnit)
     var unitRaw: String = SettingsDefaults.weightUnit
@@ -94,19 +97,64 @@ struct HistoryContent: View {
     }
 
     var body: some View {
-        Group {
-            if sessions.isEmpty {
-                emptyState
-            } else {
-                content
+        BrowserColumns(selection: $selectedSessionID) { navigation in
+            Group {
+                if sessions.isEmpty {
+                    emptyState
+                } else {
+                    content(navigation: navigation)
+                }
             }
+            .screenBackground()
+            .navigationTitle("History")
+        } detail: { id, _ in
+            sessionDetail(for: id)
         }
-        .screenBackground()
-        .onChange(of: newestSessions.map(\.id)) { oldIDs, newIDs in
-            guard oldIDs != newIDs else { return }
-            olderSessions.removeAll(keepingCapacity: true)
-            reachedArchiveEnd = false
+        .onChange(of: newestSessions.map(\.id), initial: true) { oldIDs, newIDs in
+            if oldIDs != newIDs {
+                olderSessions.removeAll(keepingCapacity: true)
+                reachedArchiveEnd = false
+            }
+            reconcileSelection()
         }
+    }
+
+    @ViewBuilder
+    private func sessionDetail(for id: UUID?) -> some View {
+        if let id, let session = sessions.first(where: { $0.id == id }) ?? (try? archivedSession(id)) {
+            SessionDetailScreen(session: session)
+        } else {
+            Color.clear.screenBackground()
+        }
+    }
+
+    /// Keeps a valid selection, else selects the newest session. A
+    /// selection that only left the loaded pages, because a newly archived
+    /// workout reset the paging, is still archived and stays selected. A
+    /// failed lookup also keeps it: only a confirmed absence is a removal.
+    private func reconcileSelection() {
+        let loaded = sessions
+        selectedSessionID = BrowserSelection.retainOrFirst(
+            selectedSessionID,
+            isValid: { id in loaded.contains { $0.id == id } || mayStillBeArchived(id) },
+            first: loaded.first?.id
+        )
+    }
+
+    private func mayStillBeArchived(_ id: UUID) -> Bool {
+        do {
+            return try archivedSession(id) != nil
+        } catch {
+            return true
+        }
+    }
+
+    private func archivedSession(_ id: UUID) throws -> WorkoutSession? {
+        var descriptor = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.id == id && $0.completedAt != nil }
+        )
+        descriptor.fetchLimit = 1
+        return try modelContext.fetch(descriptor).first
     }
 
     /// Newest live page plus appended older pages, de-duplicated in one
@@ -156,9 +204,6 @@ struct HistoryContent: View {
 }
 
 #Preview {
-    NavigationStack {
-        HistoryScreen(appState: AppState())
-            .navigationTitle("History")
-    }
-    .preferredColorScheme(.dark)
+    HistoryScreen(appState: AppState())
+        .preferredColorScheme(.dark)
 }

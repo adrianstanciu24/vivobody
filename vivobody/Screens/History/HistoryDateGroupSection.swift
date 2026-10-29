@@ -3,7 +3,10 @@
 //  vivobody
 //
 //  One date bucket of the History log and the session rows inside it.
-//  Extracted from HistoryComponents.swift.
+//  A row opens its session through the History browser: a push in
+//  compact width, a selection beside the list in regular width, where
+//  the row drops its push chevron, stacks its metric under its identity
+//  to fit the narrower column, and shows the selection mark instead.
 //
 
 import SwiftUI
@@ -19,6 +22,7 @@ struct DateGroupSection: View {
     let group: HistoryDateGroup
     let unit: WeightUnit
     let prSessions: Set<UUID>
+    let navigation: BrowserNavigation<UUID>
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
@@ -27,17 +31,19 @@ struct DateGroupSection: View {
             VStack(spacing: 0) {
                 ForEach(Array(group.sessions.enumerated()), id: \.element.id) { index, session in
                     if index > 0 { rowDivider }
-                    NavigationLink {
-                        SessionDetailScreen(session: session)
+                    Button {
+                        navigation.open(session.id)
                     } label: {
                         SessionRow(
                             session: session,
                             unit: unit,
                             hasPR: prSessions.contains(session.id),
-                            prominent: group.style == .rich
+                            prominent: group.style == .rich,
+                            besideDetail: navigation.showsDetailBeside
                         )
                     }
                     .buttonStyle(.plain)
+                    .browserRowSelection(navigation.isHighlighted(session.id))
                     .accessibilityHint("Opens workout details")
                 }
             }
@@ -64,11 +70,15 @@ struct DateGroupSection: View {
 /// anchors its honest receipt metric in monospace. `prominent` (today's
 /// sessions) enlarges the numeral and promotes the title. A PR adds
 /// the lone accent: a small outlined tag beside the title.
+/// `besideDetail` rows select a receipt shown next to the list: the
+/// column is too narrow for the numeral to share a line with the
+/// identity, so the metric moves under it and the push chevron goes.
 struct SessionRow: View {
     let session: WorkoutSession
     let unit: WeightUnit
     let hasPR: Bool
     let prominent: Bool
+    let besideDetail: Bool
 
     var muscleTags: [MuscleGroup] {
         session.distinctMuscleGroupsInOrder
@@ -76,51 +86,20 @@ struct SessionRow: View {
 
     var body: some View {
         let receiptMetric = session.primaryReceiptMetric(unit: unit)
-        let receiptUnit: String? = receiptMetric.kind == .reps
-            ? "reps"
-            : receiptMetric.unit
 
         HStack(alignment: .center, spacing: Space.lg) {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                HStack(spacing: Space.sm) {
-                    Text(titleLine)
-                        .font(prominent ? Typography.title : Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                    if hasPR { prBadge }
+            if besideDetail {
+                VStack(alignment: .leading, spacing: Space.sm) {
+                    identity
+                    metric(receiptMetric)
                 }
-                Text(metaLine)
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                Spacer(minLength: 0)
+            } else {
+                identity
+                Spacer(minLength: Space.sm)
+                metric(receiptMetric)
+                chevron
             }
-
-            Spacer(minLength: Space.sm)
-
-            // The receipt metric is supporting context, not the headline — kept a calm
-            // grayscale numeral so the workout's identity (name + muscle
-            // fingerprint) leads. The accent lives only in the rare PR
-            // badge, never on every line.
-            HStack(alignment: .lastTextBaseline, spacing: 4) {
-                Text(receiptMetric.value + (receiptMetric.qualifier ?? ""))
-                    .font(prominent ? Typography.statValue : Typography.metricInline)
-                    .foregroundStyle(Ink.secondary)
-                    .monospacedDigit()
-                if let receiptUnit {
-                    Text(receiptUnit)
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(Ink.tertiary)
-                }
-            }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(receiptMetric.accessibilityLabel)
-
-            Image(systemName: "chevron.right")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.quaternary)
-                .accessibilityHidden(true)
         }
         .frame(maxWidth: .infinity, minHeight: prominent ? 72 : Space.rowMin, alignment: .leading)
         .padding(.horizontal, Space.lg)
@@ -128,6 +107,51 @@ struct SessionRow: View {
         .contentShape(Rectangle())
         .accessibilityIdentifier("historySessionRow")
         .accessibilityElement(children: .combine)
+    }
+
+    var identity: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            HStack(spacing: Space.sm) {
+                Text(titleLine)
+                    .font(prominent ? Typography.title : Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                if hasPR { prBadge }
+            }
+            Text(metaLine)
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+    }
+
+    /// The receipt metric is supporting context, not the headline — kept a calm
+    /// grayscale numeral so the workout's identity (name + muscle
+    /// fingerprint) leads. The accent lives only in the rare PR
+    /// badge, never on every line.
+    func metric(_ receiptMetric: WorkoutReceiptMetric) -> some View {
+        HStack(alignment: .lastTextBaseline, spacing: 4) {
+            Text(receiptMetric.value + (receiptMetric.qualifier ?? ""))
+                .font(prominent ? Typography.statValue : Typography.metricInline)
+                .foregroundStyle(Ink.secondary)
+                .monospacedDigit()
+            if let receiptUnit = receiptMetric.kind == .reps ? "reps" : receiptMetric.unit {
+                Text(receiptUnit)
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.tertiary)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(receiptMetric.accessibilityLabel)
+    }
+
+    var chevron: some View {
+        Image(systemName: "chevron.right")
+            .font(Typography.caption)
+            .foregroundStyle(Ink.quaternary)
+            .accessibilityHidden(true)
     }
 
     /// The lone accent in the list: the shared outlined "PR" tag next
