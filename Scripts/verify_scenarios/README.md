@@ -17,7 +17,7 @@ made from accessibility semantics and any declared diagnostic-log contracts.
 Use this map to pick a starting flow for UI or interaction changes, then read its
 JSON before running it. For non-UI changes, agents use the smallest affected build
 under [the verification policy](../../engineering/verification.md#default-agent-validation).
-The logic suites below are user-run unless explicitly requested. These are entry
+Agents run the covering logic suites below before reporting done. These are entry
 points, not a request to run every linked scenario or suite. The
 [complete generated directory](index.md) lists every scenario and its initial
 launch arguments, including fixture, appearance, and text-size flags.

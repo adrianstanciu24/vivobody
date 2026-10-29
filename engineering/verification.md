@@ -2,8 +2,9 @@
 
 This is the canonical guide for proving Vivobody changes. Agents use the smallest
 affected build for non-UI changes and a focused Baguette check for UI or interaction
-changes. Broader validation belongs to the user. Simulator processes stay headless:
-never open the Simulator app and never run XCTest UI tests as part of the agent workflow.
+changes while iterating, then the covering test suites and `Scripts/check.sh` before
+reporting done. Simulator processes stay headless: never open the Simulator app and
+never run XCTest UI tests as part of the agent workflow.
 
 ## Default agent validation
 
@@ -48,11 +49,10 @@ both compilation and the affected interaction.
 
 Verify once after a coherent change, not after every tiny edit. Repeat only after
 further relevant edits, a failure, or an unresolved concern. Avoid clean builds,
-cache resets, extra devices, and broad scenario sweeps. Do not add `xcodebuild test`,
-`swift test`, or `Scripts/check.sh` to routine agent verification. An existing quick,
-non-mutating diagnostic can help establish behavior when relevant; it does not
-authorize a wider test suite. If the chosen check is unavailable or cannot observe
-the changed contract, state the limitation and leave deeper evidence to the user.
+cache resets, extra devices, and broad scenario sweeps. Builds and Baguette are the
+fast loop; before reporting done, run the
+[test suites and the final gate](#test-suites-and-the-final-gate). If the chosen
+check is unavailable or cannot observe the changed contract, state the limitation.
 
 ## Documentation and process tooling
 
@@ -225,7 +225,7 @@ review screenshots for layout, hierarchy, clipping, and visual regressions.
 ## Semantic scenarios
 
 Start with the [feature/scenario map](../Scripts/verify_scenarios/README.md#choose-evidence-for-the-change)
-to select the smallest relevant flow and identify user-run logic suites. The generated
+to select the smallest relevant flow and identify the focused logic suites. The generated
 directory lists every scenario and its initial launch options. A normal-state
 pass is not evidence for a failure, locked, or accessibility state.
 
@@ -250,11 +250,13 @@ The scenario schema, selector rules, and current scenario catalog are in
 Add stable identifiers only to controls needed for important harness flows;
 decorative views do not need identifiers.
 
-## Broader user-run validation
+## Test suites and the final gate
 
-The user may run targeted Swift Testing suites or the broad validator when
-deeper logic, persistence, or serialization evidence is needed. Agents do not
-run these commands unless the user explicitly requests them.
+Before reporting an implementation as done, agents run the targeted Swift
+Testing suites that cover the changed code, `swift test --package-path VivoKit`
+when VivoKit changes, and `Scripts/check.sh` as the final gate for any code,
+catalog, or tooling change. Fix failures before reporting. Prose-only changes
+use the lighter [documentation checks](#documentation-and-process-tooling).
 
 ```bash
 # Targeted suite, preferred
@@ -282,15 +284,15 @@ graphs. Follow `vivobodyTests/TrainingLoadTests.swift` for the prevailing style.
 |---|---|
 | Prose-only documentation or instructions | Documentation checker, diff hygiene, and manual guidance review; catalog Python suite when catalog guidance/proposals change; no build |
 | Documentation checker, inventory generator, or their hook routing | Prose checks plus `test_check_documentation.py`; no app build |
-| Scenario JSON or verification harness | Affected headless scenario with inspected evidence; focused harness tests are user-run |
-| Pure analytics or domain logic | Smallest affected incremental build; targeted logic suites are user-run |
-| Persistence shape or migration | Affected app build; Baguette if UI/interaction changes; store fixtures and migration suites are user-run |
+| Scenario JSON or verification harness | Affected headless scenario with inspected evidence; focused harness tests |
+| Pure analytics or domain logic | Smallest affected incremental build; targeted logic suites |
+| Persistence shape or migration | Affected app build; Baguette if UI/interaction changes; store fixtures and migration suites |
 | Session lifecycle | Affected build; relevant semantic scenario when user interaction changes |
 | UI layout or interaction | Inspected Baguette screenshot and accessibility tree |
-| VivoKit snapshot payload or widget decoding | Smallest affected build plus consumers for shared API changes; Baguette for changed handoffs/UI; package tests are user-run |
+| VivoKit snapshot payload or widget decoding | Smallest affected build plus consumers for shared API changes; Baguette for changed handoffs/UI; `swift test --package-path VivoKit` |
 | HealthKit, StoreKit, provisioning, or hardware behavior | Affected build; Baguette for changed UI/interaction; list remaining device/App Store checks explicitly |
 
-Runtime contracts not exercised by the selected check remain user-owned verification items;
+Runtime contracts that no check exercises, such as device-only behavior, remain user-owned verification items;
 do not substitute an XCTest UI test or unrelated simulator test merely to
 produce a green result.
 
@@ -309,12 +311,12 @@ Generate the unscheduled maintenance report with:
 ```
 
 Documentation paths, architecture boundaries, source-size growth, and function
-complexity are also covered by the user-run `Scripts/check.sh`. Stale dates,
+complexity are also covered by `Scripts/check.sh`. Stale dates,
 orphaned screens, and repeated UI-surface expressions are deliberately
 report-only heuristics.
 Review several manual reports and tune false positives before scheduling it.
 
 The SchemaV1 store lives in `vivobodyTests/Fixtures/`. Contract tests reopen a
 temporary copy. Retain that fixture permanently and add newer fixtures rather
-than rewriting shipped history. The checksum gate in the user-run
+than rewriting shipped history. The checksum gate in
 `Scripts/check.sh` catches accidental baseline changes.

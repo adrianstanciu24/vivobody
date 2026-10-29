@@ -76,11 +76,12 @@ pre-commit install
 
 ## Validating a change
 
-`Scripts/check.sh` is the user-run broad non-UI validator. It runs the guardrail
+`Scripts/check.sh` is the broad non-UI validator and the final agent gate. It runs the guardrail
 unit tests, the VivoKit snapshot contracts, the persistence baseline checksum,
 architecture, naming, size, complexity, formatting, documentation, and catalog
-checks, then builds the full app and widget graph. Agents use only the smallest
-relevant Baguette scenario through `Scripts/verify.sh` after implementation.
+checks, then builds the full app and widget graph. Agents use the smallest
+relevant Baguette scenario through `Scripts/verify.sh` while iterating, then the
+covering test suites and `Scripts/check.sh` before reporting done.
 
 Prose-only changes use `/usr/bin/python3 Scripts/check_documentation.py` and
 `git diff --check`. Documentation-tooling changes also run their focused Python
@@ -97,7 +98,7 @@ swift test --package-path VivoKit # shared widget payload contracts
 
 Simulator processes stay headless: do not open the Simulator app or run the
 XCTest UI-test target. [engineering/verification.md](engineering/verification.md)
-separates the focused agent workflow from broader user-run validation and
+describes the fast agent loop, the test suites and final gate, and
 documents the Baguette scenario format.
 
 ## Repository layout

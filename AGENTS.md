@@ -10,9 +10,9 @@ Inspect `git status --short` before editing. Preserve unrelated changes. Read on
 |---|---|---|
 | Understand a feature or change its behavior | [Spec index](specs/index.md), then the active feature contract | Non-UI: smallest affected build; UI/interaction: focused Baguette check |
 | UI, navigation, appearance, or copy | [Product principles](workout-app-principles.md), [quality](engineering/quality.md), active feature spec | [Feature/scenario map](Scripts/verify_scenarios/README.md#choose-evidence-for-the-change); inspect light, dark, and relevant accessibility states |
-| Add or review a bundled exercise or family | [Repository catalog skill](.agents/skills/vivobody-add-exercise/SKILL.md), [catalog foundation](specs/catalog/README.md) | Relevant Baguette Library/detail check; broader catalog testing is user-run |
+| Add or review a bundled exercise or family | [Repository catalog skill](.agents/skills/vivobody-add-exercise/SKILL.md), [catalog foundation](specs/catalog/README.md) | Relevant Baguette Library/detail check; catalog Python suite, `CatalogBiomechanicsTests`, and `Scripts/check.sh` |
 | Custom exercises, templates, or exercise selection | [Exercise contract](specs/exercise-data-contract.md), applicable spec in the index | Relevant Baguette Library check |
-| Persistence, session lifetime, or integrations | [Architecture](ARCHITECTURE.md), applicable feature spec | Smallest affected build; Baguette for changed UI/interaction; boundary testing is user-run |
+| Persistence, session lifetime, or integrations | [Architecture](ARCHITECTURE.md), applicable feature spec | Smallest affected build; Baguette for changed UI/interaction; affected boundary suites and `Scripts/check.sh` |
 | Docs, instructions, or process tooling | [Documentation maintenance](engineering/quality.md#documentation-maintenance) | [Documentation and tooling checks](engineering/verification.md#documentation-and-process-tooling) |
 | Review a change | Request, relevant contract/plan, [review checklist](engineering/code-review.md) | Assess the existing evidence; report gaps within the review's scope |
 
@@ -48,11 +48,13 @@ Use four-space indentation, PascalCase types, and lowerCamelCase members without
 
 Choose fast verification by the effect of the change, following [the verification guide](engineering/verification.md#default-agent-validation). For non-UI changes, incrementally build the smallest affected target or module; use the app/project build when changes cross targets or cannot be isolated. For UI or interaction changes, run the smallest relevant Baguette scenario through `Scripts/verify.sh` and inspect its screenshot and accessibility tree. Its incremental build also covers compilation; do not build separately first.
 
-Verify after a coherent change, not every tiny edit. Repeat only after relevant edits, failures, or unresolved concerns. Reuse build caches and the existing headless runtime; avoid clean builds, resets, extra devices, and broad scenario sweeps unless necessary. Never open Simulator.app or run `xcodebuild test`, XCTest UI tests, `swift test`, or `Scripts/check.sh` as routine agent verification. The user runs deeper test suites and broader validation unless explicitly requested.
+Verify after a coherent change, not every tiny edit. Repeat only after relevant edits, failures, or unresolved concerns. Reuse build caches and the existing headless runtime; avoid clean builds, resets, extra devices, and broad scenario sweeps unless necessary. Never open Simulator.app or run XCTest UI tests; Baguette covers UI evidence.
 
-This agent verification policy takes precedence over conflicting test/build requirements in other repository guides, skills, and historical plans, unless the user explicitly requests additional checks. Documentation-only edits use the lightweight documentation checker and `git diff --check`; they do not need Baguette. Test code, when requested, follows Swift Testing conventions with deterministic clocks.
+Before you report an implementation as done, run the test suites that cover the change: the targeted Swift Testing suites for the affected area, `swift test --package-path VivoKit` when VivoKit changes, and `Scripts/check.sh` as the final gate for any code, catalog, or tooling change. Fix failures before you report. Commands are in [the verification guide](engineering/verification.md#test-suites-and-the-final-gate).
 
-Report the build or Baguette check performed and any remaining user testing briefly. A successful build proves compilation, not runtime behavior. If the selected check is unavailable or cannot verify the changed behavior, state that limitation; do not substitute an unrelated test suite.
+This agent verification policy takes precedence over conflicting test/build requirements in other repository guides, skills, and historical plans. Documentation-only edits use the lightweight documentation checker and `git diff --check`; they do not need Baguette. Test code, when requested, follows Swift Testing conventions with deterministic clocks.
+
+Report the builds, Baguette checks, and test suites performed, with their results, and any remaining device-only checks. A successful build proves compilation, not runtime behavior. If the selected check is unavailable or cannot verify the changed behavior, state that limitation; a green unrelated suite is not evidence.
 
 ## Architecture & Product Boundaries
 

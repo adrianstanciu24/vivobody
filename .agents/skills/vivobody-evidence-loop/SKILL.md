@@ -48,7 +48,8 @@ Routine reads and individual shell commands do not each need narration.
 For a bug, reproduce the failure with an existing focused check when practical.
 Do not require a new test or a failing-test-first ritual for every change.
 Make one coherent change, then use the smallest relevant verification from
-[the verification guide](../../../engineering/verification.md#default-agent-validation).
+[the verification guide](../../../engineering/verification.md#default-agent-validation)
+while iterating.
 Non-UI work normally needs an incremental affected build; UI or interaction work
 needs a focused Baguette check with inspected evidence. Baguette already builds.
 Do not run it after every tiny edit or add a separate build before it.
@@ -70,5 +71,5 @@ authorization remains valid; do not ask for it again.
 Review the diff against the requested outcome and contract. Record the final
 evidence and remaining gaps in the task note. Report the result, exact check and
 its outcome, unverified behavior, and note path briefly. Do not claim behavior
-was tested when only a build ran. Leave deeper validation to the user unless
-requested. Commit or launch a separate review agent only when explicitly requested.
+was tested when only a build ran. Before reporting done, run the
+[test suites and the final gate](../../../engineering/verification.md#test-suites-and-the-final-gate). Commit or launch a separate review agent only when explicitly requested.
