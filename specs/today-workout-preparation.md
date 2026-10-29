@@ -3,11 +3,13 @@
 Status: Implemented product design.
 
 Today helps the user start or resume a workout. The body visualization leads,
-followed by Up next when available, Consistency, and Last workout. One pinned
-action reads **Start Fresh Workout** and opens the exercise picker directly when
-there is no workout history or saved template. Once another start path exists,
-it reads **Start Workout** and opens the chooser. An active workout replaces it
-with Resume Workout or Finish Workout and hides Up next.
+followed by Up next, Consistency, and Last workout. Every section renders on a
+fresh install; sections without data show quiet placeholders in the same card
+layout. One pinned action reads **Start Fresh Workout** and opens the exercise
+picker directly when there is no workout history or saved template. Once
+another start path exists, it reads **Start Workout** and opens the chooser. An
+active workout replaces it with Resume Workout or Finish Workout and hides Up
+next, including its placeholder.
 
 ## Up next
 
@@ -16,8 +18,10 @@ with Resume Workout or Finish Workout and hides Up next.
   duration estimate.
 - When no templates are scheduled, show the most recently used nonempty saved
   template as a **Repeat option**. Never-used templates do not imply a previous
-  workout. If no eligible template exists, omit the card; the pinned start
-  action remains available for fresh workouts and template selection.
+  workout. If no eligible template exists, show a static placeholder card
+  headed **No plan** that points to scheduling a template in Library. The
+  placeholder is not a start action; the pinned start action remains available
+  for fresh workouts and template selection.
 - Tapping the workout heading opens the template. Whenever multiple start paths
   exist, the pinned chooser remains the sole start action and provides access
   to all workout options.
@@ -41,6 +45,16 @@ with Resume Workout or Finish Workout and hides Up next.
   templates say **First time with this workout**, legend only.
 - Last time is a logged reference, not a prescribed target or a promised PR.
   The preview does not show load advice or PR-proximity coaching.
+
+## Consistency and Last workout
+
+- Both sections always render. Before the first archived workout, Consistency
+  shows the two-week strip with every day untrained and **0 sessions**, and
+  View detail still opens the Consistency screen.
+- Last workout then reads **None yet** and keeps its Time, Volume, and Sets
+  strip with dimmed dashes in place of values, followed by one caption that
+  says a finished workout fills them in. VoiceOver reads the placeholder card
+  as one element.
 
 Training Load and its detailed range comparison belong in Insights and are not
 rendered on Today. The underlying analytics remain available to their existing
@@ -85,8 +99,9 @@ analytics updates cross-fade the existing scene to its new muscle colors over
 ## Evidence
 
 Use the focused [Today scenario](../Scripts/verify_scenarios/today-up-next.json)
-for the scheduled preview and pinned action. Inspect dark, light, and large
-Dynamic Type states. Repeat-option, compatible-history, and active-workout
+for the scheduled preview and pinned action, and
+[today-actions](../Scripts/verify_scenarios/today-actions.json) for the empty
+placeholders. Inspect dark, light, and large Dynamic Type states. Repeat-option, compatible-history, and active-workout
 behavior also require focused evidence when those paths change.
 
 Implementation: [Today](../vivobody/Screens/Today/TodayScreen.swift),

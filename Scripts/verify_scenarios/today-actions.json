@@ -38,8 +38,22 @@
       }
     },
     {
+      "scrollTo": {
+        "selector": {
+          "identifier": "todayUpNextPlaceholder"
+        },
+        "direction": "up",
+        "maxSwipes": 4
+      }
+    },
+    {
       "assert": {
         "required": [
+          {
+            "identifier": "todayUpNextPlaceholder",
+            "label": "Up next. No workout planned. Schedule a template in Library to see it here.",
+            "role": "AXGenericElement"
+          },
           {
             "identifier": "todayStartWorkoutButton",
             "label": "Start Fresh Workout",
@@ -48,15 +62,42 @@
         ],
         "forbidden": [
           {
-            "identifier": "todayConsistencyOverview"
-          },
+            "identifier": "todayUpNextPreview"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "todayLastWorkoutPlaceholder"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "assert": {
+        "required": [
           {
-            "label": "Consistency",
-            "role": "AXHeading"
+            "identifier": "todayConsistencyOverview",
+            "label": "Training consistency",
+            "role": "AXGenericElement",
+            "value": "0 sessions in the last 14 days"
           },
           {
             "label": "Last workout",
             "role": "AXHeading"
+          },
+          {
+            "identifier": "todayLastWorkoutPlaceholder",
+            "label": "Last workout. No workouts yet. Finish a workout to see its time, volume, and sets.",
+            "role": "AXGenericElement"
+          },
+          {
+            "identifier": "todayStartWorkoutButton",
+            "label": "Start Fresh Workout",
+            "role": "AXButton"
           }
         ]
       }
@@ -92,6 +133,37 @@
       }
     },
     {
+      "scrollTo": {
+        "selector": {
+          "label": "Last workout",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "todayConsistencyOverview",
+            "label": "Training consistency",
+            "role": "AXGenericElement",
+            "valueRegex": "^[1-9]\\d* sessions? in the last 14 days\\. Training days: .+"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "todayLastWorkoutPlaceholder"
+          },
+          {
+            "identifier": "todayLastWorkoutPlaceholder",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
       "tap": {
         "identifier": "todayStartWorkoutButton",
         "label": "Start Workout",
@@ -122,6 +194,15 @@
       }
     },
     {
+      "scrollTo": {
+        "selector": {
+          "identifier": "todayUpNextPreview"
+        },
+        "direction": "up",
+        "maxSwipes": 4
+      }
+    },
+    {
       "assert": {
         "required": [
           {
@@ -139,6 +220,13 @@
           },
           {
             "identifier": "scheduledWorkoutOptionsButton"
+          },
+          {
+            "identifier": "todayUpNextPlaceholder"
+          },
+          {
+            "identifier": "todayUpNextPlaceholder",
+            "visible": false
           }
         ]
       }
@@ -211,6 +299,20 @@
           },
           {
             "identifier": "scheduledWorkoutOptionsButton"
+          },
+          {
+            "identifier": "todayUpNextPlaceholder"
+          },
+          {
+            "identifier": "todayUpNextPlaceholder",
+            "visible": false
+          },
+          {
+            "identifier": "todayUpNextPreview"
+          },
+          {
+            "identifier": "todayUpNextPreview",
+            "visible": false
           }
         ]
       }

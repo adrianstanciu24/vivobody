@@ -5,7 +5,8 @@
 //  Today's navigable scheduled or repeat-workout preview in the Insights
 //  instrument language: a readout heading, hairline-separated exercise rows
 //  with monospaced set structure, and a stat strip for the last matching
-//  workout. The root supplies the navigation destination.
+//  workout. The root supplies the navigation destination. A static
+//  placeholder card fills the slot when no saved template qualifies.
 //
 
 import SwiftUI
@@ -128,6 +129,34 @@ struct TodayUpNextSection<Destination: View>: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(presentation.lastTime.accessibilityLabel)
         .accessibilityIdentifier("todayUpNextLastTime")
+    }
+}
+
+/// Holds the Up next slot open when no saved template qualifies for a preview.
+/// It has no action; the pinned bar stays the only way to start.
+struct TodayUpNextPlaceholder: View {
+    private static let caption = "Schedule a template in Library to see it here."
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.lg) {
+            SectionHeader(title: "Up next", trailing: "No plan")
+            VStack(alignment: .leading, spacing: Space.sm) {
+                Text("No workout planned")
+                    .font(Typography.title)
+                    .foregroundStyle(Ink.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(Self.caption)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(Space.xl)
+            .contentCard()
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Up next. No workout planned. \(Self.caption)")
+            .accessibilityIdentifier("todayUpNextPlaceholder")
+        }
     }
 }
 

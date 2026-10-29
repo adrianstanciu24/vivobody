@@ -106,19 +106,14 @@ struct TodayScreen: View {
             sessions: recentSessions,
             load: appState.analytics.load
         )
-        let outlook = appState.analytics.strength
-        let upNextSelection = makeUpNextSelection(
-            upNext,
-            outlook: outlook,
-            defaultRestSeconds: defaultRestSeconds
-        )
         ScrollView {
             // The body leads — your trained figure is the hero
             // and the readout's subject. Up Next then names the
             // scheduled plan with its last logged reference;
             // the pinned primary action remains the biggest,
-            // first-thing-you-reach target. Completed-workout
-            // history follows only when there is history to show.
+            // first-thing-you-reach target. Consistency and Last
+            // workout always follow, as placeholders before the
+            // first archived workout.
             //
             // The development model is replayed once per data
             // change (memoised in SessionAnalytics on AppState)
@@ -155,34 +150,40 @@ struct TodayScreen: View {
                         .opacity(shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.30)
                 }
 
-                if let upNextSelection {
-                    TodayUpNextSection(
-                        presentation: upNextSelection.presentation,
-                        usesAccessibilityLayout: usesAccessibilityLayout
+                // An active workout owns the next step, so Up next
+                // steps aside entirely rather than showing a placeholder.
+                if barSession == nil {
+                    if let upNextSelection = makeUpNextSelection(
+                        upNext,
+                        outlook: appState.analytics.strength,
+                        defaultRestSeconds: defaultRestSeconds
                     ) {
-                        TemplateDetailScreen(
-                            template: upNextSelection.template,
-                            appState: appState
-                        )
+                        TodayUpNextSection(
+                            presentation: upNextSelection.presentation,
+                            usesAccessibilityLayout: usesAccessibilityLayout
+                        ) {
+                            TemplateDetailScreen(
+                                template: upNextSelection.template,
+                                appState: appState
+                            )
+                        }
+                    } else {
+                        TodayUpNextPlaceholder()
                     }
                 }
-                if let latestSession {
-                    SectionDivider()
-                    TodayConsistencySection(
-                        workoutDates: workoutDates,
-                        prDates: prDates,
-                        streakText: streakText(appState.analytics.overview.streak)
-                    ) {
-                        ConsistencyScreen()
-                    }
-                    SectionDivider()
-                    TodayLastWorkoutSection(
-                        metadata: lastWorkoutMeta(for: latestSession),
-                        durationMinutes: Int(latestSession.duration / 60),
-                        receiptStat: lastWorkoutReceiptStat(for: latestSession),
-                        totalSets: latestSession.totalSets
-                    )
+                SectionDivider()
+                TodayConsistencySection(
+                    workoutDates: workoutDates,
+                    prDates: prDates,
+                    streakText: streakText(appState.analytics.overview.streak)
+                ) {
+                    ConsistencyScreen()
                 }
+                SectionDivider()
+                TodayLastWorkoutSection(
+                    summary: latestSession.map { lastWorkoutSummary(for: $0) },
+                    unit: unit
+                )
             }
             .padding(.top, Space.xs)
             .padding(.bottom, Space.xxl)

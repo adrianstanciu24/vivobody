@@ -53,13 +53,13 @@ extension TodayScreen {
     }
 
     /// Pair the live template needed for navigation with an immutable preview.
-    /// The leaf view receives no SwiftData or analytics owner.
+    /// The leaf view receives no SwiftData or analytics owner. Nil when no
+    /// saved template qualifies for a preview.
     func makeUpNextSelection(
         _ upNext: UpNext,
         outlook: StrengthOutlookBoard,
         defaultRestSeconds: Int
     ) -> (template: WorkoutTemplate, presentation: TodayUpNextPresentation)? {
-        guard barSession == nil else { return nil }
         let template: WorkoutTemplate
         let daysUntil: Int
         let more: Int
@@ -146,6 +146,15 @@ extension TodayScreen {
     func streakText(_ streak: WorkoutStreak) -> String? {
         guard streak.current > 0 else { return nil }
         return "\(streak.current) \(streak.current == 1 ? "week" : "weeks") in a row"
+    }
+
+    func lastWorkoutSummary(for session: WorkoutSession) -> TodayLastWorkoutSection.Summary {
+        TodayLastWorkoutSection.Summary(
+            metadata: lastWorkoutMeta(for: session),
+            durationMinutes: Int(session.duration / 60),
+            receiptStat: lastWorkoutReceiptStat(for: session),
+            totalSets: session.totalSets
+        )
     }
 
     func lastWorkoutMeta(for session: WorkoutSession) -> String {
