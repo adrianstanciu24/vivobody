@@ -268,6 +268,10 @@ struct StagedBodyModel: View {
 
     @State private var rotation: Double = 0
 
+    /// The turntable's width as a share of the render height. A host
+    /// narrower than this share of the height clips the turntable.
+    static let stageWidthRatio: CGFloat = 0.48
+
     /// Where the feet land within the render height, from the camera
     /// maths: a 36° vertical field at 3.0m spans ±0.975 about eye
     /// height 0.9, putting the floor (y = 0) at 1.875 / 1.95 ≈ 0.96
@@ -275,7 +279,7 @@ struct StagedBodyModel: View {
     private let feetLine: CGFloat = 0.962
 
     var body: some View {
-        let stageWidth = renderHeight * 0.48
+        let stageWidth = renderHeight * Self.stageWidthRatio
         let stageHeight = stageWidth * 0.29 + 16
 
         RotatableBodyModel(

@@ -1,0 +1,293 @@
+{
+  "name": "duo-today-split",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-scheduled-template",
+      "--seed-history",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Current training development body model",
+            "role": "AXButton"
+          },
+          {
+            "labelContains": "Current training development legend"
+          },
+          {
+            "label": "Up next",
+            "role": "AXHeading"
+          },
+          {
+            "identifier": "todayUpNextLastTime",
+            "labelRegex": "^Last time, Today, 12 sets, 96 reps, \\d+ pounds of volume$"
+          },
+          {
+            "label": "Consistency",
+            "role": "AXHeading"
+          },
+          {
+            "identifier": "todayConsistencyOverview"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "activeWorkoutResumeBar"
+          },
+          {
+            "identifier": "BackButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayUpNextPreview"
+      }
+    },
+    {
+      "wait": {
+        "role": "AXButton",
+        "label": "Barbell Bench Press, Chest"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXStaticText",
+            "label": "Scheduled Test"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "todayStartWorkoutButton"
+          },
+          {
+            "label": "Current training development body model"
+          }
+        ]
+      }
+    },
+    {
+      "tapAt": {
+        "xFraction": 0.948,
+        "yFraction": 0.221
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Last workout",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 3,
+        "lane": {
+          "identifier": "todayConsistencyOverview"
+        }
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Current training development body model",
+            "role": "AXButton"
+          },
+          {
+            "labelContains": "Current training development legend"
+          },
+          {
+            "identifier": "todayStartWorkoutButton",
+            "label": "Start Workout"
+          },
+          {
+            "label": "12 Sets"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "View detail",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "role": "AXHeading",
+            "label": "Consistency"
+          },
+          {
+            "role": "AXButton",
+            "label": "Today"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "todayStartWorkoutButton"
+          },
+          {
+            "label": "Current training development body model"
+          },
+          {
+            "identifier": "todayConsistencyOverview"
+          }
+        ]
+      }
+    },
+    {
+      "tapAt": {
+        "xFraction": 0.948,
+        "yFraction": 0.221
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "scheduledWorkoutStartButton",
+        "label": "Start today's plan, Scheduled Test",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Start Fresh",
+        "role": "AXButton"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": true,
+        "tab": "today",
+        "arguments": [
+          "--ui-test-active-partial",
+          "--ui-test-scheduled-template",
+          "--seed-history",
+          "--static-body",
+          "-settings.weightUnit",
+          "lb",
+          "-settings.appearance",
+          "dark"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "labelContains": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "labelContains": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "endWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "today",
+        "arguments": [
+          "--static-body",
+          "-settings.weightUnit",
+          "lb",
+          "-settings.appearance",
+          "dark"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "labelContains": "Resume Workout",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "activeWorkoutResumeBar",
+      "labelContains": "Resume Workout",
+      "role": "AXButton"
+    },
+    {
+      "label": "Current training development body model",
+      "role": "AXButton"
+    },
+    {
+      "label": "Consistency",
+      "role": "AXHeading"
+    },
+    {
+      "identifier": "todayConsistencyOverview"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "todayStartWorkoutButton"
+    },
+    {
+      "label": "Up next",
+      "role": "AXHeading"
+    },
+    {
+      "label": "Up next",
+      "role": "AXHeading",
+      "visible": false
+    },
+    {
+      "identifier": "todayUpNextPreview",
+      "visible": false
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

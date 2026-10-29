@@ -5,6 +5,8 @@
 //  The app's home tab and sole owner of Today queries, navigation,
 //  workout-start orchestration, and drill-out presentation state. Focused
 //  sections render immutable or explicit inputs around one pinned action.
+//  A wide, regular-width window splits the same sections into two panes
+//  (TodaySplitContent.swift); every other window scrolls them in one column.
 //
 
 import SwiftData
@@ -16,6 +18,7 @@ struct TodayScreen: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.appDisplayLayout) private var displayLayout
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
@@ -74,13 +77,11 @@ struct TodayScreen: View {
         _latestSessions = Query(latest)
     }
 
-    /// Frozen on first layout and never updated afterwards. The
-    /// scroll container's height shrinks as the large navigation
-    /// title collapses on scroll; binding the SCNView's height to
-    /// that live value made the model visibly re-scale ("zoom") mid-
-    /// scroll. Capturing the height once decouples the model from the
-    /// title animation so it holds a constant size.
-    @State var heroHeight: CGFloat = 0
+    /// The figure's latched container reading. Sizing the SCNView from the
+    /// live scroll container made the model visibly re-scale ("zoom") on
+    /// every layout pass; the latch changes only for a new width or a
+    /// larger reading.
+    @State var heroSizing = TodayHeroSizing()
 
     /// Whether the single start-workout chooser is presented.
     @State var showStartSheet = false
@@ -100,120 +101,23 @@ struct TodayScreen: View {
     @State private var pendingFreshStart: (() -> Void)?
 
     var body: some View {
-        let shouldReduceMotion = reduceMotion
         let upNext = UpNext.compute(
             templates: templates,
             sessions: recentSessions,
             load: appState.analytics.load
         )
-        ScrollView {
-            // The body leads — your trained figure is the hero
-            // and the readout's subject. Up Next then names the
-            // scheduled plan with its last logged reference;
-            // the pinned primary action remains the biggest,
-            // first-thing-you-reach target. Consistency and Last
-            // workout always follow, as placeholders before the
-            // first archived workout.
-            //
-            // The development model is replayed once per data
-            // change (memoised in SessionAnalytics on AppState)
-            // and every consumer (figure, readiness card, the
-            // drill-down boards) derives from this single state.
-            let modelState = appState.analytics.development
-            VStack(alignment: .leading, spacing: Space.section) {
-                // The figure and its caption read as one unit: the
-                // portrait, then the line decoding its colours sitting
-                // just beneath the feet (over the plain background, not
-                // over the model — the muscle detail made an overlaid
-                // caption unreadable).
-                TodayBodySection(
-                    height: bodyHeroHeight(),
-                    state: modelState,
-                    warmth: appState.analytics.forgeWarmth,
-                    colorScheme: colorScheme,
-                    usesAccessibilityLayout: usesAccessibilityLayout
-                ) {
-                    showMuscleMapDetails = true
-                }
-                // Depth: the figure settles back into the stage as
-                // you scroll past it. Driven by .scrollTransition
-                // (render-thread) rather than a scroll-offset
-                // @State, so it never re-runs the body model's
-                // channel computation per frame — that was what
-                // made scrolling feel like slow motion.
-                .scrollTransition(.interactive, axis: .vertical) { content, phase in
-                    content
-                        .scaleEffect(
-                            shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.07,
-                            anchor: .top
-                        )
-                        .opacity(shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.30)
-                }
-
-                // An active workout owns the next step, so Up next
-                // steps aside entirely rather than showing a placeholder.
-                if barSession == nil {
-                    if let upNextSelection = makeUpNextSelection(
-                        upNext,
-                        outlook: appState.analytics.strength,
-                        defaultRestSeconds: defaultRestSeconds
-                    ) {
-                        TodayUpNextSection(
-                            presentation: upNextSelection.presentation,
-                            usesAccessibilityLayout: usesAccessibilityLayout
-                        ) {
-                            TemplateDetailScreen(
-                                template: upNextSelection.template,
-                                appState: appState
-                            )
-                        }
-                    } else {
-                        TodayUpNextPlaceholder()
-                    }
-                }
-                SectionDivider()
-                TodayConsistencySection(
-                    workoutDates: workoutDates,
-                    prDates: prDates,
-                    streakText: streakText(appState.analytics.overview.streak)
-                ) {
-                    ConsistencyScreen()
-                }
-                SectionDivider()
-                TodayLastWorkoutSection(
-                    summary: latestSession.map { lastWorkoutSummary(for: $0) },
-                    unit: unit
-                )
+        Group {
+            if displayLayout.showsDashboardColumns, #available(iOS 27.1, *) {
+                splitContent(upNext: upNext)
+            } else {
+                singleColumnContent(upNext: upNext)
             }
-            .padding(.top, Space.xs)
-            .padding(.bottom, Space.xxl)
-        }
-        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-        .scrollIndicators(.hidden)
-        .scrollEdgeEffectStyle(.soft, for: .bottom)
-        // START is pinned in the native safe-area bar, never part of
-        // the scroll. The bar insets the scroll content by its own
-        // height at every text size, and the soft edge effect fades
-        // content beneath it.
-        .safeAreaBar(edge: .bottom, spacing: 0) {
-            pinnedStartBar
         }
         // Keep the content on the app's static, edge-to-edge
         // faceplate. The body-model stage carries the hero's
         // training-driven warmth without continuously animating
         // the entire screen background.
         .screenBackground()
-        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
-            // Latch onto the LARGEST viewport height ever seen, not
-            // the first. Native bottom chrome can make the container
-            // report a transient, collapsed height during launch
-            // layout; freezing that first value shrank the hero to a
-            // thumbnail. Tracking the max ignores the transient (and
-            // the on-scroll tab-bar minimize never shrinks the figure,
-            // since the value only grows).
-            if newHeight > heroHeight { heroHeight = newHeight }
-        }
         .onAppear { Haptics.prepare() }
         .sheet(isPresented: $showStartSheet, onDismiss: runPendingStart) {
             StartWorkoutSheet(
@@ -274,6 +178,124 @@ struct TodayScreen: View {
     /// text-based training information begins.
     var usesAccessibilityLayout: Bool {
         dynamicTypeSize.isAccessibilitySize
+    }
+
+    // MARK: - Sections
+
+    private func singleColumnContent(upNext: UpNext) -> some View {
+        let shouldReduceMotion = reduceMotion
+        return ScrollView {
+            // The body leads — your trained figure is the hero
+            // and the readout's subject. Up Next then names the
+            // scheduled plan with its last logged reference;
+            // the pinned primary action remains the biggest,
+            // first-thing-you-reach target. Consistency and Last
+            // workout always follow, as placeholders before the
+            // first archived workout.
+            VStack(alignment: .leading, spacing: Space.section) {
+                bodySection
+                    // Depth: the figure settles back into the stage as
+                    // you scroll past it. Driven by .scrollTransition
+                    // (render-thread) rather than a scroll-offset
+                    // @State, so it never re-runs the body model's
+                    // channel computation per frame — that was what
+                    // made scrolling feel like slow motion.
+                    .scrollTransition(.interactive, axis: .vertical) { content, phase in
+                        content
+                            .scaleEffect(
+                                shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.07,
+                                anchor: .top
+                            )
+                            .opacity(shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.30)
+                    }
+
+                // An active workout owns the next step, so Up next
+                // steps aside entirely rather than showing a placeholder.
+                if barSession == nil {
+                    upNextSection(upNext)
+                }
+                SectionDivider()
+                consistencySection
+                SectionDivider()
+                lastWorkoutSection
+            }
+            .padding(.top, Space.xs)
+            .padding(.bottom, Space.xxl)
+        }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+        .scrollIndicators(.hidden)
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
+        // START is pinned in the native safe-area bar, never part of
+        // the scroll. The bar insets the scroll content by its own
+        // height at every text size, and the soft edge effect fades
+        // content beneath it.
+        .safeAreaBar(edge: .bottom, spacing: 0) {
+            pinnedStartBar
+        }
+        // The figure scrolls away as the title collapses here, so the
+        // reading leaves out the top inset.
+        .onGeometryChange(for: CGSize.self) { $0.size } action: { size in
+            heroSizing.accept(TodayHeroSizing.Container(size: size))
+        }
+    }
+
+    /// The figure and its caption read as one unit: the portrait, then the
+    /// line decoding its colours just beneath the feet (over the plain
+    /// background, not over the model — the muscle detail made an overlaid
+    /// caption unreadable).
+    ///
+    /// The development model is replayed once per data change (memoised in
+    /// SessionAnalytics on AppState) and every consumer (figure, readiness
+    /// card, the drill-down boards) derives from this single state.
+    var bodySection: some View {
+        TodayBodySection(
+            height: heroSizing.heroHeight(accessibility: usesAccessibilityLayout),
+            state: appState.analytics.development,
+            warmth: appState.analytics.forgeWarmth,
+            colorScheme: colorScheme,
+            usesAccessibilityLayout: usesAccessibilityLayout
+        ) {
+            showMuscleMapDetails = true
+        }
+    }
+
+    @ViewBuilder
+    func upNextSection(_ upNext: UpNext) -> some View {
+        if let upNextSelection = makeUpNextSelection(
+            upNext,
+            outlook: appState.analytics.strength,
+            defaultRestSeconds: defaultRestSeconds
+        ) {
+            TodayUpNextSection(
+                presentation: upNextSelection.presentation,
+                usesAccessibilityLayout: usesAccessibilityLayout
+            ) {
+                TemplateDetailScreen(
+                    template: upNextSelection.template,
+                    appState: appState
+                )
+            }
+        } else {
+            TodayUpNextPlaceholder()
+        }
+    }
+
+    var consistencySection: some View {
+        TodayConsistencySection(
+            workoutDates: workoutDates,
+            prDates: prDates,
+            streakText: streakText(appState.analytics.overview.streak)
+        ) {
+            ConsistencyScreen()
+        }
+    }
+
+    var lastWorkoutSection: some View {
+        TodayLastWorkoutSection(
+            summary: latestSession.map { lastWorkoutSummary(for: $0) },
+            unit: unit
+        )
     }
 }
 

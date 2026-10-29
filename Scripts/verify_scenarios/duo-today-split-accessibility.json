@@ -1,0 +1,111 @@
+{
+  "name": "duo-today-split-accessibility",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-scheduled-template",
+      "--seed-history",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Current training development body model",
+            "role": "AXButton"
+          },
+          {
+            "labelContains": "Current training development legend"
+          },
+          {
+            "label": "Up next",
+            "role": "AXHeading"
+          },
+          {
+            "identifier": "todayUpNextPreview"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "activeWorkoutResumeBar"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "todayConsistencyOverview"
+        },
+        "direction": "up",
+        "maxSwipes": 6,
+        "lane": {
+          "label": "Up next",
+          "role": "AXHeading"
+        }
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "todayConsistencyOverview",
+            "label": "Training consistency",
+            "role": "AXGenericElement",
+            "valueRegex": "^8 sessions in the last 14 days\\. Training days: .+"
+          },
+          {
+            "identifier": "todayStartWorkoutButton",
+            "label": "Start Workout",
+            "role": "AXButton"
+          },
+          {
+            "label": "Current training development body model",
+            "role": "AXButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "scheduledWorkoutStartButton",
+        "label": "Start today's plan, Scheduled Test",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "scheduledWorkoutStartButton",
+      "label": "Start today's plan, Scheduled Test",
+      "role": "AXButton"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

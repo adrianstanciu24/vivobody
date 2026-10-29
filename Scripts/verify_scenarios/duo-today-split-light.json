@@ -1,0 +1,174 @@
+{
+  "name": "duo-today-split-light",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Fresh Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Current training development body model",
+            "role": "AXButton"
+          },
+          {
+            "labelContains": "Current training development legend"
+          },
+          {
+            "identifier": "todayUpNextPlaceholder",
+            "label": "Up next. No workout planned. Schedule a template in Library to see it here.",
+            "role": "AXGenericElement"
+          },
+          {
+            "label": "Consistency",
+            "role": "AXHeading"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "todayUpNextPreview"
+          },
+          {
+            "identifier": "activeWorkoutResumeBar"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "todayLastWorkoutPlaceholder"
+        },
+        "direction": "up",
+        "maxSwipes": 3,
+        "lane": {
+          "identifier": "todayConsistencyOverview"
+        }
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "todayConsistencyOverview",
+            "label": "Training consistency",
+            "role": "AXGenericElement",
+            "value": "0 sessions in the last 14 days"
+          },
+          {
+            "identifier": "todayLastWorkoutPlaceholder",
+            "label": "No workouts yet. Finish a workout to see its time, volume, and sets.",
+            "role": "AXGenericElement"
+          },
+          {
+            "identifier": "todayStartWorkoutButton",
+            "label": "Start Fresh Workout",
+            "role": "AXButton"
+          },
+          {
+            "label": "Current training development body model",
+            "role": "AXButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Fresh Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "Add Exercise",
+        "role": "AXGroup"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": true,
+        "tab": "today",
+        "arguments": [
+          "--seed-history",
+          "--static-body",
+          "-settings.weightUnit",
+          "lb",
+          "-settings.appearance",
+          "light"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "todayUpNextPlaceholder"
+          },
+          {
+            "label": "Last workout",
+            "role": "AXHeading"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "todayLastWorkoutPlaceholder"
+          },
+          {
+            "identifier": "todayLastWorkoutPlaceholder",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Repeat Last Workout",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Repeat Last Workout",
+      "role": "AXButton"
+    },
+    {
+      "label": "Start Fresh",
+      "role": "AXButton"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

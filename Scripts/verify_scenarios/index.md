@@ -11,7 +11,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 212.
+Scenario files: 215.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -129,6 +129,9 @@ Scenario files: 212.
 | [duo-library-split-accessibility](duo-library-split-accessibility.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [duo-library-split-light](duo-library-split-light.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-library-split](duo-library-split.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark` |
+| [duo-today-split-accessibility](duo-today-split-accessibility.json) | today | `--ui-test-scheduled-template --seed-history --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
+| [duo-today-split-light](duo-today-split-light.json) | today | `--static-body -settings.weightUnit lb -settings.appearance light` |
+| [duo-today-split](duo-today-split.json) | today | `--ui-test-scheduled-template --seed-history --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [exercise-comparison-active-workout-hidden](exercise-comparison-active-workout-hidden.json) | today | `--ui-test-active-partial --static-body` |
 | [exercise-comparison-picker-filters-accessibility](exercise-comparison-picker-filters-accessibility.json) | library | `-UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [exercise-comparison-picker-filters-light](exercise-comparison-picker-filters-light.json) | library | `-settings.appearance light` |

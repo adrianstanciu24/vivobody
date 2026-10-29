@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Small root-owned adapters for Today's query ordering, immutable Up Next
-//  snapshot, journal values, hero sizing, and date formatting.
+//  snapshot, journal values, and date formatting.
 //
 
 import SwiftData
@@ -122,26 +122,6 @@ extension TodayScreen {
             return covered.count * 2 >= templateKeys.count
         }
     }
-
-    /// Frozen figure height with normal-size CTA and legend clearance.
-    func bodyHeroHeight() -> CGFloat {
-        let base = heroHeight
-        guard base > 0 else { return 0 }
-        if usesAccessibilityLayout {
-            return min(base * 0.5, 420)
-        }
-        return max(
-            base * Self.minimumHeroFraction,
-            base * Self.heroFraction
-                - Self.pinnedStartBarClearance
-                - Self.developmentLegendClearance
-        )
-    }
-
-    static let heroFraction: CGFloat = 0.98
-    static let minimumHeroFraction: CGFloat = 0.68
-    static let developmentLegendClearance: CGFloat = 88
-    static let pinnedStartBarClearance: CGFloat = 104
 
     func streakText(_ streak: WorkoutStreak) -> String? {
         guard streak.current > 0 else { return nil }
