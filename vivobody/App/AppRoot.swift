@@ -412,6 +412,7 @@ struct AppRoot: View {
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
+        .readsAppDisplayLayout()
     }
 }
 
