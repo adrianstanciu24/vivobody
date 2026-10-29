@@ -94,6 +94,11 @@ framework chatter or user-owned values.
 - `swipe`: perform `count` blind swipes in the declared `direction` with no
   selector. Use it to nudge content clear of the tab bar before tapping a
   row that `scrollTo` leaves half-covered at the screen edge.
+- `scrollTo` and `swipe` accept an optional `container` selector. The
+  swipe then runs through the middle of that element's visible frame instead
+  of the application's. Use it when one screen shows several scroll areas side
+  by side, such as a list and its detail on a wide display. The container must
+  match exactly one visible element on every swipe.
 - `typeText`: type a non-empty US-ASCII string into the currently focused
   field. Tap the field semantically before using it.
 - `assert`: poll `required` and `forbidden` selector arrays together.

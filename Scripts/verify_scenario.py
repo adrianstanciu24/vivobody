@@ -114,19 +114,27 @@ def element_point(
 def swipe_points(
     root: Mapping[str, Any],
     direction: str,
+    container: Mapping[str, Any] | None = None,
 ) -> tuple[float, float, float, float, float, float]:
     root_frame = node_frame(root)
     if root_frame is None:
         raise ScenarioFailure("Application accessibility root has no usable frame.")
-    x, y, width, height = root_frame
+    _, _, root_width, root_height = root_frame
+    if container is None:
+        x, y, width, height = root_frame
+    else:
+        area = visible_intersection(container, root)
+        if area is None:
+            raise ScenarioFailure("Swipe container has no visible on-screen frame.")
+        x, y, width, height = area
     if direction == "up":
         return (
             x + width * 0.5,
             y + height * 0.68,
             x + width * 0.5,
             y + height * 0.32,
-            width,
-            height,
+            root_width,
+            root_height,
         )
     if direction == "down":
         return (
@@ -134,10 +142,29 @@ def swipe_points(
             y + height * 0.32,
             x + width * 0.5,
             y + height * 0.68,
-            width,
-            height,
+            root_width,
+            root_height,
         )
     raise ScenarioFailure("scrollTo.direction must be 'up' or 'down'.")
+
+
+def swipe_container(
+    tree: Mapping[str, Any],
+    selector: Mapping[str, Any] | None,
+) -> Mapping[str, Any] | None:
+    if selector is None:
+        return None
+    matches = find_matches(tree, selector)
+    if len(matches) == 1:
+        return matches[0].node
+    rendered = json.dumps(selector, sort_keys=True)
+    if not matches:
+        raise ScenarioFailure(f"No visible swipe container matched selector {rendered}.")
+    candidates = "\n".join(f"  - {describe_node(match)}" for match in matches[:8])
+    raise ScenarioFailure(
+        f"Swipe container {rendered} matched {len(matches)} visible elements; "
+        f"containers must be unique:\n{candidates}"
+    )
 
 
 def walk_nodes(node: Mapping[str, Any], path: str = "root") -> Iterable[Match]:
@@ -669,6 +696,7 @@ class ScenarioRunner:
         max_swipes = configuration.get("maxSwipes", 6)
         if not isinstance(max_swipes, int) or isinstance(max_swipes, bool) or max_swipes < 1:
             raise ScenarioFailure("scrollTo.maxSwipes must be a positive integer.")
+        container = _optional_container(configuration, "scrollTo")
 
         for attempt in range(max_swipes + 1):
             tree = self.describe_tree()
@@ -681,7 +709,9 @@ class ScenarioRunner:
                 return
             if attempt == max_swipes:
                 break
-            start_x, start_y, end_x, end_y, width, height = swipe_points(tree, direction)
+            start_x, start_y, end_x, end_y, width, height = swipe_points(
+                tree, direction, swipe_container(tree, container)
+            )
             self.log(
                 f"SWIPE {direction} toward {json.dumps(selector, sort_keys=True)} "
                 f"({attempt + 1}/{max_swipes})"
@@ -719,10 +749,13 @@ class ScenarioRunner:
         count = configuration.get("count", 1)
         if not isinstance(count, int) or isinstance(count, bool) or count < 1:
             raise ScenarioFailure("swipe.count must be a positive integer.")
+        container = _optional_container(configuration, "swipe")
 
         for iteration in range(count):
             tree = self.describe_tree()
-            start_x, start_y, end_x, end_y, width, height = swipe_points(tree, direction)
+            start_x, start_y, end_x, end_y, width, height = swipe_points(
+                tree, direction, swipe_container(tree, container)
+            )
             self.log(f"SWIPE {direction} ({iteration + 1}/{count})")
             self.command([
                 self.baguette,
@@ -912,6 +945,16 @@ class ScenarioRunner:
         return 0 if status == "passed" else 1
 
 
+def _optional_container(payload: Mapping[str, Any], action: str) -> Mapping[str, Any] | None:
+    container = payload.get("container")
+    if container is None:
+        return None
+    if not isinstance(container, Mapping):
+        raise ScenarioFailure(f"{action}.container must be a selector object.")
+    validate_selector(container)
+    return container
+
+
 def _selector_list(value: Any, field: str) -> list[Mapping[str, Any]]:
     if not isinstance(value, list) or not all(isinstance(item, Mapping) for item in value):
         raise ScenarioFailure(f"Scenario {field} must be an array of selector objects.")
@@ -1056,7 +1099,7 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
         elif action == "scrollTo":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} scrollTo payload must be an object.")
-            unknown_scroll = set(payload) - {"selector", "direction", "maxSwipes"}
+            unknown_scroll = set(payload) - {"selector", "direction", "maxSwipes", "container"}
             if unknown_scroll:
                 raise ScenarioFailure(
                     f"Step {index} scrollTo has unsupported field(s): "
@@ -1071,10 +1114,11 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
             max_swipes = payload.get("maxSwipes", 6)
             if not isinstance(max_swipes, int) or isinstance(max_swipes, bool) or max_swipes < 1:
                 raise ScenarioFailure(f"Step {index} scrollTo.maxSwipes must be a positive integer.")
+            _optional_container(payload, f"Step {index} scrollTo")
         elif action == "swipe":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} swipe payload must be an object.")
-            unknown_swipe = set(payload) - {"direction", "count"}
+            unknown_swipe = set(payload) - {"direction", "count", "container"}
             if unknown_swipe:
                 raise ScenarioFailure(
                     f"Step {index} swipe has unsupported field(s): "
@@ -1085,6 +1129,7 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
             swipe_count = payload.get("count", 1)
             if not isinstance(swipe_count, int) or isinstance(swipe_count, bool) or swipe_count < 1:
                 raise ScenarioFailure(f"Step {index} swipe.count must be a positive integer.")
+            _optional_container(payload, f"Step {index} swipe")
         elif action == "typeText":
             if not isinstance(payload, str) or not payload:
                 raise ScenarioFailure(

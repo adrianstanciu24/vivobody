@@ -4,7 +4,7 @@
 #  vivobody
 #
 #  Unit tests for semantic scenario selection, on-screen filtering, constraint
-#  diagnostics, and frame-based tap resolution. These tests use tiny fixture
+#  diagnostics, and frame-based tap and container-scoped swipe resolution. These tests use tiny fixture
 #  trees and require neither Baguette nor a booted simulator.
 #
 
@@ -122,6 +122,89 @@ class VerifyScenarioTests(unittest.TestCase):
 
         self.assertEqual(upward, (201, 594.32, 201, 279.68, 402, 874))
         self.assertEqual(downward, (201, 279.68, 201, 594.32, 402, 874))
+
+    def test_container_swipe_stays_inside_the_container_in_root_coordinates(self) -> None:
+        pane = element(identifier="historyDetailPane", role="AXGroup", frame=(202, 100, 200, 400))
+        snapshot = tree(pane)
+
+        upward = verify_scenario.swipe_points(snapshot, "up", pane)
+        downward = verify_scenario.swipe_points(snapshot, "down", pane)
+
+        for actual, expected in zip(upward, (302, 372, 302, 228, 402, 874)):
+            self.assertAlmostEqual(actual, expected)
+        for actual, expected in zip(downward, (302, 228, 302, 372, 402, 874)):
+            self.assertAlmostEqual(actual, expected)
+
+    def test_container_swipe_uses_the_visible_part_of_the_container(self) -> None:
+        pane = element(identifier="libraryDetailPane", role="AXGroup", frame=(302, 100, 200, 400))
+        snapshot = tree(pane)
+
+        start_x, _, end_x, _, _, _ = verify_scenario.swipe_points(snapshot, "up", pane)
+
+        self.assertAlmostEqual(start_x, 352)
+        self.assertAlmostEqual(end_x, 352)
+
+    def test_swipe_container_requires_one_visible_match(self) -> None:
+        snapshot = tree(
+            element(identifier="pane", role="AXGroup", frame=(0, 0, 200, 400)),
+            element(identifier="pane", role="AXGroup", frame=(202, 0, 200, 400)),
+            element(identifier="offscreenPane", role="AXGroup", frame=(500, 0, 200, 400)),
+        )
+
+        self.assertIsNone(verify_scenario.swipe_container(snapshot, None))
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "containers must be unique"):
+            verify_scenario.swipe_container(snapshot, {"identifier": "pane"})
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "No visible swipe container"):
+            verify_scenario.swipe_container(snapshot, {"identifier": "offscreenPane"})
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "No visible swipe container"):
+            verify_scenario.swipe_container(snapshot, {"identifier": "missingPane"})
+
+    def test_scroll_and_swipe_accept_an_optional_container_selector(self) -> None:
+        scenario = {
+            "name": "container-swipes",
+            "launch": {},
+            "steps": [
+                {
+                    "scrollTo": {
+                        "selector": {"identifier": "historySessionRow"},
+                        "container": {"identifier": "historyListPane"},
+                    }
+                },
+                {"swipe": {"direction": "down", "container": {"identifier": "historyDetailPane"}}},
+            ],
+            "required": [],
+            "forbidden": [],
+        }
+
+        verify_scenario.validate_scenario_definition(scenario)
+
+    def test_malformed_container_selectors_fail_early(self) -> None:
+        def scenario(step: dict[str, object]) -> dict[str, object]:
+            return {
+                "name": "invalid-container",
+                "launch": {},
+                "steps": [step],
+                "required": [],
+                "forbidden": [],
+            }
+
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "container must be a selector object"):
+            verify_scenario.validate_scenario_definition(
+                scenario({"swipe": {"container": "historyListPane"}})
+            )
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "Unsupported selector"):
+            verify_scenario.validate_scenario_definition(
+                scenario({
+                    "scrollTo": {
+                        "selector": {"identifier": "row"},
+                        "container": {"testID": "historyListPane"},
+                    }
+                })
+            )
+        with self.assertRaisesRegex(verify_scenario.ScenarioFailure, "must include an identifier"):
+            verify_scenario.validate_scenario_definition(
+                scenario({"swipe": {"container": {"visible": True}}})
+            )
 
     def test_ambiguous_tap_selector_fails_with_candidates(self) -> None:
         snapshot = tree(
