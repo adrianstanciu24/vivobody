@@ -122,8 +122,9 @@ interaction. The existing `start-complete-rest` flow chooses the featured plan
 and proves the scheduled start through set completion.
 
 - Empty, unscheduled Today exposes one `Start Fresh Workout` action that opens
-  the exercise picker directly, with no redundant chooser, scheduled or active
-  action, or empty Consistency / Last workout journal.
+  the exercise picker directly, with no redundant chooser or scheduled or
+  active action. Up next and Last workout still render as non-interactive
+  placeholders, and Consistency shows an empty two-week strip.
 - History without templates restores `Start Workout`; its chooser offers both
   `Repeat Last Workout` and `Start Fresh`.
 - A due template keeps the same single `Start Workout` action. Its chooser
