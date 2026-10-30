@@ -3,8 +3,9 @@
 //  vivobodyTests
 //
 //  Pins Today's figure height: the latch that keeps one size per container
-//  width, the normal and accessibility formulas, and the turntable width cap
-//  that keeps the figure inside a narrow pane.
+//  width, the normal and accessibility formulas, the wide pane's fit above
+//  its measured bar, and the turntable width cap that keeps the figure inside
+//  a narrow pane.
 //
 
 import CoreGraphics
@@ -81,6 +82,35 @@ struct TodayHeroSizingTests {
         #expect(folded.containerWidth == 300)
         #expect(folded.containerHeight == 500)
         #expect(folded.heroHeight(accessibility: false) == 340)
+    }
+
+    @Test func thePaneFigureLeavesTheLegendAboveTheMeasuredBar() {
+        var pane = sizing(container(433.5, 553, topInset: 82))
+        pane.acceptPinnedBar(CGSize(width: 433.5, height: 78))
+
+        #expect(pane.heroHeight(accessibility: false) == 343)
+
+        pane.acceptPinnedBar(CGSize(width: 433.5, height: 96))
+
+        #expect(pane.heroHeight(accessibility: false) == 325)
+    }
+
+    @Test func thePaneKeepsTheAccessibilityShareUntilTheBarLeavesLessRoom() {
+        var tall = sizing(container(433.5, 553, topInset: 82))
+        tall.acceptPinnedBar(CGSize(width: 433.5, height: 110))
+        var short = sizing(container(433.5, 400, topInset: 82))
+        short.acceptPinnedBar(CGSize(width: 433.5, height: 110))
+
+        #expect(tall.heroHeight(accessibility: true) == 276.5)
+        #expect(short.heroHeight(accessibility: true) == 158)
+    }
+
+    @Test func aBarFromAnotherWidthLeavesTheColumnFormula() {
+        var column = sizing(container(433.5, 553, topInset: 82))
+        column.acceptPinnedBar(CGSize(width: 433.5, height: 78))
+        column.accept(container(402, 800))
+
+        #expect(column.heroHeight(accessibility: false) == 592)
     }
 
     @Test func aNarrowPaneCapsTheFigureSoTheTurntableFits() {

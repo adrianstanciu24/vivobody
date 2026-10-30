@@ -110,7 +110,11 @@ keeps the single scrolling column.
 The figure keeps one size while the user works in the panes. Its height
 latches to the tallest container seen at the current width, so a collapsing
 title or a minimized tab bar does not re-scale the model. In the leading pane
-the height is also capped so the turntable fits the pane width.
+the figure takes the height left above the measured start or resume bar and
+the Training development legend, so the whole legend stays above the bar. The
+resume bar adds a status line, so the figure is a little shorter while a
+workout is active. The height is also capped so the turntable fits the pane
+width.
 
 ## Evidence
 

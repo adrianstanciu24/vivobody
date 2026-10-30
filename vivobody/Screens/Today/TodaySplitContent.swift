@@ -39,6 +39,9 @@ extension TodayScreen {
         .accessibilityIdentifier("todayBodyPane")
         .safeAreaBar(edge: .bottom, spacing: 0) {
             pinnedStartBar
+                .onGeometryChange(for: CGSize.self) { $0.size } action: { size in
+                    heroSizing.acceptPinnedBar(size)
+                }
         }
         // The large title collapses when either pane scrolls; reading the
         // top inset keeps that from re-scaling the figure that stays on screen.
