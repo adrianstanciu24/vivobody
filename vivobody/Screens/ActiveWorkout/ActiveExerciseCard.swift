@@ -88,6 +88,8 @@ struct ActiveExerciseCard: View {
     @State var sessionOnlyStep: Double? = nil
     @State var sessionOnlyDurationStep: Double? = nil
 
+    @State private var pageHeight: CGFloat = 0
+
     var body: some View {
         Group {
             if let lanes {
@@ -105,6 +107,12 @@ struct ActiveExerciseCard: View {
             } else {
                 cardContent(expandsVertically: true)
             }
+        }
+        .environment(\.activeExerciseCardDensity, density)
+        .onGeometryChange(for: CGFloat.self) { proxy in
+            proxy.size.height
+        } action: { height in
+            pageHeight = height
         }
         .contentShape(Rectangle())
         .opacity(session.isAllComplete && !sets.isEmpty ? 0.45 : 1.0)
@@ -159,6 +167,13 @@ struct ActiveExerciseCard: View {
             maxHeight: expandsVertically ? .infinity : nil,
             alignment: .leading
         )
+    }
+
+    /// The lanes and the scrolling accessibility column have room to spare;
+    /// only the fixed phone column packs tighter on a short page.
+    var density: ActiveExerciseCardDensity {
+        guard lanes == nil, !dynamicTypeSize.isAccessibilitySize else { return .regular }
+        return ActiveExerciseCardDensity(pageHeight: pageHeight)
     }
 
     // MARK: - Scrub increments

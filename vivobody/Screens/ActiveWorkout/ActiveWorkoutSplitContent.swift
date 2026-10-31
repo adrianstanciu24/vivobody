@@ -72,16 +72,13 @@ extension ActiveWorkoutScreen {
     }
 }
 
-/// Clips the pager at its leading and trailing edges only. A wide window can
-/// keep a horizontal safe area, such as a status bar column, and the
-/// neighbor pages must not show through it. Shadows still spill above and
-/// below. Inactive, the clip is wide enough to change nothing, so turning it
-/// on keeps the pager's identity.
+/// Clips the pager at its leading and trailing edges only. A window can keep
+/// a horizontal safe area, such as the status bar column on the folded iPhone
+/// Duo display, and the neighbor pages must not show through it. Shadows
+/// still spill above and below.
 nonisolated struct PagerSideClip: Shape {
-    var isActive: Bool
-
     func path(in rect: CGRect) -> Path {
-        Path(rect.insetBy(dx: isActive ? 0 : -rect.width, dy: -rect.height))
+        Path(rect.insetBy(dx: 0, dy: -rect.height))
     }
 }
 

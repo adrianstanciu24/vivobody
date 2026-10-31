@@ -16,6 +16,8 @@ struct ActiveDurationInstrument: View {
     let onScrubEnded: () -> Void
     let adjustResistance: (AccessibilityAdjustmentDirection) -> Void
 
+    @Environment(\.activeExerciseCardDensity) private var density
+
     var body: some View {
         switch input.phase {
         case .active:
@@ -35,7 +37,7 @@ struct ActiveDurationInstrument: View {
                 range: DurationFormatter.loggedScrubRange,
                 step: input.instrument.durationStep,
                 pointsPerStep: 10,
-                fontSize: 104,
+                fontSize: density.heroFontSize(104),
                 numberColor: Ink.primary,
                 formatter: { DurationFormatter.string($0) },
                 accessibilityLabel: input.instrument.modality.durationLabel,
@@ -161,7 +163,7 @@ struct ActiveDurationInstrument: View {
                 .panelLegendType()
                 .foregroundStyle(Ink.secondary)
             Text(completed.timeText)
-                .font(.system(size: 104, weight: .bold))
+                .font(.system(size: density.heroFontSize(104), weight: .bold))
                 .foregroundStyle(Tint.complete)
                 .monospacedDigit()
                 .lineLimit(1)

@@ -177,7 +177,7 @@ struct ActiveWorkoutScreen: View {
 
             if !isEmpty {
                 pager(lanes: lanes?.page)
-                    .clipShape(PagerSideClip(isActive: lanes != nil))
+                    .clipShape(PagerSideClip())
                     .safeAreaBar(edge: .top, spacing: 8) { topBar }
                     .safeAreaBar(edge: .bottom, spacing: Space.md) {
                         bottomBar.horizontallyPlaced(in: lanes?.viewportTrailing)

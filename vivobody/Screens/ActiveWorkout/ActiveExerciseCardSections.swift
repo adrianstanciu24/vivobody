@@ -14,7 +14,8 @@ extension ActiveExerciseCard {
     var nameRow: some View {
         ActiveExerciseNameSection(
             input: cardInput.identity,
-            dynamicTypeSize: dynamicTypeSize
+            dynamicTypeSize: dynamicTypeSize,
+            density: density
         ) {
             exerciseMenu
         }
@@ -126,7 +127,7 @@ extension ActiveExerciseCard {
 
             if showsRIRControl {
                 SectionDivider()
-                    .padding(.vertical, Space.md)
+                    .padding(.vertical, density.effortDividerPadding)
                 ActiveExerciseEffortSection(
                     input: cardInput.effortAction,
                     rir: rirBinding
@@ -135,7 +136,7 @@ extension ActiveExerciseCard {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, Space.md)
+        .padding(.vertical, density.instrumentPadding)
         .frame(
             maxWidth: .infinity,
             maxHeight: expandsVertically ? .infinity : nil,

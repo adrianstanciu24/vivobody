@@ -17,6 +17,8 @@ struct ActiveRepsInstrument: View {
     let onScrubEnded: () -> Void
     let adjustResistance: (AccessibilityAdjustmentDirection) -> Void
 
+    @Environment(\.activeExerciseCardDensity) private var density
+
     var body: some View {
         switch input.phase {
         case .active:
@@ -53,7 +55,7 @@ struct ActiveRepsInstrument: View {
                     range: input.instrument.unit.strengthRange,
                     step: input.instrument.weightStep,
                     pointsPerStep: 8,
-                    fontSize: input.instrument.loadMode == .nonComparable ? 80 : 104,
+                    fontSize: density.heroFontSize(input.instrument.loadMode == .nonComparable ? 80 : 104),
                     unit: input.instrument.loadUnit(for: weight),
                     unitFontSize: 18,
                     numberColor: Ink.primary,
@@ -142,7 +144,7 @@ struct ActiveRepsInstrument: View {
                 range: 1 ... 30,
                 step: 1,
                 pointsPerStep: 16,
-                fontSize: 104,
+                fontSize: density.heroFontSize(104),
                 unit: "reps",
                 unitFontSize: 18,
                 numberColor: Ink.primary,
@@ -197,7 +199,7 @@ struct ActiveRepsInstrument: View {
                     .accessibilityHidden(true)
                 HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                     Text(completed.repsText)
-                        .font(.system(size: 104, weight: .bold))
+                        .font(.system(size: density.heroFontSize(104), weight: .bold))
                         .foregroundStyle(Tint.complete)
                         .monospacedDigit()
                         .lineLimit(1)
@@ -212,7 +214,7 @@ struct ActiveRepsInstrument: View {
         } else {
             VStack(alignment: .leading, spacing: Space.sm) {
                 Text(completed.weightText)
-                    .font(.system(size: 104, weight: .bold))
+                    .font(.system(size: density.heroFontSize(104), weight: .bold))
                     .foregroundStyle(Tint.complete)
                     .monospacedDigit()
                     .lineLimit(1)

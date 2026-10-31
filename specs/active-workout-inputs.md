@@ -97,6 +97,14 @@ one cut in the column, between the configuration and the working values:
   sheet. A wide window without a hinge, such as resizable iPhone Mirroring,
   uses the full-window presentation when the workout opens in it, and keeps
   the presentation until the workout minimizes.
+- A page shorter than the standard column, such as the folded iPhone Duo
+  display, packs the column tighter instead of scrolling: the exercise name
+  takes one line and scales down to fit, the gaps around the instruments
+  close, and the working value drops to 80% of its size. Every control stays
+  between the top bar and the page dots. Phone sheets keep the standard
+  column.
+- The pager clips at its side edges, so a neighbor page never shows through
+  a horizontal safe area such as the folded display's status bar column.
 
 Use the [Duo active workout scenario](../Scripts/verify_scenarios/duo-active-split.json)
 and its `-light` and `-accessibility` variants on the iPhone Duo simulator. A

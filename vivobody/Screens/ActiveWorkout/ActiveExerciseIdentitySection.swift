@@ -26,6 +26,7 @@ struct ActiveExerciseConfigurationActions {
 struct ActiveExerciseNameSection<MenuContent: View>: View {
     let input: ActiveExerciseIdentityInput
     let dynamicTypeSize: DynamicTypeSize
+    var density: ActiveExerciseCardDensity = .regular
     let menu: () -> MenuContent
 
     var body: some View {
@@ -39,8 +40,8 @@ struct ActiveExerciseNameSection<MenuContent: View>: View {
             Text(input.name)
                 .font(Typography.display)
                 .foregroundStyle(Ink.primary)
-                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 2)
-                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.7 : 0.82)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : density.nameLineLimit)
+                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.7 : density.nameMinimumScaleFactor)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
         }
