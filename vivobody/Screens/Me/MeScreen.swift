@@ -4,7 +4,9 @@
 //
 //  Personal-tab shell. Owns SwiftData queries, analytics readiness, AppState
 //  navigation, sheet presentation, section order, and settle timing. One
-//  immutable MePresentation feeds the focused dashboard sections.
+//  immutable MePresentation feeds the focused dashboard sections. A wide
+//  window pairs the journey with the Insights portal and body weight with
+//  the monthly recap.
 //
 
 import SwiftData
@@ -13,6 +15,8 @@ import VivoKit
 
 struct MeScreen: View {
     @Bindable var appState: AppState
+
+    @Environment(\.appDisplayLayout) private var displayLayout
 
     /// One-row probe for the loading gate. Lifetime values come from the
     /// shared analytics overview rather than faulting the full archive here.
@@ -69,33 +73,54 @@ struct MeScreen: View {
     }
 
     var body: some View {
+        content
+            .screenBackground()
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        SettingsScreen()
+                    } label: {
+                        Image(systemName: "gearshape")
+                            .foregroundStyle(Ink.secondary)
+                    }
+                    .tint(Ink.secondary)
+                    .accessibilityLabel("Settings")
+                }
+            }
+            .sheet(item: $logTarget) { target in
+                BodyWeightLogSheet(target: target)
+            }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if displayLayout.showsDashboardColumns, #available(iOS 27.1, *) {
+            // Read outside the scroll: the fold stays put while the cards move.
+            GeometryReader { viewport in
+                scroll(lanes: DashboardLanes(
+                    width: viewport.size.width,
+                    divisions: viewport.reservedRegions(kind: .division).map(\.frame)
+                ))
+            }
+        } else {
+            scroll(lanes: nil)
+        }
+    }
+
+    /// The content margins equal the lanes' outer gutters, so a paired row
+    /// starts at the leading lane.
+    private func scroll(lanes: DashboardLanes?) -> some View {
         ScrollView {
             switch presentation {
             case .loading:
                 loadingState
             case let .dashboard(dashboard):
-                dashboardContent(dashboard)
+                dashboardContent(dashboard, lanes: lanes)
             }
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-        .screenBackground()
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    SettingsScreen()
-                } label: {
-                    Image(systemName: "gearshape")
-                        .foregroundStyle(Ink.secondary)
-                }
-                .tint(Ink.secondary)
-                .accessibilityLabel("Settings")
-            }
-        }
-        .sheet(item: $logTarget) { target in
-            BodyWeightLogSheet(target: target)
-        }
     }
 
     private var loadingState: some View {
@@ -107,17 +132,19 @@ struct MeScreen: View {
     }
 
     private func dashboardContent(
-        _ dashboard: MePresentation.Dashboard
+        _ dashboard: MePresentation.Dashboard,
+        lanes: DashboardLanes?
     ) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            MeJourneySection(presentation: dashboard.journey)
-                .settleIn(0)
-
-            GroupSeparator(verticalPadding: Space.lg)
-            MeInsightsPortal(presentation: dashboard.insights) {
-                appState.presentInsights()
+            pairedRow(lanes: lanes) {
+                MeJourneySection(presentation: dashboard.journey)
+                    .settleIn(0)
+            } trailing: {
+                MeInsightsPortal(presentation: dashboard.insights) {
+                    appState.presentInsights()
+                }
+                .settleIn(1)
             }
-            .settleIn(1)
 
             GroupSeparator(verticalPadding: Space.lg)
             MeMilestonesSection(presentation: dashboard.milestones)
@@ -130,15 +157,39 @@ struct MeScreen: View {
             }
 
             GroupSeparator(verticalPadding: Space.lg)
-            bodyWeightSection(dashboard.bodyWeight)
-                .settleIn(dashboard.records.hasRecords ? 4 : 3)
-
-            GroupSeparator(verticalPadding: Space.lg)
-            MeMonthlyRecapSection(presentation: dashboard.recap)
-                .settleIn(dashboard.records.hasRecords ? 5 : 4)
+            pairedRow(lanes: lanes) {
+                bodyWeightSection(dashboard.bodyWeight)
+                    .settleIn(dashboard.records.hasRecords ? 4 : 3)
+            } trailing: {
+                MeMonthlyRecapSection(presentation: dashboard.recap)
+                    .settleIn(dashboard.records.hasRecords ? 5 : 4)
+            }
         }
         .padding(.top, Space.sm)
         .padding(.bottom, Space.section + Space.md)
+    }
+
+    /// Side by side in the two lanes, with equal heights; otherwise stacked
+    /// with a separator between them.
+    @ViewBuilder
+    private func pairedRow(
+        lanes: DashboardLanes?,
+        @ViewBuilder leading: () -> some View,
+        @ViewBuilder trailing: () -> some View
+    ) -> some View {
+        if let lanes {
+            HStack(alignment: .top, spacing: lanes.separation) {
+                leading()
+                    .frame(width: lanes.width(of: .leading))
+                trailing()
+                    .frame(width: lanes.width(of: .trailing))
+            }
+            .fixedSize(horizontal: false, vertical: true)
+        } else {
+            leading()
+            GroupSeparator(verticalPadding: Space.lg)
+            trailing()
+        }
     }
 
     private func recordsSection(

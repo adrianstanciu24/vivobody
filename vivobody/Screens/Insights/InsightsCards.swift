@@ -25,6 +25,16 @@ enum InsightsCardID: String, CaseIterable, Identifiable {
         self
     }
 
+    /// The lanes alternate by reading order, except that How muscles are
+    /// trained joins the trailing lane, whose cards are shorter than the
+    /// training signature's lane.
+    var wideLane: DashboardLane {
+        switch self {
+        case .signature, .repMix, .load, .consistency: .leading
+        case .exerciseMix, .movementCoverage, .stamina, .balance, .muscleDirectness: .trailing
+        }
+    }
+
     /// What sits above a card in the single column.
     enum LeadingSpace: Equatable {
         case none

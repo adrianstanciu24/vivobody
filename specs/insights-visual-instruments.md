@@ -32,10 +32,10 @@ labels.
 - Empty and loading states continue to replace the instrument panel as a whole.
 - On a wide, regular-width window on iOS 27.1 or later, such as the open
   iPhone Duo display held wide, the same nine cards share the one vertical
-  scroll in two lanes. They alternate by reading order. The training
-  signature, Rep mix, Training load, Training rhythm, and How muscles are
-  trained take the leading lane. Exercise mix, Movement coverage,
-  Set-series stamina, and Training balance take the trailing lane. Each
+  scroll in two lanes. The training signature, Rep mix, Training load, and
+  Training rhythm take the leading lane. Exercise mix, Movement coverage,
+  Set-series stamina, Training balance, and How muscles are trained take the
+  trailing lane, which holds shorter cards than the signature's lane. Each
   lane stacks its own cards from the top, so a tall card never moves a later
   card to the other lane. Both lanes move together with the one scroll.
 - The lanes keep one gutter on each side of an active fold division that

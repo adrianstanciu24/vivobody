@@ -46,6 +46,7 @@ struct MeInsightsPortal: View {
                     .frame(width: 94, height: 104)
                     .accessibilityHidden(true)
             }
+            .frame(maxHeight: .infinity)
             .padding(Space.xl)
             .contentCard()
             .contentShape(Rectangle())

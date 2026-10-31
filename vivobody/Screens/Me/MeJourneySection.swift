@@ -64,6 +64,7 @@ struct MeJourneySection: View {
                 MeJourneyTimeline(caption: ageText)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(Space.lg)
         .contentCard()
     }

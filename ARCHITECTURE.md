@@ -188,8 +188,9 @@ window above its `TabView` and publishes the result; screens read
 `UIScreen`. History and Library show list and detail through
 [BrowserColumns](vivobody/Components/Containers/BrowserColumns.swift), which owns
 only the visible column while each feature owns its selection as a plain ID.
-Today and Insights split into two columns only in a wide, regular-width window
-on iOS 27.1 or later.
+Today, Insights, and Me split into two columns only in a wide, regular-width
+window on iOS 27.1 or later. Insights and Me place their cards in the
+fold-aware lanes of [DashboardLanes](vivobody/Components/Containers/DashboardLanes.swift).
 
 ## Launch path
 

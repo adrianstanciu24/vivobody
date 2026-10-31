@@ -1,0 +1,78 @@
+{
+  "name": "duo-me-pairs-light",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "me",
+    "arguments": [
+      "--ui-test-me-showcase",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Your journey",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Insights",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Loading your training totals"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "This month",
+          "role": "AXHeading"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Body weight",
+      "role": "AXHeading"
+    },
+    {
+      "labelRegex": "^177[.,]6, lb, -1[.,]2 lb since last entry, Body weight trend$",
+      "role": "AXButton"
+    },
+    {
+      "label": "This month",
+      "role": "AXHeading"
+    },
+    {
+      "labelRegex": "^[0-9]+ workouts?$",
+      "role": "AXGenericElement"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Loading your training totals"
+    }
+  ]
+}
