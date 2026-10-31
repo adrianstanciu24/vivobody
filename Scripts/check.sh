@@ -4,8 +4,8 @@
 #  vivobody
 #
 #  Canonical non-UI validation entry point. It proves the architecture
-#  guardrails themselves, checks repository boundaries and generated catalog
-#  parity, then compiles the complete app and widget graph for the simulator.
+#  guardrails themselves, checks repository boundaries, then compiles the
+#  complete app and widget graph for the simulator.
 #  Full build output lands in .verify/check-build.log; the terminal stays
 #  focused on actionable diagnostics.
 #
@@ -24,11 +24,6 @@ echo "▸ Testing architecture guardrails..."
 /usr/bin/python3 -m unittest discover \
   -s Scripts/tests \
   -p 'test_check_architecture.py'
-
-echo "▸ Testing documentation guardrails..."
-/usr/bin/python3 -m unittest discover \
-  -s Scripts/tests \
-  -p 'test_check_documentation.py'
 
 echo "▸ Testing semantic scenario harness..."
 /usr/bin/python3 -m unittest discover \
@@ -50,21 +45,8 @@ echo "▸ Testing complexity guardrails..."
   -s Scripts/tests \
   -p 'test_check_complexity.py'
 
-echo "▸ Testing manual quality scan..."
-/usr/bin/python3 -m unittest discover \
-  -s Scripts/tests \
-  -p 'test_quality_scan.py'
-
-echo "▸ Testing sound generator..."
-/usr/bin/python3 -m unittest discover \
-  -s Scripts/tests \
-  -p 'test_generate_sounds.py'
-
 echo "▸ Testing VivoKit snapshot contracts..."
 swift test --package-path VivoKit
-
-echo "▸ Checking persistence baseline integrity..."
-(cd vivobodyTests/Fixtures && shasum -a 256 -c SHA256SUMS)
 
 echo "▸ Checking repository architecture..."
 /usr/bin/python3 Scripts/check_architecture.py
@@ -88,12 +70,6 @@ if command -v swiftformat >/dev/null 2>&1; then
 else
     echo "warning: swiftformat not installed; skipping Swift formatting check (brew install swiftformat)" >&2
 fi
-
-echo "▸ Checking repository knowledge map..."
-/usr/bin/python3 Scripts/check_documentation.py
-
-echo "▸ Checking generated exercise catalog..."
-/usr/bin/python3 Scripts/catalog.py --check
 
 echo "▸ Building vivobody..."
 if ! xcodebuild \

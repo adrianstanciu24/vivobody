@@ -10,7 +10,6 @@ Inspect `git status --short` before editing. Preserve unrelated changes. Read on
 |---|---|---|
 | Understand a feature or change its behavior | [Spec index](specs/index.md), then the active feature contract | Non-UI: smallest affected build; UI/interaction: focused Baguette check |
 | UI, navigation, appearance, or copy | [Product principles](workout-app-principles.md), [quality](engineering/quality.md), active feature spec | [Feature/scenario map](Scripts/verify_scenarios/README.md#choose-evidence-for-the-change); inspect light, dark, and relevant accessibility states |
-| Add or review a bundled exercise or family | [Repository catalog skill](.agents/skills/vivobody-add-exercise/SKILL.md), [catalog foundation](specs/catalog/README.md) | Relevant Baguette Library/detail check; catalog Python suite, `CatalogBiomechanicsTests`, and `Scripts/check.sh` |
 | Custom exercises, templates, or exercise selection | [Exercise contract](specs/exercise-data-contract.md), applicable spec in the index | Relevant Baguette Library check |
 | Persistence, session lifetime, or integrations | [Architecture](ARCHITECTURE.md), applicable feature spec | Smallest affected build; Baguette for changed UI/interaction; affected boundary suites and `Scripts/check.sh` |
 | Docs, instructions, or process tooling | [Documentation maintenance](engineering/quality.md#documentation-maintenance) | [Documentation and tooling checks](engineering/verification.md#documentation-and-process-tooling) |
@@ -28,14 +27,13 @@ For project work involving AI judgments or TypeSafe integration, use the [TypeSa
 
 ## Project Structure & Module Organization
 
-`vivobody/` contains `App/`, `Models/`, `Screens/`, `Components/`, `Assets.xcassets/`, and `Resources/`. `vivobodyWidgets/` owns widget surfaces; `VivoKit/` shares app/widget contracts. Tests live in `vivobodyTests/` and `VivoKit/Tests/`. Author exercises in `specs/catalog/families/`; generate `vivobody/Resources/catalog.json` with `Scripts/catalog.py`.
+`vivobody/` contains `App/`, `Models/`, `Screens/`, `Components/`, `Assets.xcassets/`, and `Resources/`. `vivobodyWidgets/` owns widget surfaces; `VivoKit/` shares app/widget contracts. Tests live in `vivobodyTests/` and `VivoKit/Tests/`.
 
 ## Build, Test, and Development Commands
 
 Use macOS and Xcode; run commands from the repository root:
 
 ```bash
-/usr/bin/python3 Scripts/check_documentation.py # Prose-only validation; see verification guide
 swiftformat vivobody/ vivobodyWidgets/ VivoKit/Sources/ # Format Swift
 SCENARIO=<relevant-scenario> Scripts/verify.sh # Smallest relevant Baguette check
 ```
@@ -52,7 +50,7 @@ Verify after a coherent change, not every tiny edit. Repeat only after relevant 
 
 Before you report an implementation as done, run the test suites that cover the change: the targeted Swift Testing suites for the affected area, `swift test --package-path VivoKit` when VivoKit changes, and `Scripts/check.sh` as the final gate for any code, catalog, or tooling change. Fix failures before you report. Commands are in [the verification guide](engineering/verification.md#test-suites-and-the-final-gate).
 
-This agent verification policy takes precedence over conflicting test/build requirements in other repository guides, skills, and historical plans. Documentation-only edits use the lightweight documentation checker and `git diff --check`; they do not need Baguette. Test code, when requested, follows Swift Testing conventions with deterministic clocks.
+This agent verification policy takes precedence over conflicting test/build requirements in other repository guides, skills, and historical plans. Documentation-only edits use `git diff --check`; they do not need Baguette. Test code, when requested, follows Swift Testing conventions with deterministic clocks.
 
 Report the builds, Baguette checks, and test suites performed, with their results, and any remaining device-only checks. A successful build proves compilation, not runtime behavior. If the selected check is unavailable or cannot verify the changed behavior, state that limitation; a green unrelated suite is not evidence.
 

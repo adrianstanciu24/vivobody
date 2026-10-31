@@ -10,7 +10,7 @@
 //  scene returns — so in the foreground the BreathingTimer remains the
 //  only voice, and the notification never double-fires behind it.
 //
-//  The chime is sfx-rest-done.caf (Scripts/generate_sounds.py), the
+//  The chime is sfx-rest-done.caf, the
 //  same synth voice as the in-app sounds, so the identity carries to
 //  the lock screen instead of falling back to the stock tri-tone.
 //

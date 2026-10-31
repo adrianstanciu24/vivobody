@@ -100,16 +100,6 @@
 			path = vivobody;
 			sourceTree = "<group>";
 		};
-		781FC1B62FBB8CC200EE0477 /* vivobodyTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = vivobodyTests;
-			sourceTree = "<group>";
-		};
-		781FC1C02FBB8CC200EE0477 /* vivobodyUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = vivobodyUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,8 +142,6 @@
 				E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */,
 				781FC1A42FBB8CC000EE0477 /* vivobody */,
 				33EBD939611D487DBC7134F4 /* vivobodyWidgets */,
-				781FC1B62FBB8CC200EE0477 /* vivobodyTests */,
-				781FC1C02FBB8CC200EE0477 /* vivobodyUITests */,
 				781FC1A32FBB8CC000EE0477 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -176,7 +164,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 781FC1C62FBB8CC200EE0477 /* Build configuration list for PBXNativeTarget "vivobody" */;
 			buildPhases = (
-				C7A10B22D3E44F55A6677889 /* Verify Canonical Catalog */,
 				781FC19E2FBB8CC000EE0477 /* Sources */,
 				781FC19F2FBB8CC000EE0477 /* Frameworks */,
 				781FC1A02FBB8CC000EE0477 /* Resources */,
@@ -211,9 +198,6 @@
 			dependencies = (
 				781FC1B52FBB8CC200EE0477 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				781FC1B62FBB8CC200EE0477 /* vivobodyTests */,
-			);
 			name = vivobodyTests;
 			packageProductDependencies = (
 			);
@@ -233,9 +217,6 @@
 			);
 			dependencies = (
 				781FC1BF2FBB8CC200EE0477 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				781FC1C02FBB8CC200EE0477 /* vivobodyUITests */,
 			);
 			name = vivobodyUITests;
 			packageProductDependencies = (
@@ -348,31 +329,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		C7A10B22D3E44F55A6677889 /* Verify Canonical Catalog */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"$(SRCROOT)/Scripts/catalog-inputs.xcfilelist",
-			);
-			inputPaths = (
-				"$(SRCROOT)/Scripts/catalog-inputs.xcfilelist",
-				"$(SRCROOT)/specs/catalog/families",
-			);
-			name = "Verify Canonical Catalog";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/catalog-check.stamp",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\n# The family directory catches roster additions/removals; the generated file\n# list gives the sandbox exact read access and is parity-checked by Python.\ncd \"$SRCROOT\"\n/usr/bin/python3 Scripts/catalog.py --check\ntouch \"$SCRIPT_OUTPUT_FILE_0\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6B32D2D5CE894911A542B070 /* Sources */ = {

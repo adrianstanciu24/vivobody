@@ -3,8 +3,7 @@
 //  vivobody
 //
 //  Strict decoder and validator for the bundled exercise catalog.
-//  catalog.json is deterministically compiled from specs/catalog
-//  by Scripts/catalog.py. It is a build-time contract: malformed
+//  catalog.json is a build-time contract: malformed
 //  enums, missing required biomechanics fields, malformed structured
 //  execution instructions, duplicate stable IDs, or ambiguous names
 //  fail loudly rather than acquiring silent defaults.
