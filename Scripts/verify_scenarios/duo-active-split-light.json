@@ -1,0 +1,121 @@
+{
+  "name": "duo-active-split-light",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-scheduled-template",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "scheduledWorkoutStartButton",
+        "label": "Start today's plan, Scheduled Test",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "scheduledWorkoutStartButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "minimizeWorkoutButton",
+        "label": "Minimize workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Barbell Bench Press",
+            "role": "AXHeading"
+          },
+          {
+            "label": "Sets",
+            "role": "AXSlider"
+          },
+          {
+            "label": "Weight",
+            "role": "AXSlider"
+          },
+          {
+            "label": "Reps",
+            "role": "AXSlider"
+          },
+          {
+            "label": "Reps left in the tank",
+            "role": "AXSlider"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "todayStartWorkoutButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "completeSetButton",
+        "role": "AXButton",
+        "value": "not completed"
+      }
+    },
+    {
+      "tap": {
+        "label": "Personal record",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "restTimerOverlay",
+        "valueRegex": "^[0-9]+ seconds remaining of"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "restTimerOverlay",
+      "role": "AXGenericElement",
+      "valueRegex": "^[0-9]+ seconds remaining of"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Personal record",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "todayStartWorkoutButton"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

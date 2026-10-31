@@ -3,7 +3,8 @@
 //  vivobody
 //
 //  The two side-by-side lanes a wide dashboard places its cards in, kept
-//  clear of the display's fold. Insights and Me share this one geometry.
+//  clear of the display's fold. Insights, Me, and the active workout share
+//  this one geometry.
 //
 
 import SwiftUI
@@ -74,5 +75,16 @@ nonisolated struct DashboardLanes: Equatable {
               let maxX = crossing.map(\.maxX).max()
         else { return nil }
         return minX ... maxX
+    }
+}
+
+extension View {
+    /// Places this view across \`extent\` of the container's width. Without an
+    /// extent, the view centers across the whole width. Both cases keep one
+    /// view identity, so a lane change does not rebuild the view.
+    func horizontallyPlaced(in extent: ClosedRange<CGFloat>?) -> some View {
+        frame(width: extent.map { $0.upperBound - $0.lowerBound })
+            .padding(.leading, extent?.lowerBound ?? 0)
+            .frame(maxWidth: .infinity, alignment: extent == nil ? .center : .leading)
     }
 }

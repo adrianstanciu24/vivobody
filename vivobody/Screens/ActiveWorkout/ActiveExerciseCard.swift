@@ -24,6 +24,11 @@
 //      the fixed identity and thumb-reachable primary action, so an
 //      omitted capability rebalances space instead of leaving a hole.
 //
+//  On a wide window the column cuts once, between the configuration and
+//  the working values: identity, set progress, and configuration lead;
+//  the working values, effort, and the action trail, so effort stays with
+//  the completion tap.
+//
 //  Progress uses outline versus fill as well as the shared accent, so
 //  pending, current, and completed sets do not depend on hue alone.
 //
@@ -48,6 +53,8 @@ struct ActiveExerciseCard: View {
     var onRemoveRequested: (() -> Void)? = nil
     /// Parent-owned cancellation generation for archive/discard/minimize.
     var scrubCancellationID: Int = 0
+    /// The page's two lanes on a wide window; nil keeps the phone column.
+    var lanes: DashboardLanes? = nil
 
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
@@ -83,7 +90,9 @@ struct ActiveExerciseCard: View {
 
     var body: some View {
         Group {
-            if dynamicTypeSize.isAccessibilitySize {
+            if let lanes {
+                splitContent(lanes)
+            } else if dynamicTypeSize.isAccessibilitySize {
                 ScrollView(.vertical, showsIndicators: false) {
                     cardContent(expandsVertically: false)
                         .padding(.vertical, Space.sm)

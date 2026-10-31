@@ -26,6 +26,10 @@
 //  Two modes share the layout: in-progress (swiped here mid-workout)
 //  and complete (every set logged → Done appears, success haptic).
 //
+//  On a wide window the receipt (status through the load comparison)
+//  leads and the exercise list with its actions trails; each lane scrolls
+//  alone.
+//
 
 import SwiftUI
 import VivoKit
@@ -58,6 +62,9 @@ struct WorkoutSummaryCard: View {
     /// the completed receipt and never owns a store query itself.
     var loadComparison: WorkoutLoadComparison? = nil
 
+    /// The page's two lanes on a wide window; nil keeps the phone column.
+    var lanes: DashboardLanes? = nil
+
     /// Duration count-up state lives on `session` (not @State) so it
     /// survives view remounts — e.g. minimizing to the MiniBar and
     /// re-expanding.
@@ -84,51 +91,37 @@ struct WorkoutSummaryCard: View {
     }
 
     var body: some View {
+        Group {
+            if let lanes {
+                WorkoutLaneSplit(lanes: lanes, scrolls: true, fillsScrollHeight: true) {
+                    receipt
+                        .padding(.top, Space.lg)
+                        .padding(.bottom, Space.xl)
+                } trailing: {
+                    exercisesAndActions
+                        .padding(.top, Space.lg + Space.xs)
+                        .padding(.bottom, Space.xl)
+                }
+            } else {
+                column
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .onChange(of: session.activeExerciseIndex, initial: true) { _, newIndex in
+            if !isHistorical, newIndex == session.orderedExercises.count {
+                playEntrance()
+            }
+        }
+    }
+
+    private var column: some View {
         GeometryReader { geo in
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
-                    statusKicker
-                        .padding(.top, Space.xs)
-                        .powerOn(0)
+                    receipt
 
-                    heroMetric
+                    exercisesAndActions
                         .padding(.top, Space.xl)
-                        .powerOn(1)
-
-                    statBand
-                        .padding(.top, Space.md)
-                        .powerOn(2)
-
-                    if SessionIntensityLine.hasContent(session) {
-                        SessionIntensityLine(session: session, unit: unit)
-                            .padding(.top, Space.md)
-                            .powerOn(2)
-                    }
-
-                    if isComplete, let loadComparison {
-                        Rectangle()
-                            .fill(Surface.edge)
-                            .frame(height: 1)
-                            .padding(.top, Space.xl)
-                            .accessibilityHidden(true)
-
-                        WorkoutLoadComparisonChart(
-                            comparison: loadComparison,
-                            unit: unit
-                        )
-                        .padding(.top, Space.lg)
-                        .powerOn(3)
-                    }
-
-                    exerciseList
-                        .padding(.top, Space.xl)
-                        .powerOn(4)
-
-                    Spacer(minLength: Space.xl)
-
-                    actionArea
-                        .padding(.top, Space.xl)
-                        .powerOn(5)
                 }
                 .padding(.top, Space.lg)
                 .padding(.bottom, Space.xl)
@@ -138,12 +131,60 @@ struct WorkoutSummaryCard: View {
             .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
             .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .onChange(of: session.activeExerciseIndex, initial: true) { _, newIndex in
-            if !isHistorical, newIndex == session.orderedExercises.count {
-                playEntrance()
+    }
+
+    /// Status, hero metric, stat band, intensity line, and the completed
+    /// load comparison.
+    private var receipt: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            statusKicker
+                .padding(.top, Space.xs)
+                .powerOn(0)
+
+            heroMetric
+                .padding(.top, Space.xl)
+                .powerOn(1)
+
+            statBand
+                .padding(.top, Space.md)
+                .powerOn(2)
+
+            if SessionIntensityLine.hasContent(session) {
+                SessionIntensityLine(session: session, unit: unit)
+                    .padding(.top, Space.md)
+                    .powerOn(2)
+            }
+
+            if isComplete, let loadComparison {
+                Rectangle()
+                    .fill(Surface.edge)
+                    .frame(height: 1)
+                    .padding(.top, Space.xl)
+                    .accessibilityHidden(true)
+
+                WorkoutLoadComparisonChart(
+                    comparison: loadComparison,
+                    unit: unit
+                )
+                .padding(.top, Space.lg)
+                .powerOn(3)
             }
         }
+    }
+
+    /// The exercise list, then the actions at the bottom of the space left.
+    private var exercisesAndActions: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            exerciseList
+                .powerOn(4)
+
+            Spacer(minLength: Space.xl)
+
+            actionArea
+                .padding(.top, Space.xl)
+                .powerOn(5)
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
     }
 
     // MARK: - Status + hero

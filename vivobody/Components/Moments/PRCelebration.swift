@@ -38,6 +38,10 @@ struct PRCelebration: View {
     let value: String
     var unit: String? = nil
     var detail: String? = nil
+    /// The horizontal extent, in the presenter's safe-area coordinates, that
+    /// the content centers in, so no digit sits on a fold. The backdrop still
+    /// covers the whole window. Nil centers across the window.
+    var contentExtent: ClosedRange<CGFloat>? = nil
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -65,14 +69,18 @@ struct PRCelebration: View {
                     .ignoresSafeArea()
 
                 centerStack
+                    .horizontallyPlaced(in: contentExtent)
 
                 VStack {
                     Spacer()
                     prompt
                         .padding(.bottom, 64)
                 }
+                .horizontallyPlaced(in: contentExtent)
             }
-            .ignoresSafeArea()
+            // A lane is measured inside the horizontal safe area, so keep
+            // that inset when placing content in one.
+            .ignoresSafeArea(edges: contentExtent == nil ? .all : .vertical)
             .contentShape(Rectangle())
             // Tap (not swipe) to dismiss — claims every gesture so the
             // celebration is its own modal moment.

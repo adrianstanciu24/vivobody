@@ -1,0 +1,224 @@
+{
+  "name": "duo-active-split",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-partial",
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "labelContains": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "labelContains": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "minimizeWorkoutButton",
+        "label": "Minimize workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Barbell Bench Press",
+            "role": "AXHeading"
+          },
+          {
+            "label": "Set 2 of 2"
+          },
+          {
+            "label": "Set 1",
+            "role": "AXButton",
+            "value": "Completed, 135 x 8"
+          },
+          {
+            "label": "Sets",
+            "role": "AXSlider",
+            "value": "2"
+          },
+          {
+            "label": "Weight increment",
+            "value": "5 lb"
+          },
+          {
+            "label": "Weight",
+            "role": "AXSlider",
+            "value": "135"
+          },
+          {
+            "label": "Reps",
+            "role": "AXSlider",
+            "value": "8"
+          },
+          {
+            "label": "Reps left in the tank",
+            "role": "AXSlider"
+          },
+          {
+            "identifier": "completeSetButton",
+            "role": "AXButton",
+            "value": "not completed"
+          },
+          {
+            "label": "Exercise pages",
+            "value": "Page 1 of 2"
+          },
+          {
+            "identifier": "endWorkoutButton",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "activeWorkoutResumeBar"
+          },
+          {
+            "label": "Consistency",
+            "role": "AXHeading"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "minimizeWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "labelContains": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Consistency",
+            "role": "AXHeading"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "minimizeWorkoutButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "labelContains": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "completeSetButton",
+        "role": "AXButton",
+        "value": "not completed"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "down",
+        "count": 1,
+        "lane": {
+          "label": "Weight",
+          "role": "AXSlider"
+        }
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "minimizeWorkoutButton",
+            "role": "AXButton"
+          },
+          {
+            "label": "Weight",
+            "role": "AXSlider",
+            "valueRegex": "^(?!135$)[0-9.]+$"
+          },
+          {
+            "identifier": "completeSetButton",
+            "role": "AXButton",
+            "value": "not completed"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "activeWorkoutResumeBar"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "completeSetButton",
+        "role": "AXButton",
+        "value": "not completed"
+      }
+    },
+    {
+      "wait": {
+        "label": "Finish workout and return to home",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "COMPLETE"
+    },
+    {
+      "label": "Add another exercise",
+      "role": "AXButton"
+    },
+    {
+      "label": "Finish workout and return to home",
+      "role": "AXButton"
+    },
+    {
+      "labelContains": "Barbell Bench Press"
+    },
+    {
+      "label": "Exercise pages",
+      "value": "Page 2 of 2"
+    },
+    {
+      "identifier": "minimizeWorkoutButton",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "activeWorkoutResumeBar"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

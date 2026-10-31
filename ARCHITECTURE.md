@@ -191,6 +191,12 @@ only the visible column while each feature owns its selection as a plain ID.
 Today, Insights, and Me split into two columns only in a wide, regular-width
 window on iOS 27.1 or later. Insights and Me place their cards in the
 fold-aware lanes of [DashboardLanes](vivobody/Components/Containers/DashboardLanes.swift).
+`AppRoot` also passes the layout into the expanded workout. A workout that
+expands in such a window, or on a device whose window reports a hinge
+([DeviceHingeReader](vivobody/App/DeviceHingeReader.swift)), opens as a
+full-window cover and keeps that presentation until it minimizes, so a fold or
+an unfold only resizes it; elsewhere it opens as a sheet that keeps one column. In the cover, each workout page splits into the same lanes, built in
+page coordinates by [ActiveWorkoutSplitContent](vivobody/Screens/ActiveWorkout/ActiveWorkoutSplitContent.swift).
 
 ## Launch path
 

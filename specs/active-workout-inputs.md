@@ -60,3 +60,45 @@ scrub feel and haptic timing remain manual checks.
 The rest readout uses unobstructed digits, without ghost numerals underneath.
 Reopening an in-progress rest preserves its full interval in the “of” label
 and progress scale while the live remaining time continues counting down.
+
+## Wide display
+
+A workout that expands in a wide, regular-width window on iOS 27.1 or later
+fills the window. Each exercise page splits at the fold into two lanes with
+one cut in the column, between the configuration and the working values:
+
+- The leading lane holds identity and setup: the exercise name and menu, the
+  set position and segment timeline with the last-set readout, and the Sets
+  and STEP configuration. Its content aligns to the top.
+- The trailing lane holds the set: the working values with their rails, reps
+  in reserve, and the completion action. The action sits at the bottom in
+  thumb reach, and the working values center in the space above it. Reps in
+  reserve stays in this lane because the person sets it just before the
+  completion tap.
+- The working value keeps its 104pt size and fits the lane width with the
+  same stable worst-case digit scale.
+- The top bar spans the window and adds a minimize control. The page dots sit
+  under the trailing lane. A horizontal swipe across either lane pages whole
+  exercises, and vertical scrubs keep gesture ownership.
+- The rest timer and the personal-record moment keep their full-window
+  scrim, and their content centers in the trailing lane, so no digit sits on
+  the fold.
+- The Summary page puts the status, hero metric, stat band, intensity line,
+  and completed load comparison in the leading lane, and the exercise list
+  with Add exercise and Done in the trailing lane.
+- At accessibility text sizes each lane scrolls alone, and the completion
+  action stays reachable. VoiceOver reads the leading lane, then the trailing
+  lane, which is the single-column order.
+- On a device with a hinge, such as iPhone Duo, the workout uses the
+  full-window presentation in every pose, folded or open. A fold or an
+  unfold only resizes the workout and changes its composition: one column
+  on the folded display, the two lanes on the open display. Nothing closes,
+  and the shell does not show between the two. Other iPhones keep the
+  sheet. A wide window without a hinge, such as resizable iPhone Mirroring,
+  uses the full-window presentation when the workout opens in it, and keeps
+  the presentation until the workout minimizes.
+
+Use the [Duo active workout scenario](../Scripts/verify_scenarios/duo-active-split.json)
+and its `-light` and `-accessibility` variants on the iPhone Duo simulator. A
+fold or unfold during a workout, during rest, or with Edit Set open, scrub feel in the
+trailing lane, the swipe-down minimize, and VoiceOver order are device checks.

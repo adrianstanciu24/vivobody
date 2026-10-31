@@ -1,0 +1,101 @@
+{
+  "name": "duo-active-split-accessibility",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-bodyweight-duration",
+      "--static-body",
+      "-settings.appearance",
+      "dark",
+      "-UIPreferredContentSizeCategoryName",
+      "UICTContentSizeCategoryAccessibilityL"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "minimizeWorkoutButton",
+        "label": "Minimize workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Weighted Hang Fixture"
+          },
+          {
+            "label": "Time increment",
+            "value": "5 seconds"
+          },
+          {
+            "label": "Hold",
+            "role": "AXSlider"
+          },
+          {
+            "label": "Added load",
+            "role": "AXSlider"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "activeWorkoutResumeBar"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "completeSetButton",
+          "role": "AXButton",
+          "value": "not completed"
+        },
+        "direction": "up",
+        "maxSwipes": 4,
+        "lane": {
+          "label": "Hold",
+          "role": "AXSlider"
+        }
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "completeSetButton",
+      "role": "AXButton",
+      "value": "not completed",
+      "enabled": true
+    },
+    {
+      "label": "Weighted Hang Fixture"
+    },
+    {
+      "identifier": "minimizeWorkoutButton",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "activeWorkoutResumeBar"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

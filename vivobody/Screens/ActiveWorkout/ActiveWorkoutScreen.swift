@@ -25,6 +25,7 @@ struct ActiveWorkoutScreen: View {
     @Environment(\.sessionAnalytics) var sessionAnalytics
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.appDisplayLayout) var displayLayout
 
     /// Optional archive callback. Wired to the Summary card's DONE
     /// button — that's the canonical "workout is over, save it"
@@ -41,6 +42,10 @@ struct ActiveWorkoutScreen: View {
     /// can be finished early, while empty workouts only discard.
     /// Distinct from `onDismiss`, which archives.
     private let onDiscard: (() -> Void)?
+
+    /// Returns the workout to the tabs. When provided, the top bar shows a
+    /// minimize control; a sheet relies on its grabber instead.
+    let onMinimize: (() -> Void)?
 
     /// AppRoot wires these to WorkoutSessionController so semantic changes
     /// and settled scrubs share the session lifetime. Nil in previews.
@@ -94,6 +99,7 @@ struct ActiveWorkoutScreen: View {
         session: WorkoutSession = .sample,
         onDismiss: (() -> Void)? = nil,
         onDiscard: (() -> Void)? = nil,
+        onMinimize: (() -> Void)? = nil,
         onSessionUpdate: (() -> Void)? = nil,
         onScrubEnded: (() -> Void)? = nil,
         onCompleteSet:
@@ -108,6 +114,7 @@ struct ActiveWorkoutScreen: View {
         )
         self.onDismiss = onDismiss
         self.onDiscard = onDiscard
+        self.onMinimize = onMinimize
         self.onSessionUpdate = onSessionUpdate
         self.onScrubEnded = onScrubEnded
         self.onCompleteSet = onCompleteSet
@@ -116,39 +123,10 @@ struct ActiveWorkoutScreen: View {
     }
 
     var body: some View {
-        ZStack {
-            Surface.background.ignoresSafeArea()
-
-            if !isEmpty {
-                pager
-                    .safeAreaBar(edge: .top, spacing: 8) { topBar }
-                    .safeAreaBar(edge: .bottom, spacing: Space.md) { bottomBar }
-                    .accessibilityHidden(isBlockingOverlayPresented)
-            }
-
-            if session.isResting {
-                RestTimerOverlay(
-                    session: session,
-                    onSessionUpdate: onSessionUpdate
-                )
-                .transition(.opacity)
-                .zIndex(10)
-                .accessibilityHidden(session.pendingPRValue != nil)
-            }
-
-            // Personal-record celebration. Sits at the highest zIndex
-            // so it visually "owns" the screen for its brief moment.
-            // Rest timer continues counting underneath; when the user
-            // dismisses the celebration they re-emerge into rest
-            // already in progress — no time stolen by the ceremony.
-            PRCelebration(
-                isPresented: prPresentationBinding,
-                title: "Personal record",
-                value: session.pendingPRValue ?? "",
-                unit: session.pendingPRUnit,
-                detail: session.pendingPRDetail
-            )
-            .zIndex(20)
+        // Always read, so the split and the column share one view identity
+        // and a layout change keeps every card's sheets and state.
+        GeometryReader { viewport in
+            content(lanes: lanes(in: viewport))
         }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: session.isResting)
         // While a PR celebration is on screen, lock the sheet's
@@ -191,6 +169,48 @@ struct ActiveWorkoutScreen: View {
             message: removalAlertMessage(for:)
         )
         .saveErrorAlert($saveError)
+    }
+
+    private func content(lanes: ActiveWorkoutLanes?) -> some View {
+        ZStack {
+            Surface.background.ignoresSafeArea()
+
+            if !isEmpty {
+                pager(lanes: lanes?.page)
+                    .clipShape(PagerSideClip(isActive: lanes != nil))
+                    .safeAreaBar(edge: .top, spacing: 8) { topBar }
+                    .safeAreaBar(edge: .bottom, spacing: Space.md) {
+                        bottomBar.horizontallyPlaced(in: lanes?.viewportTrailing)
+                    }
+                    .accessibilityHidden(isBlockingOverlayPresented)
+            }
+
+            if session.isResting {
+                RestTimerOverlay(
+                    session: session,
+                    onSessionUpdate: onSessionUpdate,
+                    contentExtent: lanes?.viewportTrailing
+                )
+                .transition(.opacity)
+                .zIndex(10)
+                .accessibilityHidden(session.pendingPRValue != nil)
+            }
+
+            // Personal-record celebration. Sits at the highest zIndex
+            // so it visually "owns" the screen for its brief moment.
+            // Rest timer continues counting underneath; when the user
+            // dismisses the celebration they re-emerge into rest
+            // already in progress — no time stolen by the ceremony.
+            PRCelebration(
+                isPresented: prPresentationBinding,
+                title: "Personal record",
+                value: session.pendingPRValue ?? "",
+                unit: session.pendingPRUnit,
+                detail: session.pendingPRDetail,
+                contentExtent: lanes?.viewportTrailing
+            )
+            .zIndex(20)
+        }
     }
 
     // MARK: - Mid-workout add
@@ -266,6 +286,7 @@ struct ActiveWorkoutScreen: View {
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(spacing: Space.xs) {
                     HStack(spacing: Space.sm) {
+                        if onMinimize != nil { minimizeButton }
                         workoutTitle
                         Spacer(minLength: Space.sm)
                     }
@@ -280,6 +301,7 @@ struct ActiveWorkoutScreen: View {
                 }
             } else {
                 HStack(spacing: Space.sm) {
+                    if onMinimize != nil { minimizeButton }
                     workoutTitle
                     Spacer(minLength: Space.sm)
                     if !isEmpty { addButton }
@@ -398,17 +420,13 @@ struct ActiveWorkoutScreen: View {
 
     // MARK: - Pager
 
-    private var pager: some View {
+    private func pager(lanes: DashboardLanes?) -> some View {
         let exercises = session.orderedExercises
-        // Slimmer side chrome than the pager's default: the workout
-        // card is an instrument read from arm's length, so the width
-        // goes to the numerals — a sliver of neighbor peek plus the
-        // page dots is enough "there's more" cue.
         return SwipePager(
             selection: $session.activeExerciseIndex,
             count: exercises.count + 1,
-            peekWidth: 10,
-            spacing: 8
+            peekWidth: Self.pagerPeekWidth,
+            spacing: Self.pagerSpacing
         ) { i in
             if i < exercises.count {
                 ActiveExerciseCard(
@@ -426,7 +444,8 @@ struct ActiveWorkoutScreen: View {
                     onRemoveRequested: onRemoveExercise == nil
                         ? nil
                         : { beginRemoving(exercises[i]) },
-                    scrubCancellationID: scrubCancellationID
+                    scrubCancellationID: scrubCancellationID,
+                    lanes: lanes
                 )
                 .id(exercises[i].id)
             } else {
@@ -434,7 +453,8 @@ struct ActiveWorkoutScreen: View {
                     session: session,
                     onDone: { finishScrubbing(then: onDismiss) },
                     onAddExercise: { showAddExercisePicker = true },
-                    loadComparison: summaryLoadComparison
+                    loadComparison: summaryLoadComparison,
+                    lanes: lanes
                 )
             }
         }

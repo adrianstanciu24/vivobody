@@ -2,7 +2,8 @@
 //  RestTimerOverlay.swift
 //  vivobody
 //
-//  Full-screen overlay that hosts the BreathingTimer between sets.
+//  Full-screen overlay that hosts the BreathingTimer between sets. On a
+//  wide window the timer sits in the set's lane, clear of the fold.
 //  Identity-rotates on each rest so a fresh timer is constructed every
 //  time (the BreathingTimer reads its duration at init and would
 //  otherwise stick to a stale end time).
@@ -16,6 +17,9 @@ import VivoKit
 struct RestTimerOverlay: View {
     @Bindable var session: WorkoutSession
     var onSessionUpdate: (() -> Void)? = nil
+    /// The horizontal extent the timer sits in on a wide window, clear of
+    /// the fold. The scrim still covers the whole window.
+    var contentExtent: ClosedRange<CGFloat>? = nil
     @Environment(\.modelContext) private var modelContext
 
     @State private var saveError: SaveErrorBox? = nil
@@ -69,6 +73,7 @@ struct RestTimerOverlay: View {
                     .padding(.horizontal, Space.gutter)
                 }
             }
+            .horizontallyPlaced(in: contentExtent)
         }
         // Bump the instance whenever a brand new rest BEGINS
         // (restStartedAt becomes a non-nil value), so the

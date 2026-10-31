@@ -3,7 +3,8 @@
 //  vivobody
 //
 //  Composition-only bridge from ActiveExerciseCard's model adapter to its
-//  focused identity, reps, duration, effort, and primary-action leaves.
+//  focused identity, reps, duration, effort, and primary-action leaves, in
+//  the phone column or the wide window's two lanes.
 //
 
 import SwiftUI
@@ -42,39 +43,47 @@ extension ActiveExerciseCard {
         )
     }
 
+    var configurationSection: some View {
+        ActiveExerciseConfigurationSection(
+            input: cardInput.configuration,
+            actions: ActiveExerciseConfigurationActions(
+                addSet: addSet,
+                removeSet: { id in
+                    guard let set = workoutSet(id: id) else { return }
+                    removeSet(set)
+                },
+                selectStep: { step in
+                    Haptics.selection()
+                    switch exercise.trackingMode {
+                    case .reps: setWeightStep(step)
+                    case .duration: setDurationStep(step)
+                    }
+                }
+            )
+        )
+    }
+
     var heroBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ActiveExerciseConfigurationSection(
-                input: cardInput.configuration,
-                actions: ActiveExerciseConfigurationActions(
-                    addSet: addSet,
-                    removeSet: { id in
-                        guard let set = workoutSet(id: id) else { return }
-                        removeSet(set)
-                    },
-                    selectStep: { step in
-                        Haptics.selection()
-                        switch exercise.trackingMode {
-                        case .reps: setWeightStep(step)
-                        case .duration: setDurationStep(step)
-                        }
-                    }
-                )
-            )
+            configurationSection
 
             SectionDivider()
                 .padding(.vertical, Space.sm)
 
-            metricInstrument
-                .background {
-                    Ellipse()
-                        .fill(Tint.primary.opacity(0.10))
-                        .padding(.horizontal, Space.xl)
-                        .blur(radius: Space.xxl)
-                        .allowsHitTesting(false)
-                        .accessibilityHidden(true)
-                }
+            metricBlock
         }
+    }
+
+    private var metricBlock: some View {
+        metricInstrument
+            .background {
+                Ellipse()
+                    .fill(Tint.primary.opacity(0.10))
+                    .padding(.horizontal, Space.xl)
+                    .blur(radius: Space.xxl)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
     }
 
     @ViewBuilder
@@ -101,10 +110,19 @@ extension ActiveExerciseCard {
         }
     }
 
-    func instrumentArea(expandsVertically: Bool) -> some View {
+    func instrumentArea(
+        expandsVertically: Bool,
+        includesConfiguration: Bool = true
+    ) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            heroBlock
-                .powerOn(2, animated: isActive)
+            Group {
+                if includesConfiguration {
+                    heroBlock
+                } else {
+                    metricBlock
+                }
+            }
+            .powerOn(2, animated: isActive)
 
             if showsRIRControl {
                 SectionDivider()
@@ -123,6 +141,39 @@ extension ActiveExerciseCard {
             maxHeight: expandsVertically ? .infinity : nil,
             alignment: .center
         )
+    }
+
+    /// Identity and setup in the leading lane, aligned to the top; the set
+    /// in the trailing lane, with the action at the bottom in thumb reach
+    /// and the working values centered above it. At accessibility sizes
+    /// each lane scrolls alone, as the column does.
+    func splitContent(_ lanes: DashboardLanes) -> some View {
+        let scrolls = dynamicTypeSize.isAccessibilitySize
+        return WorkoutLaneSplit(lanes: lanes, scrolls: scrolls) {
+            VStack(alignment: .leading, spacing: 0) {
+                nameRow
+                    .powerOn(0, animated: isActive)
+                setPips
+                    .padding(.top, Space.sm)
+                    .powerOn(1, animated: isActive)
+                configurationSection
+                    .padding(.top, Space.xl)
+                    .powerOn(2, animated: isActive)
+            }
+            .padding(.vertical, scrolls ? Space.sm : 0)
+            .frame(maxHeight: scrolls ? nil : .infinity, alignment: .top)
+        } trailing: {
+            VStack(alignment: .leading, spacing: 0) {
+                instrumentArea(expandsVertically: !scrolls, includesConfiguration: false)
+                actionArea
+                    .padding(.top, Space.md)
+                    .powerOn(showsRIRControl ? 4 : 3, animated: isActive)
+            }
+            .padding(.vertical, scrolls ? Space.sm : 0)
+            .frame(maxHeight: scrolls ? nil : .infinity, alignment: .top)
+        }
+        // Keep enlarged controls above the page dots, as the column does.
+        .padding(.bottom, scrolls ? Space.tapMin : 0)
     }
 
     var actionArea: some View {

@@ -53,6 +53,7 @@ extension TodayScreen {
         ) {
             appState.workout.expandWorkout()
         }
+        .activeWorkoutTransitionSource(.resumeBar)
         .accessibilityIdentifier("activeWorkoutResumeBar")
         .accessibilityHint(
             session.isAllComplete

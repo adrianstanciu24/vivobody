@@ -13,10 +13,13 @@
 //       the workout back to the full screen. Inspired by Music's
 //       MiniPlayer. Suppressed on Today, where the pinned CTA itself
 //       becomes the resume control rather than stacking a third bar.
-//    3. .sheet(isPresented:) — the focused ActiveWorkoutScreen
-//       when the workout is expanded. Presented as a .large sheet
-//       with a grabber so swipe-down minimizes it back to the MiniBar
-//       (Music-style). Hides the tab bar while expanded.
+//    3. The focused ActiveWorkoutScreen when the workout is expanded.
+//       Presented as a .large sheet with a grabber so swipe-down minimizes
+//       it back to the MiniBar (Music-style). A window that splits the
+//       dashboards, or a device with a hinge in any pose, gets a full-window
+//       cover instead, which zooms from the resume control and splits the
+//       workout at the fold. One presentation lasts through a fold or an
+//       unfold, so the workout only resizes.
 //
 //  Session lifetime vs. presentation lifetime are intentionally
 //  decoupled here: `workout.activeSession != nil` controls whether a
@@ -85,6 +88,10 @@ struct AppRoot: View {
         CatalogLaunchReconciler.requiresReconciliation() ? .preparing : .ready
     @State private var catalogPreparationAttempt = 0
     @State private var removedCatalogItemIDs: [UUID] = []
+    @State private var displayLayout: AppDisplayLayout = .compact
+    @State private var hasHinge = false
+    @State private var workoutPresentation = ActiveWorkoutPresentationLatch()
+    @Namespace private var workoutTransition
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
 
@@ -154,6 +161,7 @@ struct AppRoot: View {
             .tabViewBottomAccessory(isEnabled: miniBarSession(workout) != nil) {
                 if let session = miniBarSession(workout) {
                     ActiveWorkoutMiniBar(session: session, onExpand: { workout.expandWorkout() })
+                        .matchedTransitionSource(id: ActiveWorkoutTransitionSource.miniBar, in: workoutTransition)
                 }
             }
             .saveErrorAlert($workout.lastSaveError)
@@ -261,68 +269,132 @@ struct AppRoot: View {
                     workout.handle(action)
                 }
             }
+            .onChange(of: workout.isWorkoutExpanded, initial: true) { _, isExpanded in
+                workoutPresentation.update(
+                    isExpanded: isExpanded,
+                    layout: displayLayout,
+                    hasHinge: hasHinge
+                )
+            }
             .sheet(
-                isPresented: $workout.isWorkoutExpanded,
+                isPresented: workoutExpansion(workout, presentedAs: .sheet),
                 onDismiss: { workout.finalizePendingDiscard() }
             ) {
                 if let session = workout.activeSession {
-                    ActiveWorkoutScreen(
-                        session: session,
-                        onDismiss: { workout.dismissActiveWorkout() },
-                        onDiscard: { workout.discardActiveWorkout() },
-                        onSessionUpdate: {
-                            workout.saveActiveSessionChanges(for: session.id)
-                        },
-                        onScrubEnded: {
-                            workout.saveSettledScrub(for: session.id)
-                        },
-                        onCompleteSet: { request, performMutation in
-                            workout.completeActiveSet(
-                                request,
-                                performMutation: performMutation
-                            )
-                        },
-                        onReplaceExercise: { exerciseID, item in
-                            let result = workout.replacePendingExercise(
-                                sessionID: session.id,
-                                exerciseID: exerciseID,
-                                with: item
-                            )
-                            let error: SaveErrorBox?
-                            if result == .saveFailed {
-                                error = workout.lastSaveError
-                                workout.lastSaveError = nil
-                            } else {
-                                error = nil
-                            }
-                            return ExerciseSubstitutionCommit(
-                                result: result,
-                                saveError: error
-                            )
-                        },
-                        onRemoveExercise: { exerciseID in
-                            workout.removeExercise(
-                                sessionID: session.id,
-                                exerciseID: exerciseID
-                            )
-                        }
-                    )
-                    .presentationDetents([.large])
-                    // The PR moment is accessibility-modal as well as visual:
-                    // remove the system grabber so it cannot become a second
-                    // VoiceOver dismissal target while the celebration owns
-                    // the sheet. Resting workouts remain minimizable.
-                    .presentationDragIndicator(
-                        session.pendingPRValue == nil ? .visible : .hidden
-                    )
+                    activeWorkoutScreen(session, workout: workout, onMinimize: nil)
+                        .environment(
+                            \.appDisplayLayout,
+                            ActiveWorkoutPresentation.sheet.contentLayout(for: displayLayout)
+                        )
+                        .presentationDetents([.large])
+                        // The PR moment is accessibility-modal as well as visual:
+                        // remove the system grabber so it cannot become a second
+                        // VoiceOver dismissal target while the celebration owns
+                        // the sheet. Resting workouts remain minimizable.
+                        .presentationDragIndicator(
+                            session.pendingPRValue == nil ? .visible : .hidden
+                        )
                 }
             }
-            .sheet(item: $appState.pendingSpotlightExercise) { item in
+            .fullScreenCover(
+                isPresented: workoutExpansion(workout, presentedAs: .cover),
+                onDismiss: { workout.finalizePendingDiscard() }
+            ) {
+                if let session = workout.activeSession {
+                    activeWorkoutScreen(
+                        session,
+                        workout: workout,
+                        onMinimize: { workout.minimizeWorkout() }
+                    )
+                    .environment(
+                        \.appDisplayLayout,
+                        ActiveWorkoutPresentation.cover.contentLayout(for: displayLayout)
+                    )
+                    .navigationTransition(
+                        .zoom(sourceID: workoutTransitionSource, in: workoutTransition)
+                    )
+                }
+            }.sheet(item: $appState.pendingSpotlightExercise) { item in
                 NavigationStack {
                     ExerciseDetailScreen(item: item, onPickAndDismiss: nil)
                 }
                 .presentationDragIndicator(.visible)
             }
+    }
+
+    /// Presented only while the workout is expanded in the latched
+    /// presentation. Dismissal by gesture minimizes the workout.
+    private func workoutExpansion(
+        _ workout: WorkoutSessionController,
+        presentedAs presentation: ActiveWorkoutPresentation
+    ) -> Binding<Bool> {
+        Binding(
+            get: {
+                workout.isWorkoutExpanded
+                    && workoutPresentation.presentation(
+                        for: displayLayout,
+                        hasHinge: hasHinge
+                    ) == presentation
+            },
+            set: { isPresented in
+                if !isPresented { workout.isWorkoutExpanded = false }
+            }
+        )
+    }
+
+    /// Today shows its resume bar in place of the mini-bar, so the zoom
+    /// starts from whichever control the selected tab shows.
+    private var workoutTransitionSource: ActiveWorkoutTransitionSource {
+        appState.selectedTab == .today ? .resumeBar : .miniBar
+    }
+
+    private func activeWorkoutScreen(
+        _ session: WorkoutSession,
+        workout: WorkoutSessionController,
+        onMinimize: (() -> Void)?
+    ) -> some View {
+        ActiveWorkoutScreen(
+            session: session,
+            onDismiss: { workout.dismissActiveWorkout() },
+            onDiscard: { workout.discardActiveWorkout() },
+            onMinimize: onMinimize,
+            onSessionUpdate: {
+                workout.saveActiveSessionChanges(for: session.id)
+            },
+            onScrubEnded: {
+                workout.saveSettledScrub(for: session.id)
+            },
+            onCompleteSet: { request, performMutation in
+                workout.completeActiveSet(
+                    request,
+                    performMutation: performMutation
+                )
+            },
+            onReplaceExercise: { exerciseID, item in
+                let result = workout.replacePendingExercise(
+                    sessionID: session.id,
+                    exerciseID: exerciseID,
+                    with: item
+                )
+                let error: SaveErrorBox?
+                if result == .saveFailed {
+                    error = workout.lastSaveError
+                    workout.lastSaveError = nil
+                } else {
+                    error = nil
+                }
+                return ExerciseSubstitutionCommit(
+                    result: result,
+                    saveError: error
+                )
+            },
+            onRemoveExercise: { exerciseID in
+                workout.removeExercise(
+                    sessionID: session.id,
+                    exerciseID: exerciseID
+                )
+            }
+        )
     }
 
     private func prepareCatalogIfNeeded() async {
@@ -405,7 +477,42 @@ struct AppRoot: View {
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
-        .readsAppDisplayLayout()
+        .readsAppDisplayLayout(into: $displayLayout)
+        .readsDeviceHinge(into: $hasHinge)
+        .environment(\.activeWorkoutTransitionNamespace, workoutTransition)
+    }
+}
+
+// MARK: - Workout zoom source
+
+/// The controls the expanded workout's zoom transition starts from.
+enum ActiveWorkoutTransitionSource: Hashable {
+    case miniBar
+    case resumeBar
+}
+
+extension EnvironmentValues {
+    /// The shell's namespace for the workout zoom. Nil outside the shell.
+    @Entry var activeWorkoutTransitionNamespace: Namespace.ID? = nil
+}
+
+extension View {
+    /// Marks this view as the start of the expanded workout's zoom.
+    func activeWorkoutTransitionSource(_ source: ActiveWorkoutTransitionSource) -> some View {
+        modifier(ActiveWorkoutTransitionSourceModifier(source: source))
+    }
+}
+
+private struct ActiveWorkoutTransitionSourceModifier: ViewModifier {
+    let source: ActiveWorkoutTransitionSource
+    @Environment(\.activeWorkoutTransitionNamespace) private var namespace
+
+    func body(content: Content) -> some View {
+        if let namespace {
+            content.matchedTransitionSource(id: source, in: namespace)
+        } else {
+            content
+        }
     }
 }
 
