@@ -29,6 +29,14 @@ edit as it happens and offers Start Workout. Compact width keeps the list,
 the pushed Exercise Detail, and the template draft editor sheet, which saves
 on Save.
 
+In a wide window on iOS 27.1 or later, such as the open iPhone Duo display
+held wide, the list and the detail each take half of the split view. A
+vertical fold left of the middle ends the list at the fold. The system does
+not accept a list wider than half: on iPhone Duo the vertical bars narrow
+the split view, so the list ends a little before the fold. Other
+regular-width windows keep the system's list width. History uses the same
+columns.
+
 One navigation split view serves both widths, so folding or unfolding keeps
 the segment, search text, filter, and selection.
 

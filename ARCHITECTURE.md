@@ -187,7 +187,9 @@ window above its `TabView` and publishes the result; screens read
 `\.appDisplayLayout` and never test size classes, orientation, idiom, or
 `UIScreen`. History and Library show list and detail through
 [BrowserColumns](vivobody/Components/Containers/BrowserColumns.swift), which owns
-only the visible column while each feature owns its selection as a plain ID.
+only the visible column and the column widths while each feature owns its
+selection as a plain ID. In a wide window it pins the two columns to equal
+halves.
 Today, Insights, and Me split into two columns only in a wide, regular-width
 window on iOS 27.1 or later. Insights and Me place their cards in the
 fold-aware lanes of [DashboardLanes](vivobody/Components/Containers/DashboardLanes.swift).
