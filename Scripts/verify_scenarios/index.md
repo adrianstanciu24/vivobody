@@ -107,6 +107,7 @@ Scenario files: 224.
 | [catalog-swiss-ball-stir-the-pot-light](catalog-swiss-ball-stir-the-pot-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-tfl-compound-development](catalog-tfl-compound-development.json) | today | `--ui-test-tfl-development --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryL` |
 | [catalog-tfl-coverage](catalog-tfl-coverage.json) | library | `--static-body -settings.appearance dark` |
+| [catalog-trap-bar-squat-light](catalog-trap-bar-squat-light.json) | library | `--static-body -settings.appearance light` |
 | [catalog-triceps-consolidation-accessibility](catalog-triceps-consolidation-accessibility.json) | library | `--static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [catalog-triceps-consolidation-dark](catalog-triceps-consolidation-dark.json) | library | `--static-body -settings.appearance dark` |
 | [catalog-triceps-consolidation-light](catalog-triceps-consolidation-light.json) | library | `--static-body -settings.appearance light` |

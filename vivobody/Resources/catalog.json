@@ -1900,6 +1900,158 @@
         "kind": "produced"
       }
     ],
+    "catalogID": "trap-bar-squat",
+    "name": "Trap-Bar Squat",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "trapBar",
+    "mechanic": "compound",
+    "trainingRole": "legs",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Hex-Bar Squat",
+      "Hexagonal-Bar Squat"
+    ],
+    "searchPriority": 92,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "execution": {
+      "startingPosition": "Stand in the center of a loaded hexagonal bar with your feet about hip-width apart. Sit your hips down and let your knees travel forward until you can hold one handle beside each lower leg with your palms facing one another. Use the same handle height in every session.",
+      "movement": "Keep both elbows extended and drive through both feet as you straighten your knees and hips together. Keep your chest up so your torso stays more upright than in a trap-bar deadlift.",
+      "endpoint": "Finish standing tall inside the frame with your knees and hips extended and the handles controlled beside your thighs.",
+      "returnPhase": "Sit your hips down and let your knees travel forward to lower the frame under control until the plates lightly touch the floor.",
+      "controlledJoints": "Keep both elbows extended, and do not deliberately round or arch your back to complete the repetition.",
+      "supportAndPosture": "Brace your trunk, keep both feet planted, and stay centered inside the frame with the loaded sleeves beside your body.",
+      "disqualifyingCompensations": [
+        "Keeping the shins near vertical and pushing the hips back turns the squat into a trap-bar deadlift.",
+        "Driving the hips up faster than the chest turns the squat into a trap-bar deadlift.",
+        "Bouncing the plates off the floor turns the squat into a rebound squat.",
+        "Jumping with the frame turns the squat into a trap-bar jump squat."
+      ]
+    },
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "adductorMagnus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tibialisAnterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiUlnaris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "flexorCarpiUlnaris",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "bilateral-squat",
+    "familyName": "Bilateral Squat",
+    "movementActions": [
+      {
+        "actionID": "ankle.plantarflexion",
+        "name": "Ankle plantarflexion",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "hip.extension",
+        "name": "Hip extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      },
+      {
+        "actionID": "knee.extension",
+        "name": "Knee extension",
+        "plane": "sagittal",
+        "kind": "produced"
+      }
+    ],
     "catalogID": "bodyweight-floor-squat-100-degrees",
     "name": "Bodyweight Squat",
     "group": "legs",

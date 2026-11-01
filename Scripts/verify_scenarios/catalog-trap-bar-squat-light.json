@@ -1,0 +1,142 @@
+{
+  "name": "catalog-trap-bar-squat-light",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "tap": {
+        "role": "AXTextField",
+        "value": "Search exercises"
+      }
+    },
+    {
+      "typeText": "trap bar squat"
+    },
+    {
+      "wait": {
+        "labelRegex": "^Trap-Bar Squat, Trap Bar"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Trap-Bar Squat, Trap Bar"
+      }
+    },
+    {
+      "wait": {
+        "label": "STRENGTH · REPS"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Trap-Bar Squat"
+          },
+          {
+            "labelContains": "Muscles used by Trap-Bar Squat"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Muscles used by Low-Handle Trap-Bar Deadlift"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Primary, Vasti · Glute Max"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Primary, Vasti · Glute Max"
+          },
+          {
+            "labelContains": "Secondary, Rectus Femoris"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "let your knees travel forward"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "more upright than in a trap-bar deadlift"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-compensations"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "plates lightly touch the floor"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "turns the squat into a trap-bar deadlift"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}
