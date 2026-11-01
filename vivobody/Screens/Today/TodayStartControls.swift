@@ -15,9 +15,7 @@ extension TodayScreen {
     /// Once history or a saved template provides a real choice, the chooser
     /// owns scheduled, Repeat, Fresh, and saved-template decisions.
     var startCTA: some View {
-        let startsFreshDirectly = latestSession == nil && templates.isEmpty
-
-        return PrimaryActionButton(
+        PrimaryActionButton(
             title: startsFreshDirectly ? "Start Fresh Workout" : "Start Workout",
             icon: startsFreshDirectly ? "plus" : "chevron.up",
             inputLabels: startsFreshDirectly
@@ -25,11 +23,7 @@ extension TodayScreen {
                 : ["Start Workout", "Start", "Begin"],
             sound: .commit
         ) {
-            if startsFreshDirectly {
-                showFreshExercisePicker = true
-            } else {
-                showStartSheet = true
-            }
+            isStartRequested = true
         }
         .accessibilityIdentifier("todayStartWorkoutButton")
         .accessibilityHint(
@@ -38,6 +32,10 @@ extension TodayScreen {
                 : "Opens workout options"
         )
         .accessibilitySortPriority(100)
+    }
+
+    var startsFreshDirectly: Bool {
+        WorkoutStartFlow.startsFreshDirectly(lastSession: latestSession, templates: templates)
     }
 
     /// A running workout replaces every start path. Its clocks are system

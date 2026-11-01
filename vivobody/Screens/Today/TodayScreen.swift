@@ -2,9 +2,10 @@
 //  TodayScreen.swift
 //  vivobody
 //
-//  The app's home tab and sole owner of Today queries, navigation,
-//  workout-start orchestration, and drill-out presentation state. Focused
-//  sections render immutable or explicit inputs around one pinned action.
+//  The app's home tab and sole owner of Today queries, navigation, and
+//  drill-out presentation state. WorkoutStartFlow presents its start
+//  sheets. Focused sections render immutable or explicit inputs around
+//  one pinned action.
 //  A wide, regular-width window splits the same sections into two panes
 //  (TodaySplitContent.swift); every other window scrolls them in one column.
 //
@@ -83,22 +84,9 @@ struct TodayScreen: View {
     /// larger reading.
     @State var heroSizing = TodayHeroSizing()
 
-    /// Whether the single start-workout chooser is presented.
-    @State var showStartSheet = false
+    /// Opens the shared start flow: the fresh exercise picker or the chooser.
+    @State var isStartRequested = false
     @State var showMuscleMapDetails = false
-
-    /// The start action chosen in the sheet, deferred until the sheet
-    /// fully dismisses. Running it in the sheet's onDismiss avoids
-    /// presenting the next workout surface over a still-dismissing
-    /// sheet.
-    @State private var pendingStart: (() -> Void)?
-
-    /// Fresh workouts begin in the exercise catalog rather than on
-    /// an empty active-workout canvas. The selected item is likewise
-    /// deferred until the picker dismisses, so the active workout
-    /// never competes with an outgoing sheet presentation.
-    @State var showFreshExercisePicker = false
-    @State private var pendingFreshStart: (() -> Void)?
 
     var body: some View {
         let upNext = UpNext.compute(
@@ -119,58 +107,16 @@ struct TodayScreen: View {
         // the entire screen background.
         .screenBackground()
         .onAppear { Haptics.prepare() }
-        .sheet(isPresented: $showStartSheet, onDismiss: runPendingStart) {
-            StartWorkoutSheet(
-                lastSession: latestSession,
-                templates: sortedTemplates,
-                scheduledTemplate: scheduledTemplate(in: upNext),
-                onSelect: queueStart
-            )
-        }
-        .sheet(isPresented: $showFreshExercisePicker, onDismiss: runPendingFreshStart) {
-            ExercisePickerSheet { item in
-                pendingFreshStart = {
-                    appState.workout.startFreshWorkout(with: item)
-                }
-            }
-        }
+        .workoutStartFlow(
+            isRequested: $isStartRequested,
+            workout: appState.workout,
+            lastSession: latestSession,
+            templates: sortedTemplates,
+            scheduledTemplate: scheduledTemplate(in: upNext)
+        )
         .sheet(isPresented: $showMuscleMapDetails) {
             MuscleMapDetailsSheet(report: appState.analytics.muscleMap)
         }
-    }
-
-    // MARK: - Start intent
-
-    /// Record the chosen start path and let the sheet dismiss. The
-    /// work runs in `runPendingStart` once the sheet is gone, so the
-    /// focused ActiveWorkoutScreen never presents over a dismissing
-    /// sheet.
-    private func queueStart(_ intent: StartIntent) {
-        switch intent {
-        case .repeatLast:
-            let last = latestSession
-            pendingStart = { appState.workout.startTodaysWorkout(basedOn: last) }
-        case .fresh:
-            if appState.workout.activeSession != nil {
-                pendingStart = { appState.workout.expandWorkout() }
-            } else {
-                pendingStart = { showFreshExercisePicker = true }
-            }
-        case let .template(template):
-            pendingStart = { appState.workout.startWorkoutFromTemplate(template) }
-        }
-    }
-
-    private func runPendingStart() {
-        let action = pendingStart
-        pendingStart = nil
-        action?()
-    }
-
-    private func runPendingFreshStart() {
-        let action = pendingFreshStart
-        pendingFreshStart = nil
-        action?()
     }
 
     /// At accessibility text sizes the body remains useful context,

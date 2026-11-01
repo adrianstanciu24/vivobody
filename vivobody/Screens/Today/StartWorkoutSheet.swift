@@ -12,7 +12,7 @@
 //  family. The featured scheduled template is never listed twice.
 //
 //  The sheet never starts the workout directly: it reports the chosen
-//  intent to the caller and dismisses itself. TodayScreen runs the
+//  intent to the caller and dismisses itself. WorkoutStartFlow runs the
 //  intent in the sheet's onDismiss, so the focused ActiveWorkoutScreen
 //  only presents after this sheet is fully gone — avoiding a
 //  sheet-over-sheet presentation conflict.

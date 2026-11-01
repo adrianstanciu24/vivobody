@@ -56,6 +56,7 @@ struct HistoryContent: View {
     @State private var reachedArchiveEnd = false
     @State private var isLoadingPage = false
     @State private var selectedSessionID: UUID?
+    @State private var isStartRequested = false
 
     @AppStorage(SettingsKey.weightUnit)
     var unitRaw: String = SettingsDefaults.weightUnit
@@ -72,6 +73,9 @@ struct HistoryContent: View {
     /// pad for boundary-spanning workouts) — everything the weekly
     /// hero needs, without touching the older archive.
     @Query var recentSessions: [WorkoutSession]
+
+    /// Only the empty archive's start reads these.
+    @Query private var templates: [WorkoutTemplate]
 
     init(appState: AppState) {
         self.appState = appState
@@ -110,6 +114,13 @@ struct HistoryContent: View {
         } detail: { id, _ in
             sessionDetail(for: id)
         }
+        .workoutStartFlow(
+            isRequested: $isStartRequested,
+            workout: appState.workout,
+            lastSession: nil,
+            templates: templates.inStartOrder,
+            scheduledTemplate: sessions.isEmpty ? scheduledTemplate : nil
+        )
         .onChange(of: newestSessions.map(\.id), initial: true) { oldIDs, newIDs in
             if oldIDs != newIDs {
                 olderSessions.removeAll(keepingCapacity: true)
@@ -123,9 +134,24 @@ struct HistoryContent: View {
     private func sessionDetail(for id: UUID?) -> some View {
         if let id, let session = sessions.first(where: { $0.id == id }) ?? (try? archivedSession(id)) {
             SessionDetailScreen(session: session)
+        } else if sessions.isEmpty {
+            HistoryEmptyDetail(
+                appState: appState,
+                startsFreshDirectly: WorkoutStartFlow.startsFreshDirectly(lastSession: nil, templates: templates)
+            ) {
+                isStartRequested = true
+            }
         } else {
             Color.clear.screenBackground()
         }
+    }
+
+    /// The start flow opens only while the archive is empty, so nothing
+    /// is due from history yet.
+    private var scheduledTemplate: WorkoutTemplate? {
+        let upNext = UpNext.compute(templates: templates, sessions: [], load: appState.analytics.load)
+        guard case let .scheduled(template, _, _) = upNext.kind else { return nil }
+        return template
     }
 
     /// Keeps a valid selection, else selects the newest session. A

@@ -1,0 +1,83 @@
+{
+  "name": "duo-history-empty",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "history",
+    "arguments": [
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "No workouts yet"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "History",
+            "role": "AXHeading"
+          },
+          {
+            "label": "Your first receipt",
+            "role": "AXHeading"
+          },
+          {
+            "identifier": "historySampleReceipt",
+            "label": "Sample workout receipt"
+          },
+          {
+            "identifier": "historyEmptyStartButton",
+            "label": "Start Fresh Workout",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifierContains": "historySessionRow"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "historyEmptyStartButton",
+        "label": "Start Fresh Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "Add Exercise",
+        "role": "AXGroup"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "Add Exercise",
+      "role": "AXGroup"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "BackButton"
+    },
+    {
+      "identifier": "todayBodyPane"
+    },
+    {
+      "identifier": "todayStartWorkoutButton"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

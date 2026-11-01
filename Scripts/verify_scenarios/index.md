@@ -8,7 +8,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 223.
+Scenario files: 224.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -123,6 +123,7 @@ Scenario files: 223.
 | [duo-active-split-accessibility](duo-active-split-accessibility.json) | today | `--ui-test-active-bodyweight-duration --static-body -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [duo-active-split-light](duo-active-split-light.json) | today | `--ui-test-scheduled-template --static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-active-split](duo-active-split.json) | today | `--ui-test-active-partial --static-body -settings.weightUnit lb -settings.appearance dark` |
+| [duo-history-empty](duo-history-empty.json) | history | `--static-body -settings.weightUnit lb -settings.appearance dark` |
 | [duo-history-split-accessibility](duo-history-split-accessibility.json) | history | `--seed-history --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [duo-history-split-light](duo-history-split-light.json) | history | `--static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-history-split](duo-history-split.json) | history | `--seed-history --static-body -settings.weightUnit lb -settings.appearance dark` |

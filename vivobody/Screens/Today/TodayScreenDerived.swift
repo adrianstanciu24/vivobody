@@ -12,19 +12,8 @@ import SwiftUI
 extension TodayScreen {
     // MARK: - Derived
 
-    /// Templates ordered for the start sheet: most-recently-used
-    /// first, then never-used templates in their Library sortOrder.
-    /// A `@Query` predicate-based sort can't express this hybrid
-    /// (lastUsedAt is optional), so it's resolved client-side.
     var sortedTemplates: [WorkoutTemplate] {
-        templates.sorted { lhs, rhs in
-            switch (lhs.lastUsedAt, rhs.lastUsedAt) {
-            case let (l?, r?): l > r
-            case (.some, .none): true
-            case (.none, .some): false
-            case (.none, .none): lhs.sortOrder < rhs.sortOrder
-            }
-        }
+        templates.inStartOrder
     }
 
     /// Archived session timestamps in the recent window. The strip normalizes
