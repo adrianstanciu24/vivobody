@@ -214,11 +214,12 @@ struct ExerciseDetailScreen: View {
             }
             .padding(.top, 8)
             .padding(.bottom, Space.xxl)
-            .frame(maxWidth: .infinity, alignment: .leading)
             // Keep intrinsically wide detail sections from expanding the
             // scroll content and turning this vertical screen into a
-            // horizontally pannable canvas.
-            .containerRelativeFrame(.horizontal)
+            // horizontally pannable canvas. The zero minimum holds the
+            // content to the offered width. containerRelativeFrame could
+            // keep the narrower width of a push's first layout pass.
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)

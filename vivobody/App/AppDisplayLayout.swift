@@ -9,15 +9,17 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// How many panes the current window gives the tabs.
 ///
-/// - `compact`: every tab shows one column. Every compact-width window
-///   resolves here, including iPhone Duo's outer display.
+/// - `compact`: every tab shows one column, as on a phone. Every
+///   compact-width window resolves here, including iPhone Duo's outer
+///   display, and so does every window that is not wider than tall, such
+///   as the open iPhone Duo held upright.
 /// - `regular`: list-and-detail tabs (History, Library) show both columns;
 ///   dashboards (Today, Insights) keep one column. A regular-width window
-///   that is not wider than tall, or a system without fold-aware layout,
-///   stops here.
+///   wider than tall on a system without fold-aware layout stops here.
 /// - `regularWide`: a regular-width window wider than tall on a system with
 ///   fold-aware layout. Dashboards split into two columns clear of the fold.
 enum AppDisplayLayout: Equatable {
@@ -30,12 +32,18 @@ enum AppDisplayLayout: Equatable {
         windowSize: CGSize,
         supportsFoldLayout: Bool
     ) {
-        guard horizontalSizeClass == .regular else {
+        guard horizontalSizeClass == .regular, !Self.usesPhoneWidth(windowSize: windowSize) else {
             self = .compact
             return
         }
         let isWide = windowSize.width > windowSize.height
         self = isWide && supportsFoldLayout ? .regularWide : .regular
+    }
+
+    /// A window that is not wider than tall gets the phone's compact width,
+    /// even where the system reports a regular width.
+    static func usesPhoneWidth(windowSize: CGSize) -> Bool {
+        windowSize.width > 0 && windowSize.width <= windowSize.height
     }
 
     var showsBrowserDetail: Bool {
@@ -123,6 +131,17 @@ private struct AppDisplayLayoutReader: ViewModifier {
                 layout = newLayout
             }
             .background {
+                // The override reaches the whole window, so split views,
+                // sheets, and container-relative frames also behave as on
+                // a phone. It follows the window's shape only, never the
+                // size class it changes.
+                WindowCompactWidthOverride(
+                    isActive: AppDisplayLayout.usesPhoneWidth(windowSize: windowSize)
+                )
+                .frame(width: 0, height: 0)
+                .accessibilityHidden(true)
+            }
+            .background {
                 // Measured with every safe area ignored, the keyboard
                 // included: a keyboard inset would make a tall window read
                 // as wide and swap Library's layout in the middle of a search.
@@ -143,5 +162,40 @@ private struct AppDisplayLayoutReader: ViewModifier {
             windowSize: windowSize,
             supportsFoldLayout: AppDisplayLayout.systemSupportsFoldLayout
         )
+    }
+}
+
+private struct WindowCompactWidthOverride: UIViewRepresentable {
+    let isActive: Bool
+
+    func makeUIView(context _: Context) -> OverrideView {
+        let view = OverrideView()
+        view.isUserInteractionEnabled = false
+        return view
+    }
+
+    func updateUIView(_ view: OverrideView, context _: Context) {
+        view.isActive = isActive
+    }
+
+    final class OverrideView: UIView {
+        var isActive = false {
+            didSet { apply() }
+        }
+
+        override func didMoveToWindow() {
+            super.didMoveToWindow()
+            apply()
+        }
+
+        private func apply() {
+            guard let window else { return }
+            let isApplied = window.traitOverrides.contains(UITraitHorizontalSizeClass.self)
+            if isActive, !isApplied {
+                window.traitOverrides.horizontalSizeClass = .compact
+            } else if !isActive, isApplied {
+                window.traitOverrides.remove(UITraitHorizontalSizeClass.self)
+            }
+        }
     }
 }
