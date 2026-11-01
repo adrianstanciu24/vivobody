@@ -1,0 +1,84 @@
+{
+  "name": "duo-library-templates-empty",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "label": "No templates yet"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Your first template",
+            "role": "AXHeading"
+          },
+          {
+            "identifier": "librarySampleTemplates",
+            "label": "Sample templates"
+          },
+          {
+            "identifier": "libraryEmptyCreateTemplateButton",
+            "label": "Create Template",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "New template",
+            "role": "AXButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Create Template",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "New Template",
+        "role": "AXGroup"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "New Template",
+      "role": "AXGroup"
+    },
+    {
+      "label": "Name",
+      "role": "AXTextField"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

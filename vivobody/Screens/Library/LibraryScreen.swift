@@ -215,7 +215,11 @@ struct LibraryScreen: View {
         case let .template(template):
             TemplateDetailScreen(template: template, appState: appState, onStarted: navigation.showList)
         case nil:
-            Color.clear.screenBackground()
+            if listing.segment == .templates, listing.templates.isEmpty {
+                LibraryTemplatesEmptyDetail(onCreate: openNewTemplateEditor)
+            } else {
+                Color.clear.screenBackground()
+            }
         }
     }
 
@@ -250,10 +254,15 @@ struct LibraryScreen: View {
     }
 
     private func presentNewTemplate() {
+        openNewTemplateEditor()
+        Haptics.soft()
+    }
+
+    /// The empty detail's create button plays its own haptic.
+    private func openNewTemplateEditor() {
         let descriptor = FetchDescriptor<WorkoutTemplate>()
         let count = (try? modelContext.fetchCount(descriptor)) ?? 0
         templateEditorTarget = .new(sortOrder: count)
-        Haptics.soft()
     }
 
     private var plusAccessibilityLabel: String {

@@ -141,19 +141,22 @@ struct LibraryTemplatesContent: View {
 
     // MARK: - Empty states
 
-    /// The empty state keeps one clear manual-creation action.
+    /// The empty state keeps one clear manual-creation action. Beside the
+    /// detail, that action moves to the detail column.
     private var emptyState: some View {
         ContentUnavailableView {
             Label("No templates yet", systemImage: "list.bullet.clipboard")
         } description: {
             Text("Create a reusable workout to get started.")
         } actions: {
-            Button {
-                onCreateTemplate()
-            } label: {
-                Text("Create Template")
+            if !navigation.showsDetailBeside {
+                Button {
+                    onCreateTemplate()
+                } label: {
+                    Text("Create Template")
+                }
+                .primaryButtonStyle()
             }
-            .primaryButtonStyle()
         }
     }
 
@@ -354,7 +357,7 @@ struct TemplateCard: View {
 /// unscheduled day a faint pip that recedes into the card. Replaces
 /// the old gray "Mon · Thu" text line: every pinned row now carries
 /// a quiet accent texture instead of another string of gray.
-private struct ScheduleStrip: View {
+struct ScheduleStrip: View {
     let scheduled: Set<Int>
     let today: Int
 
@@ -398,7 +401,7 @@ private struct ScheduleStrip: View {
 /// per exercise, so each row carries a physical fingerprint of its
 /// plan. Decorative — capped so outlier templates can't blow the row
 /// width; the numeral beside it carries the exact count.
-private struct SetPipStrip: View {
+struct SetPipStrip: View {
     let groups: [Int]
     let tint: Color
 

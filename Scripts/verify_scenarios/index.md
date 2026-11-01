@@ -8,7 +8,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 224.
+Scenario files: 228.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -134,6 +134,8 @@ Scenario files: 224.
 | [duo-library-split-accessibility](duo-library-split-accessibility.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [duo-library-split-light](duo-library-split-light.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-library-split](duo-library-split.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark` |
+| [duo-library-templates-empty-light](duo-library-templates-empty-light.json) | library | `--static-body -settings.weightUnit lb -settings.appearance light` |
+| [duo-library-templates-empty](duo-library-templates-empty.json) | library | `--static-body -settings.weightUnit lb -settings.appearance dark` |
 | [duo-me-pairs-light](duo-me-pairs-light.json) | me | `--ui-test-me-showcase --static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-me-pairs](duo-me-pairs.json) | me | `--ui-test-me-showcase --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [duo-settings-pairs-light](duo-settings-pairs-light.json) | me | `--static-body -settings.weightUnit lb -settings.appearance light` |

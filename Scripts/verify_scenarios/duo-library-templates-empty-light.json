@@ -1,0 +1,62 @@
+{
+  "name": "duo-library-templates-empty-light",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "label": "No templates yet"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Your first template",
+      "role": "AXHeading"
+    },
+    {
+      "identifier": "librarySampleTemplates",
+      "label": "Sample templates"
+    },
+    {
+      "identifier": "libraryEmptyCreateTemplateButton",
+      "label": "Create Template",
+      "role": "AXButton"
+    },
+    {
+      "label": "Templates",
+      "value": "Selected"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "New template",
+      "role": "AXButton"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}
