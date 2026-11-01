@@ -10,6 +10,8 @@ import SwiftUI
 import VivoKit
 
 struct SettingsAboutSection: View {
+    /// Places the two rows side by side when the window splits into lanes.
+    let lanes: DashboardLanes?
     let onOpenPrivacyPolicy: () -> Void
     let onComposeSupportMail: () -> Void
 
@@ -17,25 +19,41 @@ struct SettingsAboutSection: View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "About")
 
-            VStack(alignment: .leading, spacing: 0) {
-                aboutRow(
-                    title: "Privacy Policy",
-                    subtitle: "Everything stays on your device",
-                    icon: "arrow.up.right",
-                    hint: "Opens in this app",
-                    action: onOpenPrivacyPolicy
-                )
-                rowDivider
-                aboutRow(
-                    title: "Contact & Support",
-                    subtitle: "Questions, bugs, feature requests",
-                    icon: "envelope",
-                    hint: "Opens a new email",
-                    action: onComposeSupportMail
-                )
+            if let lanes {
+                SettingsCardPair(lanes: lanes) {
+                    privacyPolicyRow
+                } trailing: {
+                    supportRow
+                }
+            } else {
+                VStack(alignment: .leading, spacing: 0) {
+                    privacyPolicyRow
+                    rowDivider
+                    supportRow
+                }
+                .contentCard()
             }
-            .contentCard()
         }
+    }
+
+    private var privacyPolicyRow: some View {
+        aboutRow(
+            title: "Privacy Policy",
+            subtitle: "Everything stays on your device",
+            icon: "arrow.up.right",
+            hint: "Opens in this app",
+            action: onOpenPrivacyPolicy
+        )
+    }
+
+    private var supportRow: some View {
+        aboutRow(
+            title: "Contact & Support",
+            subtitle: "Questions, bugs, feature requests",
+            icon: "envelope",
+            hint: "Opens a new email",
+            action: onComposeSupportMail
+        )
     }
 
     private func aboutRow(

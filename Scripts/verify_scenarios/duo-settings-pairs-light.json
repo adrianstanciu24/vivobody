@@ -1,0 +1,73 @@
+{
+  "name": "duo-settings-pairs-light",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "me",
+    "arguments": [
+      "--static-body",
+      "-settings.weightUnit",
+      "lb",
+      "-settings.appearance",
+      "light"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Settings",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Preferences",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "120 second rest",
+            "role": "AXButton"
+          },
+          {
+            "label": "Pounds",
+            "role": "AXButton"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Contact & Support",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "About",
+      "role": "AXHeading"
+    },
+    {
+      "labelContains": "Privacy Policy",
+      "role": "AXButton"
+    },
+    {
+      "labelContains": "Contact & Support",
+      "role": "AXButton"
+    }
+  ]
+}

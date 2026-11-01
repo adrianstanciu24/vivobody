@@ -16,6 +16,30 @@ enum SettingsRestNotificationsPresentation: Equatable {
     case denied
 }
 
+/// Two cards side by side in the dashboard lanes, with equal heights.
+/// A shorter card keeps its title at the top and its control at the bottom.
+struct SettingsCardPair<Leading: View, Trailing: View>: View {
+    let lanes: DashboardLanes
+    @ViewBuilder let leading: Leading
+    @ViewBuilder let trailing: Trailing
+
+    var body: some View {
+        HStack(alignment: .top, spacing: lanes.separation) {
+            card(leading)
+                .frame(width: lanes.width(of: .leading))
+            card(trailing)
+                .frame(width: lanes.width(of: .trailing))
+        }
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private func card(_ content: some View) -> some View {
+        content
+            .frame(maxHeight: .infinity, alignment: .top)
+            .contentCard()
+    }
+}
+
 struct SettingsPreferencesSection: View {
     @Binding var appearance: AppAppearance
     @Binding var bodyDriftSpeed: BodyDriftSpeed
@@ -28,23 +52,38 @@ struct SettingsPreferencesSection: View {
     let restOptions: [Int]
     let restNotificationsPresentation: SettingsRestNotificationsPresentation
     let bundledExerciseCount: Int
+    /// Pairs the choice rows side by side when the window splits into lanes.
+    let lanes: DashboardLanes?
     let onRequestCatalogReset: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Preferences")
 
-            VStack(alignment: .leading, spacing: 0) {
-                appearanceRow
-                rowDivider
-                bodyDriftSpeedRow
-                rowDivider
-                weightUnitRow
-            }
-            .contentCard()
-
-            restRow
+            if let lanes {
+                SettingsCardPair(lanes: lanes) {
+                    appearanceRow
+                } trailing: {
+                    bodyDriftSpeedRow
+                }
+                SettingsCardPair(lanes: lanes) {
+                    weightUnitRow
+                } trailing: {
+                    restRow
+                }
+            } else {
+                VStack(alignment: .leading, spacing: 0) {
+                    appearanceRow
+                    rowDivider
+                    bodyDriftSpeedRow
+                    rowDivider
+                    weightUnitRow
+                }
                 .contentCard()
+
+                restRow
+                    .contentCard()
+            }
 
             VStack(alignment: .leading, spacing: 0) {
                 toggleRow(
@@ -82,6 +121,7 @@ struct SettingsPreferencesSection: View {
                 stacksAtAccessibilitySizes: true,
                 label: \.label
             )
+            .frame(maxHeight: .infinity, alignment: .bottom)
         }
     }
 
@@ -95,6 +135,7 @@ struct SettingsPreferencesSection: View {
                 stacksAtAccessibilitySizes: true,
                 label: \.label
             )
+            .frame(maxHeight: .infinity, alignment: .bottom)
         }
     }
 
@@ -116,6 +157,7 @@ struct SettingsPreferencesSection: View {
                         .opacity(Opacity.emphasis)
                 }
             }
+            .frame(maxHeight: .infinity, alignment: .bottom)
         }
     }
 
@@ -138,6 +180,7 @@ struct SettingsPreferencesSection: View {
             ) { seconds, isSelected in
                 SegmentedPickerText(text: "\(seconds)s", font: Typography.metricUnit, isSelected: isSelected)
             }
+            .frame(maxHeight: .infinity, alignment: .bottom)
         }
         .padding(.horizontal, Space.lg)
         .padding(.vertical, Space.md)

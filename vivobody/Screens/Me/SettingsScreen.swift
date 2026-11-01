@@ -17,6 +17,7 @@ struct SettingsScreen: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.appDisplayLayout) private var displayLayout
 
     @AppStorage(SettingsKey.hapticsEnabled)
     private var hapticsEnabled: Bool = SettingsDefaults.hapticsEnabled
@@ -59,7 +60,24 @@ struct SettingsScreen: View {
         WeightUnit(rawValue: weightUnitRaw) ?? .lb
     }
 
-    var body: some View {
+    @ViewBuilder
+    private var content: some View {
+        if displayLayout.showsDashboardColumns, #available(iOS 27.1, *) {
+            // Read outside the scroll: the fold stays put while the cards move.
+            GeometryReader { viewport in
+                scroll(lanes: DashboardLanes(
+                    width: viewport.size.width,
+                    divisions: viewport.reservedRegions(kind: .division).map(\.frame)
+                ))
+            }
+        } else {
+            scroll(lanes: nil)
+        }
+    }
+
+    /// The content margins equal the lanes' outer gutters, so a paired row
+    /// starts at the leading lane.
+    private func scroll(lanes: DashboardLanes?) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 SettingsPreferencesSection(
@@ -73,11 +91,13 @@ struct SettingsScreen: View {
                     restOptions: SettingsInteractionPolicy.restOptions,
                     restNotificationsPresentation: restNotificationsPresentation,
                     bundledExerciseCount: CatalogData.records.count,
+                    lanes: lanes,
                     onRequestCatalogReset: requestCatalogReset
                 )
                 .settleIn(0)
 
                 SettingsAboutSection(
+                    lanes: lanes,
                     onOpenPrivacyPolicy: { openURL(PublicLinks.privacyPolicy, prefersInApp: true) },
                     onComposeSupportMail: composeSupportMail
                 )
@@ -90,39 +110,43 @@ struct SettingsScreen: View {
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-        .screenBackground()
-        .navigationTitle("Settings")
-        .navigationBarTitleDisplayMode(.inline)
-        .task {
-            await refreshRestNotificationAuthorization()
-        }
-        .onChange(of: scenePhase) { _, phase in
-            guard phase == .active else { return }
-            Task { await refreshRestNotificationAuthorization() }
-        }
-        .alert("Reset Exercise Catalog?", isPresented: $isConfirmingCatalogReset) {
-            Button("Reset", role: .destructive) {
-                do {
-                    try CatalogMutationBoundary(context: modelContext).resetToDefaults()
-                } catch {
-                    catalogSaveError = SaveErrorBox(error)
-                    return
-                }
-                Haptics.thunk()
+    }
+
+    var body: some View {
+        content
+            .screenBackground()
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .task {
+                await refreshRestNotificationAuthorization()
             }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Restores the \(CatalogData.records.count) bundled exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
-        }
-        .saveErrorAlert($catalogSaveError)
-        .sheet(isPresented: $isComposingSupportMail) {
-            MailComposeView(
-                recipient: SupportMail.recipient,
-                subject: SupportMail.subject,
-                body: SupportMail.body
-            )
-            .ignoresSafeArea()
-        }
+            .onChange(of: scenePhase) { _, phase in
+                guard phase == .active else { return }
+                Task { await refreshRestNotificationAuthorization() }
+            }
+            .alert("Reset Exercise Catalog?", isPresented: $isConfirmingCatalogReset) {
+                Button("Reset", role: .destructive) {
+                    do {
+                        try CatalogMutationBoundary(context: modelContext).resetToDefaults()
+                    } catch {
+                        catalogSaveError = SaveErrorBox(error)
+                        return
+                    }
+                    Haptics.thunk()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Restores the \(CatalogData.records.count) bundled exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
+            }
+            .saveErrorAlert($catalogSaveError)
+            .sheet(isPresented: $isComposingSupportMail) {
+                MailComposeView(
+                    recipient: SupportMail.recipient,
+                    subject: SupportMail.subject,
+                    body: SupportMail.body
+                )
+                .ignoresSafeArea()
+            }
     }
 
     private var appearanceBinding: Binding<AppAppearance> {

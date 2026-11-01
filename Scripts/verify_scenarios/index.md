@@ -135,6 +135,8 @@ Scenario files: 224.
 | [duo-library-split](duo-library-split.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark` |
 | [duo-me-pairs-light](duo-me-pairs-light.json) | me | `--ui-test-me-showcase --static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-me-pairs](duo-me-pairs.json) | me | `--ui-test-me-showcase --static-body -settings.weightUnit lb -settings.appearance dark` |
+| [duo-settings-pairs-light](duo-settings-pairs-light.json) | me | `--static-body -settings.weightUnit lb -settings.appearance light` |
+| [duo-settings-pairs](duo-settings-pairs.json) | me | `--static-body -settings.weightUnit lb -settings.appearance dark` |
 | [duo-today-split-accessibility](duo-today-split-accessibility.json) | today | `--ui-test-scheduled-template --seed-history --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [duo-today-split-light](duo-today-split-light.json) | today | `--static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-today-split](duo-today-split.json) | today | `--ui-test-scheduled-template --seed-history --static-body -settings.weightUnit lb -settings.appearance dark` |
