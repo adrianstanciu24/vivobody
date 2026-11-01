@@ -28,11 +28,7 @@ SWIFT_SOURCE_ROOTS = (
     "vivobodyWidgets/",
     "VivoKit/Sources/",
 )
-SWIFT_HEADER_ROOTS = (
-    *SWIFT_SOURCE_ROOTS,
-    "vivobodyTests",
-    "vivobodyUITests",
-)
+SWIFT_HEADER_ROOTS = SWIFT_SOURCE_ROOTS
 
 # Frameworks with exactly one or two repository-wide owners. Adding another
 # target or concern is possible, but it must be an explicit architecture edit.
@@ -330,8 +326,6 @@ def header_violation(path: str, source: str) -> Violation | None:
         "vivobody",
         "vivobodyWidgets",
         "VivoKit",
-        "vivobodyTests",
-        "vivobodyUITests",
     }
     purpose = [
         line

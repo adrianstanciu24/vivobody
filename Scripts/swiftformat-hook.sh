@@ -7,7 +7,7 @@
 #  files passed by the hook framework in place using the checked-in
 #  .swiftformat configuration; the framework then fails the hook so the
 #  reformatted files can be re-staged. When SwiftFormat is not installed the
-#  hook warns and passes, mirroring Scripts/check.sh.
+#  hook warns and passes.
 #
 
 set -euo pipefail

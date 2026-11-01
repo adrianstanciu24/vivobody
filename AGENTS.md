@@ -1,63 +1,44 @@
-# Repository Guidelines
+# Vivobody
 
-Vivobody is a native SwiftUI/SwiftData workout tracker with on-device storage and no third-party runtime libraries. Start unfamiliar work with the [product overview and domain vocabulary](README.md#how-the-app-fits-together).
+Vivobody is a native SwiftUI and SwiftData workout tracker for iOS. It stores all data on the device and has no third-party runtime libraries.
 
-## Start with the task
+## Commands
+- Open: `open vivobody.xcodeproj` (schemes: `vivobody`, `vivobodyWidgets`, `VivoKit`)
+- Build: `xcodebuild -scheme vivobody -destination 'generic/platform=iOS Simulator' build`
+- Format: `swiftformat vivobody/ vivobodyWidgets/ VivoKit/Sources/`
+- UI check: `SCENARIO=<name> Scripts/verify.sh` (scenarios are in `Scripts/verify_scenarios/`)
 
-Inspect `git status --short` before editing. Preserve unrelated changes. Read only the guidance relevant to the request:
+## Stack and tools
+- Swift 6, SwiftUI, SwiftData, WidgetKit, ActivityKit.
+- Xcode 27.2 and iOS 27.2 simulators. Always use the latest Xcode and simulator version; update this line when a new version ships.
+- SwiftFormat and pre-commit. Baguette (`brew install baguette`) for headless UI checks.
 
-| Task | Read first | Verification |
-|---|---|---|
-| Understand a feature or change its behavior | [Spec index](specs/index.md), then the active feature contract | Non-UI: smallest affected build; UI/interaction: focused Baguette check |
-| UI, navigation, appearance, or copy | [Product principles](workout-app-principles.md), [quality](engineering/quality.md), active feature spec | [Feature/scenario map](Scripts/verify_scenarios/README.md#choose-evidence-for-the-change); inspect light, dark, and relevant accessibility states |
-| Custom exercises, templates, or exercise selection | [Exercise contract](specs/exercise-data-contract.md), applicable spec in the index | Relevant Baguette Library check |
-| Persistence, session lifetime, or integrations | [Architecture](ARCHITECTURE.md), applicable feature spec | Smallest affected build; Baguette for changed UI/interaction; affected boundary suites and `Scripts/check.sh` |
-| Docs, instructions, or process tooling | [Documentation maintenance](engineering/quality.md#documentation-maintenance) | [Documentation and tooling checks](engineering/verification.md#documentation-and-process-tooling) |
-| Review a change | Request, relevant contract/plan, [review checklist](engineering/code-review.md) | Assess the existing evidence; report gaps within the review's scope |
+## Layout
+- `vivobody/` – app: `App/` (state, persistence, session), `Models/`, `Screens/`, `Components/`
+- `vivobodyWidgets/` – widgets, Live Activity, and controls
+- `VivoKit/` – contracts shared by the app and widgets
+- `Scripts/` – `verify.sh`, the scenario runner, and the architecture and naming guardrails
 
-Current task instructions set the authorized scope. Active specs define feature behavior; product principles define shared UX constraints; architecture defines ownership. Historical plans, proposals, and design notes explain past choices. If current guides conflict, resolve the affected rule explicitly rather than silently choosing one. Executable checks prove only the contracts they check.
+## Boundaries
+- Always: save through `context.saveOrRollback()` and surface errors. Log through `AppDiagnostics`, without workout values.
+- Always: support light and dark appearance. Make controls 44pt or larger.
+- Always: route session lifetime through `WorkoutSessionController`, and external actions through `IncomingActionParser`.
+- Ask first: new dependencies, SwiftData schema changes, a sixth top-level tab.
+- Never: write SwiftData from widgets (they read snapshots).
+- Never: write tests (unit, UI, or snapshot).
 
-## Action boundaries
+## Verification
+We do not write tests. Verify once, when the change is complete, not after each edit:
+- Logic, model, or persistence change with no visible effect: run an incremental build only.
+- UI, navigation, or interaction change: run one relevant scenario with `SCENARIO=<name> Scripts/verify.sh`. It also builds, so do not build first. Inspect its screenshot and accessibility tree.
+- Do not use `CLEAN_BUILD=1` unless the build cache is broken.
+- The commit hooks run formatting and the guardrails. The push hook runs the VivoKit tests.
 
-A review or investigation is read-only unless fixes are requested. A plan request authorizes planning, including a plan file when useful, and ends before implementation. An implementation request authorizes completing that scope and its verification; do not ask again for already-authorized steps.
+## Git
+- Commit format: imperative subject, for example `Add workout load comparison to workout receipts`.
+- PR: explain the problem and the new behavior, list the checks you ran, and add screenshots for UI changes.
 
-For an explicitly requested prediction-and-evidence workflow, invoke `$vivobody-evidence-loop`: [skill instructions](.agents/skills/vivobody-evidence-loop/SKILL.md). It adds task notes and hypothesis tracking only when invoked; it does not activate for ordinary work.
-
-For project work involving AI judgments or TypeSafe integration, use the [TypeSafe skill](.agents/skills/typesafe-ai/SKILL.md). Follow its live-documentation guidance before implementation.
-
-## Project Structure & Module Organization
-
-`vivobody/` contains `App/`, `Models/`, `Screens/`, `Components/`, `Assets.xcassets/`, and `Resources/`. `vivobodyWidgets/` owns widget surfaces; `VivoKit/` shares app/widget contracts. Tests live in `vivobodyTests/` and `VivoKit/Tests/`.
-
-## Build, Test, and Development Commands
-
-Use macOS and Xcode; run commands from the repository root:
-
-```bash
-swiftformat vivobody/ vivobodyWidgets/ VivoKit/Sources/ # Format Swift
-SCENARIO=<relevant-scenario> Scripts/verify.sh # Smallest relevant Baguette check
-```
-
-## Coding Style & Naming Conventions
-
-Use four-space indentation, PascalCase types, and lowerCamelCase members without underscores. SwiftFormat owns formatting; `Scripts/check_naming.py` enforces naming; SwiftLint measures complexity. Respect source-size and complexity ratchets. Start Swift files with purpose headers; give reusable components nearby DEBUG galleries.
-
-## Testing Guidelines
-
-Choose fast verification by the effect of the change, following [the verification guide](engineering/verification.md#default-agent-validation). For non-UI changes, incrementally build the smallest affected target or module; use the app/project build when changes cross targets or cannot be isolated. For UI or interaction changes, run the smallest relevant Baguette scenario through `Scripts/verify.sh` and inspect its screenshot and accessibility tree. Its incremental build also covers compilation; do not build separately first.
-
-Verify after a coherent change, not every tiny edit. Repeat only after relevant edits, failures, or unresolved concerns. Reuse build caches and the existing headless runtime; avoid clean builds, resets, extra devices, and broad scenario sweeps unless necessary. Never open Simulator.app or run XCTest UI tests; Baguette covers UI evidence.
-
-Before you report an implementation as done, run the test suites that cover the change: the targeted Swift Testing suites for the affected area, `swift test --package-path VivoKit` when VivoKit changes, and `Scripts/check.sh` as the final gate for any code, catalog, or tooling change. Fix failures before you report. Commands are in [the verification guide](engineering/verification.md#test-suites-and-the-final-gate).
-
-This agent verification policy takes precedence over conflicting test/build requirements in other repository guides, skills, and historical plans. Documentation-only edits use `git diff --check`; they do not need Baguette. Test code, when requested, follows Swift Testing conventions with deterministic clocks.
-
-Report the builds, Baguette checks, and test suites performed, with their results, and any remaining device-only checks. A successful build proves compilation, not runtime behavior. If the selected check is unavailable or cannot verify the changed behavior, state that limitation; a green unrelated suite is not evidence.
-
-## Architecture & Product Boundaries
-
-Read [ARCHITECTURE.md](ARCHITECTURE.md) before data-flow changes and `vivobody/App/Persistence.swift` plus `vivobody/vivobodyApp.swift` before model changes. Only the app writes SwiftData; widgets consume snapshots. Save through `context.saveOrRollback()` and surface errors. `WorkoutSessionController` owns session lifetime; route lifecycle effects through `SessionSideEffects` and external actions through `IncomingActionParser` plus the central handler. Log through `AppDiagnostics` without workout values. Use `SettingsKey`, `WeightFormatter`, and `ScreenKit`/`PanelKit`/`GlassStyle` with 44pt-or-larger controls. Both light and dark appearances are supported; the app has a maximum of five top-level tabs.
-
-## Commit & Pull Request Guidelines
-
-Recent commits use imperative subjects, such as `Add workout load comparison to workout receipts`. Keep changes focused and preserve unrelated work. PRs should explain the problem, resulting behavior, relevant issue, validation, and manual gaps; include screenshot evidence for UI changes. Review against [the checklist](engineering/code-review.md). Update affected specs and documentation.
+## More docs (read when relevant)
+- `workout-app-principles.md` – product and UX rules
+- `Scripts/verify_scenarios/README.md` – scenario format and which scenario to run
+- `.agents/skills/typesafe-ai/SKILL.md` – AI features with TypeSafe

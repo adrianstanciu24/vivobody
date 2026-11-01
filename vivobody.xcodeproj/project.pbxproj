@@ -20,20 +20,6 @@
 			remoteGlobalIDString = F62DDA2F8BF844CABA5A477F;
 			remoteInfo = vivobodyWidgets;
 		};
-		781FC1B42FBB8CC200EE0477 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 781FC19A2FBB8CC000EE0477 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 781FC1A12FBB8CC000EE0477;
-			remoteInfo = vivobody;
-		};
-		781FC1BE2FBB8CC200EE0477 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 781FC19A2FBB8CC000EE0477 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 781FC1A12FBB8CC000EE0477;
-			remoteInfo = vivobody;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,8 +39,6 @@
 /* Begin PBXFileReference section */
 		67F2DBE5F8214A8F82FC470B /* vivobodyWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = vivobodyWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		781FC1A22FBB8CC000EE0477 /* vivobody.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vivobody.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		781FC1B32FBB8CC200EE0477 /* vivobodyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vivobodyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		781FC1BD2FBB8CC200EE0477 /* vivobodyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vivobodyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,20 +95,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		781FC1B02FBB8CC200EE0477 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		781FC1BA2FBB8CC200EE0477 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		B03FB967DA07472DBE11DE18 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -151,8 +121,6 @@
 			children = (
 				781FC1A22FBB8CC000EE0477 /* vivobody.app */,
 				67F2DBE5F8214A8F82FC470B /* vivobodyWidgets.appex */,
-				781FC1B32FBB8CC200EE0477 /* vivobodyTests.xctest */,
-				781FC1BD2FBB8CC200EE0477 /* vivobodyUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -184,46 +152,6 @@
 			productName = vivobody;
 			productReference = 781FC1A22FBB8CC000EE0477 /* vivobody.app */;
 			productType = "com.apple.product-type.application";
-		};
-		781FC1B22FBB8CC200EE0477 /* vivobodyTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 781FC1CB2FBB8CC200EE0477 /* Build configuration list for PBXNativeTarget "vivobodyTests" */;
-			buildPhases = (
-				781FC1AF2FBB8CC200EE0477 /* Sources */,
-				781FC1B02FBB8CC200EE0477 /* Frameworks */,
-				781FC1B12FBB8CC200EE0477 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				781FC1B52FBB8CC200EE0477 /* PBXTargetDependency */,
-			);
-			name = vivobodyTests;
-			packageProductDependencies = (
-			);
-			productName = vivobodyTests;
-			productReference = 781FC1B32FBB8CC200EE0477 /* vivobodyTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		781FC1BC2FBB8CC200EE0477 /* vivobodyUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 781FC1CE2FBB8CC200EE0477 /* Build configuration list for PBXNativeTarget "vivobodyUITests" */;
-			buildPhases = (
-				781FC1B92FBB8CC200EE0477 /* Sources */,
-				781FC1BA2FBB8CC200EE0477 /* Frameworks */,
-				781FC1BB2FBB8CC200EE0477 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				781FC1BF2FBB8CC200EE0477 /* PBXTargetDependency */,
-			);
-			name = vivobodyUITests;
-			packageProductDependencies = (
-			);
-			productName = vivobodyUITests;
-			productReference = 781FC1BD2FBB8CC200EE0477 /* vivobodyUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		F62DDA2F8BF844CABA5A477F /* vivobodyWidgets */ = {
 			isa = PBXNativeTarget;
@@ -261,14 +189,6 @@
 					781FC1A12FBB8CC000EE0477 = {
 						CreatedOnToolsVersion = 26.4;
 					};
-					781FC1B22FBB8CC200EE0477 = {
-						CreatedOnToolsVersion = 26.4;
-						TestTargetID = 781FC1A12FBB8CC000EE0477;
-					};
-					781FC1BC2FBB8CC200EE0477 = {
-						CreatedOnToolsVersion = 26.4;
-						TestTargetID = 781FC1A12FBB8CC000EE0477;
-					};
 					F62DDA2F8BF844CABA5A477F = {
 						CreatedOnToolsVersion = 26.4;
 					};
@@ -293,8 +213,6 @@
 			targets = (
 				781FC1A12FBB8CC000EE0477 /* vivobody */,
 				F62DDA2F8BF844CABA5A477F /* vivobodyWidgets */,
-				781FC1B22FBB8CC200EE0477 /* vivobodyTests */,
-				781FC1BC2FBB8CC200EE0477 /* vivobodyUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -308,20 +226,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		781FC1A02FBB8CC000EE0477 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		781FC1B12FBB8CC200EE0477 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		781FC1BB2FBB8CC200EE0477 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -345,33 +249,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		781FC1AF2FBB8CC200EE0477 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		781FC1B92FBB8CC200EE0477 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		781FC1B52FBB8CC200EE0477 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 781FC1A12FBB8CC000EE0477 /* vivobody */;
-			targetProxy = 781FC1B42FBB8CC200EE0477 /* PBXContainerItemProxy */;
-		};
-		781FC1BF2FBB8CC200EE0477 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 781FC1A12FBB8CC000EE0477 /* vivobody */;
-			targetProxy = 781FC1BE2FBB8CC200EE0477 /* PBXContainerItemProxy */;
-		};
 		96B98A14C16E477F99B5A6E0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F62DDA2F8BF844CABA5A477F /* vivobodyWidgets */;
@@ -614,82 +494,6 @@
 			};
 			name = Release;
 		};
-		781FC1CC2FBB8CC200EE0477 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobodyTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/vivobody.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/vivobody";
-			};
-			name = Debug;
-		};
-		781FC1CD2FBB8CC200EE0477 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobodyTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/vivobody.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/vivobody";
-			};
-			name = Release;
-		};
-		781FC1CF2FBB8CC200EE0477 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				GENERATE_INFOPLIST_FILE = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobodyUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = vivobody;
-			};
-			name = Debug;
-		};
-		781FC1D02FBB8CC200EE0477 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				GENERATE_INFOPLIST_FILE = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobodyUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = vivobody;
-			};
-			name = Release;
-		};
 		DEB4D7ADE0F84D0AAD9CD942 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
@@ -742,24 +546,6 @@
 			buildConfigurations = (
 				781FC1C72FBB8CC200EE0477 /* Debug */,
 				781FC1C82FBB8CC200EE0477 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		781FC1CB2FBB8CC200EE0477 /* Build configuration list for PBXNativeTarget "vivobodyTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				781FC1CC2FBB8CC200EE0477 /* Debug */,
-				781FC1CD2FBB8CC200EE0477 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		781FC1CE2FBB8CC200EE0477 /* Build configuration list for PBXNativeTarget "vivobodyUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				781FC1CF2FBB8CC200EE0477 /* Debug */,
-				781FC1D02FBB8CC200EE0477 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

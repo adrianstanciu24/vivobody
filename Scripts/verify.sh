@@ -12,9 +12,10 @@
 #   RESET_STATE=0 Scripts/verify.sh  # preserve the simulator's app data
 #   SCENARIO=active-restoration Scripts/verify.sh
 #   SIMULATOR_NAME='iPhone 17e' Scripts/verify.sh
-#   SIMULATOR_OS=27.0 Scripts/verify.sh
+#   SIMULATOR_OS=27.2 Scripts/verify.sh  # default: newest runtime that supports SIMULATOR_NAME
 #
-# Requires: baguette (brew install baguette), Xcode 27+ with an iOS 27 simulator.
+# Requires: baguette (brew install baguette), Xcode with an iOS simulator runtime.
+# A missing SIMULATOR_NAME device is created on the selected runtime.
 
 set -euo pipefail
 
@@ -22,7 +23,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 SIMULATOR_NAME="${SIMULATOR_NAME:-iPhone 18 Pro}"
-SIMULATOR_OS="${SIMULATOR_OS:-27.0}"
+SIMULATOR_OS="${SIMULATOR_OS:-}"
 SCHEME="vivobody"
 BUNDLE_ID="astanciu.vivobody.app"
 OUT_DIR="$ROOT/.verify"
@@ -58,6 +59,54 @@ if ! command -v baguette >/dev/null 2>&1; then
   exit 1
 fi
 
+if [[ -z "$SIMULATOR_OS" ]]; then
+  SIMULATOR_OS="$(xcrun simctl list -j runtimes | SIMULATOR_NAME="$SIMULATOR_NAME" python3 -c '
+import json, os, sys
+name = os.environ["SIMULATOR_NAME"]
+runtimes = [r for r in json.load(sys.stdin)["runtimes"]
+            if r.get("isAvailable") and ".SimRuntime.iOS-" in r["identifier"]
+            and any(t["name"] == name for t in r.get("supportedDeviceTypes", []))]
+if runtimes:
+    newest = max(runtimes, key=lambda r: [int(p) for p in r["version"].split(".")])
+    print(newest["name"].split(" ", 1)[1])
+')"
+  if [[ -z "$SIMULATOR_OS" ]]; then
+    echo "error: no installed iOS runtime supports '$SIMULATOR_NAME'; install one in Xcode > Settings > Components" >&2
+    exit 1
+  fi
+fi
+
+find_udid() {
+  baguette list 2>/dev/null | SIMULATOR_NAME="$SIMULATOR_NAME" SIMULATOR_OS="$SIMULATOR_OS" python3 -c '
+import json, os, sys
+name = os.environ["SIMULATOR_NAME"]
+runtime = "iOS " + os.environ["SIMULATOR_OS"]
+for line in sys.stdin:
+    if not line.strip(): continue
+    d = json.loads(line)
+    if d["name"] == name and d["runtime"] == runtime:
+        print(d["udid"]); break
+'
+}
+
+UDID="$(find_udid)"
+if [[ -z "$UDID" ]]; then
+  echo "▸ Creating $SIMULATOR_NAME on iOS $SIMULATOR_OS..."
+  IFS='|' read -r DEVICE_TYPE RUNTIME_ID < <(xcrun simctl list -j | SIMULATOR_NAME="$SIMULATOR_NAME" SIMULATOR_OS="$SIMULATOR_OS" python3 -c '
+import json, os, sys
+data = json.load(sys.stdin)
+name, runtime = os.environ["SIMULATOR_NAME"], "iOS " + os.environ["SIMULATOR_OS"]
+device_type = next((t["identifier"] for t in data["devicetypes"] if t["name"] == name), "")
+runtime_id = next((r["identifier"] for r in data["runtimes"] if r["name"] == runtime and r.get("isAvailable")), "")
+print(f"{device_type}|{runtime_id}")
+') || true
+  if [[ -z "${DEVICE_TYPE:-}" || -z "${RUNTIME_ID:-}" ]]; then
+    echo "error: cannot create '$SIMULATOR_NAME' on iOS $SIMULATOR_OS" >&2
+    exit 1
+  fi
+  UDID="$(xcrun simctl create "$SIMULATOR_NAME" "$DEVICE_TYPE" "$RUNTIME_ID")"
+fi
+
 if [[ "$CAPTURE_ONLY" != "1" ]]; then
   if [[ "$CLEAN_BUILD" == "1" ]]; then
     echo "▸ Removing cached build products..."
@@ -85,22 +134,6 @@ if [[ "$CAPTURE_ONLY" != "1" ]]; then
     echo "error: build artifact not found at $APP_PATH" >&2
     exit 1
   fi
-fi
-
-UDID="$(baguette list 2>/dev/null | SIMULATOR_NAME="$SIMULATOR_NAME" SIMULATOR_OS="$SIMULATOR_OS" python3 -c '
-import json, os, sys
-name = os.environ["SIMULATOR_NAME"]
-runtime = "iOS " + os.environ["SIMULATOR_OS"]
-for line in sys.stdin:
-    if not line.strip(): continue
-    d = json.loads(line)
-    if d["name"] == name and d["runtime"] == runtime:
-        print(d["udid"]); break
-')"
-
-if [[ -z "$UDID" ]]; then
-  echo "error: no simulator '$SIMULATOR_NAME' on iOS $SIMULATOR_OS" >&2
-  exit 1
 fi
 
 echo "▸ Booting $SIMULATOR_NAME ($UDID)..."

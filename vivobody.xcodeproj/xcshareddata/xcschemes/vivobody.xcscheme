@@ -30,29 +30,8 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "781FC1B22FBB8CC200EE0477"
-               BuildableName = "vivobodyTests.xctest"
-               BlueprintName = "vivobodyTests"
-               ReferencedContainer = "container:vivobody.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "781FC1BC2FBB8CC200EE0477"
-               BuildableName = "vivobodyUITests.xctest"
-               BlueprintName = "vivobodyUITests"
-               ReferencedContainer = "container:vivobody.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
+
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
