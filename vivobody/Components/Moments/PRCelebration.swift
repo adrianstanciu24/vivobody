@@ -16,6 +16,9 @@
 //  number lands with a silent haptic slam, then detail settles and the
 //  prompt takes a calm breath. Tap anywhere to continue.
 //
+//  On a wide window the record sits in the trailing lane and the record it
+//  replaced sits in the leading lane, so the fold divides before and after.
+//
 //  Use:
 //      content.overlay {
 //          PRCelebration(
@@ -32,6 +35,13 @@ import SwiftUI
 import UIKit
 import VivoKit
 
+/// What a personal record replaced.
+nonisolated enum PRCelebrationBaseline: Equatable {
+    case previous(value: String, unit: String?)
+    /// The first valid performance of the exercise.
+    case first
+}
+
 struct PRCelebration: View {
     @Binding var isPresented: Bool
     let title: String
@@ -42,6 +52,11 @@ struct PRCelebration: View {
     /// the content centers in, so no digit sits on a fold. The backdrop still
     /// covers the whole window. Nil centers across the window.
     var contentExtent: ClosedRange<CGFloat>? = nil
+    /// The record this one replaced. Shows only with `baselineExtent`.
+    var baseline: PRCelebrationBaseline? = nil
+    /// The horizontal extent for the baseline, in the same coordinates as
+    /// `contentExtent`. Nil hides the baseline.
+    var baselineExtent: ClosedRange<CGFloat>? = nil
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -64,9 +79,16 @@ struct PRCelebration: View {
     var body: some View {
         if isPresented {
             ZStack {
+                // Beside a baseline, show-through from the workout would
+                // compete with the dim previous record.
                 Surface.background
-                    .opacity(backdropVisible ? 0.96 : 0)
+                    .opacity(backdropVisible ? (shownBaseline == nil ? 0.96 : 1) : 0)
                     .ignoresSafeArea()
+
+                if let shownBaseline, let baselineExtent {
+                    baselineStack(shownBaseline)
+                        .horizontallyPlaced(in: baselineExtent)
+                }
 
                 centerStack
                     .horizontallyPlaced(in: contentExtent)
@@ -117,9 +139,24 @@ struct PRCelebration: View {
     }
 
     private var accessibilitySummary: String {
-        [value + (unit.map { " \($0)" } ?? ""), detail]
+        [value + (unit.map { " \($0)" } ?? ""), detail, baselineSummary]
             .compactMap(\.self)
             .joined(separator: ". ")
+    }
+
+    private var shownBaseline: PRCelebrationBaseline? {
+        baselineExtent == nil ? nil : baseline
+    }
+
+    private var baselineSummary: String? {
+        switch shownBaseline {
+        case let .previous(value, unit):
+            "Previous best " + value + (unit.map { " \($0)" } ?? "")
+        case .first:
+            "First record for this exercise"
+        case nil:
+            nil
+        }
     }
 
     // MARK: - Content
@@ -175,6 +212,56 @@ struct PRCelebration: View {
         }
         .padding(.horizontal, Space.gutter)
         .accessibilityElement(children: .combine)
+    }
+
+    /// The replaced record, dim and still, beside the new one. It shares the
+    /// center stack's rows so the two numerals sit on one line.
+    private func baselineStack(_ baseline: PRCelebrationBaseline) -> some View {
+        let previous: (value: String, unit: String?)? = switch baseline {
+        case let .previous(value, unit): (value, unit)
+        case .first: nil
+        }
+        return VStack(spacing: Space.md) {
+            Text("Previous best")
+                .panelLegendType()
+                .foregroundStyle(Ink.tertiary)
+
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                ZStack(alignment: .leading) {
+                    Text(SegmentDisplay.ghost(for: previous?.value ?? value))
+                        .font(Typography.bigMetric)
+                        .foregroundStyle(Ink.quaternary.opacity(0.12))
+                        .monospacedDigit()
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
+                    if let previous {
+                        Text(previous.value)
+                            .font(Typography.bigMetric)
+                            .foregroundStyle(Ink.tertiary)
+                            .monospacedDigit()
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+                    }
+                }
+                if let baselineUnit = previous?.unit {
+                    Text(baselineUnit)
+                        .font(Typography.statValue)
+                        .foregroundStyle(Ink.quaternary)
+                        .padding(.bottom, 12)
+                }
+            }
+
+            Capsule()
+                .fill(Ink.quaternary.opacity(0.5))
+                .frame(width: 120, height: 3)
+
+            Text(previous == nil ? "No earlier record" : "Before this set")
+                .font(Typography.metricUnit)
+                .foregroundStyle(Ink.tertiary)
+                .opacity(detailVisible ? 1 : 0)
+        }
+        .padding(.horizontal, Space.gutter)
+        .opacity(titleVisible ? 1 : 0)
     }
 
     private var prompt: some View {

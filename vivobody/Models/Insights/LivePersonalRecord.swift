@@ -77,6 +77,9 @@ nonisolated struct LivePersonalRecordCandidate: Hashable {
 nonisolated struct LivePersonalRecord: Hashable {
     let advancement: StrengthRecordAdvancement
     let performance: StrengthPerformance
+    /// The standing record this performance beat. Nil for the first valid
+    /// performance of the exercise.
+    let priorBest: StrengthPerformance?
 
     /// Unknown history deliberately suppresses a celebration. A known empty
     /// dictionary, by contrast, applies the shared first-valid-performance
@@ -101,7 +104,8 @@ nonisolated struct LivePersonalRecord: Hashable {
         }
         return LivePersonalRecord(
             advancement: advancement,
-            performance: performance
+            performance: performance,
+            priorBest: priorBest
         )
     }
 

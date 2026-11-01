@@ -52,4 +52,28 @@ nonisolated enum ActivePersonalRecordPresentation {
             )
         }
     }
+
+    /// The record this one replaced, on the same axis as the payload's value.
+    static func baseline(
+        for record: LivePersonalRecord,
+        unit: WeightUnit
+    ) -> PRCelebrationBaseline? {
+        guard let prior = record.priorBest else { return .first }
+        switch record.advancement {
+        case .load:
+            guard prior.primaryMetricKind == .load else { return nil }
+            return .previous(
+                value: WeightFormatter.string(prior.primaryMetric, unit: unit, includeUnit: false),
+                unit: unit.symbol
+            )
+
+        case .repetitions:
+            guard let reps = prior.dynamicLoadAndReps?.reps else { return nil }
+            return .previous(value: "\(reps)", unit: reps == 1 ? "rep" : "reps")
+
+        case .duration:
+            guard let duration = prior.isometricLoadAndDuration?.duration else { return nil }
+            return .previous(value: DurationFormatter.string(duration), unit: nil)
+        }
+    }
 }

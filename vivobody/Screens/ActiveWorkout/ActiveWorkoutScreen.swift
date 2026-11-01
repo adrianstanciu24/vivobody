@@ -62,6 +62,10 @@ struct ActiveWorkoutScreen: View {
     /// Drives the end-workout confirmation.
     @State private var showDiscardConfirm: Bool = false
 
+    /// The record the pending celebration replaced. It is not persisted, so
+    /// a restored celebration shows without it.
+    @State var prBaseline: PRCelebrationBaseline?
+
     /// Surfaces failures from draft autosaves while the workout stays
     /// open so the user can retry with their current in-memory state.
     @State private var saveError: SaveErrorBox? = nil
@@ -176,6 +180,10 @@ struct ActiveWorkoutScreen: View {
             Surface.background.ignoresSafeArea()
 
             if !isEmpty {
+                // On a wide window the rest scrim leaves the leading lane open
+                // to touch. Accessibility still hides the whole pager: the
+                // page's own outer setting would override hiding only the
+                // covered lane.
                 pager(lanes: lanes?.page)
                     .clipShape(PagerSideClip())
                     .safeAreaBar(edge: .top, spacing: 8) { topBar }
@@ -189,7 +197,8 @@ struct ActiveWorkoutScreen: View {
                 RestTimerOverlay(
                     session: session,
                     onSessionUpdate: onSessionUpdate,
-                    contentExtent: lanes?.viewportTrailing
+                    contentExtent: lanes?.viewportTrailing,
+                    scrimLeadingEdge: lanes?.viewportSeam
                 )
                 .transition(.opacity)
                 .zIndex(10)
@@ -207,7 +216,9 @@ struct ActiveWorkoutScreen: View {
                 value: session.pendingPRValue ?? "",
                 unit: session.pendingPRUnit,
                 detail: session.pendingPRDetail,
-                contentExtent: lanes?.viewportTrailing
+                contentExtent: lanes?.viewportTrailing,
+                baseline: prBaseline,
+                baselineExtent: lanes?.viewportLeading
             )
             .zIndex(20)
         }
@@ -274,6 +285,7 @@ struct ActiveWorkoutScreen: View {
                     session.pendingPRValue = nil
                     session.pendingPRDetail = nil
                     session.pendingPRUnit = nil
+                    prBaseline = nil
                 }
             }
         )

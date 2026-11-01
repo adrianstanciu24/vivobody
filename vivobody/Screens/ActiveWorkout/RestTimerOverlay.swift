@@ -3,7 +3,8 @@
 //  vivobody
 //
 //  Full-screen overlay that hosts the BreathingTimer between sets. On a
-//  wide window the timer sits in the set's lane, clear of the fold.
+//  wide window the timer and its scrim cover only the set's lane, clear of
+//  the fold, and the identity and setup lane stays usable.
 //  Identity-rotates on each rest so a fresh timer is constructed every
 //  time (the BreathingTimer reads its duration at init and would
 //  otherwise stick to a stale end time).
@@ -20,6 +21,10 @@ struct RestTimerOverlay: View {
     /// The horizontal extent the timer sits in on a wide window, clear of
     /// the fold. The scrim still covers the whole window.
     var contentExtent: ClosedRange<CGFloat>? = nil
+    /// Where the scrim starts on a wide window. The scrim covers only the
+    /// timer's side, so the leading lane stays usable during rest. Nil
+    /// covers the whole window.
+    var scrimLeadingEdge: CGFloat? = nil
     @Environment(\.modelContext) private var modelContext
 
     @State private var saveError: SaveErrorBox? = nil
@@ -39,7 +44,11 @@ struct RestTimerOverlay: View {
 
     var body: some View {
         ZStack {
-            Surface.background.opacity(0.92).ignoresSafeArea()
+            // A lane is measured inside the horizontal safe area, so a
+            // partial scrim keeps the leading inset.
+            Surface.background.opacity(0.92)
+                .padding(.leading, scrimLeadingEdge ?? 0)
+                .ignoresSafeArea(edges: scrimLeadingEdge == nil ? .all : [.vertical, .trailing])
 
             BreathingTimer(
                 duration: max(1, session.restRemaining),

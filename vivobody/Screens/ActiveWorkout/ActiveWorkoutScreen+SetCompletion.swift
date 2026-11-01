@@ -49,13 +49,17 @@ extension ActiveWorkoutScreen {
             expectedActiveSetID: intent.setID,
             personalRecord: payload
         )
-        return onCompleteSet(request) { mutation in
+        let result = onCompleteSet(request) { mutation in
             withAnimation(
                 reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.85)
             ) {
                 mutation()
             }
         }
+        if case .committed = result, payload != nil, let record {
+            prBaseline = ActivePersonalRecordPresentation.baseline(for: record, unit: unit)
+        }
+        return result
     }
 
     private func applyActiveSetCompletionRoute(

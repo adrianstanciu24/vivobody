@@ -31,6 +31,17 @@ nonisolated struct ActiveWorkoutLanes: Equatable {
     var viewportTrailing: ClosedRange<CGFloat> {
         page.trailing.lowerBound + pageInset ... page.trailing.upperBound + pageInset
     }
+
+    /// The leading lane in the viewport's coordinates.
+    var viewportLeading: ClosedRange<CGFloat> {
+        page.leading.lowerBound + pageInset ... page.leading.upperBound + pageInset
+    }
+
+    /// The middle of the gap between the lanes, in the viewport's
+    /// coordinates. A cover that leaves the leading lane usable starts here.
+    var viewportSeam: CGFloat {
+        (page.leading.upperBound + page.trailing.lowerBound) / 2 + pageInset
+    }
 }
 
 extension ActiveWorkoutScreen {
