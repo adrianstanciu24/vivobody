@@ -233,7 +233,7 @@ struct StartWorkoutSheet: View {
             }
             .padding(.horizontal, Space.gutter)
             .frame(maxWidth: .infinity)
-            .frame(minHeight: 64)
+            .frame(minHeight: Space.actionMin)
             .modifier(StartTileSurface(filled: filled))
             .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         }

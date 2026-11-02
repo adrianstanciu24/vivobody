@@ -40,6 +40,12 @@ struct PrimaryActionButton: View {
     var sound: Sounds.Effect = .crescendo
     let action: () -> Void
 
+    /// The label inset `.glassProminent` adds at `.small`. The label pads
+    /// the rest itself, so the button matches the start tiles at the same
+    /// height with or without a subtitle; the larger control sizes inset too
+    /// much vertically for a subtitle to fit in `Space.actionMin`.
+    private static let systemInset = EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10)
+
     var body: some View {
         Button {
             action()
@@ -71,9 +77,10 @@ struct PrimaryActionButton: View {
                         .accessibilityHidden(true)
                 }
             }
-            .frame(maxWidth: .infinity)
+            .padding(.horizontal, Space.gutter - Self.systemInset.leading)
+            .frame(maxWidth: .infinity, minHeight: Space.actionMin - Self.systemInset.top - Self.systemInset.bottom)
         }
-        .primaryButtonStyle(accent: accent)
+        .primaryButtonStyle(accent: accent, controlSize: .small)
         .accessibilityLabel(title)
         .accessibilityValue(subtitle ?? Text(verbatim: ""))
         .accessibilityInputLabels((inputLabels ?? [title]).map { Text($0) })
@@ -85,10 +92,15 @@ extension View {
     /// button in the card shape, tinted with the accent. `compact` drops
     /// to headline type for inline prompts where the hero scale would
     /// overwhelm the surrounding content. Both sizes stay above 44pt.
-    func primaryButtonStyle(accent: Color = Tint.primary, compact: Bool = false) -> some View {
+    /// `controlSize` overrides the size for a label that sets its own height.
+    func primaryButtonStyle(
+        accent: Color = Tint.primary,
+        compact: Bool = false,
+        controlSize: ControlSize? = nil
+    ) -> some View {
         buttonStyle(.glassProminent)
             .buttonBorderShape(.roundedRectangle(radius: Radius.card))
-            .controlSize(compact ? .large : .extraLarge)
+            .controlSize(controlSize ?? (compact ? .large : .extraLarge))
             .tint(accent)
             .font(compact ? Typography.headline : Typography.title)
             .foregroundStyle(Tint.onAccent)

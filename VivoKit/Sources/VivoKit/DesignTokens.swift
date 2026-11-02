@@ -157,6 +157,8 @@
         public static let section: CGFloat = 32
         public static let tapMin: CGFloat = 44
         public static let rowMin: CGFloat = 60
+        /// Shared height of the primary actions and the start tiles.
+        public static let actionMin: CGFloat = 64
     }
 
     public enum Surface {
