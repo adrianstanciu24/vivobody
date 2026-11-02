@@ -131,6 +131,7 @@ Scenario files: 230.
 | [duo-insights-columns-accessibility](duo-insights-columns-accessibility.json) | insights | `--ui-test-insights-showcase -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [duo-insights-columns-light](duo-insights-columns-light.json) | insights | `--ui-test-insights-showcase -settings.appearance light` |
 | [duo-insights-columns](duo-insights-columns.json) | insights | `--ui-test-insights-showcase -settings.appearance dark` |
+| [duo-insights-empty](duo-insights-empty.json) | history | `--static-body -settings.appearance dark` |
 | [duo-library-split-accessibility](duo-library-split-accessibility.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [duo-library-split-light](duo-library-split-light.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-library-split](duo-library-split.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark` |

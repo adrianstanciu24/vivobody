@@ -9,6 +9,8 @@
 //  fold (InsightsCardLayout.swift); every other window keeps one column.
 //  Free users see the same real-data instruments frozen beneath one shared
 //  blur, while one persistent bottom action carries the purchase request.
+//  An empty wide window keeps the first-use message in the leading lane and
+//  a redacted sample readout in the trailing lane (InsightsEmptyDetail.swift).
 //
 import SwiftUI
 import VivoKit
@@ -82,7 +84,29 @@ struct InsightsScreen: View {
             || reports.core.load.currentLoad > 0
     }
 
+    @ViewBuilder
     private func emptyState(hasArchivedWorkout: Bool) -> some View {
+        if displayLayout.showsDashboardColumns, #available(iOS 27.1, *) {
+            // Read outside the lanes: the fold stays put for both of them.
+            GeometryReader { viewport in
+                let lanes = DashboardLanes(
+                    width: viewport.size.width,
+                    divisions: viewport.reservedRegions(kind: .division).map(\.frame)
+                )
+                ZStack {
+                    emptyMessage(hasArchivedWorkout: hasArchivedWorkout)
+                        .horizontallyPlaced(in: lanes.leading)
+                    InsightsEmptyDetail()
+                        .horizontallyPlaced(in: lanes.trailing)
+                }
+            }
+        } else {
+            emptyMessage(hasArchivedWorkout: hasArchivedWorkout)
+                .padding(.horizontal, Space.gutter)
+        }
+    }
+
+    private func emptyMessage(hasArchivedWorkout: Bool) -> some View {
         VStack(spacing: Space.xl) {
             Spacer(minLength: Space.xxl)
 
@@ -108,17 +132,8 @@ struct InsightsScreen: View {
                 .fixedSize(horizontal: false, vertical: true)
             }
 
-            PrimaryActionButton(
-                title: "Go to Today",
-                subtitle: Text("Your next workout is one tap away"),
-                icon: "arrow.right"
-            ) {
-                appState.selectedTab = .today
-            }
-
             Spacer(minLength: Space.xxl)
         }
-        .padding(.horizontal, Space.gutter)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 

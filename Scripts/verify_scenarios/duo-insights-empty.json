@@ -1,0 +1,54 @@
+{
+  "name": "duo-insights-empty",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "history",
+    "arguments": [
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "No workouts yet"
+      }
+    },
+    {
+      "tap": {
+        "label": "Insights",
+        "role": "AXRadioButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsEmptyState",
+        "label": "No training logged yet",
+        "role": "AXStaticText"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Your first readout",
+      "role": "AXHeading"
+    },
+    {
+      "identifier": "insightsSampleReadout",
+      "label": "Sample insights readout"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Go to Today"
+    },
+    {
+      "identifier": "insightsSignatureSection"
+    },
+    {
+      "identifier": "insightsScroll"
+    }
+  ]
+}
