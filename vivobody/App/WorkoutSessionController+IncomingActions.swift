@@ -32,6 +32,12 @@ extension WorkoutSessionController {
             // they are.
             guard endRestForExternalCompletion() else { return }
             completeActiveSet(presentsWorkout: false)
+        case .showPaywall:
+            // The paywall sheet is bound at the app root, so anything
+            // already presented there must come down first.
+            isWorkoutExpanded = false
+            appState?.pendingSpotlightExercise = nil
+            appState?.pro.requestUnlock()
         }
     }
 

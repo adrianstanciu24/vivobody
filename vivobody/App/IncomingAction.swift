@@ -28,6 +28,8 @@ enum IncomingAction: Equatable {
     case showExercise(UUID)
     /// Complete the active set on the current exercise (Live Activity tap).
     case completeActiveSet
+    /// Present the Vivobody Pro paywall (locked widget tap).
+    case showPaywall
 
     /// Privacy-safe case name for diagnostics. Associated UUIDs and other
     /// user-linked payloads deliberately never enter unified logs.
@@ -40,6 +42,7 @@ enum IncomingAction: Equatable {
         case .continueSession: "continue_session"
         case .showExercise: "show_exercise"
         case .completeActiveSet: "complete_active_set"
+        case .showPaywall: "show_paywall"
         }
     }
 }
@@ -53,7 +56,7 @@ enum IncomingActionParser {
     // MARK: URL scheme
 
     /// `vivobody://today`, `vivobody://library`, `vivobody://insights`,
-    /// `vivobody://workout`
+    /// `vivobody://workout`, `vivobody://pro`
     static func from(url: URL) -> IncomingAction? {
         guard url.scheme == "vivobody" else { return nil }
         let route = [url.host, url.path]
@@ -69,8 +72,7 @@ enum IncomingActionParser {
         case "workout":
             return .resumeWorkout
         case "pro":
-            // Older widget links now open the fully available Insights tab.
-            return .openTab(.insights)
+            return .showPaywall
         default:
             return .openTab(.today)
         }

@@ -26,6 +26,10 @@ public nonisolated enum WidgetShared {
     public static let activeWorkoutSnapshotKey = "widgets.activeWorkout.snapshot"
     public static let weightUnitKey = "settings.weightUnit"
     public static let appearanceKey = "settings.appearance"
+    /// Bool — whether the Pro unlock is owned. The app writes it on every
+    /// entitlement change; the Pro widgets read it to choose between real
+    /// content and the locked preview. Widgets never touch StoreKit.
+    public static let proUnlockedKey = "settings.proUnlocked"
     /// Keys from the retired App Group intent handoff and template-name
     /// list. Nothing reads them; the app deletes them at launch.
     public static let retiredKeys = [

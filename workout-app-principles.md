@@ -33,8 +33,14 @@ actionable, with a clear indication of what comes next.
 
 ## Respect the user's effort
 
-All features are included in the upfront app price, with no in-app purchases
-or feature paywalls. Follow the [paid-app contract](specs/paid-app.md).
+The app is free, and workout logging stays free and complete: active workouts,
+history, the catalog, records, the Live Activity, and the Up Next widget. One
+lifetime Vivobody Pro purchase unlocks Insights, the Exercise Detail
+instruments, exercise comparison, more than five templates, and the Signature,
+Consistency, and Training Load widgets. Free users see those surfaces as their
+own data frozen beneath a blur. The paywall opens only from a locked
+surface, the Settings row, or a locked widget; never at launch, as a popup, or
+during an active workout.
 Do not interrupt an active workout with unrelated prompts.
 Avoid long onboarding wizards, streak-shaming, and prescriptive claims that the
 recorded data cannot support.

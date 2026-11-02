@@ -12,10 +12,13 @@ import VivoKit
 
 struct ExerciseStaminaSection: View {
     let report: ExerciseStamina?
+    var isLocked = false
+    var onUnlock: (() -> Void)? = nil
 
     var body: some View {
         if let report, report.latest != nil {
             ExerciseStaminaInstrument(report: report)
+                .proLocked(isLocked, title: "Set-series stamina", onUnlock: onUnlock)
         }
     }
 }

@@ -71,6 +71,10 @@ final class AppState {
     /// fingerprint skips both when the dataset has not changed.
     let analytics = SessionAnalytics()
 
+    /// The Pro entitlement and the app's StoreKit boundary. Screens read
+    /// `pro.status` and call `pro.requestUnlock()` for the shared paywall.
+    let pro = ProStore()
+
     init() {
         workout.appState = self
     }

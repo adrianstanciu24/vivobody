@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Settings orchestration pushed from Me. This root owns UserDefaults,
-//  catalog reset, alerts, the mail sheet, in-app URL presentation, and
+//  the Pro unlock request, catalog reset, alerts, the mail sheet, in-app URL presentation, and
 //  the footer. Focused sections receive only immutable
 //  presentation, bindings, and actions.
 //
@@ -18,6 +18,7 @@ struct SettingsScreen: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.appDisplayLayout) private var displayLayout
+    @Environment(ProStore.self) private var pro: ProStore?
 
     @AppStorage(SettingsKey.hapticsEnabled)
     private var hapticsEnabled: Bool = SettingsDefaults.hapticsEnabled
@@ -80,6 +81,14 @@ struct SettingsScreen: View {
     private func scroll(lanes: DashboardLanes?) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
+                SettingsProSection(
+                    presentation: SettingsInteractionPolicy.proPresentation(
+                        isUnlocked: pro?.isUnlocked == true
+                    ),
+                    onUnlock: { perform(SettingsInteractionPolicy.requestProUnlock()) }
+                )
+                .settleIn(0)
+
                 SettingsPreferencesSection(
                     appearance: appearanceBinding,
                     bodyDriftSpeed: bodyDriftSpeedBinding,
@@ -94,7 +103,8 @@ struct SettingsScreen: View {
                     lanes: lanes,
                     onRequestCatalogReset: requestCatalogReset
                 )
-                .settleIn(0)
+                .padding(.top, Space.section)
+                .settleIn(1)
 
                 SettingsAboutSection(
                     lanes: lanes,
@@ -102,7 +112,7 @@ struct SettingsScreen: View {
                     onComposeSupportMail: composeSupportMail
                 )
                 .padding(.top, Space.section)
-                .settleIn(1)
+                .settleIn(2)
             }
             .padding(.top, Space.sm)
             .padding(.bottom, Space.section + Space.md)
@@ -298,6 +308,8 @@ struct SettingsScreen: View {
         switch command {
         case .showCatalogResetConfirmation:
             isConfirmingCatalogReset = true
+        case .requestProUnlock:
+            pro?.requestUnlock()
         default:
             assertionFailure("Unhandled Settings interaction command")
         }

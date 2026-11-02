@@ -8,7 +8,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 228.
+Scenario files: 230.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -162,6 +162,7 @@ Scenario files: 228.
 | [exercise-detail-stamina](exercise-detail-stamina.json) | library | `--ui-test-insights-dimensions --static-body` |
 | [exercise-detail-strength-building](exercise-detail-strength-building.json) | library | None declared |
 | [exercise-detail-strength-slots-partial](exercise-detail-strength-slots-partial.json) | library | `--ui-test-single-exercise-history` |
+| [exercise-detail-locked](exercise-detail-locked.json) | library | `--ui-test-weekly-volume --static-body` (free) |
 | [exercise-detail-weekly-volume](exercise-detail-weekly-volume.json) | library | `--ui-test-weekly-volume --static-body` |
 | [exercise-execution-bilateral-reps](exercise-execution-bilateral-reps.json) | library | None declared |
 | [exercise-execution-conventional-deadlift](exercise-execution-conventional-deadlift.json) | library | `--static-body -settings.appearance dark` |
@@ -179,6 +180,7 @@ Scenario files: 228.
 | [insights-empty](insights-empty.json) | history | None declared |
 | [insights-hard-sets](insights-hard-sets.json) | insights | `--ui-test-insights-hard-sets` |
 | [insights-load-rep-drivers](insights-load-rep-drivers.json) | insights | `--ui-test-insights-showcase` |
+| [insights-locked](insights-locked.json) | insights | `--ui-test-insights-showcase` (free) |
 | [insights-movement-coverage-accessibility](insights-movement-coverage-accessibility.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityXXXL` |
 | [insights-movement-coverage-light](insights-movement-coverage-light.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance light` |
 | [insights-movement-coverage](insights-movement-coverage.json) | insights | `--ui-test-insights-dimensions --static-body` |

@@ -80,6 +80,8 @@ struct InsightsLaneLayout: Layout {
 @available(iOS 27.1, *)
 struct InsightsCardLanes: View {
     let reports: SessionAnalytics.InsightsReports
+    /// Non-nil freezes the lanes beneath the free version's locked preview.
+    var onUnlock: (() -> Void)? = nil
 
     var body: some View {
         // Read outside the scroll: the fold stays put while the cards move.
@@ -103,6 +105,7 @@ struct InsightsCardLanes: View {
                             .accessibilitySortPriority(Double(InsightsCardID.allCases.count - index))
                     }
                 }
+                .insightsLockedPreview(onUnlock: onUnlock)
                 .padding(.top, Space.lg)
                 .padding(.bottom, Space.xxl)
             }

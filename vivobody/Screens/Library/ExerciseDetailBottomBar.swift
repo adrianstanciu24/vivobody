@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Exercise Detail's safe-area actions. The leaf renders immutable
-//  pick state while the root screen owns presentation,
+//  entitlement and pick state while the root screen owns presentation,
 //  navigation, haptics, and the resulting actions.
 //
 
@@ -11,10 +11,18 @@ import SwiftUI
 import VivoKit
 
 struct ExerciseDetailBottomBar: View {
+    /// Non-nil while a Pro-locked section is on screen.
+    var onUnlock: (() -> Void)? = nil
+    var price: String? = nil
     let onAddToWorkout: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
+            if let onUnlock {
+                ProUnlockButton(price: price, compact: true, action: onUnlock)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, Space.sm)
+            }
             if let onAddToWorkout {
                 addToWorkoutControl(action: onAddToWorkout)
             }

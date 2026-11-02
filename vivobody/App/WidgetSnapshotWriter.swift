@@ -591,6 +591,21 @@ enum WidgetSnapshotWriter {
         }
     }
 
+    /// Mirror the Pro entitlement into the App Group, and redraw the Pro
+    /// widgets when it changed.
+    static func publishProEntitlement(_ isPro: Bool, reload: Bool) {
+        UserDefaults(suiteName: WidgetShared.appGroup)?
+            .set(isPro, forKey: WidgetShared.proUnlockedKey)
+        guard reload else { return }
+        for kind in [
+            WidgetShared.signatureKind,
+            WidgetShared.consistencyKind,
+            WidgetShared.trainingLoadKind,
+        ] {
+            WidgetCenter.shared.reloadTimelines(ofKind: kind)
+        }
+    }
+
     private static func mirrorPreferences(unit: WeightUnit) {
         let defaults = UserDefaults(suiteName: WidgetShared.appGroup)
         defaults?.set(unit.rawValue, forKey: WidgetShared.weightUnitKey)

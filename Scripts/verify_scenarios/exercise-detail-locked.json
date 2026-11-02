@@ -1,0 +1,68 @@
+{
+  "name": "exercise-detail-locked",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "free": true,
+    "arguments": [
+      "--ui-test-weekly-volume",
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell \u00b7 Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Progress chart, locked"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "proUnlockButton",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "proLockedCover",
+      "label": "Last 7 days, locked",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "proLockedCover",
+      "label": "Progress chart, locked",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "proUnlockButton",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "weighted sets from this exercise in the last 7 days"
+    }
+  ]
+}

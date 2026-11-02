@@ -129,6 +129,7 @@ struct AppRoot: View {
         .preferredColorScheme(appearance.colorScheme)
         .tint(Tint.primary)
         .environment(\.sessionAnalytics, appState.analytics)
+        .environment(appState.pro)
         .task(id: catalogPreparationAttempt) {
             await prepareCatalogIfNeeded()
         }
@@ -136,6 +137,7 @@ struct AppRoot: View {
 
     private var mainApp: some View {
         @Bindable var workout = appState.workout
+        @Bindable var pro = appState.pro
 
         return tabView
             // The one archive analytics feeder in the app. Its ModelActor
@@ -314,7 +316,14 @@ struct AppRoot: View {
                         .zoom(sourceID: workoutTransitionSource, in: workoutTransition)
                     )
                 }
-            }.sheet(item: $appState.pendingSpotlightExercise) { item in
+            }
+            .sheet(
+                isPresented: $pro.isPaywallPresented,
+                onDismiss: { appState.pro.paywallContext = .general }
+            ) {
+                PaywallSheet(pro: appState.pro)
+            }
+            .sheet(item: $appState.pendingSpotlightExercise) { item in
                 NavigationStack {
                     ExerciseDetailScreen(item: item, onPickAndDismiss: nil)
                 }

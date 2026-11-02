@@ -139,6 +139,55 @@ private struct WidgetGlassPanelModifier: ViewModifier {
     }
 }
 
+/// Widget-side read of the Pro entitlement. The app mirrors the resolved
+/// flag into the App Group; widgets never import StoreKit.
+enum WidgetEntitlement {
+    static var isPro: Bool {
+        UserDefaults(suiteName: WidgetShared.appGroup)?
+            .bool(forKey: WidgetShared.proUnlockedKey) ?? false
+    }
+
+    /// The free version's taps open the paywall instead of the content.
+    static func url(_ unlocked: String) -> URL? {
+        URL(string: isPro ? unlocked : "vivobody://pro")
+    }
+}
+
+/// The free version's widget preview: the real content frozen beneath the
+/// same blur as the app's locked Insights page, with a small unlock pill.
+private struct WidgetProLockModifier: ViewModifier {
+    let title: String
+
+    func body(content: Content) -> some View {
+        if WidgetEntitlement.isPro {
+            content
+        } else {
+            content
+                .blur(radius: 8)
+                .opacity(0.90)
+                .accessibilityHidden(true)
+                .overlay(alignment: .bottom) {
+                    Text("Unlock Pro")
+                        .font(Typography.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Tint.onAccent)
+                        .lineLimit(1)
+                        .padding(.horizontal, Space.md)
+                        .padding(.vertical, Space.xs + 2)
+                        .background(Capsule().fill(Tint.primary))
+                        .padding(.bottom, Space.md)
+                        .accessibilityLabel("\(title), part of Vivobody Pro. Unlock in the app.")
+                }
+        }
+    }
+}
+
+extension View {
+    func widgetProLocked(_ title: String) -> some View {
+        modifier(WidgetProLockModifier(title: title))
+    }
+}
+
 struct WidgetExerciseRows: View {
     let exercises: [UpNextExerciseSnapshot]
     let limit: Int

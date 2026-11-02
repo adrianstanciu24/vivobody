@@ -216,7 +216,7 @@ struct LibraryScreen: View {
             TemplateDetailScreen(template: template, appState: appState, onStarted: navigation.showList)
         case nil:
             if listing.segment == .templates, listing.templates.isEmpty {
-                LibraryTemplatesEmptyDetail(onCreate: openNewTemplateEditor)
+                LibraryTemplatesEmptyDetail(onCreate: { openNewTemplateEditor() })
             } else {
                 Color.clear.screenBackground()
             }
@@ -254,15 +254,22 @@ struct LibraryScreen: View {
     }
 
     private func presentNewTemplate() {
-        openNewTemplateEditor()
+        guard openNewTemplateEditor() else { return }
         Haptics.soft()
     }
 
-    /// The empty detail's create button plays its own haptic.
-    private func openNewTemplateEditor() {
+    /// The empty detail's create button plays its own haptic. Past the
+    /// free template limit this opens the paywall instead of the editor.
+    @discardableResult
+    private func openNewTemplateEditor() -> Bool {
         let descriptor = FetchDescriptor<WorkoutTemplate>()
         let count = (try? modelContext.fetchCount(descriptor)) ?? 0
+        guard ProGate.canCreateTemplate(existingCount: count, status: appState.pro.status) else {
+            appState.pro.requestUnlock(context: .templateLimit)
+            return false
+        }
         templateEditorTarget = .new(sortOrder: count)
+        return true
     }
 
     private var plusAccessibilityLabel: String {

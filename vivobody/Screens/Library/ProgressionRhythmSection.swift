@@ -13,10 +13,13 @@ import VivoKit
 struct ExerciseDetailRhythmSection: View {
     let cadence: ExerciseDetailReadModel.Cadence?
     let now: Date
+    var isLocked = false
+    var onUnlock: (() -> Void)? = nil
 
     var body: some View {
         if let cadence {
             content(cadence)
+                .proLocked(isLocked, title: "Load cadence", onUnlock: onUnlock)
         }
     }
 

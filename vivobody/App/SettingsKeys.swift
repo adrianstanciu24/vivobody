@@ -79,6 +79,10 @@ nonisolated enum SettingsKey {
     /// requested. Gates ReviewRequestController: the system prompt is
     /// requested at most once, after the 20th archived workout.
     static let hasRequestedAppReview = "settings.hasRequestedAppReview"
+    /// Bool — last known Pro entitlement, mirrored by ProStore so the UI
+    /// does not flash locked on a cold offline launch. A render hint only:
+    /// StoreKit's current entitlements overwrite it on every launch.
+    static let proUnlockedCache = "settings.proUnlockedCache"
     /// Monotonic revision for data consumed by the full widget
     /// snapshot set. Relevant mutation paths advance it only after
     /// their SwiftData save succeeds.
@@ -100,6 +104,7 @@ nonisolated enum SettingsDefaults {
     static let onboardingCompleted = false
     static let hasScrubbedNumber = false
     static let bodyDriftSpeed = BodyDriftSpeed.low.rawValue
+    static let proUnlockedCache = false
 }
 
 /// How fast the 3D body model idles on its turntable. `low` is the

@@ -1,0 +1,38 @@
+{
+  "name": "insights-locked",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "free": true,
+    "arguments": [
+      "--ui-test-insights-showcase"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "proUnlockButton",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "proUnlockButton",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "insightsLockedPreview",
+      "label": "Insights, locked",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsExerciseMixLink"
+    },
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

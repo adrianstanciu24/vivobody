@@ -36,7 +36,8 @@ struct SignatureWidgetView: View {
 
     var body: some View {
         small
-            .widgetURL(URL(string: "vivobody://insights"))
+            .widgetProLocked("Training Signature")
+            .widgetURL(WidgetEntitlement.url("vivobody://insights"))
             .widgetAppearanceBackground()
     }
 

@@ -7,6 +7,8 @@
 //  secondary distributions and the full balance roster live in drill-outs.
 //  A wide, regular-width window lays the same cards in two lanes beside the
 //  fold (InsightsCardLayout.swift); every other window keeps one column.
+//  Free users see the same real-data instruments frozen beneath one shared
+//  blur, while one persistent bottom action carries the purchase request.
 //
 import SwiftUI
 import VivoKit
@@ -38,22 +40,33 @@ struct InsightsScreen: View {
 
     // MARK: - Instrument shell
 
-    @ViewBuilder
     private func instrumentShell(
         reports: SessionAnalytics.InsightsReports
     ) -> some View {
-        if displayLayout.showsDashboardColumns, #available(iOS 27.1, *) {
-            InsightsCardLanes(reports: reports)
-        } else {
-            ScrollView(.vertical) {
-                InsightsCardColumn(reports: reports)
-                    .padding(.top, Space.lg)
-                    .padding(.bottom, Space.xxl)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+        let pro = appState.pro
+        let onUnlock: (() -> Void)? = pro.isUnlocked ? nil : { pro.requestUnlock() }
+        return Group {
+            if displayLayout.showsDashboardColumns, #available(iOS 27.1, *) {
+                InsightsCardLanes(reports: reports, onUnlock: onUnlock)
+            } else {
+                ScrollView(.vertical) {
+                    InsightsCardColumn(reports: reports)
+                        .insightsLockedPreview(onUnlock: onUnlock)
+                        .padding(.top, Space.lg)
+                        .padding(.bottom, Space.xxl)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+                .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+                .scrollEdgeEffectStyle(.soft, for: .bottom)
             }
-            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-            .scrollEdgeEffectStyle(.soft, for: .bottom)
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if let onUnlock {
+                ProUnlockButton(price: pro.displayPrice, action: onUnlock)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, Space.sm)
+            }
         }
     }
 

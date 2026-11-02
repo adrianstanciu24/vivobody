@@ -12,10 +12,13 @@ import VivoKit
 
 struct ExerciseDetailWeeklyVolumeSection: View {
     let volume: ExerciseDetailReadModel.WeeklyVolume?
+    var isLocked = false
+    var onUnlock: (() -> Void)? = nil
 
     var body: some View {
         if let volume {
             content(volume)
+                .proLocked(isLocked, title: "Last 7 days", onUnlock: onUnlock)
         }
     }
 

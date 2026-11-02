@@ -19,6 +19,11 @@ nonisolated struct SettingsPreferenceDefaults: Equatable {
     let soundsEnabled: Bool
 }
 
+nonisolated enum SettingsProPresentation: Equatable {
+    case locked
+    case unlocked
+}
+
 nonisolated enum SettingsInteractionCommand: Equatable {
     case playSelectionHaptic
     case playSoftHaptic(playsSound: Bool)
@@ -30,6 +35,7 @@ nonisolated enum SettingsInteractionCommand: Equatable {
     case setHapticsEnabled(Bool)
     case setSoundsEnabled(Bool)
     case showCatalogResetConfirmation
+    case requestProUnlock
 }
 
 nonisolated enum SettingsInteractionPolicy {
@@ -77,6 +83,14 @@ nonisolated enum SettingsInteractionPolicy {
             commands.append(.playButtonSound)
         }
         return commands
+    }
+
+    static func proPresentation(isUnlocked: Bool) -> SettingsProPresentation {
+        isUnlocked ? .unlocked : .locked
+    }
+
+    static func requestProUnlock() -> [SettingsInteractionCommand] {
+        [.requestProUnlock]
     }
 
     static func requestCatalogReset() -> [SettingsInteractionCommand] {

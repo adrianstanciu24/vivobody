@@ -39,7 +39,8 @@ struct TrainingLoadWidgetView: View {
     var body: some View {
         large
             .padding()
-            .widgetURL(URL(string: "vivobody://insights"))
+            .widgetProLocked("Training Load")
+            .widgetURL(WidgetEntitlement.url("vivobody://insights"))
             .widgetAppearanceBackground()
     }
 

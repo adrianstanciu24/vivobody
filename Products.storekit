@@ -1,0 +1,33 @@
+{
+  "identifier" : "4C7D2E19-8B3F-4A6E-9D50-2F1B7C8E3A41",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "24.99",
+      "familyShareable" : false,
+      "internalID" : "9E5A3B71-2C4D-4F8A-B6E0-7D1C9A2F5B63",
+      "localizations" : [
+        {
+          "description" : "Insights, exercise instruments, comparison, unlimited templates, and widgets.",
+          "displayName" : "Vivobody Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "astanciu.vivobody.app.pro.unlock",
+      "referenceName" : "Vivobody Pro Unlock",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

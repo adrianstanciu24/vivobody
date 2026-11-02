@@ -2,7 +2,7 @@
 //  InsightsScreenSupport.swift
 //  vivobody
 //
-//  Shared navigation and empty-state pieces keep the
+//  Shared navigation, locked-preview, and empty-state pieces keep the
 //  Insights panel and its drill-outs visually consistent without putting
 //  analytics decisions in the screen shell.
 //
@@ -27,6 +27,49 @@ struct InsightsDrilloutScreen<Content: View>: View {
         .screenBackground()
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+extension View {
+    /// Freezes the whole Insights page beneath one blur for the free
+    /// version. Nil `onUnlock` renders the page unchanged.
+    @ViewBuilder
+    func insightsLockedPreview(onUnlock: (() -> Void)?) -> some View {
+        if let onUnlock {
+            InsightsLockedPreview(title: "Insights", action: onUnlock) { self }
+        } else {
+            self
+        }
+    }
+}
+
+struct InsightsLockedPreview<Content: View>: View {
+    let title: String
+    let action: () -> Void
+    @ViewBuilder let content: () -> Content
+
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+
+    var body: some View {
+        ZStack {
+            content()
+                .blur(radius: reduceTransparency ? 0 : 8)
+                .opacity(reduceTransparency ? 0 : 0.90)
+                .accessibilityHidden(true)
+                .allowsHitTesting(false)
+
+            Button(action: action) {
+                Color.clear
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityElement(children: .ignore)
+            .accessibilityIdentifier("insightsLockedPreview")
+            .accessibilityAddTraits(.isButton)
+            .accessibilityLabel("\(title), locked")
+            .accessibilityHint("Unlocks with Vivobody Pro")
+        }
     }
 }
 

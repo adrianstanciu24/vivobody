@@ -15,10 +15,13 @@ struct ExerciseDetailProgressSection: View {
     let unit: WeightUnit
     @Binding var selectedMetric: ExerciseDetailChartMetric
     @Binding var selectedRange: ExerciseDetailChartRange
+    var isLocked = false
+    var onUnlock: (() -> Void)? = nil
 
     var body: some View {
         if readModel.hasHistory || readModel.exercise.supportsEstimatedOneRepMax {
             progressSection
+                .proLocked(isLocked, title: "Progress chart", onUnlock: onUnlock)
         }
     }
 

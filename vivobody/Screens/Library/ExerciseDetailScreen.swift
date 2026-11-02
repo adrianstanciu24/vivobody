@@ -13,6 +13,9 @@
 //  Comparison is entered through the toolbar menu and opens a "Compare With"
 //  picker, then a comparison sheet. The active-workout
 //  add host suppresses comparison so logging stays focused.
+//  In the free version the Week, Chart, Rhythm, and stamina instruments sit
+//  frozen beneath Liquid Glass and comparison opens the local paywall. The
+//  numeric stats stay free, and the live-workout host never offers a purchase.
 //
 //  Surfaces (when data exists):
 //    • Hero    — orange modality eyebrow + exercise name, plus a
@@ -82,6 +85,9 @@ struct ExerciseDetailScreen: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.sessionAnalytics) var sessionAnalytics
 
+    /// Optional so previews without the app root still build; nil renders unlocked.
+    @Environment(ProStore.self) private var pro: ProStore?
+
     /// Current bodyweight is used only for an unlogged catalog default.
     /// Historical points carry their own session snapshots.
     @Query
@@ -133,6 +139,9 @@ struct ExerciseDetailScreen: View {
     @State private var isPickingComparison: Bool = false
     @State private var pendingComparisonTarget: ExerciseCatalogItem? = nil
     @State private var comparisonTarget: ExerciseCatalogItem? = nil
+    /// Local because this screen can live inside other sheets (Spotlight
+    /// detail, exercise picker), above which the app-root paywall can't present.
+    @State private var isPaywallPresented: Bool = false
     @State var isEditingOneRepMax: Bool = false
     @State var range: ExerciseDetailChartRange = .all
     @State var chartMetric: ExerciseDetailChartMetric = .weight
@@ -148,6 +157,14 @@ struct ExerciseDetailScreen: View {
             cached: cachedReports,
             unit: unit,
             currentBodyweight: currentBodyweight
+        )
+        let isProLocked = pro.map { !$0.isUnlocked } ?? false
+        let unlockAction: (() -> Void)? = allowsComparison ? { requestUnlock() } : nil
+        let showsUnlock = isProLocked && allowsComparison && (
+            readModel.hasHistory
+                || readModel.exercise.supportsEstimatedOneRepMax
+                || readModel.cadence != nil
+                || readModel.weeklyVolume != nil
         )
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: Space.xxl) {
@@ -188,22 +205,30 @@ struct ExerciseDetailScreen: View {
                     )
                 }
                 ExerciseDetailWeeklyVolumeSection(
-                    volume: readModel.weeklyVolume
+                    volume: readModel.weeklyVolume,
+                    isLocked: isProLocked,
+                    onUnlock: unlockAction
                 )
                 ExerciseDetailProgressSection(
                     readModel: readModel,
                     unit: unit,
                     selectedMetric: $chartMetric,
-                    selectedRange: $range
+                    selectedRange: $range,
+                    isLocked: isProLocked,
+                    onUnlock: unlockAction
                 )
                 ExerciseDetailRhythmSection(
                     cadence: readModel.cadence,
-                    now: readModel.now
+                    now: readModel.now,
+                    isLocked: isProLocked,
+                    onUnlock: unlockAction
                 )
                 ExerciseDetailEffortSection(effort: readModel.effort)
                 if allowsComparison {
                     ExerciseStaminaSection(
-                        report: readModel.stamina
+                        report: readModel.stamina,
+                        isLocked: isProLocked,
+                        onUnlock: unlockAction
                     )
                 }
                 if readModel.hasHistory {
@@ -300,6 +325,8 @@ struct ExerciseDetailScreen: View {
         }
         .safeAreaBar(edge: .bottom) {
             ExerciseDetailBottomBar(
+                onUnlock: showsUnlock ? { requestUnlock() } : nil,
+                price: pro?.displayPrice,
                 onAddToWorkout: onPickAndDismiss.map { action in
                     {
                         Haptics.thunk()
@@ -327,6 +354,11 @@ struct ExerciseDetailScreen: View {
                 ExerciseComparisonScreen(anchor: item, other: other)
             }
             .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $isPaywallPresented) {
+            if let pro {
+                PaywallSheet(pro: pro)
+            }
         }
         .sheet(isPresented: $isEditingOneRepMax) {
             OneRepMaxEditorSheet(
@@ -365,10 +397,20 @@ struct ExerciseDetailScreen: View {
     // MARK: - Mutations
 
     /// The detail actions menu opens the picker outside a live workout.
+    /// The free version gets the local paywall instead.
     func startComparison() {
         guard allowsComparison else { return }
         Haptics.soft()
-        isPickingComparison = true
+        if pro?.isUnlocked ?? true {
+            isPickingComparison = true
+        } else {
+            isPaywallPresented = true
+        }
+    }
+
+    private func requestUnlock() {
+        Haptics.soft()
+        isPaywallPresented = true
     }
 
     /// The picker dismissed: a picked row chains into the comparison

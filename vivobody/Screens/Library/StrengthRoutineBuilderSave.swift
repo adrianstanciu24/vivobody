@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Atomic persistence bridge from an immutable generated routine to editable
-//  workout templates. Every catalog reference is
+//  workout templates. Every catalog reference and the free template limit are
 //  resolved before insertion; external projections publish only after Save.
 //
 
@@ -31,6 +31,16 @@ extension StrengthRoutineBuilderScreen {
             )
         } catch {
             saveError = SaveErrorBox(error)
+            return
+        }
+
+        // A free user saves the whole week or none of it.
+        guard ProGate.canCreateTemplates(
+            existingCount: existingCount,
+            adding: templates.count,
+            status: appState.pro.status
+        ) else {
+            appState.pro.requestUnlock(context: .templateLimit)
             return
         }
 

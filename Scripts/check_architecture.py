@@ -44,6 +44,7 @@ GLOBAL_FRAMEWORK_BOUNDARIES: dict[str, frozenset[str]] = {
     "CareKit": frozenset(),
     "StoreKit": frozenset({
         "vivobody/App/ReviewRequestController.swift",
+        "vivobody/Store/ProStore.swift",
     }),
     "UserNotifications": frozenset({
         "vivobody/App/RestNotificationController.swift",
