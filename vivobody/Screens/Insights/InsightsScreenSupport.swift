@@ -12,21 +12,53 @@ import VivoKit
 
 struct InsightsDrilloutScreen<Content: View>: View {
     let title: String
-    @ViewBuilder let content: () -> Content
+    private let content: (DashboardLanes?) -> Content
+    private let usesLanes: Bool
+    @Environment(\.appDisplayLayout) private var displayLayout
+
+    init(title: String, @ViewBuilder content: @escaping () -> Content) {
+        self.title = title
+        self.content = { _ in content() }
+        usesLanes = false
+    }
+
+    /// Content that receives the two lanes beside the fold on a window that
+    /// splits dashboards, and nil on every other window.
+    init(title: String, @ViewBuilder content: @escaping (DashboardLanes?) -> Content) {
+        self.title = title
+        self.content = content
+        usesLanes = true
+    }
 
     var body: some View {
+        Group {
+            if usesLanes, displayLayout.showsDashboardColumns, #available(iOS 27.1, *) {
+                // Read outside the scroll: the fold stays put while the cards move.
+                GeometryReader { viewport in
+                    scroll(content(DashboardLanes(
+                        width: viewport.size.width,
+                        divisions: viewport.reservedRegions(kind: .division).map(\.frame)
+                    )))
+                }
+            } else {
+                scroll(content(nil))
+                    .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+            }
+        }
+        .screenBackground()
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func scroll(_ content: Content) -> some View {
         ScrollView(.vertical) {
-            content()
+            content
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, Space.sm)
                 .padding(.bottom, Space.xxl)
         }
-        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-        .screenBackground()
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

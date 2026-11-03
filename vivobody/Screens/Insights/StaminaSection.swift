@@ -4,7 +4,8 @@
 //
 //  Set-to-set rep changes by movement pattern: fewer, same, or more reps.
 //  The drill-out adds the typical rep profile for each movement pattern;
-//  exercise history lives in Exercise Detail.
+//  exercise history lives in Exercise Detail. A window that splits dashboards
+//  lays the drill-out's pattern cards in two lanes beside the fold.
 //
 
 import SwiftUI
@@ -60,38 +61,70 @@ private struct StaminaDetail: View {
     let report: SetSeriesStamina
 
     var body: some View {
-        InsightsDrilloutScreen(title: "Set-series stamina") {
-            LazyVStack(alignment: .leading, spacing: Space.xxl) {
-                Text("How your reps hold up").font(Typography.title)
-                    .accessibilityIdentifier("staminaPatterns").accessibilityAddTraits(.isHeader)
-                Text("Set to set · same logged weight").font(Typography.caption).foregroundStyle(Ink.secondary)
-                ForEach(report.patterns) { pattern in
-                    VStack(alignment: .leading, spacing: Space.lg) {
-                        StaminaStepsRow(pattern: pattern, showsSeriesCount: false)
-                        TypicalSetsBlock(
-                            title: pattern.pattern.displayName, sets: pattern.typicalSets,
-                            identifier: "staminaTypicalSets-\(pattern.pattern.rawValue)"
-                        )
-                        .padding(.top, Space.sm)
-                        Text("Last set averages \(Int((pattern.retention * 100).rounded()))% of first-set reps")
-                            .font(Typography.caption).foregroundStyle(Ink.secondary)
-                        if let change = pattern.change {
-                            let points = Int((change * 100).rounded())
-                            Text(points == 0
-                                ? "No change across comparable series"
-                                : "\(abs(points)) percentage \(abs(points) == 1 ? "point" : "points") \(points > 0 ? "increase" : "decrease") across comparable series")
-                                .font(Typography.caption).foregroundStyle(Ink.secondary)
+        InsightsDrilloutScreen(title: "Set-series stamina") { lanes in
+            if let lanes {
+                VStack(alignment: .leading, spacing: Space.xxl) {
+                    header
+                        .horizontallyPlaced(in: lanes.leading)
+                    InsightsLaneLayout(
+                        lanes: lanes,
+                        assignments: report.patterns.indices.map { $0.isMultiple(of: 2) ? .leading : .trailing },
+                        spacing: Space.xxl
+                    ) {
+                        ForEach(Array(report.patterns.enumerated()), id: \.element.id) { index, pattern in
+                            patternCard(pattern)
+                                .accessibilityElement(children: .contain)
+                                // VoiceOver would otherwise read across the lanes
+                                // by position; this keeps the reading order.
+                                .accessibilitySortPriority(Double(report.patterns.count - index))
                         }
-                        Text("Based on \(pattern.series.count) set series · all time")
-                            .font(Typography.caption).foregroundStyle(Ink.secondary)
                     }
-                    .padding(Space.xl).contentCard()
+                    .accessibilityElement(children: .contain)
                 }
-                if report.patterns.isEmpty {
-                    Text("Complete at least three sets at identical weight within a compound exercise.")
-                        .font(Typography.body).foregroundStyle(Ink.secondary)
+            } else {
+                LazyVStack(alignment: .leading, spacing: Space.xxl) {
+                    header
+                    ForEach(report.patterns) { pattern in
+                        patternCard(pattern)
+                    }
                 }
             }
         }
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: Space.xxl) {
+            Text("How your reps hold up").font(Typography.title)
+                .accessibilityIdentifier("staminaPatterns").accessibilityAddTraits(.isHeader)
+            Text("Set to set · same logged weight").font(Typography.caption).foregroundStyle(Ink.secondary)
+            if report.patterns.isEmpty {
+                Text("Complete at least three sets at identical weight within a compound exercise.")
+                    .font(Typography.body).foregroundStyle(Ink.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func patternCard(_ pattern: SetSeriesStamina.Pattern) -> some View {
+        VStack(alignment: .leading, spacing: Space.lg) {
+            StaminaStepsRow(pattern: pattern, showsSeriesCount: false)
+            TypicalSetsBlock(
+                title: pattern.pattern.displayName, sets: pattern.typicalSets,
+                identifier: "staminaTypicalSets-\(pattern.pattern.rawValue)"
+            )
+            .padding(.top, Space.sm)
+            Text("Last set averages \(Int((pattern.retention * 100).rounded()))% of first-set reps")
+                .font(Typography.caption).foregroundStyle(Ink.secondary)
+            if let change = pattern.change {
+                let points = Int((change * 100).rounded())
+                Text(points == 0
+                    ? "No change across comparable series"
+                    : "\(abs(points)) percentage \(abs(points) == 1 ? "point" : "points") \(points > 0 ? "increase" : "decrease") across comparable series")
+                    .font(Typography.caption).foregroundStyle(Ink.secondary)
+            }
+            Text("Based on \(pattern.series.count) set series · all time")
+                .font(Typography.caption).foregroundStyle(Ink.secondary)
+        }
+        .padding(Space.xl).contentCard()
     }
 }

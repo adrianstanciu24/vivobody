@@ -8,7 +8,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 230.
+Scenario files: 231.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -132,6 +132,7 @@ Scenario files: 230.
 | [duo-insights-columns-light](duo-insights-columns-light.json) | insights | `--ui-test-insights-showcase -settings.appearance light` |
 | [duo-insights-columns](duo-insights-columns.json) | insights | `--ui-test-insights-showcase -settings.appearance dark` |
 | [duo-insights-empty](duo-insights-empty.json) | history | `--static-body -settings.appearance dark` |
+| [duo-insights-stamina-series](duo-insights-stamina-series.json) | insights | `--ui-test-insights-dimensions --static-body -settings.appearance dark` |
 | [duo-library-split-accessibility](duo-library-split-accessibility.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [duo-library-split-light](duo-library-split-light.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance light` |
 | [duo-library-split](duo-library-split.json) | library | `--ui-test-template-starting-loads --static-body -settings.weightUnit lb -settings.appearance dark` |

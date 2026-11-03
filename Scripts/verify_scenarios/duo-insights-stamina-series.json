@@ -1,0 +1,57 @@
+{
+  "name": "duo-insights-stamina-series",
+  "interfaceRotation": "counterclockwise",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": [
+      "--ui-test-insights-dimensions",
+      "--static-body",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsStaminaLink"
+        },
+        "direction": "up",
+        "maxSwipes": 12
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsStaminaLink"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "staminaPatterns"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "staminaPatterns"
+    },
+    {
+      "identifier": "staminaTypicalSets-push",
+      "labelContains": "Set 1, 10 reps from 8 series"
+    },
+    {
+      "identifier": "staminaTypicalSets-pull"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsStaminaLink"
+    }
+  ]
+}
