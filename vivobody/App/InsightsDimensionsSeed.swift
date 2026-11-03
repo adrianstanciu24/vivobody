@@ -3,7 +3,8 @@
 //  vivobody
 //
 //  DEBUG history for plane gaps, passenger muscles, matched stamina trends,
-//  a year-old session, and a held-back run. Independent of showcase totals.
+//  fewer, same, and more set-to-set reps, a year-old session, and a
+//  held-back run. Independent of showcase totals.
 //
 
 import Foundation
@@ -22,8 +23,8 @@ import SwiftData
                 let lastBenchReps = week < 4 ? 8 : 6
                 let exercises = [
                     exercise("Barbell Bench Press", weight: 135, reps: [10, 9, lastBenchReps], order: 0),
-                    exercise("Barbell Bent-Over Row", weight: 110, reps: [12, 11, 10], order: 1),
-                    exercise("Barbell Back Squat", weight: 185, reps: [10, 8, 6], order: 2),
+                    exercise("Barbell Bent-Over Row", weight: 110, reps: [12, 12, 11], order: 1),
+                    exercise("Barbell Back Squat", weight: 185, reps: [8, 9, 9], order: 2),
                 ]
                 let session = WorkoutSession(exercises: exercises, restDuration: 90, startedAt: date)
                 session.completedAt = date.addingTimeInterval(3600)

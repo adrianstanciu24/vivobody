@@ -2,8 +2,9 @@
 //  StaminaSection.swift
 //  vivobody
 //
-//  First-to-last rep retention by movement pattern, with a common 100% rail.
-//  The drill-out compares movement patterns; exercise history lives in Exercise Detail.
+//  Set-to-set rep changes by movement pattern: fewer, same, or more reps.
+//  The drill-out adds the typical rep profile for each movement pattern;
+//  exercise history lives in Exercise Detail.
 //
 
 import SwiftUI
@@ -23,18 +24,18 @@ struct StaminaSection: View {
                     Image(systemName: "chevron.right").font(Typography.caption)
                 }
                 .foregroundStyle(Ink.primary)
-                Text("Reps held · all time").panelLegend()
+                Text("Set to set · all time").panelLegend()
                 if report.patterns.isEmpty {
                     Text(report.heldBackCount > 0 ? "Held-back series only" : "Building your first series")
                         .font(Typography.headline).foregroundStyle(Ink.primary)
                     Text("Three completed sets at the same weight reveal how reps hold up.")
                         .font(Typography.body).foregroundStyle(Ink.secondary)
                 } else {
-                    Text("Reps retained compared with your first set.")
+                    Text("How your reps change from one set to the next.")
                         .font(Typography.caption).foregroundStyle(Ink.secondary)
                     VStack(alignment: .leading, spacing: Space.xl) {
                         ForEach(Array(report.patterns.prefix(3))) { pattern in
-                            StaminaPatternBeam(pattern: pattern, scale: scale)
+                            StaminaStepsRow(pattern: pattern, showsSeriesCount: true)
                         }
                     }
                 }
@@ -46,42 +47,12 @@ struct StaminaSection: View {
         .accessibilityAddTraits(.isButton)
         .accessibilityIdentifier("insightsStaminaLink")
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint("Opens all movement patterns and comparable changes")
-    }
-
-    private var scale: Double {
-        max(1, report.patterns.map(\.retention).max() ?? 1)
+        .accessibilityHint("Opens all movement patterns and typical reps per set")
     }
 
     private var accessibilityLabel: String {
-        let reads = report.patterns.prefix(3).map {
-            "\($0.pattern.displayName), \(Int(($0.retention * 100).rounded())) percent of first-set reps across \($0.series.count) series"
-        }.joined(separator: ". ")
+        let reads = report.patterns.prefix(3).map(StaminaStepsRow.accessibilityRead).joined(separator: ". ")
         return "Set-series stamina. All time. \(reads.isEmpty ? "Building: three completed sets at the same weight needed." : reads). \(report.heldBackCount) held-back series excluded."
-    }
-}
-
-private struct StaminaPatternBeam: View {
-    let pattern: SetSeriesStamina.Pattern
-    let scale: Double
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(pattern.pattern.displayName).font(Typography.headline).foregroundStyle(Ink.primary)
-                Spacer(minLength: Space.sm)
-                Text("\(Int((pattern.retention * 100).rounded()))%")
-                    .font(Typography.statValueCompact).foregroundStyle(Tint.primary).monospacedDigit()
-            }
-            FractionBar(
-                value: pattern.retention / scale,
-                track: Surface.cardTintBright,
-                fill: Tint.primary.gradient,
-                height: InstrumentBarHeight.standard
-            )
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(pattern.pattern.displayName), holds \(Int((pattern.retention * 100).rounded())) percent of first-set reps, \(pattern.series.count) series, all time")
     }
 }
 
@@ -93,10 +64,17 @@ private struct StaminaDetail: View {
             LazyVStack(alignment: .leading, spacing: Space.xxl) {
                 Text("How your reps hold up").font(Typography.title)
                     .accessibilityIdentifier("staminaPatterns").accessibilityAddTraits(.isHeader)
-                Text("First → last · same logged weight").font(Typography.caption).foregroundStyle(Ink.secondary)
+                Text("Set to set · same logged weight").font(Typography.caption).foregroundStyle(Ink.secondary)
                 ForEach(report.patterns) { pattern in
                     VStack(alignment: .leading, spacing: Space.lg) {
-                        StaminaPatternBeam(pattern: pattern, scale: max(1, report.patterns.map(\.retention).max() ?? 1))
+                        StaminaStepsRow(pattern: pattern, showsSeriesCount: false)
+                        TypicalSetsBlock(
+                            title: pattern.pattern.displayName, sets: pattern.typicalSets,
+                            identifier: "staminaTypicalSets-\(pattern.pattern.rawValue)"
+                        )
+                        .padding(.top, Space.sm)
+                        Text("Last set averages \(Int((pattern.retention * 100).rounded()))% of first-set reps")
+                            .font(Typography.caption).foregroundStyle(Ink.secondary)
                         if let change = pattern.change {
                             let points = Int((change * 100).rounded())
                             Text(points == 0

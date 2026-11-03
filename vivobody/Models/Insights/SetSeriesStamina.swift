@@ -3,7 +3,8 @@
 //  vivobody
 //
 //  Ordered equal-weight working-set runs, with explicit effort ambiguity.
-//  Retention describes logged reps; it never diagnoses fatigue or recovery.
+//  Retention and set-to-set steps describe logged reps; they never diagnose
+//  fatigue or recovery.
 //  Same-load trends match exercise, resistance semantics, bodyweight when
 //  relevant, first reps, first RIR, and run length across the entire archive.
 //
@@ -62,7 +63,8 @@ nonisolated struct StaminaSeries: Identifiable, Hashable {
 nonisolated struct ExerciseStamina: Hashable {
     let series: [StaminaSeries]
     let includedSeries: [StaminaSeries]
-    let overallRetention: Double?
+    let steps: RepSteps
+    let typicalSets: [TypicalSet]
     let maximumIncludedRetention: Double
     let trend: [StaminaSeries]
 
@@ -73,14 +75,12 @@ nonisolated struct ExerciseStamina: Hashable {
                 : $0.element.date < $1.element.date
         }.map(\.element)
         let included = sorted.filter { !$0.isHeldBack }
-        let retentionTotal = included.reduce(0) { $0 + $1.retention }
         let latestKey = sorted.last?.comparisonKey
 
         self.series = sorted
         includedSeries = included
-        overallRetention = included.isEmpty
-            ? nil
-            : retentionTotal / Double(included.count)
+        steps = RepSteps(series: included)
+        typicalSets = TypicalSet.profile(included)
         maximumIncludedRetention = included.map(\.retention).max() ?? 1
         trend = latestKey.map { key in
             sorted.filter { $0.comparisonKey == key }
@@ -116,11 +116,87 @@ nonisolated struct ExerciseStamina: Hashable {
     }
 }
 
+nonisolated struct RepSteps: Hashable {
+    enum Kind: CaseIterable {
+        case fewer, same, more
+    }
+
+    private(set) var fewer = 0
+    private(set) var same = 0
+    private(set) var more = 0
+
+    init(series: [StaminaSeries]) {
+        for run in series {
+            for (previous, next) in zip(run.reps, run.reps.dropFirst()) {
+                if next < previous {
+                    fewer += 1
+                } else if next > previous {
+                    more += 1
+                } else {
+                    same += 1
+                }
+            }
+        }
+    }
+
+    var total: Int {
+        fewer + same + more
+    }
+
+    func count(_ kind: Kind) -> Int {
+        switch kind {
+        case .fewer: fewer
+        case .same: same
+        case .more: more
+        }
+    }
+
+    /// Whole percentages that always add up to 100, using largest remainders.
+    var percentages: [Kind: Int] {
+        guard total > 0 else { return [:] }
+        let exact = Kind.allCases.map { (kind: $0, value: Double(count($0)) * 100 / Double(total)) }
+        var result = Dictionary(uniqueKeysWithValues: exact.map { ($0.kind, Int($0.value)) })
+        let missing = 100 - result.values.reduce(0, +)
+        let byRemainder = exact.sorted { $0.value.truncatingRemainder(dividingBy: 1) > $1.value.truncatingRemainder(dividingBy: 1) }
+        for item in byRemainder.prefix(missing) {
+            result[item.kind, default: 0] += 1
+        }
+        return result
+    }
+}
+
+nonisolated struct TypicalSet: Identifiable, Hashable {
+    let number: Int
+    let reps: Double
+    let seriesCount: Int
+    var id: Int {
+        number
+    }
+
+    /// Starts at the mean first set, then adds the mean change at each step
+    /// from the series that reached it. Averaging raw reps per position would
+    /// let longer series with higher rep targets lift later sets.
+    static func profile(_ series: [StaminaSeries], limit: Int = 6) -> [TypicalSet] {
+        guard !series.isEmpty else { return [] }
+        let firstReps = series.map { Double($0.reps.first ?? 0) }
+        var result = [TypicalSet(number: 1, reps: firstReps.reduce(0, +) / Double(series.count), seriesCount: series.count)]
+        for index in 1 ..< limit {
+            let reached = series.filter { $0.reps.count > index }
+            guard !reached.isEmpty else { break }
+            let change = reached.reduce(0.0) { $0 + Double($1.reps[index] - $1.reps[index - 1]) } / Double(reached.count)
+            result.append(TypicalSet(number: index + 1, reps: max(0, result[index - 1].reps + change), seriesCount: reached.count))
+        }
+        return result
+    }
+}
+
 nonisolated struct SetSeriesStamina {
     struct Pattern: Identifiable {
         let pattern: MovementPattern
         let series: [StaminaSeries]
         let retention: Double
+        let steps: RepSteps
+        let typicalSets: [TypicalSet]
         let change: Double?
         let matchedComparisons: Int
         var id: MovementPattern {
@@ -147,7 +223,9 @@ nonisolated struct SetSeriesStamina {
             let comparison = matchedChange(series.filter { $0.pattern == pattern }, now: now)
             return Pattern(
                 pattern: pattern, series: values,
-                retention: mean(values.map(\.retention)), change: comparison.change,
+                retention: mean(values.map(\.retention)),
+                steps: RepSteps(series: values), typicalSets: TypicalSet.profile(values),
+                change: comparison.change,
                 matchedComparisons: comparison.count
             )
         }

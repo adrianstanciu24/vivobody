@@ -42,6 +42,10 @@
     },
     {
       "label": "Based on 8 set series · all time"
+    },
+    {
+      "identifier": "staminaTypicalSets-push",
+      "labelContains": "Set 1, 10 reps from 8 series"
     }
   ],
   "forbidden": [

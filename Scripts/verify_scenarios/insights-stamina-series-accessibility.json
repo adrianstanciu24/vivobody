@@ -36,12 +36,37 @@
       "wait": {
         "identifier": "staminaPatterns"
       }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "staminaTypicalSets-push"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "staminaTypicalSets-push",
+            "labelContains": "Set 1, 10 reps from 8 series"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Based on 8 set series · all time"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
     }
   ],
   "required": [
-    {
-      "identifier": "staminaPatterns"
-    },
     {
       "label": "Based on 8 set series · all time"
     }

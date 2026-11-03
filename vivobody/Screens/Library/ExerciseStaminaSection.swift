@@ -2,7 +2,8 @@
 //  ExerciseStaminaSection.swift
 //  vivobody
 //
-//  All-time exercise retention and individual series history.
+//  All-time set-to-set rep changes, typical reps per set, and individual
+//  series history.
 //  Movement comparisons belong to Insights; rep traces are available on demand.
 //
 
@@ -37,20 +38,25 @@ struct ExerciseStaminaInstrument: View {
             Text("Set-series stamina").font(Typography.title)
                 .accessibilityIdentifier("exerciseStaminaSection").accessibilityAddTraits(.isHeader)
             VStack(alignment: .leading, spacing: Space.xl) {
-                if let retention = report.overallRetention {
+                if !report.includedSeries.isEmpty {
                     VStack(alignment: .leading, spacing: Space.sm) {
-                        Text("Overall · all time").panelLegend()
-                        Text("\(Int((retention * 100).rounded()))%")
-                            .font(Typography.statValue).foregroundStyle(Tint.primaryText)
-                            .accessibilityLabel("Overall reps retained, \(Int((retention * 100).rounded())) percent, all time")
-                            .accessibilityIdentifier("exerciseStaminaOverall")
-                        Text("Reps retained compared with your first set.")
+                        Text("Set to set · all time").panelLegend()
+                        Text("How your reps change from one set to the next.")
                             .font(Typography.caption).foregroundStyle(Ink.secondary)
+                        RepStepsSummary(steps: report.steps)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("Set to set, all time: \(report.steps.accessibilityRead)")
+                            .accessibilityIdentifier("exerciseStaminaSteps")
                         Text("Based on \(report.includedSeries.count) set series · all time")
                             .font(Typography.caption).foregroundStyle(Ink.secondary)
                     }
+                    TypicalSetsBlock(
+                        title: report.latest?.name ?? "Exercise", sets: report.typicalSets,
+                        identifier: "exerciseStaminaTypicalSets"
+                    )
+                    Text("Last set vs first set").panelLegend()
                     trendChart
-                    Text("Each point is one set series. Weight and set count may vary.")
+                    Text("Each point is one set series: last-set reps as a share of first-set reps. Weight and set count may vary.")
                         .font(Typography.caption).foregroundStyle(Ink.secondary)
                     if let selectedSeries {
                         seriesLink(selectedSeries)

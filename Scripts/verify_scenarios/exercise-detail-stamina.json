@@ -41,6 +41,44 @@
     {
       "scrollTo": {
         "selector": {
+          "identifier": "exerciseStaminaSteps"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exerciseStaminaSteps",
+            "labelContains": "fewer reps on 16 of 16 set-to-set steps"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exerciseStaminaTypicalSets"
+        },
+        "direction": "up",
+        "maxSwipes": 10
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exerciseStaminaTypicalSets",
+            "labelContains": "Set 3, 7 reps from 8 series"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
           "identifier": "exerciseStaminaTrend"
         },
         "direction": "up",
@@ -58,10 +96,6 @@
     {
       "identifier": "exerciseStaminaTrend",
       "labelContains": "Set-series history. All time."
-    },
-    {
-      "identifier": "exerciseStaminaOverall",
-      "labelContains": "70 percent"
     }
   ],
   "forbidden": [
