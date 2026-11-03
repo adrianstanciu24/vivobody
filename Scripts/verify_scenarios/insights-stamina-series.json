@@ -39,7 +39,9 @@
       "identifier": "staminaPatterns"
     },
     {
-      "label": "Based on 8 set series · all time"
+      "identifier": "staminaSteps-push",
+      "labelContains": "Push, 8 series",
+      "valueContains": "of first-set reps"
     },
     {
       "identifier": "staminaTypicalSets-push",

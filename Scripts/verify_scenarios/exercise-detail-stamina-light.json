@@ -54,7 +54,7 @@
         "required": [
           {
             "identifier": "exerciseStaminaSteps",
-            "labelContains": "fewer reps on 16 of 16 set-to-set steps"
+            "labelContains": "8 series: fewer reps on 16 of 16 set-to-set steps"
           }
         ]
       }

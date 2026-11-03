@@ -129,12 +129,6 @@ struct TypicalSetsBlock: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             Text("Typical reps per set").panelLegend()
             TypicalSetsChart(title: title, sets: sets, identifier: identifier)
-            Text("Your average first set, then the average change at each next set.")
-                .font(Typography.caption).foregroundStyle(Ink.secondary)
-            if let last = sets.last, let first = sets.first, last.seriesCount < first.seriesCount {
-                Text("Later sets use only the series that reached them.")
-                    .font(Typography.caption).foregroundStyle(Ink.secondary)
-            }
         }
     }
 }
@@ -158,7 +152,8 @@ private struct TypicalSetsChart: View {
                 PointMark(x: .value("Set", set.number), y: .value("Reps", set.reps))
                     .symbolSize(65)
                     .foregroundStyle(Tint.primary)
-                    .annotation(position: .top, spacing: 8) {
+                    // Labels under the first-set rule go below their point so they never cross it.
+                    .annotation(position: set.reps < (sets.first?.reps ?? 0) ? .bottom : .top, spacing: 8) {
                         Text(Self.repsText(set.reps)).font(Typography.metricInline)
                             .foregroundStyle(Ink.primary).monospacedDigit()
                     }

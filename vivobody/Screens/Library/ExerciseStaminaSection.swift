@@ -40,15 +40,17 @@ struct ExerciseStaminaInstrument: View {
             VStack(alignment: .leading, spacing: Space.xl) {
                 if !report.includedSeries.isEmpty {
                     VStack(alignment: .leading, spacing: Space.sm) {
-                        Text("Set to set · all time").panelLegend()
-                        Text("How your reps change from one set to the next.")
-                            .font(Typography.caption).foregroundStyle(Ink.secondary)
+                        HStack(alignment: .firstTextBaseline) {
+                            Text("Set to set · all time").panelLegend()
+                            Spacer(minLength: Space.sm)
+                            Text("\(report.includedSeries.count) series")
+                                .font(Typography.caption).foregroundStyle(Ink.secondary).monospacedDigit()
+                        }
+                        .accessibilityHidden(true)
                         RepStepsSummary(steps: report.steps)
                             .accessibilityElement(children: .ignore)
-                            .accessibilityLabel("Set to set, all time: \(report.steps.accessibilityRead)")
+                            .accessibilityLabel("Set to set, all time, \(report.includedSeries.count) series: \(report.steps.accessibilityRead)")
                             .accessibilityIdentifier("exerciseStaminaSteps")
-                        Text("Based on \(report.includedSeries.count) set series · all time")
-                            .font(Typography.caption).foregroundStyle(Ink.secondary)
                     }
                     TypicalSetsBlock(
                         title: report.latest?.name ?? "Exercise", sets: report.typicalSets,
@@ -56,8 +58,6 @@ struct ExerciseStaminaInstrument: View {
                     )
                     Text("Last set vs first set").panelLegend()
                     trendChart
-                    Text("Each point is one set series: last-set reps as a share of first-set reps. Weight and set count may vary.")
-                        .font(Typography.caption).foregroundStyle(Ink.secondary)
                     if let selectedSeries {
                         seriesLink(selectedSeries)
                     }
@@ -215,7 +215,7 @@ struct ExerciseStaminaInstrument: View {
         .frame(height: InsightChartCanvas.hero)
         .accessibilityElement(children: .ignore)
         .accessibilityIdentifier("exerciseStaminaTrend")
-        .accessibilityLabel("Set-series history. All time. Each point is one series. " + report.includedSeries.map {
+        .accessibilityLabel("Set-series history. All time. Each point is one series: last-set reps as a share of first-set reps. Weight and set count may vary. " + report.includedSeries.map {
             "\($0.date.formatted(date: .abbreviated, time: .omitted)), \(Int(($0.retention * 100).rounded())) percent of first-set reps"
         }.joined(separator: ". "))
     }
