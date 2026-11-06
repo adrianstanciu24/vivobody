@@ -15,10 +15,7 @@
 //    • Edit an exercise's plan — tap its row → push to
 //      TemplateExerciseEditorScreen (target scrubbers and starting-load policy).
 //
-//    • Delete an exercise — swipe-left on the row OR enter Edit
-//      mode (toolbar EditButton) for batch delete + drag-reorder.
-//
-//    • Reorder exercises — Edit mode, then drag the grip handles.
+//    • Delete an exercise — swipe-left on the row.
 //
 //  Deleting the entire template happens from the Library list
 //  (swipe on its card), not here.

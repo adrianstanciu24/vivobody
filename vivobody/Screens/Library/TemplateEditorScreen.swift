@@ -53,6 +53,7 @@ struct TemplateEditorScreen: View {
     @State private var configureTarget: ConfigureExerciseTarget? = nil
     @State private var saveError: SaveErrorBox? = nil
     @State private var blockedPerSetExerciseName: String? = nil
+    @State private var isReordering: Bool = false
 
     /// Auto-focus the name field on a new template — first action is
     /// always "name the thing." Skipped on edit so we don't shove the
@@ -75,19 +76,25 @@ struct TemplateEditorScreen: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: Space.section) {
-                    nameField
-                    scheduleSection
-                    exercisesSection
-                    addExerciseButton
+            Group {
+                if isReordering {
+                    reorderList
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: Space.section) {
+                            nameField
+                            scheduleSection
+                            exercisesSection
+                            addExerciseButton
+                        }
+                        .padding(.top, Space.md)
+                        .padding(.bottom, Space.xxl)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+                    .scrollBounceBehavior(.basedOnSize, axes: .vertical)
                 }
-                .padding(.top, Space.md)
-                .padding(.bottom, Space.xxl)
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .screenBackground()
             .navigationTitle(isNewMode ? "New Template" : "Edit Template")
             .navigationBarTitleDisplayMode(.inline)
@@ -238,10 +245,7 @@ struct TemplateEditorScreen: View {
 
     private var exercisesSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(
-                title: "Exercises",
-                trailing: draft.exercises.isEmpty ? nil : "\(draft.exercises.count)"
-            )
+            exercisesHeader
 
             if draft.exercises.isEmpty {
                 emptyPrompt
@@ -249,11 +253,138 @@ struct TemplateEditorScreen: View {
                 VStack(spacing: 0) {
                     ForEach(Array(draft.exercises.enumerated()), id: \.element.id) { idx, exercise in
                         if idx > 0 { seamControl(before: idx) }
-                        exerciseRow(exercise)
+                        exerciseRow(exercise, at: idx)
                     }
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private var exercisesHeader: some View {
+        if draft.exercises.count >= 2 {
+            HStack(alignment: .center) {
+                SectionHeader(title: "Exercises")
+                Spacer(minLength: Space.sm)
+                reorderToggle
+                    .padding(.top, Space.sm)
+            }
+        } else {
+            SectionHeader(
+                title: "Exercises",
+                trailing: draft.exercises.isEmpty ? nil : "\(draft.exercises.count)"
+            )
+        }
+    }
+
+    private var reorderToggle: some View {
+        Button {
+            setReordering(!isReordering)
+        } label: {
+            Text(isReordering ? "Done" : "Reorder")
+                .font(Typography.sectionHeading)
+                .foregroundStyle(Tint.inProgress)
+                .frame(minWidth: Space.tapMin, minHeight: Space.tapMin)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("templateReorderToggle")
+        .accessibilityHint(isReordering ? "Returns to the exercise details" : "Shows drag handles to change the exercise order")
+    }
+
+    private func setReordering(_ on: Bool) {
+        if reduceMotion {
+            isReordering = on
+        } else {
+            withAnimation(.easeInOut(duration: 0.2)) { isReordering = on }
+        }
+        Haptics.selection()
+    }
+
+    // MARK: - Reorder
+
+    /// Compact drag list for changing the exercise order. A native List
+    /// is used only here: in the detailed view the seam buttons sit
+    /// between rows and would compete with a drag gesture.
+    private var reorderList: some View {
+        let tags = SupersetGrouping.tags(inIDs: draft.exercises.map(\.supersetID))
+        return List {
+            exercisesHeader
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: Space.md, leading: Space.gutter, bottom: Space.sm, trailing: Space.gutter))
+
+            ForEach(Array(draft.exercises.enumerated()), id: \.element.id) { idx, exercise in
+                reorderRow(exercise, tag: tags[idx])
+                    .accessibilityActions { moveActions(at: idx) }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparatorTint(Surface.edge)
+                    .listRowInsets(EdgeInsets(top: 0, leading: Space.gutter, bottom: 0, trailing: Space.gutter))
+            }
+            .onMove { source, destination in
+                guard let from = source.first else { return }
+                moveExercise(from: from, to: destination, animated: false)
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .environment(\.editMode, .constant(.active))
+    }
+
+    private func reorderRow(_ exercise: ExerciseDraft, tag: String?) -> some View {
+        HStack(spacing: Space.md) {
+            Capsule(style: .continuous)
+                .fill(tag == nil ? Color.clear : Tint.inProgress)
+                .frame(width: 3)
+                .padding(.vertical, Space.xs)
+                .accessibilityHidden(true)
+            if let tag {
+                Text(tag)
+                    .font(Typography.caption)
+                    .monospacedDigit()
+                    .foregroundStyle(Tint.inProgress)
+                    .accessibilityLabel("Superset position \(tag)")
+            }
+            Text(exercise.name)
+                .font(Typography.sectionHeading)
+                .foregroundStyle(Ink.primary)
+                .lineLimit(2)
+            Spacer(minLength: 0)
+        }
+        .frame(minHeight: Space.tapMin)
+        .padding(.vertical, Space.xs)
+        .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private func moveActions(at index: Int) -> some View {
+        if index > 0 {
+            Button("Move Up") { moveExercise(from: index, to: index - 1) }
+        }
+        if index < draft.exercises.count - 1 {
+            Button("Move Down") { moveExercise(from: index, to: index + 2) }
+        }
+    }
+
+    /// `destination` is an insertion offset into the current order, as
+    /// `onMove` reports it.
+    private func moveExercise(from source: Int, to destination: Int, animated: Bool = true) {
+        let result = SupersetGrouping.moving(
+            from: source,
+            to: destination,
+            inIDs: draft.exercises.map(\.supersetID)
+        )
+        guard result.order != Array(draft.exercises.indices) else { return }
+        var reordered = result.order.map { draft.exercises[$0] }
+        for i in reordered.indices {
+            reordered[i].supersetID = result.ids[i]
+        }
+        if animated, !reduceMotion {
+            withAnimation(.easeInOut(duration: 0.2)) { draft.exercises = reordered }
+        } else {
+            draft.exercises = reordered
+        }
+        Haptics.selection()
     }
 
     // MARK: - Superset seam
@@ -327,7 +458,7 @@ struct TemplateEditorScreen: View {
         .padding(.vertical, Space.sm)
     }
 
-    private func exerciseRow(_ exercise: ExerciseDraft) -> some View {
+    private func exerciseRow(_ exercise: ExerciseDraft, at index: Int) -> some View {
         Button {
             if exercise.isPerSet {
                 blockedPerSetExerciseName = exercise.name
@@ -368,7 +499,22 @@ struct TemplateEditorScreen: View {
             .accessibilityElement(children: .combine)
         }
         .buttonStyle(.plain)
+        .accessibilityActions { moveActions(at: index) }
         .contextMenu {
+            if index > 0 {
+                Button {
+                    moveExercise(from: index, to: index - 1)
+                } label: {
+                    Label("Move Up", systemImage: "arrow.up")
+                }
+            }
+            if index < draft.exercises.count - 1 {
+                Button {
+                    moveExercise(from: index, to: index + 2)
+                } label: {
+                    Label("Move Down", systemImage: "arrow.down")
+                }
+            }
             Button(role: .destructive) {
                 remove(exercise.id)
             } label: {

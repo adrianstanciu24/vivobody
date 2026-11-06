@@ -1,0 +1,88 @@
+{
+  "name": "template-editor-reorder",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--seed-templates",
+      "-settings.appearance",
+      "dark",
+      "-settings.weightUnit",
+      "lb"
+    ]
+  },
+  "steps": [
+    {
+      "tap": {
+        "label": "Templates",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Upper Day A",
+        "labelRegex": "^(?!Start).*",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Cancel",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "templateReorderToggle",
+          "label": "Reorder"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "templateReorderToggle",
+        "label": "Reorder"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "templateReorderToggle",
+        "label": "Done"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "templateReorderToggle",
+      "label": "Done"
+    },
+    {
+      "labelContains": "Superset position A1",
+      "labelRegex": ".*Barbell Bench Press.*"
+    },
+    {
+      "labelContains": "Superset position A2",
+      "labelRegex": ".*Barbell Bent-Over Row.*"
+    },
+    {
+      "labelContains": "Seated Dumbbell Overhead Press"
+    },
+    {
+      "labelContains": "Supinated Straight-Bar Cable Curl"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Add exercise",
+      "role": "AXButton"
+    },
+    {
+      "labelContains": "Link Barbell Bent-Over Row"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

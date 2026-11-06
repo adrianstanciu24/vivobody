@@ -8,7 +8,7 @@ initial launch only; later steps may navigate or relaunch with other settings.
 An omitted appearance or accessibility option is not evidence of coverage.
 Listing a scenario does not mean it has been run or its screenshots reviewed.
 
-Scenario files: 231.
+Scenario files: 233.
 
 | Scenario | Initial tab | Initial launch arguments |
 |---|---|---|
@@ -229,6 +229,7 @@ Scenario files: 231.
 | [strength-routine-builder-unlimited-templates](strength-routine-builder-unlimited-templates.json) | library | `--seed-templates --ui-test-strength-routine-builder` |
 | [strength-routine-builder](strength-routine-builder.json) | library | `--ui-test-strength-routine-builder` |
 | [strength-routine-picker-contract](strength-routine-picker-contract.json) | library | `--ui-test-strength-routine-builder` |
+| [template-editor-reorder](template-editor-reorder.json) | library | `--seed-templates -settings.appearance dark -settings.weightUnit lb` |
 | [template-first-load](template-first-load.json) | library | `--ui-test-template-starting-loads -settings.appearance dark -settings.weightUnit lb` |
 | [template-starting-loads-accessibility](template-starting-loads-accessibility.json) | library | `--ui-test-template-starting-loads -settings.appearance dark -settings.weightUnit lb -UIPreferredContentSizeCategoryName UICTContentSizeCategoryAccessibilityL` |
 | [template-starting-loads-detail](template-starting-loads-detail.json) | today | `--ui-test-template-starting-loads --ui-test-remembered-template-load --static-body -settings.appearance dark -settings.weightUnit lb` |

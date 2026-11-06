@@ -156,6 +156,38 @@ nonisolated enum SupersetGrouping {
         return normalizing(ids)
     }
 
+    /// Move the member at `source` to the insertion offset `destination`
+    /// (offsets into the original order, as `onMove` reports them). The
+    /// moved member joins a group it lands inside, keeps its own group
+    /// while it still touches a member of it, and otherwise leaves.
+    static func moving(
+        from source: Int,
+        to destination: Int,
+        inIDs ids: [UUID?]
+    ) -> (order: [Int], ids: [UUID?]) {
+        let identity = Array(ids.indices)
+        guard ids.indices.contains(source) else { return (identity, ids) }
+        var order = identity
+        order.remove(at: source)
+        let target = destination > source ? destination - 1 : destination
+        let landed = min(max(target, 0), order.count)
+        order.insert(source, at: landed)
+        guard order != identity else { return (identity, ids) }
+
+        var moved = order.map { ids[$0] }
+        let above = landed > 0 ? moved[landed - 1] : nil
+        let below = landed + 1 < moved.count ? moved[landed + 1] : nil
+        let own = ids[source]
+        if let above, above == below {
+            moved[landed] = above
+        } else if let own, above == own || below == own {
+            moved[landed] = own
+        } else {
+            moved[landed] = nil
+        }
+        return (order, normalizing(moved))
+    }
+
     /// Re-establish the invariants — groups are contiguous runs of two
     /// or more. Non-contiguous reuses of an ID (after a delete or
     /// reorder) split into fresh groups; singleton runs dissolve.
