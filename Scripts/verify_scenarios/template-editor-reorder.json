@@ -34,37 +34,85 @@
     {
       "scrollTo": {
         "selector": {
-          "identifier": "templateReorderToggle",
-          "label": "Reorder"
+          "identifier": "templateEditToggle",
+          "label": "Edit"
         },
         "direction": "up"
       }
     },
     {
       "tap": {
-        "identifier": "templateReorderToggle",
-        "label": "Reorder"
+        "identifier": "templateEditToggle",
+        "label": "Edit"
       }
     },
     {
       "wait": {
-        "identifier": "templateReorderToggle",
+        "identifier": "templateEditToggle",
         "label": "Done"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "templateEditToggle",
+            "label": "Done"
+          },
+          {
+            "labelContains": "Superset position A1",
+            "labelRegex": ".*Barbell Bench Press.*"
+          },
+          {
+            "labelContains": "Superset position A2",
+            "labelRegex": ".*Barbell Bent-Over Row.*"
+          },
+          {
+            "labelContains": "Seated Dumbbell Overhead Press"
+          },
+          {
+            "labelContains": "Supinated Straight-Bar Cable Curl"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Add exercise",
+            "role": "AXButton"
+          },
+          {
+            "labelContains": "Link Barbell Bent-Over Row"
+          }
+        ]
+      }
+    },
+    {
+      "tapIn": {
+        "selector": {
+          "label": "Remove, Superset position A2, Barbell Bent-Over Row"
+        },
+        "xFraction": 0.07,
+        "yFraction": 0.5
+      }
+    },
+    {
+      "tap": {
+        "label": "Delete",
+        "role": "AXButton"
+      }
+    },
+    {
+      "waitAbsent": {
+        "labelContains": "Barbell Bent-Over Row"
       }
     }
   ],
   "required": [
     {
-      "identifier": "templateReorderToggle",
+      "identifier": "templateEditToggle",
       "label": "Done"
     },
     {
-      "labelContains": "Superset position A1",
-      "labelRegex": ".*Barbell Bench Press.*"
-    },
-    {
-      "labelContains": "Superset position A2",
-      "labelRegex": ".*Barbell Bent-Over Row.*"
+      "label": "Remove, Barbell Bench Press"
     },
     {
       "labelContains": "Seated Dumbbell Overhead Press"
@@ -79,7 +127,10 @@
       "role": "AXButton"
     },
     {
-      "labelContains": "Link Barbell Bent-Over Row"
+      "labelContains": "Barbell Bent-Over Row"
+    },
+    {
+      "labelContains": "Superset position"
     }
   ],
   "forbiddenLogs": [

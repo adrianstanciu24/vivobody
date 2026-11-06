@@ -122,8 +122,8 @@
     },
     {
       "wait": {
-        "role": "AXButton",
-        "labelContains": "Start Workout"
+        "label": "Name",
+        "role": "AXTextField"
       }
     }
   ],
@@ -133,8 +133,12 @@
       "value": "Selected"
     },
     {
-      "role": "AXButton",
-      "labelContains": "Start Workout"
+      "label": "Name",
+      "role": "AXTextField"
+    },
+    {
+      "label": "Add exercise",
+      "role": "AXButton"
     }
   ],
   "forbidden": [
@@ -144,6 +148,10 @@
     },
     {
       "identifier": "BackButton"
+    },
+    {
+      "role": "AXButton",
+      "labelContains": "Start Workout"
     }
   ],
   "forbiddenLogs": [

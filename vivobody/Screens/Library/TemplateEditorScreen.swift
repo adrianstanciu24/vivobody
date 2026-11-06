@@ -2,10 +2,15 @@
 //  TemplateEditorScreen.swift
 //  vivobody
 //
-//  Create-or-edit builder for one workout template, presented as a
-//  modal sheet from Library (toolbar "+" / empty-state CTA for new,
-//  template-row tap for edit). One screen serves both modes via
-//  `TemplateEditorTarget`.
+//  Create-or-edit builder for one workout template. `TemplateEditorForm`
+//  is the editor; its host decides when the draft reaches SwiftData:
+//    • TemplateEditorScreen — the modal sheet from Library (toolbar "+" /
+//      empty-state CTA for new, template-row tap for edit in compact
+//      width). One sheet serves both modes via `TemplateEditorTarget`.
+//      Nothing touches SwiftData until Save, so a cancelled sheet never
+//      pollutes the store.
+//    • TemplateLiveEditorScreen — the detail beside the Library list,
+//      which writes each change through as it happens.
 //
 //  Flow (first principles):
 //    1. Name the template — a single hairline-underlined field.
@@ -16,11 +21,8 @@
 //       monospaced numerals, then dropped into the template.
 //    4. Tap any configured row to revise it in the same sheet.
 //
-//  Nothing touches SwiftData until Save. The editing buffer is a
-//  value-type `TemplateDraft`; the @Model objects (WorkoutTemplate /
-//  TemplateExercise) are constructed or mutated only in `save()`, so
-//  the name field has zero observation cost per keystroke and a
-//  cancelled sheet never pollutes the store.
+//  The editing buffer is a value-type `TemplateDraft`, so the name field
+//  has zero SwiftData observation cost per keystroke.
 //
 
 import SwiftData
@@ -29,9 +31,91 @@ import VivoKit
 
 struct TemplateEditorScreen: View {
     let target: TemplateEditorTarget
+    var onSaved: ((WorkoutTemplate) -> Void)? = nil
+
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+
+    @State private var draft: TemplateDraft
+    @State private var saveError: SaveErrorBox? = nil
+
+    init(target: TemplateEditorTarget, onSaved: ((WorkoutTemplate) -> Void)? = nil) {
+        self.target = target
+        self.onSaved = onSaved
+        switch target {
+        case .new:
+            _draft = State(wrappedValue: TemplateDraft())
+        case let .edit(existing):
+            _draft = State(wrappedValue: TemplateDraft(editing: existing))
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            TemplateEditorForm(draft: $draft, focusesNameOnAppear: isNewMode)
+                .navigationTitle(isNewMode ? "New Template" : "Edit Template")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { dismiss() }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save", action: save)
+                            .bold()
+                            .disabled(!canSave)
+                    }
+                }
+                .saveErrorAlert($saveError)
+        }
+    }
+
+    private var isNewMode: Bool {
+        if case .new = target { return true }
+        return false
+    }
+
+    private var canSave: Bool {
+        let trimmed = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !trimmed.isEmpty && !draft.exercises.isEmpty
+    }
+
+    private func save() {
+        let trimmedName = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty, !draft.exercises.isEmpty else { return }
+
+        let template: WorkoutTemplate
+        switch target {
+        case let .new(sortOrder):
+            template = WorkoutTemplate(name: trimmedName, sortOrder: sortOrder)
+            modelContext.insert(template)
+        case let .edit(existing):
+            template = existing
+            template.name = trimmedName
+        }
+        template.scheduledWeekdays = draft.scheduledWeekdays
+        draft.replaceExercises(of: template, in: modelContext)
+
+        do {
+            try modelContext.saveOrRollback()
+            WidgetSnapshotWriter.writeAll(in: modelContext)
+            SpotlightIndexer.index(template)
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
+        Haptics.soft()
+        onSaved?(template)
+        dismiss()
+    }
+}
+
+/// The editor body shared by the sheet and the live detail. It edits only
+/// the bound draft; the host owns persistence.
+struct TemplateEditorForm: View {
+    @Binding var draft: TemplateDraft
+    let focusesNameOnAppear: Bool
 
     @Environment(\.sessionAnalytics) private var sessionAnalytics
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -42,8 +126,6 @@ struct TemplateEditorScreen: View {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
-    @State private var draft: TemplateDraft
-
     /// A catalog pick captured from the picker, held until the picker
     /// finishes dismissing so the configure sheet can present cleanly
     /// (sequential-sheet pattern — never two sheets at once).
@@ -51,94 +133,67 @@ struct TemplateEditorScreen: View {
 
     @State private var showPicker: Bool = false
     @State private var configureTarget: ConfigureExerciseTarget? = nil
-    @State private var saveError: SaveErrorBox? = nil
     @State private var blockedPerSetExerciseName: String? = nil
-    @State private var isReordering: Bool = false
+    @State private var isEditing: Bool = false
 
     /// Auto-focus the name field on a new template — first action is
     /// always "name the thing." Skipped on edit so we don't shove the
     /// keyboard over existing content.
     @FocusState private var nameFieldFocused: Bool
 
-    init(target: TemplateEditorTarget) {
-        self.target = target
-        switch target {
-        case .new:
-            _draft = State(wrappedValue: TemplateDraft())
-        case let .edit(existing):
-            var d = TemplateDraft()
-            d.name = existing.name
-            d.exercises = existing.orderedExercises.map { ExerciseDraft(from: $0) }
-            d.scheduledWeekdays = existing.scheduledWeekdays
-            _draft = State(wrappedValue: d)
-        }
-    }
-
     var body: some View {
-        NavigationStack {
-            Group {
-                if isReordering {
-                    reorderList
-                } else {
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: Space.section) {
-                            nameField
-                            scheduleSection
-                            exercisesSection
-                            addExerciseButton
-                        }
-                        .padding(.top, Space.md)
-                        .padding(.bottom, Space.xxl)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+        Group {
+            if isEditing {
+                editList
+            } else {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: Space.section) {
+                        nameField
+                        scheduleSection
+                        exercisesSection
+                        addExerciseButton
                     }
-                    .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-                    .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+                    .padding(.top, Space.md)
+                    .padding(.bottom, Space.xxl)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+                .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             }
-            .screenBackground()
-            .navigationTitle(isNewMode ? "New Template" : "Edit Template")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+        }
+        .screenBackground()
+        .sheet(isPresented: $showPicker, onDismiss: presentConfigureForPendingPick) {
+            ExercisePickerSheet(
+                purpose: .addToTemplate,
+                onPick: { item in
+                    pendingPick = item
+                    showPicker = false
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save", action: save)
-                        .bold()
-                        .disabled(!canSave)
-                }
+            )
+        }
+        .sheet(item: $configureTarget) { cfg in
+            ConfigureExerciseSheet(target: cfg, history: history(for: cfg)) { updated in
+                applyConfigured(updated)
             }
-            .sheet(isPresented: $showPicker, onDismiss: presentConfigureForPendingPick) {
-                ExercisePickerSheet(
-                    purpose: .addToTemplate,
-                    onPick: { item in
-                        pendingPick = item
-                        showPicker = false
-                    }
-                )
+        }
+        .onAppear {
+            if focusesNameOnAppear { nameFieldFocused = true }
+        }
+        .onChange(of: draft.exercises.isEmpty) { _, isEmpty in
+            if isEmpty { isEditing = false }
+        }
+        .alert(
+            "Per-set programming",
+            isPresented: Binding(
+                get: { blockedPerSetExerciseName != nil },
+                set: { if !$0 { blockedPerSetExerciseName = nil } }
+            )
+        ) {
+            Button("OK", role: .cancel) {
+                blockedPerSetExerciseName = nil
             }
-            .sheet(item: $configureTarget) { cfg in
-                ConfigureExerciseSheet(target: cfg, history: history(for: cfg)) { updated in
-                    applyConfigured(updated)
-                }
-            }
-            .onAppear {
-                if isNewMode { nameFieldFocused = true }
-            }
-            .saveErrorAlert($saveError)
-            .alert(
-                "Per-set programming",
-                isPresented: Binding(
-                    get: { blockedPerSetExerciseName != nil },
-                    set: { if !$0 { blockedPerSetExerciseName = nil } }
-                )
-            ) {
-                Button("OK", role: .cancel) {
-                    blockedPerSetExerciseName = nil
-                }
-            } message: {
-                Text("\(blockedPerSetExerciseName ?? "This exercise") uses explicit set-by-set programming. This quick editor only changes uniform exercises, so the per-set rows were left unchanged.")
-            }
+        } message: {
+            Text("\(blockedPerSetExerciseName ?? "This exercise") uses explicit set-by-set programming. This quick editor only changes uniform exercises, so the per-set rows were left unchanged.")
         }
     }
 
@@ -147,18 +202,6 @@ struct TemplateEditorScreen: View {
         case let .adding(item): sessionAnalytics?.exerciseHistorySummaries[item.historyKey]
         case let .editing(draft): sessionAnalytics?.exerciseHistorySummaries[draft.historyKey]
         }
-    }
-
-    // MARK: - Derived
-
-    private var isNewMode: Bool {
-        if case .new = target { return true }
-        return false
-    }
-
-    private var canSave: Bool {
-        let trimmed = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
-        return !trimmed.isEmpty && !draft.exercises.isEmpty
     }
 
     // MARK: - Name
@@ -262,51 +305,48 @@ struct TemplateEditorScreen: View {
 
     @ViewBuilder
     private var exercisesHeader: some View {
-        if draft.exercises.count >= 2 {
+        if draft.exercises.isEmpty {
+            SectionHeader(title: "Exercises")
+        } else {
             HStack(alignment: .center) {
                 SectionHeader(title: "Exercises")
                 Spacer(minLength: Space.sm)
-                reorderToggle
+                editToggle
                     .padding(.top, Space.sm)
             }
-        } else {
-            SectionHeader(
-                title: "Exercises",
-                trailing: draft.exercises.isEmpty ? nil : "\(draft.exercises.count)"
-            )
         }
     }
 
-    private var reorderToggle: some View {
+    private var editToggle: some View {
         Button {
-            setReordering(!isReordering)
+            setEditing(!isEditing)
         } label: {
-            Text(isReordering ? "Done" : "Reorder")
+            Text(isEditing ? "Done" : "Edit")
                 .font(Typography.sectionHeading)
                 .foregroundStyle(Tint.inProgress)
                 .frame(minWidth: Space.tapMin, minHeight: Space.tapMin)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityIdentifier("templateReorderToggle")
-        .accessibilityHint(isReordering ? "Returns to the exercise details" : "Shows drag handles to change the exercise order")
+        .accessibilityIdentifier("templateEditToggle")
+        .accessibilityHint(isEditing ? "Returns to the exercise details" : "Shows delete buttons and drag handles for the exercises")
     }
 
-    private func setReordering(_ on: Bool) {
+    private func setEditing(_ on: Bool) {
         if reduceMotion {
-            isReordering = on
+            isEditing = on
         } else {
-            withAnimation(.easeInOut(duration: 0.2)) { isReordering = on }
+            withAnimation(.easeInOut(duration: 0.2)) { isEditing = on }
         }
         Haptics.selection()
     }
 
-    // MARK: - Reorder
+    // MARK: - Edit
 
-    /// Compact drag list for changing the exercise order. A native List
+    /// Compact list for deleting and reordering exercises. A native List
     /// is used only here: in the detailed view the seam buttons sit
     /// between rows and would compete with a drag gesture.
-    private var reorderList: some View {
+    private var editList: some View {
         let tags = SupersetGrouping.tags(inIDs: draft.exercises.map(\.supersetID))
         return List {
             exercisesHeader
@@ -315,7 +355,7 @@ struct TemplateEditorScreen: View {
                 .listRowInsets(EdgeInsets(top: Space.md, leading: Space.gutter, bottom: Space.sm, trailing: Space.gutter))
 
             ForEach(Array(draft.exercises.enumerated()), id: \.element.id) { idx, exercise in
-                reorderRow(exercise, tag: tags[idx])
+                editRow(exercise, tag: tags[idx])
                     .accessibilityActions { moveActions(at: idx) }
                     .listRowBackground(Color.clear)
                     .listRowSeparatorTint(Surface.edge)
@@ -325,13 +365,14 @@ struct TemplateEditorScreen: View {
                 guard let from = source.first else { return }
                 moveExercise(from: from, to: destination, animated: false)
             }
+            .onDelete(perform: removeExercises)
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .environment(\.editMode, .constant(.active))
     }
 
-    private func reorderRow(_ exercise: ExerciseDraft, tag: String?) -> some View {
+    private func editRow(_ exercise: ExerciseDraft, tag: String?) -> some View {
         HStack(spacing: Space.md) {
             Capsule(style: .continuous)
                 .fill(tag == nil ? Color.clear : Tint.inProgress)
@@ -591,13 +632,24 @@ struct TemplateEditorScreen: View {
                 draft.exercises.removeAll { $0.id == id }
             }
         }
-        // A group whose member was removed may be down to one exercise
-        // — dissolve it back to straight sets.
+        normalizeSupersets()
+        Haptics.soft()
+    }
+
+    /// The List animates its own row removal.
+    private func removeExercises(at offsets: IndexSet) {
+        draft.exercises.remove(atOffsets: offsets)
+        normalizeSupersets()
+        Haptics.soft()
+    }
+
+    /// A group whose member was removed may be down to one exercise —
+    /// dissolve it back to straight sets.
+    private func normalizeSupersets() {
         let normalized = SupersetGrouping.normalizing(draft.exercises.map(\.supersetID))
         for (i, groupID) in normalized.enumerated() {
             draft.exercises[i].supersetID = groupID
         }
-        Haptics.soft()
     }
 
     /// "A1"-style tag for a draft row, derived from the current list.
@@ -606,57 +658,6 @@ struct TemplateEditorScreen: View {
             return nil
         }
         return SupersetGrouping.tag(at: index, inIDs: draft.exercises.map(\.supersetID))
-    }
-
-    // MARK: - Save
-
-    private func save() {
-        let trimmedName = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedName.isEmpty, !draft.exercises.isEmpty else { return }
-
-        var savedTemplate: WorkoutTemplate?
-
-        switch target {
-        case let .new(sortOrder):
-            let template = WorkoutTemplate(name: trimmedName, sortOrder: sortOrder)
-            template.scheduledWeekdays = draft.scheduledWeekdays
-            modelContext.insert(template)
-            attachExercises(to: template)
-            savedTemplate = template
-
-        case let .edit(existing):
-            existing.name = trimmedName
-            existing.scheduledWeekdays = draft.scheduledWeekdays
-            // Replace exercises wholesale. TemplateExercises hold only
-            // plan data — no logged history — so nothing of value is
-            // discarded.
-            for old in existing.exercises {
-                modelContext.delete(old)
-            }
-            existing.exercises.removeAll()
-            attachExercises(to: existing)
-            savedTemplate = existing
-        }
-
-        do {
-            try modelContext.saveOrRollback()
-            WidgetSnapshotWriter.writeAll(in: modelContext)
-            if let template = savedTemplate {
-                SpotlightIndexer.index(template)
-            }
-        } catch {
-            saveError = SaveErrorBox(error)
-            return
-        }
-        Haptics.soft()
-        dismiss()
-    }
-
-    private func attachExercises(to template: WorkoutTemplate) {
-        for (i, ed) in draft.exercises.enumerated() {
-            let ex = ed.makeTemplateExercise(sortOrder: i)
-            template.exercises.append(ex)
-        }
     }
 }
 

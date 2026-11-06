@@ -117,37 +117,51 @@
     },
     {
       "wait": {
-        "role": "AXButton",
-        "labelContains": "Start Workout"
+        "label": "Name",
+        "role": "AXTextField"
       }
     },
     {
       "assert": {
         "required": [
           {
-            "role": "AXButton",
-            "label": "Barbell Bench Press, Chest"
+            "labelContains": "Barbell Bench Press",
+            "labelRegex": ".*Fixed: 135 lb.*",
+            "role": "AXButton"
           },
           {
             "role": "AXButton",
             "labelContains": "Load Test",
             "labelRegex": "^(?!Start).*"
+          },
+          {
+            "label": "Add exercise",
+            "role": "AXButton"
           }
         ],
         "forbidden": [
+          {
+            "role": "AXButton",
+            "labelContains": "Start Workout"
+          },
           {
             "identifier": "exercise-how-to-perform"
           },
           {
             "identifier": "BackButton"
+          },
+          {
+            "label": "Save",
+            "role": "AXButton"
           }
         ]
       }
     },
     {
       "tap": {
-        "role": "AXButton",
-        "label": "Barbell Bench Press, Chest"
+        "labelContains": "Barbell Bench Press",
+        "labelRegex": ".*Fixed: 135 lb.*",
+        "role": "AXButton"
       }
     },
     {
@@ -164,6 +178,17 @@
       "wait": {
         "identifier": "templateLastUsedLoad",
         "labelContains": "Set 1: 155 lb"
+      }
+    },
+    {
+      "tap": {
+        "label": "Save Changes",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "3 × 8 · Last used: Set 1: 155 lb · Set 2: 150 lb · Set 3: 150 lb"
       }
     },
     {
@@ -186,15 +211,9 @@
       }
     },
     {
-      "wait": {
-        "role": "AXButton",
-        "labelContains": "Start Workout"
-      }
-    },
-    {
       "tap": {
-        "role": "AXButton",
-        "label": "Barbell Bench Press, Chest"
+        "labelContains": "3 × 8 · Last used: Set 1: 155 lb · Set 2: 150 lb · Set 3: 150 lb",
+        "role": "AXButton"
       }
     },
     {
@@ -202,20 +221,31 @@
         "identifier": "templateLoadPolicy",
         "value": "Use last workout"
       }
+    },
+    {
+      "tap": {
+        "label": "Cancel",
+        "role": "AXButton"
+      }
+    },
+    {
+      "waitAbsent": {
+        "identifier": "templateLoadPolicy"
+      }
     }
   ],
   "required": [
     {
-      "identifier": "templateLoadPolicy",
-      "value": "Use last workout"
-    },
-    {
-      "identifier": "templateLastUsedLoad",
-      "labelContains": "Set 1: 155 lb"
+      "labelContains": "3 × 8 · Last used: Set 1: 155 lb",
+      "role": "AXButton"
     },
     {
       "label": "Templates",
       "value": "Selected"
+    },
+    {
+      "label": "Name",
+      "role": "AXTextField"
     }
   ],
   "forbiddenLogs": [

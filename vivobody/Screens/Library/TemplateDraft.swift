@@ -6,7 +6,7 @@
 //  TextField (and per-exercise scrubbers) off plain Swift values
 //  instead of a live @Model means zero SwiftData observation in the
 //  hot path. The @Model objects are only constructed (or mutated)
-//  at the moment of Save.
+//  when the editor's host persists the draft.
 //
 //  Per-exercise data has two modes — uniform (single sets/reps/
 //  weight triple) and per-set (explicit rows for pyramid / wave
@@ -17,8 +17,9 @@
 //
 
 import Foundation
+import SwiftData
 
-struct TemplateDraft {
+struct TemplateDraft: Equatable {
     var name: String = ""
     var exercises: [ExerciseDraft] = []
 
@@ -26,6 +27,29 @@ struct TemplateDraft {
     /// 1 = Sunday … 7 = Saturday). Surfaces it on Today's "Up next"
     /// card. Empty = unscheduled.
     var scheduledWeekdays: [Int] = []
+}
+
+extension TemplateDraft {
+    /// Hydrate the editor from a saved template.
+    init(editing template: WorkoutTemplate) {
+        self.init(
+            name: template.name,
+            exercises: template.orderedExercises.map { ExerciseDraft(from: $0) },
+            scheduledWeekdays: template.scheduledWeekdays
+        )
+    }
+
+    /// Replace the template's exercises wholesale. TemplateExercises hold
+    /// only plan data, no logged history, so nothing of value is discarded.
+    func replaceExercises(of template: WorkoutTemplate, in context: ModelContext) {
+        for old in template.exercises {
+            context.delete(old)
+        }
+        template.exercises.removeAll()
+        for (index, exercise) in exercises.enumerated() {
+            template.exercises.append(exercise.makeTemplateExercise(sortOrder: index))
+        }
+    }
 }
 
 struct ExerciseDraft: Identifiable, Hashable {

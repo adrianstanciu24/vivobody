@@ -15,7 +15,8 @@
 //    • Edit an exercise's plan — tap its row → push to
 //      TemplateExerciseEditorScreen (target scrubbers and starting-load policy).
 //
-//    • Delete an exercise — swipe-left on the row.
+//    • Delete an exercise — swipe-left on the row, or tap Edit and use
+//      the row's delete button.
 //
 //  Deleting the entire template happens from the Library list
 //  (swipe on its card), not here.
@@ -28,9 +29,6 @@ import VivoKit
 struct TemplateDetailScreen: View {
     @Bindable var template: WorkoutTemplate
     @Bindable var appState: AppState
-    /// Runs after Start requests the workout, instead of `dismiss()`, for
-    /// a host whose detail is a column root rather than a pushed screen.
-    var onStarted: (() -> Void)? = nil
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -39,6 +37,7 @@ struct TemplateDetailScreen: View {
     @State private var configureTarget: ConfigureExerciseTarget?
     @State private var showPicker: Bool = false
     @State private var saveError: SaveErrorBox? = nil
+    @State private var editMode: EditMode = .inactive
 
     var body: some View {
         ZStack {
@@ -87,6 +86,11 @@ struct TemplateDetailScreen: View {
             }
         }
         .toolbar {
+            if !template.orderedExercises.isEmpty {
+                ToolbarItem(placement: .topBarTrailing) {
+                    EditButton()
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     showPicker = true
@@ -115,6 +119,11 @@ struct TemplateDetailScreen: View {
             }
         }
         .saveErrorAlert($saveError)
+        // Set outside the toolbar so EditButton and the List share one mode.
+        .environment(\.editMode, $editMode)
+        .onChange(of: template.orderedExercises.isEmpty) { _, isEmpty in
+            if isEmpty { editMode = .inactive }
+        }
     }
 
     // MARK: - Stats
@@ -172,14 +181,8 @@ struct TemplateDetailScreen: View {
                     .listRowBackground(Color.clear)
                     .listRowSeparatorTint(Surface.edge)
                     .listRowInsets(EdgeInsets(top: 0, leading: Space.gutter, bottom: 0, trailing: Space.gutter))
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button(role: .destructive) {
-                            deleteExercise(exercise)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                    }
                 }
+                .onDelete(perform: deleteExercises)
             } header: {
                 Text("Exercises")
                     .panelLegend()
@@ -241,11 +244,7 @@ struct TemplateDetailScreen: View {
             sound: .commit
         ) {
             appState.workout.startWorkoutFromTemplate(template)
-            if let onStarted {
-                onStarted()
-            } else {
-                dismiss()
-            }
+            dismiss()
         }
         .padding(.horizontal, Space.gutter)
         .padding(.top, 12)
@@ -272,12 +271,14 @@ struct TemplateDetailScreen: View {
         Haptics.soft()
     }
 
-    /// Single-row delete (used by swipe-actions and the rendered
-    /// minus button in Edit mode if iOS routes it here).
-    private func deleteExercise(_ exercise: TemplateExercise) {
-        if let idx = template.exercises.firstIndex(where: { $0.id == exercise.id }) {
-            template.exercises.remove(at: idx)
-            modelContext.delete(exercise)
+    /// Serves both swipe-to-delete and the Edit mode delete button.
+    private func deleteExercises(at offsets: IndexSet) {
+        let doomed = offsets.map { template.orderedExercises[$0] }
+        for exercise in doomed {
+            if let idx = template.exercises.firstIndex(where: { $0.id == exercise.id }) {
+                template.exercises.remove(at: idx)
+                modelContext.delete(exercise)
+            }
         }
         repackSortOrder()
         do {
@@ -290,11 +291,14 @@ struct TemplateDetailScreen: View {
         Haptics.soft()
     }
 
-    /// Re-pack sortOrder so the next append lands at the right
-    /// index after a delete.
+    /// Re-pack sortOrder so the next append lands at the right index
+    /// after a delete, and dissolve a superset left with one member.
     private func repackSortOrder() {
-        for (i, remaining) in template.orderedExercises.enumerated() {
-            remaining.sortOrder = i
+        let remaining = template.orderedExercises
+        let groups = SupersetGrouping.normalizing(remaining.map(\.supersetID))
+        for (i, exercise) in remaining.enumerated() {
+            exercise.sortOrder = i
+            exercise.supersetID = groups[i]
         }
     }
 }

@@ -61,39 +61,35 @@
     },
     {
       "wait": {
-        "role": "AXButton",
-        "labelContains": "Start Workout"
-      }
-    },
-    {
-      "tap": {
-        "role": "AXButton",
-        "labelContains": "Start Workout"
-      }
-    },
-    {
-      "wait": {
-        "role": "AXHeading",
-        "label": "Active workout"
+        "label": "Name",
+        "role": "AXTextField"
       }
     }
   ],
   "required": [
     {
-      "role": "AXHeading",
-      "label": "Active workout"
+      "label": "Templates",
+      "value": "Selected"
     },
     {
-      "role": "AXHeading",
-      "label": "Barbell Bench Press"
+      "label": "Name",
+      "role": "AXTextField"
     },
     {
-      "label": "Weight",
-      "role": "AXSlider",
-      "valueContains": "135"
+      "labelContains": "Barbell Bench Press",
+      "role": "AXButton"
     }
   ],
   "forbiddenLogs": [
     "event=storage.open outcome=fallback_memory"
+  ],
+  "forbidden": [
+    {
+      "role": "AXButton",
+      "labelContains": "Start Workout"
+    },
+    {
+      "identifier": "BackButton"
+    }
   ]
 }

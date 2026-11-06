@@ -37,8 +37,10 @@
 //  with a sliding orange thumb.
 //
 //  In regular width the selected exercise or template shows beside the
-//  list, and a template opens as its live detail there. Compact width
-//  keeps the list-then-push flow and opens templates in the editor sheet.
+//  list, and a template opens there in the editor, which saves each
+//  change. A template created from the sheet becomes the selection.
+//  Compact width keeps the list-then-push flow and opens templates in the
+//  editor sheet.
 //
 
 import SwiftData
@@ -128,7 +130,7 @@ struct LibraryScreen: View {
         // exercise" flow that picks from the catalog then drops into
         // a configure sheet. Nothing persists until Save.
         .sheet(item: $templateEditorTarget) { target in
-            TemplateEditorScreen(target: target)
+            TemplateEditorScreen(target: target, onSaved: selectSavedTemplate)
         }
         .sheet(item: $customExerciseTarget) { target in
             CustomExerciseEditorSheet(target: target)
@@ -213,7 +215,7 @@ struct LibraryScreen: View {
         case let .exercise(item):
             ExerciseDetailScreen(item: item, onRemoved: navigation.showList, onPickAndDismiss: nil)
         case let .template(template):
-            TemplateDetailScreen(template: template, appState: appState, onStarted: navigation.showList)
+            TemplateLiveEditorScreen(template: template)
         case nil:
             if listing.segment == .templates, listing.templates.isEmpty {
                 LibraryTemplatesEmptyDetail(onCreate: { openNewTemplateEditor() })
@@ -234,6 +236,12 @@ struct LibraryScreen: View {
             isValid: ids.contains,
             first: ids.first
         )
+    }
+
+    /// Beside the list, a template saved from the sheet opens in the detail.
+    private func selectSavedTemplate(_ template: WorkoutTemplate) {
+        guard displayLayout.showsBrowserDetail else { return }
+        selectedItemID = .template(template.id)
     }
 
     // MARK: - Create action
